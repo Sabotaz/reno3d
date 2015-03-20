@@ -5,7 +5,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import java.io.File;
 
-import fr.limsi.rorqual.core.MainApplicationAdapter;
+import fr.limsi.rorqual.core.model.IfcHolder;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -13,7 +14,7 @@ public class DesktopLauncher {
         MainApplicationAdapter application = new MainApplicationAdapter();
 
         try {
-            application.openModel(new File("data/ifc/example.ifc"));
+            IfcHolder.getInstance().openModel(new File("data/ifc/example.ifc"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,12 +10,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
 
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWall;
+import fr.limsi.rorqual.core.model.IfcHolder;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
-
-import fr.limsi.rorqual.core.MainApplicationAdapter;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -41,7 +39,7 @@ public class AndroidLauncher extends AndroidApplication {
             outputStream.close();
             inputStream.close();
 
-            application.openModel(f);
+            IfcHolder.getInstance().openModel(f);
 
         } catch (Exception e) {
             System.out.println(e);
