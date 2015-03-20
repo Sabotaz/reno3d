@@ -6,6 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+
+import ifc2x3javatoolbox.ifc2x3tc1.IfcWall;
+import ifc2x3javatoolbox.ifcmodel.IfcModel;
+
 public class MainApplicationAdapter extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
@@ -24,4 +31,18 @@ public class MainApplicationAdapter extends ApplicationAdapter {
 		batch.draw(img, 0, 0);
 		batch.end();
 	}
+
+    public void openModel(File stepFile) throws Exception {
+
+
+        //create a new instance of IfcModel
+        IfcModel ifcModel = new IfcModel();
+        //load an IFC STEP file from the file system
+        ifcModel.readStepFile(stepFile);
+
+        Collection<IfcWall> walls = ifcModel.getCollection(IfcWall.class);
+        for (IfcWall wall: walls) {
+            System.out.println(wall.getGlobalId() + ": " + wall.getDescription());
+        }
+    }
 }

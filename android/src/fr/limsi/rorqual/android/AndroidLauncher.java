@@ -22,9 +22,12 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        MainApplicationAdapter application = new MainApplicationAdapter();
+
         try {
 
-            InputStream inputStream = getAssets().open("TestData/data/example.ifc");
+            InputStream inputStream = getAssets().open("data/ifc/example.ifc");
             String root = Environment.getExternalStorageDirectory().toString();
             File f = new File(root + "/example.ifc");
             OutputStream outputStream = new FileOutputStream(f);
@@ -38,22 +41,13 @@ public class AndroidLauncher extends AndroidApplication {
             outputStream.close();
             inputStream.close();
 
-            //create a new instance of IfcModel
-            IfcModel ifcModel = new IfcModel();
-            //load an IFC STEP file from the file system
-            File stepFile = f;
-            ifcModel.readStepFile(stepFile);
+            application.openModel(f);
 
-            Collection<IfcWall> walls = ifcModel.getCollection(IfcWall.class);
-            for (IfcWall wall: walls) {
-                System.out.println(wall.getGlobalId() + ": " + wall.getDescription());
-            }
         } catch (Exception e) {
             System.out.println(e);
         }
 
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new MainApplicationAdapter(), config);
+        initialize(application, config);
 
 	}
 }
