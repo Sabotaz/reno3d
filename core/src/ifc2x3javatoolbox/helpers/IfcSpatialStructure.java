@@ -299,10 +299,10 @@ public class IfcSpatialStructure
         @Override
         public int compare(IfcBuildingStorey bs1, IfcBuildingStorey bs2)
         {
-            double elevation1 = -Double.MAX_VALUE;
+            double elevation1 = Double.MIN_VALUE;
             if (bs1.getElevation() != null)
                 elevation1 = bs1.getElevation().value;
-            double elevation2 = -Double.MAX_VALUE;
+            double elevation2 = Double.MIN_VALUE;
             if (bs2.getElevation() != null)
                 elevation2 = bs2.getElevation().value;
 
