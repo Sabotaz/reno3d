@@ -14,7 +14,7 @@ public class DesktopLauncher {
         MainApplicationAdapter application = new MainApplicationAdapter();
 
         try {
-            IfcHolder.getInstance().openModel(new File("data/ifc/example.ifc"));
+            IfcHolder.getInstance().openModel(new File("data/ifc/WallOnly.ifc"));
         } catch (Exception e) {
             e.printStackTrace();
         }

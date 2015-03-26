@@ -3,6 +3,9 @@ package fr.limsi.rorqual.core.model;
 import java.io.File;
 import java.util.Collection;
 
+import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
+
+import ifc2x3javatoolbox.helpers.IfcSpatialStructure;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWall;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
@@ -12,6 +15,7 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 public class IfcHolder {
 
     IfcModel ifcModel = null;
+    DefaultMutableTreeNode spatialStructureTreeNode = new DefaultMutableTreeNode("no model loaded");
 
     private IfcHolder() {}
 
@@ -26,18 +30,20 @@ public class IfcHolder {
         return IfcHolderHolder.INSTANCE;
     }
 
+    public IfcModel getIfcModel() {
+        return this.ifcModel;
+    }
+
     public void openModel(File stepFile) throws Exception {
-
-
         //create a new instance of IfcModel
         ifcModel = new IfcModel();
         //load an IFC STEP file from the file system
         ifcModel.readStepFile(stepFile);
+        spatialStructureTreeNode = new IfcSpatialStructure(ifcModel).getSpatialStructureRoot(false);
+    }
 
-        Collection<IfcWall> walls = ifcModel.getCollection(IfcWall.class);
-        for (IfcWall wall: walls) {
-            System.out.println(wall.getGlobalId() + ": " + wall.getDescription());
-        }
+    public DefaultMutableTreeNode getSpatialStructureTreeNode() {
+        return spatialStructureTreeNode;
     }
 
 }

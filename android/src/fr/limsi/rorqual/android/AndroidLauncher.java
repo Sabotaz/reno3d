@@ -19,10 +19,6 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        MainApplicationAdapter application = new MainApplicationAdapter();
-
         try {
 
             InputStream inputStream = getAssets().open("data/ifc/example.ifc");
@@ -44,6 +40,9 @@ public class AndroidLauncher extends AndroidApplication {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        MainApplicationAdapter application = new MainApplicationAdapter();
 
         initialize(application, config);
 
