@@ -129,7 +129,7 @@ public class MainApplicationAdapter extends ApplicationAdapter {
         }
         LIST<IfcLengthMeasure> pd = ifc_p.getCoordinates();
 
-        Vector3 p = new Vector3((float)pd.get(0).value, (float)pd.get(1).value, (float)pd.get(2).value);
+        Vector3 p = new Vector3((float)pd.get(0).value, (float)pd.get(1).value, 0.f);
         Vector3 y = z.cpy().crs(x);
 
         return new Matrix4().set(x,y,z,p);
