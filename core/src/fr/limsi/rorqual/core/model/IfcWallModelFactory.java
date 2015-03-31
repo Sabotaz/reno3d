@@ -11,20 +11,35 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 
 import javax.lang.model.type.PrimitiveType;
 
+import fr.limsi.rorqual.core.utils.IfcObjectPlacementUtils;
+import ifc2x3javatoolbox.ifc2x3tc1.ENUM;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcCircle;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcDirectionSenseEnum;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcLayerSetDirectionEnum;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcLengthMeasure;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialLayer;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialLayerSet;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialLayerSetUsage;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialSelect;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcPolyline;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcProduct;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRelAssociates;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRelAssociatesMaterial;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRepresentation;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcShapeRepresentation;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcTrimmedCurve;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWall;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
+import ifc2x3javatoolbox.ifc2x3tc1.LIST;
+import ifc2x3javatoolbox.ifc2x3tc1.SET;
 
 /**
  * Created by christophe on 31/03/15.
@@ -38,6 +53,40 @@ public class IfcWallModelFactory {
         if (ifcProduct instanceof IfcWall) {
             IfcWall wall = (IfcWall) ifcProduct;
             if (wall instanceof IfcWallStandardCase) {
+                // MaterialLayers
+                ArrayList<Float> materialLayersThickness = new ArrayList<Float>();
+                float offset = 0;
+                int direction = 1;
+
+                for (IfcRelAssociates association : wall.getHasAssociations_Inverse()) {
+                    System.out.println(association);
+                    if (association instanceof IfcRelAssociatesMaterial) {
+                        IfcMaterialSelect materialSelect = ((IfcRelAssociatesMaterial) association).getRelatingMaterial();
+                        if (materialSelect instanceof IfcMaterialLayerSetUsage) {
+                            IfcMaterialLayerSetUsage layerSetUsage = (IfcMaterialLayerSetUsage) materialSelect;
+                            IfcMaterialLayerSet layerSet = layerSetUsage.getForLayerSet();
+                            IfcDirectionSenseEnum directionSense = layerSetUsage.getDirectionSense();
+                            IfcLayerSetDirectionEnum layerSetDirection = layerSetUsage.getLayerSetDirection();
+                            IfcLengthMeasure offset_measure = layerSetUsage.getOffsetFromReferenceLine();
+                            offset = (float)offset_measure.value;
+                            LIST<IfcMaterialLayer> layers = layerSet.getMaterialLayers();
+
+                            for (IfcMaterialLayer layer : layers)
+                                materialLayersThickness.add((float)layer.getLayerThickness().value);
+
+                            if (layerSetDirection.value.name().equals("AXIS2")) {
+                                // OK
+                                if (directionSense.value.name().equals("POSITIVE")) {
+                                    direction = 1;
+                                } else { // NEGATIVE
+                                    direction = -1;
+                                }
+                            }
+                        }
+                        break; //Fixme can we have multiple IfcRelAssociatesMaterial ?
+                    }
+                }
+                // Shape
                 IfcShapeRepresentation axis = null;
                 IfcShapeRepresentation body = null;
                 for (IfcRepresentation ifcRepresentation : wall.getRepresentation().getRepresentations()) {
@@ -62,27 +111,42 @@ public class IfcWallModelFactory {
                         } else {
                             IfcCartesianPoint p1 = polyline.getPoints().get(0);
                             IfcCartesianPoint p2 = polyline.getPoints().get(1);
-                            float x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
 
-                            x1 = (float)p1.getCoordinates().get(0).value;
-                            y1 = (float)p1.getCoordinates().get(1).value;
-                            if (p1.getCoordinates().size() == 3)
-                                z1 = (float)p1.getCoordinates().get(2).value;
 
-                            x2 = (float)p2.getCoordinates().get(0).value;
-                            y2 = (float)p2.getCoordinates().get(1).value;
-                            if (p1.getCoordinates().size() == 3)
-                                z2 = (float)p2.getCoordinates().get(2).value;
+
+                            Vector3 XY = IfcObjectPlacementUtils.getAxis2(wall.getObjectPlacement());
+                            Vector3 Z = IfcObjectPlacementUtils.getAxis3(wall.getObjectPlacement());
+
+                            Vector3 start = IfcObjectPlacementUtils.toVector(p1);
+                            Vector3 end = IfcObjectPlacementUtils.toVector(p2);
 
                             builder.begin();
 
-                            Node node1 = builder.node();
-                            node1.id = "wall1";
+                            Node node = builder.node();
+                            node.id = "base";
 
                             MeshPartBuilder meshBuilder;
 
-                            meshBuilder = builder.part("part1", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material());
-                            meshBuilder.line(x1,y1,z1,x2,y2,z2);
+                            meshBuilder = builder.part("part1", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.RED)));
+                            meshBuilder.line(start, end);
+
+                            Vector3 layerOffset = XY.cpy().scl(offset);
+
+                            for (int i = 0; i < materialLayersThickness.size(); i++) {
+                                node = builder.node();
+                                node.id = "layer"+i;
+
+                                float thickness = materialLayersThickness.get(i);
+
+                                meshBuilder = builder.part("part"+i, GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material());
+                                //meshBuilder.line(start, end);
+                                Vector3 corner00 = start.cpy().add(layerOffset);
+                                Vector3 corner01 = start.cpy().add(layerOffset).add(XY.cpy().scl(direction * thickness));
+                                Vector3 corner10 = end.cpy().add(layerOffset).add(XY.cpy().scl(direction * thickness));
+                                Vector3 corner11 = end.cpy().add(layerOffset);
+                                meshBuilder.rect(corner00, corner01, corner10, corner11, Z);
+                                layerOffset.add(XY.cpy().scl(direction * thickness));
+                            }
 
                             return builder.end();
                         }
@@ -95,16 +159,16 @@ public class IfcWallModelFactory {
                             //http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcgeometryresource/lexical/ifctrimmedcurve.htm
                             //http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcgeometryresource/lexical/ifccircle.htm
                         }
-                    } else {
+                    } else { // not an IfcPolyline or an IfcTrimedCurve
                         System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
                     }
-                } else {
+                } else { // no items
                     System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
                 }
 
                 System.out.println(axis.getItems());
 
-            } else {
+            } else { // IfcWall
                 System.out.println("Not a standard case wall");
 
             }
