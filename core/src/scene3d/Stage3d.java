@@ -64,7 +64,7 @@ public class Stage3d extends InputAdapter implements Disposable {
 		setViewport(width, height, keepAspectRatio);
 	}
 	
-	public Stage3d (float width, float height, PerspectiveCamera camera) {
+	public Stage3d (float width, float height, Camera camera) {
 		this.width = width;
 		this.height = height;
 		root = new Group3d();
@@ -73,7 +73,7 @@ public class Stage3d extends InputAdapter implements Disposable {
 		this.camera = camera;
 	}
 	
-	public Stage3d (float width, float height, PerspectiveCamera camera, Environment environment) {
+	public Stage3d (float width, float height, Camera camera, Environment environment) {
 		this.width = width;
 		this.height = height;
 		root = new Group3d();

@@ -146,6 +146,10 @@ public class IfcWallModelFactory {
                                 Vector3 corner11 = end.cpy().add(layerOffset);
                                 meshBuilder.rect(corner00, corner01, corner10, corner11, Z);
                                 layerOffset.add(XY.cpy().scl(direction * thickness));
+                                meshBuilder.line(corner00, new Vector3(0,0,1).add(corner00));
+                                meshBuilder.line(corner01, new Vector3(0,0,1).add(corner01));
+                                meshBuilder.line(corner10, new Vector3(0,0,1).add(corner10));
+                                meshBuilder.line(corner11, new Vector3(0,0,1).add(corner11));
                             }
 
                             return builder.end();
