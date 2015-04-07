@@ -241,7 +241,7 @@ public class IfcWallModelFactory {
         }
         meshBuilder = builder.part("sweptsolid", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.WHITE)));
         meshBuilder.setVertexTransform(body_placement);
-        for (int i = 0; i < sweptarea.size(); i++) {
+        for (int i = 0; i < sweptarea.size()-1; i++) {
             Vector3 z_shape = dir.cpy().scl(depth);
             Vector3 p1 = sweptarea.get(i);
             Vector3 p2 = sweptarea.get((i + 1) % sweptarea.size());
