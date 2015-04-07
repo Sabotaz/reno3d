@@ -44,6 +44,18 @@ public class IfcObjectPlacementUtils {
         return p;
     }
 
+    public static Vector3 toVector(LIST<DOUBLE> coord) {
+        Vector3 p = new Vector3();
+        if (coord.size() == 1)
+            p.set((float)coord.get(0).value, 0, 0);
+        if (coord.size() == 2)
+            p.set((float)coord.get(0).value, (float)coord.get(1).value, 0);
+        else if (coord.size() == 3)
+            p.set((float)coord.get(0).value, (float)coord.get(1).value, (float)coord.get(2).value);
+
+        return p;
+    }
+
     public static Matrix4 toMatrix(IfcAxis2Placement3D placement3D) {
 
         IfcDirection ifc_x = placement3D.getRefDirection();

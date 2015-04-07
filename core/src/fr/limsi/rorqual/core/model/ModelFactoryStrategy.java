@@ -18,7 +18,7 @@ public class ModelFactoryStrategy {
     public static Model getModel(IfcProduct ifcProduct) {
         if (ifcProduct instanceof IfcWall) {
             System.out.println("WALL !");
-            return IfcWallModelFactory.getModel(ifcProduct);
+            return new IfcWallModelFactory(ifcProduct).getModel();
         }
         return new Model();
     }
