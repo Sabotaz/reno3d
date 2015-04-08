@@ -14,6 +14,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcGridPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcLengthMeasure;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcLocalPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcObjectPlacement;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcVector;
 import ifc2x3javatoolbox.ifc2x3tc1.LIST;
 
 /**
@@ -54,6 +55,10 @@ public class IfcObjectPlacementUtils {
             p.set((float)coord.get(0).value, (float)coord.get(1).value, (float)coord.get(2).value);
 
         return p;
+    }
+
+    public static Vector3 toVector(IfcVector vector) {
+        return toVector(vector.getOrientation().getDirectionRatios()).scl((float)vector.getMagnitude().value);
     }
 
     public static Matrix4 toMatrix(IfcAxis2Placement3D placement3D) {
