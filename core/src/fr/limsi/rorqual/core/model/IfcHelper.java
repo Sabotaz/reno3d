@@ -68,7 +68,7 @@ public class IfcHelper {
 
     // Permet de compléter un model de départ contenant les informations du projet, un site,
     // un building et un building storey
-    public static IfcModel initialiseAnIfcModel (IfcModel ifcModel){
+    public static IfcModel initialiseIfcModel (IfcModel ifcModel){
 
         // Initialize File Name
         LIST<STRING> authors = new LIST<STRING>();
