@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.model;
 
+import ifc2x3javatoolbox.ifc2x3tc1.ClassInterface;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
 import ifc2x3javatoolbox.ifc2x3tc1.DOUBLE;
 import ifc2x3javatoolbox.ifc2x3tc1.File_Name;
@@ -44,7 +45,6 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcTrimmingSelect;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcUnit;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcUnitAssignment;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcUnitEnum;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcVector;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcLocalPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcBuildingStorey;
@@ -60,6 +60,9 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcUnitEnum.IfcUnitEnum_internal;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
  * Created by ricordeau on 08/04/2015.
  */
@@ -67,14 +70,14 @@ public class IfcHelper {
 
 
     // Permet de compléter un model de départ contenant les informations du projet, un site,
-    // un building et un building storey
+    // un building et un building storey (par défaut à l'altitude 0)
     public static IfcModel initialiseIfcModel (IfcModel ifcModel){
 
         // Initialize File Name
-        LIST<STRING> authors = new LIST<STRING>();
+        LIST<STRING> authors = new LIST<>();
         authors.add(new STRING("Thomas Ricordeau",true));
         authors.add(new STRING("Julien Christophe",true));
-        LIST<STRING> organisation = new LIST<STRING>();
+        LIST<STRING> organisation = new LIST<>();
         organisation.add(new STRING("LIMSI-CNRS",true));
         File_Name fileName = new File_Name(new STRING("3DReno first IFC",true),null,authors,
                 organisation,new STRING("",true),new STRING("",true),new STRING("",true));
@@ -113,7 +116,7 @@ public class IfcHelper {
                 (int) (System.currentTimeMillis() / 1000)));
 
         // Create WorldCoordinateSystem
-        LIST<IfcLengthMeasure> coordinatesOrigin = new LIST<IfcLengthMeasure>();
+        LIST<IfcLengthMeasure> coordinatesOrigin = new LIST<>();
         coordinatesOrigin.add(new IfcLengthMeasure(0.0));
         coordinatesOrigin.add(new IfcLengthMeasure(0.0));
         coordinatesOrigin.add(new IfcLengthMeasure(0.0));
@@ -125,11 +128,11 @@ public class IfcHelper {
         IfcGeometricRepresentationContext ifcGeometricRepresentationContext =
                 new IfcGeometricRepresentationContext(null, new IfcLabel("Model", true),
                 new IfcDimensionCount(3),new DOUBLE(1.0E-5), ifcAxis2Placement3DWorld, null);
-        SET<IfcRepresentationContext> contexts = new SET<IfcRepresentationContext>();
+        SET<IfcRepresentationContext> contexts = new SET<>();
         contexts.add(ifcGeometricRepresentationContext);
 
         // Create UnitsInContext
-        SET<IfcUnit> units = new SET<IfcUnit>();
+        SET<IfcUnit> units = new SET<>();
         IfcSIUnit lengthUnit = new IfcSIUnit(null, new IfcUnitEnum(
                 IfcUnitEnum_internal.LENGTHUNIT.name()), null,
                 new IfcSIUnitName(IfcSIUnitName_internal.METRE.name()));
@@ -152,17 +155,17 @@ public class IfcHelper {
                 contexts, ifcUnitAssignment);
 
         // Create IfcSite
-        LIST<IfcLengthMeasure> coordinatesSite = new LIST<IfcLengthMeasure>();
+        LIST<IfcLengthMeasure> coordinatesSite = new LIST<>();
         coordinatesSite.add(new IfcLengthMeasure(0.0));
         coordinatesSite.add(new IfcLengthMeasure(0.0));
         coordinatesSite.add(new IfcLengthMeasure(0.0));
         IfcCartesianPoint ifcCartesianPointOriginSite = new IfcCartesianPoint(coordinatesSite);
-        LIST<DOUBLE> ZAxisSite = new LIST<DOUBLE>();
+        LIST<DOUBLE> ZAxisSite = new LIST<>();
         ZAxisSite.add(new DOUBLE(0.0));
         ZAxisSite.add(new DOUBLE(0.0));
         ZAxisSite.add(new DOUBLE(1.0));
         IfcDirection ifcDirectionZAxisSite = new IfcDirection(ZAxisSite);
-        LIST<DOUBLE> XDirectionSite = new LIST<DOUBLE>();
+        LIST<DOUBLE> XDirectionSite = new LIST<>();
         XDirectionSite.add(new DOUBLE(1.0));
         XDirectionSite.add(new DOUBLE(0.0));
         XDirectionSite.add(new DOUBLE(0.0));
@@ -178,17 +181,17 @@ public class IfcHelper {
                 new IfcElementCompositionEnum("ELEMENT"), null, null, null, null, null);
 
         // Create IfcBuilding
-        LIST<IfcLengthMeasure> coordinatesBuilding = new LIST<IfcLengthMeasure>();
+        LIST<IfcLengthMeasure> coordinatesBuilding = new LIST<>();
         coordinatesBuilding.add(new IfcLengthMeasure(0.0));
         coordinatesBuilding.add(new IfcLengthMeasure(0.0));
         coordinatesBuilding.add(new IfcLengthMeasure(0.0));
         IfcCartesianPoint ifcCartesianPointOriginBuilding = new IfcCartesianPoint(coordinatesBuilding);
-        LIST<DOUBLE> ZAxisBuilding = new LIST<DOUBLE>();
+        LIST<DOUBLE> ZAxisBuilding = new LIST<>();
         ZAxisBuilding.add(new DOUBLE(0.0));
         ZAxisBuilding.add(new DOUBLE(0.0));
         ZAxisBuilding.add(new DOUBLE(1.0));
         IfcDirection ifcDirectionZAxisBuilding = new IfcDirection(ZAxisBuilding);
-        LIST<DOUBLE> XDirectionBuilding = new LIST<DOUBLE>();
+        LIST<DOUBLE> XDirectionBuilding = new LIST<>();
         XDirectionBuilding.add(new DOUBLE(1.0));
         XDirectionBuilding.add(new DOUBLE(0.0));
         XDirectionBuilding.add(new DOUBLE(0.0));
@@ -204,20 +207,20 @@ public class IfcHelper {
                 new IfcElementCompositionEnum("ELEMENT"), null, null, null);
 
         // Create IfcBuilgingStorey
-        LIST<IfcLengthMeasure> coordinatesBuildingStorey = new LIST<IfcLengthMeasure>();
+        LIST<IfcLengthMeasure> coordinatesBuildingStorey = new LIST<>();
         coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
         coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
         coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
         IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = new IfcCartesianPoint(coordinatesBuildingStorey);
-        LIST<DOUBLE> ZAxisBuildingStorey = new LIST<DOUBLE>();
+        LIST<DOUBLE> ZAxisBuildingStorey = new LIST<>();
+        ZAxisBuildingStorey.add(new DOUBLE(0.0));
+        ZAxisBuildingStorey.add(new DOUBLE(0.0));
         ZAxisBuildingStorey.add(new DOUBLE(1.0));
-        ZAxisBuildingStorey.add(new DOUBLE(0.0));
-        ZAxisBuildingStorey.add(new DOUBLE(0.0));
         IfcDirection ifcDirectionZAxisBuildingStorey = new IfcDirection(ZAxisBuildingStorey);
-        LIST<DOUBLE> XDirectionBuildingStorey = new LIST<DOUBLE>();
-        XDirectionBuildingStorey.add(new DOUBLE(0.0));
-        XDirectionBuildingStorey.add(new DOUBLE(0.0));
+        LIST<DOUBLE> XDirectionBuildingStorey = new LIST<>();
         XDirectionBuildingStorey.add(new DOUBLE(1.0));
+        XDirectionBuildingStorey.add(new DOUBLE(0.0));
+        XDirectionBuildingStorey.add(new DOUBLE(0.0));
         IfcDirection ifcDirectionXDirectionBuildingStorey = new IfcDirection(XDirectionBuildingStorey);
         IfcAxis2Placement3D ifcAxis2Placement3DBuildingStorey = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginBuildingStorey, ifcDirectionZAxisBuildingStorey, ifcDirectionXDirectionBuildingStorey);
@@ -225,13 +228,13 @@ public class IfcHelper {
                 ifcAxis2Placement3DBuildingStorey);
         IfcBuildingStorey ifcBuildingStorey = new IfcBuildingStorey(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcOwnerHistory, new IfcLabel("1er etage", true),
-                new IfcText("Description du 1er etage", true), null, ifcLocalPlacementBuildingStorey,
-                null, null, new IfcElementCompositionEnum("ELEMENT"), null);
+                ifcOwnerHistory, new IfcLabel("1st floor", true),
+                new IfcText("1st floor / elevation = 0.0m", true), null, ifcLocalPlacementBuildingStorey,
+                null, null, new IfcElementCompositionEnum("ELEMENT"), new IfcLengthMeasure(0.0));
 
         // Create relation IfcProject --> IfcSite
         SET<IfcObjectDefinition> relatedObjects;
-        relatedObjects = new SET<IfcObjectDefinition>();
+        relatedObjects = new SET<>();
         relatedObjects.add(ifcSite);
         IfcRelAggregates relationProjectToSite;
         relationProjectToSite = new IfcRelAggregates(new IfcGloballyUniqueId(
@@ -239,7 +242,7 @@ public class IfcHelper {
                 new IfcText("ProjectContainer for Sites",true), ifcProject, relatedObjects);
 
         // Create relation IfcSite --> IfcBuilding
-        relatedObjects = new SET<IfcObjectDefinition>();
+        relatedObjects = new SET<>();
         relatedObjects.add(ifcBuilding);
         IfcRelAggregates relationSiteToBuilding;
         relationSiteToBuilding = new IfcRelAggregates(new IfcGloballyUniqueId(
@@ -247,7 +250,7 @@ public class IfcHelper {
                 new IfcText("SiteContainer for Building",true), ifcSite, relatedObjects);
 
         // Create relation IfcBuilding --> IfcBuildingStorey
-        relatedObjects = new SET<IfcObjectDefinition>();
+        relatedObjects = new SET<>();
         relatedObjects.add(ifcBuildingStorey);
         IfcRelAggregates relationBuildingToBuildingStorey;
         relationBuildingToBuildingStorey = new IfcRelAggregates(new IfcGloballyUniqueId(
@@ -299,9 +302,92 @@ public class IfcHelper {
         return ifcModel;
     }
 
-    // Permet d'exporter le model au format .ifc sur l'ordinateur
+    // Permet de récupérer le batiment contenu dans le model (on considère qu'il n'y a qu'un batiment)
+    public static IfcBuilding getBuilding (IfcModel ifcModel){
+        Collection<IfcBuilding> collectionBuilding = ifcModel.getCollection(IfcBuilding.class);
+        Iterator<IfcBuilding> it = collectionBuilding.iterator();
+        return it.next();
+    }
+
+    // Permet de récupérer un étage dans un model en fonction de son nom
+    public static IfcBuildingStorey getBuildingStorey (IfcModel ifcModel, String nameBuildingStorey){
+        Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
+        for (IfcBuildingStorey actualBuildingStorey : collectionBuildingStorey){
+            if(actualBuildingStorey.getName().getDecodedValue().equals(nameBuildingStorey)){
+                return actualBuildingStorey;
+            }
+        }
+        return null;
+    }
+
+    // Permet d'ajouter un étage au batiment en lui rentrant son nom et son élévation
+    public static void addBuildingStorey (IfcModel ifcModel,String nameFloor , float elevation){
+        IfcBuilding ifcBuilding = getBuilding(ifcModel);
+        LIST<IfcLengthMeasure> coordinatesBuildingStorey = new LIST<>();
+        coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
+        coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
+        coordinatesBuildingStorey.add(new IfcLengthMeasure(elevation));
+        IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = new IfcCartesianPoint(coordinatesBuildingStorey);
+        LIST<DOUBLE> ZAxisBuildingStorey = new LIST<>();
+        ZAxisBuildingStorey.add(new DOUBLE(0.0));
+        ZAxisBuildingStorey.add(new DOUBLE(0.0));
+        ZAxisBuildingStorey.add(new DOUBLE(1.0));
+        IfcDirection ifcDirectionZAxisBuildingStorey = new IfcDirection(ZAxisBuildingStorey);
+        LIST<DOUBLE> XDirectionBuildingStorey = new LIST<>();
+        XDirectionBuildingStorey.add(new DOUBLE(1.0));
+        XDirectionBuildingStorey.add(new DOUBLE(0.0));
+        XDirectionBuildingStorey.add(new DOUBLE(0.0));
+        IfcDirection ifcDirectionXDirectionBuildingStorey = new IfcDirection(XDirectionBuildingStorey);
+        IfcAxis2Placement3D ifcAxis2Placement3DBuildingStorey = new IfcAxis2Placement3D(
+                ifcCartesianPointOriginBuildingStorey, ifcDirectionZAxisBuildingStorey, ifcDirectionXDirectionBuildingStorey);
+        IfcLocalPlacement ifcLocalPlacementBuildingStorey = new IfcLocalPlacement(null,
+                ifcAxis2Placement3DBuildingStorey);
+        IfcBuildingStorey ifcBuildingStorey = new IfcBuildingStorey(
+                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
+                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel(nameFloor, true),
+                new IfcText(nameFloor+" / elevation = "+elevation+"m", true), null, ifcLocalPlacementBuildingStorey,
+                null, null, new IfcElementCompositionEnum("ELEMENT"), new IfcLengthMeasure(elevation));
+
+        // Create relation IfcBuilding --> IfcBuildingStorey
+        SET<IfcObjectDefinition> relatedObjects;
+        relatedObjects = new SET<>();
+        relatedObjects.add(ifcBuildingStorey);
+        IfcRelAggregates relationBuildingToBuildingStorey;
+        relationBuildingToBuildingStorey = new IfcRelAggregates(new IfcGloballyUniqueId(
+                ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("BuildingContainer",true),
+                new IfcText("BuildingContainer for BuildingStorey",true), ifcBuilding, relatedObjects);
+
+        ifcModel.addIfcObject(relationBuildingToBuildingStorey);
+        ifcModel.addIfcObject(ifcBuildingStorey);
+        ifcModel.addIfcObject(ifcLocalPlacementBuildingStorey);
+        ifcModel.addIfcObject(ifcAxis2Placement3DBuildingStorey);
+        ifcModel.addIfcObject(ifcCartesianPointOriginBuildingStorey);
+        ifcModel.addIfcObject(ifcDirectionZAxisBuildingStorey);
+        ifcModel.addIfcObject(ifcDirectionXDirectionBuildingStorey);
+    }
+
+    // Permet d'ajouter un mur à un IfcModel
+    // Arguments : IfcModel, étage sur lequel on implémente le mur, position, orientation
+    //              et dimension du mur
+    public static void addWall(IfcModel ifcModel, String nameBuildingStorey){
+
+    }
+
+    // Permet d'importer un model au format .ifc
+    public static IfcModel loadIfcModel(String path){
+        IfcModel ifcModel = new IfcModel();
+        File stepFile = new File(path);
+        try {
+            ifcModel.readStepFile(stepFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ifcModel;
+    }
+
+    // Permet d'exporter le model au format .ifc
     public static void saveIfcModel(IfcModel ifcModel){
-        File saveStepFile = new File("C:Projet3DReno.ifc");
+        File saveStepFile = new File("C:\\Users\\ricordeau\\Desktop\\Coucou.ifc");
         try {
             ifcModel.writeStepfile(saveStepFile);
         } catch (IOException e) {
