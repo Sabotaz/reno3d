@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
@@ -51,7 +52,7 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         cameras[0] = camera1;
 
         PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera2.position.set(-5, -5, 5);
+        camera2.position.set(0, -50, 50);
         camera2.near = 0.001f;
         camera2.far = 1000f;
         camera2.lookAt(0, 0, 0);
@@ -136,8 +137,14 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         return false;
     }
 
+
+    private int last_screenX = 0;
+    private int last_screenY = 0;
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        last_screenX = screenX;
+        last_screenY = screenY;
         return false;
     }
 
@@ -148,7 +155,20 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
+        int diffX = screenX - last_screenX;
+        int diffY = screenY - last_screenY;
+        Camera camera = cameras[ncam%cameras.length];
+        if (camera instanceof OrthographicCamera) {
+            OrthographicCamera oc = (OrthographicCamera) camera;
+            oc.translate(-diffX*oc.zoom, diffY*oc.zoom, 0);
+        } else {
+            Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY,1)).sub(camera.position).nor();
+            Vector3 after = camera.unproject(new Vector3(screenX, screenY,1)).sub(camera.position).nor();
+            camera.rotate(after.cpy().crs(before), (float)(Math.acos(after.dot(before)) * 180. / Math.PI));
+        }
+        last_screenX = screenX;
+        last_screenY = screenY;
+        return true;
     }
 
     @Override
