@@ -23,7 +23,7 @@ public class DesktopLauncher {
 
 
         try {
-            IfcHolder.getInstance().openModel(new File("data/ifc/sample.ifc"));
+            IfcHolder.getInstance().openModel(new File("data/ifc/two_curved_walls.ifc"));
         } catch (Exception e) {
             e.printStackTrace();
         }

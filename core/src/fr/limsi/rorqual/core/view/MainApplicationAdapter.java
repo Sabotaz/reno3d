@@ -41,7 +41,7 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
         stage = SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode);
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera1.zoom = 1f/50;
+        camera1.zoom = 1f/10;
 
         camera1.position.set(0.f, 0, 10f);
         camera1.lookAt(0f, 0f, 0f);
