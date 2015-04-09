@@ -320,6 +320,17 @@ public class IfcHelper {
         return null;
     }
 
+    // Permet de récupérer la relation entre le building et ses étages
+    public static IfcRelAggregates getBuildingRelations (IfcModel ifcModel){
+        Collection<IfcRelAggregates> collectionRelAggregates = ifcModel.getCollection(IfcRelAggregates.class);
+        for (IfcRelAggregates actualRelAggregates : collectionRelAggregates){
+            if(actualRelAggregates.getRelatingObject().getClass().equals(IfcBuilding.class)){
+                return actualRelAggregates;
+            }
+        }
+        return null;
+    }
+
     // Permet d'ajouter un étage au batiment en lui rentrant son nom et son élévation
     public static void addBuildingStorey (IfcModel ifcModel,String nameFloor , float elevation){
         IfcBuilding ifcBuilding = getBuilding(ifcModel);
@@ -349,15 +360,9 @@ public class IfcHelper {
                 null, null, new IfcElementCompositionEnum("ELEMENT"), new IfcLengthMeasure(elevation));
 
         // Create relation IfcBuilding --> IfcBuildingStorey
-        SET<IfcObjectDefinition> relatedObjects;
-        relatedObjects = new SET<>();
-        relatedObjects.add(ifcBuildingStorey);
-        IfcRelAggregates relationBuildingToBuildingStorey;
-        relationBuildingToBuildingStorey = new IfcRelAggregates(new IfcGloballyUniqueId(
-                ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("BuildingContainer",true),
-                new IfcText("BuildingContainer for BuildingStorey",true), ifcBuilding, relatedObjects);
+        IfcRelAggregates relationBuildingToBuildingStorey = IfcHelper.getBuildingRelations(ifcModel);
+        relationBuildingToBuildingStorey.addRelatedObjects(ifcBuildingStorey);
 
-        ifcModel.addIfcObject(relationBuildingToBuildingStorey);
         ifcModel.addIfcObject(ifcBuildingStorey);
         ifcModel.addIfcObject(ifcLocalPlacementBuildingStorey);
         ifcModel.addIfcObject(ifcAxis2Placement3DBuildingStorey);
