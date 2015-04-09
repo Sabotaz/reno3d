@@ -178,6 +178,15 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
     @Override
     public boolean scrolled(int amount) {
-        return false;
+
+        Camera camera = cameras[ncam%cameras.length];
+        if (camera instanceof OrthographicCamera) {
+            OrthographicCamera oc = (OrthographicCamera) camera;
+            oc.zoom = oc.zoom * (1+amount/10f);
+        } else if (camera instanceof PerspectiveCamera) {
+            PerspectiveCamera pc = (PerspectiveCamera) camera;
+            pc.fieldOfView = pc.fieldOfView * (1+amount/10f);
+        }
+        return true;
     }
 }
