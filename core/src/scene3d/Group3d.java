@@ -64,10 +64,10 @@ public class Group3d extends Actor3d{
 
             child.transform.mul(transform);
 
-            if (child.isCullable(getStage3d().getCamera())) {
+            //if (child.isCullable(getStage3d().getCamera())) {
              child.draw(modelBatch, environment);
              visibleCount++;
-            }
+            //}
 
             child.setTransform(child_matrix);
 
