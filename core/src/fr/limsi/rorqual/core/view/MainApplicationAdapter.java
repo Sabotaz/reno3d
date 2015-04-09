@@ -86,22 +86,23 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
 
         shape.begin(ShapeRenderer.ShapeType.Line);
+        shape.setProjectionMatrix(cameras[ncam%cameras.length].combined);
+        int grid_size = 1;
+        int grid_div = 10;
 
-        int grid_size = 10;
-
-        for (int i = 0; i < Gdx.graphics.getHeight()/grid_size; i++) {
-            if (i % 5 == 0)
+        for (int i = -100; i < 100; i+=grid_size) {
+            if (i % grid_div == 0)
                 shape.setColor(new Color(1, 1, 1, 0.15f));
             else
                 shape.setColor(new Color(1, 1, 1, 0.05f));
-            shape.line(0, i*grid_size, Gdx.graphics.getWidth(), i*grid_size);
+            shape.line(-100, i, 0, 100, i, 0);
         }
-        for (int i = 0; i < Gdx.graphics.getWidth()/grid_size; i++) {
-            if (i % 5 == 0)
+        for (int i = -100; i < 100; i+=grid_size) {
+            if (i % grid_div == 0)
                 shape.setColor(new Color(1, 1, 1, 0.15f));
             else
                 shape.setColor(new Color(1, 1, 1, 0.05f));
-            shape.line(i*grid_size, 0, i*grid_size, Gdx.graphics.getHeight());
+            shape.line(i, -100, 0, i, 100, 0);
         }
 
         shape.end();
