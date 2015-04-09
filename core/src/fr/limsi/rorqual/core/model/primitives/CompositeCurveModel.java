@@ -3,7 +3,9 @@ package fr.limsi.rorqual.core.model.primitives;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import fr.limsi.rorqual.core.model.ModelProvider;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcCompositeCurve;
@@ -29,9 +31,12 @@ public class CompositeCurveModel extends AbstractModelProvider {
                 parent = new TrimmedCurveModel((IfcTrimmedCurve) segment.getParentCurve());
             }
             if (parent != null) {
-                if (!segment.getSameSense().value)
-                    Collections.reverse(parent.getPoints());
-                for (Vector3 pt : parent.getPoints()) {
+                List<Vector3> pts = new ArrayList<Vector3>(parent.getPoints());
+
+                if (!segment.getSameSense().value) {
+                    Collections.reverse(pts);
+                }
+                for (Vector3 pt : pts) {
                     points.add(pt.cpy().mul(parent.getPosition()));
                 }
             }
