@@ -35,8 +35,6 @@ package eu.mihosoft.vrl.v3d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Holds a node in a BSP tree. A BSP tree is built from a collection of polygons
@@ -96,16 +94,23 @@ final class Node {
 //            node.polygons.add(p.clone());
 //        });
 
-        Stream<Polygon> polygonStream;
+//        Stream<Polygon> polygonStream;
+//
+//        if (polygons.size() > 200) {
+//            polygonStream = polygons.parallelStream();
+//        } else {
+//            polygonStream = polygons.stream();
+//        }
 
-        if (polygons.size() > 200) {
-            polygonStream = polygons.parallelStream();
-        } else {
-            polygonStream = polygons.stream();
+//        node.polygons = polygonStream.
+//                map(p -> p.clone()).collect(Collectors.toList());
+        
+        node.polygons = new ArrayList<>();
+        
+        for(Polygon p : polygons) {
+            node.polygons.add(p.clone());
         }
-
-        node.polygons = polygonStream.
-                map(p -> p.clone()).collect(Collectors.toList());
+        
 
         return node;
     }
@@ -115,17 +120,21 @@ final class Node {
      */
     public void invert() {
         
-        Stream<Polygon> polygonStream;
+//        Stream<Polygon> polygonStream;
+//
+//        if (polygons.size() > 200) {
+//            polygonStream = polygons.parallelStream();
+//        } else {
+//            polygonStream = polygons.stream();
+//        }
 
-        if (polygons.size() > 200) {
-            polygonStream = polygons.parallelStream();
-        } else {
-            polygonStream = polygons.stream();
+//        polygonStream.forEach((polygon) -> {
+//            polygon.flip();
+//        });
+        
+        for(Polygon p : polygons) {
+            p.flip();
         }
-
-        polygonStream.forEach((polygon) -> {
-            polygon.flip();
-        });
 
         if (this.plane == null && !polygons.isEmpty()) {
             this.plane = polygons.get(0).plane.clone();
@@ -240,10 +249,15 @@ final class Node {
         List<Polygon> backP = new ArrayList<>();
 
         // parellel version does not work here
-        polygons.forEach((polygon) -> {
+//        polygons.forEach((polygon) -> {
+//            this.plane.splitPolygon(
+//                    polygon, this.polygons, this.polygons, frontP, backP);
+//        });
+        
+        for(Polygon polygon : polygons) {
             this.plane.splitPolygon(
                     polygon, this.polygons, this.polygons, frontP, backP);
-        });
+        }
 
         if (frontP.size() > 0) {
             if (this.front == null) {

@@ -216,5 +216,15 @@ public class Sphere implements Primitive {
     public PropertyStorage getProperties() {
         return properties;
     }
+    
+    /**
+     * Returns this primitive as {@link eu.mihosoft.vrl.v3d.CSG}.
+     *
+     * @return this primitive as {@link eu.mihosoft.vrl.v3d.CSG}
+     */
+    @Override
+    public CSG toCSG() {
+        return CSG.fromPolygons(getProperties(), toPolygons());
+    }
 
 }

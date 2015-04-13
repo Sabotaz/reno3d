@@ -29,7 +29,7 @@ import java.io.*;
  *
  * <p>A hull is constructed by providing a set of points
  * to either a constructor or a
- * {@link #build(Point3d[]) build} method. After
+ * {@link #build(eu.mihosoft.vrl.v3d.ext.quickhull3d.Point3d[]) build} method. After
  * the hull is built, its vertices and faces can be retrieved
  * using {@link #getVertices()
  * getVertices} and {@link #getFaces() getFaces}.

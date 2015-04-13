@@ -61,5 +61,5 @@ package eu.mihosoft.vrl.v3d.ext.org.poly2tri;
  */
 interface TriangulationProcessListener
 {
-    public void triangulationEvent( TriangulationProcessEvent e, Triangulatable unit );
+    public void triangulationEvent(TriangulationProcessEvent e, Triangulatable unit);
 }

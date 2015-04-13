@@ -42,10 +42,10 @@ import eu.mihosoft.vrl.v3d.ext.org.poly2tri.PolygonUtil;
 /**
  * Represents a convex polygon.
  *
- * Each convex polygon has a {@code shared} property, which is shared between
- * all polygons that are clones of each other or where split from the same
- * polygon. This can be used to define per-polygon properties (such as surface
- * color).
+ * Each convex polygon has a {@code shared} property, disthich is shared
+ * betdisteen all polygons that are clones of each other or where split from the
+ * same polygon. This can be used to define per-polygon properties (such as
+ * surface color).
  */
 public final class Polygon {
 
@@ -75,18 +75,6 @@ public final class Polygon {
      * @return the decomposed concave polygon (list of convex polygons)
      */
     public static List<Polygon> fromConcavePoints(Vector3d... points) {
-        Polygon p = fromPoints(points);
-
-        return PolygonUtil.concaveToConvex(p);
-    }
-
-    /**
-     * Decomposes the specified concave polygon into convex polygons.
-     *
-     * @param points the points that define the polygon
-     * @return the decomposed concave polygon (list of convex polygons)
-     */
-    public static List<Polygon> fromConcavePoints(List<Vector3d> points) {
         Polygon p = fromPoints(points);
 
         return PolygonUtil.concaveToConvex(p);
@@ -145,9 +133,13 @@ public final class Polygon {
     @Override
     public Polygon clone() {
         List<Vertex> newVertices = new ArrayList<>();
-        this.vertices.forEach((vertex) -> {
+//        this.vertices.forEach((vertex) -> {
+//            newVertices.add(vertex.clone());
+//        });
+
+        for (Vertex vertex : vertices) {
             newVertices.add(vertex.clone());
-        });
+        }
         return new Polygon(newVertices, getStorage());
     }
 
@@ -157,9 +149,14 @@ public final class Polygon {
      * @return this polygon
      */
     public Polygon flip() {
-        vertices.forEach((vertex) -> {
+//        vertices.forEach((vertex) -> {
+//            vertex.flip();
+//        });
+
+        for (Vertex vertex : vertices) {
             vertex.flip();
-        });
+        }
+
         Collections.reverse(vertices);
 
         plane.flip();
@@ -229,9 +226,13 @@ public final class Polygon {
      * @return this polygon
      */
     public Polygon translate(Vector3d v) {
-        vertices.forEach((vertex) -> {
+//        vertices.forEach((vertex) -> {
+//            vertex.pos = vertex.pos.plus(v);
+//        });
+
+        for (Vertex vertex : vertices) {
             vertex.pos = vertex.pos.plus(v);
-        });
+        }
 
         Vector3d a = this.vertices.get(0).pos;
         Vector3d b = this.vertices.get(1).pos;
@@ -267,11 +268,15 @@ public final class Polygon {
      */
     public Polygon transform(Transform transform) {
 
-        this.vertices.stream().forEach(
-                (v) -> {
-                    v.transform(transform);
-                }
-        );
+//        this.vertices.stream().forEach(
+//                (v) -> {
+//                    v.transform(transform);
+//                }
+//        );
+        
+        for (Vertex vertex : vertices) {
+            vertex.transform(transform);
+        }
 
         Vector3d a = this.vertices.get(0).pos;
         Vector3d b = this.vertices.get(1).pos;
@@ -403,40 +408,6 @@ public final class Polygon {
         return new Bounds(
                 new Vector3d(minX, minY, minZ),
                 new Vector3d(maxX, maxY, maxZ));
-    }
-
-    public boolean contains(Vector3d p) {
-        // taken from http://www.java-gaming.org/index.php?topic=26013.0
-        // and http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-        double px = p.x;
-        double py = p.y;
-        boolean oddNodes = false;
-        double x2 = vertices.get(vertices.size() - 1).pos.x;
-        double y2 = vertices.get(vertices.size() - 1).pos.y;
-        double x1, y1;
-        for (int i = 0; i < vertices.size(); x2 = x1, y2 = y1, ++i) {
-            x1 = vertices.get(i).pos.x;
-            y1 = vertices.get(i).pos.y;
-            if (((y1 < py) && (y2 >= py))
-                    || (y1 >= py) && (y2 < py)) {
-                if ((py - y1) / (y2 - y1)
-                        * (x2 - x1) < (px - x1)) {
-                    oddNodes = !oddNodes;
-                }
-            }
-        }
-        return oddNodes;
-    }
-    
-    public boolean contains(Polygon p) {
-        
-        for (Vertex v : p.vertices) {
-            if (!contains(v.pos)) {
-                return false;
-            }
-        }
-        
-        return true;
     }
 
 //    private static List<Polygon> concaveToConvex(Polygon concave) {

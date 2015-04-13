@@ -45,7 +45,7 @@ public class QuadrocopterPlatform {
 
         CSG platform =  basePlatform(platformRadius, numHoneycombs, platformThickness, platformBorderThickness, honeycombWallThickness);
         
-        double armHeight = 25;
+        double armHeight = 18;
         double armScaleFactor = 0.5;
         double armCubeWidth = armHeight;
         double armCubeThickness = 4;

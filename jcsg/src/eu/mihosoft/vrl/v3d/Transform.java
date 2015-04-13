@@ -37,8 +37,8 @@ import javax.vecmath.Matrix4d;
 
 /**
  * Transform. Transformations (translation, rotation, scale) can be applied to
- * geometrical objects like {@link CSG}, {@link Polygon}, {@link Vertex} and
- * {@link Vector3d}.
+ * geometrical objects like {@link eu.mihosoft.vrl.v3d.CSG}, {@link eu.mihosoft.vrl.v3d.Polygon}, {@link eu.mihosoft.vrl.v3d.Vertex} and
+ * {@link eu.mihosoft.vrl.v3d.Vector3d}.
  *
  * This transform class uses the builder pattern to define combined
  * transformations.<br><br>

@@ -11,7 +11,6 @@ package eu.mihosoft.vrl.v3d;
  * 
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
-@FunctionalInterface
 public interface WeightFunction {
     /**
      * Evaluates the function at the specified location.

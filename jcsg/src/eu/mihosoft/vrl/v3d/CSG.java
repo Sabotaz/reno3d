@@ -33,21 +33,14 @@
  */
 package eu.mihosoft.vrl.v3d;
 
-import eu.mihosoft.vrl.v3d.ext.openjfx.importers.obj.ObjImporter;
+import com.badlogic.gdx.graphics.Color;
+
 import eu.mihosoft.vrl.v3d.ext.quickhull3d.HullUtil;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Mesh;
-import javafx.scene.shape.TriangleMesh;
 
 /**
  * Constructive Solid Geometry (CSG).
@@ -172,16 +165,25 @@ public class CSG {
 //        polygons.forEach((polygon) -> {
 //            csg.polygons.add(polygon.clone());
 //        });
-        Stream<Polygon> polygonStream;
+        
+        // Java 8
+//        Stream<Polygon> polygonStream;
+//
+//        if (polygons.size() > 200) {
+//            polygonStream = polygons.parallelStream();
+//        } else {
+//            polygonStream = polygons.stream();
+//        }
 
-        if (polygons.size() > 200) {
-            polygonStream = polygons.parallelStream();
-        } else {
-            polygonStream = polygons.stream();
+//        csg.polygons = polygonStream.
+//                map((Polygon p) -> p.clone()).collect(Collectors.toList());
+        
+        csg.polygons = new ArrayList<>();
+        
+        for (Polygon p : polygons) {
+            csg.polygons.add(p.clone());
         }
 
-        csg.polygons = polygonStream.
-                map((Polygon p) -> p.clone()).collect(Collectors.toList());
 
         return csg;
     }
@@ -240,29 +242,6 @@ public class CSG {
 //                return _unionIntersectOpt(csg);
                 return _unionNoOpt(csg);
         }
-    }
-    
-    /**
-     * Returns a csg consisting of the polygons of this csg and the specified csg.
-     * 
-     * The purpose of this method is to allow fast union operations for objects
-     * that do not intersect. 
-     * 
-     * <p><b>WARNING:</b> this method does not apply the csg algorithms. Therefore,
-     * please ensure that this csg and the specified csg do not intersect.
-     * 
-     * @param csg csg
-     * 
-     * @return a csg consisting of the polygons of this csg and the specified csg
-     */
-    public CSG dumbUnion(CSG csg) {
-        
-        CSG result = this.clone();
-        CSG other = csg.clone();
-        
-        result.polygons.addAll(other.polygons);
-        
-        return result;
     }
 
     /**
@@ -346,25 +325,13 @@ public class CSG {
      */
     public CSG hull(List<CSG> csgs) {
 
-        CSG csgsUnion = new CSG();
-        csgsUnion.storage = storage;
-        csgsUnion.optType = optType;
-        csgsUnion.polygons = this.clone().polygons;
+        CSG csgsUnion = this;
 
-        csgs.stream().forEach((csg) -> {
-            csgsUnion.polygons.addAll(csg.clone().polygons);
-        });
+        for (CSG csg : csgs) {
+            csgsUnion = csgsUnion.union(csg);
+        }
 
-        csgsUnion.polygons.forEach(p -> p.setStorage(storage));
         return csgsUnion.hull();
-
-//        CSG csgsUnion = this;
-//
-//        for (CSG csg : csgs) {
-//            csgsUnion = csgsUnion.union(csg);
-//        }
-//
-//        return csgsUnion.hull();
     }
 
     /**
@@ -379,9 +346,9 @@ public class CSG {
     }
 
     private CSG _unionCSGBoundsOpt(CSG csg) {
-        System.err.println("WARNING: using " + OptType.NONE
+        System.err.println("WARNING: using " + OptType.POLYGON_BOUND
                 + " since other optimization types missing for union operation.");
-        return _unionIntersectOpt(csg);
+        return _unionPolygonBoundsOpt(csg);
     }
 
     private CSG _unionPolygonBoundsOpt(CSG csg) {
@@ -390,14 +357,21 @@ public class CSG {
 
         Bounds bounds = csg.getBounds();
 
-        this.polygons.stream().forEach((p) -> {
+        for (Polygon p : this.polygons) {
             if (bounds.intersects(p.getBounds())) {
                 inner.add(p);
             } else {
                 outer.add(p);
             }
-        });
+        }
 
+//        this.polygons.stream().forEach((p) -> {
+//            if (bounds.intersects(p.getBounds())) {
+//                inner.add(p);
+//            } else {
+//                outer.add(p);
+//            }
+//        });
         List<Polygon> allPolygons = new ArrayList<>();
 
         if (!inner.isEmpty()) {
@@ -561,7 +535,7 @@ public class CSG {
         CSG a1 = this._differenceNoOpt(csg.getBounds().toCSG());
         CSG a2 = this.intersect(csg.getBounds().toCSG());
 
-        return a2._differenceNoOpt(b)._unionIntersectOpt(a1).optimization(getOptType());
+        return a2._differenceNoOpt(b).union(a1).optimization(getOptType());
     }
 
     private CSG _differencePolygonBoundsOpt(CSG csg) {
@@ -570,13 +544,20 @@ public class CSG {
 
         Bounds bounds = csg.getBounds();
 
-        this.polygons.stream().forEach((p) -> {
+//        this.polygons.stream().forEach((p) -> {
+//            if (bounds.intersects(p.getBounds())) {
+//                inner.add(p);
+//            } else {
+//                outer.add(p);
+//            }
+//        });
+        for (Polygon p : this.polygons) {
             if (bounds.intersects(p.getBounds())) {
                 inner.add(p);
             } else {
                 outer.add(p);
             }
-        });
+        }
 
         CSG innerCSG = CSG.fromPolygons(inner);
 
@@ -728,10 +709,15 @@ public class CSG {
      */
     public StringBuilder toStlString(StringBuilder sb) {
         sb.append("solid v3d.csg\n");
-        this.polygons.stream().forEach(
-                (Polygon p) -> {
-                    p.toStlString(sb);
-                });
+//        this.polygons.stream().forEach(
+//                (Polygon p) -> {
+//                    p.toStlString(sb);
+//                });
+
+        for (Polygon p : this.polygons) {
+            p.toStlString(sb);
+        }
+
         sb.append("endsolid v3d.csg\n");
         return sb;
     }
@@ -741,9 +727,9 @@ public class CSG {
         CSG result = this.clone();
 
         storage.set("material:color",
-                "" + c.getRed()
-                + " " + c.getGreen()
-                + " " + c.getBlue());
+                "" + c.r
+                + " " + c.g
+                + " " + c.b);
 
         return result;
     }
@@ -782,7 +768,16 @@ public class CSG {
         for (Polygon p : polygons) {
             List<Integer> polyIndices = new ArrayList<>();
 
-            p.vertices.stream().forEach((v) -> {
+//            p.vertices.stream().forEach((v) -> {
+//                if (!vertices.contains(v)) {
+//                    vertices.add(v);
+//                    v.toObjString(objSb);
+//                    polyIndices.add(vertices.size());
+//                } else {
+//                    polyIndices.add(vertices.indexOf(v) + 1);
+//                }
+//            });
+            for (Vertex v : p.vertices) {
                 if (!vertices.contains(v)) {
                     vertices.add(v);
                     v.toObjString(objSb);
@@ -790,7 +785,7 @@ public class CSG {
                 } else {
                     polyIndices.add(vertices.indexOf(v) + 1);
                 }
-            });
+            }
 
             if (!materialNames.containsKey(p.getStorage())) {
                 materialIndex++;
@@ -808,8 +803,11 @@ public class CSG {
         for (PolygonStruct ps : indices) {
 
             // add mtl info
-            ps.storage.getValue("material:color").ifPresent(
-                    (v) -> objSb.append("usemtl ").append(ps.materialName).append("\n"));
+//            ps.storage.getValue("material:color").ifPresent(
+//                    (v) -> objSb.append("usemtl ").append(ps.materialName).append("\n"));
+            if (ps.storage.getValue("material:color") != null) {
+                objSb.append("usemtl ").append(ps.materialName).append("\n");
+            }
 
             // we triangulate the polygon to ensure 
             // compatibility with 3d printer software
@@ -830,12 +828,18 @@ public class CSG {
 
         StringBuilder mtlSb = new StringBuilder();
 
-        materialNames.keySet().forEach(s -> {
+//        materialNames.keySet().forEach(s -> {
+//            if (s.contains("material:color")) {
+//                mtlSb.append("newmtl material-").append(s.getValue("material:name").get()).append("\n");
+//                mtlSb.append("Kd ").append(s.getValue("material:color").get()).append("\n");
+//            }
+//        });
+        for (PropertyStorage s : materialNames.keySet()) {
             if (s.contains("material:color")) {
-                mtlSb.append("newmtl material-").append(s.getValue("material:name").get()).append("\n");
-                mtlSb.append("Kd ").append(s.getValue("material:color").get()).append("\n");
+                mtlSb.append("newmtl material-").append((String)s.getValue("material:name")).append("\n");
+                mtlSb.append("Kd ").append((String)s.getValue("material:color")).append("\n");
             }
-        });
+        }
 
         return new ObjFile(objSb.toString(), mtlSb.toString());
     }
@@ -871,7 +875,16 @@ public class CSG {
         for (Polygon p : polygons) {
             List<Integer> polyIndices = new ArrayList<>();
 
-            p.vertices.stream().forEach((v) -> {
+//            p.vertices.stream().forEach((v) -> {
+//                if (!vertices.contains(v)) {
+//                    vertices.add(v);
+//                    v.toObjString(sb);
+//                    polyIndices.add(vertices.size());
+//                } else {
+//                    polyIndices.add(vertices.indexOf(v) + 1);
+//                }
+//            });
+            for (Vertex v : p.vertices) {
                 if (!vertices.contains(v)) {
                     vertices.add(v);
                     v.toObjString(sb);
@@ -879,7 +892,7 @@ public class CSG {
                 } else {
                     polyIndices.add(vertices.indexOf(v) + 1);
                 }
-            });
+            }
 
         }
 
@@ -933,9 +946,14 @@ public class CSG {
             return clone();
         }
 
-        List<Polygon> newpolygons = this.polygons.stream().map(
-                p -> p.transformed(transform)
-        ).collect(Collectors.toList());
+//        List<Polygon> newpolygons = this.polygons.stream().map(
+//                p -> p.transformed(transform)
+//        ).collect(Collectors.toList());
+        List<Polygon> newpolygons = new ArrayList<>();
+
+        for (Polygon p : this.polygons) {
+            newpolygons.add(p.transformed(transform));
+        }
 
         CSG result = CSG.fromPolygons(newpolygons).optimization(getOptType());
 
@@ -943,160 +961,159 @@ public class CSG {
 
         return result;
     }
- 
 
-    // TODO finish experiment (20.7.2014)
-    public MeshContainer toJavaFXMesh() {
-
-        return toJavaFXMeshSimple();
-
-// TODO test obj approach with multiple materials
-//        try {
-//            ObjImporter importer = new ObjImporter(toObj());
+//    // TODO finish experiment (20.7.2014)
+//    public MeshContainer toJavaFXMesh() {
 //
-//            List<Mesh> meshes = new ArrayList<>(importer.getMeshCollection());
-//            return new MeshContainer(getBounds().getMin(), getBounds().getMax(),
-//                    meshes, new ArrayList<>(importer.getMaterialCollection()));
-//        } catch (IOException ex) {
-//            Logger.getLogger(CSG.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        // we have no backup strategy for broken streams :(
-//        return null;
-    }
+//        return toJavaFXMeshSimple();
+//
+//// TODO test obj approach with multiple materials
+////        try {
+////            ObjImporter importer = new ObjImporter(toObj());
+////
+////            List<Mesh> meshes = new ArrayList<>(importer.getMeshCollection());
+////            return new MeshContainer(getBounds().getMin(), getBounds().getMax(),
+////                    meshes, new ArrayList<>(importer.getMaterialCollection()));
+////        } catch (IOException ex) {
+////            Logger.getLogger(CSG.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+////        // we have no backup strategy for broken streams :(
+////        return null;
+//    }
 
-    /**
-     * Returns the CSG as JavaFX triangle mesh.
-     *
-     * @return the CSG as JavaFX triangle mesh
-     */
-    public MeshContainer toJavaFXMeshSimple() {
-
-        TriangleMesh mesh = new TriangleMesh();
-
-        double minX = Double.POSITIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double minZ = Double.POSITIVE_INFINITY;
-
-        double maxX = Double.NEGATIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
-        double maxZ = Double.NEGATIVE_INFINITY;
-
-        int counter = 0;
-        for (Polygon p : getPolygons()) {
-            if (p.vertices.size() >= 3) {
-
-                // TODO: improve the triangulation?
-                //
-                // JavaOne requires triangular polygons.
-                // If our polygon has more vertices, create
-                // multiple triangles:
-                Vertex firstVertex = p.vertices.get(0);
-                for (int i = 0; i < p.vertices.size() - 2; i++) {
-
-                    if (firstVertex.pos.x < minX) {
-                        minX = firstVertex.pos.x;
-                    }
-                    if (firstVertex.pos.y < minY) {
-                        minY = firstVertex.pos.y;
-                    }
-                    if (firstVertex.pos.z < minZ) {
-                        minZ = firstVertex.pos.z;
-                    }
-
-                    if (firstVertex.pos.x > maxX) {
-                        maxX = firstVertex.pos.x;
-                    }
-                    if (firstVertex.pos.y > maxY) {
-                        maxY = firstVertex.pos.y;
-                    }
-                    if (firstVertex.pos.z > maxZ) {
-                        maxZ = firstVertex.pos.z;
-                    }
-
-                    mesh.getPoints().addAll(
-                            (float) firstVertex.pos.x,
-                            (float) firstVertex.pos.y,
-                            (float) firstVertex.pos.z);
-
-                    mesh.getTexCoords().addAll(0); // texture (not covered)
-                    mesh.getTexCoords().addAll(0);
-
-                    Vertex secondVertex = p.vertices.get(i + 1);
-
-                    if (secondVertex.pos.x < minX) {
-                        minX = secondVertex.pos.x;
-                    }
-                    if (secondVertex.pos.y < minY) {
-                        minY = secondVertex.pos.y;
-                    }
-                    if (secondVertex.pos.z < minZ) {
-                        minZ = secondVertex.pos.z;
-                    }
-
-                    if (secondVertex.pos.x > maxX) {
-                        maxX = firstVertex.pos.x;
-                    }
-                    if (secondVertex.pos.y > maxY) {
-                        maxY = firstVertex.pos.y;
-                    }
-                    if (secondVertex.pos.z > maxZ) {
-                        maxZ = firstVertex.pos.z;
-                    }
-
-                    mesh.getPoints().addAll(
-                            (float) secondVertex.pos.x,
-                            (float) secondVertex.pos.y,
-                            (float) secondVertex.pos.z);
-
-                    mesh.getTexCoords().addAll(0); // texture (not covered)
-                    mesh.getTexCoords().addAll(0);
-
-                    Vertex thirdVertex = p.vertices.get(i + 2);
-
-                    mesh.getPoints().addAll(
-                            (float) thirdVertex.pos.x,
-                            (float) thirdVertex.pos.y,
-                            (float) thirdVertex.pos.z);
-
-                    if (thirdVertex.pos.x < minX) {
-                        minX = thirdVertex.pos.x;
-                    }
-                    if (thirdVertex.pos.y < minY) {
-                        minY = thirdVertex.pos.y;
-                    }
-                    if (thirdVertex.pos.z < minZ) {
-                        minZ = thirdVertex.pos.z;
-                    }
-
-                    if (thirdVertex.pos.x > maxX) {
-                        maxX = firstVertex.pos.x;
-                    }
-                    if (thirdVertex.pos.y > maxY) {
-                        maxY = firstVertex.pos.y;
-                    }
-                    if (thirdVertex.pos.z > maxZ) {
-                        maxZ = firstVertex.pos.z;
-                    }
-
-                    mesh.getTexCoords().addAll(0); // texture (not covered)
-                    mesh.getTexCoords().addAll(0);
-
-                    mesh.getFaces().addAll(
-                            counter, // first vertex
-                            0, // texture (not covered)
-                            counter + 1, // second vertex
-                            0, // texture (not covered)
-                            counter + 2, // third vertex
-                            0 // texture (not covered)
-                    );
-                    counter += 3;
-                } // end for
-            } // end if #verts >= 3
-
-        } // end for polygon
-
-        return new MeshContainer(new Vector3d(minX, minY, minZ), new Vector3d(maxX, maxY, maxZ), mesh);
-    }
+//    /**
+//     * Returns the CSG as JavaFX triangle mesh.
+//     *
+//     * @return the CSG as JavaFX triangle mesh
+//     */
+//    public MeshContainer toJavaFXMeshSimple() {
+//
+//        TriangleMesh mesh = new TriangleMesh();
+//
+//        double minX = Double.POSITIVE_INFINITY;
+//        double minY = Double.POSITIVE_INFINITY;
+//        double minZ = Double.POSITIVE_INFINITY;
+//
+//        double maxX = Double.NEGATIVE_INFINITY;
+//        double maxY = Double.NEGATIVE_INFINITY;
+//        double maxZ = Double.NEGATIVE_INFINITY;
+//
+//        int counter = 0;
+//        for (Polygon p : getPolygons()) {
+//            if (p.vertices.size() >= 3) {
+//
+//                // TODO: improve the triangulation?
+//                //
+//                // JavaOne requires triangular polygons.
+//                // If our polygon has more vertices, create
+//                // multiple triangles:
+//                Vertex firstVertex = p.vertices.get(0);
+//                for (int i = 0; i < p.vertices.size() - 2; i++) {
+//
+//                    if (firstVertex.pos.x < minX) {
+//                        minX = firstVertex.pos.x;
+//                    }
+//                    if (firstVertex.pos.y < minY) {
+//                        minY = firstVertex.pos.y;
+//                    }
+//                    if (firstVertex.pos.z < minZ) {
+//                        minZ = firstVertex.pos.z;
+//                    }
+//
+//                    if (firstVertex.pos.x > maxX) {
+//                        maxX = firstVertex.pos.x;
+//                    }
+//                    if (firstVertex.pos.y > maxY) {
+//                        maxY = firstVertex.pos.y;
+//                    }
+//                    if (firstVertex.pos.z > maxZ) {
+//                        maxZ = firstVertex.pos.z;
+//                    }
+//
+//                    mesh.getPoints().addAll(
+//                            (float) firstVertex.pos.x,
+//                            (float) firstVertex.pos.y,
+//                            (float) firstVertex.pos.z);
+//
+//                    mesh.getTexCoords().addAll(0); // texture (not covered)
+//                    mesh.getTexCoords().addAll(0);
+//
+//                    Vertex secondVertex = p.vertices.get(i + 1);
+//
+//                    if (secondVertex.pos.x < minX) {
+//                        minX = secondVertex.pos.x;
+//                    }
+//                    if (secondVertex.pos.y < minY) {
+//                        minY = secondVertex.pos.y;
+//                    }
+//                    if (secondVertex.pos.z < minZ) {
+//                        minZ = secondVertex.pos.z;
+//                    }
+//
+//                    if (secondVertex.pos.x > maxX) {
+//                        maxX = firstVertex.pos.x;
+//                    }
+//                    if (secondVertex.pos.y > maxY) {
+//                        maxY = firstVertex.pos.y;
+//                    }
+//                    if (secondVertex.pos.z > maxZ) {
+//                        maxZ = firstVertex.pos.z;
+//                    }
+//
+//                    mesh.getPoints().addAll(
+//                            (float) secondVertex.pos.x,
+//                            (float) secondVertex.pos.y,
+//                            (float) secondVertex.pos.z);
+//
+//                    mesh.getTexCoords().addAll(0); // texture (not covered)
+//                    mesh.getTexCoords().addAll(0);
+//
+//                    Vertex thirdVertex = p.vertices.get(i + 2);
+//
+//                    mesh.getPoints().addAll(
+//                            (float) thirdVertex.pos.x,
+//                            (float) thirdVertex.pos.y,
+//                            (float) thirdVertex.pos.z);
+//
+//                    if (thirdVertex.pos.x < minX) {
+//                        minX = thirdVertex.pos.x;
+//                    }
+//                    if (thirdVertex.pos.y < minY) {
+//                        minY = thirdVertex.pos.y;
+//                    }
+//                    if (thirdVertex.pos.z < minZ) {
+//                        minZ = thirdVertex.pos.z;
+//                    }
+//
+//                    if (thirdVertex.pos.x > maxX) {
+//                        maxX = firstVertex.pos.x;
+//                    }
+//                    if (thirdVertex.pos.y > maxY) {
+//                        maxY = firstVertex.pos.y;
+//                    }
+//                    if (thirdVertex.pos.z > maxZ) {
+//                        maxZ = firstVertex.pos.z;
+//                    }
+//
+//                    mesh.getTexCoords().addAll(0); // texture (not covered)
+//                    mesh.getTexCoords().addAll(0);
+//
+//                    mesh.getFaces().addAll(
+//                            counter, // first vertex
+//                            0, // texture (not covered)
+//                            counter + 1, // second vertex
+//                            0, // texture (not covered)
+//                            counter + 2, // third vertex
+//                            0 // texture (not covered)
+//                    );
+//                    counter += 3;
+//                } // end for
+//            } // end if #verts >= 3
+//
+//        } // end for polygon
+//
+//        return new MeshContainer(new Vector3d(minX, minY, minZ), new Vector3d(maxX, maxY, maxZ), mesh);
+//    }
 
     /**
      * Returns the bounds of this csg.

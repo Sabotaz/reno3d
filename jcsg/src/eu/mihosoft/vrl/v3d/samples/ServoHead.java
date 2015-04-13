@@ -10,7 +10,6 @@ import eu.mihosoft.vrl.v3d.Cylinder;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.FileUtil;
 import eu.mihosoft.vrl.v3d.Transform;
-import static eu.mihosoft.vrl.v3d.Transform.unity;
 import eu.mihosoft.vrl.v3d.Vector3d;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -115,7 +114,7 @@ public class ServoHead {
 
         CSG headFinal = cyl1.difference(cyl2).difference(head);
 
-        return headFinal.transformed(unity().rotX(180).translateZ(-headHeight-headThickness));
+        return headFinal;
     }
     
     

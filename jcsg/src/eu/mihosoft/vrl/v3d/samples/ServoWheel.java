@@ -10,7 +10,6 @@ import eu.mihosoft.vrl.v3d.Cylinder;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.FileUtil;
 import eu.mihosoft.vrl.v3d.Transform;
-import static eu.mihosoft.vrl.v3d.Transform.unity;
 import eu.mihosoft.vrl.v3d.Vector3d;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -21,101 +20,116 @@ import java.nio.file.Paths;
  */
 public class ServoWheel {
 
-    private double toothLength = 0.7;
-    private double toothWidth = 0.1;
-    private double toothHeight = 0.3;
-    private int toothCount = 25;
-    private double headHeight = 4;
-    private double headDiameter = 5.92;
-    private double headScrewDiameter = 2.5;
-    private double headThickness = 1.1;
+    public static CSG servoTooth(double toothLength, double toothWidth, double toothHeight, double headHeight) {
 
-    private ServoHead servoHead = new ServoHead(toothLength, toothWidth, toothHeight, toothCount, headHeight, headDiameter, headScrewDiameter, headThickness);
+         //
+        //       |  tw  |
+        //       --------    --
+        //      /        \   th
+        //     /          \  --
+        //     
+        //     |    tl    |
+        //
+        return Extrude.points(new Vector3d(0, 0, headHeight),
+                new Vector3d(-toothLength / 2, 0),
+                new Vector3d(-toothWidth / 2, toothHeight),
+                new Vector3d(toothWidth / 2, toothHeight),
+                new Vector3d(toothLength / 2, 0)
+        );
+    }
 
-    private int numberOfArms = 7;
-    double innerWidth = 7;
-    double outerWidth = 3.5;
-    double thickness = 2;
-    double radius = 27.5;
-    double ringThickness = 3;
-    double wheelThickness = 5;
+    public static CSG toCSG() {
 
-    double minorArmLength = radius * 0.75;
-    double minorArmHeight = headHeight;
-    double minorArmThickness = 2.5;
-    
-    double outerRingThickness = wheelThickness/3.0*2;
-    double outerRingDepth = 0.5;
+//        return servoTooth(2, 1, 2, 6);
+        return servoHead(5.92, 4, 25, 0.3, 0.7, 0.1);
+    }
 
-    public CSG toCSG() {
+    public static CSG servoHead(
+            double headDiameter,
+            double headHeight,
+            int toothCount,
+            double toothHeight,
+            double toothLength,
+            double toothWidth) {
 
-        double dt = 360.0 / numberOfArms;
+        double clear = 0.3;
 
-        CSG arms = null;
+        CSG cylinder = new Cylinder(
+                new Vector3d(0, 0, 0), new Vector3d(0, 0, headHeight),
+                headDiameter / 2 - toothHeight + clear + 0.03, toothCount*2).toCSG();
 
-        for (int i = 0; i < numberOfArms; i++) {
+        CSG result = null;
 
-            CSG arm = servoArm(innerWidth, outerWidth, thickness, radius, ringThickness, minorArmThickness, minorArmLength, minorArmHeight).transformed(unity().rotZ(dt * i));
-
-            if (arms == null) {
-                arms = arm;
+        for (int i = 0; i < toothCount; i++) {
+            
+              CSG tooth = servoTooth(toothLength, toothWidth, toothHeight, headHeight);
+              
+              Transform translate = Transform.unity().translateY(headDiameter / 2 - toothHeight + clear);
+              Transform rot = Transform.unity().rotZ(i * (360.0 / toothCount));  
+              
+              tooth = tooth.transformed(rot.apply(translate));
+            
+            if (i == 0) {
+                result = tooth;
             } else {
-                arms = arms.union(arm);
+                result = result.union(tooth);
             }
         }
+        
+        result = result.union(cylinder);
 
-        CSG sHead = servoHead.servoHeadFemale();
+        return result;
 
-        CSG screwHole = new Cylinder(headScrewDiameter / 2.0, ringThickness * 2, 16).toCSG();
-
-        if (arms != null) {
-            sHead = sHead.union(arms);
+    }
+    
+    public static CSG servoArm(
+            double headDiameter,
+            double headHeight,
+            double headThickness,
+            double headScrewDiameter,
+            double toothLength, 
+            double toothWidth,
+            double armLength,
+            int armCount) {
+        return null;
+    }
+    
+    public static CSG arm(double toothLength, double toothWidth, double headHeight, double headHeight1, double headHeight2, int holeCount) {
+        return null;
+    }
+    
+    private static CSG union(CSG first, CSG... csgs) {
+        CSG result = first;
+        
+        for (CSG csg : csgs) {
+            result = result.union(csg);
         }
-
-        sHead = sHead.difference(screwHole);
-
-        CSG outerWheelCylinder = new Cylinder(radius, wheelThickness, 64).toCSG();
-        CSG innerWheelCylinder = new Cylinder(radius - ringThickness, wheelThickness, 64).toCSG();
-
-        CSG ring = outerWheelCylinder.difference(innerWheelCylinder);
-
-        CSG wheel = ring.union(sHead);
         
-       
-        
-        CSG outerRingOutCylinder = new Cylinder(radius, outerRingThickness, 64).toCSG();
-        CSG outerRingInnerCylinder = new Cylinder(radius-outerRingDepth, outerRingThickness, 64).toCSG();
-        
-        CSG outerRing = outerRingOutCylinder.difference(outerRingInnerCylinder).
-                transformed(unity().translateZ(wheelThickness*0.5-outerRingThickness*0.5));
-        
-        wheel = wheel.difference(outerRing);
-        
-        return wheel;
+        return first;
     }
-
-    public CSG servoArm(
-            double innerWidth, double outerWidth, double thickness, double radius, double wheelThickness, double minorArmThickness, double minorArmLegth, double minorArmHeight) {
-        CSG mainArm = Extrude.points(Vector3d.z(thickness),
-                new Vector3d(-innerWidth * 0.5, 0),
-                new Vector3d(innerWidth * 0.5, 0),
-                new Vector3d(outerWidth * 0.5, radius - wheelThickness),
-                new Vector3d(-outerWidth * 0.5, radius - wheelThickness)
-        );
-
-        CSG minorArm = Extrude.points(Vector3d.z(minorArmThickness),
-                new Vector3d(headDiameter * 0.5 + headThickness * 0.5, thickness),
-                new Vector3d(minorArmLegth - headDiameter * 0.5 - headThickness * 0.5, thickness),
-                new Vector3d(headDiameter * 0.5 + headThickness * 0.5, minorArmHeight + thickness * 0.5)).transformed(unity().rot(-90, 0, 0).translateZ(-minorArmThickness * 0.5));
-
-        minorArm = minorArm.transformed(unity().rotZ(-90));
-
-        return mainArm.union(minorArm);
-
+    
+    private static CSG difference(CSG first, CSG... csgs) {
+        CSG result = first;
+        
+        for (CSG csg : csgs) {
+            result = result.difference(csg);
+        }
+        
+        return first;
     }
-
+    
+    private static CSG intersect(CSG first, CSG... csgs) {
+        CSG result = first;
+        
+        for (CSG csg : csgs) {
+            result = result.intersect(csg);
+        }
+        
+        return first;
+    }
+    
     public static void main(String[] args) throws IOException {
-
+        
         System.out.println("RUNNING");
 
         FileUtil.write(Paths.get("servo-wheel.stl"), new ServoWheel().toCSG().toStlString());

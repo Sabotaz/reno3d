@@ -178,11 +178,21 @@ public class Cube implements Primitive {
 
     /**
      * Defines that this cube will not be centered.
+     *
      * @return this cube
      */
     public Cube noCenter() {
         centered = false;
         return this;
+    }
+
+    /**
+     * Returns this primitive as {@link eu.mihosoft.vrl.v3d.CSG}.
+     *
+     * @return this primitive as {@link eu.mihosoft.vrl.v3d.CSG}
+     */
+    public CSG toCSG() {
+        return CSG.fromPolygons(getProperties(), toPolygons());
     }
 
 }

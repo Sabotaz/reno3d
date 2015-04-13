@@ -33,10 +33,10 @@
  */
 package eu.mihosoft.vrl.v3d;
 
+import com.badlogic.gdx.graphics.Color;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import javafx.scene.paint.Color;
 
 /**
  * A simple property storage.
@@ -68,7 +68,26 @@ public class PropertyStorage {
         map.put(key, property);
     }
 
-    /**
+//    /**
+//     * Returns a property.
+//     *
+//     * @param <T> property type
+//     * @param key key
+//     * @return the property; an empty {@link java.util.Optional} will be
+//     * returned if the property does not exist or the type does not match
+//     */
+//    public <T> Optional<T> getValue(String key) {
+//
+//        Object value = map.get(key);
+//
+//        try {
+//            return Optional.ofNullable((T) value);
+//        } catch (ClassCastException ex) {
+//            return Optional.empty();
+//        }
+//    }
+    
+        /**
      * Returns a property.
      *
      * @param <T> property type
@@ -76,14 +95,14 @@ public class PropertyStorage {
      * @return the property; an empty {@link java.util.Optional} will be
      * returned if the property does not exist or the type does not match
      */
-    public <T> Optional<T> getValue(String key) {
+    public <T> T getValue(String key) {
 
         Object value = map.get(key);
 
         try {
-            return Optional.ofNullable((T) value);
+            return(T) value;
         } catch (ClassCastException ex) {
-            return Optional.empty();
+            return null;
         }
     }
 
@@ -111,8 +130,8 @@ public class PropertyStorage {
         Color c = colors[(int) (Math.random() * colors.length)];
 
         storage.set("material:color",
-                "" + c.getRed()
-                + " " + c.getGreen()
-                + " " + c.getBlue());
+                "" + c.r
+                + " " + c.g
+                + " " + c.b);
     }
 }

@@ -43,20 +43,18 @@ public interface Primitive {
      * Returns the polygons that define this primitive.
      *
      * <b>Note:</b> this method computes the polygons each time this method is
-     * called. The polygons can be cached inside a {@link CSG} object.
+     * called. The polygons can be cached inside a {@link eu.mihosoft.vrl.v3d.CSG} object.
      *
      * @return al list of polygons that define this primitive
      */
     public List<Polygon> toPolygons();
-
-    /**
-     * Returns this primitive as {@link CSG}.
+    
+        /**
+     * Returns this primitive as {@link eu.mihosoft.vrl.v3d.CSG}.
      *
-     * @return this primitive as {@link CSG}
+     * @return this primitive as {@link eu.mihosoft.vrl.v3d.CSG}
      */
-    public default CSG toCSG() {
-        return CSG.fromPolygons(getProperties(),toPolygons());
-    }
+    public CSG toCSG();
     
     /**
      * Returns the property storage of this primitive.

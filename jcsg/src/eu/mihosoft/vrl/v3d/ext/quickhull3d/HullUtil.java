@@ -23,7 +23,13 @@ public class HullUtil {
 
     public static CSG hull(List<eu.mihosoft.vrl.v3d.Vector3d> points, PropertyStorage storage) {
 
-        Point3d[] hullPoints = points.stream().map((vec) -> new Point3d(vec.x, vec.y, vec.z)).toArray(Point3d[]::new);
+//        Point3d[] hullPoints = points.stream().map((vec)->new Point3d(vec.x, vec.y, vec.z)).toArray(Point3d[]::new);
+        Point3d[] hullPoints = new Point3d[points.size()];
+
+        for (int i = 0; i < points.size(); i++) {
+            eu.mihosoft.vrl.v3d.Vector3d vec = points.get(i);
+            hullPoints[i] = new Point3d(vec.x, vec.y, vec.z);
+        }
 
         QuickHull3D hull = new QuickHull3D();
         hull.build(hullPoints);
@@ -52,9 +58,6 @@ public class HullUtil {
     public static CSG hull(CSG csg, PropertyStorage storage) {
 
         List<eu.mihosoft.vrl.v3d.Vector3d> points = new ArrayList<>(csg.getPolygons().size() * 3);
-
-        csg.getPolygons().forEach((p) -> p.vertices.forEach((v) -> points.add(v.pos)));
-
         return hull(points, storage);
     }
 }

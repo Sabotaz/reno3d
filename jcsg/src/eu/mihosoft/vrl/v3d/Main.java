@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.paint.Color;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  *
