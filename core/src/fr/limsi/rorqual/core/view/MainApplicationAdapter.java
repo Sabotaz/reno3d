@@ -29,7 +29,7 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
     Camera[] cameras = new Camera[2];
 
-    int ncam = 0;
+    int ncam = 1;
 
     @Override
 	public void create () {
@@ -48,7 +48,6 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         camera1.lookAt(0f, 0f, 0f);
         camera1.up.set(0,1,0);
         camera1.update();
-        stage.setCamera(camera1);
         cameras[0] = camera1;
 
         PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -59,6 +58,8 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         camera2.up.set(0,0,1);
         camera2.update();
         cameras[1] = camera2;
+
+        stage.setCamera(cameras[ncam%cameras.length]);
 
         Gdx.input.setInputProcessor(this);
         //stage.getRoot().print();
@@ -165,7 +166,10 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         } else {
             Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY,1)).sub(camera.position).nor();
             Vector3 after = camera.unproject(new Vector3(screenX, screenY,1)).sub(camera.position).nor();
-            camera.rotate(after.cpy().crs(before), (float)(Math.acos(after.dot(before)) * 180. / Math.PI));
+
+            if (!before.isCollinear(after))
+                camera.rotate(after.cpy().crs(before), (float)(Math.acos(after.dot(before)) * 180. / Math.PI));
+            camera.up.set(0,0,1);
         }
         last_screenX = screenX;
         last_screenY = screenY;

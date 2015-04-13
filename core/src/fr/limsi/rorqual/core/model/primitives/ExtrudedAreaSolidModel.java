@@ -21,6 +21,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcCurve;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcExtrudedAreaSolid;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcPolyline;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcProfileDef;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRectangleProfileDef;
 import ifc2x3javatoolbox.ifc2x3tc1.LIST;
 
 /**
@@ -48,6 +49,9 @@ public class ExtrudedAreaSolidModel extends AbstractModelProvider {
             } else if (curve instanceof IfcCompositeCurve) {
                 outerCurve = new CompositeCurveModel((IfcCompositeCurve) curve);
             }
+        } else if (profile instanceof IfcRectangleProfileDef) {
+            outerCurve = new RectangleProfileDefModel((IfcRectangleProfileDef) profile);
+            System.out.println("rect: " + profile);
         }
 
         direction = IfcObjectPlacementUtils.toVector(extrudedAreaSolid.getExtrudedDirection().getDirectionRatios());

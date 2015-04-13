@@ -1,66 +1,39 @@
 package fr.limsi.rorqual.core.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.model.Node;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Matrix3;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.lang.model.type.PrimitiveType;
-
 import fr.limsi.rorqual.core.model.primitives.ExtrudedAreaSolidModel;
 import fr.limsi.rorqual.core.model.primitives.PolylineModel;
 import fr.limsi.rorqual.core.model.primitives.TrimmedCurveModel;
 import fr.limsi.rorqual.core.utils.IfcObjectPlacementUtils;
-import ifc2x3javatoolbox.ifc2x3tc1.BOOLEAN;
-import ifc2x3javatoolbox.ifc2x3tc1.ENUM;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcArbitraryClosedProfileDef;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcAxis2Placement;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcAxis2Placement3D;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCircle;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCompositeCurve;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCompositeCurveSegment;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCurve;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcDirection;
+import fr.limsi.rorqual.core.utils.ModelUtils;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDirectionSenseEnum;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcExtrudedAreaSolid;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcFeatureElementSubtraction;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcLayerSetDirectionEnum;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcLengthMeasure;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcLine;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialLayer;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialLayerSet;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialLayerSetUsage;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcMaterialSelect;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcParameterValue;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcOpeningElement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcPolyline;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcPositiveLengthMeasure;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcProduct;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcProfileDef;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRelAssociates;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRelAssociatesMaterial;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRelVoidsElement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRepresentation;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcShapeRepresentation;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcTrimmedCurve;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcTrimmingSelect;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWall;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 import ifc2x3javatoolbox.ifc2x3tc1.LIST;
 import ifc2x3javatoolbox.ifc2x3tc1.SET;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by christophe on 31/03/15.
@@ -84,7 +57,45 @@ public class IfcWallModelFactory {
         this.setRepresentations();
         this.setAxis();
         this.setBody();
+        this.setOpenings();
+        this.mergeOpenings();
+    }
 
+    private List<ModelProvider> opening_models = new ArrayList<ModelProvider>();
+
+    private void setOpenings() {
+        ArrayList<IfcShapeRepresentation> openings = new ArrayList<IfcShapeRepresentation>();
+        if (wall.getHasOpenings_Inverse() != null) {
+            SET<IfcRelVoidsElement> voids = wall.getHasOpenings_Inverse();
+            for (IfcRelVoidsElement voidElement : voids) {
+                IfcFeatureElementSubtraction subs = voidElement.getRelatedOpeningElement();
+                if (subs instanceof  IfcOpeningElement) {
+                    IfcOpeningElement opening = (IfcOpeningElement) subs;
+                    LIST<IfcRepresentation> reprs = opening.getRepresentation().getRepresentations();
+                    for (IfcRepresentation repr : reprs) {
+                        if (repr instanceof IfcShapeRepresentation) {
+                            IfcShapeRepresentation ifcShapeRepresentation = (IfcShapeRepresentation) repr;
+                            if (repr.getRepresentationIdentifier().getDecodedValue().equals("Body"))
+                                openings.add(ifcShapeRepresentation);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        for (IfcShapeRepresentation repr : openings) {
+            if (!repr.getRepresentationType().getDecodedValue().equals("SweptSolid"))
+                System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
+
+            Object[] items = repr.getItems().toArray();
+            System.out.println("opening: " + repr);
+            if (items.length > 0) {
+                System.out.println("item: " + items[0]);
+                if (items[0] instanceof IfcExtrudedAreaSolid) {
+                    opening_models.add(new ExtrudedAreaSolidModel((IfcExtrudedAreaSolid) items[0]));
+                }
+            }
+        }
     }
 
     private ArrayList<Float> materialLayersThickness = new ArrayList<Float>();
@@ -186,7 +197,19 @@ public class IfcWallModelFactory {
     }
 
 
+    private ModelProvider wall_model;
+
+    private void mergeOpenings() {
+        List<Vector3> body_points = body_model.getPoints();
+        wall_model = body_model;
+        for (ModelProvider opening_model : opening_models) {
+            wall_model = ModelUtils.subs(wall_model, opening_model);
+            wall_model = opening_model;
+        }
+    }
+
+
     public Model getModel() {
-        return body_model.getModel();
+        return wall_model.getModel();
     }
 }
