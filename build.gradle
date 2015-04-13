@@ -59,6 +59,7 @@ project(":core") {
 
 
     dependencies {
+        compile project(":jcsg")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     }
 }

@@ -1,1 +1,2 @@
+include ':jcsg'
 include 'desktop', 'android', 'core'
