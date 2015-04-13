@@ -4,11 +4,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import java.io.File;
+import java.util.Collection;
 
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRelContainedInSpatialStructure;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 public class DesktopLauncher {
@@ -30,9 +32,15 @@ public class DesktopLauncher {
         IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
         IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
         IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,0.0f,1.0f,0.0f);
-        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
+        IfcHelper.addWall(ifcMSodel,"3rd floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
         IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
         IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
+
+        Collection<IfcRelContainedInSpatialStructure> collectionRelContainedInSpatialStructure = ifcModel.getCollection(IfcRelContainedInSpatialStructure.class);
+        for (IfcRelContainedInSpatialStructure actualRelContainedInSpatialStructure : collectionRelContainedInSpatialStructure){
+            System.out.println(actualRelContainedInSpatialStructure.getRelatingStructure().getName());
+        }
+
 
         IfcHelper.saveIfcModel(ifcModel);
 

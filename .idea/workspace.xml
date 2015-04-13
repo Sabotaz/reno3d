@@ -21,6 +21,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" afterPath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" afterPath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="3DReno.iws" />
@@ -47,8 +49,8 @@
       <file leaf-file-name="DesktopLauncher.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="918">
-              <caret line="23" column="83" selection-start-line="23" selection-start-column="83" selection-end-line="23" selection-end-column="83" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="284" max-vertical-offset="1054">
+              <caret line="34" column="31" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -56,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IfcHelper.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="IfcHelper.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="998" max-vertical-offset="1870">
-              <caret line="549" column="10" selection-start-line="549" selection-start-column="10" selection-end-line="549" selection-end-column="10" />
+            <state vertical-scroll-proportion="0.4409722" vertical-offset="1310" max-vertical-offset="1938">
+              <caret line="353" column="0" selection-start-line="353" selection-start-column="0" selection-end-line="353" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
@@ -68,42 +70,33 @@
                 <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-                <element signature="e#21372#21390#0" expanded="true" />
-                <element signature="e#21701#21709#0" expanded="true" />
-                <element signature="e#21953#21961#0" expanded="true" />
-                <element signature="e#22582#22601#0" expanded="true" />
-                <element signature="e#22725#22743#0" expanded="true" />
-                <element signature="e#22993#23011#0" expanded="true" />
-                <element signature="e#23262#23270#0" expanded="true" />
-                <element signature="e#23611#23629#0" expanded="true" />
-                <element signature="e#23946#23965#0" expanded="true" />
-                <element signature="e#24015#24034#0" expanded="true" />
-                <element signature="e#24348#24371#0" expanded="true" />
-                <element signature="e#24865#24884#0" expanded="true" />
-                <element signature="e#24941#24959#0" expanded="true" />
-                <element signature="e#25260#25278#0" expanded="true" />
-                <element signature="e#25586#25604#0" expanded="true" />
-                <element signature="e#25913#25931#0" expanded="true" />
-                <element signature="e#26491#26509#0" expanded="true" />
-                <element signature="e#26902#26910#0" expanded="true" />
-                <element signature="e#27238#27246#0" expanded="true" />
-                <element signature="e#27824#27832#0" expanded="true" />
-                <element signature="e#28457#28480#0" expanded="true" />
+                <element signature="e#22113#22131#0" expanded="true" />
+                <element signature="e#22442#22450#0" expanded="true" />
+                <element signature="e#22694#22702#0" expanded="true" />
+                <element signature="e#23323#23342#0" expanded="true" />
+                <element signature="e#23466#23484#0" expanded="true" />
+                <element signature="e#23734#23752#0" expanded="true" />
+                <element signature="e#24003#24011#0" expanded="true" />
+                <element signature="e#24352#24370#0" expanded="true" />
+                <element signature="e#24687#24706#0" expanded="true" />
+                <element signature="e#24756#24775#0" expanded="true" />
+                <element signature="e#25089#25112#0" expanded="true" />
+                <element signature="e#25606#25625#0" expanded="true" />
+                <element signature="e#25682#25700#0" expanded="true" />
+                <element signature="e#26001#26019#0" expanded="true" />
+                <element signature="e#26327#26345#0" expanded="true" />
+                <element signature="e#26654#26672#0" expanded="true" />
+                <element signature="e#27232#27250#0" expanded="true" />
+                <element signature="e#27643#27651#0" expanded="true" />
+                <element signature="e#27979#27987#0" expanded="true" />
+                <element signature="e#28565#28573#0" expanded="true" />
+                <element signature="e#29198#29221#0" expanded="true" />
                 <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="3etages12murs.ifc" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/data/ifc/3etages12murs.ifc">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.20695652" vertical-offset="0" max-vertical-offset="7140">
-              <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -1812,8 +1805,8 @@
         <option value="$PROJECT_DIR$/android/src/fr/limsi/rorqual/android/AndroidLauncher.java" />
         <option value="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/ljhol.java" />
         <option value="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/utils/IfcObjectPlacementUtils.java" />
-        <option value="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
         <option value="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
+        <option value="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
       </list>
     </option>
   </component>
@@ -2586,7 +2579,15 @@
       <created>1428925625224</created>
       <updated>1428925625224</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;">
+      <created>1428925698254</created>
+      <updated>1428925698254</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Ajout du fichiers de donnée suivant :&#10; &quot;3etages12murs.ifc&quot;">
+      <created>1428929898822</created>
+      <updated>1428929898822</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2602,8 +2603,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.50053304" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.49946696" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3288889" sideWeight="0.49946696" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32987747" sideWeight="0.4997242" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.50053304" order="7" side_tool="true" content_ui="tabs" />
@@ -2645,11 +2646,16 @@
     <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getBuildingStorey&quot; + &quot;loadIfcModel&quot;" />
     <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getBuildingRelations&quot;&#10;&#10;Modification des méthodes suivantes :&#10;&quot;addBuildingStorey&quot; : on ne créer plus une nouvelle relation avec le building mais on modifie celle qui existe déja pour la compléter et faire pointer le building sur le nouvel étage" />
     <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getGeometricRepresentationContext&quot; + &quot;addWall&quot;&#10;Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout des méthodes suivantes :&#10;&quot;getGeometricRepresentationContext&quot; + &quot;addWall&quot;&#10;Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;" />
+    <MESSAGE value="Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;" />
+    <MESSAGE value="Ajout du fichiers de donnée suivant :&#10; &quot;3etages12murs.ifc&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout du fichiers de donnée suivant :&#10; &quot;3etages12murs.ifc&quot;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="16" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -2674,29 +2680,30 @@
             <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#21372#21390#0" expanded="true" />
-            <element signature="e#21701#21709#0" expanded="true" />
-            <element signature="e#21953#21961#0" expanded="true" />
-            <element signature="e#22582#22601#0" expanded="true" />
-            <element signature="e#22725#22743#0" expanded="true" />
-            <element signature="e#22993#23011#0" expanded="true" />
-            <element signature="e#23262#23270#0" expanded="true" />
-            <element signature="e#23611#23629#0" expanded="true" />
-            <element signature="e#23946#23965#0" expanded="true" />
-            <element signature="e#24015#24034#0" expanded="true" />
-            <element signature="e#24348#24371#0" expanded="true" />
-            <element signature="e#24865#24884#0" expanded="true" />
-            <element signature="e#24941#24959#0" expanded="true" />
-            <element signature="e#25260#25278#0" expanded="true" />
-            <element signature="e#25586#25604#0" expanded="true" />
-            <element signature="e#25913#25931#0" expanded="true" />
-            <element signature="e#26491#26509#0" expanded="true" />
-            <element signature="e#26902#26910#0" expanded="true" />
-            <element signature="e#27238#27246#0" expanded="true" />
-            <element signature="e#27824#27832#0" expanded="true" />
-            <element signature="e#28457#28480#0" expanded="true" />
+            <element signature="e#22113#22131#0" expanded="true" />
+            <element signature="e#22442#22450#0" expanded="true" />
+            <element signature="e#22694#22702#0" expanded="true" />
+            <element signature="e#23323#23342#0" expanded="true" />
+            <element signature="e#23466#23484#0" expanded="true" />
+            <element signature="e#23734#23752#0" expanded="true" />
+            <element signature="e#24003#24011#0" expanded="true" />
+            <element signature="e#24352#24370#0" expanded="true" />
+            <element signature="e#24687#24706#0" expanded="true" />
+            <element signature="e#24756#24775#0" expanded="true" />
+            <element signature="e#25089#25112#0" expanded="true" />
+            <element signature="e#25606#25625#0" expanded="true" />
+            <element signature="e#25682#25700#0" expanded="true" />
+            <element signature="e#26001#26019#0" expanded="true" />
+            <element signature="e#26327#26345#0" expanded="true" />
+            <element signature="e#26654#26672#0" expanded="true" />
+            <element signature="e#27232#27250#0" expanded="true" />
+            <element signature="e#27643#27651#0" expanded="true" />
+            <element signature="e#27979#27987#0" expanded="true" />
+            <element signature="e#28565#28573#0" expanded="true" />
+            <element signature="e#29198#29221#0" expanded="true" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
           </folding>
@@ -2724,29 +2731,30 @@
             <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#21372#21390#0" expanded="true" />
-            <element signature="e#21701#21709#0" expanded="true" />
-            <element signature="e#21953#21961#0" expanded="true" />
-            <element signature="e#22582#22601#0" expanded="true" />
-            <element signature="e#22725#22743#0" expanded="true" />
-            <element signature="e#22993#23011#0" expanded="true" />
-            <element signature="e#23262#23270#0" expanded="true" />
-            <element signature="e#23611#23629#0" expanded="true" />
-            <element signature="e#23946#23965#0" expanded="true" />
-            <element signature="e#24015#24034#0" expanded="true" />
-            <element signature="e#24348#24371#0" expanded="true" />
-            <element signature="e#24865#24884#0" expanded="true" />
-            <element signature="e#24941#24959#0" expanded="true" />
-            <element signature="e#25260#25278#0" expanded="true" />
-            <element signature="e#25586#25604#0" expanded="true" />
-            <element signature="e#25913#25931#0" expanded="true" />
-            <element signature="e#26491#26509#0" expanded="true" />
-            <element signature="e#26902#26910#0" expanded="true" />
-            <element signature="e#27238#27246#0" expanded="true" />
-            <element signature="e#27824#27832#0" expanded="true" />
-            <element signature="e#28457#28480#0" expanded="true" />
+            <element signature="e#22113#22131#0" expanded="true" />
+            <element signature="e#22442#22450#0" expanded="true" />
+            <element signature="e#22694#22702#0" expanded="true" />
+            <element signature="e#23323#23342#0" expanded="true" />
+            <element signature="e#23466#23484#0" expanded="true" />
+            <element signature="e#23734#23752#0" expanded="true" />
+            <element signature="e#24003#24011#0" expanded="true" />
+            <element signature="e#24352#24370#0" expanded="true" />
+            <element signature="e#24687#24706#0" expanded="true" />
+            <element signature="e#24756#24775#0" expanded="true" />
+            <element signature="e#25089#25112#0" expanded="true" />
+            <element signature="e#25606#25625#0" expanded="true" />
+            <element signature="e#25682#25700#0" expanded="true" />
+            <element signature="e#26001#26019#0" expanded="true" />
+            <element signature="e#26327#26345#0" expanded="true" />
+            <element signature="e#26654#26672#0" expanded="true" />
+            <element signature="e#27232#27250#0" expanded="true" />
+            <element signature="e#27643#27651#0" expanded="true" />
+            <element signature="e#27979#27987#0" expanded="true" />
+            <element signature="e#28565#28573#0" expanded="true" />
+            <element signature="e#29198#29221#0" expanded="true" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
           </folding>
@@ -3044,14 +3052,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifcmodel/IfcModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="16473">
-          <caret line="108" column="43" selection-start-line="108" selection-start-column="43" selection-end-line="108" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcWallModelFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.38898757" vertical-offset="3555" max-vertical-offset="5321">
@@ -3073,10 +3073,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifcmodel/IfcModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="6680" max-vertical-offset="16473">
+          <caret line="495" column="0" selection-start-line="495" selection-start-column="0" selection-end-line="495" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/ifc/3etages12murs.ifc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.7482638" vertical-offset="0" max-vertical-offset="7140">
+          <caret line="127" column="18" selection-start-line="127" selection-start-column="18" selection-end-line="127" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="918">
-          <caret line="23" column="83" selection-start-line="23" selection-start-column="83" selection-end-line="23" selection-end-column="83" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="284" max-vertical-offset="1054">
+          <caret line="34" column="31" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -3085,8 +3101,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="998" max-vertical-offset="1870">
-          <caret line="549" column="10" selection-start-line="549" selection-start-column="10" selection-end-line="549" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.4409722" vertical-offset="1310" max-vertical-offset="1938">
+          <caret line="353" column="0" selection-start-line="353" selection-start-column="0" selection-end-line="353" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
@@ -3094,40 +3110,33 @@
             <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#21372#21390#0" expanded="true" />
-            <element signature="e#21701#21709#0" expanded="true" />
-            <element signature="e#21953#21961#0" expanded="true" />
-            <element signature="e#22582#22601#0" expanded="true" />
-            <element signature="e#22725#22743#0" expanded="true" />
-            <element signature="e#22993#23011#0" expanded="true" />
-            <element signature="e#23262#23270#0" expanded="true" />
-            <element signature="e#23611#23629#0" expanded="true" />
-            <element signature="e#23946#23965#0" expanded="true" />
-            <element signature="e#24015#24034#0" expanded="true" />
-            <element signature="e#24348#24371#0" expanded="true" />
-            <element signature="e#24865#24884#0" expanded="true" />
-            <element signature="e#24941#24959#0" expanded="true" />
-            <element signature="e#25260#25278#0" expanded="true" />
-            <element signature="e#25586#25604#0" expanded="true" />
-            <element signature="e#25913#25931#0" expanded="true" />
-            <element signature="e#26491#26509#0" expanded="true" />
-            <element signature="e#26902#26910#0" expanded="true" />
-            <element signature="e#27238#27246#0" expanded="true" />
-            <element signature="e#27824#27832#0" expanded="true" />
-            <element signature="e#28457#28480#0" expanded="true" />
+            <element signature="e#22113#22131#0" expanded="true" />
+            <element signature="e#22442#22450#0" expanded="true" />
+            <element signature="e#22694#22702#0" expanded="true" />
+            <element signature="e#23323#23342#0" expanded="true" />
+            <element signature="e#23466#23484#0" expanded="true" />
+            <element signature="e#23734#23752#0" expanded="true" />
+            <element signature="e#24003#24011#0" expanded="true" />
+            <element signature="e#24352#24370#0" expanded="true" />
+            <element signature="e#24687#24706#0" expanded="true" />
+            <element signature="e#24756#24775#0" expanded="true" />
+            <element signature="e#25089#25112#0" expanded="true" />
+            <element signature="e#25606#25625#0" expanded="true" />
+            <element signature="e#25682#25700#0" expanded="true" />
+            <element signature="e#26001#26019#0" expanded="true" />
+            <element signature="e#26327#26345#0" expanded="true" />
+            <element signature="e#26654#26672#0" expanded="true" />
+            <element signature="e#27232#27250#0" expanded="true" />
+            <element signature="e#27643#27651#0" expanded="true" />
+            <element signature="e#27979#27987#0" expanded="true" />
+            <element signature="e#28565#28573#0" expanded="true" />
+            <element signature="e#29198#29221#0" expanded="true" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/ifc/3etages12murs.ifc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20695652" vertical-offset="0" max-vertical-offset="7140">
-          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>

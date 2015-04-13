@@ -340,6 +340,18 @@ public class IfcHelper {
         return null;
     }
 
+    // Permet de récupérer la relation entre un étage et ses produits
+    public static IfcRelContainedInSpatialStructure getRelContainedInSpatialStructure (IfcModel ifcModel, String nameBuildingStorey){
+        Collection<IfcRelContainedInSpatialStructure> collectionRelContainedInSpatialStructure = ifcModel.getCollection(IfcRelContainedInSpatialStructure.class);
+        for (IfcRelContainedInSpatialStructure actualRelContainedInSpatialStructure : collectionRelContainedInSpatialStructure){
+            if(actualRelContainedInSpatialStructure.getRelatingStructure().getName().getDecodedValue().equals(nameBuildingStorey)){
+                return actualRelContainedInSpatialStructure;
+            }
+        }
+        return null;
+    }
+
+
     // Permet d'ajouter un étage au batiment en lui rentrant son nom et son élévation
     public static void addBuildingStorey (IfcModel ifcModel,String nameFloor , float elevation){
         IfcBuilding ifcBuilding = getBuilding(ifcModel);
@@ -502,17 +514,23 @@ public class IfcHelper {
                 ifcWallDefinitionShape, null);
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
-        SET<IfcProduct> relatedObject;
-        relatedObject = new SET<IfcProduct>();
-        relatedObject.add(ifcWallStandardCase);
-        IfcRelContainedInSpatialStructure relationBuildingStoreyToWall;
-        relationBuildingStoreyToWall = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
-                ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                new IfcLabel("BuildingStoreyContainer",true),new IfcText("BuildingStoreyContainer for Wall",true),
-                relatedObject, buildingStorey);
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
+        if(relContainedInSpatialStructure==null){
+            SET<IfcProduct> relatedObject;
+            relatedObject = new SET<IfcProduct>();
+            relatedObject.add(ifcWallStandardCase);
+            IfcRelContainedInSpatialStructure relationBuildingStoreyToWall;
+            relationBuildingStoreyToWall = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
+                    ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    new IfcLabel("BuildingStoreyContainer",true),new IfcText("BuildingStoreyContainer for Wall",true),
+                    relatedObject, buildingStorey);
+            ifcModel.addIfcObject(relationBuildingStoreyToWall);
+        }
+        else{
+            relContainedInSpatialStructure.addRelatedElements(ifcWallStandardCase);
+        }
 
         // add new Ifc-objects to the model
-        ifcModel.addIfcObject(relationBuildingStoreyToWall);
         ifcModel.addIfcObject(ifcWallStandardCase);
         ifcModel.addIfcObject(ifcLocalPlacementWall);
         ifcModel.addIfcObject(ifcAxis2Placement3DWall);
