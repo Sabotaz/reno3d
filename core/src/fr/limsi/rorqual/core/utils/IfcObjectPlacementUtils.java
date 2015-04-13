@@ -82,6 +82,8 @@ public class IfcObjectPlacementUtils {
 
         Vector3 p = new Vector3((float)pd.get(0).value, (float)pd.get(1).value, (float)pd.get(2).value);
         Vector3 y = z.cpy().crs(x);
+        // ref_direction can be just in the x-z-plane, not perpendicular to y and z. so re-compute local x
+        x = y.cpy().crs(z);
 
         return new Matrix4().set(x,y,z,p);
     }
@@ -102,6 +104,8 @@ public class IfcObjectPlacementUtils {
 
         Vector3 p = new Vector3((float)pd.get(0).value, (float)pd.get(1).value, 0.f);
         Vector3 y = z.cpy().crs(x);
+        // ref_direction can be just in the x-z-plane, not perpendicular to y and z. so re-compute local x
+        x = y.cpy().crs(z);
 
         return new Matrix4().set(x,y,z,p);
     }
