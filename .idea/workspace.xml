@@ -21,7 +21,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" afterPath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" afterPath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -46,10 +45,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DesktopLauncher.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="DesktopLauncher.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="376" max-vertical-offset="1258">
+            <state vertical-scroll-proportion="0.5868056" vertical-offset="427" max-vertical-offset="1258">
               <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -58,11 +57,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IfcHelper.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="IfcHelper.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2361111" vertical-offset="340" max-vertical-offset="986">
-              <caret line="354" column="4" selection-start-line="354" selection-start-column="4" selection-end-line="354" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="986">
+              <caret line="686" column="27" selection-start-line="686" selection-start-column="27" selection-end-line="686" selection-end-column="27" />
               <folding>
                 <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
@@ -74,37 +73,7 @@
                 <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-                <element signature="e#23103#23121#0" expanded="true" />
-                <element signature="e#23432#23440#0" expanded="true" />
-                <element signature="e#23684#23692#0" expanded="true" />
-                <element signature="e#24313#24332#0" expanded="true" />
-                <element signature="e#24456#24474#0" expanded="true" />
-                <element signature="e#24724#24742#0" expanded="true" />
-                <element signature="e#24993#25001#0" expanded="true" />
-                <element signature="e#25342#25360#0" expanded="true" />
-                <element signature="e#25677#25696#0" expanded="true" />
-                <element signature="e#25746#25765#0" expanded="true" />
-                <element signature="e#26079#26102#0" expanded="true" />
-                <element signature="e#26596#26615#0" expanded="true" />
-                <element signature="e#26672#26690#0" expanded="true" />
-                <element signature="e#26991#27009#0" expanded="true" />
-                <element signature="e#27317#27335#0" expanded="true" />
-                <element signature="e#27644#27662#0" expanded="true" />
-                <element signature="e#28222#28240#0" expanded="true" />
-                <element signature="e#28633#28641#0" expanded="true" />
-                <element signature="e#28969#28977#0" expanded="true" />
-                <element signature="e#29555#29563#0" expanded="true" />
-                <element signature="e#30188#30211#0" expanded="true" />
                 <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
-                <element signature="e#33965#33983#0" expanded="true" />
-                <element signature="e#34297#34305#0" expanded="true" />
-                <element signature="e#34579#34587#0" expanded="true" />
-                <element signature="e#35241#35260#0" expanded="true" />
-                <element signature="e#35649#35667#0" expanded="true" />
-                <element signature="e#36060#36068#0" expanded="true" />
-                <element signature="e#36396#36404#0" expanded="true" />
-                <element signature="e#36982#36990#0" expanded="true" />
-                <element signature="e#37608#37631#0" expanded="true" />
                 <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
               </folding>
@@ -2602,7 +2571,11 @@
       <created>1428930840692</created>
       <updated>1428930840692</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Ajout des méthodes suivantes :&#10;&quot;createCartesianPoint2D&quot; +  &quot;createCartesianPoint3D&quot; + &quot;addSlabs&quot;&#10;&#10;">
+      <created>1428942058120</created>
+      <updated>1428942058120</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2664,14 +2637,15 @@
     <MESSAGE value="Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;" />
     <MESSAGE value="Ajout du fichiers de donnée suivant :&#10; &quot;3etages12murs.ifc&quot;" />
     <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getRelContainedInSpatialStrucure&quot; &#10;Modification des méthodes suivantes :&#10;&quot;addWall&quot; -&gt; si un étage possède déja une relation avec un produit, on édite cette dernière au lieu d'en créer un nouvelle" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout des méthodes suivantes :&#10;&quot;getRelContainedInSpatialStrucure&quot; &#10;Modification des méthodes suivantes :&#10;&quot;addWall&quot; -&gt; si un étage possède déja une relation avec un produit, on édite cette dernière au lieu d'en créer un nouvelle" />
+    <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;createCartesianPoint2D&quot; +  &quot;createCartesianPoint3D&quot; + &quot;addSlabs&quot;&#10;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout des méthodes suivantes :&#10;&quot;createCartesianPoint2D&quot; +  &quot;createCartesianPoint3D&quot; + &quot;addSlabs&quot;&#10;&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="19" />
+      <option name="time" value="21" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -2700,37 +2674,7 @@
             <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#23103#23121#0" expanded="true" />
-            <element signature="e#23432#23440#0" expanded="true" />
-            <element signature="e#23684#23692#0" expanded="true" />
-            <element signature="e#24313#24332#0" expanded="true" />
-            <element signature="e#24456#24474#0" expanded="true" />
-            <element signature="e#24724#24742#0" expanded="true" />
-            <element signature="e#24993#25001#0" expanded="true" />
-            <element signature="e#25342#25360#0" expanded="true" />
-            <element signature="e#25677#25696#0" expanded="true" />
-            <element signature="e#25746#25765#0" expanded="true" />
-            <element signature="e#26079#26102#0" expanded="true" />
-            <element signature="e#26596#26615#0" expanded="true" />
-            <element signature="e#26672#26690#0" expanded="true" />
-            <element signature="e#26991#27009#0" expanded="true" />
-            <element signature="e#27317#27335#0" expanded="true" />
-            <element signature="e#27644#27662#0" expanded="true" />
-            <element signature="e#28222#28240#0" expanded="true" />
-            <element signature="e#28633#28641#0" expanded="true" />
-            <element signature="e#28969#28977#0" expanded="true" />
-            <element signature="e#29555#29563#0" expanded="true" />
-            <element signature="e#30188#30211#0" expanded="true" />
             <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#33965#33983#0" expanded="true" />
-            <element signature="e#34297#34305#0" expanded="true" />
-            <element signature="e#34579#34587#0" expanded="true" />
-            <element signature="e#35241#35260#0" expanded="true" />
-            <element signature="e#35649#35667#0" expanded="true" />
-            <element signature="e#36060#36068#0" expanded="true" />
-            <element signature="e#36396#36404#0" expanded="true" />
-            <element signature="e#36982#36990#0" expanded="true" />
-            <element signature="e#37608#37631#0" expanded="true" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
           </folding>
@@ -2762,37 +2706,7 @@
             <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#23103#23121#0" expanded="true" />
-            <element signature="e#23432#23440#0" expanded="true" />
-            <element signature="e#23684#23692#0" expanded="true" />
-            <element signature="e#24313#24332#0" expanded="true" />
-            <element signature="e#24456#24474#0" expanded="true" />
-            <element signature="e#24724#24742#0" expanded="true" />
-            <element signature="e#24993#25001#0" expanded="true" />
-            <element signature="e#25342#25360#0" expanded="true" />
-            <element signature="e#25677#25696#0" expanded="true" />
-            <element signature="e#25746#25765#0" expanded="true" />
-            <element signature="e#26079#26102#0" expanded="true" />
-            <element signature="e#26596#26615#0" expanded="true" />
-            <element signature="e#26672#26690#0" expanded="true" />
-            <element signature="e#26991#27009#0" expanded="true" />
-            <element signature="e#27317#27335#0" expanded="true" />
-            <element signature="e#27644#27662#0" expanded="true" />
-            <element signature="e#28222#28240#0" expanded="true" />
-            <element signature="e#28633#28641#0" expanded="true" />
-            <element signature="e#28969#28977#0" expanded="true" />
-            <element signature="e#29555#29563#0" expanded="true" />
-            <element signature="e#30188#30211#0" expanded="true" />
             <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#33965#33983#0" expanded="true" />
-            <element signature="e#34297#34305#0" expanded="true" />
-            <element signature="e#34579#34587#0" expanded="true" />
-            <element signature="e#35241#35260#0" expanded="true" />
-            <element signature="e#35649#35667#0" expanded="true" />
-            <element signature="e#36060#36068#0" expanded="true" />
-            <element signature="e#36396#36404#0" expanded="true" />
-            <element signature="e#36982#36990#0" expanded="true" />
-            <element signature="e#37608#37631#0" expanded="true" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
           </folding>
@@ -3131,20 +3045,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="376" max-vertical-offset="1258">
-          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2361111" vertical-offset="340" max-vertical-offset="986">
-          <caret line="354" column="4" selection-start-line="354" selection-start-column="4" selection-end-line="354" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="986">
+          <caret line="686" column="27" selection-start-line="686" selection-start-column="27" selection-end-line="686" selection-end-column="27" />
           <folding>
             <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
@@ -3156,39 +3060,19 @@
             <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#23103#23121#0" expanded="true" />
-            <element signature="e#23432#23440#0" expanded="true" />
-            <element signature="e#23684#23692#0" expanded="true" />
-            <element signature="e#24313#24332#0" expanded="true" />
-            <element signature="e#24456#24474#0" expanded="true" />
-            <element signature="e#24724#24742#0" expanded="true" />
-            <element signature="e#24993#25001#0" expanded="true" />
-            <element signature="e#25342#25360#0" expanded="true" />
-            <element signature="e#25677#25696#0" expanded="true" />
-            <element signature="e#25746#25765#0" expanded="true" />
-            <element signature="e#26079#26102#0" expanded="true" />
-            <element signature="e#26596#26615#0" expanded="true" />
-            <element signature="e#26672#26690#0" expanded="true" />
-            <element signature="e#26991#27009#0" expanded="true" />
-            <element signature="e#27317#27335#0" expanded="true" />
-            <element signature="e#27644#27662#0" expanded="true" />
-            <element signature="e#28222#28240#0" expanded="true" />
-            <element signature="e#28633#28641#0" expanded="true" />
-            <element signature="e#28969#28977#0" expanded="true" />
-            <element signature="e#29555#29563#0" expanded="true" />
-            <element signature="e#30188#30211#0" expanded="true" />
             <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
-            <element signature="e#33965#33983#0" expanded="true" />
-            <element signature="e#34297#34305#0" expanded="true" />
-            <element signature="e#34579#34587#0" expanded="true" />
-            <element signature="e#35241#35260#0" expanded="true" />
-            <element signature="e#35649#35667#0" expanded="true" />
-            <element signature="e#36060#36068#0" expanded="true" />
-            <element signature="e#36396#36404#0" expanded="true" />
-            <element signature="e#36982#36990#0" expanded="true" />
-            <element signature="e#37608#37631#0" expanded="true" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5868056" vertical-offset="427" max-vertical-offset="1258">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
