@@ -20,27 +20,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: fr.limsi.rorqual" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="Ajout des méthodes suivantes :&#10;&quot;getBuildingStorey&quot; + &quot;loadIfcModel&quot;">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" afterPath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" afterPath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/android.iml" afterPath="$PROJECT_DIR$/android/android.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/gdx_1_5_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/gdx_1_5_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/gdx_backend_android_1_5_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/gdx_backend_android_1_5_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/gdx_backend_lwjgl_1_5_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/gdx_backend_lwjgl_1_5_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/gdx_platform_1_5_5_natives_desktop.xml" afterPath="$PROJECT_DIR$/.idea/libraries/gdx_platform_1_5_5_natives_desktop.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jinput_2_0_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jinput_2_0_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jinput_platform_2_0_5_natives_linux.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jinput_platform_2_0_5_natives_linux.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jinput_platform_2_0_5_natives_osx.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jinput_platform_2_0_5_natives_osx.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jinput_platform_2_0_5_natives_windows.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jinput_platform_2_0_5_natives_windows.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jlayer_1_0_1_gdx.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jlayer_1_0_1_gdx.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jorbis_0_0_17.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jorbis_0_0_17.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jutils_1_0_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jutils_1_0_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lwjgl_2_9_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lwjgl_2_9_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lwjgl_platform_2_9_2_natives_linux.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lwjgl_platform_2_9_2_natives_linux.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lwjgl_platform_2_9_2_natives_osx.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lwjgl_platform_2_9_2_natives_osx.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lwjgl_platform_2_9_2_natives_windows.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lwjgl_platform_2_9_2_natives_windows.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lwjgl_util_2_9_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lwjgl_util_2_9_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="3DReno.iws" />
@@ -76,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IfcHelper.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="IfcHelper.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.734375" vertical-offset="1192" max-vertical-offset="1870">
-              <caret line="385" column="176" selection-start-line="385" selection-start-column="176" selection-end-line="385" selection-end-column="176" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="998" max-vertical-offset="1870">
+              <caret line="549" column="10" selection-start-line="549" selection-start-column="10" selection-end-line="549" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
@@ -114,6 +94,16 @@
                 <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="3etages12murs.ifc" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data/ifc/3etages12murs.ifc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.20695652" vertical-offset="0" max-vertical-offset="7140">
+              <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -2228,6 +2218,120 @@
       <recent name="fr.limsi.Rorqual" />
     </key>
   </component>
+  <component name="RestoreUpdateTree">
+    <UpdateInfo date="Moments ago" ActionInfo="_Update">
+      <UpdatedFiles>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated from server" />
+          <option name="myStatusName" value="Changed on server" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CHANGED_ON_SERVER" />
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Updated" />
+            <option name="myStatusName" value="Changed" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="UPDATED" />
+            <PATH vcs="svn" revision="34">C:\Users\ricordeau\3dreno\core\src\fr\limsi\rorqual\core\model\primitives\CompositeCurveModel.java</PATH>
+            <PATH vcs="svn" revision="34">C:\Users\ricordeau\3dreno\core\src\fr\limsi\rorqual\core\view\MainApplicationAdapter.java</PATH>
+            <PATH vcs="svn" revision="34">C:\Users\ricordeau\3dreno\core\src\scene3d\Group3d.java</PATH>
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Created" />
+            <option name="myStatusName" value="Created" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="CREATED" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Deleted" />
+            <option name="myStatusName" value="Deleted" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="true" />
+            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Restored" />
+            <option name="myStatusName" value="Will be restored" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="RESTORED" />
+          </FILE-GROUP>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Modified" />
+          <option name="myStatusName" value="Modified" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MODIFIED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Skipped" />
+          <option name="myStatusName" value="Skipped" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SKIPPED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with conflicts" />
+          <option name="myStatusName" value="Will be merged with conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_CONFLICTS" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with tree conflicts" />
+          <option name="myStatusName" value="Merged with tree conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with property conflicts" />
+          <option name="myStatusName" value="Will be merged with property conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged" />
+          <option name="myStatusName" value="Will be merged" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Not in repository" />
+          <option name="myStatusName" value="Not in repository" />
+          <option name="mySupportsDeletion" value="true" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UNKNOWN" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally added" />
+          <option name="myStatusName" value="Locally added" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_ADDED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally removed" />
+          <option name="myStatusName" value="Locally removed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_REMOVED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Switched" />
+          <option name="myStatusName" value="Switched" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SWITCHED" />
+        </FILE-GROUP>
+      </UpdatedFiles>
+    </UpdateInfo>
+  </component>
   <component name="RunManager" selected="Application.Java">
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -2478,7 +2582,11 @@
       <created>1428570137572</created>
       <updated>1428570137572</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Ajout des méthodes suivantes :&#10;&quot;getGeometricRepresentationContext&quot; + &quot;addWall&quot;&#10;Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;">
+      <created>1428925625224</created>
+      <updated>1428925625224</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2494,8 +2602,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.50053304" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3288889" sideWeight="0.49946696" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.49946696" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32987747" sideWeight="0.4997242" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.50053304" order="7" side_tool="true" content_ui="tabs" />
@@ -2536,7 +2644,8 @@
     <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getBuilding&quot; + &quot;addBuildingStorey&quot;" />
     <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getBuildingStorey&quot; + &quot;loadIfcModel&quot;" />
     <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getBuildingRelations&quot;&#10;&#10;Modification des méthodes suivantes :&#10;&quot;addBuildingStorey&quot; : on ne créer plus une nouvelle relation avec le building mais on modifie celle qui existe déja pour la compléter et faire pointer le building sur le nouvel étage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout des méthodes suivantes :&#10;&quot;getBuildingRelations&quot;&#10;&#10;Modification des méthodes suivantes :&#10;&quot;addBuildingStorey&quot; : on ne créer plus une nouvelle relation avec le building mais on modifie celle qui existe déja pour la compléter et faire pointer le building sur le nouvel étage" />
+    <MESSAGE value="Ajout des méthodes suivantes :&#10;&quot;getGeometricRepresentationContext&quot; + &quot;addWall&quot;&#10;Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout des méthodes suivantes :&#10;&quot;getGeometricRepresentationContext&quot; + &quot;addWall&quot;&#10;Ajout du fichiers de donnée suivant :&#10;&quot;3etages12murs.ifc&quot;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2976,8 +3085,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.734375" vertical-offset="1192" max-vertical-offset="1870">
-          <caret line="385" column="176" selection-start-line="385" selection-start-column="176" selection-end-line="385" selection-end-column="176" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="998" max-vertical-offset="1870">
+          <caret line="549" column="10" selection-start-line="549" selection-start-column="10" selection-end-line="549" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
@@ -3011,6 +3120,14 @@
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/ifc/3etages12murs.ifc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20695652" vertical-offset="0" max-vertical-offset="7140">
+          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
