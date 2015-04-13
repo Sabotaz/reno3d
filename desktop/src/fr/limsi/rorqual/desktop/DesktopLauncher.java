@@ -18,7 +18,22 @@ public class DesktopLauncher {
         MainApplicationAdapter application = new MainApplicationAdapter();
 
         IfcHelper.initialiseIfcModel(ifcModel);
-        IfcHelper.addIfcBuildingStorey(ifcModel,"2nd floor",2.8f);
+        IfcHelper.addBuildingStorey(ifcModel,"2nd floor",2.8f);
+        IfcHelper.addBuildingStorey(ifcModel,"3rd floor",5.6f);
+        IfcHelper.addBuildingStorey(ifcModel,"roof",8.4f);
+        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,0.0f,0.0f,1.0f,0.0f);
+        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
+        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
+        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
+        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,0.0f,0.0f,1.0f,0.0f);
+        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
+        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
+        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
+        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,0.0f,1.0f,0.0f);
+        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
+        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
+        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
+
         IfcHelper.saveIfcModel(ifcModel);
 
 
