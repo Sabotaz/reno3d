@@ -716,9 +716,9 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening à un Wall
-    public static void addOpeningToWall (IfcModel ifcModel, String nameWall, String nameOpening){
+    public static void addOpeningToWall (IfcModel ifcModel, String nameWall, String nameOpening, double depth, double xLocal, double zLocal, double openingWidth, double openingHeight){
         IfcWallStandardCase wall = getWall(ifcModel, nameWall);
-        IfcCartesianPoint localPointOpening = createCartesianPoint3D(1.9d,-0.2d,1.0d);
+        IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,-depth/2,zLocal);
         IfcDirection zLocalOpening = createDirection3D(0.0d,0.0d,1.0d);
         IfcDirection xLocalOpening = createDirection3D(1.0d,0.0d,0.0d);
         IfcAxis2Placement3D placementOpening = new IfcAxis2Placement3D(
@@ -730,7 +730,7 @@ public class IfcHelper {
         // Opening geometry with extruded area solid placement
         IfcDirection zLocalExtrusion = createDirection3D(0.0d,1.0d,0.0d);
         IfcDirection xLocalExtrusion = createDirection3D(0.0d,0.0d,1.0d);
-        IfcCartesianPoint centerOpening = createCartesianPoint3D(0.5d,0.0d,0.75d);
+        IfcCartesianPoint centerOpening = createCartesianPoint3D(openingWidth/2,0.0d,openingHeight/2);
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
                 centerOpening, zLocalExtrusion, xLocalExtrusion);
         IfcDirection zLocalRectangle = createDirection2D(1.0d, 0.0d);
@@ -738,11 +738,11 @@ public class IfcHelper {
         IfcAxis2Placement2D placementRectangle = new IfcAxis2Placement2D(
                 originOpening, zLocalRectangle);
         IfcRectangleProfileDef rectangle = new IfcRectangleProfileDef(new IfcProfileTypeEnum("AREA"),
-                null,placementRectangle,new IfcPositiveLengthMeasure(new IfcLengthMeasure(1.5d)),
-                new IfcPositiveLengthMeasure(new IfcLengthMeasure(1.0d)));
+                null,placementRectangle,new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingHeight)),
+                new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingWidth)));
         IfcDirection openingExtrusionDirection = createDirection3D(0.0d,0.0d,1.0d);
         IfcExtrudedAreaSolid extrudedOpening = new IfcExtrudedAreaSolid(rectangle, placementCenterOpening,
-                openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.4d)));
+                openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(depth)));
         SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<>();
         openingRepresentation3DItem.add(extrudedOpening);
         IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
@@ -753,8 +753,8 @@ public class IfcHelper {
         // Create the Opening
         IfcOpeningElement opening = new IfcOpeningElement(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("Opening", true),
-                new IfcText("Opening / wall = " + nameWall, true), null, localPlacementOpening,
+                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel(nameOpening, true),
+                new IfcText(nameOpening + " / wall = " + nameWall, true), null, localPlacementOpening,
                 openingDefinitionShape, null);
 
         // Create relation IfcWallStandardCase --> IfcOpeningElement

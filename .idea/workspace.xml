@@ -17,16 +17,9 @@
     </filters>
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/3dreno.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/hamcrest_core_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/junit_4_13_SNAPSHOT.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/slf4j_api_1_6_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/slf4j_simple_1_6_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/vecmath_1_3_1.xml" />
+    <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="Ajout des fonctions suivantes :&#10;&quot;addOpeningToWall&quot; + &quot;createDirection2D&quot; + &quot;createDirection3D&quot;&#10;+ &quot;createCartesianPoint2D&quot; + &quot;createCartesianPoint3D&quot;&#10;&#10;&#10;">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" afterPath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" afterPath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/core.iml" afterPath="$PROJECT_DIR$/core/core.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jcsg/jcsg.iml" afterPath="$PROJECT_DIR$/jcsg/jcsg.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -51,22 +44,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DesktopLauncher.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="DesktopLauncher.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.035714" vertical-offset="47" max-vertical-offset="952">
-              <caret line="35" column="40" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
-              <folding />
+            <state vertical-scroll-proportion="0.50364965" vertical-offset="625" max-vertical-offset="1479">
+              <caret line="53" column="31" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IfcHelper.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="IfcHelper.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6305506" vertical-offset="155" max-vertical-offset="5287">
-              <caret line="95" column="35" selection-start-line="95" selection-start-column="35" selection-end-line="95" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="2329">
+              <caret line="756" column="42" selection-start-line="756" selection-start-column="42" selection-end-line="756" selection-end-column="42" />
               <folding>
+                <element signature="docComment;class#IfcHelper#0" expanded="false" />
+                <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
@@ -1553,8 +1550,8 @@
         <option value="$PROJECT_DIR$/android/src/fr/limsi/rorqual/android/AndroidLauncher.java" />
         <option value="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/ljhol.java" />
         <option value="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/utils/IfcObjectPlacementUtils.java" />
-        <option value="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
         <option value="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
+        <option value="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
       </list>
     </option>
   </component>
@@ -1959,6 +1956,118 @@
       <recent name="fr.limsi.Rorqual" />
     </key>
   </component>
+  <component name="RestoreUpdateTree">
+    <UpdateInfo date="Moments ago" ActionInfo="_Update">
+      <UpdatedFiles>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated from server" />
+          <option name="myStatusName" value="Changed on server" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CHANGED_ON_SERVER" />
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Updated" />
+            <option name="myStatusName" value="Changed" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="UPDATED" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Created" />
+            <option name="myStatusName" value="Created" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="CREATED" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Deleted" />
+            <option name="myStatusName" value="Deleted" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="true" />
+            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+            <PATH vcs="svn" revision="47">C:\Users\ricordeau\3dreno\data\ifc\3etage12murs3slabs12openings.ifc</PATH>
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Restored" />
+            <option name="myStatusName" value="Will be restored" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="RESTORED" />
+          </FILE-GROUP>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Modified" />
+          <option name="myStatusName" value="Modified" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MODIFIED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Skipped" />
+          <option name="myStatusName" value="Skipped" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SKIPPED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with conflicts" />
+          <option name="myStatusName" value="Will be merged with conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_CONFLICTS" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with tree conflicts" />
+          <option name="myStatusName" value="Merged with tree conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with property conflicts" />
+          <option name="myStatusName" value="Will be merged with property conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged" />
+          <option name="myStatusName" value="Will be merged" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Not in repository" />
+          <option name="myStatusName" value="Not in repository" />
+          <option name="mySupportsDeletion" value="true" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UNKNOWN" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally added" />
+          <option name="myStatusName" value="Locally added" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_ADDED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally removed" />
+          <option name="myStatusName" value="Locally removed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_REMOVED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Switched" />
+          <option name="myStatusName" value="Switched" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SWITCHED" />
+        </FILE-GROUP>
+      </UpdatedFiles>
+    </UpdateInfo>
+  </component>
   <component name="RunManager" selected="Application.Java">
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -2146,7 +2255,7 @@
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="SvnConfiguration" cleanupOnStartRun="true">
-    <configuration>C:\Users\ricordeau\AppData\Roaming\Subversion</configuration>
+    <configuration useDefault="false">C:\Users\ricordeau\AppData\Roaming\Subversion</configuration>
     <supportedVersion>125</supportedVersion>
   </component>
   <component name="SvnFileUrlMappingImpl">
@@ -2245,20 +2354,36 @@
       <created>1429014507776</created>
       <updated>1429014507776</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Modifications :&#10;Correction du nom de famille &quot;Cristophe&quot; dans &quot;Initialize File Name&quot;&#10;&#10;&#10;">
+      <created>1429014610558</created>
+      <updated>1429014610558</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Ajout des fonctions suivantes :&#10;&quot;addOpeningToWall&quot; + &quot;createDirection2D&quot; + &quot;createDirection3D&quot;&#10;+ &quot;createCartesianPoint2D&quot; + &quot;createCartesianPoint3D&quot;&#10;&#10;&#10;">
+      <created>1429019949402</created>
+      <updated>1429019949402</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Ajout du fichier suivant :&#10;&quot;3etages12murs3slabs12openings&quot;&#10;&#10;&#10;">
+      <created>1429020145884</created>
+      <updated>1429020145884</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Changement du repère local dans la fonction suivante :&#10;&quot;addOpeningToWall&quot;&#10;&#10;&#10;">
+      <created>1429026331577</created>
+      <updated>1429026331577</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.4997242" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.49946696" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.49946696" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32777777" sideWeight="0.50053304" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3288889" sideWeight="0.50053304" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3288889" sideWeight="0.49946696" order="2" side_tool="false" content_ui="tabs" />
@@ -2312,46 +2437,28 @@
     <MESSAGE value="Retrait de 40 warnings peu important&#10;&#10;&#10;" />
     <MESSAGE value="Ajout du fichier : &#10;&quot;3etages12murs3slabs.ifc&quot;&#10;&#10;&#10;" />
     <MESSAGE value="Modifications :&#10;Passage de paramètres de type double au lieu de float (au niveau du IfcHelper)&#10;&#10;&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modifications :&#10;Passage de paramètres de type double au lieu de float (au niveau du IfcHelper)&#10;&#10;&#10;" />
+    <MESSAGE value="Modifications :&#10;Correction du nom de famille &quot;Cristophe&quot; dans &quot;Initialize File Name&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Ajout des fonctions suivantes :&#10;&quot;addOpeningToWall&quot; + &quot;createDirection2D&quot; + &quot;createDirection3D&quot;&#10;+ &quot;createCartesianPoint2D&quot; + &quot;createCartesianPoint3D&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Ajout du fichier suivant :&#10;&quot;3etages12murs3slabs12openings&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Changement du repère local dans la fonction suivante :&#10;&quot;addOpeningToWall&quot;&#10;&#10;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changement du repère local dans la fonction suivante :&#10;&quot;addOpeningToWall&quot;&#10;&#10;&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="22" />
+      <option name="time" value="23" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="56" max-vertical-offset="986">
-          <caret line="321" column="56" selection-start-line="321" selection-start-column="56" selection-end-line="321" selection-end-column="56" />
-          <folding>
-            <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createCartesianPoint2D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createDirection2D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createDirection3D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="714">
           <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2360,6 +2467,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6970">
           <caret line="377" column="0" selection-start-line="377" selection-start-column="0" selection-end-line="377" selection-end-column="0" />
           <folding>
+            <element signature="docComment;class#IfcHelper#0" expanded="false" />
+            <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
@@ -2383,7 +2492,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="663">
           <caret line="20" column="66" selection-start-line="20" selection-start-column="66" selection-end-line="20" selection-end-column="66" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2392,6 +2503,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="6562" max-vertical-offset="6698">
           <caret line="386" column="0" selection-start-line="386" selection-start-column="0" selection-end-line="386" selection-end-column="0" />
           <folding>
+            <element signature="docComment;class#IfcHelper#0" expanded="false" />
+            <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
@@ -2415,7 +2528,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="510">
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2437,7 +2552,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="510">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2734,19 +2851,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcGloballyUniqueId.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.035714" vertical-offset="47" max-vertical-offset="952">
-          <caret line="35" column="40" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.7083333" vertical-offset="0" max-vertical-offset="1156">
+          <caret line="24" column="11" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6305506" vertical-offset="155" max-vertical-offset="5287">
-          <caret line="95" column="35" selection-start-line="95" selection-start-column="35" selection-end-line="95" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2329">
+          <caret line="756" column="42" selection-start-line="756" selection-start-column="42" selection-end-line="756" selection-end-column="42" />
           <folding>
+            <element signature="docComment;class#IfcHelper#0" expanded="false" />
+            <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
@@ -2762,6 +2881,16 @@
             <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.50364965" vertical-offset="625" max-vertical-offset="1479">
+          <caret line="53" column="31" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

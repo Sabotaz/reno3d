@@ -53,18 +53,18 @@ public class DesktopLauncher {
         IfcHelper.addSlabs(ifcModel,"1st floor",listCartesianPoint);
         IfcHelper.addSlabs(ifcModel,"2nd floor",listCartesianPoint);
         IfcHelper.addSlabs(ifcModel,"3rd floor",listCartesianPoint);
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.1","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.2","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.3","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.4","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.1","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.2","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.3","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.4","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.1","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.2","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.3","Hall opening");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.4","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.1","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.2","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.3","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.4","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.1","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.2","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.3","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.4","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.1","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.2","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.3","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.4","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
 
 
         IfcHelper.saveIfcModel(ifcModel);
