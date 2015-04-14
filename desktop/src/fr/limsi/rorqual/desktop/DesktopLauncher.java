@@ -27,7 +27,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         MainApplicationAdapter application = new MainApplicationAdapter();
 
-/*        IfcHelper.initialiseIfcModel(ifcModel);
+        IfcHelper.initialiseIfcModel(ifcModel);
         IfcHelper.addBuildingStorey(ifcModel,"2nd floor", 2.8d);
         IfcHelper.addBuildingStorey(ifcModel,"3rd floor",5.6d);
         IfcHelper.addBuildingStorey(ifcModel,"roof",8.4d);
@@ -53,18 +53,18 @@ public class DesktopLauncher {
         IfcHelper.addSlabs(ifcModel,"1st floor",listCartesianPoint);
         IfcHelper.addSlabs(ifcModel,"2nd floor",listCartesianPoint);
         IfcHelper.addSlabs(ifcModel,"3rd floor",listCartesianPoint);
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.1");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.2");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.3");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 1.4");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.1");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.2");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.3");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 2.4");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.1");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.2");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.3");
-        IfcHelper.addOpeningToWall(ifcModel,"wall 3.4");*/
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.1","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.2","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.3","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 1.4","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.1","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.2","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.3","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 2.4","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.1","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.2","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.3","Hall opening");
+        IfcHelper.addOpeningToWall(ifcModel,"wall 3.4","Hall opening");
 
 
         IfcHelper.saveIfcModel(ifcModel);

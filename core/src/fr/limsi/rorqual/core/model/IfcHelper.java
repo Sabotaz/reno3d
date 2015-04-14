@@ -716,11 +716,11 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening à un Wall
-    public static void addOpeningToWall (IfcModel ifcModel, String nameWall){
+    public static void addOpeningToWall (IfcModel ifcModel, String nameWall, String nameOpening){
         IfcWallStandardCase wall = getWall(ifcModel, nameWall);
         IfcCartesianPoint localPointOpening = createCartesianPoint3D(1.9d,-0.2d,1.0d);
-        IfcDirection zLocalOpening = createDirection3D(-1.0d,0.0d,0.0d);
-        IfcDirection xLocalOpening = createDirection3D(0.0d,0.0d,1.0d);
+        IfcDirection zLocalOpening = createDirection3D(0.0d,0.0d,1.0d);
+        IfcDirection xLocalOpening = createDirection3D(1.0d,0.0d,0.0d);
         IfcAxis2Placement3D placementOpening = new IfcAxis2Placement3D(
                 localPointOpening, zLocalOpening, xLocalOpening);
         IfcLocalPlacement localPlacementOpening = new IfcLocalPlacement(wall.getObjectPlacement(),
@@ -729,8 +729,8 @@ public class IfcHelper {
 
         // Opening geometry with extruded area solid placement
         IfcDirection zLocalExtrusion = createDirection3D(0.0d,1.0d,0.0d);
-        IfcDirection xLocalExtrusion = createDirection3D(1.0d,0.0d,0.0d);
-        IfcCartesianPoint centerOpening = createCartesianPoint3D(0.75d,0.0d,0.5d);
+        IfcDirection xLocalExtrusion = createDirection3D(0.0d,0.0d,1.0d);
+        IfcCartesianPoint centerOpening = createCartesianPoint3D(0.5d,0.0d,0.75d);
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
                 centerOpening, zLocalExtrusion, xLocalExtrusion);
         IfcDirection zLocalRectangle = createDirection2D(1.0d, 0.0d);
