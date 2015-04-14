@@ -93,7 +93,7 @@ public class IfcHelper {
                 null, null, null, null, null);
 
         IfcPerson ifcPerson2 = new IfcPerson(null,
-                new IfcLabel("Chrisptophe", true), new IfcLabel("Julien", true),
+                new IfcLabel("Christophe", true), new IfcLabel("Julien", true),
                 null, null, null, null, null);
 
         // Create the Organisation informations
