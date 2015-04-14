@@ -1,6 +1,9 @@
 package fr.limsi.rorqual.core.model;
 
 import ifc2x3javatoolbox.ifc2x3tc1.IfcAxis2Placement2D;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcOpeningElement;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRectangleProfileDef;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRelVoidsElement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlabTypeEnum;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
@@ -715,17 +718,74 @@ public class IfcHelper {
     // Permet d'ajouter un opening à un Wall
     public static void addOpeningToWall (IfcModel ifcModel, String nameWall){
         IfcWallStandardCase wall = getWall(ifcModel, nameWall);
-        IfcDirection zLocal = createDirection3D(0.0d,1.0d,0.0d);
-        IfcDirection xLocal = createDirection3D(1.0d,0.0d,0.0d);
+        IfcCartesianPoint localPointOpening = createCartesianPoint3D(1.9d,-0.2d,1.0d);
+        IfcDirection zLocalOpening = createDirection3D(-1.0d,0.0d,0.0d);
+        IfcDirection xLocalOpening = createDirection3D(0.0d,0.0d,1.0d);
+        IfcAxis2Placement3D placementOpening = new IfcAxis2Placement3D(
+                localPointOpening, zLocalOpening, xLocalOpening);
+        IfcLocalPlacement localPlacementOpening = new IfcLocalPlacement(wall.getObjectPlacement(),
+                placementOpening);
+        LIST<IfcRepresentation> openingRepresentationsList = new LIST<>();
+
+        // Opening geometry with extruded area solid placement
+        IfcDirection zLocalExtrusion = createDirection3D(0.0d,1.0d,0.0d);
+        IfcDirection xLocalExtrusion = createDirection3D(1.0d,0.0d,0.0d);
         IfcCartesianPoint centerOpening = createCartesianPoint3D(0.75d,0.0d,0.5d);
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
-                centerOpening, zLocal, xLocal);
-        IfcDirection xLocalRectangle = createDirection2D(1.0d, 0.0d);
+                centerOpening, zLocalExtrusion, xLocalExtrusion);
+        IfcDirection zLocalRectangle = createDirection2D(1.0d, 0.0d);
         IfcCartesianPoint originOpening = createCartesianPoint2D(0.0d,0.0d);
         IfcAxis2Placement2D placementRectangle = new IfcAxis2Placement2D(
-                originOpening, xLocalRectangle);
-    }
+                originOpening, zLocalRectangle);
+        IfcRectangleProfileDef rectangle = new IfcRectangleProfileDef(new IfcProfileTypeEnum("AREA"),
+                null,placementRectangle,new IfcPositiveLengthMeasure(new IfcLengthMeasure(1.5d)),
+                new IfcPositiveLengthMeasure(new IfcLengthMeasure(1.0d)));
+        IfcDirection openingExtrusionDirection = createDirection3D(0.0d,0.0d,1.0d);
+        IfcExtrudedAreaSolid extrudedOpening = new IfcExtrudedAreaSolid(rectangle, placementCenterOpening,
+                openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.4d)));
+        SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<>();
+        openingRepresentation3DItem.add(extrudedOpening);
+        IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+                new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), openingRepresentation3DItem);
+        openingRepresentationsList.add(openingSweptSolidRepresentation);
+        IfcProductDefinitionShape openingDefinitionShape = new IfcProductDefinitionShape(null,null,openingRepresentationsList);
 
+        // Create the Opening
+        IfcOpeningElement opening = new IfcOpeningElement(
+                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
+                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("Opening", true),
+                new IfcText("Opening / wall = " + nameWall, true), null, localPlacementOpening,
+                openingDefinitionShape, null);
+
+        // Create relation IfcWallStandardCase --> IfcOpeningElement
+        IfcRelVoidsElement relWallToOpening = new IfcRelVoidsElement(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
+                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Wall Container", true),
+                new IfcText("WallContainer for OpeningElement",true),wall,opening);
+
+        // add new Ifc-objects to the model
+        ifcModel.addIfcObject(relWallToOpening);
+
+        ifcModel.addIfcObject(opening);
+        ifcModel.addIfcObject(localPlacementOpening);
+        ifcModel.addIfcObject(localPointOpening);
+        ifcModel.addIfcObject(zLocalOpening);
+        ifcModel.addIfcObject(xLocalOpening);
+        ifcModel.addIfcObject(placementOpening);
+
+        ifcModel.addIfcObject(openingDefinitionShape);
+
+        ifcModel.addIfcObject(openingSweptSolidRepresentation);
+        ifcModel.addIfcObject(extrudedOpening);
+        ifcModel.addIfcObject(rectangle);
+        ifcModel.addIfcObject(placementRectangle);
+        ifcModel.addIfcObject(originOpening);
+        ifcModel.addIfcObject(zLocalRectangle);
+        ifcModel.addIfcObject(placementCenterOpening);
+        ifcModel.addIfcObject(centerOpening);
+        ifcModel.addIfcObject(zLocalExtrusion);
+        ifcModel.addIfcObject(xLocalExtrusion);
+        ifcModel.addIfcObject(openingExtrusionDirection);
+    }
 
     // Permet d'importer un model au format .ifc
     public static IfcModel loadIfcModel(String path){
