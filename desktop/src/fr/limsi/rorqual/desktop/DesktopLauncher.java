@@ -28,31 +28,32 @@ public class DesktopLauncher {
         MainApplicationAdapter application = new MainApplicationAdapter();
 
         IfcHelper.initialiseIfcModel(ifcModel);
-        IfcHelper.addBuildingStorey(ifcModel,"2nd floor",2.8f);
-        IfcHelper.addBuildingStorey(ifcModel,"3rd floor",5.6f);
-        IfcHelper.addBuildingStorey(ifcModel,"roof",8.4f);
-        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,0.0f,0.0f,1.0f,0.0f);
-        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
-        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
-        IfcHelper.addWall(ifcModel,"1st floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
-        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,0.0f,0.0f,1.0f,0.0f);
-        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
-        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
-        IfcHelper.addWall(ifcModel,"2nd floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
-        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,0.0f,1.0f,0.0f);
-        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,8.0f,1.0f,0.0f);
-        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,0.0f,0.0f,0.0f,1.0f);
-        IfcHelper.addWall(ifcModel,"3rd floor",8.0f,0.4f,2.8f,8.0f,0.0f,0.0f,1.0f);
+        IfcHelper.addBuildingStorey(ifcModel,"2nd floor", 2.8d);
+        IfcHelper.addBuildingStorey(ifcModel,"3rd floor",5.6d);
+        IfcHelper.addBuildingStorey(ifcModel,"roof",8.4d);
+        IfcHelper.addWall(ifcModel,"1st floor","wall 1.1",8.0d,0.4d,2.8d,0.0d,0.0d,1.0d,0.0d);
+        IfcHelper.addWall(ifcModel,"1st floor","wall 1.2",8.0d,0.4d,2.8d,0.0d,8.0d,1.0d,0.0d);
+        IfcHelper.addWall(ifcModel,"1st floor","wall 1.3",8.0d,0.4d,2.8d,0.0d,0.0d,0.0d,1.0d);
+        IfcHelper.addWall(ifcModel,"1st floor","wall 1.4",8.0d,0.4d,2.8d,8.0d,0.0d,0.0d,1.0d);
+        IfcHelper.addWall(ifcModel,"2nd floor","wall 2.1",8.0d,0.4d,2.8d,0.0d,0.0d,1.0d,0.0d);
+        IfcHelper.addWall(ifcModel,"2nd floor","wall 2.2",8.0d,0.4d,2.8d,0.0d,8.0d,1.0d,0.0d);
+        IfcHelper.addWall(ifcModel,"2nd floor","wall 2.3",8.0d,0.4d,2.8d,0.0d,0.0d,0.0d,1.0d);
+        IfcHelper.addWall(ifcModel,"2nd floor","wall 2.4",8.0d,0.4d,2.8d,8.0d,0.0d,0.0d,1.0d);
+        IfcHelper.addWall(ifcModel,"3rd floor","wall 3.1",8.0d,0.4d,2.8d,0.0d,0.0d,1.0d,0.0d);
+        IfcHelper.addWall(ifcModel,"3rd floor","wall 3.2",8.0d,0.4d,2.8d,0.0d,8.0d,1.0d,0.0d);
+        IfcHelper.addWall(ifcModel,"3rd floor","wall 3.3",8.0d,0.4d,2.8d,0.0d,0.0d,0.0d,1.0d);
+        IfcHelper.addWall(ifcModel,"3rd floor","wall 3.4",8.0d,0.4d,2.8d,8.0d,0.0d,0.0d,1.0d);
 
         LIST<IfcCartesianPoint> listCartesianPoint = new LIST<>();
-        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(0.0f,0.0f));
-        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(8.0f,0.0f));
-        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(8.0f,8.0f));
-        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(0.0f,8.0f));
+        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(0.0d,0.0d));
+        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(8.0d,0.0d));
+        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(8.0d,8.0d));
+        listCartesianPoint.add(IfcHelper.createCartesianPoint2D(0.0d,8.0d));
 
         IfcHelper.addSlabs(ifcModel,"1st floor",listCartesianPoint);
         IfcHelper.addSlabs(ifcModel,"2nd floor",listCartesianPoint);
         IfcHelper.addSlabs(ifcModel,"3rd floor",listCartesianPoint);
+        //IfcHelper.addOpeningToWall(ifcModel,"wall 1.1");
 
         IfcHelper.saveIfcModel(ifcModel);
 

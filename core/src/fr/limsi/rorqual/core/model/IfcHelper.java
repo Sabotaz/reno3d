@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.model;
 
+import ifc2x3javatoolbox.ifc2x3tc1.IfcAxis2Placement2D;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlabTypeEnum;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
@@ -330,6 +331,17 @@ public class IfcHelper {
         return null;
     }
 
+    // Permet de récupérer un WallStandardCase dans un model en fonction de son nom
+    public static IfcWallStandardCase getWall (IfcModel ifcModel, String nameWall){
+        Collection<IfcWallStandardCase> collectionWallStandardCase = ifcModel.getCollection(IfcWallStandardCase.class);
+        for (IfcWallStandardCase actualWall : collectionWallStandardCase){
+            if(actualWall.getName().getDecodedValue().equals(nameWall)){
+                return actualWall;
+            }
+        }
+        return null;
+    }
+
     // Permet de récupérer la relation entre le building et ses étages
     public static IfcRelAggregates getBuildingRelations (IfcModel ifcModel){
         Collection<IfcRelAggregates> collectionRelAggregates = ifcModel.getCollection(IfcRelAggregates.class);
@@ -352,16 +364,16 @@ public class IfcHelper {
         return null;
     }
 
-    // Permet de créer un point cartésien en 2D à partir de deux float
-    public static IfcCartesianPoint createCartesianPoint2D(float x, float y){
+    // Permet de créer un point cartésien en 2D à partir de deux doubles
+    public static IfcCartesianPoint createCartesianPoint2D(double x, double y){
         LIST<IfcLengthMeasure> coordinates = new LIST<>();
         coordinates.add(new IfcLengthMeasure(x));
         coordinates.add(new IfcLengthMeasure(y));
         return new IfcCartesianPoint(coordinates);
     }
 
-    // Permet de créer un point cartésien en 3D à partir de trois float
-    public static IfcCartesianPoint createCartesianPoint3D(float x, float y, float z){
+    // Permet de créer un point cartésien en 3D à partir de trois doubles
+    public static IfcCartesianPoint createCartesianPoint3D(double x, double y, double z){
         LIST<IfcLengthMeasure> coordinates = new LIST<>();
         coordinates.add(new IfcLengthMeasure(x));
         coordinates.add(new IfcLengthMeasure(y));
@@ -369,8 +381,25 @@ public class IfcHelper {
         return new IfcCartesianPoint(coordinates);
     }
 
+    // Permet de créer une direction à partir de deux doubles
+    public static IfcDirection createDirection2D(double x, double y){
+        LIST<DOUBLE> coordinates = new LIST<>();
+        coordinates.add(new DOUBLE(x));
+        coordinates.add(new DOUBLE(y));
+        return new IfcDirection(coordinates);
+    }
+
+    // Permet de créer une direction à partir de trois doubles
+    public static IfcDirection createDirection3D(double x, double y, double z){
+        LIST<DOUBLE> coordinates = new LIST<>();
+        coordinates.add(new DOUBLE(x));
+        coordinates.add(new DOUBLE(y));
+        coordinates.add(new DOUBLE(z));
+        return new IfcDirection(coordinates);
+    }
+
     // Permet d'ajouter un étage au batiment en lui rentrant son nom et son élévation
-    public static void addBuildingStorey (IfcModel ifcModel,String nameFloor , float elevation){
+    public static void addBuildingStorey (IfcModel ifcModel,String nameFloor , double elevation){
         LIST<IfcLengthMeasure> coordinatesBuildingStorey = new LIST<>();
         coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
         coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
@@ -410,7 +439,7 @@ public class IfcHelper {
 
     // Permet d'ajouter un mur à un IfcModel
     // Arguments : IfcModel, étage sur lequel on implémente le mur, dimension, position, et orientation du mur
-    public static void addWall(IfcModel ifcModel, String nameBuildingStorey, float wallLength, float wallWidth, float wallHeight, float posX, float posY,float dirX, float dirY){
+    public static void addWall(IfcModel ifcModel, String nameBuildingStorey, String nameWall, double wallLength, double wallWidth, double wallHeight, double posX, double posY, double dirX, double dirY){
         IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel,nameBuildingStorey);
         LIST<IfcLengthMeasure> coordinatesWall = new LIST<>();
         coordinatesWall.add(new IfcLengthMeasure(posX));
@@ -524,8 +553,8 @@ public class IfcHelper {
         IfcProductDefinitionShape ifcWallDefinitionShape = new IfcProductDefinitionShape(null,null,ifcWallRepresentationsList);
         IfcWallStandardCase ifcWallStandardCase = new IfcWallStandardCase(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("Mur", true),
-                new IfcText("Description du mur", true), null, ifcLocalPlacementWall,
+                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel(nameWall, true),
+                new IfcText(nameWall + " / etage = " + nameBuildingStorey, true), null, ifcLocalPlacementWall,
                 ifcWallDefinitionShape, null);
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
@@ -641,7 +670,7 @@ public class IfcHelper {
         IfcSlab ifcSlab = new IfcSlab(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
                 ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("Slab", true),
-                new IfcText("Description du slab", true), null, ifcLocalPlacementSlab,
+                new IfcText("Slab = floor / etage = " + nameBuildingStorey, true), null, ifcLocalPlacementSlab,
                 ifcSlabDefinitionShape, null, new IfcSlabTypeEnum("FLOOR"));
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
@@ -682,6 +711,21 @@ public class IfcHelper {
             ifcModel.addIfcObject(actualPoint);
         }
     }
+
+    // Permet d'ajouter un opening à un Wall
+    public static void addOpeningToWall (IfcModel ifcModel, String nameWall){
+        IfcWallStandardCase wall = getWall(ifcModel, nameWall);
+        IfcDirection zLocal = createDirection3D(0.0d,1.0d,0.0d);
+        IfcDirection xLocal = createDirection3D(1.0d,0.0d,0.0d);
+        IfcCartesianPoint centerOpening = createCartesianPoint3D(0.75d,0.0d,0.5d);
+        IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
+                centerOpening, zLocal, xLocal);
+        IfcDirection xLocalRectangle = createDirection2D(1.0d, 0.0d);
+        IfcCartesianPoint originOpening = createCartesianPoint2D(0.0d,0.0d);
+        IfcAxis2Placement2D placementRectangle = new IfcAxis2Placement2D(
+                originOpening, xLocalRectangle);
+    }
+
 
     // Permet d'importer un model au format .ifc
     public static IfcModel loadIfcModel(String path){
