@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import fr.limsi.rorqual.core.model.ModelProvider;
+import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.IfcObjectPlacementUtils;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcCircle;
@@ -20,7 +21,6 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcLine;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcParameterValue;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcTrimmedCurve;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcTrimmingSelect;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by christophe on 08/04/15.
@@ -38,16 +38,16 @@ public class TrimmedCurveModel extends AbstractModelProvider {
 
     public TrimmedCurveModel(IfcTrimmedCurve ifcTrimmedCurve) {
 
+        boolean sense = ifcTrimmedCurve.getSenseAgreement().value;
+
         if (ifcTrimmedCurve.getBasisCurve() instanceof IfcCircle) {
             basis_curve = IfcCircle.class;
             //Todo
             //http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcgeometryresource/lexical/ifctrimmedcurve.htm
             //http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcgeometryresource/lexical/ifccircle.htm
-
             IfcCircle circle = (IfcCircle) ifcTrimmedCurve.getBasisCurve();
             placement = IfcObjectPlacementUtils.toMatrix(circle.getPosition());
             circle_radius = (float)circle.getRadius().value;
-            boolean sense = ifcTrimmedCurve.getSenseAgreement().value;
 
             IfcCartesianPoint CPtrim1 = null, CPtrim2 = null;
             IfcParameterValue PVtrim1 = null, PVtrim2 = null;
@@ -67,7 +67,7 @@ public class TrimmedCurveModel extends AbstractModelProvider {
 
 
             if (PVtrim1 == null || PVtrim2 == null)
-                throw new NotImplementedException();
+                System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
             if (sense) {
                 angle_from = (float)(PVtrim1.value * Math.PI / 180.);
                 angle_to = (float)(PVtrim2.value * Math.PI / 180.);
@@ -77,7 +77,6 @@ public class TrimmedCurveModel extends AbstractModelProvider {
             }
             while (angle_to < angle_from)
                 angle_to += 2 * Math.PI;
-            System.out.println("angles: " + angle_from + "," + angle_to);
 
         }
         else if (ifcTrimmedCurve.getBasisCurve() instanceof IfcLine) {
@@ -87,8 +86,6 @@ public class TrimmedCurveModel extends AbstractModelProvider {
             Vector3 d = IfcObjectPlacementUtils.toVector(line.getDir());
             IfcCartesianPoint CPtrim1 = null, CPtrim2 = null;
             IfcParameterValue PVtrim1 = null, PVtrim2 = null;
-
-            System.out.println("sense: "+ifcTrimmedCurve.getSenseAgreement());
 
             for (IfcTrimmingSelect t : ifcTrimmedCurve.getTrim1()) {
                 if (t instanceof IfcCartesianPoint)
@@ -126,21 +123,20 @@ public class TrimmedCurveModel extends AbstractModelProvider {
 
     private void make_points() {
 
+        Vector3 normal = new Vector3(0,0,1);
         if (basis_curve == IfcCircle.class) {
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i <= 30; i++) {
                 float theta1 = angle_from + (angle_to-angle_from) * (i / 30f);
                 float x = (float)(circle_radius * Math.cos(theta1));
                 float y = (float)(circle_radius * Math.sin(theta1));
-                points.add(new Vector3(x,y,0));
+                Vector3 pt = new Vector3(x,y,0);
+                vertex.add(CSGUtils.toVertex(pt,normal));
+
             }
 
         } else {
-            points.add(start);
-            points.add(end);
+            vertex.add(CSGUtils.toVertex(start,normal));
+            vertex.add(CSGUtils.toVertex(end,normal));
         }
-    }
-
-    public Model getModel() {
-        return null;
     }
 }

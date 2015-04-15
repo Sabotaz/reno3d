@@ -29,8 +29,6 @@ public class SceneGraphMaker {
         Queue<IfcObjectPlacement> queue = new LinkedList<IfcObjectPlacement>();
         getProductsPlacements(treeNode, nodes, queue);
 
-        System.out.println(nodes.size());
-
         while (!queue.isEmpty()) {
             IfcObjectPlacement placement = queue.poll();
             Group3d node = nodes.get(placement);
@@ -51,7 +49,6 @@ public class SceneGraphMaker {
                         queue.add(localPlacement.getPlacementRelTo());
                     }
                 } else { // root
-                    System.out.println("root...");
                     stage.getRoot().addActor3d(node);
                 }
 
@@ -60,9 +57,6 @@ public class SceneGraphMaker {
                 //ToDo
             }
             node.setTransform(loc);
-            System.out.println(node.getTransform());
-            System.out.println(node.getX());
-            //node.transform = loc;
         }
         return stage;
     }
@@ -74,6 +68,7 @@ public class SceneGraphMaker {
             IfcObjectPlacement placement = product.getObjectPlacement();
             Group3d node = new Group3d(ModelFactoryStrategy.getModel(product));
             node.setName(product.getGlobalId().getEncodedValue());
+            node.setTransform(IfcObjectPlacementUtils.computeMatrix(placement));
             node.userData = product;
             nodes.put(product.getObjectPlacement(), node);
             queue.add(placement);

@@ -54,6 +54,9 @@ project(":android") {
     }
 }
 
+project(":jcsg") {
+}
+
 project(":core") {
     apply plugin: "java"
 

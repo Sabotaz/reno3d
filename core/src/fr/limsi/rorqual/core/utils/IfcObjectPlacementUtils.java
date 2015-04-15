@@ -61,6 +61,35 @@ public class IfcObjectPlacementUtils {
         return toVector(vector.getOrientation().getDirectionRatios()).scl((float)vector.getMagnitude().value);
     }
 
+    public static IfcAxis2Placement3D toPlacement3D(Matrix4 matrix) {
+        IfcAxis2Placement3D placement3D = new IfcAxis2Placement3D();
+
+        float[] mxf = matrix.getValues();
+        IfcDirection axis = createDirection3D(mxf[8],mxf[9],mxf[10]);
+        placement3D.setAxis(axis);
+        IfcDirection refDirection = createDirection3D(mxf[0],mxf[1],mxf[2]);
+        placement3D.setRefDirection(refDirection);
+        IfcCartesianPoint location = createCartesianPoint3D(mxf[12],mxf[13],mxf[14]);
+        placement3D.setLocation(location);
+        return placement3D;
+    }
+
+    public static IfcCartesianPoint createCartesianPoint3D(double x, double y, double z){
+        LIST<IfcLengthMeasure> coordinates = new LIST<>();
+        coordinates.add(new IfcLengthMeasure(x));
+        coordinates.add(new IfcLengthMeasure(y));
+        coordinates.add(new IfcLengthMeasure(z));
+        return new IfcCartesianPoint(coordinates);
+    }
+
+    public static IfcDirection createDirection3D(double x, double y, double z){
+        LIST<DOUBLE> coordinates = new LIST<>();
+        coordinates.add(new DOUBLE(x));
+        coordinates.add(new DOUBLE(y));
+        coordinates.add(new DOUBLE(z));
+        return new IfcDirection(coordinates);
+    }
+
     public static Matrix4 toMatrix(IfcAxis2Placement3D placement3D) {
 
         IfcDirection ifc_x = placement3D.getRefDirection();
@@ -68,6 +97,7 @@ public class IfcObjectPlacementUtils {
         IfcCartesianPoint ifc_p = placement3D.getLocation();
 
         Vector3 x = new Vector3(1.f,0.f,0.f);
+        Vector3 y;// = new Vector3(0.f,1.f,0.f);
         Vector3 z = new Vector3(0.f,0.f,1.f);
 
         if (ifc_x != null) {
@@ -81,11 +111,26 @@ public class IfcObjectPlacementUtils {
         LIST<IfcLengthMeasure> pd = ifc_p.getCoordinates();
 
         Vector3 p = new Vector3((float)pd.get(0).value, (float)pd.get(1).value, (float)pd.get(2).value);
-        Vector3 y = z.cpy().crs(x);
+        y = z.cpy().crs(x);
         // ref_direction can be just in the x-z-plane, not perpendicular to y and z. so re-compute local x
         x = y.cpy().crs(z);
 
-        return new Matrix4().set(x,y,z,p);
+        x.nor();
+        y.nor();
+        z.nor();
+
+        Matrix4 mx = new Matrix4();
+        float[] mxf = new float[16];
+        mxf[0] = x.x; mxf[1] = x.y; mxf[2] = x.z; mxf[3] = 0;
+        mxf[4] = y.x; mxf[5] = y.y; mxf[6] = y.z; mxf[7] = 0;
+        mxf[8] = z.x; mxf[9] = z.y; mxf[10]= z.z; mxf[11]= 0;
+        mxf[12]= p.x; mxf[13]= p.y; mxf[14]= p.z; mxf[15]= 1;
+        mx.set(mxf);
+        System.out.println(mx);
+
+        //Matrix4 mx = new Matrix4().set(x,y,z,p);
+
+        return mx;
     }
 
     public static Matrix4 toMatrix(IfcAxis2Placement2D placement2D) {
@@ -94,6 +139,7 @@ public class IfcObjectPlacementUtils {
         IfcCartesianPoint ifc_p = placement2D.getLocation();
 
         Vector3 x = new Vector3(1.f,0.f,0.f);
+        Vector3 y;
         Vector3 z = new Vector3(0.f,0.f,1.f);
 
         if (ifc_x != null) {
@@ -103,13 +149,25 @@ public class IfcObjectPlacementUtils {
         LIST<IfcLengthMeasure> pd = ifc_p.getCoordinates();
 
         Vector3 p = new Vector3((float)pd.get(0).value, (float)pd.get(1).value, 0.f);
-        Vector3 y = z.cpy().crs(x);
+        y = z.cpy().crs(x);
         // ref_direction can be just in the x-z-plane, not perpendicular to y and z. so re-compute local x
         x = y.cpy().crs(z);
 
-        return new Matrix4().set(x,y,z,p);
-    }
+        x.nor();
+        y.nor();
+        z.nor();
 
+        Matrix4 mx = new Matrix4();
+        float[] mxf = new float[16];
+        mxf[0] = x.x; mxf[1] = x.y; mxf[2] = x.z; mxf[3] = 0;
+        mxf[4] = y.x; mxf[5] = y.y; mxf[6] = y.z; mxf[7] = 0;
+        mxf[8] = z.x; mxf[9] = z.y; mxf[10]= z.z; mxf[11]= 0;
+        mxf[12]= p.x; mxf[13]= p.y; mxf[14]= p.z; mxf[15]= 1;
+        mx.set(mxf);
+
+        return mx;
+    }
+/*
     public static Vector3 getAxis1(IfcAxis2Placement2D placement2D) {
 
         IfcDirection ifc_x = placement2D.getRefDirection();
@@ -220,18 +278,19 @@ public class IfcObjectPlacementUtils {
             return new Vector3();
     }
 
-
+*/
     // compute the matrix4 of a placement
     public static Matrix4 computeMatrix(IfcObjectPlacement placement) {
         if (placement instanceof IfcLocalPlacement) {
             IfcLocalPlacement localPlacement = (IfcLocalPlacement) placement;
-            return IfcObjectPlacementUtils.toMatrix(localPlacement.getRelativePlacement());
+            Matrix4 mx =  IfcObjectPlacementUtils.toMatrix(localPlacement.getRelativePlacement());
+            return mx;
         } else if (placement instanceof IfcGridPlacement) {
             return new Matrix4(); //ToDo
         }
         return new Matrix4(); // n'arrive normalement jamais
     }
-
+/*
     public static Vector3 getAxis1(IfcObjectPlacement placement) {
         if (placement instanceof IfcLocalPlacement) {
             IfcLocalPlacement localPlacement = (IfcLocalPlacement) placement;
@@ -261,7 +320,7 @@ public class IfcObjectPlacementUtils {
         }
         return new Vector3(); // n'arrive normalement jamais
     }
-
+*/
     // recursively compute the matrix4 of a placement
     public static Matrix4 computeFullMatrix(IfcObjectPlacement placement) {
         if (placement instanceof IfcLocalPlacement) {

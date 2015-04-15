@@ -6,14 +6,16 @@ import com.badlogic.gdx.math.Vector3;
 
 import java.util.List;
 
+import eu.mihosoft.vrl.v3d.Primitive;
+import eu.mihosoft.vrl.v3d.Vertex;
+
 /**
  * Created by christophe on 08/04/15.
  */
-public interface ModelProvider {
+public interface ModelProvider extends Primitive {
 
-    public Model getModel();
-
-    public List<Vector3> getPoints();
     public Matrix4 getPosition();
+
+    public List<Vertex> getVertex();
 
 }

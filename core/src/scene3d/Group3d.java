@@ -59,9 +59,7 @@ public class Group3d extends Actor3d{
 
             //child.translate(1,0,0);
 
-            //System.out.println(child.x + " " + child.y + " " + child.z);
-            Matrix4 child_matrix = child.getTransform().cpy();
-
+            Matrix4 child_matrix = child.transform.cpy();
             child.transform.mul(transform);
 
             //if (child.isCullable(getStage3d().getCamera())) {
@@ -69,7 +67,7 @@ public class Group3d extends Actor3d{
              visibleCount++;
             //}
 
-            child.setTransform(child_matrix);
+            child.transform.set(child_matrix);
 
 
         }

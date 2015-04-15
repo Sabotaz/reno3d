@@ -3,14 +3,19 @@ package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.mihosoft.vrl.v3d.CSG;
+import eu.mihosoft.vrl.v3d.Cube;
+import eu.mihosoft.vrl.v3d.Vertex;
 import fr.limsi.rorqual.core.model.primitives.ExtrudedAreaSolidModel;
 import fr.limsi.rorqual.core.model.primitives.PolylineModel;
 import fr.limsi.rorqual.core.model.primitives.TrimmedCurveModel;
+import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.IfcObjectPlacementUtils;
 import fr.limsi.rorqual.core.utils.ModelUtils;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDirectionSenseEnum;
@@ -71,28 +76,31 @@ public class IfcWallModelFactory {
                 IfcFeatureElementSubtraction subs = voidElement.getRelatedOpeningElement();
                 if (subs instanceof  IfcOpeningElement) {
                     IfcOpeningElement opening = (IfcOpeningElement) subs;
+                    Matrix4 position = IfcObjectPlacementUtils.computeMatrix(opening.getObjectPlacement());
                     LIST<IfcRepresentation> reprs = opening.getRepresentation().getRepresentations();
-                    for (IfcRepresentation repr : reprs) {
-                        if (repr instanceof IfcShapeRepresentation) {
-                            IfcShapeRepresentation ifcShapeRepresentation = (IfcShapeRepresentation) repr;
-                            if (repr.getRepresentationIdentifier().getDecodedValue().equals("Body"))
-                                openings.add(ifcShapeRepresentation);
-                            break;
+                    IfcShapeRepresentation repr = null;
+                    for (IfcRepresentation lrepr : reprs) {
+                        if (lrepr instanceof IfcShapeRepresentation) {
+                            IfcShapeRepresentation ifcShapeRepresentation = (IfcShapeRepresentation) lrepr;
+                            if (ifcShapeRepresentation.getRepresentationIdentifier().getDecodedValue().equals("Body")) {
+                                repr = ifcShapeRepresentation;
+                                break;
+                            }
                         }
                     }
-                }
-            }
-        }
-        for (IfcShapeRepresentation repr : openings) {
-            if (!repr.getRepresentationType().getDecodedValue().equals("SweptSolid"))
-                System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
 
-            Object[] items = repr.getItems().toArray();
-            System.out.println("opening: " + repr);
-            if (items.length > 0) {
-                System.out.println("item: " + items[0]);
-                if (items[0] instanceof IfcExtrudedAreaSolid) {
-                    opening_models.add(new ExtrudedAreaSolidModel((IfcExtrudedAreaSolid) items[0]));
+                    if (repr != null) {
+                        if (!repr.getRepresentationType().getDecodedValue().equals("SweptSolid"))
+                            System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
+                        Object[] items = repr.getItems().toArray();
+                        if (items.length > 0) {
+                            if (items[0] instanceof IfcExtrudedAreaSolid) {
+                                ExtrudedAreaSolidModel model = new ExtrudedAreaSolidModel((IfcExtrudedAreaSolid) items[0], position);
+                                opening_models.add(model);
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -153,6 +161,8 @@ public class IfcWallModelFactory {
 
     private Vector3 XY;
     private Vector3 Z;
+    private Matrix4 placement;
+
 
     private ModelProvider axis_model;
 
@@ -161,8 +171,9 @@ public class IfcWallModelFactory {
         if (!axis.getRepresentationType().getDecodedValue().equals("Curve2D"))
             System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
 
-        XY = IfcObjectPlacementUtils.getAxis2(wall.getObjectPlacement());
-        Z = IfcObjectPlacementUtils.getAxis3(wall.getObjectPlacement());
+        /*XY = IfcObjectPlacementUtils.getAxis1(wall.getObjectPlacement());
+        Z = IfcObjectPlacementUtils.getAxis3(wall.getObjectPlacement());*/
+        placement = IfcObjectPlacementUtils.computeMatrix(wall.getObjectPlacement());
 
         Object[] items = axis.getItems().toArray();
         if (items.length > 0) {
@@ -187,9 +198,7 @@ public class IfcWallModelFactory {
             System.out.println("ASSERT TYPE FALSE"); //Todo throw exception
 
         Object[] items = body.getItems().toArray();
-        System.out.println("body: " + body);
         if (items.length > 0) {
-            System.out.println("item: " + items[0]);
             if (items[0] instanceof IfcExtrudedAreaSolid) {
                 body_model = new ExtrudedAreaSolidModel((IfcExtrudedAreaSolid) items[0]);
             }
@@ -198,18 +207,30 @@ public class IfcWallModelFactory {
 
 
     private ModelProvider wall_model;
+    private CSG wall_csg;
 
     private void mergeOpenings() {
-        List<Vector3> body_points = body_model.getPoints();
+        CSG cube;
+        List<Vertex> body_points = body_model.getVertex();
         wall_model = body_model;
+
+        wall_csg = wall_model.toCSG();
+
         for (ModelProvider opening_model : opening_models) {
-            wall_model = ModelUtils.subs(wall_model, opening_model);
-            wall_model = opening_model;
+            //wall_csg.setOptType(CSG.OptType.NONE);
+            System.out.println("opening " + opening_model);
+            CSG opening_csg = opening_model.toCSG();
+            //wall_csg = wall_csg.difference(opening_csg);
+            wall_csg = wall_csg.union(opening_csg);
+            //wall_csg = wall_csg.difference(opening_csg);
+            //wall_csg = opening_csg;
         }
+
     }
 
 
     public Model getModel() {
-        return wall_model.getModel();
+        //return wall_model.getModel();
+        return CSGUtils.toModel(wall_csg);
     }
 }

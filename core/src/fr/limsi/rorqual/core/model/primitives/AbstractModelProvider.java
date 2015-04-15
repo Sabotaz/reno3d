@@ -7,6 +7,10 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.mihosoft.vrl.v3d.CSG;
+import eu.mihosoft.vrl.v3d.Polygon;
+import eu.mihosoft.vrl.v3d.PropertyStorage;
+import eu.mihosoft.vrl.v3d.Vertex;
 import fr.limsi.rorqual.core.model.ModelProvider;
 
 /**
@@ -14,13 +18,24 @@ import fr.limsi.rorqual.core.model.ModelProvider;
  */
 public abstract class AbstractModelProvider implements ModelProvider {
     protected Matrix4 placement = new Matrix4();
-    protected List<Vector3> points = new ArrayList<Vector3>();
-
-    public List<Vector3> getPoints() {
-        return points;
-    }
+    protected List<Vertex> vertex = new ArrayList<Vertex>();
+    protected final PropertyStorage properties = new PropertyStorage();
+    protected List<Polygon> polygons = new ArrayList<Polygon>();
 
     public Matrix4 getPosition() {
         return placement;
+    }
+
+    public CSG toCSG() {
+        return CSG.fromPolygons(getProperties(), toPolygons());
+    }
+    public PropertyStorage getProperties() {
+        return properties;
+    }
+    public List<Polygon> toPolygons() {
+        return polygons;
+    }
+    public List<Vertex> getVertex() {
+        return vertex;
     }
 }

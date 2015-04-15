@@ -33,6 +33,9 @@
  */
 package eu.mihosoft.vrl.v3d;
 
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
+
 import java.util.Random;
 
 /**
@@ -294,6 +297,30 @@ public class Vector3d {
         return clone().transform(transform);
     }
 
+    public Vector3d mul(Matrix4 m) {
+        double x, y;
+        float[] mv = m.getValues();
+        x = mv[0] * this.x + mv[4] * this.y + mv[8] * this.z + mv[12];
+        y = mv[1] * this.x + mv[5] * this.y + mv[9] * this.z + mv[13];
+        this.z = mv[2] * this.x + mv[6] * this.y + mv[10] * this.z + mv[14];
+        this.x = x;
+        this.y = y;
+
+        return this;
+    }
+
+    public Vector3d add(Vector3 v) {
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
+
+        return this;
+    }
+
+    public Vector3 toVector3() {
+        return new Vector3((float)x,(float)y,(float)z);
+    }
+
     /**
      * Applies the specified transformation to this vector.
      *
@@ -301,6 +328,7 @@ public class Vector3d {
      *
      * @return this vector
      */
+
     public Vector3d transform(Transform transform, double amount) {
         return transform.transform(this, amount);
     }

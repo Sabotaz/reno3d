@@ -1,28 +1,23 @@
 package fr.limsi.rorqual.core.model.primitives;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.model.Node;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.mihosoft.vrl.v3d.Polygon;
+import eu.mihosoft.vrl.v3d.Vertex;
 import fr.limsi.rorqual.core.model.ModelProvider;
+import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.IfcObjectPlacementUtils;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcArbitraryClosedProfileDef;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcCompositeCurve;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCompositeCurveSegment;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcCurve;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcExtrudedAreaSolid;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcPolyline;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcProfileDef;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRectangleProfileDef;
-import ifc2x3javatoolbox.ifc2x3tc1.LIST;
 
 /**
  * Created by christophe on 08/04/15.
@@ -33,17 +28,15 @@ public class ExtrudedAreaSolidModel extends AbstractModelProvider {
     private Vector3 direction;
     private float depth;
 
-    public ExtrudedAreaSolidModel(IfcExtrudedAreaSolid extrudedAreaSolid) {
-
-        placement = IfcObjectPlacementUtils.toMatrix(extrudedAreaSolid.getPosition());
+    public ExtrudedAreaSolidModel(IfcExtrudedAreaSolid extrudedAreaSolid, Matrix4 lplacement) {
+        this.placement = lplacement;
+        placement.mul(IfcObjectPlacementUtils.toMatrix(extrudedAreaSolid.getPosition()));
 
         IfcProfileDef profile = extrudedAreaSolid.getSweptArea();
-        System.out.println("profile: " + profile.getProfileType()); // should be AREA :o
 
         if (profile instanceof IfcArbitraryClosedProfileDef) {
             IfcArbitraryClosedProfileDef arbitraryClosedProfileDef = (IfcArbitraryClosedProfileDef) profile;
             IfcCurve curve = arbitraryClosedProfileDef.getOuterCurve();
-            System.out.println("curve: " + curve);
             if (curve instanceof IfcPolyline) {
                 outerCurve = new PolylineModel((IfcPolyline) curve);
             } else if (curve instanceof IfcCompositeCurve) {
@@ -51,35 +44,62 @@ public class ExtrudedAreaSolidModel extends AbstractModelProvider {
             }
         } else if (profile instanceof IfcRectangleProfileDef) {
             outerCurve = new RectangleProfileDefModel((IfcRectangleProfileDef) profile);
-            System.out.println("rect: " + profile);
         }
 
         direction = IfcObjectPlacementUtils.toVector(extrudedAreaSolid.getExtrudedDirection().getDirectionRatios());
         depth = (float)extrudedAreaSolid.getDepth().value;
+
+        makePoints();
     }
 
-    public Model getModel() {
-        ModelBuilder builder = new ModelBuilder();
+    public ExtrudedAreaSolidModel(IfcExtrudedAreaSolid extrudedAreaSolid) {
+        this(extrudedAreaSolid, new Matrix4());
+    }
 
-        builder.begin();
+    private void makePoints() {
+        polygons.clear();
 
-        Node node = builder.node();
-        node.id = "base";
+        List<Vertex> base = new ArrayList<Vertex>();
+        List<Vertex> top = new ArrayList<Vertex>();
 
-        MeshPartBuilder meshBuilder;
+        Matrix4 mx = placement.cpy().mul(outerCurve.getPosition());
 
-        meshBuilder = builder.part("sweptsolid", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.WHITE)));
+        Vector3 z_shape = direction.cpy().scl(depth);
+        for (int i = 0; i < outerCurve.getVertex().size(); i++) {
+            Vertex p1 = outerCurve.getVertex().get(i).cpy();
+            Vertex p2 = outerCurve.getVertex().get((i + 1) % outerCurve.getVertex().size()).cpy();
+            Vertex p3 = p1.cpy();
+            Vertex p4 = p2.cpy();
 
-        meshBuilder.setVertexTransform(placement);
-        for (int i = 0; i < outerCurve.getPoints().size(); i++) {
-            Vector3 z_shape = direction.cpy().scl(depth);
-            Vector3 p1 = outerCurve.getPoints().get(i);
-            Vector3 p2 = outerCurve.getPoints().get((i + 1) % outerCurve.getPoints().size());
-            Vector3 p3 = p1.cpy().add(z_shape);
-            Vector3 p4 = p2.cpy().add(z_shape);
-            meshBuilder.rect(p1, p2, p4, p3, direction);
+            Vector3 normal = CSGUtils.castVector(p1.pos).sub(CSGUtils.castVector(p2.pos)).crs(z_shape).mul(mx);
+
+            p1.pos.mul(mx);
+            p2.pos.mul(mx);
+            p3.pos.add(z_shape).mul(mx);
+            p4.pos.add(z_shape).mul(mx);
+
+            p1.normal = CSGUtils.castVector(normal);
+            p2.normal = CSGUtils.castVector(normal);
+            p3.normal = CSGUtils.castVector(normal);
+            p4.normal = CSGUtils.castVector(normal);
+
+            List<Vertex> v = new ArrayList<Vertex>();
+            v.add(p1);
+            v.add(p2);
+            v.add(p4);
+            v.add(p3);
+
+            Vertex bp = CSGUtils.toVertex(CSGUtils.castVector(p1.pos),direction.cpy().mul(mx).nor());
+            Vertex tp = CSGUtils.toVertex(CSGUtils.castVector(p3.pos),direction.cpy().scl(-1).mul(mx).nor());
+
+            base.add(bp);
+            top.add(tp);
+
+            polygons.add(new Polygon(v));
         }
-        return builder.end();
+        polygons.add(new Polygon(base));
+        polygons.add(new Polygon(top));
+
     }
 
 }

@@ -63,6 +63,10 @@ public class Vertex {
         this.normal = normal;
     }
 
+    public Vertex cpy() {
+        return this.clone();
+    }
+
     
         /**
      * Constructor. Creates a vertex.
