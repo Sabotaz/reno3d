@@ -218,11 +218,9 @@ public class IfcWallModelFactory {
 
         for (ModelProvider opening_model : opening_models) {
             //wall_csg.setOptType(CSG.OptType.NONE);
-            System.out.println("opening " + opening_model);
             CSG opening_csg = opening_model.toCSG();
-            //wall_csg = wall_csg.difference(opening_csg);
-            wall_csg = wall_csg.union(opening_csg);
-            //wall_csg = wall_csg.difference(opening_csg);
+            wall_csg = wall_csg.difference(opening_csg);
+            //wall_csg = wall_csg.union(opening_csg);
             //wall_csg = opening_csg;
         }
 
