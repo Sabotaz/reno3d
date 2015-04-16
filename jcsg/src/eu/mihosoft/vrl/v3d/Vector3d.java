@@ -83,6 +83,10 @@ public class Vector3d {
         this.z = 0;
     }
 
+    public Vector3d cpy() {
+        return clone();
+    }
+
     @Override
     public Vector3d clone() {
         return new Vector3d(x, y, z);

@@ -60,7 +60,7 @@ package eu.mihosoft.vrl.v3d.ext.org.poly2tri;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-class PolygonPoint extends TPoint
+public class PolygonPoint extends TPoint
 {
     protected PolygonPoint _next;
     protected PolygonPoint _previous;

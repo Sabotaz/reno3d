@@ -63,7 +63,7 @@ import java.util.ArrayList;
 
 
 
-abstract class TriangulationPoint extends Point
+public abstract class TriangulationPoint extends Point
 {
     // List of edges this point constitutes an upper ending point (CDT)
     private ArrayList<DTSweepConstraint> edges; 

@@ -126,7 +126,6 @@ public class IfcObjectPlacementUtils {
         mxf[8] = z.x; mxf[9] = z.y; mxf[10]= z.z; mxf[11]= 0;
         mxf[12]= p.x; mxf[13]= p.y; mxf[14]= p.z; mxf[15]= 1;
         mx.set(mxf);
-        System.out.println(mx);
 
         //Matrix4 mx = new Matrix4().set(x,y,z,p);
 

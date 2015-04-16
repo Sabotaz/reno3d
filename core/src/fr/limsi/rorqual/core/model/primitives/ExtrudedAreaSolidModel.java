@@ -6,7 +6,10 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.mihosoft.vrl.v3d.CSG;
+import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Polygon;
+import eu.mihosoft.vrl.v3d.Vector3d;
 import eu.mihosoft.vrl.v3d.Vertex;
 import fr.limsi.rorqual.core.model.ModelProvider;
 import fr.limsi.rorqual.core.utils.CSGUtils;
@@ -56,50 +59,32 @@ public class ExtrudedAreaSolidModel extends AbstractModelProvider {
         this(extrudedAreaSolid, new Matrix4());
     }
 
-    private void makePoints() {
-        polygons.clear();
+    private CSG csg = null;
 
-        List<Vertex> base = new ArrayList<Vertex>();
-        List<Vertex> top = new ArrayList<Vertex>();
+    public CSG toCSG() {
+        return csg;
+    }
+
+    private void makePoints() {
 
         Matrix4 mx = placement.cpy().mul(outerCurve.getPosition());
 
         Vector3 z_shape = direction.cpy().scl(depth);
-        for (int i = 0; i < outerCurve.getVertex().size(); i++) {
-            Vertex p1 = outerCurve.getVertex().get(i).cpy();
-            Vertex p2 = outerCurve.getVertex().get((i + 1) % outerCurve.getVertex().size()).cpy();
-            Vertex p3 = p1.cpy();
-            Vertex p4 = p2.cpy();
 
-            Vector3 normal = CSGUtils.castVector(p1.pos).sub(CSGUtils.castVector(p2.pos)).crs(z_shape).mul(mx);
 
-            p1.pos.mul(mx);
-            p2.pos.mul(mx);
-            p3.pos.add(z_shape).mul(mx);
-            p4.pos.add(z_shape).mul(mx);
+        Vector3d dir = CSGUtils.castVector(z_shape);
 
-            p1.normal = CSGUtils.castVector(normal);
-            p2.normal = CSGUtils.castVector(normal);
-            p3.normal = CSGUtils.castVector(normal);
-            p4.normal = CSGUtils.castVector(normal);
+        List<Vector3d> face = new ArrayList<Vector3d>();
+        for (Vertex v : outerCurve.getVertex())
+            face.add(v.pos);
 
-            List<Vertex> v = new ArrayList<Vertex>();
-            v.add(p1);
-            v.add(p2);
-            v.add(p4);
-            v.add(p3);
+        csg = Extrude.points(dir, face);
 
-            Vertex bp = CSGUtils.toVertex(CSGUtils.castVector(p1.pos),direction.cpy().mul(mx).nor());
-            Vertex tp = CSGUtils.toVertex(CSGUtils.castVector(p3.pos),direction.cpy().scl(-1).mul(mx).nor());
+        polygons = csg.getPolygons();
 
-            base.add(bp);
-            top.add(tp);
-
-            polygons.add(new Polygon(v));
-        }
-        polygons.add(new Polygon(base));
-        polygons.add(new Polygon(top));
-
+        for (Polygon p : polygons)
+            for (Vertex v : p.vertices)
+                v.pos.mul(mx);
     }
 
 }

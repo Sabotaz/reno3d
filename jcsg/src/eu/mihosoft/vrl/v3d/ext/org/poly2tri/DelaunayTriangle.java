@@ -65,7 +65,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-class DelaunayTriangle
+public class DelaunayTriangle
 {
     private final static Logger logger    = LoggerFactory.getLogger( DelaunayTriangle.class );
 

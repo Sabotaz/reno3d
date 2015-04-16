@@ -26,7 +26,7 @@ public class DesktopLauncher {
         IfcModel ifcModel = new IfcModel();
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         MainApplicationAdapter application = new MainApplicationAdapter();
-
+/*
         IfcHelper.initialiseIfcModel(ifcModel);
         IfcHelper.addBuildingStorey(ifcModel,"2nd floor", 2.8d);
         IfcHelper.addBuildingStorey(ifcModel,"3rd floor",5.6d);
@@ -67,11 +67,11 @@ public class DesktopLauncher {
         IfcHelper.addOpeningToWall(ifcModel,"wall 3.4","Hall opening",0.4d,0.9d,1.0d,1.0d,1.5d);
 
 
-        IfcHelper.saveIfcModel(ifcModel);
+        IfcHelper.saveIfcModel(ifcModel);*/
 
 
         try {
-            IfcHolder.getInstance().openModel(new File("data/ifc/two_curved_walls.ifc"));
+            IfcHolder.getInstance().openModel(new File("data/ifc/3etage12murs3slabs12openings.ifc"));
         } catch (Exception e) {
             e.printStackTrace();
         }
