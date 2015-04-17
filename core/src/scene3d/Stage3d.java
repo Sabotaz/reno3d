@@ -308,7 +308,9 @@ public class Stage3d extends InputAdapter implements Disposable {
     
     public Actor3d getObject(int screenX, int screenY) {
         distance = -1;
-        return hit3d(screenX,screenY, root);
+        Actor3d hit =  hit3d(screenX,screenY, root);
+        System.out.println(distance);
+        return hit;
     }
     
     public Actor3d test_hit(int screenX, int screenY, Actor3d actor3d) {

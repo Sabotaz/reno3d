@@ -65,7 +65,7 @@ public class CSGUtils {
         for (int p = 0; p < polygons.size(); p++) {
             Polygon polygon = polygons.get(p);
 
-            meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.WHITE)));
+            meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position, new Material("Color", ColorAttribute.createDiffuse(Color.WHITE)));
 
             /*Vector3 p1 = CSGUtils.castVector(polygon.vertices.get(0).pos);
             for (int i = 0; i < polygon.vertices.size()-2; i++) {

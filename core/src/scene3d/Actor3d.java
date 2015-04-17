@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -57,8 +58,8 @@ public class Actor3d extends ModelInstance implements Disposable {
 		//boundBox = model.meshes.get(0).calculateBoundingBox();
 		calculateBoundingBox(boundBox);
         System.out.println(boundBox);
-        center.set(boundBox.getCenter());
-        dimensions.set(boundBox.getDimensions());
+        boundBox.getCenter(center);
+        boundBox.getDimensions(dimensions);
 		radius = dimensions.len() / 2f;
 		animation = new AnimationController(this);
 	}
@@ -218,18 +219,32 @@ public class Actor3d extends ModelInstance implements Disposable {
         }
         return mx;
     }
+
+    private float intersectsMesh(Ray ray) {
+        Vector3 pt = new Vector3();
+        Boolean intersect = Intersector.intersectRayBounds(ray, boundBox, pt);
+
+        final float dist2cam = pt.dst(ray.origin);
+        return intersect ? dist2cam : -1f;
+    }
 	
 	/** @return -1 on no intersection, or when there is an intersection: the squared distance between the center of this 
      * object and the point on the ray closest to this object when there is intersection. */
     public float intersects(Ray ray) {
-        getFullTransform().getTranslation(position).add(center);
-        System.out.println(userData + ": "  + position);
+        Matrix4 mx = getFullTransform();
+
+        model.calculateBoundingBox(boundBox);
+        boundBox.mul(mx);
+        boundBox.getCenter(center);
+
         //transform.getTranslation(position).cpy().add(center);
-        final float len = ray.direction.dot(position.x-ray.origin.x, position.y-ray.origin.y, position.z-ray.origin.z);
+        final float len = ray.direction.dot(center.x-ray.origin.x, center.y-ray.origin.y, center.z-ray.origin.z);
+        //final float dist2cam = position.dst(ray.origin);
         if (len < 0f)
             return -1f;
-        float dist2 = position.dst2(ray.origin.x+ray.direction.x*len, ray.origin.y+ray.direction.y*len, ray.origin.z+ray.direction.z*len);
-        return (dist2 <= radius * radius) ? len : -1f;
+        float dist2 = center.dst2(ray.origin.x + ray.direction.x * len, ray.origin.y + ray.direction.y * len, ray.origin.z + ray.direction.z * len);
+        //return (dist2 <= radius * radius) ? dist2cam : -1f;
+        return (dist2 <= radius * radius) ? intersectsMesh(ray) : -1f;
     }
 	
 	public void setPosition(float x, float y, float z) {

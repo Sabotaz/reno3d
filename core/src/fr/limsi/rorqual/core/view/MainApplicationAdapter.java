@@ -143,27 +143,37 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
     private int last_screenX = 0;
     private int last_screenY = 0;
+    private boolean dragged = false;
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         last_screenX = screenX;
         last_screenY = screenY;
+        dragged = false;
         return false;
     }
+
+    Actor3d selected = null;
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        Actor3d actor3d = stage.getObject(screenX, screenY);
-        if (actor3d != null) {
-            System.out.println("TOUCH: " + actor3d.userData);
-            actor3d.getParent().removeActor3d(actor3d);
+        if (!dragged) {
+            if (selected != null)
+                selected.setColor(Color.WHITE);
+            selected = stage.getObject(screenX, screenY);
+            if (selected != null) {
+                System.out.println("TOUCH: " + selected.userData);
+                selected.setColor(Color.YELLOW);
+            }
+            return selected != null;
         }
-        return actor3d != null;
+        return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        dragged = true;
         int diffX = screenX - last_screenX;
         int diffY = screenY - last_screenY;
         Camera camera = cameras[ncam%cameras.length];
