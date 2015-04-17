@@ -263,17 +263,26 @@ public class Stage3d extends InputAdapter implements Disposable {
 		canHit = false;
 	}
 
+    Actor3d selected = null;
+
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(canHit){
 			Actor3d actor3d = getObject(screenX, screenY);
 			selecting = actor3d != null?1:-1;
-			if(actor3d != null && actor3d.getName() != null)
-				Gdx.app.log("", ""+actor3d.getName());
+            selected = actor3d;
+			if(actor3d != null) {
+                if (actor3d.getName() != null)
+                    Gdx.app.log("", "" + actor3d.getName());
+            }
 		}
         return selecting > 0;
 		//return false;
 	}
+
+    public Actor3d getSelected() {
+        return selected;
+    }
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
@@ -298,21 +307,12 @@ public class Stage3d extends InputAdapter implements Disposable {
     float distance = -1;
     
     public Actor3d getObject(int screenX, int screenY) {
-    	 Actor3d temp = null;
-    	 SnapshotArray<Actor3d> children = root.getChildren();
-    	 Actor3d[] actors = children.begin();
-         for(int i = 0, n = children.size; i < n; i++){
-        	 temp = hit3d(screenX, screenY, actors[i]);
-        	 if(actors[i] instanceof Group3d)
-        		 temp = hit3d(screenX, screenY, (Group3d)actors[i]);
-         }
-         children.end();
-         return temp;
+        distance = -1;
+        return hit3d(screenX,screenY, root);
     }
     
-    public Actor3d hit3d(int screenX, int screenY, Actor3d actor3d) {
+    public Actor3d test_hit(int screenX, int screenY, Actor3d actor3d) {
         Ray ray = camera.getPickRay(screenX, screenY);
-        float distance = -1;
         final float dist2 = actor3d.intersects(ray);
         if (dist2 >= 0f && (distance < 0f || dist2 <= distance)) { 
             distance = dist2;
@@ -321,17 +321,22 @@ public class Stage3d extends InputAdapter implements Disposable {
         return null;
     }
     
-    public Actor3d hit3d(int screenX, int screenY, Group3d group3d) {
-    	 Actor3d temp = null;
-    	 SnapshotArray<Actor3d> children = group3d.getChildren();
-    	 Actor3d[] actors = children.begin();
-         for(int i = 0, n = children.size; i < n; i++){
-        	 temp = hit3d(screenX, screenY, actors[i]);
-        	 if(actors[i] instanceof Group3d)
-        		 temp = hit3d(screenX, screenY, (Group3d)actors[i]);
-         }
-         children.end();
-         return temp;
+    public Actor3d hit3d(int screenX, int screenY, Actor3d actor3d) {
+        Actor3d temp = test_hit(screenX,screenY,actor3d);
+
+        if (actor3d instanceof Group3d) {
+            Group3d group3d = (Group3d) actor3d;
+
+            SnapshotArray<Actor3d> children = group3d.getChildren();
+            Actor3d[] actors = children.begin();
+
+            for (int i = 0, n = children.size; i < n; i++) {
+                Actor3d touch = hit3d(screenX, screenY, actors[i]);
+                temp = touch == null ? temp : touch;
+            }
+            children.end();
+        }
+        return temp;
     }
 
 	@Override

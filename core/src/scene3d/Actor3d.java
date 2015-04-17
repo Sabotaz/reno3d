@@ -56,6 +56,7 @@ public class Actor3d extends ModelInstance implements Disposable {
 		setPosition(x,y,z);
 		//boundBox = model.meshes.get(0).calculateBoundingBox();
 		calculateBoundingBox(boundBox);
+        System.out.println(boundBox);
         center.set(boundBox.getCenter());
         dimensions.set(boundBox.getDimensions());
 		radius = dimensions.len() / 2f;
@@ -207,16 +208,28 @@ public class Actor3d extends ModelInstance implements Disposable {
 	public void setVisible (boolean visible) {
 		this.visible = visible;
 	}
+
+    private Matrix4 getFullTransform() {
+        Actor3d current = this;
+        Matrix4 mx = new Matrix4();
+        while (current != null) {
+            mx.mulLeft(current.getTransform());
+            current = current.getParent();
+        }
+        return mx;
+    }
 	
 	/** @return -1 on no intersection, or when there is an intersection: the squared distance between the center of this 
      * object and the point on the ray closest to this object when there is intersection. */
     public float intersects(Ray ray) {
-        transform.getTranslation(position).cpy().add(center);
+        getFullTransform().getTranslation(position).add(center);
+        System.out.println(userData + ": "  + position);
+        //transform.getTranslation(position).cpy().add(center);
         final float len = ray.direction.dot(position.x-ray.origin.x, position.y-ray.origin.y, position.z-ray.origin.z);
         if (len < 0f)
             return -1f;
         float dist2 = position.dst2(ray.origin.x+ray.direction.x*len, ray.origin.y+ray.direction.y*len, ray.origin.z+ray.direction.z*len);
-        return (dist2 <= radius * radius) ? dist2 : -1f;
+        return (dist2 <= radius * radius) ? len : -1f;
     }
 	
 	public void setPosition(float x, float y, float z) {

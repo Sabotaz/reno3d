@@ -18,6 +18,7 @@ import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.utils.SceneGraphMaker;
+import scene3d.Actor3d;
 import scene3d.Stage3d;
 
 public class MainApplicationAdapter extends ApplicationAdapter implements InputProcessor {
@@ -152,7 +153,13 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+
+        Actor3d actor3d = stage.getObject(screenX, screenY);
+        if (actor3d != null) {
+            System.out.println("TOUCH: " + actor3d.userData);
+            actor3d.getParent().removeActor3d(actor3d);
+        }
+        return actor3d != null;
     }
 
     @Override
