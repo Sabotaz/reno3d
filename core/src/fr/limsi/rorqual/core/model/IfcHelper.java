@@ -146,11 +146,7 @@ public class IfcHelper {
                 (int) (System.currentTimeMillis() / 1000)));
 
         // Create WorldCoordinateSystem
-        LIST<IfcLengthMeasure> coordinatesOrigin = new LIST<>();
-        coordinatesOrigin.add(new IfcLengthMeasure(0.0));
-        coordinatesOrigin.add(new IfcLengthMeasure(0.0));
-        coordinatesOrigin.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginWorld = new IfcCartesianPoint(coordinatesOrigin);
+        IfcCartesianPoint ifcCartesianPointOriginWorld = createCartesianPoint3D(0.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DWorld = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginWorld, null, null);
 
@@ -185,21 +181,9 @@ public class IfcHelper {
                 contexts, ifcUnitAssignment);
 
         // Create IfcSite
-        LIST<IfcLengthMeasure> coordinatesSite = new LIST<>();
-        coordinatesSite.add(new IfcLengthMeasure(0.0));
-        coordinatesSite.add(new IfcLengthMeasure(0.0));
-        coordinatesSite.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginSite = new IfcCartesianPoint(coordinatesSite);
-        LIST<DOUBLE> ZAxisSite = new LIST<>();
-        ZAxisSite.add(new DOUBLE(0.0));
-        ZAxisSite.add(new DOUBLE(0.0));
-        ZAxisSite.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisSite = new IfcDirection(ZAxisSite);
-        LIST<DOUBLE> XDirectionSite = new LIST<>();
-        XDirectionSite.add(new DOUBLE(1.0));
-        XDirectionSite.add(new DOUBLE(0.0));
-        XDirectionSite.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionSite = new IfcDirection(XDirectionSite);
+        IfcCartesianPoint ifcCartesianPointOriginSite = createCartesianPoint3D(0.0,0.0,0.0);
+        IfcDirection ifcDirectionZAxisSite = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionSite = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DSite = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginSite, ifcDirectionZAxisSite, ifcDirectionXDirectionSite);
         IfcLocalPlacement ifcLocalPlacementSite = new IfcLocalPlacement(null,
@@ -211,21 +195,9 @@ public class IfcHelper {
                 new IfcElementCompositionEnum("ELEMENT"), null, null, null, null, null);
 
         // Create IfcBuilding
-        LIST<IfcLengthMeasure> coordinatesBuilding = new LIST<>();
-        coordinatesBuilding.add(new IfcLengthMeasure(0.0));
-        coordinatesBuilding.add(new IfcLengthMeasure(0.0));
-        coordinatesBuilding.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginBuilding = new IfcCartesianPoint(coordinatesBuilding);
-        LIST<DOUBLE> ZAxisBuilding = new LIST<>();
-        ZAxisBuilding.add(new DOUBLE(0.0));
-        ZAxisBuilding.add(new DOUBLE(0.0));
-        ZAxisBuilding.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisBuilding = new IfcDirection(ZAxisBuilding);
-        LIST<DOUBLE> XDirectionBuilding = new LIST<>();
-        XDirectionBuilding.add(new DOUBLE(1.0));
-        XDirectionBuilding.add(new DOUBLE(0.0));
-        XDirectionBuilding.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionBuilding = new IfcDirection(XDirectionBuilding);
+        IfcCartesianPoint ifcCartesianPointOriginBuilding = createCartesianPoint3D(0.0,0.0,0.0);
+        IfcDirection ifcDirectionZAxisBuilding = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionBuilding = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DBuilding = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginBuilding, ifcDirectionZAxisBuilding, ifcDirectionXDirectionBuilding);
         IfcLocalPlacement ifcLocalPlacementBuilding = new IfcLocalPlacement(null,
@@ -237,21 +209,9 @@ public class IfcHelper {
                 new IfcElementCompositionEnum("ELEMENT"), null, null, null);
 
         // Create IfcBuilgingStorey
-        LIST<IfcLengthMeasure> coordinatesBuildingStorey = new LIST<>();
-        coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
-        coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
-        coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = new IfcCartesianPoint(coordinatesBuildingStorey);
-        LIST<DOUBLE> ZAxisBuildingStorey = new LIST<>();
-        ZAxisBuildingStorey.add(new DOUBLE(0.0));
-        ZAxisBuildingStorey.add(new DOUBLE(0.0));
-        ZAxisBuildingStorey.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisBuildingStorey = new IfcDirection(ZAxisBuildingStorey);
-        LIST<DOUBLE> XDirectionBuildingStorey = new LIST<>();
-        XDirectionBuildingStorey.add(new DOUBLE(1.0));
-        XDirectionBuildingStorey.add(new DOUBLE(0.0));
-        XDirectionBuildingStorey.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionBuildingStorey = new IfcDirection(XDirectionBuildingStorey);
+        IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = createCartesianPoint3D(0.0,0.0,0.0);
+        IfcDirection ifcDirectionZAxisBuildingStorey = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionBuildingStorey = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DBuildingStorey = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginBuildingStorey, ifcDirectionZAxisBuildingStorey, ifcDirectionXDirectionBuildingStorey);
         IfcLocalPlacement ifcLocalPlacementBuildingStorey = new IfcLocalPlacement(null,
@@ -339,13 +299,6 @@ public class IfcHelper {
         return it.next();
     }
 
-    // Permet de récupérer le batiment contenu dans le model (on considère qu'il n'y a qu'un batiment)
-    public static IfcBuilding getBuilding (IfcModel ifcModel){
-        Collection<IfcBuilding> collectionBuilding = ifcModel.getCollection(IfcBuilding.class);
-        Iterator<IfcBuilding> it = collectionBuilding.iterator();
-        return it.next();
-    }
-
     // Permet de récupérer un étage dans un model en fonction de son nom
     public static IfcBuildingStorey getBuildingStorey (IfcModel ifcModel, String nameBuildingStorey){
         Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
@@ -359,8 +312,7 @@ public class IfcHelper {
 
     // Permet de récupérer l'étage dans lequel se trouve un wall
     public static IfcSpatialStructureElement getBuildingStorey (IfcModel ifcModel, IfcWallStandardCase wall){
-        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructure = new SET<>();
-        relContainedInSpatialStructure = wall.getContainedInStructure_Inverse();
+        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructure = wall.getContainedInStructure_Inverse();
         Iterator<IfcRelContainedInSpatialStructure> it = relContainedInSpatialStructure.iterator();
         return it.next().getRelatingStructure();
     }
@@ -445,21 +397,9 @@ public class IfcHelper {
 
     // Permet d'ajouter un étage au batiment en lui rentrant son nom et son élévation
     public static void addBuildingStorey (IfcModel ifcModel,String nameFloor , double elevation){
-        LIST<IfcLengthMeasure> coordinatesBuildingStorey = new LIST<>();
-        coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
-        coordinatesBuildingStorey.add(new IfcLengthMeasure(0.0));
-        coordinatesBuildingStorey.add(new IfcLengthMeasure(elevation));
-        IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = new IfcCartesianPoint(coordinatesBuildingStorey);
-        LIST<DOUBLE> ZAxisBuildingStorey = new LIST<>();
-        ZAxisBuildingStorey.add(new DOUBLE(0.0));
-        ZAxisBuildingStorey.add(new DOUBLE(0.0));
-        ZAxisBuildingStorey.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisBuildingStorey = new IfcDirection(ZAxisBuildingStorey);
-        LIST<DOUBLE> XDirectionBuildingStorey = new LIST<>();
-        XDirectionBuildingStorey.add(new DOUBLE(1.0));
-        XDirectionBuildingStorey.add(new DOUBLE(0.0));
-        XDirectionBuildingStorey.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionBuildingStorey = new IfcDirection(XDirectionBuildingStorey);
+        IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = createCartesianPoint3D(0.0,0.0,elevation);
+        IfcDirection ifcDirectionZAxisBuildingStorey = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionBuildingStorey = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DBuildingStorey = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginBuildingStorey, ifcDirectionZAxisBuildingStorey, ifcDirectionXDirectionBuildingStorey);
         IfcLocalPlacement ifcLocalPlacementBuildingStorey = new IfcLocalPlacement(null,
@@ -486,21 +426,9 @@ public class IfcHelper {
     // Arguments : IfcModel, étage sur lequel on implémente le mur, dimension, position, et orientation du mur
     public static void addWall(IfcModel ifcModel, String nameBuildingStorey, String nameWall, double wallLength, double wallHeight, double wallThickness, double posX, double posY, double dirX, double dirY){
         IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel,nameBuildingStorey);
-        LIST<IfcLengthMeasure> coordinatesWall = new LIST<>();
-        coordinatesWall.add(new IfcLengthMeasure(posX));
-        coordinatesWall.add(new IfcLengthMeasure(posY));
-        coordinatesWall.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginWall = new IfcCartesianPoint(coordinatesWall);
-        LIST<DOUBLE> zAxisWall = new LIST<>();
-        zAxisWall.add(new DOUBLE(0.0));
-        zAxisWall.add(new DOUBLE(0.0));
-        zAxisWall.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisWall = new IfcDirection(zAxisWall);
-        LIST<DOUBLE> xDirectionWall = new LIST<>();
-        xDirectionWall.add(new DOUBLE(dirX));
-        xDirectionWall.add(new DOUBLE(dirY));
-        xDirectionWall.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionWall = new IfcDirection(xDirectionWall);
+        IfcCartesianPoint ifcCartesianPointOriginWall = createCartesianPoint3D(posX,posY,0.0);
+        IfcDirection ifcDirectionZAxisWall = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionWall = createDirection3D(dirX,dirY,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DWall = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginWall, ifcDirectionZAxisWall, ifcDirectionXDirectionWall);
         IfcLocalPlacement ifcLocalPlacementWall = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
@@ -508,23 +436,11 @@ public class IfcHelper {
         LIST<IfcRepresentation> ifcWallRepresentationsList = new LIST<>();
 
         // First representation : Geometric representation (2D)
-        LIST<IfcLengthMeasure> wallPoints2D1 = new LIST<>();
-        wallPoints2D1.add(new IfcLengthMeasure(0.0));
-        wallPoints2D1.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcWallPoints2D1 = new IfcCartesianPoint(wallPoints2D1);
-        LIST<IfcLengthMeasure> wallPoints2D2 = new LIST<>();
-        wallPoints2D2.add(new IfcLengthMeasure(wallLength));
-        wallPoints2D2.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcWallPoints2D2 = new IfcCartesianPoint(wallPoints2D2);
-        LIST<DOUBLE> wallAxisDirection = new LIST<>();
-        wallAxisDirection.add(new DOUBLE(1.0));
-        wallAxisDirection.add(new DOUBLE(0.0));
-        IfcDirection ifcWallAxisDirection = new IfcDirection(wallAxisDirection);
+        IfcCartesianPoint ifcWallPoints2D1 = createCartesianPoint2D(0.0,0.0);
+        IfcCartesianPoint ifcWallPoints2D2 = createCartesianPoint2D(wallLength,0.0);
+        IfcDirection ifcWallAxisDirection = createDirection2D(1.0,0.0);
         IfcVector wallAxisVector = new IfcVector(ifcWallAxisDirection,new IfcLengthMeasure(wallLength));
-        LIST<IfcLengthMeasure> wallPoints2D0 = new LIST<>();
-        wallPoints2D0.add(new IfcLengthMeasure(0.0));
-        wallPoints2D0.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcWallPoints2D0 = new IfcCartesianPoint(wallPoints2D0);
+        IfcCartesianPoint ifcWallPoints2D0 = createCartesianPoint2D(0.0,0.0);
         IfcLine wallAxisLine =new IfcLine(ifcWallPoints2D0,wallAxisVector);
         SET<IfcTrimmingSelect> Trim1 = new SET<>();
         SET<IfcTrimmingSelect> Trim2 = new SET<>();
@@ -540,51 +456,23 @@ public class IfcHelper {
 
         // Second representation : SweptSolid representation (3D)
         LIST<IfcCartesianPoint> wallAllPoints = new LIST<>();
-        LIST<IfcLengthMeasure> wallPoints1 = new LIST<>();
-        wallPoints1.add(new IfcLengthMeasure(0.0));
-        wallPoints1.add(new IfcLengthMeasure(wallThickness/2));
-        IfcCartesianPoint wallCartesianPoint1 = new IfcCartesianPoint(wallPoints1);
+        IfcCartesianPoint wallCartesianPoint1 = createCartesianPoint2D(0.0,wallThickness/2);
         wallAllPoints.add(wallCartesianPoint1);
-        LIST<IfcLengthMeasure> wallPoints2 = new LIST<>();
-        wallPoints2.add(new IfcLengthMeasure(wallLength));
-        wallPoints2.add(new IfcLengthMeasure(wallThickness/2));
-        IfcCartesianPoint wallCartesianPoint2 = new IfcCartesianPoint(wallPoints2);
+        IfcCartesianPoint wallCartesianPoint2 = createCartesianPoint2D(wallLength,wallThickness/2);
         wallAllPoints.add(wallCartesianPoint2);
-        LIST<IfcLengthMeasure> wallPoints3 = new LIST<>();
-        wallPoints3.add(new IfcLengthMeasure(wallLength));
-        wallPoints3.add(new IfcLengthMeasure(-wallThickness/2));
-        IfcCartesianPoint wallCartesianPoint3 = new IfcCartesianPoint(wallPoints3);
+        IfcCartesianPoint wallCartesianPoint3 = createCartesianPoint2D(wallLength,-wallThickness/2);
         wallAllPoints.add(wallCartesianPoint3);
-        LIST<IfcLengthMeasure> wallPoints4 = new LIST<>();
-        wallPoints4.add(new IfcLengthMeasure(0.0));
-        wallPoints4.add(new IfcLengthMeasure(-wallThickness/2));
-        IfcCartesianPoint wallCartesianPoint4 = new IfcCartesianPoint(wallPoints4);
+        IfcCartesianPoint wallCartesianPoint4 = createCartesianPoint2D(0.0,-wallThickness/2);
         wallAllPoints.add(wallCartesianPoint4);
         IfcPolyline wallPolyline = new IfcPolyline(wallAllPoints);
         IfcArbitraryClosedProfileDef wallArbitraryClosedProfileDef = new IfcArbitraryClosedProfileDef(
                 new IfcProfileTypeEnum ("AREA"), null, wallPolyline);
-        LIST<IfcLengthMeasure> coordinatesWallRepresentation = new LIST<>();
-        coordinatesWallRepresentation.add(new IfcLengthMeasure(0.0));
-        coordinatesWallRepresentation.add(new IfcLengthMeasure(0.0));
-        coordinatesWallRepresentation.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginWallRepresentation = new IfcCartesianPoint(coordinatesWallRepresentation);
-        LIST<DOUBLE> zAxisWallRepresentation = new LIST<>();
-        zAxisWallRepresentation.add(new DOUBLE(0.0));
-        zAxisWallRepresentation.add(new DOUBLE(0.0));
-        zAxisWallRepresentation.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisWallRepresentation = new IfcDirection(zAxisWallRepresentation);
-        LIST<DOUBLE> xDirectionWallRepresentation = new LIST<>();
-        xDirectionWallRepresentation.add(new DOUBLE(1.0));
-        xDirectionWallRepresentation.add(new DOUBLE(0.0));
-        xDirectionWallRepresentation.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionWallRepresentation = new IfcDirection(xDirectionWallRepresentation);
+        IfcCartesianPoint ifcCartesianPointOriginWallRepresentation = createCartesianPoint3D(0.0,0.0,0.0);
+        IfcDirection ifcDirectionZAxisWallRepresentation = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionWallRepresentation = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DWallRepresentation = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginWallRepresentation, ifcDirectionZAxisWallRepresentation, ifcDirectionXDirectionWallRepresentation);
-        LIST<DOUBLE> wallExtrudedDirection = new LIST<>();
-        wallExtrudedDirection.add(new DOUBLE(0.0));
-        wallExtrudedDirection.add(new DOUBLE(0.0));
-        wallExtrudedDirection.add(new DOUBLE(1.0));
-        IfcDirection ifcWallExtrudedDirection = new IfcDirection(wallExtrudedDirection);
+        IfcDirection ifcWallExtrudedDirection = createDirection3D(0.0,0.0,1.0);
         IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(wallHeight);
         IfcExtrudedAreaSolid extrudedWall = new IfcExtrudedAreaSolid(wallArbitraryClosedProfileDef,
                 ifcAxis2Placement3DWallRepresentation,ifcWallExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
@@ -654,21 +542,9 @@ public class IfcHelper {
     // Permet d'ajouter un slab à un IfcModel
     public static void addSlabs(IfcModel ifcModel,String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint){
         IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel,nameBuildingStorey);
-        LIST<IfcLengthMeasure> coordinatesSlab = new LIST<>();
-        coordinatesSlab.add(new IfcLengthMeasure(0.0));
-        coordinatesSlab.add(new IfcLengthMeasure(0.0));
-        coordinatesSlab.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginSlab = new IfcCartesianPoint(coordinatesSlab);
-        LIST<DOUBLE> zAxisLocalSlab = new LIST<>();
-        zAxisLocalSlab.add(new DOUBLE(0.0));
-        zAxisLocalSlab.add(new DOUBLE(0.0));
-        zAxisLocalSlab.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisLocalSlab = new IfcDirection(zAxisLocalSlab);
-        LIST<DOUBLE> xDirectionLocalSlab = new LIST<>();
-        xDirectionLocalSlab.add(new DOUBLE(1.0));
-        xDirectionLocalSlab.add(new DOUBLE(0.0));
-        xDirectionLocalSlab.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionLocalSlab = new IfcDirection(xDirectionLocalSlab);
+        IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0,0.0,0.0);
+        IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionLocalSlab = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DSlab = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginSlab, ifcDirectionZAxisLocalSlab, ifcDirectionXDirectionLocalSlab);
         IfcLocalPlacement ifcLocalPlacementSlab = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
@@ -679,28 +555,12 @@ public class IfcHelper {
         IfcPolyline slabPolyline = new IfcPolyline(listSlabCartesianPoint);
         IfcArbitraryClosedProfileDef slabArbitraryClosedProfileDef = new IfcArbitraryClosedProfileDef(
                 new IfcProfileTypeEnum ("AREA"), null, slabPolyline);
-        LIST<IfcLengthMeasure> coordinatesSlabRepresentation = new LIST<>();
-        coordinatesSlabRepresentation.add(new IfcLengthMeasure(0.0));
-        coordinatesSlabRepresentation.add(new IfcLengthMeasure(0.0));
-        coordinatesSlabRepresentation.add(new IfcLengthMeasure(0.0));
-        IfcCartesianPoint ifcCartesianPointOriginSlabRepresentation = new IfcCartesianPoint(coordinatesSlabRepresentation);
-        LIST<DOUBLE> zAxisSlabRepresentation = new LIST<>();
-        zAxisSlabRepresentation.add(new DOUBLE(0.0));
-        zAxisSlabRepresentation.add(new DOUBLE(0.0));
-        zAxisSlabRepresentation.add(new DOUBLE(1.0));
-        IfcDirection ifcDirectionZAxisSlabRepresentation = new IfcDirection(zAxisSlabRepresentation);
-        LIST<DOUBLE> xDirectionSlabRepresentation = new LIST<>();
-        xDirectionSlabRepresentation.add(new DOUBLE(1.0));
-        xDirectionSlabRepresentation.add(new DOUBLE(0.0));
-        xDirectionSlabRepresentation.add(new DOUBLE(0.0));
-        IfcDirection ifcDirectionXDirectionSlabRepresentation = new IfcDirection(xDirectionSlabRepresentation);
+        IfcCartesianPoint ifcCartesianPointOriginSlabRepresentation = createCartesianPoint3D(0.0,0.0,0.0);
+        IfcDirection ifcDirectionZAxisSlabRepresentation = createDirection3D(0.0,0.0,1.0);
+        IfcDirection ifcDirectionXDirectionSlabRepresentation = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DSlabRepresentation = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginSlabRepresentation, ifcDirectionZAxisSlabRepresentation, ifcDirectionXDirectionSlabRepresentation);
-        LIST<DOUBLE> slabExtrudedDirection = new LIST<>();
-        slabExtrudedDirection.add(new DOUBLE(0.0));
-        slabExtrudedDirection.add(new DOUBLE(0.0));
-        slabExtrudedDirection.add(new DOUBLE(1.0));
-        IfcDirection ifcSlabExtrudedDirection = new IfcDirection(slabExtrudedDirection);
+        IfcDirection ifcSlabExtrudedDirection = createDirection3D(0.0,0.0,1.0);
         IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(0.2);
         IfcExtrudedAreaSolid extrudedSlab = new IfcExtrudedAreaSolid(slabArbitraryClosedProfileDef,
                 ifcAxis2Placement3DSlabRepresentation,ifcSlabExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
@@ -756,78 +616,6 @@ public class IfcHelper {
             ifcModel.addIfcObject(actualPoint);
         }
     }
-
-//    // Permet d'ajouter un opening à un Wall
-//    public static void addOpeningToWall (IfcModel ifcModel, String nameWall, String nameOpening, double depth, double xLocal, double zLocal, double openingWidth, double openingHeight){
-//        IfcWallStandardCase wall = getWall(ifcModel, nameWall);
-//        IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,-depth/2,zLocal);
-//        IfcDirection zLocalOpening = createDirection3D(0.0,0.0,1.0);
-//        IfcDirection xLocalOpening = createDirection3D(1.0,0.0,0.0);
-//        IfcAxis2Placement3D placementOpening = new IfcAxis2Placement3D(
-//                localPointOpening, zLocalOpening, xLocalOpening);
-//        IfcLocalPlacement localPlacementOpening = new IfcLocalPlacement(wall.getObjectPlacement(),
-//                placementOpening);
-//        LIST<IfcRepresentation> openingRepresentationsList = new LIST<>();
-//
-//        // Opening geometry with extruded area solid placement
-//        IfcDirection zLocalExtrusion = createDirection3D(0.0,1.0,0.0);
-//        IfcDirection xLocalExtrusion = createDirection3D(0.0,0.0,1.0);
-//        IfcCartesianPoint centerOpening = createCartesianPoint3D(openingWidth/2,0.0,openingHeight/2);
-//        IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
-//                centerOpening, zLocalExtrusion, xLocalExtrusion);
-//        IfcDirection zLocalRectangle = createDirection2D(1.0, 0.0);
-//        IfcCartesianPoint originOpening = createCartesianPoint2D(0.0,0.0);
-//        IfcAxis2Placement2D placementRectangle = new IfcAxis2Placement2D(
-//                originOpening, zLocalRectangle);
-//        IfcRectangleProfileDef rectangle = new IfcRectangleProfileDef(new IfcProfileTypeEnum("AREA"),
-//                null,placementRectangle,new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingHeight)),
-//                new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingWidth)));
-//        IfcDirection openingExtrusionDirection = createDirection3D(0.0,0.0,1.0);
-//        IfcExtrudedAreaSolid extrudedOpening = new IfcExtrudedAreaSolid(rectangle, placementCenterOpening,
-//                openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(depth)));
-//        SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<>();
-//        openingRepresentation3DItem.add(extrudedOpening);
-//        IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
-//                new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), openingRepresentation3DItem);
-//        openingRepresentationsList.add(openingSweptSolidRepresentation);
-//        IfcProductDefinitionShape openingDefinitionShape = new IfcProductDefinitionShape(null,null,openingRepresentationsList);
-//
-//        // Create the Opening
-//        IfcOpeningElement opening = new IfcOpeningElement(
-//                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-//                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel(nameOpening, true),
-//                new IfcText(nameOpening + " / wall = " + nameWall, true), null, localPlacementOpening,
-//                openingDefinitionShape, null);
-//
-//        // Create relation IfcWallStandardCase --> IfcOpeningElement
-//        IfcRelVoidsElement relWallToOpening = new IfcRelVoidsElement(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-//                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Wall Container", true),
-//                new IfcText("WallContainer for OpeningElement",true),wall,opening);
-//
-//        // add new Ifc-objects to the model
-//        ifcModel.addIfcObject(relWallToOpening);
-//
-//        ifcModel.addIfcObject(opening);
-//        ifcModel.addIfcObject(localPlacementOpening);
-//        ifcModel.addIfcObject(localPointOpening);
-//        ifcModel.addIfcObject(zLocalOpening);
-//        ifcModel.addIfcObject(xLocalOpening);
-//        ifcModel.addIfcObject(placementOpening);
-//
-//        ifcModel.addIfcObject(openingDefinitionShape);
-//
-//        ifcModel.addIfcObject(openingSweptSolidRepresentation);
-//        ifcModel.addIfcObject(extrudedOpening);
-//        ifcModel.addIfcObject(rectangle);
-//        ifcModel.addIfcObject(placementRectangle);
-//        ifcModel.addIfcObject(originOpening);
-//        ifcModel.addIfcObject(zLocalRectangle);
-//        ifcModel.addIfcObject(placementCenterOpening);
-//        ifcModel.addIfcObject(centerOpening);
-//        ifcModel.addIfcObject(zLocalExtrusion);
-//        ifcModel.addIfcObject(xLocalExtrusion);
-//        ifcModel.addIfcObject(openingExtrusionDirection);
-//    }
 
     // Permet d'ajouter un opening à un mur
     public static void addOpening (IfcModel ifcModel, String nameOpening,IfcWallStandardCase wall, double openingWidth, double openingHeight, double openingThickness, double xLocal, double zLocal){
@@ -901,7 +689,7 @@ public class IfcHelper {
         ifcModel.addIfcObject(openingExtrusionDirection);
     }
 
-    // Permet d'ajouter une door à un opening
+    // Permet d'ajouter une door à un wall
     public static void addDoor (IfcModel ifcModel, String nameDoor,IfcWallStandardCase wall, double doorWidth, double doorHeight, double wallThickness, double xLocal, double zLocal){
         IfcBuildingStorey buildingStorey = (IfcBuildingStorey) getBuildingStorey(ifcModel,wall);
         addOpening(ifcModel,nameDoor,wall,doorWidth,doorHeight,wallThickness,xLocal,zLocal);
@@ -990,7 +778,7 @@ public class IfcHelper {
         ifcModel.addIfcObject(doorPanelProperties);
     }
 
-    // Permet d'ajouter une window à un opening
+    // Permet d'ajouter une window à un wall
     public static void addWindow (IfcModel ifcModel, String nameWindow,IfcWallStandardCase wall, double windowWidth, double windowHeight, double wallThickness, double xLocal, double zLocal){
         IfcBuildingStorey buildingStorey = (IfcBuildingStorey) getBuildingStorey(ifcModel,wall);
         addOpening(ifcModel,nameWindow,wall,windowWidth,windowHeight,wallThickness,xLocal,zLocal);
