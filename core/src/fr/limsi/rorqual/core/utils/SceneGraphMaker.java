@@ -19,11 +19,10 @@ import scene3d.Stage3d;
  */
 public class SceneGraphMaker {
 
-    public static Stage3d makeSceneGraph(DefaultMutableTreeNode treeNode) {
+    public static void makeSceneGraph(DefaultMutableTreeNode treeNode, Stage3d stage) {
 
         HashMap<IfcObjectPlacement, Group3d> nodes = new HashMap<IfcObjectPlacement,Group3d>();
 
-        Stage3d stage = new Stage3d();
         stage.getRoot().setTransform(new Matrix4());
 
         Queue<IfcObjectPlacement> queue = new LinkedList<IfcObjectPlacement>();
@@ -58,7 +57,6 @@ public class SceneGraphMaker {
             }
             node.setTransform(loc);
         }
-        return stage;
     }
 
 

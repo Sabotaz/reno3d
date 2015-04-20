@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -82,6 +83,16 @@ public class Stage3d extends InputAdapter implements Disposable {
 		this.camera = camera;
 		this.environment = environment;
 	}
+
+    public Stage3d (float width, float height, Camera camera, Environment environment, ShaderProvider shaderProvider) {
+        this.width = width;
+        this.height = height;
+        root = new Group3d();
+        root.setStage3d(this);
+        modelBatch = new ModelBatch(shaderProvider);
+        this.camera = camera;
+        this.environment = environment;
+    }
 
 
 	public void setViewport (float width, float height) {

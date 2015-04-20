@@ -10,6 +10,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
@@ -32,6 +40,9 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
     int ncam = 1;
 
+    Environment environnement;
+    ShaderProgram shader;
+
     @Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -41,7 +52,11 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
         //print(spatialStructureTreeNode, 0);
 
-        stage = SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode);
+        // lights
+        environnement = new Environment();
+        environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environnement.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera1.zoom = 1f/10;
 
@@ -60,10 +75,22 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         camera2.update();
         cameras[1] = camera2;
 
-        stage.setCamera(cameras[ncam%cameras.length]);
+        ShaderProvider shaderProvider = new DefaultShaderProvider() {
+            @Override
+            protected Shader createShader(Renderable renderable) {
+                if (true) return new TestShader(renderable);
+                return super.createShader(renderable);
+            }
+        };
+
+        Camera baseCamera = cameras[ncam%cameras.length];
+
+        stage = new Stage3d(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), baseCamera, environnement, shaderProvider);
+        SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, stage);
 
         Gdx.input.setInputProcessor(this);
         //stage.getRoot().print();
+
 	}
 
     public void print(DefaultMutableTreeNode treeNode, int tab) {
@@ -80,6 +107,8 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
 	@Override
 	public void render () {
+
+        //shader.setUniformMatrix("u_projectionViewMatrix", cameras[ncam%cameras.length].combined);
 
 		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -106,14 +135,12 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
                 shape.setColor(new Color(1, 1, 1, 0.05f));
             shape.line(i, -100, 0, i, 100, 0);
         }
-
         shape.end();
         /*
 		batch.begin();
 		batch.draw(img, 0, 0);
 		batch.end();*/
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
-
         stage.act();
         stage.draw();
 
