@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 import ifc2x3javatoolbox.ifc2x3tc1.IfcProduct;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWall;
 
 /**
@@ -19,6 +20,9 @@ public class ModelFactoryStrategy {
         if (ifcProduct instanceof IfcWall) {
             System.out.println("WALL !");
             return new IfcWallModelFactory(ifcProduct).getModel();
+        } else if (ifcProduct instanceof IfcSlab) {
+            System.out.println("SLAB !");
+            return new IfcSlabModelFactory(ifcProduct).getModel();
         }
         return new Model();
     }
