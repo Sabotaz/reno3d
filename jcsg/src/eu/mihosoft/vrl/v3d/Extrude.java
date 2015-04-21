@@ -103,8 +103,9 @@ public class Extrude {
             Vector3d topV2 = polygon2.vertices.get(nexti).pos;
 
             List<Vector3d> pPoints = Arrays.asList(bottomV2, topV2, topV1, bottomV1);
-
-            newPolygons.add(Polygon.fromPoints(pPoints, polygon1.getStorage()));
+            //Plane plane = Plane.createFromPoints(bottomV1, bottomV2,topV1);
+            Polygon p = Polygon.fromPoints(pPoints, polygon1.getStorage());
+            newPolygons.add(p);
 
         }
 

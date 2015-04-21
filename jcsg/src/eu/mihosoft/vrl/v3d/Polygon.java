@@ -348,7 +348,7 @@ public final class Polygon {
      * @param plane may be null
      * @return a polygon defined by the specified point list
      */
-    private static Polygon fromPoints(
+    public static Polygon fromPoints(
             List<Vector3d> points, PropertyStorage shared, Plane plane) {
 
         Vector3d normal

@@ -41,7 +41,7 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
     int ncam = 1;
 
     Environment environnement;
-    ShaderProgram shader;
+    ShaderProvider shaderProvider;
 
     @Override
 	public void create () {
@@ -55,7 +55,7 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         // lights
         environnement = new Environment();
         environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environnement.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+        environnement.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 0.8f, 0.4f, -0.6f));
 
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera1.zoom = 1f/10;
@@ -68,18 +68,19 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
 
         PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera2.position.set(0, -50, 50);
-        camera2.near = 0.001f;
+        camera2.near = 1f;
         camera2.far = 1000f;
         camera2.lookAt(0, 0, 0);
         camera2.up.set(0,0,1);
         camera2.update();
         cameras[1] = camera2;
 
-        ShaderProvider shaderProvider = new DefaultShaderProvider() {
+        shaderProvider = new DefaultShaderProvider() {
             @Override
             protected Shader createShader(Renderable renderable) {
-                if (true) return new TestShader(renderable);
-                return super.createShader(renderable);
+                return new LightShader(renderable);
+                //return new TestShader(renderable);
+                //return super.createShader(renderable);
             }
         };
 
@@ -105,15 +106,37 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         }
     }
 
+    private void update_cam() {
+        if (cameras[ncam%cameras.length] instanceof PerspectiveCamera) {
+            PerspectiveCamera camera = (PerspectiveCamera) cameras[ncam%cameras.length];
+            switch (camera_mov) {
+                case GAUCHE:
+                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), -5);
+                    break;
+                case DROITE:
+                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), 5);
+                    break;
+                case HAUT:
+                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), 5);
+                    break;
+                case BAS:
+                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), -5);
+                    break;
+            }
+        }
+    }
+
 	@Override
 	public void render () {
-
+        update_cam();
         //shader.setUniformMatrix("u_projectionViewMatrix", cameras[ncam%cameras.length].combined);
 
 		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
+        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
 
         shape.begin(ShapeRenderer.ShapeType.Line);
@@ -143,17 +166,48 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         stage.act();
         stage.draw();
+        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
 
 	}
 
+    private static enum Sense {
+        GAUCHE,
+        DROITE,
+        HAUT,
+        BAS,
+        NONE;
+    }
+
+    private Sense camera_mov = Sense.NONE;
+
     @Override
     public boolean keyDown(int keycode) {
+        switch (keycode) {
+            case Input.Keys.LEFT:
+                camera_mov = Sense.GAUCHE;
+                return true;
+            case Input.Keys.RIGHT:
+                camera_mov = Sense.DROITE;
+                return true;
+            case Input.Keys.UP:
+                camera_mov = Sense.HAUT;
+                return true;
+            case Input.Keys.DOWN:
+                camera_mov = Sense.BAS;
+                return true;
+        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         switch (keycode) {
+            case Input.Keys.LEFT:
+            case Input.Keys.RIGHT:
+            case Input.Keys.UP:
+            case Input.Keys.DOWN:
+                camera_mov = Sense.NONE;
+                return true;
             case Input.Keys.C:
                 ncam++;
                 stage.setCamera(cameras[ncam%cameras.length]);
