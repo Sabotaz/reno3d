@@ -1,6 +1,8 @@
 package fr.limsi.rorqual.core.model;
 
+import ifc2x3javatoolbox.ifc2x3tc1.IfcAxis2Placement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcAxis2Placement2D;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcCurve;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoorLiningProperties;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoorPanelOperationEnum;
@@ -9,12 +11,18 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcDoorPanelProperties;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoorStyle;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoorStyleConstructionEnum;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoorStyleOperationEnum;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcElement;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcGridPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcNormalisedRatioMeasure;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcObject;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcObjectPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcOpeningElement;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcProductRepresentation;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcProfileDef;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcPropertySetDefinition;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRatioMeasure;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRectangleProfileDef;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcRelDefines;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRelDefinesByType;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRelFillsElement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcRelVoidsElement;
@@ -97,7 +105,6 @@ import java.util.Iterator;
  * Created by ricordeau on 08/04/2015.
  */
 public class IfcHelper {
-
 
     // Permet de compléter un model de départ contenant les informations du projet, un site,
     // un building et un building storey (par défaut à l'altitude 0)
@@ -339,6 +346,28 @@ public class IfcHelper {
         return null;
     }
 
+    // Permet de récupérer une Door dans un model en fonction de son nom
+    public static IfcDoor getDoor (IfcModel ifcModel, String nameDoor){
+        Collection<IfcDoor> collectionDoor = ifcModel.getCollection(IfcDoor.class);
+        for (IfcDoor actualDoor : collectionDoor){
+            if(actualDoor.getName().getDecodedValue().equals(nameDoor)){
+                return actualDoor;
+            }
+        }
+        return null;
+    }
+
+    // Permet de récupérer une Door dans un model en fonction de son nom
+    public static IfcWindow getWindow (IfcModel ifcModel, String nameWindow){
+        Collection<IfcWindow> collectionWindow = ifcModel.getCollection(IfcWindow.class);
+        for (IfcWindow actualWindow : collectionWindow){
+            if(actualWindow.getName().getDecodedValue().equals(nameWindow)){
+                return actualWindow;
+            }
+        }
+        return null;
+    }
+
     // Permet de récupérer la relation entre le building et ses étages
     public static IfcRelAggregates getBuildingRelations (IfcModel ifcModel){
         Collection<IfcRelAggregates> collectionRelAggregates = ifcModel.getCollection(IfcRelAggregates.class);
@@ -356,6 +385,17 @@ public class IfcHelper {
         for (IfcRelContainedInSpatialStructure actualRelContainedInSpatialStructure : collectionRelContainedInSpatialStructure){
             if(actualRelContainedInSpatialStructure.getRelatingStructure().getName().getDecodedValue().equals(nameBuildingStorey)){
                 return actualRelContainedInSpatialStructure;
+            }
+        }
+        return null;
+    }
+
+    // Permet de récupérer la liaison entre un openingElement et un relFillsElement
+    public static IfcRelFillsElement getRelFillsElement (IfcModel ifcModel, IfcOpeningElement openingElement){
+        Collection<IfcRelFillsElement> collectionRelFillsElement = ifcModel.getCollection(IfcRelFillsElement.class);
+        for (IfcRelFillsElement actualRelFillsElement : collectionRelFillsElement){
+            if(actualRelFillsElement.getRelatingOpeningElement().equals(openingElement)){
+                return (actualRelFillsElement);
             }
         }
         return null;
@@ -818,9 +858,9 @@ public class IfcHelper {
         // Create the window
         IfcWindow window = new IfcWindow(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("A simple window", true),
+                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel(nameWindow, true),
                 new IfcText("", true), null, localPlacementWindow,
-                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.0)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.0)));
+                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowHeight)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowWidth)));
 
         // Create relation buildingStorey -> window
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
@@ -866,6 +906,259 @@ public class IfcHelper {
         ifcModel.addIfcObject(windowLiningProperties);
         ifcModel.addIfcObject(windowPanelProperties);
 
+    }
+
+    // Permet de supprimer le placement d'un objet dans un model
+    public static void deleteObjectPlacement(IfcModel ifcModel, IfcObjectPlacement objectPlacement){
+        if(objectPlacement instanceof IfcLocalPlacement){
+            IfcAxis2Placement axis2Placement =((IfcLocalPlacement) objectPlacement).getRelativePlacement();
+            ifcModel.removeIfcObject(objectPlacement);
+            if (axis2Placement instanceof IfcAxis2Placement2D){
+                IfcHelper.deleteAxis2Placement2D(ifcModel, (IfcAxis2Placement2D) axis2Placement);
+            }else{
+                // axis2Placement instanceof IfcAxis2Placement3D
+                IfcHelper.deleteAxis2Placement3D(ifcModel,(IfcAxis2Placement3D)axis2Placement);
+            }
+        }else{
+            // objectPlacement instanceof IfcGridPlacement
+        }
+    }
+
+    // Permet de supprimer le placement d'un objet dans un model
+    public static void deleteAxis2Placement3D(IfcModel ifcModel, IfcAxis2Placement3D axis2Placement3D){
+        IfcCartesianPoint cartesianPoint = axis2Placement3D.getLocation();
+        IfcDirection axis = axis2Placement3D.getAxis();
+        IfcDirection refDirection = axis2Placement3D.getRefDirection();
+        ifcModel.removeIfcObject(axis2Placement3D);
+        ifcModel.removeIfcObject(cartesianPoint);
+        ifcModel.removeIfcObject(axis);
+        ifcModel.removeIfcObject(refDirection);
+    }
+
+    // Permet de supprimer le placement d'un objet dans un model
+    public static void deleteAxis2Placement2D(IfcModel ifcModel, IfcAxis2Placement2D axis2Placement2D){
+        IfcCartesianPoint cartesianPoint = axis2Placement2D.getLocation();
+        IfcDirection refDirection = axis2Placement2D.getRefDirection();
+        ifcModel.removeIfcObject(axis2Placement2D);
+        ifcModel.removeIfcObject(cartesianPoint);
+        ifcModel.removeIfcObject(refDirection);
+    }
+
+    // Permet de supprimer une représentation
+    public static void deleteRepresentation(IfcModel ifcModel, IfcProductRepresentation productRepresentation){
+        if(productRepresentation instanceof IfcProductDefinitionShape){
+            IfcProductDefinitionShape productDefinitionShape = (IfcProductDefinitionShape) productRepresentation;
+            ifcModel.removeIfcObject(productDefinitionShape);
+            LIST<IfcRepresentation> representationLIST = productDefinitionShape.getRepresentations();
+            for(IfcRepresentation actualRepresentation : representationLIST){
+                ifcModel.removeIfcObject(actualRepresentation);
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
+                    if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
+                        IfcExtrudedAreaSolid extrudedAreaSolid = (IfcExtrudedAreaSolid) actualRepresentationItem;
+                        ifcModel.removeIfcObject(extrudedAreaSolid);
+                        ifcModel.removeIfcObject(extrudedAreaSolid.getExtrudedDirection());
+                        IfcHelper.deleteAxis2Placement3D(ifcModel, extrudedAreaSolid.getPosition());
+                        IfcProfileDef profileDef = extrudedAreaSolid.getSweptArea();
+                        if (profileDef instanceof IfcRectangleProfileDef){
+                            IfcRectangleProfileDef rectangleProfileDef = (IfcRectangleProfileDef)profileDef;
+                            ifcModel.removeIfcObject(rectangleProfileDef);
+                            IfcHelper.deleteAxis2Placement2D(ifcModel,rectangleProfileDef.getPosition());
+                        }
+                        if (profileDef instanceof IfcArbitraryClosedProfileDef){
+                            IfcArbitraryClosedProfileDef arbitraryClosedProfileDef = (IfcArbitraryClosedProfileDef)profileDef;
+                            ifcModel.removeIfcObject(arbitraryClosedProfileDef);
+                            IfcCurve outerCurve = arbitraryClosedProfileDef.getOuterCurve();
+                            if(outerCurve instanceof IfcPolyline){
+                                IfcPolyline polyline = (IfcPolyline) outerCurve;
+                                ifcModel.removeIfcObject(outerCurve);
+                                LIST<IfcCartesianPoint> cartesianPointLIST = polyline.getPoints();
+                                for(IfcCartesianPoint actualCartesianPoint : cartesianPointLIST){
+                                    ifcModel.removeIfcObject(actualCartesianPoint);
+                                }
+                            }
+                        }
+                    }
+                    else if(actualRepresentationItem instanceof IfcTrimmedCurve){
+                        IfcTrimmedCurve trimmedCurve = (IfcTrimmedCurve) actualRepresentationItem;
+                        ifcModel.removeIfcObject(trimmedCurve);
+                        IfcCurve curve = trimmedCurve.getBasisCurve();
+                        if(curve instanceof IfcLine){
+                            IfcLine line = (IfcLine)curve;
+                            ifcModel.removeIfcObject(line);
+                            ifcModel.removeIfcObject(line.getPnt());
+                            ifcModel.removeIfcObject(line.getDir());
+                            ifcModel.removeIfcObject(line.getDir().getOrientation());
+                        }
+                        SET<IfcTrimmingSelect> trimmingSelectSET = trimmedCurve.getTrim1();
+                        for(IfcTrimmingSelect actualTrimmingSelect : trimmingSelectSET){
+                            if(actualTrimmingSelect instanceof IfcCartesianPoint){
+                                ifcModel.removeIfcObject((IfcCartesianPoint) actualTrimmingSelect);
+                            }
+                        }
+                        trimmingSelectSET = trimmedCurve.getTrim2();
+                        for(IfcTrimmingSelect actualTrimmingSelect : trimmingSelectSET){
+                            if(actualTrimmingSelect instanceof IfcCartesianPoint){
+                                ifcModel.removeIfcObject((IfcCartesianPoint) actualTrimmingSelect);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Permet de supprimer un opening
+    public static void deleteOpening(IfcModel ifcModel, IfcOpeningElement opening){
+
+        // Remove the opening placement
+        IfcHelper.deleteObjectPlacement(ifcModel, opening.getObjectPlacement());
+
+        // Remove the relation WallStandardCase <-> OpeningElement
+        ifcModel.removeIfcObject(opening.getVoidsElements_Inverse());
+
+        // Remove the representation
+        IfcHelper.deleteRepresentation(ifcModel, opening.getRepresentation());
+
+        // Remove the opening
+        ifcModel.removeIfcObject(opening);
+
+    }
+
+    // Permet de supprimer une door dans un model
+    public static void deleteDoor (IfcModel ifcModel, IfcDoor door){
+
+        // Remove the door placement
+        IfcHelper.deleteObjectPlacement(ifcModel, door.getObjectPlacement());
+
+        // Remove the opening
+        IfcHelper.deleteOpening(ifcModel,IfcHelper.getOpening(ifcModel, door.getName().getDecodedValue()));
+
+        // Remove the parameters of the door
+        SET<IfcRelDefines> relDefinesSET = door.getIsDefinedBy_Inverse();
+        for (IfcRelDefines actualRelDefines : relDefinesSET){
+            ifcModel.removeIfcObject(actualRelDefines);
+            if(actualRelDefines instanceof IfcRelDefinesByType){
+                ifcModel.removeIfcObject(((IfcRelDefinesByType)actualRelDefines).getRelatingType());
+                SET<IfcPropertySetDefinition> propertySetDefinitionsSET = ((IfcRelDefinesByType)actualRelDefines).getRelatingType().getHasPropertySets();
+                for (IfcPropertySetDefinition actualPropertySetDefinition : propertySetDefinitionsSET){
+                    ifcModel.removeIfcObject(actualPropertySetDefinition);
+                }
+            }
+        }
+
+        // Remove the relation OpeningElement <-> Door
+        SET<IfcRelFillsElement> relFillsElements = door.getFillsVoids_Inverse();
+        for (IfcRelFillsElement actualRelFillsElement : relFillsElements){
+            ifcModel.removeIfcObject(actualRelFillsElement);
+        }
+
+        // Remove the relation BuildingStorey <-> Door
+        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = door.getContainedInStructure_Inverse();
+        for (IfcRelContainedInSpatialStructure actualRelContainedInSpatialStructure : relContainedInSpatialStructureSET){
+            SET<IfcProduct> ifcProductSET = actualRelContainedInSpatialStructure.getRelatedElements();
+            for(IfcProduct actualIfcProduct : ifcProductSET){
+                if(actualIfcProduct.equals(door)){
+                    actualRelContainedInSpatialStructure.removeRelatedElements(actualIfcProduct);
+                }
+            }
+        }
+
+        // Remove the door
+        ifcModel.removeIfcObject(door);
+    }
+
+    // Permet de supprimer une window dans un model
+    public static void deleteWindow (IfcModel ifcModel, IfcWindow window){
+
+        // Remove the window placement
+        IfcHelper.deleteObjectPlacement(ifcModel, window.getObjectPlacement());
+
+        // Remove the opening
+        IfcHelper.deleteOpening(ifcModel,IfcHelper.getOpening(ifcModel,window.getName().getDecodedValue()));
+
+        // Remove the parameters of the window
+        SET<IfcRelDefines> relDefinesSET = window.getIsDefinedBy_Inverse();
+        for (IfcRelDefines actualRelDefines : relDefinesSET){
+            ifcModel.removeIfcObject(actualRelDefines);
+            if(actualRelDefines instanceof IfcRelDefinesByType){
+                ifcModel.removeIfcObject(((IfcRelDefinesByType)actualRelDefines).getRelatingType());
+                SET<IfcPropertySetDefinition> propertySetDefinitionsSET = ((IfcRelDefinesByType)actualRelDefines).getRelatingType().getHasPropertySets();
+                for (IfcPropertySetDefinition actualPropertySetDefinition : propertySetDefinitionsSET){
+                    ifcModel.removeIfcObject(actualPropertySetDefinition);
+                }
+            }
+        }
+
+        // Remove the relation OpeningElement <-> window
+        SET<IfcRelFillsElement> relFillsElements = window.getFillsVoids_Inverse();
+        for (IfcRelFillsElement actualRelFillsElement : relFillsElements){
+            ifcModel.removeIfcObject(actualRelFillsElement);
+        }
+
+        // Remove the relation BuildingStorey <-> window
+        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = window.getContainedInStructure_Inverse();
+        for (IfcRelContainedInSpatialStructure actualRelContainedInSpatialStructure : relContainedInSpatialStructureSET){
+            SET<IfcProduct> ifcProductSET = actualRelContainedInSpatialStructure.getRelatedElements();
+            for(IfcProduct actualIfcProduct : ifcProductSET){
+                if(actualIfcProduct.equals(window)){
+                    actualRelContainedInSpatialStructure.removeRelatedElements(actualIfcProduct);
+                }
+            }
+        }
+
+        // Remove the door
+        ifcModel.removeIfcObject(window);
+    }
+
+    // Permet de supprimer un standardWall dans un model avec tous les éléments associés (doors, windows, ...)
+    public static void deleteWallStandardCase (IfcModel ifcModel, IfcWallStandardCase wallStandardCase){
+
+        // Remove the wall placement
+        IfcHelper.deleteObjectPlacement(ifcModel, wallStandardCase.getObjectPlacement());
+
+        // Remove all the elements associated to the Wall
+        SET<IfcRelVoidsElement> relVoidsElementSET = wallStandardCase.getHasOpenings_Inverse();
+        if(relVoidsElementSET.isEmpty()){
+            // No openings Element -> do nothing
+        }
+        else{
+            for(IfcRelVoidsElement actualRelVoidsElement : relVoidsElementSET){
+                IfcElement openingElement = actualRelVoidsElement.getRelatedOpeningElement();
+                if(openingElement instanceof IfcOpeningElement){
+                    IfcRelFillsElement relFillsElement = IfcHelper.getRelFillsElement(ifcModel,(IfcOpeningElement) openingElement);
+                    IfcElement buildingElement =  relFillsElement.getRelatedBuildingElement();
+                    if (buildingElement instanceof IfcDoor){
+                        IfcHelper.deleteDoor(ifcModel,(IfcDoor) buildingElement);
+                    }
+                    else if (buildingElement instanceof IfcWindow){
+                        IfcHelper.deleteWindow(ifcModel,(IfcWindow) buildingElement);
+                    }
+                }
+            }
+        }
+
+        // Remove the representations
+        IfcHelper.deleteRepresentation(ifcModel, wallStandardCase.getRepresentation());
+
+        // Remove the relation BuildingStorey <-> wallStandardCase
+        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = wallStandardCase.getContainedInStructure_Inverse();
+        for (IfcRelContainedInSpatialStructure actualRelContainedInSpatialStructure : relContainedInSpatialStructureSET){
+            SET<IfcProduct> ifcProductSET = actualRelContainedInSpatialStructure.getRelatedElements();
+            if(ifcProductSET.size() == 1){
+                ifcModel.removeIfcObject(actualRelContainedInSpatialStructure);
+            }
+            else {
+                for(IfcProduct actualIfcProduct : ifcProductSET){
+                    if(actualIfcProduct.equals(wallStandardCase)){
+                        actualRelContainedInSpatialStructure.removeRelatedElements(actualIfcProduct);
+                    }
+                }
+            }
+        }
+
+        // Remove the wallStandardCase
+        ifcModel.removeIfcObject(wallStandardCase);
     }
 
     // Permet d'importer un model au format .ifc
