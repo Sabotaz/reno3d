@@ -269,6 +269,28 @@ public class IfcHelper {
         return null;
     }
 
+    // Permet de récupérer l'Opening lié à une door
+    public static IfcOpeningElement getOpeningRelToDoor (IfcModel ifcModel, IfcDoor door){
+        Collection<IfcRelFillsElement> collectionRelFillsElement = ifcModel.getCollection(IfcRelFillsElement.class);
+        for (IfcRelFillsElement actualRelFillsElement : collectionRelFillsElement){
+            if(actualRelFillsElement.getRelatedBuildingElement().equals(door)){
+                return actualRelFillsElement.getRelatingOpeningElement();
+            }
+        }
+        return null;
+    }
+
+    // Permet de récupérer l'Opening lié à une window
+    public static IfcOpeningElement getOpeningRelToWindow (IfcModel ifcModel, IfcWindow window){
+        Collection<IfcRelFillsElement> collectionRelFillsElement = ifcModel.getCollection(IfcRelFillsElement.class);
+        for (IfcRelFillsElement actualRelFillsElement : collectionRelFillsElement){
+            if(actualRelFillsElement.getRelatedBuildingElement().equals(window)){
+                return actualRelFillsElement.getRelatingOpeningElement();
+            }
+        }
+        return null;
+    }
+
     // Permet de récupérer une Door dans un model en fonction de son nom
     public static IfcDoor getDoor (IfcModel ifcModel, String nameDoor){
         Collection<IfcDoor> collectionDoor = ifcModel.getCollection(IfcDoor.class);
@@ -807,15 +829,20 @@ public class IfcHelper {
         ifcModel.addIfcObject(openingExtrusionDirection);
     }
 
-    // Permet d'ajouter une door à un produit (wall ou slab)
-    public static void addDoor (IfcModel ifcModel, String nameDoor,IfcProduct product, double doorWidth, double doorHeight, double wallThickness, double xLocal, double zLocal){
-        IfcBuildingStorey buildingStorey = getBuildingStorey(product);
+    // Permet d'ajouter un opening
+    public static void addOpening (IfcModel ifcModel, String nameOpening,IfcProduct product, double openingWidth, double openingHeight, double openingThickness, double xLocal, double yzLocal){
         if (product instanceof IfcWallStandardCase){
-            addOpeningToWall(ifcModel, nameDoor, (IfcWallStandardCase) product, doorWidth, doorHeight, wallThickness, xLocal, zLocal);
+            addOpeningToWall (ifcModel, nameOpening, (IfcWallStandardCase)product, openingWidth, openingHeight, openingThickness, xLocal, yzLocal);
         }
         else if (product instanceof IfcSlab){
-            addOpeningToSlab(ifcModel, nameDoor, (IfcSlab) product, doorWidth, doorHeight, wallThickness, xLocal, zLocal);
+            addOpeningToSlab(ifcModel, nameOpening, (IfcSlab) product, openingWidth, openingHeight, openingThickness, xLocal, yzLocal);
         }
+    }
+
+    // Permet d'ajouter une door à un produit (wall ou slab)
+    public static void addDoor (IfcModel ifcModel, String nameDoor,IfcProduct product, double doorWidth, double doorHeight, double wallThickness, double xLocal){
+        IfcBuildingStorey buildingStorey = getBuildingStorey(product);
+        addOpening(ifcModel, nameDoor, product, doorWidth, doorHeight, wallThickness, xLocal, 0.0);
         IfcOpeningElement opening = getOpening(ifcModel, nameDoor);
 
         // Door style definitions
@@ -854,7 +881,7 @@ public class IfcHelper {
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
                 ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel(nameDoor, true),
                 new IfcText("", true), null, localPlacementDoor,
-                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(10.2)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(1.0)));
+                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(doorHeight)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(doorWidth)));
 
         // Create relation buildingStorey -> door
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
@@ -905,12 +932,7 @@ public class IfcHelper {
     public static void addWindow (IfcModel ifcModel, String nameWindow,IfcProduct product, double windowWidth, double windowHeight, double wallThickness, double xLocal, double zLocal){
 
         IfcBuildingStorey buildingStorey = getBuildingStorey(product);
-        if (product instanceof IfcWallStandardCase){
-            addOpeningToWall(ifcModel,nameWindow,(IfcWallStandardCase)product,windowWidth,windowHeight,wallThickness,xLocal,zLocal);
-        }
-        else if (product instanceof IfcSlab){
-            addOpeningToSlab(ifcModel,nameWindow,(IfcSlab)product,windowWidth,windowHeight,wallThickness,xLocal,zLocal);
-        }
+        addOpening(ifcModel,nameWindow,product,windowWidth,windowHeight,wallThickness,xLocal,zLocal);
         IfcOpeningElement opening = getOpening(ifcModel, nameWindow);
 
         // Window style definitions
@@ -1333,6 +1355,245 @@ public class IfcHelper {
                 }
             }
         }
+    }
+
+    // Permet de modifier la position d'un mur
+    public static void setWallPosition (IfcModel ifcModel, IfcWallStandardCase wall, double newPosX, double newPosY){
+        IfcObjectPlacement objectPlacement = wall.getObjectPlacement();
+        if(objectPlacement instanceof IfcLocalPlacement){
+            IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
+            if(axis2Placement instanceof IfcAxis2Placement3D){
+                IfcCartesianPoint cartesianPoint = ((IfcAxis2Placement3D) axis2Placement).getLocation();
+                LIST<IfcLengthMeasure> coordinatesPoint = cartesianPoint.getCoordinates();
+                coordinatesPoint.set(0,new IfcLengthMeasure(newPosX));
+                coordinatesPoint.set(1,new IfcLengthMeasure(newPosY));
+                cartesianPoint.setCoordinates(coordinatesPoint);
+            }
+        }
+    }
+
+    // Permet de modifier l'orientation d'un mur
+    public static void setWallOrientation (IfcModel ifcModel, IfcWallStandardCase wall, double newDirectionRatioX, double newDirectionRatioY){
+        IfcObjectPlacement objectPlacement = wall.getObjectPlacement();
+        if(objectPlacement instanceof IfcLocalPlacement){
+            IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
+            if(axis2Placement instanceof IfcAxis2Placement3D){
+                IfcDirection direction = ((IfcAxis2Placement3D) axis2Placement).getRefDirection();
+                LIST<DOUBLE> directionRatiosLIST = direction.getDirectionRatios();
+                directionRatiosLIST.set(0,new DOUBLE(newDirectionRatioX));
+                directionRatiosLIST.set(1,new DOUBLE(newDirectionRatioY));
+                direction.setDirectionRatios(directionRatiosLIST);
+            }
+        }
+    }
+
+    // Permet de modifier l'épaisseur d'un mur
+    public static void setWallThickness (IfcModel ifcModel, IfcWallStandardCase wall, double newThickness){
+        IfcProductRepresentation productRepresentation = wall.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST){
+            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
+                    if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
+                        IfcProfileDef profileDef = ((IfcExtrudedAreaSolid) actualRepresentationItem).getSweptArea();
+                        if(profileDef instanceof IfcArbitraryClosedProfileDef){
+                            IfcCurve curve = ((IfcArbitraryClosedProfileDef) profileDef).getOuterCurve();
+                            if (curve instanceof IfcPolyline){
+                                LIST<IfcCartesianPoint> cartesianPointLIST = ((IfcPolyline) curve).getPoints();
+                                for(IfcCartesianPoint actualCartesianPoint : cartesianPointLIST){
+                                    LIST<IfcLengthMeasure> lengthMeasureLIST = actualCartesianPoint.getCoordinates();
+                                    if(lengthMeasureLIST.get(1).value > 0){
+                                        lengthMeasureLIST.set(1,new IfcLengthMeasure(newThickness/2));
+                                    }
+                                    else{
+                                        lengthMeasureLIST.set(1,new IfcLengthMeasure(-newThickness/2));
+                                    }
+                                    actualCartesianPoint.setCoordinates(lengthMeasureLIST);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Permet de modifier la longueur d'un mur
+    public static void setWallLength (IfcModel ifcModel, IfcWallStandardCase wall, double newLength){
+        IfcProductRepresentation productRepresentation = wall.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST){
+            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
+                    if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
+                        IfcProfileDef profileDef = ((IfcExtrudedAreaSolid) actualRepresentationItem).getSweptArea();
+                        if(profileDef instanceof IfcArbitraryClosedProfileDef){
+                            IfcCurve curve = ((IfcArbitraryClosedProfileDef) profileDef).getOuterCurve();
+                            if (curve instanceof IfcPolyline){
+                                LIST<IfcCartesianPoint> cartesianPointLIST = ((IfcPolyline) curve).getPoints();
+                                // Set of the first point which use the length
+                                IfcCartesianPoint cartesianPoint1 = cartesianPointLIST.get(1);
+                                LIST<IfcLengthMeasure> lengthMeasureLIST = cartesianPoint1.getCoordinates();
+                                lengthMeasureLIST.set(0,new IfcLengthMeasure(newLength));
+                                cartesianPoint1.setCoordinates(lengthMeasureLIST);
+                                // Set of the second point which use the length
+                                IfcCartesianPoint cartesianPoint2 = cartesianPointLIST.get(2);
+                                lengthMeasureLIST = cartesianPoint2.getCoordinates();
+                                lengthMeasureLIST.set(0,new IfcLengthMeasure(newLength));
+                                cartesianPoint2.setCoordinates(lengthMeasureLIST);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (actualRepresentation.getRepresentationType().getDecodedValue() == "Curve2D"){
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
+                    if(actualRepresentationItem instanceof IfcTrimmedCurve){
+                        IfcCurve curve = ((IfcTrimmedCurve) actualRepresentationItem).getBasisCurve();
+                        if(curve instanceof IfcLine){
+                            IfcVector vector = ((IfcLine) curve).getDir();
+                            vector.setMagnitude(new IfcLengthMeasure(newLength));
+                        }
+                        SET<IfcTrimmingSelect> trimmingSelectSET = ((IfcTrimmedCurve) actualRepresentationItem).getTrim2();
+                        for(IfcTrimmingSelect actualTrimmingSelect : trimmingSelectSET){
+                            if(actualTrimmingSelect instanceof IfcCartesianPoint){
+                                LIST<IfcLengthMeasure> lengthMeasureLIST = ((IfcCartesianPoint) actualTrimmingSelect).getCoordinates();
+                                lengthMeasureLIST.set(0,new IfcLengthMeasure(newLength));
+                                ((IfcCartesianPoint) actualTrimmingSelect).setCoordinates(lengthMeasureLIST);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Permet de modifier la hauteur d'un mur
+    public static void setWallHeight (IfcModel ifcModel, IfcWallStandardCase wall, double newHeight){
+        IfcProductRepresentation productRepresentation = wall.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST){
+            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
+                    if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
+                        ((IfcExtrudedAreaSolid) actualRepresentationItem).setDepth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
+                    }
+                }
+            }
+        }
+    }
+
+    // Permet de modifier la position d'un opening
+    public static void setOpeningPosition (IfcModel ifcModel, IfcOpeningElement opening, double newPosX, double newPosZ){
+        IfcObjectPlacement objectPlacement = opening.getObjectPlacement();
+        if(objectPlacement instanceof IfcLocalPlacement){
+            IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
+            if(axis2Placement instanceof IfcAxis2Placement3D){
+                IfcCartesianPoint cartesianPoint = ((IfcAxis2Placement3D) axis2Placement).getLocation();
+                LIST<IfcLengthMeasure> coordinatesPoint = cartesianPoint.getCoordinates();
+                coordinatesPoint.set(0,new IfcLengthMeasure(newPosX));
+                coordinatesPoint.set(2,new IfcLengthMeasure(newPosZ));
+                cartesianPoint.setCoordinates(coordinatesPoint);
+            }
+        }
+    }
+
+    // Permet de modifier l'épaisseur d'un opening
+    public static void setOpeningThickness (IfcModel ifcModel, IfcOpeningElement opening, double newThickness){
+        IfcObjectPlacement objectPlacement = opening.getObjectPlacement();
+        if(objectPlacement instanceof IfcLocalPlacement){
+            IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
+            if(axis2Placement instanceof IfcAxis2Placement3D){
+                IfcCartesianPoint cartesianPoint = ((IfcAxis2Placement3D) axis2Placement).getLocation();
+                LIST<IfcLengthMeasure> coordinatesPoint = cartesianPoint.getCoordinates();
+                coordinatesPoint.set(1,new IfcLengthMeasure(-newThickness/2));
+                cartesianPoint.setCoordinates(coordinatesPoint);
+            }
+        }
+        IfcProductRepresentation productRepresentation = opening.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST) {
+            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
+                    if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
+                        ((IfcExtrudedAreaSolid) actualRepresentationItem).setDepth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newThickness)));
+                    }
+                }
+            }
+        }
+    }
+
+    // Permet de modifier la largeur d'un opening
+    public static void setOpeningWidth (IfcModel ifcModel, IfcOpeningElement opening, double newWidth){
+        IfcProductRepresentation productRepresentation = opening.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST) {
+            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
+                    if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
+                        IfcProfileDef profileDef = ((IfcExtrudedAreaSolid) actualRepresentationItem).getSweptArea();
+                        if(profileDef instanceof IfcRectangleProfileDef){
+                            ((IfcRectangleProfileDef) profileDef).setYDim(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
+                        }
+                        IfcAxis2Placement3D axis2Placement3D = ((IfcExtrudedAreaSolid) actualRepresentationItem).getPosition();
+                        IfcCartesianPoint cartesianPoint = axis2Placement3D.getLocation();
+                        LIST<IfcLengthMeasure> lengthMeasureLIST = cartesianPoint.getCoordinates();
+                        lengthMeasureLIST.set(0,new IfcLengthMeasure(newWidth/2));
+                        cartesianPoint.setCoordinates(lengthMeasureLIST);
+                    }
+                }
+            }
+        }
+    }
+
+    // Permet de modifier la hauteur d'un opening
+    public static void setOpeningHeight (IfcModel ifcModel, IfcOpeningElement opening, double newHeight){
+        IfcProductRepresentation productRepresentation = opening.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST) {
+            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
+                    if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
+                        IfcProfileDef profileDef = ((IfcExtrudedAreaSolid) actualRepresentationItem).getSweptArea();
+                        if(profileDef instanceof IfcRectangleProfileDef){
+                            ((IfcRectangleProfileDef) profileDef).setXDim(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
+                        }
+                        IfcAxis2Placement3D axis2Placement3D = ((IfcExtrudedAreaSolid) actualRepresentationItem).getPosition();
+                        IfcCartesianPoint cartesianPoint = axis2Placement3D.getLocation();
+                        LIST<IfcLengthMeasure> lengthMeasureLIST = cartesianPoint.getCoordinates();
+                        lengthMeasureLIST.set(2,new IfcLengthMeasure(newHeight/2));
+                        cartesianPoint.setCoordinates(lengthMeasureLIST);
+                    }
+                }
+            }
+        }
+    }
+
+    // Permet de modifier la position d'une door
+    public static void setDoorPosition (IfcModel ifcModel, IfcDoor door, double newPosX){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
+        IfcHelper.setOpeningPosition(ifcModel, opening, newPosX, 0.0);
+    }
+
+    // Permet de modifier l'épaisseur d'une door
+    public static void setDoorWidth (IfcModel ifcModel, IfcDoor door, double newWidth){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
+        IfcHelper.setOpeningWidth(ifcModel, opening, newWidth);
+        door.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
+    }
+
+    // Permet de modifier la hauteur d'une door
+    public static void setDoorHeight (IfcModel ifcModel, IfcDoor door, double newHeight){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
+        IfcHelper.setOpeningHeight(ifcModel, opening, newHeight);
+        door.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
     // Permet d'importer un model au format .ifc
