@@ -1582,7 +1582,7 @@ public class IfcHelper {
         IfcHelper.setOpeningPosition(ifcModel, opening, newPosX, 0.0);
     }
 
-    // Permet de modifier l'épaisseur d'une door
+    // Permet de modifier la largeur d'une door
     public static void setDoorWidth (IfcModel ifcModel, IfcDoor door, double newWidth){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
         IfcHelper.setOpeningWidth(ifcModel, opening, newWidth);
@@ -1594,6 +1594,26 @@ public class IfcHelper {
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
         IfcHelper.setOpeningHeight(ifcModel, opening, newHeight);
         door.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
+    }
+
+    // Permet de modifier la position d'une window
+    public static void setWindowPosition (IfcModel ifcModel, IfcWindow window, double newPosX, double newPosY){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
+        IfcHelper.setOpeningPosition(ifcModel, opening, newPosX, newPosY);
+    }
+
+    // Permet de modifier la largeur d'une window
+    public static void setWindowWidth (IfcModel ifcModel, IfcWindow window, double newWidth){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
+        IfcHelper.setOpeningWidth(ifcModel, opening, newWidth);
+        window.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
+    }
+
+    // Permet de modifier la hauteur d'une window
+    public static void setWindowHeight (IfcModel ifcModel, IfcWindow window, double newHeight){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
+        IfcHelper.setOpeningHeight(ifcModel, opening, newHeight);
+        window.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
     // Permet d'importer un model au format .ifc
