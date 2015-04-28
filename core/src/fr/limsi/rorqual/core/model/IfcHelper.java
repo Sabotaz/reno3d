@@ -258,6 +258,30 @@ public class IfcHelper {
         return null;
     }
 
+    // Permet de récuperer l'épaisseur d'un wall dans le model
+    public static double getWallThickness (IfcWallStandardCase wall){
+        IfcProductRepresentation productRepresentation = wall.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST) {
+            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
+                    if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
+                        IfcProfileDef profileDef = ((IfcExtrudedAreaSolid) actualRepresentationItem).getSweptArea();
+                        if (profileDef instanceof IfcArbitraryClosedProfileDef) {
+                            IfcCurve curve = ((IfcArbitraryClosedProfileDef) profileDef).getOuterCurve();
+                            if (curve instanceof IfcPolyline) {
+                                LIST<IfcCartesianPoint> cartesianPointLIST = ((IfcPolyline) curve).getPoints();
+                                return (2.0*cartesianPointLIST.get(0).getCoordinates().get(1).value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return -1.0;
+    }
+
     // Permet de récupérer un Opening dans un model en fonction de son nom
     public static IfcOpeningElement getOpening (IfcModel ifcModel, String nameOpening){
         Collection<IfcOpeningElement> collectionOpening = ifcModel.getCollection(IfcOpeningElement.class);
@@ -357,6 +381,23 @@ public class IfcHelper {
             }
         }
         return slabs;
+    }
+
+    // Permet de récupérer l'épaisseur d'un slab
+    public static double getSlabThickness (IfcSlab slab){
+        IfcProductRepresentation productRepresentation = slab.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST) {
+            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
+                    if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
+                        return(((IfcExtrudedAreaSolid) actualRepresentationItem).getDepth().value);
+                    }
+                }
+            }
+        }
+        return -1;
     }
 
     // Permet de créer un point cartésien en 2D à partir de deux doubles
@@ -688,7 +729,10 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening à un wall
-    public static void addOpeningToWall (IfcModel ifcModel, String nameOpening,IfcWallStandardCase wall, double openingWidth, double openingHeight, double openingThickness, double xLocal, double zLocal){
+    public static void addOpeningToWall (IfcModel ifcModel, String nameOpening,IfcWallStandardCase wall, double openingWidth, double openingHeight, double xLocal, double zLocal){
+
+        // Calcul of openingThickness = wallThickness
+        double openingThickness = IfcHelper.getWallThickness(wall);
 
         IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,-openingThickness/2,zLocal);
         IfcDirection zLocalOpening = createDirection3D(0.0,0.0,1.0);
@@ -759,7 +803,10 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening à slab
-    public static void addOpeningToSlab (IfcModel ifcModel, String nameOpening,IfcSlab slab, double openingWidth, double openingHeight, double openingThickness, double xLocal, double yLocal){
+    public static void addOpeningToSlab (IfcModel ifcModel, String nameOpening,IfcSlab slab, double openingWidth, double openingHeight, double xLocal, double yLocal){
+
+        // Calcul of openingThickness = slabThickness
+        double openingThickness = IfcHelper.getSlabThickness(slab);
 
         IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,yLocal,0.0);
         IfcDirection zLocalOpening = createDirection3D(0.0,0.0,1.0);
@@ -830,19 +877,19 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening
-    public static void addOpening (IfcModel ifcModel, String nameOpening,IfcProduct product, double openingWidth, double openingHeight, double openingThickness, double xLocal, double yzLocal){
+    public static void addOpening (IfcModel ifcModel, String nameOpening,IfcProduct product, double openingWidth, double openingHeight, double xLocal, double yzLocal){
         if (product instanceof IfcWallStandardCase){
-            addOpeningToWall (ifcModel, nameOpening, (IfcWallStandardCase)product, openingWidth, openingHeight, openingThickness, xLocal, yzLocal);
+            addOpeningToWall (ifcModel, nameOpening, (IfcWallStandardCase)product, openingWidth, openingHeight, xLocal, yzLocal);
         }
         else if (product instanceof IfcSlab){
-            addOpeningToSlab(ifcModel, nameOpening, (IfcSlab) product, openingWidth, openingHeight, openingThickness, xLocal, yzLocal);
+            addOpeningToSlab(ifcModel, nameOpening, (IfcSlab) product, openingWidth, openingHeight, xLocal, yzLocal);
         }
     }
 
     // Permet d'ajouter une door à un produit (wall ou slab)
     public static void addDoor (IfcModel ifcModel, String nameDoor,IfcProduct product, double doorWidth, double doorHeight, double wallThickness, double xLocal){
         IfcBuildingStorey buildingStorey = getBuildingStorey(product);
-        addOpening(ifcModel, nameDoor, product, doorWidth, doorHeight, wallThickness, xLocal, 0.0);
+        addOpening(ifcModel, nameDoor, product, doorWidth, doorHeight, xLocal, 0.0);
         IfcOpeningElement opening = getOpening(ifcModel, nameDoor);
 
         // Door style definitions
@@ -932,7 +979,7 @@ public class IfcHelper {
     public static void addWindow (IfcModel ifcModel, String nameWindow,IfcProduct product, double windowWidth, double windowHeight, double wallThickness, double xLocal, double zLocal){
 
         IfcBuildingStorey buildingStorey = getBuildingStorey(product);
-        addOpening(ifcModel,nameWindow,product,windowWidth,windowHeight,wallThickness,xLocal,zLocal);
+        addOpening(ifcModel,nameWindow,product,windowWidth,windowHeight,xLocal,zLocal);
         IfcOpeningElement opening = getOpening(ifcModel, nameWindow);
 
         // Window style definitions

@@ -17,12 +17,13 @@
     </filters>
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="Ajout des fonctions suivantes :&#10;&quot;addOpeningToWall&quot; + &quot;createDirection2D&quot; + &quot;createDirection3D&quot;&#10;+ &quot;createCartesianPoint2D&quot; + &quot;createCartesianPoint3D&quot;&#10;&#10;&#10;">
+    <list default="true" readonly="true" id="f98c8b91-1a63-4593-a98e-5ea9e2504404" name="Default" comment="Ajout des fonctions suivantes : &#10;&quot;addOpeningToWall&quot; + &quot;addOpeningToSlab&quot; + &quot;addFloor&quot; + &quot;addRoof&quot; + &quot;addMaterialLayer&quot; + &quot;deleteSlab&quot; + &quot;deleteMaterialLayer&quot;&#10;&#10;&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" afterPath="$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" afterPath="$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/junit_4_13_SNAPSHOT.xml" afterPath="$PROJECT_DIR$/.idea/libraries/junit_4_13_SNAPSHOT.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
+    <list id="e2252677-32d2-44a9-a9c3-ec863c462304" name="Rejected commit: Default" comment="Suppression des fonctions suivantes :&#10;&quot;addOpening&quot; + &quot;addSlab&quot;&#10;&#10;Ajout des fonctions suivantes : &#10;&quot;addOpeningToWall&quot; + &quot;addOpeningToSlab&quot; + &quot;addFloor&quot; + &quot;addRoof&quot; + &quot;addMaterialLayer&quot; + &quot;deleteSlab&quot; + &quot;deleteMaterialLayer&quot;&#10;&#10;&#10;" />
     <ignored path="3DReno.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,39 +45,77 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DesktopLauncher.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="DesktopLauncher.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.50364965" vertical-offset="625" max-vertical-offset="1479">
-              <caret line="53" column="31" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="1003" max-vertical-offset="1785">
+              <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IfcHelper.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="IfcHelper.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="2329">
-              <caret line="756" column="42" selection-start-line="756" selection-start-column="42" selection-end-line="756" selection-end-column="42" />
+            <state vertical-scroll-proportion="4.810764" vertical-offset="255" max-vertical-offset="3213">
+              <caret line="1676" column="0" selection-start-line="1676" selection-start-column="0" selection-end-line="1676" selection-end-column="0" />
               <folding>
-                <element signature="docComment;class#IfcHelper#0" expanded="false" />
                 <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
-                <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getBuildingStorey#1;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getWall#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getWallThickness#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getOpening#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getOpeningRelToDoor#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getOpeningRelToWindow#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getDoor#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getWindow#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getRelFillsElement#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getSlabs#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#getSlabThickness#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#createCartesianPoint2D#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#createDirection2D#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#createDirection3D#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-                <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addFloor#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addRoof#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addOpeningToWall#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addOpeningToSlab#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addOpening#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addDoor#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addWindow#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#addMaterialLayer#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteObjectPlacement#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteAxis2Placement3D#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteAxis2Placement2D#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteRepresentation#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteOpening#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteDoor#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteWindow#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteWallStandardCase#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteSlab#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#deleteMaterialLayerWall#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWallPosition#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWallOrientation#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWallThickness#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWallLength#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWallHeight#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setOpeningPosition#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setOpeningThickness#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setOpeningWidth#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setOpeningHeight#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setDoorPosition#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setDoorWidth#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setDoorHeight#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWindowPosition#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWindowWidth#0;class#IfcHelper#0" expanded="false" />
+                <element signature="method#setWindowHeight#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
                 <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
               </folding>
@@ -1011,7 +1050,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="8572263815775" />
+        <entry key="$PROJECT_DIR$" value="8572650969431" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1588,6 +1627,9 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1655,24 +1697,6 @@
               <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3DReno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3dreno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1716,15 +1740,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifc2x3javatoolbox" />
+              <option name="myItemId" value="android" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1738,178 +1754,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
+              <option name="myItemId" value="android" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifc2x3javatoolbox" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifcmodel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3DReno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3dreno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifc2x3javatoolbox" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="helpers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3DReno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3dreno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifc2x3javatoolbox" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="guidcompressor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3DReno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3dreno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="view" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3DReno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3dreno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utils" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3DReno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3dreno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3DReno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="3dreno" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane />
       </pane>
       <pane id="AndroidView">
         <subPane />
@@ -1955,118 +1808,6 @@
       <recent name="fr.limsi.rorqual.android" />
       <recent name="fr.limsi.Rorqual" />
     </key>
-  </component>
-  <component name="RestoreUpdateTree">
-    <UpdateInfo date="Moments ago" ActionInfo="_Update">
-      <UpdatedFiles>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Updated from server" />
-          <option name="myStatusName" value="Changed on server" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="CHANGED_ON_SERVER" />
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Updated" />
-            <option name="myStatusName" value="Changed" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="UPDATED" />
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Created" />
-            <option name="myStatusName" value="Created" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="CREATED" />
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Deleted" />
-            <option name="myStatusName" value="Deleted" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="true" />
-            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-            <PATH vcs="svn" revision="47">C:\Users\ricordeau\3dreno\data\ifc\3etage12murs3slabs12openings.ifc</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Restored" />
-            <option name="myStatusName" value="Will be restored" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="RESTORED" />
-          </FILE-GROUP>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Modified" />
-          <option name="myStatusName" value="Modified" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MODIFIED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Skipped" />
-          <option name="myStatusName" value="Skipped" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SKIPPED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with conflicts" />
-          <option name="myStatusName" value="Will be merged with conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_CONFLICTS" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with tree conflicts" />
-          <option name="myStatusName" value="Merged with tree conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with property conflicts" />
-          <option name="myStatusName" value="Will be merged with property conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged" />
-          <option name="myStatusName" value="Will be merged" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Not in repository" />
-          <option name="myStatusName" value="Not in repository" />
-          <option name="mySupportsDeletion" value="true" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="UNKNOWN" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally added" />
-          <option name="myStatusName" value="Locally added" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_ADDED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally removed" />
-          <option name="myStatusName" value="Locally removed" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_REMOVED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Switched" />
-          <option name="myStatusName" value="Switched" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SWITCHED" />
-        </FILE-GROUP>
-      </UpdatedFiles>
-    </UpdateInfo>
   </component>
   <component name="RunManager" selected="Application.Java">
     <configuration default="true" type="Remote" factoryName="Remote">
@@ -2370,7 +2111,35 @@
       <created>1429026331577</created>
       <updated>1429026331577</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Modification des fonctions suivantes :&#10;&quot;addOpeningToWall&quot; -&gt; Ajouts d'arguments permettant de créer les openings rectangulaires que l'on veut&#10;&#10;&#10;">
+      <created>1429027150928</created>
+      <updated>1429027150928</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Ajouts des fonctions suivantes :&#10;&quot;addDoor&quot; + &quot;addWindow&quot;&#10;&#10;&#10;">
+      <created>1429280406369</created>
+      <updated>1429280406370</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Fluidification globale des méthodes contenues dans &quot;IfcHelper&quot; via l'utilisation des méthodes &quot;createCartesianPoint&quot; et &quot;createDirection&quot;&#10;&#10;&#10;">
+      <created>1429284240666</created>
+      <updated>1429284240666</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Ajouts des méthodes suivantes :&#10;&quot;getDoor&quot; + &quot;getWindow&quot; + &quot;getRelFillsElement&quot;&#10;&#10;et&#10;&#10;&quot;deleteObjectPlacement&quot; + &quot;deleteAxis2Placement3D&quot; + &quot;deleteAxis2Placement2D&quot; + &quot;deleteRepresentation&quot; + &quot;deleteOpening&quot; + &quot;deleteDoor&quot; + &quot;deleteWindow&quot; + &quot;deleteWallStandardCase&quot;&#10;&#10;&#10;">
+      <created>1429709786728</created>
+      <updated>1429709786728</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Suppression des fonctions suivantes :&#10;&quot;addOpening&quot; + &quot;addSlab&quot;&#10;&#10;Ajout des fonctions suivantes : &#10;&quot;addOpeningToWall&quot; + &quot;addOpeningToSlab&quot; + &quot;addFloor&quot; + &quot;addRoof&quot; + &quot;addMaterialLayer&quot; + &quot;deleteSlab&quot; + &quot;deleteMaterialLayer&quot;&#10;&#10;&#10;">
+      <created>1430125678524</created>
+      <updated>1430125678524</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Ajout des fonctions suivantes : &#10;&quot;getOpeningRelToDoor&quot; + &quot;getOpeningRelToWindow&quot; + &quot;addOpening&quot; + &quot;setWallPosition&quot; + &quot;setWallThickness&quot; + &quot;setWallLength&quot; + &quot;setWallHeight&quot; + &quot;setOpeningPosition&quot; +  &quot;setOpeningThickness&quot; + &quot;setOpeningWidth&quot; + &quot;setOpeningHeight&quot; + &quot;setDoorPosition&quot; + &quot;setDoorWidth&quot; + &quot;setDoorHeight&quot;&#10;&#10;&#10;">
+      <created>1430152261168</created>
+      <updated>1430152261168</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Ajout des fonctions suivantes : &#10;&quot;setWindowPosition&quot;  + &quot;setWindowWidth&quot; + &quot;setWindowHeight&quot;">
+      <created>1430211757758</created>
+      <updated>1430211757758</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2392,11 +2161,11 @@
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.4997242" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.50053304" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24946696" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15351813" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3988889" sideWeight="0.9195096" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3988889" sideWeight="0.77771854" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2441,176 +2210,24 @@
     <MESSAGE value="Ajout des fonctions suivantes :&#10;&quot;addOpeningToWall&quot; + &quot;createDirection2D&quot; + &quot;createDirection3D&quot;&#10;+ &quot;createCartesianPoint2D&quot; + &quot;createCartesianPoint3D&quot;&#10;&#10;&#10;" />
     <MESSAGE value="Ajout du fichier suivant :&#10;&quot;3etages12murs3slabs12openings&quot;&#10;&#10;&#10;" />
     <MESSAGE value="Changement du repère local dans la fonction suivante :&#10;&quot;addOpeningToWall&quot;&#10;&#10;&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changement du repère local dans la fonction suivante :&#10;&quot;addOpeningToWall&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Modification des fonctions suivantes :&#10;&quot;addOpeningToWall&quot; -&gt; Ajouts d'arguments permettant de créer les openings rectangulaires que l'on veut&#10;&#10;&#10;" />
+    <MESSAGE value="Ajouts des fonctions suivantes :&#10;&quot;addDoor&quot; + &quot;addWindow&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Fluidification globale des méthodes contenues dans &quot;IfcHelper&quot; via l'utilisation des méthodes &quot;createCartesianPoint&quot; et &quot;createDirection&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Ajouts des méthodes suivantes :&#10;&quot;getDoor&quot; + &quot;getWindow&quot; + &quot;getRelFillsElement&quot;&#10;&#10;et&#10;&#10;&quot;deleteObjectPlacement&quot; + &quot;deleteAxis2Placement3D&quot; + &quot;deleteAxis2Placement2D&quot; + &quot;deleteRepresentation&quot; + &quot;deleteOpening&quot; + &quot;deleteDoor&quot; + &quot;deleteWindow&quot; + &quot;deleteWallStandardCase&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Suppression des fonctions suivantes :&#10;&quot;addOpening&quot; + &quot;addSlab&quot;&#10;&#10;Ajout des fonctions suivantes : &#10;&quot;addOpeningToWall&quot; + &quot;addOpeningToSlab&quot; + &quot;addFloor&quot; + &quot;addRoof&quot; + &quot;addMaterialLayer&quot; + &quot;deleteSlab&quot; + &quot;deleteMaterialLayer&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Ajout des fonctions suivantes : &#10;&quot;getOpeningRelToDoor&quot; + &quot;getOpeningRelToWindow&quot; + &quot;addOpening&quot; + &quot;setWallPosition&quot; + &quot;setWallThickness&quot; + &quot;setWallLength&quot; + &quot;setWallHeight&quot; + &quot;setOpeningPosition&quot; +  &quot;setOpeningThickness&quot; + &quot;setOpeningWidth&quot; + &quot;setOpeningHeight&quot; + &quot;setDoorPosition&quot; + &quot;setDoorWidth&quot; + &quot;setDoorHeight&quot;&#10;&#10;&#10;" />
+    <MESSAGE value="Ajout des fonctions suivantes : &#10;&quot;setWindowPosition&quot;  + &quot;setWindowWidth&quot; + &quot;setWindowHeight&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout des fonctions suivantes : &#10;&quot;setWindowPosition&quot;  + &quot;setWindowWidth&quot; + &quot;setWindowHeight&quot;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="23" />
+      <option name="time" value="94" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="714">
-          <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6970">
-          <caret line="377" column="0" selection-start-line="377" selection-start-column="0" selection-end-line="377" selection-end-column="0" />
-          <folding>
-            <element signature="docComment;class#IfcHelper#0" expanded="false" />
-            <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createCartesianPoint2D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createDirection2D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createDirection3D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="663">
-          <caret line="20" column="66" selection-start-line="20" selection-start-column="66" selection-end-line="20" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6562" max-vertical-offset="6698">
-          <caret line="386" column="0" selection-start-line="386" selection-start-column="0" selection-end-line="386" selection-end-column="0" />
-          <folding>
-            <element signature="docComment;class#IfcHelper#0" expanded="false" />
-            <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createCartesianPoint2D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createDirection2D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#createDirection3D#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="510">
-          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/fr/limsi/rorqual/android/AndroidLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="952">
-          <caret line="46" column="40" selection-start-line="46" selection-start-column="40" selection-end-line="46" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="102">
-          <caret line="0" column="19" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="510">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="527" max-vertical-offset="867">
-          <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="289">
-          <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="935" max-vertical-offset="1241">
-          <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1105" max-vertical-offset="2159">
-          <caret line="65" column="71" selection-start-line="65" selection-start-column="71" selection-end-line="65" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/fr/limsi/rorqual/android/AndroidLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="315">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="30" max-vertical-offset="480">
-          <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
-          <folding>
-            <element signature="e#475#493#0" expanded="false" />
-            <element signature="e#632#650#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/local.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="105">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/settings.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="90">
@@ -2780,38 +2397,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/fr/limsi/rorqual/android/AndroidLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7378472" vertical-offset="0" max-vertical-offset="952">
-          <caret line="25" column="46" selection-start-line="25" selection-start-column="46" selection-end-line="25" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/utils/IfcObjectPlacementUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23394495" vertical-offset="0" max-vertical-offset="4590">
-          <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/ModelFactoryStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33142203" vertical-offset="0" max-vertical-offset="872">
-          <caret line="25" column="1" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifcmodel/IfcGuidHashMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1073" max-vertical-offset="1751">
           <caret line="100" column="7" selection-start-line="100" selection-start-column="7" selection-end-line="100" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcWallModelFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38898757" vertical-offset="3555" max-vertical-offset="5321">
-          <caret line="277" column="65" selection-start-line="277" selection-start-column="65" selection-end-line="277" selection-end-column="65" />
         </state>
       </provider>
     </entry>
@@ -2822,21 +2411,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/ModelProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20659722" vertical-offset="0" max-vertical-offset="576">
-          <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifcmodel/IfcModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="6680" max-vertical-offset="16473">
-          <caret line="495" column="0" selection-start-line="495" selection-start-column="0" selection-end-line="495" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/ifc/3etages12murs.ifc">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="3.7482638" vertical-offset="0" max-vertical-offset="7140">
@@ -2844,53 +2418,240 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHolder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcGloballyUniqueId.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7083333" vertical-offset="0" max-vertical-offset="1156">
           <caret line="24" column="11" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcRelContainedInSpatialStructure.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.608" vertical-offset="6938" max-vertical-offset="8279">
+          <caret line="496" column="7" selection-start-line="496" selection-start-column="7" selection-end-line="496" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcWallStandardCase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.442" vertical-offset="0" max-vertical-offset="5117">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcWall.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.096" vertical-offset="769" max-vertical-offset="5117">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/utils/CSGUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20659722" vertical-offset="0" max-vertical-offset="2380">
+          <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/view/MainApplicationAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3145">
+          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/ModelProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
+          <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/ModelFactoryStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
+          <caret line="25" column="1" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcObjectPlacement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.79532164" vertical-offset="0" max-vertical-offset="3298">
+          <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/util/TreeMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5116" max-vertical-offset="47651">
+          <caret line="351" column="0" selection-start-line="351" selection-start-column="0" selection-end-line="351" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/Integer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="19447" max-vertical-offset="26044">
+          <caret line="1215" column="0" selection-start-line="1215" selection-start-column="0" selection-end-line="1215" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcDoor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5666075" vertical-offset="3506" max-vertical-offset="6749">
+          <caret line="228" column="0" selection-start-line="228" selection-start-column="0" selection-end-line="228" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHolder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14409722" vertical-offset="138" max-vertical-offset="714">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/utils/IfcObjectPlacementUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35416666" vertical-offset="0" max-vertical-offset="5644">
+          <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/utils/ModelUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20659722" vertical-offset="0" max-vertical-offset="2975">
+          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcWallModelFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.7552085" vertical-offset="2858" max-vertical-offset="3434">
+          <caret line="45" column="13" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifcmodel/IfcModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="8057" max-vertical-offset="16473">
+          <caret line="578" column="0" selection-start-line="578" selection-start-column="0" selection-end-line="578" selection-end-column="0" />
+          <folding>
+            <element signature="e#19604#19612#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcProduct.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4594" max-vertical-offset="6664">
+          <caret line="289" column="0" selection-start-line="289" selection-start-column="0" selection-end-line="289" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcSweptAreaSolid.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2668" max-vertical-offset="4250">
+          <caret line="179" column="0" selection-start-line="179" selection-start-column="0" selection-end-line="179" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcMaterialSelect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.38368055" vertical-offset="0" max-vertical-offset="576">
+          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/ifc2x3javatoolbox/ifc2x3tc1/IfcRelAssociatesMaterial.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="5491">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/scene3d/actions/Actions3d.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.11805555" vertical-offset="0" max-vertical-offset="5287">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/src/fr/limsi/rorqual/android/AndroidLauncher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35416666" vertical-offset="0" max-vertical-offset="731">
+          <caret line="25" column="46" selection-start-line="25" selection-start-column="46" selection-end-line="25" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1003" max-vertical-offset="1785">
+          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/fr/limsi/rorqual/core/model/IfcHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2329">
-          <caret line="756" column="42" selection-start-line="756" selection-start-column="42" selection-end-line="756" selection-end-column="42" />
+        <state vertical-scroll-proportion="4.810764" vertical-offset="255" max-vertical-offset="3213">
+          <caret line="1676" column="0" selection-start-line="1676" selection-start-column="0" selection-end-line="1676" selection-end-column="0" />
           <folding>
-            <element signature="docComment;class#IfcHelper#0" expanded="false" />
             <element signature="method#initialiseIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getGeometricRepresentationContext#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#getBuilding#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingStorey#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getBuildingStorey#1;class#IfcHelper#0" expanded="false" />
             <element signature="method#getWall#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getWallThickness#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getOpening#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getOpeningRelToDoor#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getOpeningRelToWindow#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getDoor#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getWindow#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getBuildingRelations#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#getRelContainedInSpatialStructure#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getRelFillsElement#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getSlabs#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#getSlabThickness#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#createCartesianPoint2D#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#createCartesianPoint3D#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#createDirection2D#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#createDirection3D#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addBuildingStorey#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#addWall#0;class#IfcHelper#0" expanded="false" />
-            <element signature="method#addSlabs#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addFloor#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addRoof#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addOpeningToWall#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addOpeningToSlab#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addOpening#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addDoor#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addWindow#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#addMaterialLayer#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteObjectPlacement#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteAxis2Placement3D#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteAxis2Placement2D#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteRepresentation#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteOpening#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteDoor#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteWindow#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteWallStandardCase#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteSlab#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#deleteMaterialLayerWall#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWallPosition#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWallOrientation#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWallThickness#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWallLength#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWallHeight#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setOpeningPosition#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setOpeningThickness#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setOpeningWidth#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setOpeningHeight#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setDoorPosition#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setDoorWidth#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setDoorHeight#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWindowPosition#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWindowWidth#0;class#IfcHelper#0" expanded="false" />
+            <element signature="method#setWindowHeight#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#loadIfcModel#0;class#IfcHelper#0" expanded="false" />
             <element signature="method#saveIfcModel#0;class#IfcHelper#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/src/fr/limsi/rorqual/desktop/DesktopLauncher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50364965" vertical-offset="625" max-vertical-offset="1479">
-          <caret line="53" column="31" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
