@@ -1,15 +1,16 @@
 package fr.limsi.rorqual.core.view;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
@@ -17,11 +18,16 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
 import fr.limsi.rorqual.core.model.IfcHolder;
@@ -29,52 +35,63 @@ import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import scene3d.Actor3d;
 import scene3d.Stage3d;
 
-public class MainApplicationAdapter extends ApplicationAdapter implements InputProcessor {
-	SpriteBatch batch;
-	Texture img;
+public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
-    ShapeRenderer shape;
-    Stage3d stage;
-
-    Camera[] cameras = new Camera[2];
-
-    int ncam = 1;
-
-    Environment environnement;
-    ShaderProvider shaderProvider;
+    private ShapeRenderer shape;
+    private Stage3d stage3d;
+    private Stage stageMenu;
+    private Skin skin;
+    private TextureAtlas atlas;
+    private TextButton buttonDPE, buttonExit;
+    private TextButton.TextButtonStyle textButtonStyle;
+    private BitmapFont fontBlack;
+    private BitmapFont fontWhite;
+    private Camera[] cameras = new Camera[2];
+    private int ncam = 1;
+    private Environment environnement;
+    private ShaderProvider shaderProvider;
+    private Dpe dpe;
 
     @Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("data/gdx/badlogic.jpg");
         shape = new ShapeRenderer();
 
-        DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
-        //print(spatialStructureTreeNode, 0);
+        /*** Chargement des boutons et des polices d'écriture ***/
+        atlas = new TextureAtlas(Gdx.files.internal("data/ui/button.pack"));
+        fontBlack = new BitmapFont(Gdx.files.internal("data/font/black.fnt"));
+        fontWhite = new BitmapFont(Gdx.files.internal("data/font/white.fnt"));
 
-        // lights
+        /*** ??? ***/
+        DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
+
+        /*** Création des lumières ***/
         environnement = new Environment();
         environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         environnement.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 0.8f, 0.4f, -0.6f));
 
+        /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera1.zoom = 1f/10;
-
         camera1.position.set(0.f, 0, 10f);
         camera1.lookAt(0f, 0f, 0f);
-        camera1.up.set(0,1,0);
+        camera1.up.set(0, 1, 0);
         camera1.update();
         cameras[0] = camera1;
 
+        /*** Création de la caméra 3D ***/
         PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera2.position.set(0, -50, 50);
         camera2.near = 1f;
         camera2.far = 1000f;
         camera2.lookAt(0, 0, 0);
-        camera2.up.set(0,0,1);
+        camera2.up.set(0, 0, 1);
         camera2.update();
         cameras[1] = camera2;
 
+        /*** Création d'un tableau de caméras ***/
+        Camera baseCamera = cameras[ncam%cameras.length];
+
+        /*** Chargement des shaders ***/
         shaderProvider = new DefaultShaderProvider() {
             @Override
             protected Shader createShader(Renderable renderable) {
@@ -84,52 +101,43 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
             }
         };
 
-        Camera baseCamera = cameras[ncam%cameras.length];
+        stage3d = new Stage3d(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), baseCamera, environnement, shaderProvider);
+        stageMenu = new Stage();
+        SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, stage3d);
 
-        stage = new Stage3d(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), baseCamera, environnement, shaderProvider);
-        SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, stage);
+        /*** On autorise les inputs en entrée ***/
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, this, stage3d));
 
-        Gdx.input.setInputProcessor(this);
-        //stage.getRoot().print();
-
-	}
-
-    public void print(DefaultMutableTreeNode treeNode, int tab) {
-
-        System.out.print(new String(new char[tab]).replace('\0', ' '));
-
-        System.out.println(treeNode.getUserObject() + " [" + treeNode.getUserObject().getClass().getName() + "]");
-
-        for (int i = 0; i < treeNode.getChildCount(); i++) {
-            DefaultMutableTreeNode currentTreeNode = (DefaultMutableTreeNode)treeNode.getChildAt(i);
-            print(currentTreeNode, tab + 1);
-        }
-    }
-
-    private void update_cam() {
-        if (cameras[ncam%cameras.length] instanceof PerspectiveCamera) {
-            PerspectiveCamera camera = (PerspectiveCamera) cameras[ncam%cameras.length];
-            switch (camera_mov) {
-                case GAUCHE:
-                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), -5);
-                    break;
-                case DROITE:
-                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), 5);
-                    break;
-                case HAUT:
-                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), 5);
-                    break;
-                case BAS:
-                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), -5);
-                    break;
+        /*** Ajout du bouton DPE ***/
+        skin = new Skin(atlas);
+        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("buttonUp"),skin.getDrawable("buttonDown"),null,fontBlack);
+        buttonDPE = new TextButton("DPE", textButtonStyle);
+        buttonDPE.setSize(100, 40);
+        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight()));
+        buttonDPE.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y)
+            {
+                dpe = new Dpe(IfcHolder.getInstance().getIfcModel(),stageMenu);
+                dpe.startDPE();
             }
-        }
-    }
+        });
+        stageMenu.addActor(buttonDPE);
+
+        /*** Ajout du bouton EXIT ***/
+        buttonExit = new TextButton("EXIT", textButtonStyle);
+        buttonExit.setSize(100, 40);
+        buttonExit.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight() - buttonDPE.getHeight()));
+        buttonExit.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+        stageMenu.addActor(buttonExit);
+	}
 
 	@Override
 	public void render () {
         update_cam();
-        //shader.setUniformMatrix("u_projectionViewMatrix", cameras[ncam%cameras.length].combined);
 
 		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -159,16 +167,36 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
             shape.line(i, -100, 0, i, 100, 0);
         }
         shape.end();
-        /*
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();*/
-        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
-        stage.act();
-        stage.draw();
-        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
 
+        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
+        stage3d.act();
+        stage3d.draw();
+        stageMenu.act();
+        stageMenu.draw();
+        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
 	}
+
+    @Override
+    public void dispose() {
+        fontBlack.dispose();
+        fontWhite.dispose();
+        atlas.dispose();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
 
     private static enum Sense {
         GAUCHE,
@@ -210,7 +238,10 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
                 return true;
             case Input.Keys.C:
                 ncam++;
-                stage.setCamera(cameras[ncam%cameras.length]);
+                stage3d.setCamera(cameras[ncam % cameras.length]);
+                return true;
+            case Input.Keys.ESCAPE:
+                Gdx.app.exit();
                 return true;
         }
         return false;
@@ -242,7 +273,7 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
         if (!dragged) {
             if (selected != null)
                 selected.setColor(Color.WHITE);
-            selected = stage.getObject(screenX, screenY);
+            selected = stage3d.getObject(screenX, screenY);
             if (selected != null) {
                 System.out.println("TOUCH: " + selected.userData);
                 selected.setColor(Color.YELLOW);
@@ -291,5 +322,38 @@ public class MainApplicationAdapter extends ApplicationAdapter implements InputP
             pc.fieldOfView = pc.fieldOfView * (1+amount/10f);
         }
         return true;
+    }
+
+
+    public void print(DefaultMutableTreeNode treeNode, int tab) {
+
+        System.out.print(new String(new char[tab]).replace('\0', ' '));
+
+        System.out.println(treeNode.getUserObject() + " [" + treeNode.getUserObject().getClass().getName() + "]");
+
+        for (int i = 0; i < treeNode.getChildCount(); i++) {
+            DefaultMutableTreeNode currentTreeNode = (DefaultMutableTreeNode)treeNode.getChildAt(i);
+            print(currentTreeNode, tab + 1);
+        }
+    }
+
+    private void update_cam() {
+        if (cameras[ncam%cameras.length] instanceof PerspectiveCamera) {
+            PerspectiveCamera camera = (PerspectiveCamera) cameras[ncam%cameras.length];
+            switch (camera_mov) {
+                case GAUCHE:
+                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), -5);
+                    break;
+                case DROITE:
+                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), 5);
+                    break;
+                case HAUT:
+                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), 5);
+                    break;
+                case BAS:
+                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), -5);
+                    break;
+            }
+        }
     }
 }
