@@ -14,10 +14,10 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
  */
 public class IfcHolder {
 
-    IfcModel ifcModel = null;
-    DefaultMutableTreeNode spatialStructureTreeNode = new DefaultMutableTreeNode("no model loaded");
+    private IfcModel ifcModel = null;
+    private DefaultMutableTreeNode spatialStructureTreeNode = new DefaultMutableTreeNode("no model loaded");
 
-    private IfcHolder() {}
+    public IfcHolder() {}
 
     /** Holder */
     private static class IfcHolderHolder
