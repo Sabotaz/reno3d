@@ -129,7 +129,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y)
             {
-                buttonDPE.setVisible(false);
+//                buttonDPE.setVisible(false);
                 dpe = new Dpe(stageMenu);
                 dpe.startDPE();
             }
