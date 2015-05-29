@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
@@ -21,11 +20,13 @@ import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
@@ -41,7 +42,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Stage3d stage3d;
     private Stage stageMenu;
     private Skin skin;
-    private TextureAtlas atlas;
     private TextButton buttonDPE, buttonExit;
     private TextButton.TextButtonStyle textButtonStyle;
     private BitmapFont fontBlack;
@@ -57,9 +57,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         shape = new ShapeRenderer();
 
         /*** Chargement des boutons et des polices d'écriture ***/
-        atlas = new TextureAtlas(Gdx.files.internal("data/ui/button.pack"));
         fontBlack = new BitmapFont(Gdx.files.internal("data/font/black.fnt"));
         fontWhite = new BitmapFont(Gdx.files.internal("data/font/white.fnt"));
+        skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
+        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
 
         /*** ??? ***/
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
@@ -108,31 +109,32 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** On autorise les inputs en entrée ***/
         Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, this, stage3d));
 
-        /*** Ajout du bouton DPE ***/
-        skin = new Skin(atlas);
-        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("buttonUp"),skin.getDrawable("buttonDown"),null,fontBlack);
-        buttonDPE = new TextButton("DPE", textButtonStyle);
-        buttonDPE.setSize(100, 40);
-        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight()));
-        buttonDPE.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y)
-            {
-                dpe = new Dpe(IfcHolder.getInstance().getIfcModel(),stageMenu);
-                dpe.startDPE();
-            }
-        });
-        stageMenu.addActor(buttonDPE);
-
         /*** Ajout du bouton EXIT ***/
         buttonExit = new TextButton("EXIT", textButtonStyle);
+        buttonExit.setName("EXIT");
         buttonExit.setSize(100, 40);
-        buttonExit.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight() - buttonDPE.getHeight()));
+        buttonExit.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight()));
         buttonExit.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
         stageMenu.addActor(buttonExit);
+
+        /*** Ajout du bouton DPE ***/
+        buttonDPE = new TextButton("DPE", textButtonStyle);
+        buttonDPE.setName("DPE");
+        buttonDPE.setSize(100, 40);
+        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
+        buttonDPE.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y)
+            {
+                buttonDPE.setVisible(false);
+                dpe = new Dpe(stageMenu);
+                dpe.startDPE();
+            }
+        });
+        stageMenu.addActor(buttonDPE);
 	}
 
 	@Override
@@ -180,7 +182,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public void dispose() {
         fontBlack.dispose();
         fontWhite.dispose();
-        atlas.dispose();
     }
 
     @Override
