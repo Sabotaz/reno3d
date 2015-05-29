@@ -263,7 +263,7 @@ public class IfcHelper {
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -283,11 +283,11 @@ public class IfcHelper {
     }
 
     // Permet de récuperer la hauteur d'un wall dans le model
-    public static double getWallHeight (IfcModel ifcModel, IfcWallStandardCase wall){
+    public static double getWallHeight (IfcWallStandardCase wall){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
-            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+            if(actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")){
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
                     if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
@@ -300,11 +300,11 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la longueur d'un mur
-    public static double getWallLength (IfcModel ifcModel, IfcWallStandardCase wall){
+    public static double getWallLength (IfcWallStandardCase wall){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
-            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+            if(actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")){
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
                     if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
@@ -322,7 +322,7 @@ public class IfcHelper {
                     }
                 }
             }
-            else if (actualRepresentation.getRepresentationType().getDecodedValue() == "Curve2D"){
+            else if (actualRepresentation.getRepresentationType().getDecodedValue().equals("Curve2D")){
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
                     if(actualRepresentationItem instanceof IfcTrimmedCurve){
@@ -338,9 +338,9 @@ public class IfcHelper {
         return -1.0;
     }
 
-    public static double getWallSurface (IfcModel ifcModel, IfcWallStandardCase wall){
-        double wallHeight = getWallHeight(ifcModel, wall);
-        double wallLength = getWallLength(ifcModel, wall);
+    public static double getWallSurface (IfcWallStandardCase wall){
+        double wallHeight = getWallHeight(wall);
+        double wallLength = getWallLength(wall);
         return (wallHeight*wallLength);
     }
 
@@ -378,7 +378,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer les openings liées à un wall
-    public static SET<IfcOpeningElement> getOpeningRelToWall (IfcModel ifcModel, IfcWallStandardCase wall){
+    public static SET<IfcOpeningElement> getOpeningRelToWall (IfcWallStandardCase wall){
         SET<IfcOpeningElement> openingElementSET = new SET<>();
         SET<IfcRelVoidsElement> relVoidsElementSET = wall.getHasOpenings_Inverse();
         for(IfcRelVoidsElement actualRelVoidsElement : relVoidsElementSET){
@@ -391,11 +391,11 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la largeur d'un opening
-    public static double getOpeningWidth (IfcModel ifcModel, IfcOpeningElement opening){
+    public static double getOpeningWidth (IfcOpeningElement opening){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -415,11 +415,11 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la hauteur d'un opening
-    public static double getOpeningHeight (IfcModel ifcModel, IfcOpeningElement opening){
+    public static double getOpeningHeight (IfcOpeningElement opening){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -439,9 +439,9 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la surface d'un opening
-    public static double getOpeningSurface (IfcModel ifcModel, IfcOpeningElement opening){
-        double openingWidth = getOpeningWidth(ifcModel, opening);
-        double openingHeight = getOpeningHeight(ifcModel, opening);
+    public static double getOpeningSurface (IfcOpeningElement opening){
+        double openingWidth = getOpeningWidth(opening);
+        double openingHeight = getOpeningHeight(opening);
         return openingWidth*openingHeight;
     }
 
@@ -459,19 +459,19 @@ public class IfcHelper {
     // Permet de récupérer la largeur d'une door
     public static double getDoorWidth (IfcModel ifcModel, IfcDoor door){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        return (IfcHelper.getOpeningWidth(ifcModel, opening));
+        return (IfcHelper.getOpeningWidth(opening));
     }
 
     // Permet de récupérer la hauteur d'une door
     public static double getDoorHeight (IfcModel ifcModel, IfcDoor door){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        return (IfcHelper.getOpeningHeight(ifcModel, opening));
+        return (IfcHelper.getOpeningHeight(opening));
     }
 
     // Permet de récupérer la surface d'une door
     public static double getDoorSurface (IfcModel ifcModel, IfcDoor door){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        return (IfcHelper.getOpeningSurface(ifcModel, opening));
+        return (IfcHelper.getOpeningSurface(opening));
     }
 
     // Permet de récupérer une window dans un model en fonction de son nom
@@ -488,19 +488,19 @@ public class IfcHelper {
     // Permet de récupérer la largeur d'une window
     public static double getWindowWidth (IfcModel ifcModel, IfcWindow window){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        return (IfcHelper.getOpeningWidth(ifcModel, opening));
+        return (IfcHelper.getOpeningWidth(opening));
     }
 
     // Permet de récupérer la hauteur d'une window
     public static double getWindowHeight (IfcModel ifcModel, IfcWindow window){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        return (IfcHelper.getOpeningHeight(ifcModel, opening));
+        return (IfcHelper.getOpeningHeight(opening));
     }
 
     // Permet de récupérer la surface d'une window
     public static double getWindowSurface (IfcModel ifcModel, IfcWindow window){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        return (IfcHelper.getOpeningSurface(ifcModel, opening));
+        return (IfcHelper.getOpeningSurface(opening));
     }
 
     // Permet de récupérer la relation entre le building et ses étages
@@ -554,7 +554,7 @@ public class IfcHelper {
         IfcProductRepresentation productRepresentation = slab.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -571,7 +571,7 @@ public class IfcHelper {
         IfcProductRepresentation productRepresentation = slab.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -601,7 +601,6 @@ public class IfcHelper {
         }
         return -1;
     }
-
 
     // Permet de créer un point cartésien en 2D à partir de deux doubles
     public static IfcCartesianPoint createCartesianPoint2D(double x, double y){
@@ -732,7 +731,7 @@ public class IfcHelper {
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
-        if(relContainedInSpatialStructure==null){
+        if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
             relatedObject.add(ifcWallStandardCase);
@@ -854,7 +853,7 @@ public class IfcHelper {
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
-        if(relContainedInSpatialStructure==null){
+        if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
             relatedObject.add(ifcWallStandardCase);
@@ -940,7 +939,7 @@ public class IfcHelper {
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
-        if(relContainedInSpatialStructure==null){
+        if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
             relatedObject.add(ifcSlab);
@@ -1016,7 +1015,7 @@ public class IfcHelper {
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
-        if(relContainedInSpatialStructure==null){
+        if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
             relatedObject.add(ifcSlab);
@@ -1061,7 +1060,7 @@ public class IfcHelper {
 
         IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,-openingThickness/2,zLocal);
         IfcDirection zLocalOpening = createDirection3D(0.0,0.0,1.0);
-        IfcDirection xLocalOpening = createDirection3D(1.0,0.0,0.0);
+        IfcDirection xLocalOpening = createDirection3D(1.0, 0.0, 0.0);
         IfcAxis2Placement3D placementOpening = new IfcAxis2Placement3D(
                 localPointOpening, zLocalOpening, xLocalOpening);
         IfcLocalPlacement localPlacementOpening = new IfcLocalPlacement(wall.getObjectPlacement(),
@@ -1075,7 +1074,7 @@ public class IfcHelper {
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
                 centerOpening, zLocalExtrusion, xLocalExtrusion);
         IfcDirection zLocalRectangle = createDirection2D(1.0, 0.0);
-        IfcCartesianPoint originOpening = createCartesianPoint2D(0.0,0.0);
+        IfcCartesianPoint originOpening = createCartesianPoint2D(0.0, 0.0);
         IfcAxis2Placement2D placementRectangle = new IfcAxis2Placement2D(
                 originOpening, zLocalRectangle);
         IfcRectangleProfileDef rectangle = new IfcRectangleProfileDef(new IfcProfileTypeEnum("AREA"),
@@ -1257,7 +1256,7 @@ public class IfcHelper {
 
         // Create relation buildingStorey -> door
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
-        if(relContainedInSpatialStructure==null){
+        if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
             relatedObject.add(door);
@@ -1347,7 +1346,7 @@ public class IfcHelper {
 
         // Create relation buildingStorey -> window
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
-        if(relContainedInSpatialStructure==null){
+        if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
             relatedObject.add(window);
@@ -1443,7 +1442,7 @@ public class IfcHelper {
 
         // Create relation buildingStorey -> window
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
-        if(relContainedInSpatialStructure==null){
+        if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
             relatedObject.add(window);
@@ -1630,7 +1629,7 @@ public class IfcHelper {
         IfcHelper.deleteObjectPlacement(ifcModel, door.getObjectPlacement());
 
         // Remove the opening
-        IfcHelper.deleteOpening(ifcModel,IfcHelper.getOpening(ifcModel, door.getName().getDecodedValue()));
+        IfcHelper.deleteOpening(ifcModel, IfcHelper.getOpening(ifcModel, door.getName().getDecodedValue()));
 
         // Remove the parameters of the door
         SET<IfcRelDefines> relDefinesSET = door.getIsDefinedBy_Inverse();
@@ -1861,7 +1860,7 @@ public class IfcHelper {
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
-            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+            if(actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")){
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
                     if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
@@ -1887,7 +1886,7 @@ public class IfcHelper {
             }
         }
         // Change also thickness of the openings present in the wall
-        SET<IfcOpeningElement> openingElementSET = IfcHelper.getOpeningRelToWall(ifcModel,wall);
+        SET<IfcOpeningElement> openingElementSET = IfcHelper.getOpeningRelToWall(wall);
         for(IfcOpeningElement actualOpeningElement : openingElementSET){
             IfcHelper.setOpeningThickness(ifcModel,actualOpeningElement,newThickness);
         }
@@ -1898,7 +1897,7 @@ public class IfcHelper {
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
-            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+            if(actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")){
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
                     if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
@@ -1922,7 +1921,7 @@ public class IfcHelper {
                     }
                 }
             }
-            else if (actualRepresentation.getRepresentationType().getDecodedValue() == "Curve2D"){
+            else if (actualRepresentation.getRepresentationType().getDecodedValue().equals("Curve2D")){
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
                     if(actualRepresentationItem instanceof IfcTrimmedCurve){
@@ -1950,7 +1949,7 @@ public class IfcHelper {
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
-            if(actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid"){
+            if(actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")){
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for(IfcRepresentationItem actualRepresentationItem : representationItemSET){
                     if(actualRepresentationItem instanceof IfcExtrudedAreaSolid){
@@ -1991,7 +1990,7 @@ public class IfcHelper {
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -2003,11 +2002,11 @@ public class IfcHelper {
     }
 
     // Permet de modifier la largeur d'un opening
-    public static void setOpeningWidth (IfcModel ifcModel, IfcOpeningElement opening, double newWidth){
+    public static void setOpeningWidth (IfcOpeningElement opening, double newWidth){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -2027,11 +2026,11 @@ public class IfcHelper {
     }
 
     // Permet de modifier la hauteur d'un opening
-    public static void setOpeningHeight (IfcModel ifcModel, IfcOpeningElement opening, double newHeight){
+    public static void setOpeningHeight (IfcOpeningElement opening, double newHeight){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
-            if (actualRepresentation.getRepresentationType().getDecodedValue() == "SweptSolid") {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
                 SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
                 for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
                     if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
@@ -2052,41 +2051,41 @@ public class IfcHelper {
 
     // Permet de modifier la position d'une door
     public static void setDoorPosition (IfcModel ifcModel, IfcDoor door, double newPosX){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
         IfcHelper.setOpeningPosition(ifcModel, opening, newPosX, 0.0);
     }
 
     // Permet de modifier la largeur d'une door
     public static void setDoorWidth (IfcModel ifcModel, IfcDoor door, double newWidth){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
-        IfcHelper.setOpeningWidth(ifcModel, opening, newWidth);
+        IfcHelper.setOpeningWidth(opening, newWidth);
         door.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
     }
 
     // Permet de modifier la hauteur d'une door
     public static void setDoorHeight (IfcModel ifcModel, IfcDoor door, double newHeight){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
-        IfcHelper.setOpeningHeight(ifcModel, opening, newHeight);
+        IfcHelper.setOpeningHeight(opening, newHeight);
         door.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
     // Permet de modifier la position d'une window
     public static void setWindowPosition (IfcModel ifcModel, IfcWindow window, double newPosX, double newPosY){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
         IfcHelper.setOpeningPosition(ifcModel, opening, newPosX, newPosY);
     }
 
     // Permet de modifier la largeur d'une window
     public static void setWindowWidth (IfcModel ifcModel, IfcWindow window, double newWidth){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
-        IfcHelper.setOpeningWidth(ifcModel, opening, newWidth);
+        IfcHelper.setOpeningWidth(opening, newWidth);
         window.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
     }
 
     // Permet de modifier la hauteur d'une window
     public static void setWindowHeight (IfcModel ifcModel, IfcWindow window, double newHeight){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
-        IfcHelper.setOpeningHeight(ifcModel, opening, newHeight);
+        IfcHelper.setOpeningHeight(opening, newHeight);
         window.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
@@ -2257,5 +2256,38 @@ public class IfcHelper {
         addWindow(ifcModel,"window I1",wallI,1.00,1.50,3.75,0.50);
         addWindow(ifcModel,"window I2",wallI,2.00,1.50,0.70,0.50);
         addWindow(ifcModel,"window G",wallG,1.00,1.50,1.63,0.50);
+    }
+
+    // Permet de parcourir les produits inscrit au sein du DPE
+    public static void parcourDpe(IfcModel ifcModel){
+        Collection<IfcWallStandardCase> collectionWall = ifcModel.getCollection(IfcWallStandardCase.class);
+        for (IfcWallStandardCase actualWall : collectionWall){
+            System.out.println(actualWall.getName().getDecodedValue() + " Aire = " + getWallSurface(actualWall));
+        }
+
+        Collection<IfcSlab> collectionSlab = ifcModel.getCollection(IfcSlab.class);
+        for (IfcSlab actualSlab : collectionSlab){
+            System.out.println(actualSlab.getName().getDecodedValue() + " Aire = " + getSlabSurface(actualSlab));
+        }
+
+        Collection<IfcWindow> collectionWindow = ifcModel.getCollection(IfcWindow.class);
+        for (IfcWindow actualWindow : collectionWindow){
+            System.out.println(actualWindow.getName().getDecodedValue() + " Aire = " + getWindowSurface(ifcModel, actualWindow));
+        }
+
+        Collection<IfcDoor> collectionDoor = ifcModel.getCollection(IfcDoor.class);
+        for (IfcDoor actualDoor : collectionDoor){
+            System.out.println(actualDoor.getName().getDecodedValue() + " Aire = " + getDoorSurface(ifcModel, actualDoor));
+        }
+    }
+
+    // Permet de calculer la surface habitable du logement
+    public static double calculSurfaceHabitable(IfcModel ifcModel){
+        double surfaceHabitable = 0;
+        Collection<IfcSlab> collectionSlab = ifcModel.getCollection(IfcSlab.class);
+        for (IfcSlab actualSlab : collectionSlab){
+            surfaceHabitable += getSlabSurface(actualSlab);
+        }
+        return surfaceHabitable;
     }
 }
