@@ -39,7 +39,7 @@ import scene3d.Stage3d;
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
     private ShapeRenderer shape;
-    private Stage3d stage3d;
+    private static Stage3d stage3d;
     private Stage stageMenu;
     private Skin skin;
     private TextButton buttonDPE, buttonExit;
@@ -81,7 +81,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** Création de la caméra 3D ***/
         PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera2.position.set(0, -50, 50);
+        camera2.position.set(0, -20, 20);
         camera2.near = 1f;
         camera2.far = 1000f;
         camera2.lookAt(0, 0, 0);
@@ -266,7 +266,20 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         return false;
     }
 
-    Actor3d selected = null;
+    static Actor3d selected = null;
+
+    public static void select(Object o) {
+        deselect();
+        selected = stage3d.getFromUserObject(o);
+        if (selected != null)
+            selected.setColor(Color.YELLOW);
+    }
+
+    public static void deselect() {
+        if (selected != null)
+            selected.setColor(Color.WHITE);
+        selected = null;
+    }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {

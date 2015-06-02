@@ -357,4 +357,21 @@ public class Stage3d extends InputAdapter implements Disposable {
 		modelBatch.dispose();
 		clear();
 	}
+
+    private Actor3d searchUserObject(Actor3d a, Object o) {
+        if (a.userData.equals(o))
+            return a;
+        if (a instanceof Group3d) {
+            Actor3d result;
+            for (Actor3d child : ((Group3d)a).getChildren()) {
+                result = searchUserObject(child, o);
+                if (result != null) return result;
+            }
+        }
+        return null;
+    }
+
+    public Actor3d getFromUserObject(Object o) {
+        return searchUserObject(this.getRoot(), o);
+    }
 }
