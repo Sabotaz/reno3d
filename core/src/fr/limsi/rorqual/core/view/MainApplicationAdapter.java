@@ -46,8 +46,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private TextButton.TextButtonStyle textButtonStyle;
     private BitmapFont fontBlack;
     private BitmapFont fontWhite;
-    private Camera[] cameras = new Camera[2];
-    private int ncam = 1;
+    private static Camera[] cameras = new Camera[2];
+    private static int ncam = 1;
     private Environment environnement;
     private ShaderProvider shaderProvider;
     private Dpe dpe;
@@ -271,13 +271,23 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static void select(Object o) {
         deselect();
         selected = stage3d.getFromUserObject(o);
-        if (selected != null)
+        if (selected != null) {
             selected.setColor(Color.YELLOW);
+            cameras[ncam%cameras.length].position.set(selected.getTransform().getTranslation(new Vector3()).add(5, 5, 5));
+            cameras[ncam%cameras.length].lookAt(selected.getTransform().getTranslation(new Vector3()).add(0,0,2));
+            cameras[ncam%cameras.length].up.set(0,0,1);
+            cameras[ncam%cameras.length].update();
+        }
     }
 
     public static void deselect() {
-        if (selected != null)
+        if (selected != null) {
             selected.setColor(Color.WHITE);
+            cameras[ncam%cameras.length].position.set(0,-20,20);
+            cameras[ncam%cameras.length].lookAt(0,0,0);
+            cameras[ncam%cameras.length].up.set(0,0,1);
+            cameras[ncam%cameras.length].update();
+        }
         selected = null;
     }
 
