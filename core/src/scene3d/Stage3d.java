@@ -359,7 +359,7 @@ public class Stage3d extends InputAdapter implements Disposable {
 	}
 
     private Actor3d searchUserObject(Actor3d a, Object o) {
-        if (a.userData.equals(o))
+        if (a.userData != null && a.userData.equals(o))
             return a;
         if (a instanceof Group3d) {
             Actor3d result;
