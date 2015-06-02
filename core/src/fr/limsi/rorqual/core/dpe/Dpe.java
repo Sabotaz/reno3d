@@ -20,9 +20,11 @@ import com.badlogic.gdx.utils.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
@@ -66,6 +68,7 @@ public class Dpe {
     private String _typeBatiment; // "Maison" ou "Appartement"
     private String _positionAppartement; // "PremierEtage" ou "EtageIntermediaire" ou "DernierEtage"
     private String _typeEnergieConstruction; // "Electrique" ou "Autre"
+    private boolean _presenceLNC;
     private double _anneeConstruction;
     private double _SH;
     private double _NIV;
@@ -193,6 +196,11 @@ public class Dpe {
                 _DP_planAh+=_S*_U*_b*0.2;
                 break;
         }
+    }
+
+    public void calc_DP_Fenetre(){
+        _S = IfcHelper.getWindowSurface(_ifcModel,_window);
+        _DP_fen += _S*_U;
     }
 
     public void calcUmurInconnu(){
@@ -356,23 +364,271 @@ public class Dpe {
             transitionSlab();
     }
 
-    /*------------------------------------Lecteur .IFC------------------------------------------*/
+    public void calcUfenetre(){
+        switch (_materiauMenuiserie){
+
+            case "bois":
+                switch (_typeMenuiserie){
+
+                    case "battante":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 4.2;
+                                break;
+                            case "survitrage":
+                                _U = 2.9;
+                                break;
+                            case "double90":
+                                _U = 2.7;
+                                break;
+                            case "double90-01":
+                                _U = 2.55;
+                                break;
+                            case "double01":
+                                _U = 1.75;
+                                break;
+                            case "triple":
+                                _U = 1.24;
+                                break;
+                        }
+                        break;
+
+                    case "coulissante":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 4.2;
+                                break;
+                            case "survitrage":
+                                _U = 2.9;
+                                break;
+                            case "double90":
+                                _U = 2.7;
+                                break;
+                            case "double90-01":
+                                _U = 2.55;
+                                break;
+                            case "double01":
+                                _U = 1.75;
+                                break;
+                            case "triple":
+                                _U = 1.24;
+                                break;
+                        }
+                        break;
+
+                    case "toit":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 4.2;
+                                break;
+                            case "survitrage":
+                                _U = 3.15;
+                                break;
+                            case "double90":
+                                _U = 2.96;
+                                break;
+                            case "double90-01":
+                                _U = 2.9;
+                                break;
+                            case "double01":
+                                _U = 2.04;
+                                break;
+                            case "triple":
+                                _U = 1.46;
+                                break;
+                        }
+                        break;
+                }
+                break;
+
+            case "pvc":
+                switch (_typeMenuiserie){
+
+                    case "battante":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 3.90;
+                                break;
+                            case "survitrage":
+                                _U = 2.75;
+                                break;
+                            case "double90":
+                                _U = 2.45;
+                                break;
+                            case "double90-01":
+                                _U = 2.35;
+                                break;
+                            case "double01":
+                                _U = 1.70;
+                                break;
+                            case "triple":
+                                _U = 1.24;
+                                break;
+                        }
+                        break;
+
+                    case "coulissante":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 4.25;
+                                break;
+                            case "survitrage":
+                                _U = 3;
+                                break;
+                            case "double90":
+                                _U = 2.62;
+                                break;
+                            case "double90-01":
+                                _U = 2.52;
+                                break;
+                            case "double01":
+                                _U = 1.85;
+                                break;
+                            case "triple":
+                                _U = 1.39;
+                                break;
+                        }
+                        break;
+
+                    case "toit":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 3.90;
+                                break;
+                            case "survitrage":
+                                _U = 2.92;
+                                break;
+                            case "double90":
+                                _U = 2.70;
+                                break;
+                            case "double90-01":
+                                _U = 2.70;
+                                break;
+                            case "double01":
+                                _U = 2.01;
+                                break;
+                            case "triple":
+                                _U = 1.39;
+                                break;
+                        }
+                        break;
+                }
+                break;
+
+            case "met<2001":
+                switch (_typeMenuiserie){
+
+                    case "battante":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 4.95;
+                                break;
+                            case "survitrage":
+                                _U = 4;
+                                break;
+                            case "double90":
+                                _U = 3.70;
+                                break;
+                            case "double90-01":
+                                _U = 3.60;
+                                break;
+                        }
+                        break;
+
+                    case "coulissante":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 4.63;
+                                break;
+                            case "survitrage":
+                                _U = 3.46;
+                                break;
+                            case "double90":
+                                _U = 3.46;
+                                break;
+                            case "double90-01":
+                                _U = 3.36;
+                                break;
+                        }
+                        break;
+
+                    case "toit":
+                        switch (_typeVitrage){
+                            case "simple":
+                                _U = 4.95;
+                                break;
+                            case "survitrage":
+                                _U = 4.38;
+                                break;
+                            case "double90":
+                                _U = 4.01;
+                                break;
+                            case "double90-01":
+                                _U = 3.92;
+                                break;
+                        }
+                        break;
+                }
+                break;
+
+            case "met>=2001":
+                switch (_typeMenuiserie){
+                    case "battante":
+                        switch (_typeVitrage){
+                            case "double01":
+                                _U = 2.25;
+                                break;
+                            case "triple":
+                                _U = 1.88;
+                                break;
+                        }
+                        break;
+                    case "coulissante":
+                        switch (_typeVitrage){
+                            case "double01":
+                                _U = 2.18;
+                                break;
+                            case "triple":
+                                _U = 1.65;
+                                break;
+                        }
+                        break;
+                    case "toit":
+                        switch (_typeVitrage){
+                            case "double01":
+                                _U = 3.3;
+                                break;
+                            case "triple":
+                                _U = 3.15;
+                                break;
+                        }
+                        break;
+                }
+                break;
+        }
+    }
+
+    /*--------------------------------Lecteur/Writter .IFC---------------------------------------*/
+
     /*** On mémorise le premier mur contenu dans le model ***/
     public void takeFirstWall(){
         Iterator<IfcWallStandardCase> it = _wallStandardCaseCollection.iterator();
         _wall=it.next();
+        MainApplicationAdapter.select(_wall);
     }
 
     /*** On mémorise le premier slab contenu dans le model ***/
     public void takeFirstSlab(){
         Iterator<IfcSlab> it = _slabCollection.iterator();
         _slab = it.next();
+        MainApplicationAdapter.select(_slab);
     }
 
     /*** On mémorise la première window contenue dans le model ***/
     public void takeFirstWindow(){
         Iterator<IfcWindow> it = _windowCollection.iterator();
         _window = it.next();
+        MainApplicationAdapter.select(_window);
     }
 
     /*** On vérifie si on est au dernier mur du model ***/
@@ -465,14 +721,18 @@ public class Dpe {
         }
     }
 
+    /*---------------------------- Bloc de transition logique ----------------------------------*/
+
     /*** On regarde s'il reste des murs à traiter, sinon on traite les éléments suivants ***/
     public void transitionMur(){
         if (isLastWall()){
             takeFirstSlab();
+            MainApplicationAdapter.select(_slab);
             demandeSousPlancher();
         }
         else{
             takeNextWall();
+            MainApplicationAdapter.select(_wall);
             demandeDerriereMur();
         }
     }
@@ -481,10 +741,12 @@ public class Dpe {
     public void transitionSlab(){
         if (isLastSlab()){
             takeFirstWindow();
+            MainApplicationAdapter.select(_window);
             demandeMateriauFenetre();
         }
         else{
             takeNextSlab();
+            MainApplicationAdapter.select(_slab);
             demandeSousPlancher();
         }
     }
@@ -492,15 +754,17 @@ public class Dpe {
     /*** On regarde s'il reste des windows à traiter, sinon on traite les éléments suivants ***/
     public void transitionWindow(){
         if (isLastWindow()){
-
+            // TODO : continuer à partir de là ...
         }
         else{
             takeNextWindow();
+            MainApplicationAdapter.select(_window);
             demandeMateriauFenetre();
         }
     }
 
     /*---------------------------------------IHM------------------------------------------------*/
+
     /*** Ajout du message initial et du bouton startDpe ***/
     public void startDPE() {
 
@@ -901,13 +1165,28 @@ public class Dpe {
                     _typeEnergieConstruction = "Autre";
                 }
                 if (!_wallStandardCaseCollection.isEmpty()){
-//                    takeFirstWall();
-//                    demandeDerriereMur();
-                    takeFirstWindow();
-                    demandeMateriauFenetre();
+                    demandePresenceLNC();
                 }
             }
         }.button("Electrique", 1).button("Autre",2).show(_stage);
+        dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+    }
+
+    /*** Demande si le logement contient un LNC ***/
+    public void demandePresenceLNC(){
+        Dialog dialog = new Dialog(" Présence d'une local non chauffe ? ", _skin, "dialog") {
+            protected void result (Object object) {
+                if(object.equals(1)){
+                    _presenceLNC = true;
+                }
+                else
+                {
+                    _presenceLNC = false;
+                }
+                takeFirstWall();
+                demandeDerriereMur();
+            }
+        }.button("Oui", 1).button("Non", 2).show(_stage);
         dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
     }
 
@@ -916,27 +1195,45 @@ public class Dpe {
 
         /*** Qu'est-ce qu'il y a derrière ? ***/
         String name = _wall.getName().getDecodedValue();
-        Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere le mur : "+name, _skin, "dialog") {
-            protected void result (Object object) {
-                if(object.equals(1)){
-                    _derriere="ext";
+        if(IfcHelper.getPropertyTypeWall(_wall).equals("ext")){
+            Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere le mur : "+name, _skin, "dialog") {
+                protected void result (Object object) {
+                    if(object.equals(1)){
+                        _derriere="ext";
+                    }
+                    else if (object.equals(2)) {
+                        _derriere="lnc";
+                    }
+                    else if (object.equals(3)) {
+                        _derriere="ah";
+                    }
+                    else if (object.equals(4)) {
+                        _derriere="ver";
+                    }
+                    demandeIsolationMur();
                 }
-                else if (object.equals(2)) {
-                    _derriere="int";
-                }
-                else if (object.equals(3)) {
-                    _derriere="lnc";
-                }
-                else if (object.equals(4)) {
-                    _derriere="ah";
-                }
-                else if (object.equals(5)) {
-                    _derriere="ver";
-                }
-                demandeIsolationMur();
+            }.button("Exterieur", 1).button("Local non chauffe", 2).button("Autre habitation", 3).button("Veranda", 4).show(_stage);
+            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+        }
+        else if (IfcHelper.getPropertyTypeWall(_wall).equals("int")) {
+            if (_presenceLNC){
+                Dialog dialog = new Dialog(" Local non chauffe derriere ce mur ? : "+name, _skin, "dialog") {
+                    protected void result (Object object) {
+                        if(object.equals(1)){
+                            _derriere="lnc";
+                            demandeIsolationMur();
+                        }
+                        else if (object.equals(2)) {
+                            transitionMur();
+                        }
+                    }
+                }.button("oui", 1).button("non", 2).show(_stage);
+                dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+            }else{
+                transitionMur();
             }
-        }.button("Exterieur", 1).button("Interieur", 2).button("Local non chauffe", 3).button("Autre habitation", 4).button("Veranda", 5).show(_stage);
-        dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+
+        }
     }
 
     /*** Demande si le mur est isolé ***/
@@ -1205,7 +1502,7 @@ public class Dpe {
                     demandeTypeFenetre();
                 }
                 else if (object.equals(2)) {
-                    _materiauMenuiserie = "met>2001";
+                    _materiauMenuiserie = "met>=2001";
                     demandeTypeFenetre();
                 }
             }
@@ -1233,7 +1530,15 @@ public class Dpe {
             public void clicked(InputEvent event, float x, float y) {
                 _typeMenuiserie = "battante";
                 dialog.remove();
-                demandeTypeVitrage();
+                if (_materiauMenuiserie.equals("bois")||(_materiauMenuiserie.equals("pvc"))) {
+                    demandeTypeVitrage();
+                }
+                else if (_materiauMenuiserie.equals("met<2001")) {
+                    demandeTypeVitrageMetInf01();
+                }
+                else if (_materiauMenuiserie.equals("met>=2001")) {
+                    demandeTypeVitrageMetSup01();
+                }
             }
         });
 
@@ -1243,7 +1548,15 @@ public class Dpe {
             public void clicked(InputEvent event, float x, float y) {
                 _typeMenuiserie = "coulissante";
                 dialog.remove();
-                demandeTypeVitrage();
+                if (_materiauMenuiserie.equals("bois")||(_materiauMenuiserie.equals("pvc"))) {
+                    demandeTypeVitrage();
+                }
+                else if (_materiauMenuiserie.equals("met<2001")) {
+                    demandeTypeVitrageMetInf01();
+                }
+                else if (_materiauMenuiserie.equals("met>=2001")) {
+                    demandeTypeVitrageMetSup01();
+                }
             }
         });
 
@@ -1253,7 +1566,7 @@ public class Dpe {
         dialog.addActor(imageButton2);
     }
 
-    /*** Demande le type de vitrage d'une fenetre ***/
+    /*** Demande le type de vitrage d'une fenetre PVC ou bois ***/
     public void demandeTypeVitrage(){
         Dialog dialog = new Dialog(" Quel est le type de vitrage : ", _skin, "dialog") {
             protected void result (Object object) {
@@ -1272,13 +1585,58 @@ public class Dpe {
                 else if (object.equals(5)) {
                     _typeVitrage = "double01";
                 }
-//                calcUfenetre();
-//                calc_DP_Fenetre();
+                calcUfenetre();
+                calc_DP_Fenetre();
+                suite();
+                transitionWindow();
             }
         }.button("Simple vitrage", 1).button("Survitrage", 2).button("Double vitrage <1990", 3).button("Double vitrage 1990<...<2001", 4).button("Double vitrage >2001", 5).show(_stage);
         dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
     }
 
+    /*** Demande le type de vitrage d'une fenetre mettallique >2001 ***/
+    public void demandeTypeVitrageMetSup01(){
+        Dialog dialog = new Dialog(" Quel est le type de vitrage : ", _skin, "dialog") {
+            protected void result (Object object) {
+                if(object.equals(1)){
+                    _typeVitrage = "double01";
+                }
+                else if (object.equals(2)) {
+                    _typeVitrage = "triple";
+                }
+                calcUfenetre();
+                calc_DP_Fenetre();
+                suite();
+                transitionWindow();
+            }
+        }.button("Double vitrage >2001", 1).button("Triple vitrage", 2).show(_stage);
+        dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+    }
+
+    /*** Demande le type de vitrage d'une fenetre mettallique <2001***/
+    public void demandeTypeVitrageMetInf01(){
+        Dialog dialog = new Dialog(" Quel est le type de vitrage : ", _skin, "dialog") {
+            protected void result (Object object) {
+                if(object.equals(1)){
+                    _typeVitrage = "simple";
+                }
+                else if (object.equals(2)) {
+                    _typeVitrage = "survitrage";
+                }
+                else if (object.equals(3)) {
+                    _typeVitrage = "double90";
+                }
+                else if (object.equals(4)) {
+                    _typeVitrage = "double90-01";
+                }
+                calcUfenetre();
+                calc_DP_Fenetre();
+                suite();
+                transitionWindow();
+            }
+        }.button("Simple vitrage", 1).button("Survitrage", 2).button("Double vitrage <1990", 3).button("Double vitrage 1990<...<2001", 4).show(_stage);
+        dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+    }
 
 
     public void suite(){
