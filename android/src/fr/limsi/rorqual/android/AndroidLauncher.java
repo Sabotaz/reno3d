@@ -11,16 +11,21 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 public class AndroidLauncher extends AndroidApplication {
+    IfcModel ifcModel = new IfcModel();
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         try {
 
+            IfcHelper.initialiseIfcModel(ifcModel);
+            IfcHelper.createApartmentTest(ifcModel);
+            IfcHelper.saveIfcModel(ifcModel);
             InputStream inputStream = getAssets().open("data/ifc/example.ifc");
             String root = Environment.getExternalStorageDirectory().toString();
             File f = new File(root + "/example.ifc");

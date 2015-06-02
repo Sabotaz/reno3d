@@ -50,7 +50,6 @@ public class SceneGraphMaker {
                 } else { // root
                     stage.getRoot().addActor3d(node);
                 }
-
             } else if (placement instanceof IfcGridPlacement) {
                 IfcGridPlacement gridPlacement = (IfcGridPlacement) placement;
                 //ToDo
