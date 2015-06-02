@@ -1144,7 +1144,7 @@ public class IfcHelper {
         // Opening geometry with extruded area solid placement
         IfcDirection zLocalExtrusion = createDirection3D(0.0,0.0,1.0);
         IfcDirection xLocalExtrusion = createDirection3D(1.0,0.0,0.0);
-        IfcCartesianPoint centerOpening = createCartesianPoint3D(openingWidth/2,openingHeight/2,0.0);
+        IfcCartesianPoint centerOpening = createCartesianPoint3D(openingWidth / 2, openingHeight / 2, 0.0);
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
                 centerOpening, zLocalExtrusion, xLocalExtrusion);
         IfcDirection zLocalRectangle = createDirection2D(0.0, 1.0);
@@ -1672,7 +1672,7 @@ public class IfcHelper {
         IfcHelper.deleteObjectPlacement(ifcModel, window.getObjectPlacement());
 
         // Remove the opening
-        IfcHelper.deleteOpening(ifcModel,IfcHelper.getOpening(ifcModel,window.getName().getDecodedValue()));
+        IfcHelper.deleteOpening(ifcModel, IfcHelper.getOpening(ifcModel, window.getName().getDecodedValue()));
 
         // Remove the parameters of the window
         SET<IfcRelDefines> relDefinesSET = window.getIsDefinedBy_Inverse();
@@ -2057,14 +2057,14 @@ public class IfcHelper {
 
     // Permet de modifier la largeur d'une door
     public static void setDoorWidth (IfcModel ifcModel, IfcDoor door, double newWidth){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
         IfcHelper.setOpeningWidth(opening, newWidth);
         door.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
     }
 
     // Permet de modifier la hauteur d'une door
     public static void setDoorHeight (IfcModel ifcModel, IfcDoor door, double newHeight){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel,door);
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
         IfcHelper.setOpeningHeight(opening, newHeight);
         door.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
@@ -2190,7 +2190,41 @@ public class IfcHelper {
         addWall(ifcModel,"1st floor","WallInt M",pointM1,pointM2,0.07);
         addWall(ifcModel,"1st floor","WallInt N",pointN1,pointN2,0.07);
         addWall(ifcModel,"1st floor","WallInt O",pointO1,pointO2,0.07);
-        addWall(ifcModel,"1st floor","WallInt P",pointP1,pointP2,0.07);
+        addWall(ifcModel, "1st floor", "WallInt P", pointP1, pointP2, 0.07);
+        IfcWallStandardCase wallA = getWall(ifcModel,"WallExt A");
+        IfcWallStandardCase wallB = getWall(ifcModel,"WallExt B");
+        IfcWallStandardCase wallC = getWall(ifcModel,"WallExt C");
+        IfcWallStandardCase wallD = getWall(ifcModel,"WallExt D");
+        IfcWallStandardCase wallE = getWall(ifcModel,"WallExt E");
+        IfcWallStandardCase wallF = getWall(ifcModel,"WallExt F");
+        IfcWallStandardCase wallG = getWall(ifcModel,"WallExt G");
+        IfcWallStandardCase wallH = getWall(ifcModel,"WallExt H");
+        IfcWallStandardCase wallI = getWall(ifcModel,"WallExt I");
+        IfcWallStandardCase wallJ = getWall(ifcModel,"WallExt J");
+        IfcWallStandardCase wallK = getWall(ifcModel,"WallInt K");
+        IfcWallStandardCase wallL = getWall(ifcModel,"WallInt L");
+        IfcWallStandardCase wallM = getWall(ifcModel,"WallInt M");
+        IfcWallStandardCase wallN = getWall(ifcModel,"WallInt N");
+        IfcWallStandardCase wallO = getWall(ifcModel,"WallInt O");
+        IfcWallStandardCase wallP = getWall(ifcModel,"WallInt P");
+
+        addPropertyTypeWall(ifcModel,wallA,false);
+        addPropertyTypeWall(ifcModel,wallB,false);
+        addPropertyTypeWall(ifcModel,wallC,false);
+        addPropertyTypeWall(ifcModel,wallD,false);
+        addPropertyTypeWall(ifcModel,wallE,false);
+        addPropertyTypeWall(ifcModel,wallF,false);
+        addPropertyTypeWall(ifcModel,wallG,false);
+        addPropertyTypeWall(ifcModel,wallH,false);
+        addPropertyTypeWall(ifcModel,wallI,false);
+        addPropertyTypeWall(ifcModel,wallJ,false);
+        addPropertyTypeWall(ifcModel,wallK,true);
+        addPropertyTypeWall(ifcModel,wallL,true);
+        addPropertyTypeWall(ifcModel,wallM,true);
+        addPropertyTypeWall(ifcModel,wallN,true);
+        addPropertyTypeWall(ifcModel,wallO,true);
+        addPropertyTypeWall(ifcModel,wallP,true);
+
 
         // Create all the slabs
         LIST<IfcCartesianPoint> hall = new LIST<>();
@@ -2233,12 +2267,6 @@ public class IfcHelper {
         addFloor(ifcModel,"1st floor",salon);
 
         // Create all the doors
-        IfcWallStandardCase wallA = getWall(ifcModel,"WallExt A");
-        IfcWallStandardCase wallK = getWall(ifcModel,"WallInt K");
-        IfcWallStandardCase wallL = getWall(ifcModel,"WallInt L");
-        IfcWallStandardCase wallN = getWall(ifcModel,"WallInt N");
-        IfcWallStandardCase wallO = getWall(ifcModel,"WallInt O");
-        IfcWallStandardCase wallP = getWall(ifcModel,"WallInt P");
         addDoor(ifcModel,"door A",wallA,0.94,2.13,0.32);
         addDoor(ifcModel,"door K",wallK,0.90,2.04,0.37);
         addDoor(ifcModel,"door L",wallL,0.90,2.04,0.16);
@@ -2247,10 +2275,6 @@ public class IfcHelper {
         addDoor(ifcModel,"door P",wallP,0.80,2.04,0.085);
 
         // Create all the windows
-        IfcWallStandardCase wallD = getWall(ifcModel,"WallExt D");
-        IfcWallStandardCase wallF = getWall(ifcModel,"WallExt F");
-        IfcWallStandardCase wallI = getWall(ifcModel,"WallExt I");
-        IfcWallStandardCase wallG = getWall(ifcModel,"WallExt G");
         addWindow(ifcModel,"window D",wallD,1.00,1.50,1.47,0.50);
         addWindow(ifcModel,"window F",wallF,1.00,1.50,1.395,0.50);
         addWindow(ifcModel,"window I1",wallI,1.00,1.50,3.75,0.50);
@@ -2290,4 +2314,157 @@ public class IfcHelper {
         }
         return surfaceHabitable;
     }
+
+    // Permet d'ajouter une information d'isolation sur un objet
+    public static void addPropertyTypeIsolation(IfcModel ifcModel, IfcProduct product,String typeIsolation){
+
+        boolean hasProperties=false;
+        boolean hasSameProperty=false;
+
+        // On créer la property
+        IfcIdentifier nameProperty = new IfcIdentifier("IsolationType",true);
+        IfcValue valueProperty = new IfcIdentifier(typeIsolation,true);
+        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
+
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null){
+            for (IfcRelDefines actualRelDefines : relDefinesSET){
+                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet){
+                            hasProperties=true;
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET){
+                                if (actualProperty instanceof IfcPropertySingleValue){
+                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
+                                        hasSameProperty=true;
+                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
+                                    }
+                                }
+                            }
+                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
+                                propertySET.add(property);
+                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
+                                ifcModel.addIfcObject(property);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
+        if (!hasProperties){
+            SET<IfcProperty> propertySET = new SET<>();
+            propertySET.add(property);
+            IfcPropertySet propertySet = new IfcPropertySet(
+                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    new IfcLabel("DPE-Properties",true),null,propertySET);
+            SET<IfcObject> objectSET = new SET<>();
+            objectSET.add(product);
+            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    null,null,objectSET,propertySet);
+            ifcModel.addIfcObject(propertySet);
+            ifcModel.addIfcObject(property);
+            ifcModel.addIfcObject(relDefinesByProperties);
+        }
+    }
+
+    // Permet d'ajouter une information sur le type de mur
+    public static void addPropertyTypeWall(IfcModel ifcModel, IfcWallStandardCase wall,boolean isInterior){
+
+        boolean hasProperties=false;
+        boolean hasSameProperty=false;
+
+        // On créer la property
+        IfcIdentifier nameProperty = new IfcIdentifier("isInterior",true);
+        IfcValue valueProperty = new IfcBoolean(isInterior);
+        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
+
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = wall.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null){
+            for (IfcRelDefines actualRelDefines : relDefinesSET){
+                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet){
+                            hasProperties=true;
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET){
+                                if (actualProperty instanceof IfcPropertySingleValue){
+                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
+                                        hasSameProperty=true;
+                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
+                                    }
+                                }
+                            }
+                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
+                                propertySET.add(property);
+                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
+                                ifcModel.addIfcObject(property);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
+        if (!hasProperties){
+            SET<IfcProperty> propertySET = new SET<>();
+            propertySET.add(property);
+            IfcPropertySet propertySet = new IfcPropertySet(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    new IfcLabel("DPE-Properties",true),null,propertySET);
+            SET<IfcObject> objectSET = new SET<>();
+            objectSET.add(wall);
+            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    null,null,objectSET,propertySet);
+            ifcModel.addIfcObject(propertySet);
+            ifcModel.addIfcObject(property);
+            ifcModel.addIfcObject(relDefinesByProperties);
+        }
+    }
+
+    // Permet de récupérer le type de wall (ext ou int)
+    public static String getPropertyTypeWall(IfcWallStandardCase wall) {
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = wall.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null) {
+            for (IfcRelDefines actualRelDefines : relDefinesSET) {
+                if (actualRelDefines instanceof IfcRelDefinesByProperties) { // des propriétés éxistent déja sur l'objet
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET) {
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet) {
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET) {
+                                if (actualProperty instanceof IfcPropertySingleValue) {
+                                    if (actualProperty.getName().getDecodedValue().equals("isInterior")) { // notre propriétée existe déja
+                                        IfcValue value = ((IfcPropertySingleValue) actualProperty).getNominalValue(); // On change la valeur de la propriété qui existe déja
+                                        if (value instanceof IfcBoolean){
+                                            if (((IfcBoolean) value).value==true){
+                                                return "int";
+                                            }else{
+                                                return "ext";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "null";
+    }
+
 }
