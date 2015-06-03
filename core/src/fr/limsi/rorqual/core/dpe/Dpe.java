@@ -720,6 +720,7 @@ public class Dpe implements EventListener {
                 _wall=it.next();
             }
         }
+        MainApplicationAdapter.select(_wall);
     }
 
     /*** On prend le slab suivant du model ***/
@@ -730,6 +731,7 @@ public class Dpe implements EventListener {
                 _slab=it.next();
             }
         }
+        MainApplicationAdapter.select(_slab);
     }
 
     /*** On prend la window suivante du model ***/
@@ -740,6 +742,7 @@ public class Dpe implements EventListener {
                 _window=it.next();
             }
         }
+        MainApplicationAdapter.select(_window);
     }
 
     /*---------------------------- Bloc de transition logique ----------------------------------*/
@@ -1196,7 +1199,6 @@ public class Dpe implements EventListener {
                     //demandeSousPlancher();
 //                    takeFirstWindow();
 //                    demandeMateriauFenetre();
-                    demandePresenceLNC();
                 }
             }
         }.button("Electrique", 1).button("Autre",2).show(_stage);
@@ -1231,10 +1233,8 @@ public class Dpe implements EventListener {
     /*** Demande ce qui se trouve derriere un mur ***/
     public void demandeDerriereMur(){
 
-        /*** Qu'est-ce qu'il y a derrière ? ***/
-        String name = _wall.getName().getDecodedValue();
         if(IfcHelper.getPropertyTypeWall(_wall).equals("ext")){
-            Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere le mur : "+name, _skin, "dialog") {
+            Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur : ", _skin, "dialog") {
                 protected void result (Object object) {
                     if(object.equals(1)){
                         _derriere="ext";
@@ -1252,25 +1252,8 @@ public class Dpe implements EventListener {
                 }
             }.button("Exterieur", 1).button("Local non chauffe", 2).button("Autre habitation", 3).button("Veranda", 4).show(_stage);
             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-        }
-        else if (IfcHelper.getPropertyTypeWall(_wall).equals("int")) {
-            if (_presenceLNC){
-                Dialog dialog = new Dialog(" Local non chauffe derriere ce mur ? : "+name, _skin, "dialog") {
-                    protected void result (Object object) {
-                        if(object.equals(1)){
-                            _derriere="lnc";
-                            demandeIsolationMur();
-                        }
-                        else if (object.equals(2)) {
-                            transitionMur();
-                        }
-                    }
-                }.button("oui", 1).button("non", 2).show(_stage);
-                dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-            }else{
+        }else{
                 transitionMur();
-            }
-
         }
     }
 
@@ -1366,7 +1349,32 @@ public class Dpe implements EventListener {
     /*** Demande ce qui se trouve sous un plancher ***/
     public void demandeSousPlancher(){
 
-        /*** Qu'est-ce qu'il y a dessous ? ***/
+        // "PremierEtage" ou "EtageIntermediaire" ou "DernierEtage"
+        if(_typeBatiment.equals("Appartement")){
+            if(_positionAppartement.equals("EtageIntermediaire") || _positionAppartement.equals("DernierEtage")){
+                Dialog dialog = new Dialog(" Qu'est-ce qu'il y a sous ce plancher : ", _skin, "dialog") {
+                    protected void result (Object object) {
+                        if(object.equals(1)){
+                            _derriere="vs";
+                            demandeIsolationPlancher();
+                        }
+                        else if (object.equals(2)) {
+                            _derriere="ss";
+                            demandeIsolationPlancher();
+                        }
+                        else if (object.equals(3)) {
+                            _derriere="tp";
+                            calcUplanTp();
+                        }
+                        else if (object.equals(4)) {
+                            _derriere="ah";
+                            demandeIsolationPlancher();
+                        }
+                    }
+                }.button("Vide-sanitaire", 1).button("Sous-sol", 2).button("Terre plein", 3).button("Autre habitation", 4).show(_stage);
+                dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+            }
+        }
         Dialog dialog = new Dialog(" Qu'est-ce qu'il y a sous ce plancher : ", _skin, "dialog") {
             protected void result (Object object) {
                 if(object.equals(1)){
@@ -1694,6 +1702,7 @@ public class Dpe implements EventListener {
         System.out.println("DP plancher ss : " + _DP_planSs);
         System.out.println("DP plancher tp : " + _DP_planTp);
         System.out.println("DP plancher vs : " + _DP_planVs);
+        System.out.println("DP plancher vs : " + _DP_fen);
         System.out.println("Surface tampon : " + _S);
         System.out.println("U tampon : " + _U);
         System.out.println("Annee d'isolation : " + _anneeIsolation);
