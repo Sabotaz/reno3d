@@ -19,9 +19,14 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EventListener;
 import java.util.Iterator;
 import java.util.List;
 
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.event.EventType;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
@@ -34,7 +39,7 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 /**
  * Created by ricordeau on 20/05/15.
  */
-public class Dpe {
+public class Dpe implements EventListener {
 
     /*** Attributs liés au model IFC***/
     private IfcModel _ifcModel;
@@ -105,9 +110,6 @@ public class Dpe {
     private double _PT;
     private double _DR;
 
-    /*** Constructeur par défaut ***/
-    public Dpe () {}
-
     /*** Autres constructeurs ***/
     public Dpe (Stage stage) {
         _fontBlack = new BitmapFont(Gdx.files.internal("data/font/black.fnt"));
@@ -164,6 +166,25 @@ public class Dpe {
         _S = IfcHelper.getWallSurface(_wall);
         _b=1;
         switch (_derriere){
+            case "ext":
+                _DP_murExt+=_S*_U;
+                break;
+            case "lnc":
+                _DP_murLnc+=_S*_U*_b;
+                break;
+            case "ah":
+                _DP_murAh+=_S*_U*0.2;
+                break;
+            case "ver":
+                _DP_murVer+=_S*_U*_b;
+                break;
+        }
+    }
+
+    public void calc_DP_Mur(IfcWallStandardCase wall, String derriere){
+        _S = IfcHelper.getWallSurface(wall);
+        _b=1;
+        switch (derriere){
             case "ext":
                 _DP_murExt+=_S*_U;
                 break;
@@ -1165,11 +1186,28 @@ public class Dpe {
                     _typeEnergieConstruction = "Autre";
                 }
                 if (!_wallStandardCaseCollection.isEmpty()){
+                    takeFirstWall();
+
+                    while (!isLastWall()){
+                        demandeDerriereMur2(_wall);
+                        takeNextWall();
+                    }
+                    //takeFirstSlab();
+                    //demandeSousPlancher();
+//                    takeFirstWindow();
+//                    demandeMateriauFenetre();
                     demandePresenceLNC();
                 }
             }
         }.button("Electrique", 1).button("Autre",2).show(_stage);
         dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+    }
+
+    public void demandeDerriereMur2(IfcWallStandardCase wall) {
+        DpeEvent eventType = DpeEvent.DERRIERE_MUR;
+        Event event = new Event(eventType, wall);
+
+        EventManager.getInstance().put(Channel.DPE, event);
     }
 
     /*** Demande si le logement contient un LNC ***/
@@ -1661,4 +1699,23 @@ public class Dpe {
         System.out.println("Annee d'isolation : " + _anneeIsolation);
         System.out.println("************************************************************************************");
     }
+
+    public void notify(Channel c, Event e) {
+
+        EventType eventType = e.getEventType();
+        if (c == Channel.DPE)
+            if (eventType instanceof DpeEvent) {
+                DpeEvent event = (DpeEvent) eventType;
+                Object o = e.getUserObject();
+                switch (event) {
+                    case DERRIERE_MUR_RESPONSE:
+                        Object items[] = (Object[]) o;
+                        IfcWallStandardCase wall = (IfcWallStandardCase) items[0];
+                        String derriere = (String) items[1];
+                        calc_DP_Mur(wall, derriere);
+                }
+            }
+    }
+
+
 }
