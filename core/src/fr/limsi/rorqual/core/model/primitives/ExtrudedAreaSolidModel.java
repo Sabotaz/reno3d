@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import eu.mihosoft.vrl.v3d.CSG;

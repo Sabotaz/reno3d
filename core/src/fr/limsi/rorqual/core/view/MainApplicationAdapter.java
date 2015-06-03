@@ -29,6 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
+import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
 import fr.limsi.rorqual.core.model.IfcHolder;
@@ -134,6 +136,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 dpe.startDPE();
             }
         });
+        new DpeUi(stageMenu);
         stageMenu.addActor(buttonDPE);
 	}
 
@@ -182,6 +185,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public void dispose() {
         fontBlack.dispose();
         fontWhite.dispose();
+        EventManager.getInstance().stop();
     }
 
     @Override
@@ -274,8 +278,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         if (selected != null) {
             selected.setColor(Color.YELLOW);
             cameras[ncam%cameras.length].position.set(selected.getTransform().getTranslation(new Vector3()).add(5, 5, 5));
-            cameras[ncam%cameras.length].lookAt(selected.getTransform().getTranslation(new Vector3()).add(0,0,2));
-            cameras[ncam%cameras.length].up.set(0,0,1);
+            cameras[ncam%cameras.length].lookAt(selected.getTransform().getTranslation(new Vector3()).add(0, 0, 2));
+            cameras[ncam%cameras.length].up.set(0, 0, 1);
             cameras[ncam%cameras.length].update();
         }
     }
@@ -283,9 +287,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static void deselect() {
         if (selected != null) {
             selected.setColor(Color.WHITE);
-            cameras[ncam%cameras.length].position.set(0,-20,20);
-            cameras[ncam%cameras.length].lookAt(0,0,0);
-            cameras[ncam%cameras.length].up.set(0,0,1);
+            cameras[ncam%cameras.length].position.set(0, -20, 20);
+            cameras[ncam%cameras.length].lookAt(0, 0, 0);
+            cameras[ncam%cameras.length].up.set(0, 0, 1);
             cameras[ncam%cameras.length].update();
         }
         selected = null;

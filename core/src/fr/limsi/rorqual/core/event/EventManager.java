@@ -66,4 +66,8 @@ public class EventManager {
         t.start();
     }
 
+    public void stop() {
+        running = false;
+    }
+
 }
