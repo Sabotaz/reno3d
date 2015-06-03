@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.view;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,7 +22,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class LightShader extends BaseShader {
 
 
-    public final static String vertexShader = "attribute vec4 a_position;    \n" +
+    public final static String vertexShader = //"precision highp float; \n" +
+            "attribute vec4 a_position;    \n" +
             "attribute vec3 a_normal;    \n" +
             "uniform mat4 u_worldTrans;\n" +
             "uniform mat4 u_projTrans;\n" +
@@ -35,7 +37,8 @@ public class LightShader extends BaseShader {
             "   v = vec3(u_projTrans * u_worldTrans * a_position);       \n" +
             "   N = normalize(u_normal_matrix * a_normal);\n"      +
             "}                            \n" ;
-    public final static String fragmentShader = "uniform vec4 u_color;\n" +
+    public final static String fragmentShader = //"precision highp float; \n" +
+            "uniform vec4 u_color;\n" +
             "uniform vec4 u_ambient_color;\n" +
             "uniform vec4 u_light_color;\n" +
             "uniform vec3 u_light_direction;\n" +
@@ -103,7 +106,17 @@ public class LightShader extends BaseShader {
         //    Gdx.app.log("ShaderTest", "Compiling test shader without u_color uniform");
 
         //String prefix = withColor ? "#define HasDiffuseColor\n" : "";
-        program = new ShaderProgram(vertexShader, /*prefix +*/ fragmentShader);
+        String vs_prefix = "";
+        String fs_prefix = "";
+        switch(Gdx.app.getType()) {
+            case Android:
+                vs_prefix += "precision highp float; \n";
+                fs_prefix += "precision highp float; \n";
+                break;
+            case Desktop:
+                break;
+        }
+        program = new ShaderProgram(vs_prefix + vertexShader, fs_prefix + fragmentShader);
 
         if (!program.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader " + program.getLog());
         String log = program.getLog();
