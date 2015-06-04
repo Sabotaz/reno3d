@@ -5,5 +5,6 @@ package fr.limsi.rorqual.core.event;
  */
 public enum Channel {
     DPE,
+    UI,
     ;
 }

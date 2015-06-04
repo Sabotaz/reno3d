@@ -28,7 +28,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
@@ -277,6 +280,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         deselect();
         selected = stage3d.getFromUserObject(o);
         if (selected != null) {
+            EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
             selected.setColor(Color.YELLOW);
             cameras[ncam%cameras.length].position.set(selected.getTransform().getTranslation(new Vector3()).add(5, 5, 5));
             cameras[ncam%cameras.length].lookAt(selected.getTransform().getTranslation(new Vector3()).add(0, 0, 2));
@@ -294,6 +298,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             cameras[ncam%cameras.length].update();
         }
         selected = null;
+        EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
     }
 
     @Override
@@ -304,6 +309,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 selected.setColor(Color.WHITE);
             selected = stage3d.getObject(screenX, screenY);
             if (selected != null) {
+                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected));
                 System.out.println("TOUCH: " + selected.userData);
                 selected.setColor(Color.YELLOW);
             }
