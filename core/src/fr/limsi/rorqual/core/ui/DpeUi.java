@@ -33,9 +33,9 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
  */
 public class DpeUi implements EventListener {
 
-    private Skin skin;
     private Stage stage;
-    private Texture textureStartDpe;
+    private Skin skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
+    private Texture textureStartDpe = new Texture(Gdx.files.internal("data/img/dpe/StartDpe.png"));
     private Texture textureTypeBatiment1 = new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/maison.png"));
     private Texture textureTypeBatiment2 = new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/appt.png"));
     private Texture textureNbNiveau1 = new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/plainPied.png"));
@@ -57,9 +57,7 @@ public class DpeUi implements EventListener {
 
     public DpeUi(Stage stage2d) {
         EventManager.getInstance().addListener(Channel.DPE, this);
-        skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
         stage = stage2d;
-        textureStartDpe = new Texture(Gdx.files.internal("data/img/dpe/StartDpe.png"));
     }
     Semaphore s = new Semaphore(1,true);
 
