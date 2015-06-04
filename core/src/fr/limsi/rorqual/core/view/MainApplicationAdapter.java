@@ -128,6 +128,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         state = new DpeStateUpdater(stage3d);
 
+        new DpeUi(stageMenu);
+        dpe = new Dpe(stageMenu);
+
         /*** Ajout du bouton DPE ***/
         buttonDPE = new TextButton("DPE", textButtonStyle);
         buttonDPE.setName("DPE");
@@ -136,11 +139,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
-                dpe = new Dpe(stageMenu);
                 dpe.startDPE();
             }
         });
-        new DpeUi(stageMenu);
         stageMenu.addActor(buttonDPE);
 	}
 

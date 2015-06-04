@@ -10,6 +10,10 @@ public class Event {
 
     public Event() {}
 
+    public Event(EventType t) {
+        setEventType(t);
+    }
+
     public Event(EventType t, Object o) {
         setEventType(t);
         setUserObject(o);
