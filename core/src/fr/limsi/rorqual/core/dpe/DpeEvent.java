@@ -25,5 +25,7 @@ public enum DpeEvent implements EventType {
     DERRIERE_MUR,
     DERRIERE_MUR_RESPONSE,
     DPE_STATE_CHANGED,
+    DPE_STATE_REQUIRED,
+    DPE_REQUEST,
     ;
 }
