@@ -20,15 +20,14 @@ import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
+import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
@@ -53,6 +52,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Environment environnement;
     private ShaderProvider shaderProvider;
     private Dpe dpe;
+    private DpeStateUpdater state;
 
     @Override
 	public void create () {
@@ -123,14 +123,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         });
         stageMenu.addActor(buttonExit);
 
+        state = new DpeStateUpdater(stage3d);
+
         /*** Ajout du bouton DPE ***/
         buttonDPE = new TextButton("DPE", textButtonStyle);
         buttonDPE.setName("DPE");
         buttonDPE.setSize(100, 40);
         buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
         buttonDPE.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y)
-            {
+            public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
                 dpe = new Dpe(stageMenu);
                 dpe.startDPE();

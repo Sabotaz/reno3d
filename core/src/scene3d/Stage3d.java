@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SnapshotArray;
 
+import java.util.HashMap;
+
 public class Stage3d extends InputAdapter implements Disposable {
 	private float width, height;
 	private final ModelBatch modelBatch;
@@ -359,8 +361,11 @@ public class Stage3d extends InputAdapter implements Disposable {
 	}
 
     private Actor3d searchUserObject(Actor3d a, Object o) {
-        if (a.userData != null && a.userData.equals(o))
-            return a;
+        if (a.userData != null ) {
+            userObjects.put(a.userData, a);
+            if (a.userData.equals(o))
+                return a;
+        }
         if (a instanceof Group3d) {
             Actor3d result;
             for (Actor3d child : ((Group3d)a).getChildren()) {
@@ -371,7 +376,19 @@ public class Stage3d extends InputAdapter implements Disposable {
         return null;
     }
 
+    HashMap<Object, Actor3d> userObjects = new HashMap<Object, Actor3d>();
+
     public Actor3d getFromUserObject(Object o) {
+        if (userObjects.containsKey(o)) {
+            Actor3d a =  userObjects.get(o);
+            if (a.userData.equals(o))
+                return a;
+            else {
+                userObjects.remove(o);
+                if (a.userData != null)
+                    userObjects.put(a.userData, a);
+            }
+        }
         return searchUserObject(this.getRoot(), o);
     }
 }
