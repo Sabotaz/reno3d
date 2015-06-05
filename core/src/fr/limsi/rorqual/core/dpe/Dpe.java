@@ -6,8 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import fr.limsi.rorqual.core.event.Channel;
@@ -68,7 +70,6 @@ public class Dpe implements EventListener {
     private double FOR;
     private double Per;
     private double PER;
-    private Semaphore semaphore;
 
     // 1.Expression du besoin de chauffage
     private double BV;
@@ -114,7 +115,149 @@ public class Dpe implements EventListener {
 
     /*---------------------------------Calculateur DPE-------------------------------------------*/
 
+    public void calc_BV() {
+        BV = GV*(1-F);
+    }
 
+    public void calc_GV() {
+        GV = DP_murExt + DP_murLnc + DP_murAh + DP_murVer + DP_toiTer + DP_toiCp + DP_toiCa + DP_planVs + DP_planTp + DP_planSs + DP_planAh + DP_fen + DP_pfen + DP_fenVer + DP_pfenVer + DP_portExt + DP_portLnc + DP_portVer + PT + DR;
+    }
+
+    public void calc_MIT2(){
+        if (FOR == 4.12){ // Forme carré ou rectangulaire de la maison
+            if (MIT == 1){MIT2=1;}
+            else if (MIT == 0.8){MIT2=0.8;}
+            else if (MIT == 0.7){MIT2=0.675;}
+            else if (MIT == 0.5){MIT2=0.5;}
+            else if (MIT == 0.35){MIT2=0.35;}
+        }
+        else if (FOR == 4.81){ // Forme allongé de la maison
+            if (MIT == 1){MIT2=1;}
+            else if (MIT == 0.8){MIT2=0.9;}
+            else if (MIT == 0.7){MIT2=0.725;}
+            else if (MIT == 0.5){MIT2=0.55;}
+            else if (MIT == 0.35){MIT2=0.4;}
+        }
+        else if (FOR == 5.71){ // Forme développé de la maison
+            if (MIT == 1){MIT2=1;}
+            else if (MIT == 0.8){MIT2=0.9;}
+            else if (MIT == 0.7){MIT2=0.75;}
+            else if (MIT == 0.5){MIT2=0.7;}
+            else if (MIT == 0.35){MIT2=0.55;}
+        }
+    }
+
+    public double getUmurInconnu(){
+        double u=-1;
+        if (anneeConstruction<1975){
+            u = 2.5;
+        }
+        else if (anneeConstruction>=1975 && anneeConstruction<=1977){
+            u = 1;
+        }
+        else if (anneeConstruction>=1978 && anneeConstruction<=1982){
+            if(typeEnergieConstruction.equals(typeEnergieConstructionEnum.ELECTRIQUE)){
+                u=0.8;
+            }
+            else{
+                u=1;
+            }
+        }
+        else if (anneeConstruction>=1983 && anneeConstruction<=1988){
+            if(typeEnergieConstruction.equals(typeEnergieConstructionEnum.ELECTRIQUE)){
+                u=0.7;
+            }
+            else{
+                u=0.8;
+            }
+        }
+        else if (anneeConstruction>=1989 && anneeConstruction<=2000){
+            if(typeEnergieConstruction.equals(typeEnergieConstructionEnum.ELECTRIQUE)){
+                u=0.45;
+            }
+            else{
+                u=0.5;
+            }
+        }
+        else if (anneeConstruction>=2001 && anneeConstruction<=2005){
+            u = 0.4;
+        }
+        else if (anneeConstruction>=2006 && anneeConstruction<=2012){
+            u = 0.35;
+        }
+        else if (anneeConstruction>2012){
+            u = 0.2;
+        }
+        return u;
+    }
+
+    public double getUmur(boolean isAnneeIsolationConnue,double anneeIsolation){
+        double u=-1;
+        if (isAnneeIsolationConnue && anneeIsolation!=anneeConstruction){
+            if (anneeIsolation<1983){
+                u = 0.82;
+            }
+            else if (anneeIsolation>=1983 && anneeIsolation<=1988){
+                u = 0.75;
+            }
+            else if (anneeIsolation>=1989 && anneeIsolation<=2000){
+                u = 0.48;
+            }
+            else if (anneeIsolation>=2001 && anneeIsolation<=2005){
+                u = 0.42;
+            }
+            else if (anneeIsolation>=2006 && anneeIsolation<=2012){
+                u = 0.36;
+            }
+            else if (anneeIsolation>2012){
+                u = 0.24;
+            }
+        }
+        else if (isAnneeIsolationConnue && anneeIsolation==anneeConstruction){
+            if (anneeConstruction<1974){
+                u=0.8;
+            }else{
+                u=this.getUmurInconnu();
+            }
+        }
+        else if(!isAnneeIsolationConnue){
+            u=this.getUmurInconnu();
+        }
+        return u;
+    }
+
+    public void actualiseDP_mur(IfcWallStandardCase wall, String derriere,String isole,boolean isAnneeIsolationConnue,double anneeIsolation){
+        double surface=IfcHelper.getWallSurface(wall);
+        double u=0,b=0;
+        switch (isole){
+            case "oui":
+                u=getUmur(isAnneeIsolationConnue,anneeIsolation);
+                break;
+            case "non":
+                u=2.5;
+                break;
+            case "inconnue":
+                u=getUmurInconnu();
+                break;
+        }
+        switch (derriere){
+            case "ext":
+                DP_murExt += surface*u;
+                break;
+            case "lnc":
+                if (isole=="non"){b=0.95;}
+                else {b=0.85;}
+                DP_murLnc += surface*u*b;
+                break;
+            case "ah":
+                DP_murAh += surface*u*0.2;
+                break;
+            case "ver":
+                DP_murVer += surface*u*0.6;
+                break;
+        }
+        log();
+    }
 
     /*-------------------------------Reader/Writter .IFC-----------------------------------------*/
 
@@ -161,6 +304,18 @@ public class Dpe implements EventListener {
 
     /*---------------------------------Blocs logiques--------------------------------------------*/
 
+    public void transitionMur(IfcWallStandardCase wall){
+        if (isLastWall(wall)){
+//            takeFirstSlab();
+//            MainApplicationAdapter.select(_slab);
+//            demandeSousPlancher();
+        }
+        else{
+            wall = getNextWall(wall);
+            MainApplicationAdapter.select(wall);
+            demandeDerriereMur(wall);
+        }
+    }
 
     /*---------------------------------------IHM------------------------------------------------*/
 
@@ -198,6 +353,7 @@ public class Dpe implements EventListener {
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
     }
+
     /*** Demande la la position d'un appartement ***/
     public void demandePositionAppartement() {
         DpeEvent eventType = DpeEvent.POSITION_APPARTEMENT;
@@ -206,9 +362,9 @@ public class Dpe implements EventListener {
     }
 
     /*** Demande l'année de construction d'une maison ou d'un appartement ***/
-    public void demandeAnneeConstruction(String initialText) {
+    public void demandeAnneeConstruction() {
         DpeEvent eventType = DpeEvent.ANNEE_CONSTRUCTION;
-        Event event = new Event(eventType,initialText);
+        Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
     }
 
@@ -221,8 +377,25 @@ public class Dpe implements EventListener {
 
     /*** Demande ce qui se trouve derrière un mur ***/
     public void demandeDerriereMur(IfcWallStandardCase wall) {
-        DpeEvent eventType = DpeEvent.DERRIERE_MUR;
-        Event event = new Event(eventType,wall);
+        if (IfcHelper.getPropertyTypeWall(wall)=="ext"){
+            DpeEvent eventType = DpeEvent.DERRIERE_MUR;
+            Event event = new Event(eventType,wall);
+            EventManager.getInstance().put(Channel.DPE, event);
+        }else{
+            transitionMur(wall);
+        }
+    }
+
+    /*** Demande isolation mur ***/
+    public void demandeIsolationMur(Object[] tab) {
+        DpeEvent eventType = DpeEvent.ISOLATION_MUR;
+        Event event = new Event(eventType,tab);
+        EventManager.getInstance().put(Channel.DPE, event);
+    }
+
+    public void demandeDateIsolation(Object[] tab) {
+        DpeEvent eventType = DpeEvent.DATE_ISOLATION_MUR;
+        Event event = new Event(eventType,tab);
         EventManager.getInstance().put(Channel.DPE, event);
     }
 
@@ -231,9 +404,15 @@ public class Dpe implements EventListener {
         System.out.println("Type d'energie a la construction : " + typeEnergieConstruction);
         System.out.println("Type de batiment : " + typeBatiment);
         System.out.println("Annee de construction : " + anneeConstruction);
-        System.out.println("NIV : " + NIV);
-        System.out.println("MIT : " + MIT);
-        System.out.println("FOR : " + FOR);
+        if(typeBatiment==typeBatimentEnum.APPARTEMENT){
+            System.out.println("PositionAppt : " + positionAppartement);
+        }
+        else{
+            System.out.println("NIV : " + NIV);
+            System.out.println("MIT : " + MIT);
+            System.out.println("MIT2 : " + MIT2);
+            System.out.println("FOR : " + FOR);
+        }
         System.out.println("Surface habitable : " + SH);
         System.out.println("DP mur ext : " + DP_murExt);
         System.out.println("DP mur ah : " + DP_murAh);
@@ -290,8 +469,9 @@ public class Dpe implements EventListener {
 
                     case MITOYENNETE_RESPONSE: {
                         MIT = (double) o;
+                        this.calc_MIT2();
                         stage.getActors().pop();
-                        this.demandeAnneeConstruction("ex: 1998");
+                        this.demandeAnneeConstruction();
                         break;
                     }
 
@@ -305,28 +485,14 @@ public class Dpe implements EventListener {
                             positionAppartement=positionAppartementEnum.DERNIER_ETAGE;
                         }
                         stage.getActors().pop();
-                        this.demandeAnneeConstruction("ex: 1998");
+                        this.demandeAnneeConstruction();
                         break;
                     }
 
                     case ANNEE_CONSTRUCTION_RESPONSE: {
-                        String reponse = (String) o;
-                        try{
-                            double annee = Double.parseDouble(reponse);
-                            if (annee < 1700){
-                                this.demandeAnneeConstruction("Annee saisie < 1700");
-                            }
-                            else if (annee > 2015){
-                                this.demandeAnneeConstruction("Annee saisie > 2015");
-                            }
-                            else {
-                                anneeConstruction = annee;
-                                this.demandeTypeEnergieConstruction();
-                            }
-                        }
-                        catch (NumberFormatException ev){
-                            this.demandeAnneeConstruction("Saisie invalide");
-                        }
+                        anneeConstruction = (double) o;
+                        stage.getActors().pop();
+                        this.demandeTypeEnergieConstruction();
                         break;
                     }
 
@@ -339,22 +505,49 @@ public class Dpe implements EventListener {
                         }
                         if (!wallStandardCaseCollection.isEmpty()) {
                             IfcWallStandardCase wall = getFirstWall();
-                            demandeDerriereMur(wall);
+                            this.demandeDerriereMur(wall);
                         }else{
-                            // TODO il n'y a pas de murs dans le model, on fait quoi ???
+                            // TODO il n'y a pas de murs dans le model : on fait quoi ???
                         }
                         break;
                     }
 
                     case DERRIERE_MUR_RESPONSE:{
-                        Object items[] = (Object[]) o;
+                        Object[] items = (Object[]) o;
+                        this.demandeIsolationMur(items);
+                        break;
+                    }
+
+                    case ISOLATION_MUR_RESPONSE:{
+                        Object[] items = (Object[]) o;
                         IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
                         String derriere = (String)items[1];
-                        if (!isLastWall(wall)){
-                            wall=getNextWall(wall);
-                            demandeDerriereMur(wall);
+                        String isole = (String)items[2];
+                        if (isole=="oui"){
+                            this.demandeDateIsolation(items);
+                        }else {
+                            this.actualiseDP_mur(wall, derriere, isole, false, -1);
+                            this.transitionMur(wall);
                         }
+                        break;
                     }
+
+                    case DATE_ISOLATION_MUR_RESPONSE:{
+                        stage.getActors().pop();
+                        Object[] items = (Object[]) o;
+                        IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
+                        String derriere = (String)items[1];
+                        String isole = (String)items[2];
+                        boolean isDateIsolationConnue = (boolean)items[3];
+                        double dateIsolation = (double)items[4];
+                        if (dateIsolation==-1){
+                            dateIsolation=anneeConstruction;
+                        }
+                        this.actualiseDP_mur(wall, derriere, isole, isDateIsolationConnue, dateIsolation);
+                        this.transitionMur(wall);
+                        break;
+                    }
+
                 }
             }
         }

@@ -19,6 +19,7 @@ public class Event {
         setUserObject(o);
     }
 
+
     public void setEventType(EventType e) {
         event = e;
     }
@@ -31,7 +32,9 @@ public class Event {
         userObject = o;
     }
 
+
     public Object getUserObject() {
         return userObject;
     }
+
 }

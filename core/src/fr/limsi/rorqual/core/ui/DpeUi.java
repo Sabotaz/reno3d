@@ -417,22 +417,115 @@ public class DpeUi implements EventListener {
 
                         case ANNEE_CONSTRUCTION: {
                             s.acquire();
-                            String initialText = (String) o;
-                            final TextField textField = new TextField("", skin);
-                            textField.setMessageText(initialText);
                             Dialog dialog = new Dialog(" Annee de construction du batiment ", skin, "dialog") {
                                 protected void result(Object object) {
-                                    String text = textField.getText();
+
+                                }
+                            }.show(stage);
+
+                            TextButton textButton1 = new TextButton("<1975",skin);
+                            TextButton textButton2 = new TextButton("1975-1977",skin);
+                            TextButton textButton3 = new TextButton("1978-1982",skin);
+                            TextButton textButton4 = new TextButton("1983-1988",skin);
+                            TextButton textButton5 = new TextButton("1989-2000",skin);
+                            TextButton textButton6 = new TextButton("2001-2005",skin);
+                            TextButton textButton7 = new TextButton("2006-2012",skin);
+                            TextButton textButton8 = new TextButton(">2012",skin);
+                            float largeur = textButton1.getWidth()+textButton2.getWidth()+textButton3.getWidth()+textButton4.getWidth()+45;
+                            float hauteur = textButton1.getHeight()+textButton5.getHeight()+25;
+
+                            dialog.setSize(largeur, hauteur);
+                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.addActor(textButton1);
+                            dialog.addActor(textButton2);
+                            dialog.addActor(textButton3);
+                            dialog.addActor(textButton4);
+                            dialog.addActor(textButton5);
+                            dialog.addActor(textButton6);
+                            dialog.addActor(textButton7);
+                            dialog.addActor(textButton8);
+
+                            textButton1.setPosition(4, textButton5.getHeight() + 4);
+                            textButton2.setPosition(textButton1.getX()+textButton1.getWidth()+10,textButton5.getHeight()+4);
+                            textButton3.setPosition(textButton2.getX()+textButton2.getWidth()+10,textButton5.getHeight()+4);
+                            textButton4.setPosition(textButton3.getX()+textButton3.getWidth()+10,textButton5.getHeight()+4);
+                            textButton5.setPosition(4,4);
+                            textButton6.setPosition(textButton5.getX()+textButton5.getWidth()+10,4);
+                            textButton7.setPosition(textButton6.getX()+textButton6.getWidth()+10,4);
+                            textButton8.setPosition(textButton7.getX()+textButton7.getWidth()+10,4);
+
+                            textButton1.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1970;
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
-                                    Event response = new Event(responseType, text);
+                                    Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     s.release();
                                 }
-                            }.button("Valider").show(stage);
-                            textField.setPosition((dialog.getWidth() - textField.getWidth()) / 2, 40);
-                            dialog.setSize(dialog.getWidth() + 20, textField.getHeight() + dialog.getHeight() + 20);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(textField);
+                            });
+                            textButton2.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1976;
+                                    DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
+                                    Event response = new Event(responseType, reponse);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton3.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1980;
+                                    DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
+                                    Event response = new Event(responseType, reponse);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton4.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1985;
+                                    DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
+                                    Event response = new Event(responseType, reponse);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton5.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1995;
+                                    DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
+                                    Event response = new Event(responseType, reponse);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton6.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 2002;
+                                    DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
+                                    Event response = new Event(responseType, reponse);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton7.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 2008;
+                                    DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
+                                    Event response = new Event(responseType, reponse);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton8.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 2014;
+                                    DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
+                                    Event response = new Event(responseType, reponse);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
                             break;
                         }
 
@@ -473,7 +566,7 @@ public class DpeUi implements EventListener {
                                         derriere = "ver";
                                     }
                                     DpeEvent responseType = DpeEvent.DERRIERE_MUR_RESPONSE;
-                                    Object[]items = new Object[2];
+                                    Object[] items = new Object[2];
                                     items[0]=wall;
                                     items[1]=derriere;
                                     Event response = new Event(responseType, items);
@@ -484,6 +577,199 @@ public class DpeUi implements EventListener {
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
+
+                        case ISOLATION_MUR: {
+                            s.acquire();
+                            final Object[] tabObjects = (Object[])e.getUserObject();
+                            Dialog dialog = new Dialog(" Ce mur a-t'il etait isole ? : ", skin, "dialog") {
+                                protected void result (Object object) {
+                                    String isole="";
+                                    if(object.equals(1)){
+                                        isole="non";
+                                    }
+                                    else if (object.equals(2)) {
+                                        isole="oui";
+                                    }
+                                    else if (object.equals(3)) {
+                                        isole="inconnue";
+                                    }
+                                    DpeEvent responseType = DpeEvent.ISOLATION_MUR_RESPONSE;
+                                    Object[] items = new Object[3];
+                                    items[0]=tabObjects[0];
+                                    items[1]=tabObjects[1];
+                                    items[2]=isole;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            }.button("Non", 1).button("Oui", 2).button("Inconnue", 3).show(stage);
+                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            break;
+                        }
+
+                        case DATE_ISOLATION_MUR:{
+                            s.acquire();
+                            final Object[] tabObjects = (Object[])e.getUserObject();
+                            Dialog dialog = new Dialog(" Annee d'isolation du mur ", skin, "dialog") {
+                                protected void result(Object object) {
+
+                                }
+                            }.show(stage);
+
+                            TextButton textButton1 = new TextButton("A la construction",skin);
+                            TextButton textButton2 = new TextButton("Inconnue",skin);
+                            TextButton textButton3 = new TextButton("<1983",skin);
+                            TextButton textButton4 = new TextButton("1983-1988",skin);
+                            TextButton textButton5 = new TextButton("1989-2000",skin);
+                            TextButton textButton6 = new TextButton("2001-2005",skin);
+                            TextButton textButton7 = new TextButton("2006-2012",skin);
+                            TextButton textButton8 = new TextButton(">2012",skin);
+                            float largeur = textButton1.getWidth()+textButton2.getWidth()+textButton3.getWidth()+textButton4.getWidth()+45;
+                            float hauteur = textButton1.getHeight()+textButton5.getHeight()+25;
+
+                            dialog.setSize(largeur, hauteur);
+                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.addActor(textButton1);
+                            dialog.addActor(textButton2);
+                            dialog.addActor(textButton3);
+                            dialog.addActor(textButton4);
+                            dialog.addActor(textButton5);
+                            dialog.addActor(textButton6);
+                            dialog.addActor(textButton7);
+                            dialog.addActor(textButton8);
+
+                            textButton1.setPosition(4, textButton5.getHeight() + 4);
+                            textButton2.setPosition(textButton1.getX()+textButton1.getWidth()+10,textButton5.getHeight()+4);
+                            textButton3.setPosition(textButton2.getX()+textButton2.getWidth()+10,textButton5.getHeight()+4);
+                            textButton4.setPosition(textButton3.getX()+textButton3.getWidth()+10,textButton5.getHeight()+4);
+                            textButton5.setPosition(24,4);
+                            textButton6.setPosition(textButton5.getX()+textButton5.getWidth()+10,4);
+                            textButton7.setPosition(textButton6.getX()+textButton6.getWidth()+10,4);
+                            textButton8.setPosition(textButton7.getX()+textButton7.getWidth()+10,4);
+
+                            textButton1.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = -1;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = true;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton2.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = -2;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = false;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton3.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1980;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = true;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton4.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1985;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = true;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton5.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 1995;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = true;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton6.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 2002;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = true;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton7.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 2008;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = true;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            textButton8.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    double reponse = 2014;
+                                    Object[] items = new Object[5];
+                                    items[0] = tabObjects[0];
+                                    items[1] = tabObjects[1];
+                                    items[2] = tabObjects[2];
+                                    items[3] = true;
+                                    items[4] = reponse;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, items);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    s.release();
+                                }
+                            });
+                            break;
+                        }
+
                     }
                 }
         } catch (InterruptedException ie) {
