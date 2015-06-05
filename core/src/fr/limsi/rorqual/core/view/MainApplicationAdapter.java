@@ -281,7 +281,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         deselect();
         selected = stage3d.getFromUserObject(o);
         if (selected != null) {
-            EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
+            //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
             selected.setColor(Color.YELLOW);
             cameras[ncam%cameras.length].position.set(selected.getTransform().getTranslation(new Vector3()).add(5, 5, 5));
             cameras[ncam%cameras.length].lookAt(selected.getTransform().getTranslation(new Vector3()).add(0, 0, 2));
@@ -299,7 +299,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             cameras[ncam%cameras.length].update();
         }
         selected = null;
-        EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
+        //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
     }
 
     @Override
@@ -310,7 +310,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 selected.setColor(Color.WHITE);
             selected = stage3d.getObject(screenX, screenY);
             if (selected != null) {
-                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected));
+                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.userData));
                 System.out.println("TOUCH: " + selected.userData);
                 selected.setColor(Color.YELLOW);
             }

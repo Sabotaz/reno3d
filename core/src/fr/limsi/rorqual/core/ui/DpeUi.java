@@ -580,7 +580,7 @@ public class DpeUi implements EventListener {
 
                         case ISOLATION_MUR: {
                             s.acquire();
-                            final Object[] tabObjects = (Object[])e.getUserObject();
+                            final Object wall = e.getUserObject();
                             Dialog dialog = new Dialog(" Ce mur a-t'il etait isole ? : ", skin, "dialog") {
                                 protected void result (Object object) {
                                     String isole="";
@@ -594,10 +594,9 @@ public class DpeUi implements EventListener {
                                         isole="inconnue";
                                     }
                                     DpeEvent responseType = DpeEvent.ISOLATION_MUR_RESPONSE;
-                                    Object[] items = new Object[3];
-                                    items[0]=tabObjects[0];
-                                    items[1]=tabObjects[1];
-                                    items[2]=isole;
+                                    Object[] items = new Object[2];
+                                    items[0]=wall;
+                                    items[1]=isole;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     s.release();
@@ -609,8 +608,8 @@ public class DpeUi implements EventListener {
 
                         case DATE_ISOLATION_MUR:{
                             s.acquire();
-                            final Object[] tabObjects = (Object[])e.getUserObject();
-                            Dialog dialog = new Dialog(" Annee d'isolation du mur ", skin, "dialog") {
+                            final Object wall = e.getUserObject();
+                            final Dialog dialog = new Dialog(" Annee d'isolation du mur ", skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
@@ -650,120 +649,112 @@ public class DpeUi implements EventListener {
                             textButton1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = -1;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = true;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {true, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
                             textButton2.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = -2;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = false;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {false, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
                             textButton3.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = 1980;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = true;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {true, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
                             textButton4.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = 1985;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = true;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {true, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
                             textButton5.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = 1995;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = true;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {true, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
                             textButton6.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = 2002;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = true;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {true, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
                             textButton7.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = 2008;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = true;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {true, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
                             textButton8.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = 2014;
-                                    Object[] items = new Object[5];
-                                    items[0] = tabObjects[0];
-                                    items[1] = tabObjects[1];
-                                    items[2] = tabObjects[2];
-                                    items[3] = true;
-                                    items[4] = reponse;
+                                    Object[] items = new Object[2];
+                                    items[0] = wall;
+                                    Object[] r = {true, reponse};
+                                    items[1] = r;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, items);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });

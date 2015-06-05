@@ -9,6 +9,7 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventType;
+import fr.limsi.rorqual.core.event.UiEvent;
 import scene3d.Actor3d;
 import scene3d.Stage3d;
 
@@ -17,43 +18,35 @@ import scene3d.Stage3d;
  */
 public class DpeStateUpdater implements EventListener {
 
-    public enum State {
-        KNOWN,
-        UNKNOWN,
-        GUESSED,
-        NONE,
-        ;
-    }
-
-    HashMap<Object, State> states = new HashMap<Object, State>();
+    HashMap<Object, DpeState> states = new HashMap<Object, DpeState>();
     Stage3d stage;
 
     public DpeStateUpdater(Stage3d s) {
         stage = s;
         EventManager.getInstance().addListener(Channel.DPE, this);
+        EventManager.getInstance().addListener(Channel.UI, this);
     }
 
-    public void setState(Object o, State s) {
+    public void setState(Object o, DpeState s) {
         states.put(o, s);
     }
 
-    public State getState(Object o) {
+    public DpeState getState(Object o) {
         if (states.containsKey(o)) return states.get(o);
-        else return State.NONE;
+        else return DpeState.NONE;
     }
     public void notify(Channel c, Event e) {
-
         EventType eventType = e.getEventType();
-        if (c == Channel.DPE)
+        if (c == Channel.DPE) {
             if (eventType instanceof DpeEvent) {
                 DpeEvent event = (DpeEvent) eventType;
                 Object o = e.getUserObject();
                 switch (event) {
                     case DPE_STATE_CHANGED:
                         Object items[] = (Object[]) o;
-                        setState(items[0], (State)items[1]);
+                        setState(items[0], (DpeState) items[1]);
                         Actor3d actor = stage.getFromUserObject(items[0]);
-                        switch ((State)items[1]) {
+                        switch ((DpeState) items[1]) {
                             case UNKNOWN:
                                 actor.setColor(Color.RED);
                                 break;
@@ -65,9 +58,23 @@ public class DpeStateUpdater implements EventListener {
                                 actor.setColor(Color.WHITE);
                                 break;
                         }
-                    break;
+                        setState(items[0], (DpeState) items[1]);
+                        break;
                 }
             }
+        } else if (c == Channel.UI) {
+            if (eventType instanceof UiEvent) {
+                UiEvent event = (UiEvent) eventType;
+                Object o = e.getUserObject();
+                switch (event) {
+                    case ITEM_SELECTED:
+                        if (getState(o) == DpeState.UNKNOWN || getState(o) == DpeState.GUESSED) {
+                            Event response = new Event(DpeEvent.DPE_REQUEST, o);
+                            EventManager.getInstance().put(Channel.DPE, response);
+                        }
+                }
+            }
+        }
     }
 
 }

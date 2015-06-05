@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -17,6 +18,7 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventType;
+import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
@@ -225,6 +227,30 @@ public class Dpe implements EventListener {
         }
         return u;
     }
+    public void tryActualiseMurDP(IfcWallStandardCase wall) {
+        if (!walls_properties.get(wall).containsKey(DpeEvent.DERRIERE_MUR_RESPONSE))
+            return;
+        String derriere = (String)walls_properties.get(wall).get(DpeEvent.DERRIERE_MUR_RESPONSE);
+
+        if (!walls_properties.get(wall).containsKey(DpeEvent.ISOLATION_MUR_RESPONSE))
+            return;
+        String isolation = (String)walls_properties.get(wall).get(DpeEvent.ISOLATION_MUR_RESPONSE);
+
+        if (isolation=="oui") {
+            if (!walls_properties.get(wall).containsKey(DpeEvent.DATE_ISOLATION_MUR_RESPONSE))
+                return;
+            Object item[] = (Object[]) walls_properties.get(wall).get(DpeEvent.DATE_ISOLATION_MUR_RESPONSE);
+            actualiseDP_mur(wall, derriere, isolation, (boolean) item[0], (double) item[1]);
+            Object res[] = {wall, DpeState.KNOWN};
+            Event stateChange = new Event(DpeEvent.DPE_STATE_CHANGED, res);
+            EventManager.getInstance().put(Channel.DPE, stateChange);
+        } else {
+            actualiseDP_mur(wall, derriere, isolation, false, 0);
+            Object res[] = {wall, DpeState.KNOWN};
+            Event stateChange = new Event(DpeEvent.DPE_STATE_CHANGED, res);
+            EventManager.getInstance().put(Channel.DPE, stateChange);
+        }
+    }
 
     public void actualiseDP_mur(IfcWallStandardCase wall, String derriere,String isole,boolean isAnneeIsolationConnue,double anneeIsolation){
         double surface=IfcHelper.getWallSurface(wall);
@@ -321,6 +347,7 @@ public class Dpe implements EventListener {
 
     /*** Explique ce qu'est le DPE et demande de continuer ou non ***/
     public void startDPE() {
+        notifierMurs();
         DpeEvent eventType = DpeEvent.START_DPE;
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
@@ -375,6 +402,29 @@ public class Dpe implements EventListener {
         EventManager.getInstance().put(Channel.DPE, event);
     }
 
+    /*** Notifie le statut des murs ***/
+    public void notifierMurs() {
+        IfcWallStandardCase wall;
+        Iterator<IfcWallStandardCase> it = wallStandardCaseCollection.iterator();
+        while (it.hasNext()) {
+            wall = it.next();
+            Object o[] = {wall, DpeState.UNKNOWN};
+            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
+    }
+
+    public void demanderMur(IfcWallStandardCase wall) {
+        walls_properties.put(wall, new HashMap<EventType, Object>());
+        DpeEvent eventType = DpeEvent.DERRIERE_MUR;
+        Event event = new Event(eventType, wall);
+        EventManager.getInstance().put(Channel.DPE, event);
+
+        eventType = DpeEvent.ISOLATION_MUR;
+        event = new Event(eventType, wall);
+        EventManager.getInstance().put(Channel.DPE, event);
+    }
+
     /*** Demande ce qui se trouve derrière un mur ***/
     public void demandeDerriereMur(IfcWallStandardCase wall) {
         if (IfcHelper.getPropertyTypeWall(wall)=="ext"){
@@ -425,6 +475,8 @@ public class Dpe implements EventListener {
         System.out.println("DP plancher vs : " + DP_fen);
         System.out.println("************************************************************************************");
     }
+
+    HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<IfcWallStandardCase, HashMap<EventType, Object>>();
 
     public void notify(Channel c, Event e) throws InterruptedException {
 
@@ -504,47 +556,42 @@ public class Dpe implements EventListener {
                             typeEnergieConstruction=typeEnergieConstructionEnum.AUTRE;
                         }
                         if (!wallStandardCaseCollection.isEmpty()) {
-                            IfcWallStandardCase wall = getFirstWall();
-                            this.demandeDerriereMur(wall);
+                            //IfcWallStandardCase wall = getFirstWall();
+                            //this.demandeDerriereMur(wall);
                         }else{
                             // TODO il n'y a pas de murs dans le model : on fait quoi ???
                         }
                         break;
                     }
 
-                    case DERRIERE_MUR_RESPONSE:{
-                        Object[] items = (Object[]) o;
-                        this.demandeIsolationMur(items);
-                        break;
-                    }
-
-                    case ISOLATION_MUR_RESPONSE:{
+                    case ISOLATION_MUR_RESPONSE: {
                         Object[] items = (Object[]) o;
                         IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
-                        String derriere = (String)items[1];
-                        String isole = (String)items[2];
+                        String isole = (String)items[1];
                         if (isole=="oui"){
-                            this.demandeDateIsolation(items);
-                        }else {
-                            this.actualiseDP_mur(wall, derriere, isole, false, -1);
-                            this.transitionMur(wall);
+                            DpeEvent et = DpeEvent.DATE_ISOLATION_MUR;
+                            Event ev = new Event(et, wall);
+                            EventManager.getInstance().put(Channel.DPE, ev);
                         }
+
+                    }
+                    case DERRIERE_MUR_RESPONSE:
+                    case DATE_ISOLATION_MUR_RESPONSE:
+                    {
+                        Object[] items = (Object[]) o;
+                        walls_properties.get(items[0]).put(event, items[1]);
+
+                        tryActualiseMurDP((IfcWallStandardCase)items[0]);
+
                         break;
                     }
 
-                    case DATE_ISOLATION_MUR_RESPONSE:{
-                        stage.getActors().pop();
-                        Object[] items = (Object[]) o;
-                        IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
-                        String derriere = (String)items[1];
-                        String isole = (String)items[2];
-                        boolean isDateIsolationConnue = (boolean)items[3];
-                        double dateIsolation = (double)items[4];
-                        if (dateIsolation==-1){
-                            dateIsolation=anneeConstruction;
+                    case DPE_REQUEST: {
+                        System.out.println(o.getClass());
+                        if (o instanceof IfcWallStandardCase) {
+                            IfcWallStandardCase wall = (IfcWallStandardCase) o;
+                            demanderMur(wall);
                         }
-                        this.actualiseDP_mur(wall, derriere, isole, isDateIsolationConnue, dateIsolation);
-                        this.transitionMur(wall);
                         break;
                     }
 
