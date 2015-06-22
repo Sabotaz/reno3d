@@ -4,12 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import java.util.HashMap;
 
-import fr.limsi.rorqual.core.event.Channel;
-import fr.limsi.rorqual.core.event.Event;
-import fr.limsi.rorqual.core.event.EventListener;
-import fr.limsi.rorqual.core.event.EventManager;
-import fr.limsi.rorqual.core.event.EventType;
-import fr.limsi.rorqual.core.event.UiEvent;
+import fr.limsi.rorqual.core.event.*;
 import scene3d.Actor3d;
 import scene3d.Stage3d;
 

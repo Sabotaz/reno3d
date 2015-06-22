@@ -6,19 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.Semaphore;
 
-import fr.limsi.rorqual.core.event.Channel;
-import fr.limsi.rorqual.core.event.Event;
-import fr.limsi.rorqual.core.event.EventListener;
-import fr.limsi.rorqual.core.event.EventManager;
-import fr.limsi.rorqual.core.event.EventType;
-import fr.limsi.rorqual.core.event.UiEvent;
+import fr.limsi.rorqual.core.event.*;
+import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;

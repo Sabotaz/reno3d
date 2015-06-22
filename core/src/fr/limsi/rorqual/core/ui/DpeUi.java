@@ -2,8 +2,6 @@ package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -11,22 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 
-import java.util.Iterator;
 import java.util.concurrent.Semaphore;
 
-import fr.limsi.rorqual.core.dpe.DpeEvent;
+import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventType;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
 
 /**
  * Created by christophe on 03/06/15.

@@ -1,6 +1,4 @@
-package fr.limsi.rorqual.core.dpe;
-
-import fr.limsi.rorqual.core.event.EventType;
+package fr.limsi.rorqual.core.event;
 
 /**
  * Created by christophe on 03/06/15.
