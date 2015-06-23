@@ -341,6 +341,7 @@ public class Dpe implements EventListener {
     /*** Explique ce qu'est le DPE et demande de continuer ou non ***/
     public void startDPE() {
         notifierMurs();
+        notifierPlanchers();
         DpeEvent eventType = DpeEvent.START_DPE;
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
@@ -393,6 +394,17 @@ public class Dpe implements EventListener {
         DpeEvent eventType = DpeEvent.ENERGIE_CONSTRUCTION;
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
+    }
+    /*** Notifie le statut des planchers ***/
+    public void notifierPlanchers() {
+        IfcSlab slab;
+        Iterator<IfcSlab> it = slabCollection.iterator();
+        while (it.hasNext()) {
+            slab = it.next();
+            Object o[] = {slab, DpeState.UNKNOWN};
+            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
     }
 
     /*** Notifie le statut des murs ***/
