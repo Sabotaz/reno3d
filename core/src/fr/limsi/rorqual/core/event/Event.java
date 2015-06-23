@@ -32,7 +32,6 @@ public class Event {
         userObject = o;
     }
 
-
     public Object getUserObject() {
         return userObject;
     }

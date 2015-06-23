@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.dpe;
 import com.badlogic.gdx.graphics.Color;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import fr.limsi.rorqual.core.event.*;
 import scene3d.Actor3d;
@@ -30,6 +31,18 @@ public class DpeStateUpdater implements EventListener {
         if (states.containsKey(o)) return states.get(o);
         else return DpeState.NONE;
     }
+
+    public void verifyAllStates() {
+        boolean all_known = true;
+        for (DpeState value : states.values())
+            if (value == DpeState.UNKNOWN) all_known = false;
+
+        if (all_known == true) {
+            Event response = new Event(DpeEvent.DPE_STATE_NO_MORE_UNKNOWN, null);
+            EventManager.getInstance().put(Channel.DPE, response);
+        }
+    }
+
     public void notify(Channel c, Event e) {
         EventType eventType = e.getEventType();
         if (c == Channel.DPE) {
@@ -54,6 +67,7 @@ public class DpeStateUpdater implements EventListener {
                                 break;
                         }
                         setState(items[0], (DpeState) items[1]);
+                        verifyAllStates();
                         break;
                 }
             }
@@ -71,5 +85,4 @@ public class DpeStateUpdater implements EventListener {
             }
         }
     }
-
 }

@@ -338,10 +338,16 @@ public class IfcHelper {
         return -1.0;
     }
 
+    // Permet de récupérer la surface d'un mur
     public static double getWallSurface (IfcWallStandardCase wall){
         double wallHeight = getWallHeight(wall);
         double wallLength = getWallLength(wall);
-        return (wallHeight*wallLength);
+        double surfaceWall = (wallHeight*wallLength);
+        SET<IfcOpeningElement> openingElementSET = getOpeningRelToWall(wall);
+        for (IfcOpeningElement actualOpening : openingElementSET){
+            surfaceWall -= getOpeningSurface(actualOpening);
+        }
+        return surfaceWall;
     }
 
     // Permet de récupérer un Opening dans un model en fonction de son nom
@@ -380,11 +386,13 @@ public class IfcHelper {
     // Permet de récupérer les openings liées à un wall
     public static SET<IfcOpeningElement> getOpeningRelToWall (IfcWallStandardCase wall){
         SET<IfcOpeningElement> openingElementSET = new SET<>();
-        SET<IfcRelVoidsElement> relVoidsElementSET = wall.getHasOpenings_Inverse();
-        for(IfcRelVoidsElement actualRelVoidsElement : relVoidsElementSET){
-            IfcFeatureElementSubtraction featureElementSubtraction = actualRelVoidsElement.getRelatedOpeningElement();
-            if(featureElementSubtraction instanceof IfcOpeningElement){
-                openingElementSET.add((IfcOpeningElement)featureElementSubtraction);
+        if (wall.getHasOpenings_Inverse()!=null){
+            SET<IfcRelVoidsElement> relVoidsElementSET = wall.getHasOpenings_Inverse();
+            for(IfcRelVoidsElement actualRelVoidsElement : relVoidsElementSET){
+                IfcFeatureElementSubtraction featureElementSubtraction = actualRelVoidsElement.getRelatedOpeningElement();
+                if(featureElementSubtraction instanceof IfcOpeningElement){
+                    openingElementSET.add((IfcOpeningElement)featureElementSubtraction);
+                }
             }
         }
         return openingElementSET;
@@ -2077,7 +2085,7 @@ public class IfcHelper {
 
     // Permet de modifier la largeur d'une window
     public static void setWindowWidth (IfcModel ifcModel, IfcWindow window, double newWidth){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
         IfcHelper.setOpeningWidth(opening, newWidth);
         window.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
     }
@@ -2282,34 +2290,22 @@ public class IfcHelper {
         addWindow(ifcModel,"window G",wallG,1.00,1.50,1.63,0.50);
     }
 
-    // Permet de parcourir les produits inscrit au sein du DPE
-    public static void parcourDpe(IfcModel ifcModel){
-        Collection<IfcWallStandardCase> collectionWall = ifcModel.getCollection(IfcWallStandardCase.class);
-        for (IfcWallStandardCase actualWall : collectionWall){
-            System.out.println(actualWall.getName().getDecodedValue() + " Aire = " + getWallSurface(actualWall));
-        }
-
-        Collection<IfcSlab> collectionSlab = ifcModel.getCollection(IfcSlab.class);
-        for (IfcSlab actualSlab : collectionSlab){
-            System.out.println(actualSlab.getName().getDecodedValue() + " Aire = " + getSlabSurface(actualSlab));
-        }
-
-        Collection<IfcWindow> collectionWindow = ifcModel.getCollection(IfcWindow.class);
-        for (IfcWindow actualWindow : collectionWindow){
-            System.out.println(actualWindow.getName().getDecodedValue() + " Aire = " + getWindowSurface(ifcModel, actualWindow));
-        }
-
-        Collection<IfcDoor> collectionDoor = ifcModel.getCollection(IfcDoor.class);
-        for (IfcDoor actualDoor : collectionDoor){
-            System.out.println(actualDoor.getName().getDecodedValue() + " Aire = " + getDoorSurface(ifcModel, actualDoor));
-        }
-    }
-
     // Permet de calculer la surface habitable du logement
     public static double calculSurfaceHabitable(IfcModel ifcModel){
         double surfaceHabitable = 0;
-        Collection<IfcSlab> collectionSlab = ifcModel.getCollection(IfcSlab.class);
-        for (IfcSlab actualSlab : collectionSlab){
+        Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
+        Iterator buildingStoreyIterator = collectionBuildingStorey.iterator();
+        IfcBuildingStorey buildingStorey = (IfcBuildingStorey)buildingStoreyIterator.next();
+        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = buildingStorey.getContainsElements_Inverse();
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
+        SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
+        LIST<IfcSlab> slabLIST = new LIST<>();
+        for (IfcProduct actualProduct : productSET){
+            if (actualProduct instanceof IfcSlab){
+                slabLIST.add((IfcSlab)actualProduct);
+            }
+        }
+        for (IfcSlab actualSlab : slabLIST){
             surfaceHabitable += getSlabSurface(actualSlab);
         }
         return surfaceHabitable;
@@ -2372,6 +2368,36 @@ public class IfcHelper {
             ifcModel.addIfcObject(property);
             ifcModel.addIfcObject(relDefinesByProperties);
         }
+    }
+
+    // Permet d'ajouter une information d'isolation sur un objet
+    public static String getPropertyTypeIsolation(IfcProduct product){
+
+        SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null){
+            for (IfcRelDefines actualRelDefines : relDefinesSET){
+                if (actualRelDefines instanceof IfcRelDefinesByProperties){
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet){
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET){
+                                if (actualProperty instanceof IfcPropertySingleValue){
+                                    if (actualProperty.getName().getDecodedValue().equals("IsolationType")) {
+                                        IfcValue value = ((IfcPropertySingleValue) actualProperty).getNominalValue();
+                                        if (value instanceof IfcIdentifier){
+                                            return (((IfcIdentifier) value).getDecodedValue());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "null";
     }
 
     // Permet d'ajouter une information sur le type de mur
@@ -2465,6 +2491,63 @@ public class IfcHelper {
             }
         }
         return "null";
+    }
+
+    // Permet de calculer le périmètre d'un batiment
+    public static double calculPerimetreBatiment(IfcModel ifcModel){
+        double per=0;
+        List<IfcWallStandardCase> wallStandardCaseList = getWallsRelToFirstStage(ifcModel);
+
+        for (IfcWallStandardCase actualWall : wallStandardCaseList){
+            if (IfcHelper.getPropertyTypeWall(actualWall)=="ext"){
+                per+=getWallLength(actualWall);
+            }
+        }
+        return per;
+    }
+
+    // Permet de récupérer le premier étage d'un batiment
+    public static IfcBuildingStorey getFirstStorey(IfcModel ifcModel){
+        Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
+        IfcBuildingStorey buildingStorey = new IfcBuildingStorey();
+        double elevation = 100000;
+        for (IfcBuildingStorey actualBuildingStorey : collectionBuildingStorey){
+            if (elevation > actualBuildingStorey.getElevation().value){
+                elevation = actualBuildingStorey.getElevation().value;
+                buildingStorey = actualBuildingStorey;
+            }
+        }
+        return buildingStorey;
+    }
+
+    // Permet de récupérer les murs associés au premier étage
+    public static List<IfcWallStandardCase> getWallsRelToFirstStage(IfcModel ifcModel){
+        List<IfcWallStandardCase> wallStandardCaseList = new ArrayList<>();
+        IfcBuildingStorey firstBuildingStorey = getFirstStorey(ifcModel);
+        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = firstBuildingStorey.getContainsElements_Inverse();
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
+        SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
+        for (IfcProduct actualProduct : productSET){
+            if (actualProduct instanceof IfcWallStandardCase){
+                wallStandardCaseList.add((IfcWallStandardCase)actualProduct);
+            }
+        }
+        return wallStandardCaseList;
+    }
+
+    // Permet de récupérer les murs associés au premier étage
+    public static List<IfcSlab> getSlabsRelToFirstStage(IfcModel ifcModel){
+        List<IfcSlab> slabList = new ArrayList<>();
+        IfcBuildingStorey firstBuildingStorey = getFirstStorey(ifcModel);
+        SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = firstBuildingStorey.getContainsElements_Inverse();
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
+        SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
+        for (IfcProduct actualProduct : productSET){
+            if (actualProduct instanceof IfcSlab){
+                slabList.add((IfcSlab)actualProduct);
+            }
+        }
+        return slabList;
     }
 
 }

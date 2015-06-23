@@ -20,15 +20,7 @@ public class DesktopLauncher {
         MainApplicationAdapter application = new MainApplicationAdapter();
 
         IfcHelper.initialiseIfcModel(ifcModel);
-
         IfcHelper.createApartmentTest(ifcModel);
-//        IfcCartesianPoint pointA = IfcHelper.createCartesianPoint3D(0, 0, 0);
-//        IfcCartesianPoint pointB = IfcHelper.createCartesianPoint3D(4, 0, 0);
-//        IfcHelper.addWall(ifcModel, "1st floor", "wall", pointA, pointB, 0.18);
-//        IfcWallStandardCase wall = IfcHelper.getWall(ifcModel, "wall");
-//        IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
-//        IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITE");
-//            IfcHelper.addPropertyTypeWall(ifcModel,wall,true);
         IfcHelper.saveIfcModel(ifcModel);
 
         try {
