@@ -17,7 +17,9 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
         IfcModel ifcModel = new IfcModel();
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        MainApplicationAdapter application = new MainApplicationAdapter();
+        config.title = "3DReno";
+        config.height = 1080;
+        config.width = 1920;
 
         IfcHelper.initialiseIfcModel(ifcModel);
         IfcHelper.createApartmentTest(ifcModel);
@@ -28,6 +30,7 @@ public class DesktopLauncher {
         } catch (Exception e) {
             e.printStackTrace();
         }
-		new LwjglApplication(application, config);
+
+		new LwjglApplication(new MainApplicationAdapter(), config);
 	}
 }

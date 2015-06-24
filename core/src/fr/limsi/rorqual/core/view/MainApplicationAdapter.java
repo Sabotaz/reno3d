@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.Renderable;
@@ -23,6 +25,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -41,6 +44,11 @@ import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController.AnimationDesc;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController.AnimationListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
@@ -49,6 +57,7 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.ui.DpeUi;
+import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
 import fr.limsi.rorqual.core.model.IfcHolder;
@@ -62,7 +71,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private static Stage3d stage3d;
     private Stage stageMenu;
     private Skin skin;
-    private TextButton buttonDPE, buttonExit;
+    private Button buttonDPE, buttonExit;
     private TextButton.TextButtonStyle textButtonStyle;
     private BitmapFont fontBlack;
     private BitmapFont fontWhite;
@@ -75,6 +84,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Model model;
     private ModelBatch modelBatch;
     private ModelInstance modelInstance;
+    private Viewport viewport;
 
     @Override
 	public void create () {
@@ -86,6 +96,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
         textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
 
+        AssetManager.getInstance().init();
+
         /*** ??? ***/
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
 
@@ -96,6 +108,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera1.viewportHeight = Gdx.graphics.getHeight();
+        camera1.viewportWidth = Gdx.graphics.getWidth();
         camera1.zoom = 1f/10;
         camera1.position.set(0.f, 0, 10f);
         camera1.lookAt(0f, 0f, 0f);
@@ -105,6 +119,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** Création de la caméra 3D ***/
         PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera2.viewportHeight = Gdx.graphics.getHeight();
+        camera2.viewportWidth = Gdx.graphics.getWidth();
         camera2.position.set(0, -20, 20);
         camera2.near = 1f;
         camera2.far = 1000f;
@@ -112,6 +128,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         camera2.up.set(0, 0, 1);
         camera2.update();
         cameras[1] = camera2;
+
+        //viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera1);
 
         /*** Création d'un tableau de caméras ***/
         Camera baseCamera = cameras[ncam%cameras.length];
@@ -128,6 +146,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         stage3d = new Stage3d(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), baseCamera, environnement, shaderProvider);
         stageMenu = new Stage();
+        stageMenu.setDebugAll(true);
+        System.out.println(stageMenu.getWidth());
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, stage3d);
 
         /*** On autorise les inputs en entrée ***/
@@ -149,11 +169,18 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         new DpeUi(stageMenu);
         dpe = new Dpe(stageMenu);
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/ui/ui_001.atlas"));
+        TextureAtlas.AtlasRegion region = atlas.findRegion("dpe");
+        TextureRegionDrawable dpe_drawable = new TextureRegionDrawable(region);
+        Drawable dpe_drawable2 = dpe_drawable.tint(new Color(0.8f, 0.8f, 0.8f, 1));
+        //NinePatch patch = atlas.createPatch("wall");
+
+        textButtonStyle = new TextButton.TextButtonStyle(dpe_drawable,dpe_drawable2,null,fontBlack);
 
         /*** Ajout du bouton DPE ***/
-        buttonDPE = new TextButton("DPE", textButtonStyle);
+        buttonDPE = new Button(textButtonStyle);
         buttonDPE.setName("DPE");
-        buttonDPE.setSize(100, 40);
+        buttonDPE.setSize(150, 150);
         buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -235,7 +262,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     @Override
     public void resize(int width, int height) {
-
+        cameras[0].viewportHeight = height;
+        cameras[0].viewportWidth = width;
+        cameras[1].viewportHeight = height;
+        cameras[1].viewportWidth = width;
+        stageMenu.getViewport().update(width, height, true);
     }
 
     @Override
@@ -280,6 +311,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     @Override
     public boolean keyUp(int keycode) {
         switch (keycode) {
+        //NinePatch patch = atlas.createPatch("wall");
             case Input.Keys.LEFT:
             case Input.Keys.RIGHT:
             case Input.Keys.UP:
@@ -316,6 +348,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     static Actor3d selected = null;
+
+    public static Actor3d getFromUserObject(Object o) {
+        return stage3d.getFromUserObject(o);
+    }
 
     public static void select(Object o) {
         deselect();

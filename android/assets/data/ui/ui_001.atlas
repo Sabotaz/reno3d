@@ -1,0 +1,21 @@
+
+ui_001.png
+size: 1616,1108
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ask
+  rotate: false
+  xy: 78, 84
+  size: 976, 884
+  split: 500, 500, 500, 500
+  orig: 976, 884
+  offset: 0, 0
+  index: -1
+dpe
+  rotate: false
+  xy: 1172, 89
+  size: 346, 362
+  orig: 346, 362
+  offset: 0, 0
+  index: -1

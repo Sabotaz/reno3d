@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -19,8 +20,11 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventType;
+import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
+import scene3d.Stage3d;
 
 /**
  * Created by christophe on 03/06/15.
@@ -28,30 +32,12 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 public class DpeUi implements EventListener {
 
     private Stage stage;
-    private Skin skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
-    private Texture textureStartDpe = new Texture(Gdx.files.internal("data/img/dpe/StartDpe.png"));
-    private Texture textureTypeBatiment1 = new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/maison.png"));
-    private Texture textureTypeBatiment2 = new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/appt.png"));
-    private Texture textureNbNiveau1 = new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/plainPied.png"));
-    private Texture textureNbNiveau2 = new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/plainPiedCa.png"));
-    private Texture textureNbNiveau3 = new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/r+1.png"));
-    private Texture textureNbNiveau4 = new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/r+1Ca.png"));
-    private Texture textureNbNiveau5 = new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/r+2.png"));
-    private Texture textureForme1 = new Texture(Gdx.files.internal("data/img/dpe/FormeMaison/carre.png"));
-    private Texture textureForme2 = new Texture(Gdx.files.internal("data/img/dpe/FormeMaison/allongee.png"));
-    private Texture textureForme3 = new Texture(Gdx.files.internal("data/img/dpe/FormeMaison/developpee.png"));
-    private Texture textureMit1 = new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/independante.png"));
-    private Texture textureMit2 = new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleePetitCote.png"));
-    private Texture textureMit3 = new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleeUnGrandOuDeuxPetits.png"));
-    private Texture textureMit4 = new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleeUnGrandEtUnPetit.png"));
-    private Texture textureMit5 = new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleeDeuxGrandsCotes.png"));
-    private Texture texturePosAppt1 = new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/1erEtage.png"));
-    private Texture texturePosAppt2 = new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/etageInt.png"));
-    private Texture texturePosAppt3 = new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/dernierEtage.png"));
+    private AssetManager assets;
 
     public DpeUi(Stage stage2d) {
         EventManager.getInstance().addListener(Channel.DPE, this);
         stage = stage2d;
+        assets = AssetManager.getInstance();
     }
     Semaphore s = new Semaphore(1,true);
 
@@ -62,10 +48,12 @@ public class DpeUi implements EventListener {
                 if (eventType instanceof DpeEvent) {
                     DpeEvent event = (DpeEvent) eventType;
                     Object o = e.getUserObject();
+                    Skin skin = (Skin)assets.get("uiskin");
 
                     switch (event) {
                         case START_DPE: {
                             s.acquire();
+                            Texture textureStartDpe = (Texture)assets.get("textureStartDpe");
                             Image image = new Image(textureStartDpe);
                             int largeurImage = textureStartDpe.getWidth() + 10;
                             int hauteurImage = textureStartDpe.getHeight() + 20;
@@ -86,6 +74,8 @@ public class DpeUi implements EventListener {
 
                         case TYPE_BATIMENT: {
                             s.acquire();
+                            Texture textureTypeBatiment1 = (Texture)assets.get("textureTypeBatiment1");
+                            Texture textureTypeBatiment2 = (Texture)assets.get("textureTypeBatiment2");
                             Image image1 = new Image(textureTypeBatiment1);
                             Image image2 = new Image(textureTypeBatiment2);
                             int largeur2images = textureTypeBatiment1.getWidth() * 2 + 10;
@@ -129,6 +119,11 @@ public class DpeUi implements EventListener {
 
                         case NB_NIVEAUX: {
                             s.acquire();
+                            Texture textureNbNiveau1 = (Texture)assets.get("textureNbNiveau1");
+                            Texture textureNbNiveau2 = (Texture)assets.get("textureNbNiveau2");
+                            Texture textureNbNiveau3 = (Texture)assets.get("textureNbNiveau3");
+                            Texture textureNbNiveau4 = (Texture)assets.get("textureNbNiveau4");
+                            Texture textureNbNiveau5 = (Texture)assets.get("textureNbNiveau5");
                             Image image1 = new Image(textureNbNiveau1);
                             Image image2 = new Image(textureNbNiveau2);
                             Image image3 = new Image(textureNbNiveau3);
@@ -214,6 +209,9 @@ public class DpeUi implements EventListener {
 
                         case FORME: {
                             s.acquire();
+                            Texture textureForme1 = (Texture)assets.get("textureForme1");
+                            Texture textureForme2 = (Texture)assets.get("textureForme2");
+                            Texture textureForme3 = (Texture)assets.get("textureForme3");
                             Image image1 = new Image(textureForme1);
                             Image image2 = new Image(textureForme2);
                             Image image3 = new Image(textureForme3);
@@ -270,6 +268,11 @@ public class DpeUi implements EventListener {
 
                         case MITOYENNETE: {
                             s.acquire();
+                            Texture textureMit1 = (Texture)assets.get("textureMit1");
+                            Texture textureMit2 = (Texture)assets.get("textureMit2");
+                            Texture textureMit3 = (Texture)assets.get("textureMit3");
+                            Texture textureMit4 = (Texture)assets.get("textureMit4");
+                            Texture textureMit5 = (Texture)assets.get("textureMit5");
                             Image image1 = new Image(textureMit1);
                             Image image2 = new Image(textureMit2);
                             Image image3 = new Image(textureMit3);
@@ -354,9 +357,13 @@ public class DpeUi implements EventListener {
                         }
                         case POSITION_APPARTEMENT: {
                             s.acquire();
+                            Texture texturePosAppt1 = (Texture)assets.get("texturePosAppt1");
+                            Texture texturePosAppt2 = (Texture)assets.get("texturePosAppt2");
+                            Texture texturePosAppt3 = (Texture)assets.get("texturePosAppt3");
                             Image image1 = new Image(texturePosAppt1);
                             Image image2 = new Image(texturePosAppt2);
                             Image image3 = new Image(texturePosAppt3);
+
                             int largeur3images = texturePosAppt1.getWidth() + texturePosAppt2.getWidth() + texturePosAppt3.getWidth() + 25;
                             int hauteurImages = texturePosAppt1.getHeight() + 20;
 
@@ -545,9 +552,9 @@ public class DpeUi implements EventListener {
 
 
                         case DERRIERE_MUR: {
-                            s.acquire();
+                            //s.acquire();
                             final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
-                            Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur ? " , skin, "dialog") {
+                            /*Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur ? " , skin, "dialog") {
                                 protected void result(Object object) {
                                     String derriere = "";
                                     if (object.equals(1)) {
@@ -568,7 +575,14 @@ public class DpeUi implements EventListener {
                                     s.release();
                                 }
                             }.button("Exterieur", 1).button("Local non chauffe", 2).button("Autre habitation", 3).button("Veranda", 4).show(stage);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));*/
+                            Popup popup = new Popup(skin, MainApplicationAdapter.getFromUserObject(wall));
+                            popup.setTitle(" Qu'est-ce qu'il y a derriere ce mur ? ");
+                            popup.getButtonTable().addActor(new TextButton("Exterieur", skin));
+                            popup.getButtonTable().addActor(new TextButton("Local non chauffe", skin));
+                            popup.getButtonTable().addActor(new TextButton("Autre habitation", skin));
+                            popup.getButtonTable().addActor(new TextButton("Veranda", skin));
+                            stage.addActor(popup);
                             break;
                         }
 
