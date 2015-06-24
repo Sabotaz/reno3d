@@ -199,7 +199,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
-        model = modelLoader.loadModel(Gdx.files.getFileHandle("android/assets/data/blender/fenetreSimpleVentail.g3db", FileType.Internal));
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/fenetreSimpleVentailPvc.g3db", FileType.Internal));
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
