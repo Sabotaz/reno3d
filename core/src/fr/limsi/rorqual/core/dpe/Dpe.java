@@ -126,6 +126,7 @@ public class Dpe implements EventListener {
     private double PT;
     private double DR;
     private double Tint;
+    private double Sdep;
 
     /*** Constructeur ***/
     public Dpe (Stage stageMenu) {
@@ -154,6 +155,13 @@ public class Dpe implements EventListener {
 
     public void calc_GV() {
         GV = DP_murExt + DP_murLnc + DP_murAh + DP_murVer + DP_toiTer + DP_toiCp + DP_toiCa + DP_planVs + DP_planTp + DP_planSs + DP_planAh + DP_fen + DP_pfen + DP_fenVer + DP_pfenVer + DP_portExt + DP_portLnc + DP_portVer + PT + DR;
+    }
+
+    public void calc_Sdep(){
+        Sdep=0;
+        for (IfcWindow actualWindow : windowCollection){
+            Sdep += IfcHelper.getWindowSurface(ifcModel,actualWindow);
+        }
     }
 
     public void calc_MIT2(){
@@ -250,7 +258,6 @@ public class Dpe implements EventListener {
                 else if (FOR==5.71){lRfm=12;}
             }
         }
-
         return lRfm;
     }
 
@@ -268,7 +275,6 @@ public class Dpe implements EventListener {
             hauteurPorte=IfcHelper.getDoorHeight(ifcModel,actualDoor);
             lMen += (2*largeurPorte+2*hauteurPorte);
         }
-
         return lMen;
     }
 

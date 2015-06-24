@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -25,6 +26,21 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.utils.UBJsonReader;
+import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
+import com.badlogic.gdx.graphics.g3d.utils.AnimationController.AnimationDesc;
+import com.badlogic.gdx.graphics.g3d.utils.AnimationController.AnimationListener;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
@@ -56,6 +72,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ShaderProvider shaderProvider;
     private Dpe dpe;
     private DpeStateUpdater state;
+    private Model model;
+    private ModelBatch modelBatch;
+    private ModelInstance modelInstance;
 
     @Override
 	public void create () {
@@ -143,6 +162,24 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             }
         });
         stageMenu.addActor(buttonDPE);
+
+        /*** test affichage fenetre ***/
+        // A ModelBatch is like a SpriteBatch, just for models.  Use it to batch up geometry for OpenGL
+        modelBatch = new ModelBatch();
+        // Model loader needs a binary json reader to decode
+        UBJsonReader jsonReader = new UBJsonReader();
+        // Create a model loader passing in our json reader
+        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+        // Now load the model by name
+        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("android/assets/data/blender/fenetreSimpleVentail.g3db", FileType.Internal));
+        // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
+        modelInstance = new ModelInstance(model);
+        //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
+        //modelInstance.transform.rotate(1, 0, 0, -90);
+        //move the model down a bit on the screen ( in a z-up world, down is -z ).
+        modelInstance.transform.translate(0, 0, 4);
+        modelInstance.transform.scale(2,2,2);
 	}
 
 	@Override
@@ -184,6 +221,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         stageMenu.act();
         stageMenu.draw();
         Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
+        modelBatch.begin(cameras[ncam%cameras.length]);
+        modelBatch.render(modelInstance, environnement);
+        modelBatch.end();
 	}
 
     @Override
