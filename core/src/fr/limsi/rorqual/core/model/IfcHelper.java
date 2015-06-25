@@ -1248,8 +1248,8 @@ public class IfcHelper {
 
         // Door definition
         IfcCartesianPoint localPointDoor = createCartesianPoint3D(0.0,0.16,0.0);
-        IfcDirection zLocalDoor = createDirection3D(1.0,0.0,0.0);
-        IfcDirection xLocalDoor = createDirection3D(0.0,0.0,1.0);
+        IfcDirection xLocalDoor = createDirection3D(1.0,0.0,0.0);
+        IfcDirection zLocalDoor = createDirection3D(0.0,0.0,1.0);
         IfcAxis2Placement3D placementDoor = new IfcAxis2Placement3D(
                 localPointDoor, zLocalDoor, xLocalDoor);
         IfcLocalPlacement localPlacementDoor = new IfcLocalPlacement(opening.getObjectPlacement(),
