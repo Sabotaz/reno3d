@@ -199,14 +199,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
-        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/fenetreSimpleVentailPvc.g3db", FileType.Internal));
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/windowTransparenceTest.g3db", FileType.Internal));
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
         //modelInstance.transform.rotate(1, 0, 0, -90);
         //move the model down a bit on the screen ( in a z-up world, down is -z ).
         modelInstance.transform.translate(0, 0, 4);
-        modelInstance.transform.scale(2,2,2);
+        modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
 	}
 
 	@Override
@@ -241,8 +241,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             shape.line(i, -100, 0, i, 100, 0);
         }
         shape.end();
-
-        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         stage3d.act();
         stage3d.draw();
         stageMenu.act();
@@ -251,6 +249,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         modelBatch.begin(cameras[ncam%cameras.length]);
         modelBatch.render(modelInstance, environnement);
         modelBatch.end();
+
+        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 	}
 
     @Override
