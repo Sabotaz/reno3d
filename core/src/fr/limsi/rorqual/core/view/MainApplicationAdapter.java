@@ -20,8 +20,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -57,6 +59,7 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.ui.DpeUi;
+import fr.limsi.rorqual.core.ui.Popup;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
@@ -79,12 +82,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private static int ncam = 1;
     private Environment environnement;
     private ShaderProvider shaderProvider;
+    private ShaderProgram program;
     private Dpe dpe;
     private DpeStateUpdater state;
     private Model model;
     private ModelBatch modelBatch;
     private ModelInstance modelInstance;
     private Viewport viewport;
+    private Popup popup;
 
     @Override
 	public void create () {
@@ -207,11 +212,16 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //move the model down a bit on the screen ( in a z-up world, down is -z ).
         modelInstance.transform.translate(0, 0, 4);
         modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
+
+        program = new TestShader(null).getProgram();
+        popup = new Popup(null,0,0,0,0);
 	}
 
 	@Override
 	public void render () {
         update_cam();
+        stage3d.act();
+        stageMenu.act();
 
 		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -221,8 +231,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
 
+        shape.setProjectionMatrix(cameras[ncam % cameras.length].combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
-        shape.setProjectionMatrix(cameras[ncam%cameras.length].combined);
         int grid_size = 1;
         int grid_div = 10;
 
@@ -241,14 +251,20 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             shape.line(i, -100, 0, i, 100, 0);
         }
         shape.end();
-        stage3d.act();
+
+        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         stage3d.draw();
-        stageMenu.act();
         stageMenu.draw();
         Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
-        modelBatch.begin(cameras[ncam%cameras.length]);
+        Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+        modelBatch.begin(cameras[ncam % cameras.length]);
         modelBatch.render(modelInstance, environnement);
         modelBatch.end();
+
+        program.begin();
+        program.setUniformMatrix("u_projTrans", cameras[ncam % cameras.length].combined.cpy().mul(popup.getTransform()));
+        popup.render(program);
+        program.end();
 
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 	}

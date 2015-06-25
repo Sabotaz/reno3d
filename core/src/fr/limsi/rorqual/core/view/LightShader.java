@@ -97,6 +97,30 @@ public class LightShader extends BaseShader {
     protected final ShaderProgram program;
     //private boolean withColor;
 
+    public ShaderProgram getProgram() {
+        return program;
+    }
+
+    public LightShader() {
+        super();
+        String vs_prefix = "";
+        String fs_prefix = "";
+        switch(Gdx.app.getType()) {
+            case Android:
+                vs_prefix += "precision highp float; \n";
+                fs_prefix += "precision highp float; \n";
+                break;
+            case Desktop:
+                break;
+        }
+        program = new ShaderProgram(vs_prefix + vertexShader, fs_prefix + fragmentShader);
+
+        if (!program.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader " + program.getLog());
+        String log = program.getLog();
+        if (log.length() > 0) Gdx.app.error("ShaderTest", "Shader compilation log: " + log);
+    }
+
+
     public LightShader(Renderable renderable) {
         super();
         //withColor = renderable.material.has(ColorAttribute.Diffuse);

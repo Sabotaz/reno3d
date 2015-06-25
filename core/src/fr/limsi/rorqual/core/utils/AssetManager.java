@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -36,8 +37,15 @@ public class AssetManager {
     public void init() {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/ui/ui_001.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("ask");
+        System.out.println(atlas.getRegions().size);
+        System.out.println(atlas.getTextures().size);
         TextureRegionDrawable drawable = new TextureRegionDrawable(region);
-        assets.put("ask", drawable);
+
+        NinePatch patch = atlas.createPatch("ask");
+        assets.put("ask", patch);
+        assets.put("ask_texture", region.getTexture());
+
+        assets.put("bulle", new Texture(Gdx.files.internal("data/ui/bulle.png")));
 
         assets.put("black.fnt", new BitmapFont(Gdx.files.internal("data/font/black.fnt")));
 

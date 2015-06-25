@@ -554,7 +554,7 @@ public class DpeUi implements EventListener {
                         case DERRIERE_MUR: {
                             //s.acquire();
                             final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
-                            /*Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur ? " , skin, "dialog") {
+                            Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur ? " , skin, "dialog") {
                                 protected void result(Object object) {
                                     String derriere = "";
                                     if (object.equals(1)) {
@@ -575,14 +575,14 @@ public class DpeUi implements EventListener {
                                     s.release();
                                 }
                             }.button("Exterieur", 1).button("Local non chauffe", 2).button("Autre habitation", 3).button("Veranda", 4).show(stage);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));*/
-                            Popup popup = new Popup(skin, MainApplicationAdapter.getFromUserObject(wall));
+                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            /*Popup popup = new Popup(skin, MainApplicationAdapter.getFromUserObject(wall));
                             popup.setTitle(" Qu'est-ce qu'il y a derriere ce mur ? ");
                             popup.getButtonTable().addActor(new TextButton("Exterieur", skin));
                             popup.getButtonTable().addActor(new TextButton("Local non chauffe", skin));
                             popup.getButtonTable().addActor(new TextButton("Autre habitation", skin));
                             popup.getButtonTable().addActor(new TextButton("Veranda", skin));
-                            stage.addActor(popup);
+                            stage.addActor(popup);*/
                             break;
                         }
 

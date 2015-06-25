@@ -17,17 +17,27 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class TestShader extends BaseShader {
 
 
-    public final static String vertexShader = "attribute vec4 a_position;    \n" +
-            "uniform mat4 u_worldTrans;\n" +
+    public final static String vertexShader = "attribute vec3 a_position;    \n" +
+            "attribute vec4 a_color;    \n" +
             "uniform mat4 u_projTrans;\n" +
+            "varying vec4 vColor;" +
+            "attribute vec2 a_texCoords;\n" +
+            "varying vec2 v_texCoords;\n" +
             "void main()                  \n" +
             "{                            \n" +
-            "    gl_Position =  u_projTrans * u_worldTrans * a_position;  \n"      +
+            " vColor = a_color;\n" +
+            "    v_texCoords = a_texCoords;\n" +
+            "    gl_Position = u_projTrans * vec4(a_position.xy, 0.0, 1.0);  \n"      +
             "}                            \n" ;
-    public final static String fragmentShader = "uniform vec4 u_color;\n" +
+    public final static String fragmentShader =
+            "varying vec4 vColor;" +
+                    "varying vec2 v_texCoords;\n" +
+                    "uniform sampler2D u_texture;\n" +
     "void main()                                  \n" +
             "{                                            \n" +
-            "  gl_FragColor.rgb = vec3(u_color);\n" +
+            "\n" +
+                    "    vec4 texColor = texture2D(u_texture, v_texCoords);\n" +
+                    "    gl_FragColor = texColor;" +
             "}";
     /*
     public final static String vertexShader =
@@ -70,6 +80,10 @@ public class TestShader extends BaseShader {
 
     protected final ShaderProgram program;
     //private boolean withColor;
+
+    public ShaderProgram getProgram() {
+        return program;
+    }
 
     public TestShader (Renderable renderable) {
         super();
