@@ -88,6 +88,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Model model;
     private ModelBatch modelBatch;
     private ModelInstance modelInstance;
+    private AssetManager assets;
     private Viewport viewport;
     private Popup popup;
 
@@ -204,13 +205,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
-        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/windowTransparenceTest.g3db", FileType.Internal));
+        this.assets = AssetManager.getInstance();
+        model = (Model)assets.get("modelDoor");
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
         //modelInstance.transform.rotate(1, 0, 0, -90);
         //move the model down a bit on the screen ( in a z-up world, down is -z ).
-        modelInstance.transform.translate(0, 0, 4);
+        //modelInstance.transform.translate(0, 0, 4);
         modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
 
         program = new TestShader(null).getProgram();
