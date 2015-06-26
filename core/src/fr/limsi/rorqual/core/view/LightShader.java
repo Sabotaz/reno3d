@@ -48,7 +48,7 @@ public class LightShader extends BaseShader {
             "{                                            \n" +
             "   vec4 Idiff = u_light_color * max(-dot(N,u_light_direction), 0.0);  \n" +
             //"   Idiff = clamp(Idiff, 0.0, 1.0); \n" +
-            "  gl_FragColor.rgb = 0.4*vec3(Idiff) + 0.2 * vec3(u_ambient_color) + 0.4 * vec3(u_color);\n" +
+            "  gl_FragColor = 0.4*Idiff + 0.2 * u_ambient_color + 0.4 * u_color;\n" +
             //"  gl_FragColor =Idiff;\n" +
             "}";
     /*

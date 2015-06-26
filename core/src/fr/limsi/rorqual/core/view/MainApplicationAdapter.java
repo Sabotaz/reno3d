@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -83,6 +84,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Environment environnement;
     private ShaderProvider shaderProvider;
     private ShaderProgram program;
+    private BaseShader shader;
     private Dpe dpe;
     private DpeStateUpdater state;
     private Model model;
@@ -215,8 +217,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //modelInstance.transform.translate(0, 0, 4);
         modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
 
-        program = new TestShader(null).getProgram();
-        popup = new Popup(null,0,0,0,0);
+        program = new BillboardShader(null).getProgram();
+        shader = new BillboardShader(null);
+        popup = new Popup(null,0,0,400,400);
 	}
 
 	@Override
@@ -230,7 +233,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
-        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
 
         shape.setProjectionMatrix(cameras[ncam % cameras.length].combined);
@@ -257,14 +259,42 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         stage3d.draw();
         stageMenu.draw();
-        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         modelBatch.begin(cameras[ncam % cameras.length]);
-        modelBatch.render(modelInstance, environnement);
+        //modelBatch.render(modelInstance, environnement);
         modelBatch.end();
 
+        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
+
         program.begin();
-        program.setUniformMatrix("u_projTrans", cameras[ncam % cameras.length].combined.cpy().mul(popup.getTransform()));
+        /*
+        Matrix4 m = cameras[ncam % cameras.length].view.cpy();
+        m.val[0*4+0] = 1;
+        m.val[0*4+1] = 0;
+        m.val[0*4+2] = 0;
+
+        m.val[1*4+0] = 0;
+        m.val[1*4+1] = 1;
+        m.val[1*4+2] = 0;
+
+        m.val[2*4+0] = 0;
+        m.val[2*4+1] = 0;
+        m.val[2*4+2] = 1;
+        m = cameras[ncam % cameras.length].projection.cpy().mul(m).mul(popup.getTransform());
+
+        program.setUniformMatrix("u_projTrans", m);
+        popup.render(program);
+        program.end();
+*/
+
+        program.begin();
+        program.setUniformMatrix("u_proj", cameras[ncam % cameras.length].projection);
+        program.setUniformMatrix("u_view", cameras[ncam % cameras.length].view);
+        System.out.println("proj " + cameras[ncam % cameras.length].projection);
+        System.out.println("view " + cameras[ncam % cameras.length].view);
+        System.out.println("model " + popup.getTransform());
+        System.out.println("xxxx " + cameras[ncam % cameras.length].view.cpy().mul(popup.getTransform()));
+        program.setUniformMatrix("u_model", popup.getTransform());
         popup.render(program);
         program.end();
 
@@ -449,7 +479,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             oc.zoom = oc.zoom * (1+amount/10f);
         } else if (camera instanceof PerspectiveCamera) {
             PerspectiveCamera pc = (PerspectiveCamera) camera;
-            pc.fieldOfView = pc.fieldOfView * (1+amount/10f);
+            pc.position.scl(1+amount/10f);
+            pc.update();
+            //pc.fieldOfView = pc.fieldOfView * (1+amount/10f);
         }
         return true;
     }
@@ -484,6 +516,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), -5);
                     break;
             }
+            camera.update();
         }
     }
 }

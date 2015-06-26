@@ -46,11 +46,11 @@ public class Popup extends Actor3d {
         //actor.getParent().addActor3d(this);
         //texture = background.getTexture();
         texture = (Texture)AssetManager.getInstance().get("bulle");
-        background = new NinePatch3d(texture,100,100,-100,-100);
+        background = new NinePatch3d(texture,200,200,-200,-200);
         //background.scale(0.01f, 0.01f);
 
         //background.setSize(0, 0, 10, 5);
-        background.setSize(0, 0, 400, 400);
+        background.setSize(x, y, w, h);
         vertices = background.getVertices();
 
         mesh = new Mesh(true, 9*4, 9*2*3,
@@ -95,9 +95,10 @@ public class Popup extends Actor3d {
         mesh.setIndices(new short[] { 0, 1, 2 });*/
 
         transform = new Matrix4();
-        transform.rotate(1, 0, 0, -90);
-        transform.translate(0, 0, 10);
-        transform.scale(0.01f, 0.01f, 0.01f);
+        transform.translate(0, 5, 0);
+        transform.rotate(1, 0, 0, 180);
+        transform.val[15] = 0.01f;
+        //transform.scale(0.01f, 0.01f, 0.01f);
     }
 
     public void render(ShaderProgram shader) {
