@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 
 import fr.limsi.rorqual.core.utils.AssetManager;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
@@ -14,12 +15,12 @@ public class IfcWindowModelFactory {
 
     /*** Attributs ***/
     private IfcWindow window;
-    private Model modelWindow;
+    private ModelInstance modelWindow;
     private AssetManager assets;
 
     /*** Constructeur ***/
     public IfcWindowModelFactory(IfcProduct ifcProduct) {
-        if (ifcProduct instanceof IfcDoor) {
+        if (ifcProduct instanceof IfcWindow) {
             this.assets = AssetManager.getInstance();
             this.window = (IfcWindow) ifcProduct;
             this.make();
@@ -35,9 +36,9 @@ public class IfcWindowModelFactory {
     }
 
     private void loadDoorModel(){
-//        modelInstanceDoor = new ModelInstance((Model)assets.get("modelDoor"));
+        modelWindow = new ModelInstance((Model)assets.get("modelWindow"));
 //        modelInstanceDoor.transform.setTranslation(1.0f,1.0f,1.0f);
-        modelWindow = (Model)assets.get("modelWindow");
+//        modelWindow = (Model)assets.get("modelWindow");
     }
 
     private void setDoorPosition(){
@@ -52,7 +53,7 @@ public class IfcWindowModelFactory {
 
     }
 
-    public Model getModel(){
+    public ModelInstance getModel(){
         return modelWindow;
     }
 

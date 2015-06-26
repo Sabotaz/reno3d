@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -22,8 +23,12 @@ public class Group3d extends Actor3d{
 	}
 	
 	public Group3d(Model model){
-		super(model);
+		this(new ModelInstance(model));
 	}
+
+    public Group3d(ModelInstance model){
+        super(model);
+    }
 	
 	public void act (float delta) {
         super.act(delta);

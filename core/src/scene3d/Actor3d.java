@@ -44,15 +44,15 @@ public class Actor3d extends ModelInstance implements Disposable {
 	private AnimationController animation;
 	
 	public Actor3d(){
-		this(new Model());
+		this(new ModelInstance(new Model()));
 		setScale(0,0,0);
 	}
 	
-	public Actor3d(Model model){
-		this(model, 0f, 0f ,0f);
+	public Actor3d(ModelInstance model){
+		this(model, 0f, 0f, 0f);
 	}
 	
-	public Actor3d(Model model, float x, float y, float z){
+	public Actor3d(ModelInstance model, float x, float y, float z){
 		super(model);
 		setPosition(x,y,z);
 		//boundBox = model.meshes.get(0).calculateBoundingBox();
@@ -213,10 +213,10 @@ public class Actor3d extends ModelInstance implements Disposable {
     private Matrix4 getFullTransform() {
         Actor3d current = this;
         Matrix4 mx = new Matrix4();
-        while (current != null) {
-            mx.mulLeft(current.getTransform());
+        do {
+            mx.mul(current.getTransform());
             current = current.getParent();
-        }
+        } while (current != null);
         return mx;
     }
 

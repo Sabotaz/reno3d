@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 
 
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
@@ -14,7 +15,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
  */
 public class ModelFactoryStrategy {
 
-    public static Model getModel(IfcProduct ifcProduct) {
+    public static ModelInstance getModel(IfcProduct ifcProduct) {
         if (ifcProduct instanceof IfcWall) {
             System.out.println("WALL !");
             return new IfcWallModelFactory(ifcProduct).getModel();
@@ -28,6 +29,6 @@ public class ModelFactoryStrategy {
             System.out.println("WINDOW!");
             //return new IfcWindowModelFactory(ifcProduct).getModel();
         }
-        return new Model();
+        return new ModelInstance(new Model());
     }
 }

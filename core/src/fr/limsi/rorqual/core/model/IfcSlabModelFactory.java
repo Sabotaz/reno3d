@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
@@ -190,8 +191,8 @@ public class IfcSlabModelFactory {
     }
 
 
-    public Model getModel() {
+    public ModelInstance getModel() {
         //return wall_model.getModel();
-        return CSGUtils.toModel(wall_csg);
+        return new ModelInstance(CSGUtils.toModel(wall_csg));
     }
 }

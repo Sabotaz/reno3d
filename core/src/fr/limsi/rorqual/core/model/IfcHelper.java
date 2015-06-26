@@ -1337,9 +1337,9 @@ public class IfcHelper {
                 new BOOLEAN(true), new BOOLEAN(false));
 
         // Window definition
-        IfcCartesianPoint localPointWindow = createCartesianPoint3D(0.0,0.05,1.01);
-        IfcDirection zLocalWindow = createDirection3D(1.0,0.0,0.0);
-        IfcDirection xLocalWindow = createDirection3D(0.0,0.0,-1.0);
+        IfcCartesianPoint localPointWindow = createCartesianPoint3D(0.0,0.05,0.01);
+        IfcDirection xLocalWindow = createDirection3D(1.0,0.0,0.0);
+        IfcDirection zLocalWindow = createDirection3D(0.0,0.0,1.0);
         IfcAxis2Placement3D placementWindow = new IfcAxis2Placement3D(
                 localPointWindow, zLocalWindow, xLocalWindow);
         IfcLocalPlacement localPlacementWindow = new IfcLocalPlacement(opening.getObjectPlacement(),

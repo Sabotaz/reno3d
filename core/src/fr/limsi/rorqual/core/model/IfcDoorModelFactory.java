@@ -15,7 +15,7 @@ public class IfcDoorModelFactory {
 
     /*** Attributs ***/
     private IfcDoor door;
-    private Model modelInstanceDoor;
+    private ModelInstance modelInstanceDoor;
     private AssetManager assets;
 
     /*** Constructeur ***/
@@ -36,9 +36,9 @@ public class IfcDoorModelFactory {
     }
 
     private void loadDoorModel(){
-//        modelInstanceDoor = new ModelInstance((Model)assets.get("modelDoor"));
-//        modelInstanceDoor.transform.setTranslation(1.0f,1.0f,1.0f);
-        modelInstanceDoor = (Model)assets.get("modelDoor");
+        modelInstanceDoor = new ModelInstance((Model)assets.get("modelDoor"));
+        //modelInstanceDoor.transform.setTranslation(1.0f,1.0f,1.0f);
+        //modelInstanceDoor = (Model)assets.get("modelDoor");
     }
 
     private void setDoorPosition(){
@@ -53,7 +53,7 @@ public class IfcDoorModelFactory {
 
     }
 
-    public Model getModel(){
+    public ModelInstance getModel(){
         return modelInstanceDoor;
     }
 }
