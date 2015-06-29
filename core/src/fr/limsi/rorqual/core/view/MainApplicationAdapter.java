@@ -208,7 +208,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         this.assets = AssetManager.getInstance();
-        model = (Model)assets.get("modelDoor");
+        model = (Model)assets.get("modelWindow");
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
@@ -261,7 +261,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         stageMenu.draw();
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         modelBatch.begin(cameras[ncam % cameras.length]);
-        //modelBatch.render(modelInstance, environnement);
+//        modelBatch.render(modelInstance, environnement);
         modelBatch.end();
 
         Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);

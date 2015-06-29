@@ -76,8 +76,8 @@ public class AssetManager {
 
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        assets.put("modelDoor", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/Door2.g3db", Files.FileType.Internal)));
-        assets.put("modelWindow", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/windowTest.g3db", Files.FileType.Internal)));
+        assets.put("modelDoor", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/Door.g3db", Files.FileType.Internal)));
+        assets.put("modelWindow", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/windowTransparenceTest.g3db", Files.FileType.Internal)));
     }
 
     public Object get(String s) {
