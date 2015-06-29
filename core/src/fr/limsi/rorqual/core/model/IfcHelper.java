@@ -532,6 +532,27 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la largeur d'une window
+    public static double getWindowWidth (IfcWindow window){
+        return getWindowWidth(IfcHolder.getInstance().getIfcModel(), window);
+    }
+
+    // Permet de récupérer la hauteur d'une window
+    public static double getWindowHeight (IfcWindow window){
+        return getWindowHeight(IfcHolder.getInstance().getIfcModel(), window);
+    }
+
+    // Permet de récupérer la profondeur d'une window
+    public static double getWindowDepth (IfcWindow window){
+        return getWindowDepth(IfcHolder.getInstance().getIfcModel(), window);
+    }
+
+    // Permet de récupérer la profondeur d'une window
+    public static double getWindowDepth (IfcModel ifcModel, IfcWindow window){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
+        return (IfcHelper.getOpeningDepth(opening));
+    }
+
+    // Permet de récupérer la largeur d'une window
     public static double getWindowWidth (IfcModel ifcModel, IfcWindow window){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
         return (IfcHelper.getOpeningWidth(opening));

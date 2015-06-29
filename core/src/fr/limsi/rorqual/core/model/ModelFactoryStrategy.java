@@ -27,7 +27,7 @@ public class ModelFactoryStrategy {
             return new IfcDoorModelFactory(ifcProduct).getModel();
         } else if (ifcProduct instanceof IfcWindow) {
             System.out.println("WINDOW!");
-            //return new IfcWindowModelFactory(ifcProduct).getModel();
+            return new IfcWindowModelFactory(ifcProduct).getModel();
         }
         return new ModelInstance(new Model());
     }
