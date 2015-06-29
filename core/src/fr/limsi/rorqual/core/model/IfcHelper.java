@@ -873,6 +873,7 @@ public class IfcHelper {
         wallAllPoints.add(wallCartesianPoint3);
         IfcCartesianPoint wallCartesianPoint4 = createCartesianPoint2D(0.0,-wallThickness/2);
         wallAllPoints.add(wallCartesianPoint4);
+        wallAllPoints.add(wallCartesianPoint1);
         IfcPolyline wallPolyline = new IfcPolyline(wallAllPoints);
         IfcArbitraryClosedProfileDef wallArbitraryClosedProfileDef = new IfcArbitraryClosedProfileDef(
                 new IfcProfileTypeEnum ("AREA"), null, wallPolyline);
@@ -948,15 +949,18 @@ public class IfcHelper {
 
     // Permet d'ajouter un floor à un IfcModel
     public static void addFloor (IfcModel ifcModel,String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint){
-        IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel,nameBuildingStorey);
-        IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0,0.0,0.0);
-        IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0,0.0,1.0);
+        IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel, nameBuildingStorey);
+        IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0, 0.0, 0.0);
+        IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0, 0.0, 1.0);
         IfcDirection ifcDirectionXDirectionLocalSlab = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DSlab = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginSlab, ifcDirectionZAxisLocalSlab, ifcDirectionXDirectionLocalSlab);
         IfcLocalPlacement ifcLocalPlacementSlab = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
                 ifcAxis2Placement3DSlab);
         LIST<IfcRepresentation> ifcSlabRepresentationsList = new LIST<>();
+        LIST<IfcLengthMeasure> lengthMeasureLIST = listSlabCartesianPoint.get(0).getCoordinates();
+        IfcCartesianPoint firstCartesianPoint = new IfcCartesianPoint(lengthMeasureLIST);
+        listSlabCartesianPoint.add(firstCartesianPoint);
 
         // Slab representation : SweptSolid representation (3D)
         IfcPolyline slabPolyline = new IfcPolyline(listSlabCartesianPoint);
@@ -1262,32 +1266,32 @@ public class IfcHelper {
         addOpening(ifcModel, nameDoor, product, doorWidth, doorHeight, xLocal, 0.0);
         IfcOpeningElement opening = getOpening(ifcModel, nameDoor);
 
-        // Door style definitions
-        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
-
-        IfcDoorLiningProperties doorLiningProperties = new IfcDoorLiningProperties(
-                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.12)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.05)),
-                null, null, null, null, null, null, null, null, null);
-
-        IfcDoorPanelProperties doorPanelProperties = new IfcDoorPanelProperties(
-                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.05)), new IfcDoorPanelOperationEnum("SWINGING"),
-                new IfcNormalisedRatioMeasure(new IfcRatioMeasure(1.0)), new IfcDoorPanelPositionEnum("LEFT"), null);
-
-        propertySetDefinitions.add(doorPanelProperties);
-        propertySetDefinitions.add(doorLiningProperties);
-
-        IfcDoorStyle doorStyle = new IfcDoorStyle(
-                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                new IfcLabel("Standard", true), null, new IfcLabel(), propertySetDefinitions, null, new IfcLabel(),
-                new IfcDoorStyleOperationEnum("SINGLE_SWING_RIGHT"), new IfcDoorStyleConstructionEnum("NOTDEFINED"),
-                new BOOLEAN(true), new BOOLEAN(false));
+//        // Door style definitions
+//        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
+//
+//        IfcDoorLiningProperties doorLiningProperties = new IfcDoorLiningProperties(
+//                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+//                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.12)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.05)),
+//                null, null, null, null, null, null, null, null, null);
+//
+//        IfcDoorPanelProperties doorPanelProperties = new IfcDoorPanelProperties(
+//                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+//                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.05)), new IfcDoorPanelOperationEnum("SWINGING"),
+//                new IfcNormalisedRatioMeasure(new IfcRatioMeasure(1.0)), new IfcDoorPanelPositionEnum("LEFT"), null);
+//
+//        propertySetDefinitions.add(doorPanelProperties);
+//        propertySetDefinitions.add(doorLiningProperties);
+//
+//        IfcDoorStyle doorStyle = new IfcDoorStyle(
+//                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+//                new IfcLabel("Standard", true), null, new IfcLabel(), propertySetDefinitions, null, new IfcLabel(),
+//                new IfcDoorStyleOperationEnum("SINGLE_SWING_LEFT"), new IfcDoorStyleConstructionEnum("NOTDEFINED"),
+//                new BOOLEAN(true), new BOOLEAN(false));
 
         // Door definition
-        IfcCartesianPoint localPointDoor = createCartesianPoint3D(0.0,0.16,0.0);
-        IfcDirection xLocalDoor = createDirection3D(0.0, 0.0, 1.0);
-        IfcDirection zLocalDoor = createDirection3D(1.0,0.0,0.0);
+        IfcCartesianPoint localPointDoor = createCartesianPoint3D(0.0,0.0,0.0);
+        IfcDirection xLocalDoor = createDirection3D(1.0,0.0,0.0);
+        IfcDirection zLocalDoor = createDirection3D(0.0,0.0,1.0);
         IfcAxis2Placement3D placementDoor = new IfcAxis2Placement3D(
                 localPointDoor, xLocalDoor, zLocalDoor);
         IfcLocalPlacement localPlacementDoor = new IfcLocalPlacement(opening.getObjectPlacement(),
@@ -1322,12 +1326,12 @@ public class IfcHelper {
                 ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Opening Container", true),
                 new IfcText("OpeningContainer for Door",true),opening,door);
 
-        // Create relation IfcDoor <-> IfcDoorStyle
-        SET<IfcObject> ifcDoorSET = new SET<>();
-        ifcDoorSET.add(door);
-        IfcRelDefinesByType relDefinesByType = new IfcRelDefinesByType(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Door Container", true),
-                new IfcText("DoorContainer for DoorStyle",true),ifcDoorSET,doorStyle);
+//        // Create relation IfcDoor <-> IfcDoorStyle
+//        SET<IfcObject> ifcDoorSET = new SET<>();
+//        ifcDoorSET.add(door);
+//        IfcRelDefinesByType relDefinesByType = new IfcRelDefinesByType(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
+//                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Door Container", true),
+//                new IfcText("DoorContainer for DoorStyle",true),ifcDoorSET,doorStyle);
 
         // add new Ifc-objects to the model
         ifcModel.addIfcObject(relFillsElement);
@@ -1339,10 +1343,10 @@ public class IfcHelper {
         ifcModel.addIfcObject(zLocalDoor);
         ifcModel.addIfcObject(xLocalDoor);
 
-        ifcModel.addIfcObject(relDefinesByType);
-        ifcModel.addIfcObject(doorStyle);
-        ifcModel.addIfcObject(doorLiningProperties);
-        ifcModel.addIfcObject(doorPanelProperties);
+//        ifcModel.addIfcObject(relDefinesByType);
+//        ifcModel.addIfcObject(doorStyle);
+//        ifcModel.addIfcObject(doorLiningProperties);
+//        ifcModel.addIfcObject(doorPanelProperties);
     }
 
     // Permet d'ajouter une window à un produit (wall ou slab)
@@ -1352,27 +1356,27 @@ public class IfcHelper {
         addOpening(ifcModel,nameWindow,product,windowWidth,windowHeight,xLocal,zLocal);
         IfcOpeningElement opening = getOpening(ifcModel, nameWindow);
 
-        // Window style definitions
-        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
-
-        IfcWindowLiningProperties windowLiningProperties = new IfcWindowLiningProperties(
-                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.1)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.05)),
-                null, null, null, null, null, null, null);
-
-        IfcWindowPanelProperties windowPanelProperties = new IfcWindowPanelProperties(
-                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                null, null, new IfcWindowPanelOperationEnum("SIDEHUNGLEFTHAND"), new IfcWindowPanelPositionEnum("NOTDEFINED"),
-                new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.5)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.5)), null);
-
-        propertySetDefinitions.add(windowPanelProperties);
-        propertySetDefinitions.add(windowLiningProperties);
-
-        IfcWindowStyle windowStyle = new IfcWindowStyle(
-                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                new IfcLabel("Standard", true), null, new IfcLabel(), propertySetDefinitions, null, new IfcLabel(),
-                new IfcWindowStyleConstructionEnum("NOTDEFINED"), new IfcWindowStyleOperationEnum("SINGLE_PANEL"),
-                new BOOLEAN(true), new BOOLEAN(false));
+//        // Window style definitions
+//        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
+//
+//        IfcWindowLiningProperties windowLiningProperties = new IfcWindowLiningProperties(
+//                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+//                null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.1)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.05)),
+//                null, null, null, null, null, null, null);
+//
+//        IfcWindowPanelProperties windowPanelProperties = new IfcWindowPanelProperties(
+//                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+//                null, null, new IfcWindowPanelOperationEnum("SIDEHUNGLEFTHAND"), new IfcWindowPanelPositionEnum("NOTDEFINED"),
+//                new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.5)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(0.5)), null);
+//
+//        propertySetDefinitions.add(windowPanelProperties);
+//        propertySetDefinitions.add(windowLiningProperties);
+//
+//        IfcWindowStyle windowStyle = new IfcWindowStyle(
+//                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+//                new IfcLabel("Standard", true), null, new IfcLabel(), propertySetDefinitions, null, new IfcLabel(),
+//                new IfcWindowStyleConstructionEnum("NOTDEFINED"), new IfcWindowStyleOperationEnum("SINGLE_PANEL"),
+//                new BOOLEAN(true), new BOOLEAN(false));
 
         // Window definition
         IfcCartesianPoint localPointWindow = createCartesianPoint3D(0.0,0.05,0.01);
@@ -1387,7 +1391,7 @@ public class IfcHelper {
         IfcWindow window = new IfcWindow(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
                 ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel(nameWindow, true),
-                new IfcText("", true), null, localPlacementWindow,
+                new IfcText("", true), new IfcLabel("",true), localPlacementWindow,
                 null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowHeight)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowWidth)));
 
         // Create relation buildingStorey -> window
@@ -1412,12 +1416,12 @@ public class IfcHelper {
                 ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Opening Container", true),
                 new IfcText("OpeningContainer for Window",true),opening,window);
 
-        // Create relation IfcWindow <-> IfcWindowStyle
-        SET<IfcObject> ifcWindowSET = new SET<>();
-        ifcWindowSET.add(window);
-        IfcRelDefinesByType relDefinesByType = new IfcRelDefinesByType(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Window Container", true),
-                new IfcText("WindowContainer for WindowStyle",true),ifcWindowSET,windowStyle);
+//        // Create relation IfcWindow <-> IfcWindowStyle
+//        SET<IfcObject> ifcWindowSET = new SET<>();
+//        ifcWindowSET.add(window);
+//        IfcRelDefinesByType relDefinesByType = new IfcRelDefinesByType(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
+//                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Window Container", true),
+//                new IfcText("WindowContainer for WindowStyle",true),ifcWindowSET,windowStyle);
 
         // add new Ifc-objects to the model
         ifcModel.addIfcObject(relFillsElement);
@@ -1429,10 +1433,10 @@ public class IfcHelper {
         ifcModel.addIfcObject(zLocalWindow);
         ifcModel.addIfcObject(xLocalWindow);
 
-        ifcModel.addIfcObject(relDefinesByType);
-        ifcModel.addIfcObject(windowStyle);
-        ifcModel.addIfcObject(windowLiningProperties);
-        ifcModel.addIfcObject(windowPanelProperties);
+//        ifcModel.addIfcObject(relDefinesByType);
+//        ifcModel.addIfcObject(windowStyle);
+//        ifcModel.addIfcObject(windowLiningProperties);
+//        ifcModel.addIfcObject(windowPanelProperties);
     }
 
     // Permet d'ajouter une double window à un produit (wall ou slab)
