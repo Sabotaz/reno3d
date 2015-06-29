@@ -65,14 +65,14 @@ public class Group3d extends Actor3d{
             //child.translate(1,0,0);
 
             Matrix4 child_matrix = child.transform.cpy();
-            child.transform.mul(transform);
-
+            child.transform.mulLeft(transform);
             //if (child.isCullable(getStage3d().getCamera())) {
              child.draw(modelBatch, environment);
-             visibleCount++;
             //}
 
             child.transform.set(child_matrix);
+
+            visibleCount++;
 
 
         }

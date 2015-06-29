@@ -446,6 +446,23 @@ public class IfcHelper {
         return -1;
     }
 
+    // Permet de récupérer la hauteur d'un opening
+    public static double getOpeningDepth (IfcOpeningElement opening){
+        IfcProductRepresentation productRepresentation = opening.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST) {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
+                    if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
+                        return ((IfcExtrudedAreaSolid) actualRepresentationItem).getDepth().value;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
     // Permet de récupérer la surface d'un opening
     public static double getOpeningSurface (IfcOpeningElement opening){
         double openingWidth = getOpeningWidth(opening);
@@ -465,6 +482,21 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la largeur d'une door
+    public static double getDoorWidth (IfcDoor door){
+        return getDoorWidth(IfcHolder.getInstance().getIfcModel(), door);
+    }
+
+    // Permet de récupérer la hauteur d'une door
+    public static double getDoorHeight (IfcDoor door){
+        return getDoorHeight(IfcHolder.getInstance().getIfcModel(), door);
+    }
+
+    // Permet de récupérer la profondeur d'une door
+    public static double getDoorDepth (IfcDoor door){
+        return getDoorDepth(IfcHolder.getInstance().getIfcModel(), door);
+    }
+
+    // Permet de récupérer la largeur d'une door
     public static double getDoorWidth (IfcModel ifcModel, IfcDoor door){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
         return (IfcHelper.getOpeningWidth(opening));
@@ -474,6 +506,12 @@ public class IfcHelper {
     public static double getDoorHeight (IfcModel ifcModel, IfcDoor door){
         IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
         return (IfcHelper.getOpeningHeight(opening));
+    }
+
+    // Permet de récupérer la profondeur d'une door
+    public static double getDoorDepth (IfcModel ifcModel, IfcDoor door){
+        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
+        return (IfcHelper.getOpeningDepth(opening));
     }
 
     // Permet de récupérer la surface d'une door
@@ -1243,15 +1281,15 @@ public class IfcHelper {
         IfcDoorStyle doorStyle = new IfcDoorStyle(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                 new IfcLabel("Standard", true), null, new IfcLabel(), propertySetDefinitions, null, new IfcLabel(),
-                new IfcDoorStyleOperationEnum("SINGLE_SWING_LEFT"), new IfcDoorStyleConstructionEnum("NOTDEFINED"),
+                new IfcDoorStyleOperationEnum("SINGLE_SWING_RIGHT"), new IfcDoorStyleConstructionEnum("NOTDEFINED"),
                 new BOOLEAN(true), new BOOLEAN(false));
 
         // Door definition
         IfcCartesianPoint localPointDoor = createCartesianPoint3D(0.0,0.16,0.0);
-        IfcDirection xLocalDoor = createDirection3D(1.0,0.0,0.0);
-        IfcDirection zLocalDoor = createDirection3D(0.0,0.0,1.0);
+        IfcDirection xLocalDoor = createDirection3D(0.0, 0.0, 1.0);
+        IfcDirection zLocalDoor = createDirection3D(1.0,0.0,0.0);
         IfcAxis2Placement3D placementDoor = new IfcAxis2Placement3D(
-                localPointDoor, zLocalDoor, xLocalDoor);
+                localPointDoor, xLocalDoor, zLocalDoor);
         IfcLocalPlacement localPlacementDoor = new IfcLocalPlacement(opening.getObjectPlacement(),
                 placementDoor);
 

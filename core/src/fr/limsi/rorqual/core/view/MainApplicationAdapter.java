@@ -290,10 +290,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         program.begin();
         program.setUniformMatrix("u_proj", cameras[ncam % cameras.length].projection);
         program.setUniformMatrix("u_view", cameras[ncam % cameras.length].view);
-        System.out.println("proj " + cameras[ncam % cameras.length].projection);
-        System.out.println("view " + cameras[ncam % cameras.length].view);
-        System.out.println("model " + popup.getTransform());
-        System.out.println("xxxx " + cameras[ncam % cameras.length].view.cpy().mul(popup.getTransform()));
         program.setUniformMatrix("u_model", popup.getTransform());
         popup.render(program);
         program.end();
@@ -434,8 +430,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 selected.setColor(Color.WHITE);
             selected = stage3d.getObject(screenX, screenY);
             if (selected != null) {
-                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.userData));
-                System.out.println("TOUCH: " + selected.userData);
+                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getParent().userData));
+                System.out.println("TOUCH: " + selected.getParent().userData);
                 selected.setColor(Color.YELLOW);
             }
             return selected != null;

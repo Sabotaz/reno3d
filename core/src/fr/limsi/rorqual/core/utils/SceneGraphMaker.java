@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.utils;
 
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcGridPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcLocalPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcObjectPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcProduct;
+import scene3d.Actor3d;
 import scene3d.Group3d;
 import scene3d.Stage3d;
 
@@ -63,9 +65,12 @@ public class SceneGraphMaker {
         if (treeNode.getUserObject() instanceof IfcProduct) {
             IfcProduct product = (IfcProduct) treeNode.getUserObject();
             IfcObjectPlacement placement = product.getObjectPlacement();
-            Group3d node = new Group3d(ModelFactoryStrategy.getModel(product));
+            ModelInstance model = ModelFactoryStrategy.getModel(product);
+            Actor3d container = new Actor3d(model);
+            container.transform.set(model.transform);
+            Group3d node = new Group3d();
+            node.addActor3d(container);
             node.setName(product.getGlobalId().getEncodedValue());
-            node.setTransform(IfcObjectPlacementUtils.computeMatrix(placement));
             node.userData = product;
             nodes.put(product.getObjectPlacement(), node);
             queue.add(placement);
