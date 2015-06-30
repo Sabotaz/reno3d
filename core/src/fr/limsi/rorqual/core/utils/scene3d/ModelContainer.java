@@ -140,8 +140,6 @@ public class ModelContainer {
         Hit temp = new Hit();
         for (ModelContainer child : children) {
             Hit hit = child.hit(ray, current_mx);
-            if (hit.distance != -1)
-                System.out.println(hit.hit + "(" + hit.hit.userData + "): " + hit.distance);
             if (hit.isCloserThan(temp))
                 temp = hit;
         }
