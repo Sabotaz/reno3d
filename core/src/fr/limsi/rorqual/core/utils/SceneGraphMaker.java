@@ -8,31 +8,28 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import fr.limsi.rorqual.core.model.ModelFactoryStrategy;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
+import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcGridPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcLocalPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcObjectPlacement;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcProduct;
-import scene3d.Actor3d;
-import scene3d.Group3d;
-import scene3d.Stage3d;
 
 /**
  * Created by christophe on 31/03/15.
  */
 public class SceneGraphMaker {
 
-    public static void makeSceneGraph(DefaultMutableTreeNode treeNode, Stage3d stage) {
+    public static void makeSceneGraph(DefaultMutableTreeNode treeNode, ModelGraph stage) {
 
-        HashMap<IfcObjectPlacement, Group3d> nodes = new HashMap<IfcObjectPlacement,Group3d>();
-
-        stage.getRoot().setTransform(new Matrix4());
+        HashMap<IfcObjectPlacement, ModelContainer> nodes = new HashMap<IfcObjectPlacement,ModelContainer>();
 
         Queue<IfcObjectPlacement> queue = new LinkedList<IfcObjectPlacement>();
         getProductsPlacements(treeNode, nodes, queue);
 
         while (!queue.isEmpty()) {
             IfcObjectPlacement placement = queue.poll();
-            Group3d node = nodes.get(placement);
+            ModelContainer node = nodes.get(placement);
             Matrix4 loc = new Matrix4();
             if (placement instanceof IfcLocalPlacement) {
                 IfcLocalPlacement localPlacement = (IfcLocalPlacement) placement;
@@ -41,36 +38,32 @@ public class SceneGraphMaker {
                 // parents
                 if (localPlacement.getPlacementRelTo() != null) {
                     if (nodes.containsKey(localPlacement.getPlacementRelTo())) {
-                        Group3d parent = nodes.get(localPlacement.getPlacementRelTo());
-                        parent.addActor3d(node);
+                        ModelContainer parent = nodes.get(localPlacement.getPlacementRelTo());
+                        parent.add(node);
                     } else {
-                        Group3d parent = new Group3d();
-                        parent.addActor3d(node);
+                        ModelContainer parent = new ModelContainer();
+                        parent.add(node);
                         nodes.put(localPlacement.getPlacementRelTo(), parent);
                         queue.add(localPlacement.getPlacementRelTo());
                     }
                 } else { // root
-                    stage.getRoot().addActor3d(node);
+                    stage.getRoot().add(node);
                 }
             } else if (placement instanceof IfcGridPlacement) {
                 IfcGridPlacement gridPlacement = (IfcGridPlacement) placement;
                 //ToDo
             }
-            node.setTransform(loc);
+            node.transform.mul(loc);
         }
     }
 
 
-    public static void getProductsPlacements(DefaultMutableTreeNode treeNode, HashMap<IfcObjectPlacement, Group3d> nodes, Queue<IfcObjectPlacement> queue) {
+    public static void getProductsPlacements(DefaultMutableTreeNode treeNode, HashMap<IfcObjectPlacement, ModelContainer> nodes, Queue<IfcObjectPlacement> queue) {
         if (treeNode.getUserObject() instanceof IfcProduct) {
             IfcProduct product = (IfcProduct) treeNode.getUserObject();
             IfcObjectPlacement placement = product.getObjectPlacement();
             ModelInstance model = ModelFactoryStrategy.getModel(product);
-            Actor3d container = new Actor3d(model);
-            container.transform.set(model.transform);
-            Group3d node = new Group3d();
-            node.addActor3d(container);
-            node.setName(product.getGlobalId().getEncodedValue());
+            ModelContainer node = new ModelContainer(model);
             node.userData = product;
             nodes.put(product.getObjectPlacement(), node);
             queue.add(placement);

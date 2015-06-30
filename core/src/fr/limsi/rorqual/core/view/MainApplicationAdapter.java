@@ -66,13 +66,13 @@ import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.utils.SceneGraphMaker;
-import scene3d.Actor3d;
-import scene3d.Stage3d;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
+import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
     private ShapeRenderer shape;
-    private static Stage3d stage3d;
+    private static ModelGraph modelGraph;
     private Stage stageMenu;
     private Skin skin;
     private Button buttonDPE, buttonExit;
@@ -152,14 +152,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             }
         };
 
-        stage3d = new Stage3d(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), baseCamera, environnement, shaderProvider);
+        modelGraph = new ModelGraph(baseCamera, environnement, shaderProvider);
         stageMenu = new Stage();
         stageMenu.setDebugAll(true);
         System.out.println(stageMenu.getWidth());
-        SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, stage3d);
+        SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, this, stage3d));
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, this, modelGraph));
 
         /*** Ajout du bouton EXIT ***/
         buttonExit = new TextButton("EXIT", textButtonStyle);
@@ -173,7 +173,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         });
         stageMenu.addActor(buttonExit);
 
-        state = new DpeStateUpdater(stage3d);
+        state = new DpeStateUpdater(modelGraph);
 
         new DpeUi(stageMenu);
         dpe = new Dpe(stageMenu);
@@ -219,13 +219,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         program = new BillboardShader(null).getProgram();
         shader = new BillboardShader(null);
-        popup = new Popup(null,0,0,400,400);
+        popup = new Popup(0,0,400,400);
 	}
 
 	@Override
 	public void render () {
         update_cam();
-        stage3d.act();
+        //modelGraph.act();
         stageMenu.act();
 
 		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1);
@@ -257,7 +257,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         shape.end();
 
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
-        stage3d.draw();
+        modelGraph.draw();
         stageMenu.draw();
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         modelBatch.begin(cameras[ncam % cameras.length]);
@@ -290,7 +290,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         program.begin();
         program.setUniformMatrix("u_proj", cameras[ncam % cameras.length].projection);
         program.setUniformMatrix("u_view", cameras[ncam % cameras.length].view);
-        program.setUniformMatrix("u_model", popup.getTransform());
+        program.setUniformMatrix("u_model", popup.transform);
         popup.render(program);
         program.end();
 
@@ -364,7 +364,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 return true;
             case Input.Keys.C:
                 ncam++;
-                stage3d.setCamera(cameras[ncam % cameras.length]);
+                modelGraph.setCamera(cameras[ncam % cameras.length]);
                 return true;
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();
@@ -391,20 +391,20 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         return false;
     }
 
-    static Actor3d selected = null;
+    static ModelContainer selected = null;
 
-    public static Actor3d getFromUserObject(Object o) {
-        return stage3d.getFromUserObject(o);
+    public static ModelContainer getFromUserObject(Object o) {
+        return modelGraph.getFromUserObject(o);
     }
 
     public static void select(Object o) {
         deselect();
-        selected = stage3d.getFromUserObject(o);
+        selected = modelGraph.getFromUserObject(o);
         if (selected != null) {
             //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
-            selected.setColor(Color.YELLOW);
-            cameras[ncam%cameras.length].position.set(selected.getTransform().getTranslation(new Vector3()).add(5, 5, 5));
-            cameras[ncam%cameras.length].lookAt(selected.getTransform().getTranslation(new Vector3()).add(0, 0, 2));
+            //selected.getModel().setColor(Color.YELLOW);
+            cameras[ncam%cameras.length].position.set(selected.transform.getTranslation(new Vector3()).add(5, 5, 5));
+            cameras[ncam%cameras.length].lookAt(selected.transform.getTranslation(new Vector3()).add(0, 0, 2));
             cameras[ncam%cameras.length].up.set(0, 0, 1);
             cameras[ncam%cameras.length].update();
         }
@@ -412,7 +412,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     public static void deselect() {
         if (selected != null) {
-            selected.setColor(Color.WHITE);
+            //selected.getModel().setColor(Color.WHITE);
             cameras[ncam%cameras.length].position.set(0, -20, 20);
             cameras[ncam%cameras.length].lookAt(0, 0, 0);
             cameras[ncam%cameras.length].up.set(0, 0, 1);
@@ -427,12 +427,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         if (!dragged) {
             if (selected != null)
-                selected.setColor(Color.WHITE);
-            selected = stage3d.getObject(screenX, screenY);
+                ;//selected.getModel().setColor(Color.WHITE);
+            selected = modelGraph.getObject(screenX, screenY);
+            System.out.println("TOUCH: " + selected);
             if (selected != null) {
-                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getParent().userData));
-                System.out.println("TOUCH: " + selected.getParent().userData);
-                selected.setColor(Color.YELLOW);
+                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.userData));
+                System.out.println("TOUCH: " + selected.userData);
+                //selected.getModel().setColor(Color.YELLOW);
             }
             return selected != null;
         }

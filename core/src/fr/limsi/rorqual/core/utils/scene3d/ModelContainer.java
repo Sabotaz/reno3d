@@ -1,0 +1,164 @@
+package fr.limsi.rorqual.core.utils.scene3d;
+
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.math.collision.Ray;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.mihosoft.vrl.v3d.Vector3d;
+
+/**
+ * Created by christophe on 30/06/15.
+ */
+public class ModelContainer {
+
+    protected ModelContainer parent;
+    protected List<ModelContainer> children = new ArrayList<ModelContainer>();
+    protected ModelInstance model;
+    public Matrix4 transform;
+    private Matrix4 model_transform;
+    public Object userData;
+
+    public ModelContainer() {
+        transform = new Matrix4();
+        model_transform = new Matrix4();
+        model = new ModelInstance(new Model());
+    }
+
+    public ModelContainer(ModelInstance m) {
+        transform = new Matrix4();
+        setModel(m);
+    }
+
+    public void add(ModelContainer child) {
+        child.remove();
+        children.add(child);
+        child.setParent(this);
+    }
+
+    private void remove() {
+        if (parent != null)
+            parent.remove(this);
+    }
+
+    public void remove(ModelContainer child) {
+        if (children.contains(child))
+            children.remove(child);
+        child.parent = null;
+    }
+
+    private void setParent(ModelContainer p) {
+        parent = p;
+    }
+
+    public void setModel(ModelInstance m) {
+        model = m;
+        model_transform = model.transform.cpy();
+    }
+
+    public void draw(ModelBatch modelBatch, Environment environment){
+        draw(modelBatch, environment, new Matrix4());
+    }
+
+    protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
+
+        // update mx
+        Matrix4 updated_global_transform = global_transform.cpy().mul(transform);
+
+        // update model mx
+        model.transform = updated_global_transform.cpy().mul(model_transform);
+
+        // draw
+        modelBatch.render(model, environment);
+        drawChildren(modelBatch, environment, updated_global_transform);
+    }
+
+    protected void drawChildren(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
+        for (ModelContainer child : children) {
+            child.draw(modelBatch, environment, global_transform);
+        }
+    }
+
+    public ModelInstance getModel() {
+        return model;
+    }
+
+    private float intersectsMesh(Ray ray, BoundingBox boundBox) {
+        Vector3 pt = new Vector3();
+        Boolean intersect = Intersector.intersectRayBounds(ray, boundBox, pt);
+
+        final float dist2cam = pt.dst(ray.origin);
+        return intersect ? dist2cam : -1f;
+    }
+
+    private float intersects(Ray ray, Matrix4 global_transform) {
+
+        BoundingBox boundBox = new BoundingBox();
+        Vector3 center = new Vector3();
+        model.calculateBoundingBox(boundBox);
+        Matrix4 local_transform = global_transform.cpy().mul(model_transform);
+        boundBox.mul(local_transform);
+        boundBox.getCenter(center);
+
+        Vector3 dimensions = new Vector3();
+        boundBox.getDimensions(dimensions);
+        float radius = dimensions.len() / 2f;
+
+        //transform.getTranslation(position).cpy().add(center);
+        final float len = ray.direction.dot(center.x-ray.origin.x, center.y-ray.origin.y, center.z-ray.origin.z);
+        //final float dist2cam = position.dst(ray.origin);
+        if (len < 0f)
+            return -1f;
+        float dist2 = center.dst2(ray.origin.x + ray.direction.x * len, ray.origin.y + ray.direction.y * len, ray.origin.z + ray.direction.z * len);
+        //return (dist2 <= radius * radius) ? dist2cam : -1f;
+        return (dist2 <= radius * radius) ? intersectsMesh(ray, boundBox) : -1f;
+    }
+
+    private class Hit {
+        ModelContainer hit;
+        float distance = -1;
+
+        public boolean isCloserThan(Hit other) {
+            if (this.hit == null || this.distance == -1)
+                return false;
+            else if (other.hit == null || other.distance == -1)
+                return true;
+            else return distance < other.distance;
+        }
+    }
+
+    private Hit hit(Ray ray, Matrix4 mx) {
+        Matrix4 current_mx = mx.cpy().mul(transform);
+        Hit temp = new Hit();
+        for (ModelContainer child : children) {
+            Hit hit = child.hit(ray, current_mx);
+            if (hit.distance != -1)
+                System.out.println(hit.hit + "(" + hit.hit.userData + "): " + hit.distance);
+            if (hit.isCloserThan(temp))
+                temp = hit;
+        }
+
+        if (temp.hit == null) {
+            float dist2 = intersects(ray, current_mx);
+            if (dist2 >= 0f) {
+                temp.hit = this;
+                temp.distance = dist2;
+            }
+        }
+        return temp;
+    }
+
+    public ModelContainer hit(Ray ray) {
+        Hit hit = hit(ray, new Matrix4());
+        return hit.hit;
+    }
+
+}

@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.limsi.rorqual.core.event.*;
-import scene3d.Actor3d;
-import scene3d.Stage3d;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
+import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 /**
  * Created by christophe on 04/06/15.
@@ -15,10 +15,10 @@ import scene3d.Stage3d;
 public class DpeStateUpdater implements EventListener {
 
     HashMap<Object, DpeState> states = new HashMap<Object, DpeState>();
-    Stage3d stage;
+    ModelGraph modelGraph;
 
-    public DpeStateUpdater(Stage3d s) {
-        stage = s;
+    public DpeStateUpdater(ModelGraph m) {
+        modelGraph = m;
         EventManager.getInstance().addListener(Channel.DPE, this);
         EventManager.getInstance().addListener(Channel.UI, this);
     }
@@ -53,17 +53,17 @@ public class DpeStateUpdater implements EventListener {
                     case DPE_STATE_CHANGED:
                         Object items[] = (Object[]) o;
                         setState(items[0], (DpeState) items[1]);
-                        Actor3d actor = stage.getFromUserObject(items[0]);
+                        ModelContainer node = modelGraph.getFromUserObject(items[0]);
                         switch ((DpeState) items[1]) {
                             case UNKNOWN:
-                                actor.setColor(Color.RED);
+                                //node.getModel().setColor(Color.RED);
                                 break;
                             case GUESSED:
-                                actor.setColor(Color.YELLOW);
+                                //node.getModel().setColor(Color.YELLOW);
                                 break;
                             case KNOWN:
                             default:
-                                actor.setColor(Color.WHITE);
+                                //node.getModel().setColor(Color.WHITE);
                                 break;
                         }
                         setState(items[0], (DpeState) items[1]);

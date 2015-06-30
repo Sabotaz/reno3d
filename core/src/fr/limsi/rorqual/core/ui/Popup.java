@@ -29,18 +29,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import fr.limsi.rorqual.core.utils.AssetManager;
-import scene3d.Actor3d;
 
 /**
  * Created by christophe on 23/06/15.
  */
-public class Popup extends Actor3d {
+public class Popup {
+    public Matrix4 transform;
     NinePatch3d background;
     private Mesh mesh;
     private Texture texture;
     private float[] vertices;
 
-    public Popup (Actor3d actor, int x, int y, int w, int h) {
+    public Popup (int x, int y, int w, int h) {
         super();
         //this.setPosition(actor.getX(), actor.getY(), actor.getZ());
         //actor.getParent().addActor3d(this);

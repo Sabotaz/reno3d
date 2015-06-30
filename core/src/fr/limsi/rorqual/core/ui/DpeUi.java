@@ -24,7 +24,6 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
-import scene3d.Stage3d;
 
 /**
  * Created by christophe on 03/06/15.
