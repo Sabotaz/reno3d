@@ -11,8 +11,8 @@ import fr.limsi.rorqual.core.view.BillboardShader;
  */
 public class ShaderChooser implements ShaderProvider {
 
-    LightShader lightShader = new fr.limsi.rorqual.core.view.LightShader();
-    fr.limsi.rorqual.core.view.shaders.BillboardShader billboardShader = new BillboardShader();
+    LightShader lightShader = new LightShader();
+    BillboardShader billboardShader = new BillboardShader();
     TextureShader testShader;
 
     public ShaderChooser() {

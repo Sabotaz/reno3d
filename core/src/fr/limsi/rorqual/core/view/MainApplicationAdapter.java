@@ -193,7 +193,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //modelInstance.transform.translate(0, 0, 4);
         modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
 
-        shader = new fr.limsi.rorqual.core.view.shaders.BillboardShader();
+        shader = new BillboardShader();
         shader.init();
         program = shader.program;
         popup = new Popup(0,0,400,400);
