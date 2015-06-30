@@ -14,16 +14,23 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 /**
  * Created by christophe on 20/04/15.
  */
-public class BillboardShader extends FileShader {
+public class TextureShader extends FileShader {
 
-    protected final int u_proj = register(new Uniform("u_proj"));
-    protected final int u_view = register(new Uniform("u_view"));
-    protected final int u_model = register(new Uniform("u_model"));
+    /*
+    protected final int u_projTrans = register(new Uniform("u_projTrans"));
+    protected final int u_worldTrans = register(new Uniform("u_worldTrans"));
+    protected final int u_test = register(new Uniform("u_test"));
+    protected final int u_color = register(new Uniform("u_color"));*/
+    protected final int u_projTrans = register(new Uniform("u_projTrans"));
+    protected final int u_worldTrans = register(new Uniform("u_worldTrans"));
+    protected final int u_color = register(new Uniform("u_color"));
+
     //private boolean withColor;
 
     public ShaderProgram getProgram() {
         return program;
     }
+
 
     @Override
     public void init () {
@@ -43,13 +50,17 @@ public class BillboardShader extends FileShader {
     @Override
     public void begin (Camera camera, RenderContext context) {
         program.begin();
-        set(u_proj, camera.projection);
-        set(u_view, camera.view);
+        context.setDepthTest(GL20.GL_LEQUAL, 0f, 1f);
+        context.setDepthMask(true);
+        set(u_projTrans, camera.combined);
     }
 
     @Override
     public void render (Renderable renderable) {
-        set(u_model, renderable.worldTransform);
+        set(u_worldTrans, renderable.worldTransform);
+
+        ColorAttribute colorAttr = (ColorAttribute)renderable.material.get(ColorAttribute.Diffuse);
+        set(u_color, colorAttr.color);
 
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }

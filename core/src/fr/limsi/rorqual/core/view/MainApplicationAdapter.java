@@ -143,14 +143,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Camera baseCamera = cameras[ncam%cameras.length];
 
         /*** Chargement des shaders ***/
-        shaderProvider = new DefaultShaderProvider() {
-            @Override
-            protected Shader createShader(Renderable renderable) {
-                return new LightShader(renderable);
-                //return new TestShader(renderable);
-                //return super.createShader(renderable);
-            }
-        };
+        shaderProvider = new ShaderChooser();
 
         modelGraph = new ModelGraph(baseCamera, environnement, shaderProvider);
         stageMenu = new Stage();
@@ -217,8 +210,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //modelInstance.transform.translate(0, 0, 4);
         modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
 
-        program = new BillboardShader(null).getProgram();
-        shader = new BillboardShader(null);
+        shader = new BillboardShader();
+        shader.init();
+        program = shader.program;
         popup = new Popup(0,0,400,400);
 	}
 
@@ -402,7 +396,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         selected = modelGraph.getFromUserObject(o);
         if (selected != null) {
             //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
-            //selected.getModel().setColor(Color.YELLOW);
+            selected.setColor(Color.YELLOW);
             cameras[ncam%cameras.length].position.set(selected.transform.getTranslation(new Vector3()).add(5, 5, 5));
             cameras[ncam%cameras.length].lookAt(selected.transform.getTranslation(new Vector3()).add(0, 0, 2));
             cameras[ncam%cameras.length].up.set(0, 0, 1);
@@ -412,7 +406,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     public static void deselect() {
         if (selected != null) {
-            //selected.getModel().setColor(Color.WHITE);
+            selected.setColor(Color.WHITE);
             cameras[ncam%cameras.length].position.set(0, -20, 20);
             cameras[ncam%cameras.length].lookAt(0, 0, 0);
             cameras[ncam%cameras.length].up.set(0, 0, 1);
@@ -427,13 +421,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         if (!dragged) {
             if (selected != null)
-                ;//selected.getModel().setColor(Color.WHITE);
+                selected.setColor(Color.WHITE);
             selected = modelGraph.getObject(screenX, screenY);
             System.out.println("TOUCH: " + selected);
             if (selected != null) {
-                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.userData));
-                System.out.println("TOUCH: " + selected.userData);
-                //selected.getModel().setColor(Color.YELLOW);
+                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
+                System.out.println("TOUCH: " + selected.getUserData());
+                selected.setColor(Color.YELLOW);
             }
             return selected != null;
         }

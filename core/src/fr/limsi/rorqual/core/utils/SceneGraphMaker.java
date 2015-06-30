@@ -64,7 +64,7 @@ public class SceneGraphMaker {
             IfcObjectPlacement placement = product.getObjectPlacement();
             ModelInstance model = ModelFactoryStrategy.getModel(product);
             ModelContainer node = new ModelContainer(model);
-            node.userData = product;
+            node.setUserData(product);
             nodes.put(product.getObjectPlacement(), node);
             queue.add(placement);
         }

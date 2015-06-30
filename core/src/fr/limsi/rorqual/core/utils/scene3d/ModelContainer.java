@@ -1,9 +1,12 @@
 package fr.limsi.rorqual.core.utils.scene3d;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -21,11 +24,13 @@ import eu.mihosoft.vrl.v3d.Vector3d;
 public class ModelContainer {
 
     protected ModelContainer parent;
+    protected ModelGraph root;
+
     protected List<ModelContainer> children = new ArrayList<ModelContainer>();
     protected ModelInstance model;
     public Matrix4 transform;
     private Matrix4 model_transform;
-    public Object userData;
+    private Object userData;
 
     public ModelContainer() {
         transform = new Matrix4();
@@ -36,6 +41,16 @@ public class ModelContainer {
     public ModelContainer(ModelInstance m) {
         transform = new Matrix4();
         setModel(m);
+    }
+    public void setUserData(Object o) {
+        if (root != null)
+            root.remove(this);
+        userData = o;
+        if (root != null)
+            root.add(this);
+    }
+    public Object getUserData() {
+        return userData;
     }
 
     public void add(ModelContainer child) {
@@ -53,10 +68,16 @@ public class ModelContainer {
         if (children.contains(child))
             children.remove(child);
         child.parent = null;
+        child.root = null;
+        if (root != null)
+            root.remove(child);
     }
 
     private void setParent(ModelContainer p) {
         parent = p;
+        root = parent.root;
+        if (root != null)
+            root.add(this);
     }
 
     public void setModel(ModelInstance m) {
@@ -157,6 +178,15 @@ public class ModelContainer {
     public ModelContainer hit(Ray ray) {
         Hit hit = hit(ray, new Matrix4());
         return hit.hit;
+    }
+
+    public void setColor(Color color){
+        ColorAttribute ca = new ColorAttribute(ColorAttribute.Diffuse, color);
+        if(model.getMaterial("Color") != null)
+            model.getMaterial("Color").set(ca);
+        else
+            model.materials.add(new Material("Color", ca));
+        model.materials.add(new Material("Color", ca));
     }
 
 }
