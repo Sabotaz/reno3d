@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Matrix3;
 /**
  * Created by christophe on 20/04/15.
  */
-public class LightShader extends fr.limsi.rorqual.core.view.FileShader {
+public class LightShader extends FileShader {
     /*
     protected final int u_projTrans = register(new Uniform("u_projTrans"));
     protected final int u_worldTrans = register(new Uniform("u_worldTrans"));

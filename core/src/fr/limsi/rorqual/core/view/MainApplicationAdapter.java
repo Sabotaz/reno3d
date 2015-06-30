@@ -50,6 +50,8 @@ import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+import fr.limsi.rorqual.core.view.shaders.*;
+import fr.limsi.rorqual.core.view.shaders.BillboardShader;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
 
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
