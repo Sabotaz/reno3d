@@ -2,6 +2,7 @@ uniform vec4 u_color;
 uniform vec4 u_ambient_color;
 uniform vec4 u_light_color;
 uniform vec3 u_light_direction;
+
 varying vec3 N;
 varying vec3 v;
 

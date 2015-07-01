@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -43,8 +44,12 @@ public class LightShader extends FileShader {
     }
 
     @Override
-    public boolean canRender (Renderable instance) {
-        return instance.material.has(ColorAttribute.Diffuse);
+    public boolean canRender (Renderable renderable) {
+        if (renderable.material.has(TextureAttribute.Diffuse))
+            return false;
+        else if (renderable.material.has(ColorAttribute.Diffuse))
+            return true;
+        else return false;
     }
 
     @Override

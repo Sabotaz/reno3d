@@ -186,7 +186,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         this.assets = AssetManager.getInstance();
-        model = (Model)assets.get("modelWindow");
+        model = (Model)assets.get("modelDoor");
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
@@ -240,7 +240,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         stageMenu.draw();
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         modelBatch.begin(cameras[ncam % cameras.length]);
-//        modelBatch.render(modelInstance, environnement);
+        //modelBatch.render(modelInstance, environnement);
         modelBatch.end();
 
         Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
@@ -391,7 +391,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     public static void deselect() {
         if (selected != null) {
-            selected.setColor(Color.WHITE);
+            selected.removeColor();
             cameras[ncam%cameras.length].position.set(0, -20, 20);
             cameras[ncam%cameras.length].lookAt(0, 0, 0);
             cameras[ncam%cameras.length].up.set(0, 0, 1);
@@ -406,7 +406,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         if (!dragged) {
             if (selected != null)
-                selected.setColor(Color.WHITE);
+                selected.removeColor();
             selected = modelGraph.getObject(screenX, screenY);
             System.out.println("TOUCH: " + selected);
             if (selected != null) {

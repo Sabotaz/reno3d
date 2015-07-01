@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.utils.scene3d;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import eu.mihosoft.vrl.v3d.Vector3d;
@@ -180,13 +182,23 @@ public class ModelContainer {
         return hit.hit;
     }
 
+    HashMap<String, ColorAttribute> last_colors = new HashMap<String, ColorAttribute>();
+
     public void setColor(Color color){
+        last_colors.clear();
         ColorAttribute ca = new ColorAttribute(ColorAttribute.Diffuse, color);
-        if(model.getMaterial("Color") != null)
-            model.getMaterial("Color").set(ca);
-        else
-            model.materials.add(new Material("Color", ca));
-        model.materials.add(new Material("Color", ca));
+        for (Material m : model.materials) {
+            ColorAttribute last = (ColorAttribute) m.get(ColorAttribute.Diffuse);
+            last_colors.put(m.id, last);
+            m.set(ca);
+        }
+    }
+
+    public void removeColor(){
+        for (Material m : model.materials) {
+            m.set(last_colors.get(m.id));
+        }
+        last_colors.clear();
     }
 
 }

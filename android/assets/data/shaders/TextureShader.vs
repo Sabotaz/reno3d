@@ -1,12 +1,22 @@
-attribute vec3 a_position;
+attribute vec4 a_position;
+attribute vec3 a_normal;
 attribute vec4 a_color;
+attribute vec2 a_texCoord0;
+
 uniform mat4 u_projTrans;
-varying vec4 vColor;
-attribute vec2 a_texCoords;
+uniform mat4 u_worldTrans;
+uniform vec4 v_textureUV;
+uniform mat3 u_normal_matrix;
+uniform vec3 u_light_direction;
+
 varying vec2 v_texCoords;
+varying vec3 N;
+varying vec3 v;
 
 void main() {
-    vColor = a_color;
-    v_texCoords = a_texCoords;
-    gl_Position = u_projTrans * vec4(a_position.xy, 0.0, 1.0);
+    v_texCoords = a_texCoord0;
+    gl_Position =  u_projTrans * u_worldTrans * a_position;
+
+    v = vec3(u_projTrans * u_worldTrans * a_position);
+    N = normalize(u_normal_matrix * a_normal);
 }
