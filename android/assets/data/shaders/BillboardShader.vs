@@ -1,8 +1,10 @@
 attribute vec3 a_position;
+attribute vec2 a_texCoords;
+
 uniform mat4 u_proj;
 uniform mat4 u_model;
 uniform mat4 u_view;
-attribute vec2 a_texCoords;
+
 varying vec2 v_texCoords;
 
 void main() {

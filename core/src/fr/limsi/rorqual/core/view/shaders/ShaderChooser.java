@@ -13,7 +13,7 @@ public class ShaderChooser extends BaseShaderProvider {
 
     protected Shader createShader (final Renderable renderable) {
         if (renderable.material.has(TextureAttribute.Diffuse)) {
-            return new TextureShader(renderable);
+            return new TextureShader();
         }
         return new LightShader();
     }

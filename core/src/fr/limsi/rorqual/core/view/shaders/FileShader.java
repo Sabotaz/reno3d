@@ -14,12 +14,13 @@ public abstract class FileShader extends BaseShader {
 
     private String vertexShader;
     private String fragmentShader;
-    protected String prefix;
+    protected String prefix = "";
 
     public FileShader(boolean autocompile) {
         super();
 
         String shaderName = this.getClass().getSimpleName();
+
         vertexShader = Gdx.files.internal("data/shaders/" + shaderName + ".vs").readString();
         fragmentShader = Gdx.files.internal("data/shaders/" + shaderName + ".fs").readString();
 

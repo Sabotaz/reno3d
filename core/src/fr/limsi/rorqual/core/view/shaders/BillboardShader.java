@@ -17,18 +17,9 @@ public class BillboardShader extends FileShader {
     protected final int u_model = register(new Uniform("u_model"));
     //private boolean withColor;
 
-    public ShaderProgram getProgram() {
-        return program;
-    }
-
     @Override
     public void init () {
         super.init(program, null);
-    }
-
-    @Override
-    public int compareTo (Shader other) {
-        return 0;
     }
 
     @Override
