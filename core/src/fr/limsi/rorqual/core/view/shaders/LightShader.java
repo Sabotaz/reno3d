@@ -1,10 +1,12 @@
 package fr.limsi.rorqual.core.view.shaders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -28,6 +30,9 @@ public class LightShader extends FileShader {
     protected final int u_light_color = register(new Uniform("u_light_color"));
     protected final int u_ambient_color = register(new Uniform("u_ambient_color"));
     protected final int u_normal_matrix = register(new Uniform("u_normal_matrix"));
+
+    protected final int u_is_blended = register(new Uniform("u_is_blended"));
+    protected final int u_opacity = register(new Uniform("u_opacity"));
 
     public ShaderProgram getProgram() {
         return program;
@@ -80,6 +85,17 @@ public class LightShader extends FileShader {
 
         ColorAttribute colorAttr = (ColorAttribute)renderable.material.get(ColorAttribute.Diffuse);
         set(u_color, colorAttr.color);
+        if(renderable.material.get(BlendingAttribute.Type) != null) {
+
+            Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+            Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
+
+            set(u_is_blended, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).blended ? 1 : 0);
+            set(u_opacity, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity);
+        } else {
+            set(u_is_blended, 0);
+            set(u_opacity, 1.0f);
+        }
 
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }
