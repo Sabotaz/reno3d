@@ -200,7 +200,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         shader = new BillboardShader();
         shader.init();
         program = shader.program;
-        popup = new Popup(0,0,400,400);
+        popup = new Popup(0,0,800,800);
 	}
 
 	@Override
@@ -237,10 +237,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         }
         shape.end();
 
-        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
+        //Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         modelGraph.draw();
         stageMenu.draw();
-        Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+        //Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         modelBatch.begin(cameras[ncam % cameras.length]);
         //modelBatch.render(modelInstance, environnement);
         modelBatch.end();

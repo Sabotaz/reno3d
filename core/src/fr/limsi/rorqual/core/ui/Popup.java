@@ -35,7 +35,7 @@ import fr.limsi.rorqual.core.utils.AssetManager;
  */
 public class Popup {
     public Matrix4 transform;
-    NinePatch3d background;
+    NinePatchSprite background;
     private Mesh mesh;
     private Texture texture;
     private float[] vertices;
@@ -46,16 +46,15 @@ public class Popup {
         //actor.getParent().addActor3d(this);
         //texture = background.getTexture();
         texture = (Texture)AssetManager.getInstance().get("bulle");
-        background = new NinePatch3d(texture,200,200,-200,-200);
+        background = new NinePatchSprite(texture, 200, 200, 200, 300);
         //background.scale(0.01f, 0.01f);
 
         //background.setSize(0, 0, 10, 5);
         background.setSize(x, y, w, h);
-        vertices = background.getVertices();
+        vertices = background.vertices;
 
         mesh = new Mesh(true, 9*4, 9*2*3,
                 new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"),
-                //new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, "a_color"),
                 new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, "a_texCoords"));
         mesh.setVertices(vertices);
         mesh.setIndices(new short[]{
@@ -97,7 +96,7 @@ public class Popup {
         transform = new Matrix4();
         transform.translate(0, 5, 0);
         transform.rotate(1, 0, 0, 180);
-        transform.val[15] = 0.01f;
+        transform.val[15] = 0.008f;
         //transform.scale(0.01f, 0.01f, 0.01f);
     }
 
