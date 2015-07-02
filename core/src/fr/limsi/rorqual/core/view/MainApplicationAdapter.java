@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -38,6 +39,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
@@ -132,7 +134,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         modelGraph = new ModelGraph(baseCamera, environnement, shaderProvider);
         stageMenu = new Stage();
-        stageMenu.setDebugAll(true);
+//        stageMenu.setDebugAll(true);
         System.out.println(stageMenu.getWidth());
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
@@ -186,14 +188,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         this.assets = AssetManager.getInstance();
-        model = (Model)assets.get("modelDoor");
+        model = (Model)assets.get("modelWindowTest");
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
         //modelInstance.transform.rotate(1, 0, 0, -90);
         //move the model down a bit on the screen ( in a z-up world, down is -z ).
-        //modelInstance.transform.translate(0, 0, 4);
-        modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
+        modelInstance.transform.translate(0, 0, 4);
+//        modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
 
         shader = new BillboardShader();
         shader.init();

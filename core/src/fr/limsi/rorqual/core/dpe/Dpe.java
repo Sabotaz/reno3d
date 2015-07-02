@@ -859,8 +859,8 @@ public class Dpe implements EventListener {
 
     /*** Explique ce qu'est le DPE et demande de continuer ou non ***/
     public void startDPE() {
-        notifierMurs();
-        notifierPlanchers();
+//        notifierMurs();
+//        notifierPlanchers();
         DpeEvent eventType = DpeEvent.START_DPE;
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);

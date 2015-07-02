@@ -62,7 +62,6 @@ public class EventManager {
                 }
             }
         };
-
         t.start();
     }
 

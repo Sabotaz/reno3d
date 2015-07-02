@@ -17,16 +17,12 @@ public class ModelFactoryStrategy {
 
     public static ModelInstance getModel(IfcProduct ifcProduct) {
         if (ifcProduct instanceof IfcWall) {
-            System.out.println("WALL !");
             return new IfcWallModelFactory(ifcProduct).getModel();
         } else if (ifcProduct instanceof IfcSlab) {
-            System.out.println("SLAB !");
             return new IfcSlabModelFactory(ifcProduct).getModel();
         } else if (ifcProduct instanceof IfcDoor) {
-            System.out.println("DOOR!");
             return new IfcDoorModelFactory(ifcProduct).getModel();
         } else if (ifcProduct instanceof IfcWindow) {
-            System.out.println("WINDOW!");
             return new IfcWindowModelFactory(ifcProduct).getModel();
         }
         return new ModelInstance(new Model());
