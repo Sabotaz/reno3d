@@ -56,14 +56,15 @@ public class DpeStateUpdater implements EventListener {
                         ModelContainer node = modelGraph.getFromUserObject(items[0]);
                         switch ((DpeState) items[1]) {
                             case UNKNOWN:
-                                //node.getModel().setColor(Color.RED);
+                                node.setColor(Color.RED);
                                 break;
                             case GUESSED:
                                 //node.getModel().setColor(Color.YELLOW);
                                 break;
                             case KNOWN:
+                                node.setColor(Color.WHITE);
                             default:
-                                //node.getModel().setColor(Color.WHITE);
+                                node.setColor(Color.WHITE);
                                 break;
                         }
                         setState(items[0], (DpeState) items[1]);

@@ -859,8 +859,9 @@ public class Dpe implements EventListener {
 
     /*** Explique ce qu'est le DPE et demande de continuer ou non ***/
     public void startDPE() {
-//        notifierMurs();
-//        notifierPlanchers();
+        notifierMurs();
+        notifierPlanchers();
+        notifierFenetres();
         DpeEvent eventType = DpeEvent.START_DPE;
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
@@ -914,6 +915,7 @@ public class Dpe implements EventListener {
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
     }
+
     /*** Notifie le statut des planchers ***/
     public void notifierPlanchers() {
         IfcSlab slab;
@@ -937,6 +939,18 @@ public class Dpe implements EventListener {
                 Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
                 EventManager.getInstance().put(Channel.DPE, e);
             }
+        }
+    }
+
+    /*** Notifie le statut des fenetres ***/
+    public void notifierFenetres() {
+        IfcWindow window;
+        Iterator<IfcWindow> it = windowCollection.iterator();
+        while (it.hasNext()) {
+            window = it.next();
+            Object o[] = {window, DpeState.UNKNOWN};
+            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
+            EventManager.getInstance().put(Channel.DPE, e);
         }
     }
 
@@ -1090,9 +1104,7 @@ public class Dpe implements EventListener {
                     {
                         Object[] items = (Object[]) o;
                         walls_properties.get(items[0]).put(event, items[1]);
-
                         tryActualiseMurDP((IfcWallStandardCase)items[0]);
-
                         break;
                     }
 

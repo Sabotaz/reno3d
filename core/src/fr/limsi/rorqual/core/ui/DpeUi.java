@@ -551,7 +551,7 @@ public class DpeUi implements EventListener {
 
 
                         case DERRIERE_MUR: {
-                            //s.acquire();
+                            s.acquire();
                             final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
                             Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur ? " , skin, "dialog") {
                                 protected void result(Object object) {
