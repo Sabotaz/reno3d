@@ -2,6 +2,7 @@ package fr.limsi.rorqual.core.utils;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -79,6 +80,12 @@ public class AssetManager {
         assets.put("modelDoor", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/Door.g3db", Files.FileType.Internal)));
         assets.put("modelWindow", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/window7.g3db", Files.FileType.Internal)));
         assets.put("modelWindowTest", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/window7.g3db", Files.FileType.Internal)));
+
+        FileHandle file = Gdx.files.internal("data/textures/");
+        if (file.isDirectory())
+            for (FileHandle f : file.list()) {
+                assets.put(f.nameWithoutExtension(), new Texture(f));
+            }
     }
 
     public Object get(String s) {

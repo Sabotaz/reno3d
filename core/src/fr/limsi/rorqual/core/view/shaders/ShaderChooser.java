@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 public class ShaderChooser extends BaseShaderProvider {
 
     protected Shader createShader (final Renderable renderable) {
+        if (renderable.material.has(TextureAttribute.Normal)) {
+            return new BumpedTextureShader();
+        }
         if (renderable.material.has(TextureAttribute.Diffuse)) {
             return new TextureShader();
         }

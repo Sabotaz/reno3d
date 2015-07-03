@@ -52,6 +52,7 @@ import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 import fr.limsi.rorqual.core.view.shaders.*;
 import fr.limsi.rorqual.core.view.shaders.BillboardShader;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
@@ -99,7 +100,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** Création des lumières ***/
         environnement = new Environment();
         environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environnement.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 0.8f, 0.4f, -0.6f));
+        environnement.add(new DirectionalLight().set(1f, 1f, 1f, 0.6f, 0.4f, -1.0f));
 
         /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -136,6 +137,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         stageMenu = new Stage();
 //        stageMenu.setDebugAll(true);
         System.out.println(stageMenu.getWidth());
+
+        modelGraph.getRoot().add(new ModelContainer(Floor.getModelInstance()));
+
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
@@ -215,7 +219,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
-
+        /*
         shape.setProjectionMatrix(cameras[ncam % cameras.length].combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
         int grid_size = 1;
@@ -235,7 +239,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 shape.setColor(new Color(1, 1, 1, 0.05f));
             shape.line(i, -100, 0, i, 100, 0);
         }
-        shape.end();
+        shape.end();*/
 
         //Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         modelGraph.draw();
