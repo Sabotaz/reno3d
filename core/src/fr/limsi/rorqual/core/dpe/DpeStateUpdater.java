@@ -59,7 +59,7 @@ public class DpeStateUpdater implements EventListener {
                                 node.setColor(Color.RED);
                                 break;
                             case GUESSED:
-                                //node.getModel().setColor(Color.YELLOW);
+                                node.setColor(Color.YELLOW);
                                 break;
                             case KNOWN:
                                 node.setColor(Color.WHITE);

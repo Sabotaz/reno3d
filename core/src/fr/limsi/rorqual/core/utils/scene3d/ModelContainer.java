@@ -14,7 +14,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,20 +69,46 @@ public class ModelContainer {
             parent.remove(this);
     }
 
+    public List<ModelContainer> getChildren() {
+        return children;
+    }
+
     public void remove(ModelContainer child) {
         if (children.contains(child))
             children.remove(child);
         child.parent = null;
         child.root = null;
-        if (root != null)
-            root.remove(child);
+
+        if (root != null) {
+            // remove root datas
+            Deque<ModelContainer> removed = new ArrayDeque<ModelContainer>();
+            removed.add(child);
+            do {
+                ModelContainer current = removed.remove();
+                root.remove(current);
+                for (ModelContainer c : current.getChildren())
+                    removed.add(c);
+            } while (!removed.isEmpty());
+        }
+
     }
 
     private void setParent(ModelContainer p) {
         parent = p;
         root = parent.root;
-        if (root != null)
-            root.add(this);
+        if (root != null) {
+            if (root != null) {
+                // remove root datas
+                Deque<ModelContainer> added = new ArrayDeque<ModelContainer>();
+                added.add(this);
+                do {
+                    ModelContainer current = added.remove();
+                    root.add(current);
+                    for (ModelContainer c : current.getChildren())
+                        added.add(c);
+                } while (!added.isEmpty());
+            }
+        }
     }
 
     public void setModel(ModelInstance m) {
