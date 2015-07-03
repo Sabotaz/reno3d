@@ -18,7 +18,7 @@ varying vec3 v;
 void main() {
 
     vec3 normal = normalize(texture2D(u_texture_normal, v_texCoords).rgb * 2.0 - 1.0);
-    float diffuse = max(0.0-dot(N * normal, u_light_direction), 0.0);
+    float diffuse = max(0.0-dot(normal, u_light_direction), 0.0);
 
     vec4 texColor = texture2D(u_texture_diffuse, v_texCoords);
 

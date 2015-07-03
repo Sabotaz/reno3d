@@ -81,6 +81,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private AssetManager assets;
     private Viewport viewport;
     private Popup popup;
+    private DirectionalLight light;
 
     @Override
 	public void create () {
@@ -100,7 +101,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** Création des lumières ***/
         environnement = new Environment();
         environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environnement.add(new DirectionalLight().set(1f, 1f, 1f, 0.6f, 0.4f, -1.0f));
+        light = new DirectionalLight();
+        light.set(1f, 1f, 1f, 0.6f, 0.4f, -1.0f);
+        environnement.add(light);
 
         /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -209,6 +212,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
 	@Override
 	public void render () {
+        light.direction.rotate(1,0,0,1);
         update_cam();
         //modelGraph.act();
         stageMenu.act();
