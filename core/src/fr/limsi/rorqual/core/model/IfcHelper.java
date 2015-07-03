@@ -2556,65 +2556,6 @@ public class IfcHelper {
         return "null";
     }
 
-    // Permet d'ajouter une information sur le type de fenetre
-    public static void addPropertyTypeWindow(IfcModel ifcModel, IfcWallStandardCase wall,boolean isInterior){
-
-        boolean hasProperties=false;
-        boolean hasSameProperty=false;
-
-        // On créer la property
-        IfcIdentifier nameProperty = new IfcIdentifier("isInterior",true);
-        IfcValue valueProperty = new IfcBoolean(isInterior);
-        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
-
-        // On va voir si des propriétés existent déja
-        SET<IfcRelDefines> relDefinesSET = wall.getIsDefinedBy_Inverse();
-        if (relDefinesSET != null){
-            for (IfcRelDefines actualRelDefines : relDefinesSET){
-                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
-                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
-                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
-                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
-                        if (propertySetDefinition instanceof IfcPropertySet){
-                            hasProperties=true;
-                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
-                            for (IfcProperty actualProperty : propertySET){
-                                if (actualProperty instanceof IfcPropertySingleValue){
-                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
-                                        hasSameProperty=true;
-                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
-                                    }
-                                }
-                            }
-                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
-                                propertySET.add(property);
-                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
-                                ifcModel.addIfcObject(property);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
-        if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
-            propertySET.add(property);
-            IfcPropertySet propertySet = new IfcPropertySet(
-                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                    new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
-            objectSET.add(wall);
-            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
-                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                    null,null,objectSET,propertySet);
-            ifcModel.addIfcObject(propertySet);
-            ifcModel.addIfcObject(property);
-            ifcModel.addIfcObject(relDefinesByProperties);
-        }
-    }
-
     // Permet de calculer le périmètre d'un batiment
     public static double calculPerimetreBatiment(IfcModel ifcModel){
         double per=0;
