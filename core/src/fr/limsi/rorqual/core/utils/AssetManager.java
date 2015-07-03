@@ -74,6 +74,11 @@ public class AssetManager {
         assets.put("texturePosAppt1", new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/1erEtage.png")));
         assets.put("texturePosAppt2", new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/etageInt.png")));
         assets.put("texturePosAppt3", new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/dernierEtage.png")));
+        assets.put("textureWindowMateriauBois", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Materiaux/bois.png")));
+        assets.put("textureWindowMateriauMetallique", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Materiaux/metallique.png")));
+        assets.put("textureWindowMateriauPvc", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Materiaux/pvc.png")));
+        assets.put("textureWindowTypeBattante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/battante.png")));
+        assets.put("textureWindowTypeCoulissante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/coulissante.png")));
 
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
@@ -91,5 +96,4 @@ public class AssetManager {
     public Object get(String s) {
         return assets.get(s);
     }
-
 }

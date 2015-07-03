@@ -1776,3 +1776,126 @@ public class Dpesave implements EventListener {
 
 }
 */
+
+
+
+
+
+//                Texture windowBattante = (Texture) AssetManager.getInstance().get("textureWindowTypeBattante");
+//                Texture windowCoulissante = (Texture) AssetManager.getInstance().get("textureWindowTypeCoulissante");
+//                Image image1 = new Image(windowBattante);
+//                Image image2 = new Image(windowCoulissante);
+//                final Dialog dialog = new Dialog(" Type de fenetre ", skin, "dialog") {
+//                    protected void result (Object object) {
+//
+//                    }
+//                }.show(stageMenu);
+//                ImageButton imageButton1 = new ImageButton(image1.getDrawable());
+//                imageButton1.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou1");
+//                    }
+//                });
+//                ImageButton imageButton2 = new ImageButton(image2.getDrawable());
+//                imageButton2.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou2");
+//                    }
+//                });
+//                dialog.getContentTable().setDebug(true);
+//                dialog.getContentTable().add(imageButton1).pad(10);
+//                dialog.getContentTable().add(imageButton2).pad(10);
+//                dialog.setSize(image1.getWidth()+image2.getWidth()+60,Math.max(image1.getHeight(),image2.getHeight())+60);
+
+
+
+
+
+//                Texture materiauBois = (Texture) AssetManager.getInstance().get("textureWindowMateriauBois");
+//                Texture materiauMetallique = (Texture) AssetManager.getInstance().get("textureWindowMateriauMetallique");
+//                Texture materiauPvc = (Texture) AssetManager.getInstance().get("textureWindowMateriauPvc");
+//                Image image1 = new Image(materiauBois);
+//                Image image2 = new Image(materiauMetallique);
+//                Image image3 = new Image(materiauPvc);
+//                final Dialog dialog = new Dialog(" Type de fenetre ", skin, "dialog") {
+//                    protected void result (Object object) {
+//
+//                    }
+//                }.show(stageMenu);
+//                ImageButton imageButton1 = new ImageButton(image1.getDrawable());
+//                imageButton1.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou1");
+//                    }
+//                });
+//                ImageButton imageButton2 = new ImageButton(image2.getDrawable());
+//                imageButton2.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou2");
+//                    }
+//                });
+//                ImageButton imageButton3 = new ImageButton(image3.getDrawable());
+//                imageButton3.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou3");
+//                    }
+//                });
+//                dialog.getContentTable().setDebug(true);
+//                dialog.getContentTable().add(imageButton1).pad(10);
+//                dialog.getContentTable().add(imageButton2).pad(10);
+//                dialog.getContentTable().add(imageButton3).pad(10);
+//                dialog.setSize(image1.getWidth()+image2.getWidth()+image3.getWidth()+80,image1.getHeight()+60);
+
+
+
+
+//                final Dialog dialog = new Dialog(" Type de fenetre ", skin, "dialog") {
+//                    protected void result (Object object) {
+//
+//                    }
+//                }.show(stageMenu);
+//                TextButton textButton1 = new TextButton("Simple vitrage",skin);
+//                textButton1.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou1");
+//                    }
+//                });
+//                TextButton textButton2 = new TextButton("Survitrage",skin);
+//                textButton2.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou2");
+//                    }
+//                });
+//                TextButton textButton3 = new TextButton("Double vitrage < 1990",skin);
+//                textButton3.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou3");
+//                    }
+//                });
+//                TextButton textButton4 = new TextButton("1990 < Double vitrage < 2001",skin);
+//                textButton4.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou4");
+//                    }
+//                });
+//                TextButton textButton5 = new TextButton("Double vitrage > 2001",skin);
+//                textButton5.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou5");
+//                    }
+//                });
+//                TextButton textButton6 = new TextButton("Triple Vitrage",skin);
+//                textButton6.addListener(new ClickListener() {
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        System.out.println("coucou6");
+//                    }
+//                });
+//                dialog.getContentTable().setDebug(true);
+//                dialog.getContentTable().add(textButton1).pad(2);
+//                dialog.getContentTable().add(textButton2).pad(2);
+//                dialog.getContentTable().add(textButton3).pad(2);
+//                dialog.getContentTable().row();
+//                dialog.getContentTable().add(textButton4).pad(2);
+//                dialog.getContentTable().add(textButton5).pad(2);
+//                dialog.getContentTable().add(textButton6).pad(2);
+//                dialog.setSize(textButton3.getWidth()*3+120,textButton1.getHeight()*2+60);
