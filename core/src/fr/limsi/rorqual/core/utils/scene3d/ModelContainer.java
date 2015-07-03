@@ -33,6 +33,7 @@ public class ModelContainer {
     public Matrix4 transform;
     private Matrix4 model_transform;
     private Object userData;
+    private HashMap<String,Object> modelData = new HashMap<String, Object>();
 
     public ModelContainer() {
         transform = new Matrix4();
@@ -85,6 +86,7 @@ public class ModelContainer {
     public void setModel(ModelInstance m) {
         model = m;
         model_transform = model.transform.cpy();
+        model.userData = modelData;
     }
 
     public void draw(ModelBatch modelBatch, Environment environment){
@@ -182,23 +184,12 @@ public class ModelContainer {
         return hit.hit;
     }
 
-    HashMap<String, ColorAttribute> last_colors = new HashMap<String, ColorAttribute>();
-
     public void setColor(Color color){
-        last_colors.clear();
-        ColorAttribute ca = new ColorAttribute(ColorAttribute.Diffuse, color);
-        for (Material m : model.materials) {
-            ColorAttribute last = (ColorAttribute) m.get(ColorAttribute.Diffuse);
-            last_colors.put(m.id, last);
-            m.set(ca);
-        }
+        modelData.put("Color", color);
     }
 
     public void removeColor(){
-        for (Material m : model.materials) {
-            m.set(last_colors.get(m.id));
-        }
-        last_colors.clear();
+        modelData.put("Color", null);
     }
 
 }

@@ -2,6 +2,7 @@ package fr.limsi.rorqual.core.view.shaders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Renderable;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix3;
+
+import java.util.HashMap;
 
 /**
  * Created by christophe on 20/04/15.
@@ -33,6 +36,9 @@ public class LightShader extends FileShader {
 
     protected final int u_is_blended = register(new Uniform("u_is_blended"));
     protected final int u_opacity = register(new Uniform("u_opacity"));
+
+    protected final int u_is_tinted = register(new Uniform("u_is_tinted"));
+    protected final int u_tint = register(new Uniform("u_tint"));
 
     public ShaderProgram getProgram() {
         return program;
@@ -85,6 +91,16 @@ public class LightShader extends FileShader {
 
         ColorAttribute colorAttr = (ColorAttribute)renderable.material.get(ColorAttribute.Diffuse);
         set(u_color, colorAttr.color);
+
+        HashMap<String, Object> attrs = (HashMap<String, Object>)renderable.userData;
+        if (attrs.containsKey("Color") && attrs.get("Color") != null) {
+            set(u_is_tinted, 1);
+            set(u_tint, (Color)attrs.get("Color"));
+
+        } else {
+            set(u_is_tinted, 0);
+        }
+
         if(renderable.material.get(BlendingAttribute.Type) != null) {
 
             Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
