@@ -152,7 +152,15 @@ public class ModelContainer {
         return intersect ? dist2cam : -1f;
     }
 
+    private boolean selectable = true;
+
+    public void setSelectable(boolean b) {
+        selectable = b;
+    }
+
     private float intersects(Ray ray, Matrix4 global_transform) {
+
+        if (!selectable) return -1;
 
         BoundingBox boundBox = new BoundingBox();
         Vector3 center = new Vector3();

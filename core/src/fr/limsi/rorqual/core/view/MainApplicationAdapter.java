@@ -141,7 +141,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 //        stageMenu.setDebugAll(true);
         System.out.println(stageMenu.getWidth());
 
-        modelGraph.getRoot().add(new ModelContainer(Floor.getModelInstance()));
+        ModelContainer floor = new ModelContainer(Floor.getModelInstance());
+        floor.setSelectable(false);
+        modelGraph.getRoot().add(floor);
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
