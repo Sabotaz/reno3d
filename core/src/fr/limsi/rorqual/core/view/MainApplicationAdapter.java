@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
@@ -53,6 +54,7 @@ import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
+import fr.limsi.rorqual.core.utils.scene3d.models.Sun;
 import fr.limsi.rorqual.core.view.shaders.*;
 import fr.limsi.rorqual.core.view.shaders.BillboardShader;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
@@ -82,6 +84,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Viewport viewport;
     private Popup popup;
     private DirectionalLight light;
+    private ModelContainer sun;
 
     @Override
 	public void create () {
@@ -141,9 +144,20 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 //        stageMenu.setDebugAll(true);
         System.out.println(stageMenu.getWidth());
 
+        sun = new ModelContainer(Sun.getModelInstance());
+        sun.setSelectable(false);
+        sun.transform.setToTranslation(light.direction.cpy().scl(-100));
+
+        ModelContainer popup = new ModelContainer(new Popup(0,0,600,600).getModelInstance());
+        popup.setSelectable(false);
+
         ModelContainer floor = new ModelContainer(Floor.getModelInstance());
         floor.setSelectable(false);
+
+        modelGraph.getRoot().add(sun);
         modelGraph.getRoot().add(floor);
+        modelGraph.getRoot().add(popup);
+
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
@@ -205,15 +219,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         modelInstance.transform.translate(0, 0, 4);
 //        modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
 
-        shader = new BillboardShader();
-        shader.init();
-        program = shader.program;
-        popup = new Popup(0,0,800,800);
+        //shader = new BillboardShader();
+        //shader.init();
+        //program = shader.program;
+        //popup = new Popup(0,0,800,800);
 	}
 
 	@Override
 	public void render () {
-        light.direction.rotate(1,0,0,1);
+        light.direction.rotate(1, 0, 0, 1);
         update_cam();
         //modelGraph.act();
         stageMenu.act();
@@ -222,68 +236,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
-        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
-        /*
-        shape.setProjectionMatrix(cameras[ncam % cameras.length].combined);
-        shape.begin(ShapeRenderer.ShapeType.Line);
-        int grid_size = 1;
-        int grid_div = 10;
+        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
 
-        for (int i = -100; i < 100; i+=grid_size) {
-            if (i % grid_div == 0)
-                shape.setColor(new Color(1, 1, 1, 0.15f));
-            else
-                shape.setColor(new Color(1, 1, 1, 0.05f));
-            shape.line(-100, i, 0, 100, i, 0);
-        }
-        for (int i = -100; i < 100; i+=grid_size) {
-            if (i % grid_div == 0)
-                shape.setColor(new Color(1, 1, 1, 0.15f));
-            else
-                shape.setColor(new Color(1, 1, 1, 0.05f));
-            shape.line(i, -100, 0, i, 100, 0);
-        }
-        shape.end();*/
-
-        //Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
         modelGraph.draw();
+        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
         stageMenu.draw();
-        //Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
-        modelBatch.begin(cameras[ncam % cameras.length]);
-        //modelBatch.render(modelInstance, environnement);
-        modelBatch.end();
-
-        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
-
-        program.begin();
-        /*
-        Matrix4 m = cameras[ncam % cameras.length].view.cpy();
-        m.val[0*4+0] = 1;
-        m.val[0*4+1] = 0;
-        m.val[0*4+2] = 0;
-
-        m.val[1*4+0] = 0;
-        m.val[1*4+1] = 1;
-        m.val[1*4+2] = 0;
-
-        m.val[2*4+0] = 0;
-        m.val[2*4+1] = 0;
-        m.val[2*4+2] = 1;
-        m = cameras[ncam % cameras.length].projection.cpy().mul(m).mul(popup.getTransform());
-
-        program.setUniformMatrix("u_projTrans", m);
-        popup.render(program);
-        program.end();
-*/
-
-        program.begin();
-        program.setUniformMatrix("u_proj", cameras[ncam % cameras.length].projection);
-        program.setUniformMatrix("u_view", cameras[ncam % cameras.length].view);
-        program.setUniformMatrix("u_model", popup.transform);
-        //popup.render(program);
-        program.end();
-
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 	}
 

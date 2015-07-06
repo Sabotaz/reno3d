@@ -20,7 +20,7 @@ import java.util.HashMap;
 /**
  * Created by christophe on 20/04/15.
  */
-public class LightShader extends FileShader {
+public class SunShader extends FileShader {
     /*
     protected final int u_projTrans = register(new Uniform("u_projTrans"));
     protected final int u_worldTrans = register(new Uniform("u_worldTrans"));
@@ -56,11 +56,7 @@ public class LightShader extends FileShader {
 
     @Override
     public boolean canRender (Renderable renderable) {
-        if (renderable.material.has(TextureAttribute.Diffuse))
-            return false;
-        else if (renderable.material.has(ColorAttribute.Diffuse))
-            return true;
-        else return false;
+        return renderable.material.has(ShaderAttribute.Sun);
     }
 
     @Override
@@ -71,11 +67,11 @@ public class LightShader extends FileShader {
 
     @Override
     public void render (Renderable renderable) {
-       if (renderable.environment.directionalLights.size > 0) {
-           DirectionalLight light0 = renderable.environment.directionalLights.get(0);
-           set(u_light_color, light0.color);
-           set(u_light_direction, light0.direction);
-       }
+        if (renderable.environment.directionalLights.size > 0) {
+            DirectionalLight light0 = renderable.environment.directionalLights.get(0);
+            set(u_light_color, light0.color);
+            set(u_light_direction, light0.direction);
+        }
         Attribute attribute =  renderable.environment.get(ColorAttribute.AmbientLight);
         if (attribute != null) {
             ColorAttribute colorAttribute = (ColorAttribute) attribute;
@@ -88,7 +84,8 @@ public class LightShader extends FileShader {
         set(u_worldTrans, renderable.worldTransform);
 
         ColorAttribute colorAttr = (ColorAttribute)renderable.material.get(ColorAttribute.Diffuse);
-        set(u_color, colorAttr.color);
+        if (colorAttr != null)
+            set(u_color, colorAttr.color);
 
         HashMap<String, Object> attrs = (HashMap<String, Object>)renderable.userData;
         if (attrs.containsKey("Color") && attrs.get("Color") != null) {
@@ -100,6 +97,7 @@ public class LightShader extends FileShader {
         }
 
         if(renderable.material.get(BlendingAttribute.Type) != null) {
+
             set(u_is_blended, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).blended ? 1 : 0);
             set(u_opacity, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity);
         } else {

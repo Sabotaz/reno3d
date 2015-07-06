@@ -3,6 +3,8 @@ uniform sampler2D u_texture;
 uniform vec4 u_ambient_color;
 uniform vec4 u_light_color;
 uniform vec3 u_light_direction;
+
+uniform bool u_is_colored;
 uniform vec4 u_color;
 
 uniform bool u_is_tinted;
@@ -16,7 +18,12 @@ void main() {
     vec4 texColor = texture2D(u_texture, v_texCoords);
 
     vec4 Idiff = (0.1 * u_light_color +  0.9 * texColor) * max(-dot(N,u_light_direction), 0.0);
-    vec4 ambient = (0.5 * u_ambient_color +  0.5 * u_color);
+    vec4 ambient;
+    if (u_is_colored) {
+        ambient = (0.5 * u_ambient_color +  0.5 * u_color);
+    } else {
+        ambient = u_ambient_color;
+    }
     gl_FragColor = 0.7 * Idiff+ 0.3 * ambient;
 
     if (u_is_tinted) {

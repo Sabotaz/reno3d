@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
@@ -34,6 +35,7 @@ public class ModelContainer {
     protected ModelInstance model;
     public Matrix4 transform;
     private Matrix4 model_transform;
+    private Shader prefered_shader;
     private Object userData;
     private HashMap<String,Object> modelData = new HashMap<String, Object>();
 
@@ -47,6 +49,11 @@ public class ModelContainer {
         transform = new Matrix4();
         setModel(m);
     }
+
+    public void setShaderProgram(Shader s) {
+        prefered_shader = s;
+    }
+
     public void setUserData(Object o) {
         if (root != null)
             root.remove(this);

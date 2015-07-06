@@ -41,6 +41,8 @@ public class BumpedTextureShader extends FileShader {
     protected final int u_light_direction = register(new Uniform("u_light_direction"));
     protected final int u_light_color = register(new Uniform("u_light_color"));
     protected final int u_ambient_color = register(new Uniform("u_ambient_color"));
+
+    protected final int u_is_colored = register(new Uniform("u_is_colored"));
     protected final int u_color = register(new Uniform("u_color"));
 
     protected final int u_is_tinted = register(new Uniform("u_is_tinted"));
@@ -65,8 +67,6 @@ public class BumpedTextureShader extends FileShader {
     @Override
     public void begin (Camera camera, RenderContext context) {
         program.begin();
-        context.setDepthTest(GL20.GL_LEQUAL, 0f, 1f);
-        context.setDepthMask(true);
         set(u_projTrans, camera.combined);
     }
 
@@ -117,8 +117,12 @@ public class BumpedTextureShader extends FileShader {
         }
 
         ColorAttribute colorAttr = (ColorAttribute)renderable.material.get(ColorAttribute.Diffuse);
-        if (colorAttr != null)
+        if (colorAttr != null) {
+            set(u_is_colored, 1);
             set(u_color, colorAttr.color);
+        } else {
+            set(u_is_colored, 0);
+        }
 
         HashMap<String, Object> attrs = (HashMap<String, Object>)renderable.userData;
         if (attrs.containsKey("Color") && attrs.get("Color") != null) {

@@ -12,6 +12,17 @@ import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 public class ShaderChooser extends BaseShaderProvider {
 
     protected Shader createShader (final Renderable renderable) {
+        //if (renderable.shader != null && renderable.shader.canRender(renderable))
+        //    return renderable.shader;
+
+        if (renderable.material.has(ShaderAttribute.Billboard)) {
+            System.out.println("BILLBOARD");
+            return new BillboardShader();
+        }
+        if (renderable.material.has(ShaderAttribute.Sun)) {
+            System.out.println("SUN");
+            return new SunShader();
+        }
         if (renderable.material.has(TextureAttribute.Normal)) {
             return new BumpedTextureShader();
         }
