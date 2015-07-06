@@ -19,12 +19,14 @@ public class IfcDoorModelFactory {
     private IfcDoor door;
     private ModelInstance modelInstanceDoor;
     private AssetManager assets;
+    private IfcHelper ifcHelper;
 
     /*** Constructeur ***/
     public IfcDoorModelFactory(IfcProduct ifcProduct) {
         if (ifcProduct instanceof IfcDoor) {
             this.assets = AssetManager.getInstance();
             this.door = (IfcDoor) ifcProduct;
+            this.ifcHelper = new IfcHelper(IfcHolder.getInstance().getIfcModel());
             this.make();
         }
     }
@@ -35,9 +37,9 @@ public class IfcDoorModelFactory {
         modelInstanceDoor = new ModelInstance((Model)assets.get("modelDoor"));
         BoundingBox b = new BoundingBox();
         m.calculateBoundingBox(b);
-        float d = (float)IfcHelper.getDoorDepth(door) / b.getHeight();
-        float w = (float)IfcHelper.getDoorWidth(door) / b.getWidth();
-        float h = (float)IfcHelper.getDoorHeight(door) / b.getDepth();
+        float d = (float)ifcHelper.getDoorDepth(door) / b.getHeight();
+        float w = (float)ifcHelper.getDoorWidth(door) / b.getWidth();
+        float h = (float)ifcHelper.getDoorHeight(door) / b.getDepth();
         modelInstanceDoor.transform.rotate(0, 1, 0, 90);
         modelInstanceDoor.transform.scale(w, d, h);
     }

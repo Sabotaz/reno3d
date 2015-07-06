@@ -30,6 +30,7 @@ public class Dpe implements EventListener {
     boolean over=false;
     /*** Attributs liés au model IFC***/
     private IfcModel ifcModel;
+    private IfcHelper ifcHelper;
     private HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<>();
     private HashMap<IfcSlab, HashMap<EventType, Object>> slabs_properties = new HashMap<>();
     private HashMap<IfcWindow, HashMap<EventType, Object>> windows_properties = new HashMap<>();
@@ -138,13 +139,14 @@ public class Dpe implements EventListener {
         skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
         textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
         ifcModel = IfcHolder.getInstance().getIfcModel();
+        ifcHelper = new IfcHelper(ifcModel);
         stage = stageMenu;
         wallStandardCaseCollection = ifcModel.getCollection(IfcWallStandardCase.class);
         slabCollection = ifcModel.getCollection(IfcSlab.class);
         windowCollection = ifcModel.getCollection(IfcWindow.class);
         doorCollection = ifcModel.getCollection(IfcDoor.class);
-        SH = IfcHelper.calculSurfaceHabitable(ifcModel);
-        PER = IfcHelper.calculPerimetreBatiment(ifcModel);
+        SH = ifcHelper.calculSurfaceHabitable();
+        PER = ifcHelper.calculPerimetreBatiment();
         deperditionsPlancherBasAppartementList = new ArrayList<>();
         deperditionsPlancherHautAppartementList = new ArrayList<>();
         EventManager.getInstance().addListener(Channel.DPE, this);
@@ -163,7 +165,7 @@ public class Dpe implements EventListener {
     public void calc_Sdep(){
         Sdep=0;
         for (IfcWindow actualWindow : windowCollection){
-            Sdep += IfcHelper.getWindowSurface(ifcModel,actualWindow);
+            Sdep += ifcHelper.getWindowSurface(actualWindow);
         }
     }
 
@@ -268,14 +270,14 @@ public class Dpe implements EventListener {
         double lMen=0,largeurFenetre=0,hauteurFenetre=0,largeurPorte=0,hauteurPorte=0;
 
         for (IfcWindow actualWindow : windowCollection){
-            largeurFenetre=IfcHelper.getWindowWidth(ifcModel,actualWindow);
-            hauteurFenetre=IfcHelper.getWindowHeight(ifcModel,actualWindow);
+            largeurFenetre=ifcHelper.getWindowWidth(actualWindow);
+            hauteurFenetre=ifcHelper.getWindowHeight(actualWindow);
             lMen += (2*largeurFenetre+2*hauteurFenetre);
         }
 
         for (IfcDoor actualDoor : doorCollection){
-            largeurPorte=IfcHelper.getDoorWidth(ifcModel,actualDoor);
-            hauteurPorte=IfcHelper.getDoorHeight(ifcModel,actualDoor);
+            largeurPorte=ifcHelper.getDoorWidth(actualDoor);
+            hauteurPorte=ifcHelper.getDoorHeight(actualDoor);
             lMen += (2*largeurPorte+2*hauteurPorte);
         }
         return lMen;
@@ -286,8 +288,8 @@ public class Dpe implements EventListener {
         int nbWallNonIsole=0, nbWallITI=0, nbWallITE=0, nbWallITR=0;
         String isolationType="";
         for(IfcWallStandardCase actualWall : wallStandardCaseCollection){
-            if (IfcHelper.getPropertyTypeWall(actualWall).equals("ext")){
-                isolationType = IfcHelper.getPropertyTypeIsolation(actualWall);
+            if (ifcHelper.getPropertyTypeWall(actualWall).equals("ext")){
+                isolationType = ifcHelper.getPropertyTypeIsolation(actualWall);
                 switch(isolationType){
                     case "sans" :
                         nbWallNonIsole++;
@@ -315,9 +317,9 @@ public class Dpe implements EventListener {
     public String calc_type_iso_planchers_bas() {
         int nbSlabNonIsole=0, nbSlabITI=0, nbSlabITE=0, nbSlabITR=0;
         String isolationType="";
-        List<IfcSlab> slabList = IfcHelper.getSlabsRelToFirstStage(ifcModel);
+        List<IfcSlab> slabList = ifcHelper.getSlabsRelToFirstStage();
         for(IfcSlab actualSlab : slabList){
-            isolationType = IfcHelper.getPropertyTypeIsolation(actualSlab);
+            isolationType = ifcHelper.getPropertyTypeIsolation(actualSlab);
             switch(isolationType){
                 case "sans" :
                     nbSlabNonIsole++;
@@ -344,53 +346,53 @@ public class Dpe implements EventListener {
         double u=-1;
         if (anneeConstruction<1975){
             u = 2.5;
-            IfcHelper.addPropertyTypeIsolation(ifcModel, wall, "sans");
+            ifcHelper.addPropertyTypeIsolation(wall, "sans");
         }
         else if (anneeConstruction>=1975 && anneeConstruction<=1977){
             u = 1;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+            ifcHelper.addPropertyTypeIsolation(wall,"ITI");
         }
         else if (anneeConstruction>=1978 && anneeConstruction<=1982){
             if(typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
                 u=0.8;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else{
                 u=1;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
         }
         else if (anneeConstruction>=1983 && anneeConstruction<=1988){
             if(typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
                 u=0.7;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else{
                 u=0.8;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
         }
         else if (anneeConstruction>=1989 && anneeConstruction<=2000){
             if(typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
                 u=0.45;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else{
                 u=0.5;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
         }
         else if (anneeConstruction>=2001 && anneeConstruction<=2005){
             u = 0.4;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+            ifcHelper.addPropertyTypeIsolation(wall,"ITI");
         }
         else if (anneeConstruction>=2006 && anneeConstruction<=2012){
             u = 0.35;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITE");
+            ifcHelper.addPropertyTypeIsolation(wall,"ITE");
         }
         else if (anneeConstruction>2012){
             u = 0.2;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITE");
+            ifcHelper.addPropertyTypeIsolation(wall,"ITE");
         }
         return u;
     }
@@ -399,53 +401,53 @@ public class Dpe implements EventListener {
         double u=-1;
         if (anneeConstruction<1975){
             u = 2;
-            IfcHelper.addPropertyTypeIsolation(ifcModel, slab, "sans");
+            ifcHelper.addPropertyTypeIsolation(slab, "sans");
         }
         else if (anneeConstruction>=1975 && anneeConstruction<=1977){
             u = 0.9;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+            ifcHelper.addPropertyTypeIsolation(slab,"ITI");
         }
         else if (anneeConstruction>=1978 && anneeConstruction<=1982){
             if(typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
                 u=0.8;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITI");
             }
             else{
                 u=0.9;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITI");
             }
         }
         else if (anneeConstruction>=1983 && anneeConstruction<=1988){
             if(typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
                 u=0.55;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITI");
             }
             else{
                 u=0.7;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITI");
             }
         }
         else if (anneeConstruction>=1989 && anneeConstruction<=2000){
             if(typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
                 u=0.55;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITI");
             }
             else{
                 u=0.6;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITI");
             }
         }
         else if (anneeConstruction>=2001 && anneeConstruction<=2005){
             u = 0.3;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+            ifcHelper.addPropertyTypeIsolation(slab,"ITI");
         }
         else if (anneeConstruction>=2006 && anneeConstruction<=2012){
             u = 0.27;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+            ifcHelper.addPropertyTypeIsolation(slab,"ITI");
         }
         else if (anneeConstruction>2012){
             u = 0.22;
-            IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+            ifcHelper.addPropertyTypeIsolation(slab,"ITI");
         }
         return u;
     }
@@ -455,33 +457,33 @@ public class Dpe implements EventListener {
         if (isAnneeIsolationConnue && anneeIsolation!=anneeConstruction){
             if (anneeIsolation<1983){
                 u = 0.82;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else if (anneeIsolation>=1983 && anneeIsolation<=1988){
                 u = 0.75;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else if (anneeIsolation>=1989 && anneeIsolation<=2000){
                 u = 0.48;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else if (anneeIsolation>=2001 && anneeIsolation<=2005){
                 u = 0.42;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else if (anneeIsolation>=2006 && anneeIsolation<=2012){
                 u = 0.36;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
             else if (anneeIsolation>2012){
                 u = 0.24;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }
         }
         else if (isAnneeIsolationConnue && anneeIsolation==anneeConstruction){
             if (anneeConstruction<1974){
                 u=0.8;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,wall,"ITI");
+                ifcHelper.addPropertyTypeIsolation(wall,"ITI");
             }else{
                 u=this.getUmurInconnu(wall);
             }
@@ -497,33 +499,33 @@ public class Dpe implements EventListener {
         if (isAnneeIsolationConnue && anneeIsolation!=anneeConstruction){
             if (anneeIsolation<1983){
                 u = 0.85;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITE");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITE");
             }
             else if (anneeIsolation>=1983 && anneeIsolation<=1988){
                 u = 0.6;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITE");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITE");
             }
             else if (anneeIsolation>=1989 && anneeIsolation<=2000){
                 u = 0.55;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITE");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITE");
             }
             else if (anneeIsolation>=2001 && anneeIsolation<=2005){
                 u = 0.3;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITE");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITE");
             }
             else if (anneeIsolation>=2006 && anneeIsolation<=2012){
                 u = 0.27;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITE");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITE");
             }
             else if (anneeIsolation>2012){
                 u = 0.24;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITE");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITE");
             }
         }
         else if (isAnneeIsolationConnue && anneeIsolation==anneeConstruction){
             if (anneeConstruction<1974){
                 u=0.8;
-                IfcHelper.addPropertyTypeIsolation(ifcModel,slab,"ITI");
+                ifcHelper.addPropertyTypeIsolation(slab,"ITI");
             }else{
                 u=this.getUslabInconnu(slab);
             }
@@ -601,7 +603,7 @@ public class Dpe implements EventListener {
     }
 
     public void actualiseDP_mur(IfcWallStandardCase wall, String derriere,String isole,boolean isAnneeIsolationConnue,double anneeIsolation){
-        double surface=IfcHelper.getWallSurface(wall);
+        double surface=ifcHelper.getWallSurface(wall);
         double u=0,b=0;
         switch (isole){
             case "oui":
@@ -635,7 +637,7 @@ public class Dpe implements EventListener {
     }
 
     public void actualiseDP_slab(IfcSlab slab, String derriere,String isole,boolean isAnneeIsolationConnue,double anneeIsolation){
-        double surface = IfcHelper.getSlabSurface(slab);
+        double surface = ifcHelper.getSlabSurface(slab);
         double u=0,b=0;
         if (!derriere.equals("tp")){
             switch (isole){
@@ -694,7 +696,7 @@ public class Dpe implements EventListener {
     }
 
     public void actualiseDP_window(IfcWindow window,TypeFenetreEnum typeFenetre,TypeMenuiserieFenetreEnum typeMenuiserie,TypeVitrageEnum typeVitrage){
-        double uFen=0,sFen=IfcHelper.getWindowSurface(ifcModel,window);
+        double uFen=0,sFen=ifcHelper.getWindowSurface(window);
         if (typeMenuiserie.equals(TypeMenuiserieFenetreEnum.METALLIQUE)){
             if (typeFenetre.equals(TypeFenetreEnum.BATTANTE)){
                 if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
@@ -829,7 +831,7 @@ public class Dpe implements EventListener {
     }
 
     public void actualiseDP_door(IfcDoor door, TypeDoorEnum typeDoor){
-        double sDoor=IfcHelper.getDoorSurface(ifcModel,door),uDoor=0;
+        double sDoor=ifcHelper.getDoorSurface(door),uDoor=0;
         if (typeDoor.equals(TypeDoorEnum.PORTE_OPAQUE_PLEINE)){
             uDoor=3.5;
         }
@@ -1113,7 +1115,7 @@ public class Dpe implements EventListener {
         Iterator<IfcWallStandardCase> it = wallStandardCaseCollection.iterator();
         while (it.hasNext()) {
             wall = it.next();
-            if(IfcHelper.getPropertyTypeWall(wall).equals("ext")){
+            if(ifcHelper.getPropertyTypeWall(wall).equals("ext")){
                 Object o[] = {wall, DpeState.UNKNOWN};
                 Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
                 EventManager.getInstance().put(Channel.DPE, e);
@@ -1346,7 +1348,7 @@ public class Dpe implements EventListener {
                         Object[] items = (Object[]) o;
                         IfcWindow window = (IfcWindow)items[0];
                         TypeFenetreEnum typeFenetre = (TypeFenetreEnum)items[1];
-                        IfcHelper.addPropertyTypeWindow(ifcModel, window, typeFenetre);
+                        ifcHelper.addPropertyTypeWindow(window, typeFenetre);
                         windows_properties.get(items[0]).put(event, typeFenetre);
                         break;
                     }
@@ -1354,7 +1356,7 @@ public class Dpe implements EventListener {
                         Object[] items = (Object[]) o;
                         IfcWindow window = (IfcWindow)items[0];
                         TypeMenuiserieFenetreEnum typeMenuiserieFenetre = (TypeMenuiserieFenetreEnum)items[1];
-                        IfcHelper.addPropertyTypeMenuiserieWindow(ifcModel, window, typeMenuiserieFenetre);
+                        ifcHelper.addPropertyTypeMenuiserieWindow(window, typeMenuiserieFenetre);
                         windows_properties.get(items[0]).put(event, typeMenuiserieFenetre);
                         break;
                     }
@@ -1362,7 +1364,7 @@ public class Dpe implements EventListener {
                         Object[] items = (Object[]) o;
                         IfcWindow window = (IfcWindow)items[0];
                         TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items[1];
-                        IfcHelper.addPropertyTypeVitrageWindow(ifcModel, window, typeVitrage);
+                        ifcHelper.addPropertyTypeVitrageWindow(window, typeVitrage);
                         windows_properties.get(items[0]).put(event, typeVitrage);
                         tryActualiseWindowDP(window);
                         break;
@@ -1371,7 +1373,7 @@ public class Dpe implements EventListener {
                         Object[] items = (Object[]) o;
                         IfcDoor door = (IfcDoor)items[0];
                         TypeDoorEnum typedoor = (TypeDoorEnum)items[1];
-                        IfcHelper.addPropertyTypeDoor(ifcModel, door, typedoor);
+                        ifcHelper.addPropertyTypeDoor(door, typedoor);
                         doors_properties.get(items[0]).put(event, typedoor);
                         actualiseDP_door(door,typedoor);
                         break;

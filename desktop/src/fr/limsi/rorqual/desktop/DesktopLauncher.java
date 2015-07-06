@@ -22,37 +22,36 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-        IfcModel ifcModel = new IfcModel();
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "3DReno";
         config.height = 720;
         config.width = 1280;
 
-        IfcHelper.initialiseIfcModel(ifcModel);
-//        IfcHelper.createApartmentTest(ifcModel);
-        IfcHelper.createSecondAppartementTest(ifcModel);
-//        IfcCartesianPoint pointA1 = IfcHelper.createCartesianPoint2D(0, 0);
-//        IfcCartesianPoint pointA2 = IfcHelper.createCartesianPoint2D(8, 0);
-//        IfcHelper.addWall(ifcModel, "1st floor", "wall", pointA1, pointA2, 0.18);
-//        IfcWallStandardCase wall = IfcHelper.getWall(ifcModel, "wall");
-//        IfcHelper.addDoor(ifcModel, "door", wall, 1, 2.2, 1);
-//        IfcHelper.addWindow(ifcModel, "window", wall, 1.0, 1.0, 5.5, 1.3);
-//        IfcWindow window = IfcHelper.getWindow(ifcModel,"window");
+        IfcHelper ifcHelper = new IfcHelper();
+//        ifcHelper.createApartmentTest(ifcModel);
+        ifcHelper.createSecondAppartementTest();
+//        IfcCartesianPoint pointA1 = ifcHelper.createCartesianPoint2D(0, 0);
+//        IfcCartesianPoint pointA2 = ifcHelper.createCartesianPoint2D(8, 0);
+//        ifcHelper.addWall("1st floor", "wall", pointA1, pointA2, 0.18);
+//        IfcWallStandardCase wall = ifcHelper.getWall("wall");
+//        ifcHelper.addDoor("door", wall, 1, 2.2, 1);
+//        ifcHelper.addWindow("window", wall, 1.0, 1.0, 5.5, 1.3);
+//        IfcWindow window = ifcHelper.getWindow("window");
 //        ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<>();
 //        materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
 //        materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
-//        IfcHelper.addMaterialLayer(ifcModel, wall, materialTypeEnumArrayList);
-//        IfcHelper.addPropertyTypeWindow(ifcModel, window, TypeFenetreEnum.UNKNOWN);
-//        IfcHelper.addPropertyTypeMenuiserieWindow(ifcModel, window, TypeMenuiserieFenetreEnum.UNKNOWN);
-//        IfcHelper.addPropertyTypeVitrageWindow(ifcModel, window, TypeVitrageEnum.UNKNOWN);
-//        IfcHelper.saveIfcModel(ifcModel);
-//        IfcHelper.addPropertyTypeWindow(ifcModel, window, TypeFenetreEnum.BATTANTE);
-//        IfcHelper.addPropertyTypeMenuiserieWindow(ifcModel, window, TypeMenuiserieFenetreEnum.METALLIQUE);
-//        IfcHelper.addPropertyTypeVitrageWindow(ifcModel, window, TypeVitrageEnum.TRIPLE_VITRAGE);
-//        System.out.println(IfcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_FENETRE));
-//        System.out.println(IfcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_MENUISERIE));
-//        System.out.println(IfcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_VITRAGE));
-        IfcHelper.saveIfcModel(ifcModel);
+//        ifcHelper.addMaterialLayer(wall, materialTypeEnumArrayList);
+//        ifcHelper.addPropertyTypeWindow(window, TypeFenetreEnum.UNKNOWN);
+//        ifcHelper.addPropertyTypeMenuiserieWindow(window, TypeMenuiserieFenetreEnum.UNKNOWN);
+//        ifcHelper.addPropertyTypeVitrageWindow(window, TypeVitrageEnum.UNKNOWN);
+//        ifcHelper.saveIfcModel();
+//        ifcHelper.addPropertyTypeWindow(window, TypeFenetreEnum.BATTANTE);
+//        ifcHelper.addPropertyTypeMenuiserieWindow(window, TypeMenuiserieFenetreEnum.METALLIQUE);
+//        ifcHelper.addPropertyTypeVitrageWindow(window, TypeVitrageEnum.TRIPLE_VITRAGE);
+//        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_FENETRE));
+//        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_MENUISERIE));
+//        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_VITRAGE));
+        ifcHelper.saveIfcModel();
 
         try {
             IfcHolder.getInstance().openModel(new File("data/ifc/coucou.ifc"));

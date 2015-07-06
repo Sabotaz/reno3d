@@ -28,13 +28,18 @@ public class IfcHelper {
 
     private IfcModel ifcModel;
 
+    public IfcHelper(){
+        ifcModel = new IfcModel();
+        this.initialiseIfcModel();
+    }
+
     public IfcHelper(IfcModel model){
         ifcModel = model;
     }
 
     // Permet de compléter un model de départ contenant les informations du projet, un site,
     // un building et un building storey (par défaut à l'altitude 0)
-    public static IfcModel initialiseIfcModel (IfcModel ifcModel){
+    public IfcModel initialiseIfcModel (){
 
         // Initialize File Name
         LIST<STRING> authors = new LIST<>();
@@ -226,14 +231,14 @@ public class IfcHelper {
     }
 
     // Permet de récupérer le contexte géométrique d'un model
-    public static IfcGeometricRepresentationContext getGeometricRepresentationContext (IfcModel ifcModel){
+    public IfcGeometricRepresentationContext getGeometricRepresentationContext (){
         Collection<IfcGeometricRepresentationContext> collectionBuilding = ifcModel.getCollection(IfcGeometricRepresentationContext.class);
         Iterator<IfcGeometricRepresentationContext> it = collectionBuilding.iterator();
         return it.next();
     }
 
     // Permet de récupérer un étage dans un model en fonction de son nom
-    public static IfcBuildingStorey getBuildingStorey (IfcModel ifcModel, String nameBuildingStorey){
+    public IfcBuildingStorey getBuildingStorey (String nameBuildingStorey){
         Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
         for (IfcBuildingStorey actualBuildingStorey : collectionBuildingStorey){
             if(actualBuildingStorey.getName().getDecodedValue().equals(nameBuildingStorey)){
@@ -244,7 +249,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer l'étage dans lequel se trouve un product
-    public static IfcBuildingStorey getBuildingStorey (IfcProduct product){
+    public IfcBuildingStorey getBuildingStorey (IfcProduct product){
         if(product instanceof IfcWallStandardCase){
             IfcWallStandardCase wall = (IfcWallStandardCase) product;
             SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructure = wall.getContainedInStructure_Inverse();
@@ -261,7 +266,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer un WallStandardCase dans un model en fonction de son nom
-    public static IfcWallStandardCase getWall (IfcModel ifcModel, String nameWall){
+    public IfcWallStandardCase getWall (String nameWall){
         Collection<IfcWallStandardCase> collectionWallStandardCase = ifcModel.getCollection(IfcWallStandardCase.class);
         for (IfcWallStandardCase actualWall : collectionWallStandardCase){
             if(actualWall.getName().getDecodedValue().equals(nameWall)){
@@ -272,7 +277,7 @@ public class IfcHelper {
     }
 
     // Permet de récuperer l'épaisseur d'un wall dans le model
-    public static double getWallThickness (IfcWallStandardCase wall){
+    public double getWallThickness (IfcWallStandardCase wall){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -296,7 +301,7 @@ public class IfcHelper {
     }
 
     // Permet de récuperer la hauteur d'un wall dans le model
-    public static double getWallHeight (IfcWallStandardCase wall){
+    public double getWallHeight (IfcWallStandardCase wall){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
@@ -313,7 +318,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la longueur d'un mur
-    public static double getWallLength (IfcWallStandardCase wall){
+    public double getWallLength (IfcWallStandardCase wall){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
@@ -352,7 +357,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la surface d'un mur
-    public static double getWallSurface (IfcWallStandardCase wall){
+    public double getWallSurface (IfcWallStandardCase wall){
         double wallHeight = getWallHeight(wall);
         double wallLength = getWallLength(wall);
         double surfaceWall = (wallHeight*wallLength);
@@ -364,7 +369,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer un Opening dans un model en fonction de son nom
-    public static IfcOpeningElement getOpening (IfcModel ifcModel, String nameOpening){
+    public IfcOpeningElement getOpening (String nameOpening){
         Collection<IfcOpeningElement> collectionOpening = ifcModel.getCollection(IfcOpeningElement.class);
         for (IfcOpeningElement actualOpening : collectionOpening){
             if(actualOpening.getName().getDecodedValue().equals(nameOpening)){
@@ -375,7 +380,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer l'Opening lié à une door
-    public static IfcOpeningElement getOpeningRelToDoor (IfcModel ifcModel, IfcDoor door){
+    public IfcOpeningElement getOpeningRelToDoor (IfcDoor door){
         Collection<IfcRelFillsElement> collectionRelFillsElement = ifcModel.getCollection(IfcRelFillsElement.class);
         for (IfcRelFillsElement actualRelFillsElement : collectionRelFillsElement){
             if(actualRelFillsElement.getRelatedBuildingElement().equals(door)){
@@ -386,7 +391,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer l'Opening lié à une window
-    public static IfcOpeningElement getOpeningRelToWindow (IfcModel ifcModel, IfcWindow window){
+    public IfcOpeningElement getOpeningRelToWindow (IfcWindow window){
         Collection<IfcRelFillsElement> collectionRelFillsElement = ifcModel.getCollection(IfcRelFillsElement.class);
         for (IfcRelFillsElement actualRelFillsElement : collectionRelFillsElement){
             if(actualRelFillsElement.getRelatedBuildingElement().equals(window)){
@@ -397,7 +402,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer les openings liées à un wall
-    public static SET<IfcOpeningElement> getOpeningRelToWall (IfcWallStandardCase wall){
+    public SET<IfcOpeningElement> getOpeningRelToWall (IfcWallStandardCase wall){
         SET<IfcOpeningElement> openingElementSET = new SET<>();
         if (wall.getHasOpenings_Inverse()!=null){
             SET<IfcRelVoidsElement> relVoidsElementSET = wall.getHasOpenings_Inverse();
@@ -412,7 +417,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la largeur d'un opening
-    public static double getOpeningWidth (IfcOpeningElement opening){
+    public double getOpeningWidth (IfcOpeningElement opening){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -436,7 +441,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la hauteur d'un opening
-    public static double getOpeningHeight (IfcOpeningElement opening){
+    public double getOpeningHeight (IfcOpeningElement opening){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -460,7 +465,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la hauteur d'un opening
-    public static double getOpeningDepth (IfcOpeningElement opening){
+    public double getOpeningDepth (IfcOpeningElement opening){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -477,14 +482,14 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la surface d'un opening
-    public static double getOpeningSurface (IfcOpeningElement opening){
+    public double getOpeningSurface (IfcOpeningElement opening){
         double openingWidth = getOpeningWidth(opening);
         double openingHeight = getOpeningHeight(opening);
         return openingWidth*openingHeight;
     }
 
     // Permet de récupérer une Door dans un model en fonction de son nom
-    public static IfcDoor getDoor (IfcModel ifcModel, String nameDoor){
+    public IfcDoor getDoor (String nameDoor){
         Collection<IfcDoor> collectionDoor = ifcModel.getCollection(IfcDoor.class);
         for (IfcDoor actualDoor : collectionDoor){
             if(actualDoor.getName().getDecodedValue().equals(nameDoor)){
@@ -495,46 +500,31 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la largeur d'une door
-    public static double getDoorWidth (IfcDoor door){
-        return getDoorWidth(IfcHolder.getInstance().getIfcModel(), door);
+    public double getDoorWidth (IfcDoor door){
+        IfcOpeningElement opening = this.getOpeningRelToDoor(door);
+        return (this.getOpeningWidth(opening));
     }
 
     // Permet de récupérer la hauteur d'une door
-    public static double getDoorHeight (IfcDoor door){
-        return getDoorHeight(IfcHolder.getInstance().getIfcModel(), door);
+    public double getDoorHeight (IfcDoor door){
+        IfcOpeningElement opening = this.getOpeningRelToDoor(door);
+        return (this.getOpeningHeight(opening));
     }
 
     // Permet de récupérer la profondeur d'une door
-    public static double getDoorDepth (IfcDoor door){
-        return getDoorDepth(IfcHolder.getInstance().getIfcModel(), door);
-    }
-
-    // Permet de récupérer la largeur d'une door
-    public static double getDoorWidth (IfcModel ifcModel, IfcDoor door){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        return (IfcHelper.getOpeningWidth(opening));
-    }
-
-    // Permet de récupérer la hauteur d'une door
-    public static double getDoorHeight (IfcModel ifcModel, IfcDoor door){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        return (IfcHelper.getOpeningHeight(opening));
-    }
-
-    // Permet de récupérer la profondeur d'une door
-    public static double getDoorDepth (IfcModel ifcModel, IfcDoor door){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        return (IfcHelper.getOpeningDepth(opening));
+    public double getDoorDepth (IfcDoor door){
+        IfcOpeningElement opening = this.getOpeningRelToDoor(door);
+        return (this.getOpeningDepth(opening));
     }
 
     // Permet de récupérer la surface d'une door
-    public static double getDoorSurface (IfcModel ifcModel, IfcDoor door){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        return (IfcHelper.getOpeningSurface(opening));
+    public double getDoorSurface (IfcDoor door){
+        IfcOpeningElement opening = this.getOpeningRelToDoor(door);
+        return (this.getOpeningSurface(opening));
     }
 
     // Permet de récupérer une window dans un model en fonction de son nom
-    public static IfcWindow getWindow (IfcModel ifcModel, String nameWindow){
+    public IfcWindow getWindow (String nameWindow){
         Collection<IfcWindow> collectionWindow = ifcModel.getCollection(IfcWindow.class);
         for (IfcWindow actualWindow : collectionWindow){
             if(actualWindow.getName().getDecodedValue().equals(nameWindow)){
@@ -544,47 +534,32 @@ public class IfcHelper {
         return null;
     }
 
-    // Permet de récupérer la largeur d'une window
-    public static double getWindowWidth (IfcWindow window){
-        return getWindowWidth(IfcHolder.getInstance().getIfcModel(), window);
-    }
-
-    // Permet de récupérer la hauteur d'une window
-    public static double getWindowHeight (IfcWindow window){
-        return getWindowHeight(IfcHolder.getInstance().getIfcModel(), window);
-    }
-
     // Permet de récupérer la profondeur d'une window
-    public static double getWindowDepth (IfcWindow window){
-        return getWindowDepth(IfcHolder.getInstance().getIfcModel(), window);
-    }
-
-    // Permet de récupérer la profondeur d'une window
-    public static double getWindowDepth (IfcModel ifcModel, IfcWindow window){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        return (IfcHelper.getOpeningDepth(opening));
+    public double getWindowDepth (IfcWindow window){
+        IfcOpeningElement opening = this.getOpeningRelToWindow(window);
+        return (this.getOpeningDepth(opening));
     }
 
     // Permet de récupérer la largeur d'une window
-    public static double getWindowWidth (IfcModel ifcModel, IfcWindow window){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        return (IfcHelper.getOpeningWidth(opening));
+    public double getWindowWidth (IfcWindow window){
+        IfcOpeningElement opening = this.getOpeningRelToWindow(window);
+        return (this.getOpeningWidth(opening));
     }
 
     // Permet de récupérer la hauteur d'une window
-    public static double getWindowHeight (IfcModel ifcModel, IfcWindow window){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        return (IfcHelper.getOpeningHeight(opening));
+    public double getWindowHeight (IfcWindow window){
+        IfcOpeningElement opening = this.getOpeningRelToWindow(window);
+        return (this.getOpeningHeight(opening));
     }
 
     // Permet de récupérer la surface d'une window
-    public static double getWindowSurface (IfcModel ifcModel, IfcWindow window){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        return (IfcHelper.getOpeningSurface(opening));
+    public double getWindowSurface (IfcWindow window){
+        IfcOpeningElement opening = this.getOpeningRelToWindow(window);
+        return (this.getOpeningSurface(opening));
     }
 
     // Permet de récupérer la relation entre le building et ses étages
-    public static IfcRelAggregates getBuildingRelations (IfcModel ifcModel){
+    public IfcRelAggregates getBuildingRelations (){
         Collection<IfcRelAggregates> collectionRelAggregates = ifcModel.getCollection(IfcRelAggregates.class);
         for (IfcRelAggregates actualRelAggregates : collectionRelAggregates){
             if(actualRelAggregates.getRelatingObject().getClass().equals(IfcBuilding.class)){
@@ -595,7 +570,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la relation entre un étage et ses produits
-    public static IfcRelContainedInSpatialStructure getRelContainedInSpatialStructure (IfcModel ifcModel, String nameBuildingStorey){
+    public IfcRelContainedInSpatialStructure getRelContainedInSpatialStructure (String nameBuildingStorey){
         Collection<IfcRelContainedInSpatialStructure> collectionRelContainedInSpatialStructure = ifcModel.getCollection(IfcRelContainedInSpatialStructure.class);
         for (IfcRelContainedInSpatialStructure actualRelContainedInSpatialStructure : collectionRelContainedInSpatialStructure){
             if(actualRelContainedInSpatialStructure.getRelatingStructure().getName().getDecodedValue().equals(nameBuildingStorey)){
@@ -606,7 +581,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la liaison entre un openingElement et un relFillsElement
-    public static IfcRelFillsElement getRelFillsElement (IfcModel ifcModel, IfcOpeningElement openingElement){
+    public IfcRelFillsElement getRelFillsElement (IfcOpeningElement openingElement){
         Collection<IfcRelFillsElement> collectionRelFillsElement = ifcModel.getCollection(IfcRelFillsElement.class);
         for (IfcRelFillsElement actualRelFillsElement : collectionRelFillsElement){
             if(actualRelFillsElement.getRelatingOpeningElement().equals(openingElement)){
@@ -617,9 +592,9 @@ public class IfcHelper {
     }
 
     // Permet de récupérer l'ensemble des slabs rattaché à un building Storey
-    public static LIST<IfcSlab> getSlabs (IfcModel ifcModel, String nameBuildingStorey){
+    public LIST<IfcSlab> getSlabs (String nameBuildingStorey){
         LIST<IfcSlab> slabs = new LIST<>();
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel, nameBuildingStorey);
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
         for(IfcProduct actualProduct : productSET){
             if(actualProduct instanceof IfcSlab){
@@ -630,7 +605,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer l'épaisseur d'un slab
-    public static double getSlabThickness (IfcSlab slab){
+    public double getSlabThickness (IfcSlab slab){
         IfcProductRepresentation productRepresentation = slab.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -647,7 +622,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer la surface d'un slab
-    public static double getSlabSurface (IfcSlab slab){
+    public double getSlabSurface (IfcSlab slab){
         IfcProductRepresentation productRepresentation = slab.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -683,7 +658,7 @@ public class IfcHelper {
     }
 
     // Permet de créer un point cartésien en 2D à partir de deux doubles
-    public static IfcCartesianPoint createCartesianPoint2D(double x, double y){
+    public IfcCartesianPoint createCartesianPoint2D(double x, double y){
         LIST<IfcLengthMeasure> coordinates = new LIST<>();
         coordinates.add(new IfcLengthMeasure(x));
         coordinates.add(new IfcLengthMeasure(y));
@@ -691,7 +666,7 @@ public class IfcHelper {
     }
 
     // Permet de créer un point cartésien en 3D à partir de trois doubles
-    public static IfcCartesianPoint createCartesianPoint3D(double x, double y, double z){
+    public IfcCartesianPoint createCartesianPoint3D(double x, double y, double z){
         LIST<IfcLengthMeasure> coordinates = new LIST<>();
         coordinates.add(new IfcLengthMeasure(x));
         coordinates.add(new IfcLengthMeasure(y));
@@ -700,7 +675,7 @@ public class IfcHelper {
     }
 
     // Permet de créer une direction à partir de deux doubles
-    public static IfcDirection createDirection2D(double x, double y){
+    public IfcDirection createDirection2D(double x, double y){
         LIST<DOUBLE> coordinates = new LIST<>();
         coordinates.add(new DOUBLE(x));
         coordinates.add(new DOUBLE(y));
@@ -708,7 +683,7 @@ public class IfcHelper {
     }
 
     // Permet de créer une direction à partir de trois doubles
-    public static IfcDirection createDirection3D(double x, double y, double z){
+    public IfcDirection createDirection3D(double x, double y, double z){
         LIST<DOUBLE> coordinates = new LIST<>();
         coordinates.add(new DOUBLE(x));
         coordinates.add(new DOUBLE(y));
@@ -717,7 +692,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un étage au batiment en lui rentrant son nom et son élévation
-    public static void addBuildingStorey (IfcModel ifcModel,String nameFloor , double elevation){
+    public void addBuildingStorey (String nameFloor , double elevation){
         IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = createCartesianPoint3D(0.0,0.0,elevation);
         IfcDirection ifcDirectionZAxisBuildingStorey = createDirection3D(0.0,0.0,1.0);
         IfcDirection ifcDirectionXDirectionBuildingStorey = createDirection3D(1.0,0.0,0.0);
@@ -732,7 +707,7 @@ public class IfcHelper {
                 null, null, new IfcElementCompositionEnum("ELEMENT"), new IfcLengthMeasure(elevation));
 
         // Create relation IfcBuilding --> IfcBuildingStorey
-        IfcRelAggregates relationBuildingToBuildingStorey = IfcHelper.getBuildingRelations(ifcModel);
+        IfcRelAggregates relationBuildingToBuildingStorey = this.getBuildingRelations();
         relationBuildingToBuildingStorey.addRelatedObjects(ifcBuildingStorey);
 
         ifcModel.addIfcObject(ifcBuildingStorey);
@@ -745,8 +720,8 @@ public class IfcHelper {
 
     // Permet d'ajouter un mur à un IfcModel
     // Arguments : IfcModel, étage sur lequel on implémente le mur, dimension, position, et orientation du mur
-    public static void addWall(IfcModel ifcModel, String nameBuildingStorey, String nameWall, double wallLength, double wallHeight, double wallThickness, double posX, double posY, double dirX, double dirY){
-        IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel,nameBuildingStorey);
+    public void addWall(String nameBuildingStorey, String nameWall, double wallLength, double wallHeight, double wallThickness, double posX, double posY, double dirX, double dirY){
+        IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
         IfcCartesianPoint ifcCartesianPointOriginWall = createCartesianPoint3D(posX,posY,0.0);
         IfcDirection ifcDirectionZAxisWall = createDirection3D(0.0,0.0,1.0);
         IfcDirection ifcDirectionXDirectionWall = createDirection3D(dirX,dirY,0.0);
@@ -771,7 +746,7 @@ public class IfcHelper {
                 new BOOLEAN(true),new IfcTrimmingPreference("CARTESIAN"));
         SET<IfcRepresentationItem> ifcWallRepresentation2DItem = new SET<>();
         ifcWallRepresentation2DItem.add(wallTrimmedCurve);
-        IfcShapeRepresentation ifcWallCurve2DRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation ifcWallCurve2DRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Axis",true), new IfcLabel("Curve2D",true), ifcWallRepresentation2DItem);
         ifcWallRepresentationsList.add(ifcWallCurve2DRepresentation);
 
@@ -797,7 +772,7 @@ public class IfcHelper {
                 ifcAxis2Placement3DWallRepresentation,ifcWallExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
         SET<IfcRepresentationItem> ifcWallRepresentation3DItem = new SET<>();
         ifcWallRepresentation3DItem.add(extrudedWall);
-        IfcShapeRepresentation ifcWallSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation ifcWallSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcWallRepresentation3DItem);
         ifcWallRepresentationsList.add(ifcWallSweptSolidRepresentation);
 
@@ -810,7 +785,7 @@ public class IfcHelper {
                 ifcWallDefinitionShape, null);
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
@@ -859,8 +834,8 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un mur à un IfcModel
-    public static void addWall(IfcModel ifcModel, String nameBuildingStorey, String nameWall, IfcCartesianPoint pointA, IfcCartesianPoint pointB, double wallThickness){
-        IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel,nameBuildingStorey);
+    public void addWall(String nameBuildingStorey, String nameWall, IfcCartesianPoint pointA, IfcCartesianPoint pointB, double wallThickness){
+        IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
         double wallHeight = 2.80;
         double xPointA = pointA.getCoordinates().get(0).value;
         double yPointA = pointA.getCoordinates().get(1).value;
@@ -893,7 +868,7 @@ public class IfcHelper {
                 new BOOLEAN(true),new IfcTrimmingPreference("CARTESIAN"));
         SET<IfcRepresentationItem> ifcWallRepresentation2DItem = new SET<>();
         ifcWallRepresentation2DItem.add(wallTrimmedCurve);
-        IfcShapeRepresentation ifcWallCurve2DRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation ifcWallCurve2DRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Axis",true), new IfcLabel("Curve2D",true), ifcWallRepresentation2DItem);
         ifcWallRepresentationsList.add(ifcWallCurve2DRepresentation);
 
@@ -920,7 +895,7 @@ public class IfcHelper {
                 ifcAxis2Placement3DWallRepresentation,ifcWallExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
         SET<IfcRepresentationItem> ifcWallRepresentation3DItem = new SET<>();
         ifcWallRepresentation3DItem.add(extrudedWall);
-        IfcShapeRepresentation ifcWallSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation ifcWallSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcWallRepresentation3DItem);
         ifcWallRepresentationsList.add(ifcWallSweptSolidRepresentation);
 
@@ -933,7 +908,7 @@ public class IfcHelper {
                 ifcWallDefinitionShape, null);
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
@@ -982,12 +957,12 @@ public class IfcHelper {
         ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<>();
         materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
         materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
-        IfcHelper.addMaterialLayer(ifcModel, ifcWallStandardCase, materialTypeEnumArrayList);
+        this.addMaterialLayer(ifcWallStandardCase, materialTypeEnumArrayList);
     }
 
     // Permet d'ajouter un floor à un IfcModel
-    public static void addFloor (IfcModel ifcModel,String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint){
-        IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel, nameBuildingStorey);
+    public void addFloor (String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint){
+        IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
         IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0, 0.0, 0.0);
         IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0, 0.0, 1.0);
         IfcDirection ifcDirectionXDirectionLocalSlab = createDirection3D(1.0, 0.0, 0.0);
@@ -1013,7 +988,7 @@ public class IfcHelper {
                 ifcAxis2Placement3DSlabRepresentation,ifcSlabExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
         SET<IfcRepresentationItem> ifcSlabRepresentation3DItem = new SET<>();
         ifcSlabRepresentation3DItem.add(extrudedSlab);
-        IfcShapeRepresentation ifcSlabSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation ifcSlabSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcSlabRepresentation3DItem);
         ifcSlabRepresentationsList.add(ifcSlabSweptSolidRepresentation);
 
@@ -1026,7 +1001,7 @@ public class IfcHelper {
                 ifcSlabDefinitionShape, null, new IfcSlabTypeEnum("FLOOR"));
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
@@ -1044,7 +1019,7 @@ public class IfcHelper {
         ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<>();
         materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
         materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
-        IfcHelper.addMaterialLayerToSlab(ifcModel, ifcSlab, materialTypeEnumArrayList);
+        this.addMaterialLayerToSlab(ifcSlab, materialTypeEnumArrayList);
 
         // add new Ifc-objects to the model
         ifcModel.addIfcObject(ifcSlab);
@@ -1069,8 +1044,8 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un roof à un IfcModel
-    public static void addRoof (IfcModel ifcModel,String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint, double elevation){
-        IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel, nameBuildingStorey);
+    public void addRoof (String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint, double elevation){
+        IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
         IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0, 0.0, elevation);
         IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0,0.0,1.0);
         IfcDirection ifcDirectionXDirectionLocalSlab = createDirection3D(1.0,0.0,0.0);
@@ -1093,7 +1068,7 @@ public class IfcHelper {
                 ifcAxis2Placement3DSlabRepresentation,ifcSlabExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
         SET<IfcRepresentationItem> ifcSlabRepresentation3DItem = new SET<>();
         ifcSlabRepresentation3DItem.add(extrudedSlab);
-        IfcShapeRepresentation ifcSlabSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation ifcSlabSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcSlabRepresentation3DItem);
         ifcSlabRepresentationsList.add(ifcSlabSweptSolidRepresentation);
 
@@ -1106,7 +1081,7 @@ public class IfcHelper {
                 ifcSlabDefinitionShape, null, new IfcSlabTypeEnum("ROOF"));
 
         // Create relation IfcBuildingStorey --> IfcWallStandardCase
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,nameBuildingStorey);
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
@@ -1145,10 +1120,10 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening à un wall
-    public static void addOpeningToWall (IfcModel ifcModel, String nameOpening,IfcWallStandardCase wall, double openingWidth, double openingHeight, double xLocal, double zLocal){
+    public void addOpeningToWall (String nameOpening,IfcWallStandardCase wall, double openingWidth, double openingHeight, double xLocal, double zLocal){
 
         // Calcul of openingThickness = wallThickness
-        double openingThickness = IfcHelper.getWallThickness(wall);
+        double openingThickness = this.getWallThickness(wall);
 
         IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,-openingThickness/2,zLocal);
         IfcDirection zLocalOpening = createDirection3D(0.0,0.0,1.0);
@@ -1177,7 +1152,7 @@ public class IfcHelper {
                 openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingThickness)));
         SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<>();
         openingRepresentation3DItem.add(extrudedOpening);
-        IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), openingRepresentation3DItem);
         openingRepresentationsList.add(openingSweptSolidRepresentation);
         IfcProductDefinitionShape openingDefinitionShape = new IfcProductDefinitionShape(null,null,openingRepresentationsList);
@@ -1219,10 +1194,10 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening à slab
-    public static void addOpeningToSlab (IfcModel ifcModel, String nameOpening,IfcSlab slab, double openingWidth, double openingHeight, double xLocal, double yLocal){
+    public void addOpeningToSlab (String nameOpening,IfcSlab slab, double openingWidth, double openingHeight, double xLocal, double yLocal){
 
         // Calcul of openingThickness = slabThickness
-        double openingThickness = IfcHelper.getSlabThickness(slab);
+        double openingThickness = this.getSlabThickness(slab);
 
         IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,yLocal,0.0);
         IfcDirection zLocalOpening = createDirection3D(0.0,0.0,1.0);
@@ -1251,7 +1226,7 @@ public class IfcHelper {
                 openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingThickness)));
         SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<>();
         openingRepresentation3DItem.add(extrudedOpening);
-        IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(ifcModel),
+        IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), openingRepresentation3DItem);
         openingRepresentationsList.add(openingSweptSolidRepresentation);
         IfcProductDefinitionShape openingDefinitionShape = new IfcProductDefinitionShape(null,null,openingRepresentationsList);
@@ -1293,20 +1268,20 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un opening
-    public static void addOpening (IfcModel ifcModel, String nameOpening,IfcProduct product, double openingWidth, double openingHeight, double xLocal, double yzLocal){
+    public void addOpening (String nameOpening,IfcProduct product, double openingWidth, double openingHeight, double xLocal, double yzLocal){
         if (product instanceof IfcWallStandardCase){
-            addOpeningToWall (ifcModel, nameOpening, (IfcWallStandardCase)product, openingWidth, openingHeight, xLocal, yzLocal);
+            addOpeningToWall (nameOpening, (IfcWallStandardCase)product, openingWidth, openingHeight, xLocal, yzLocal);
         }
         else if (product instanceof IfcSlab){
-            addOpeningToSlab(ifcModel, nameOpening, (IfcSlab) product, openingWidth, openingHeight, xLocal, yzLocal);
+            addOpeningToSlab(nameOpening, (IfcSlab) product, openingWidth, openingHeight, xLocal, yzLocal);
         }
     }
 
     // Permet d'ajouter une door à un produit (wall ou slab)
-    public static void addDoor (IfcModel ifcModel, String nameDoor,IfcProduct product, double doorWidth, double doorHeight, double xLocal){
+    public void addDoor (String nameDoor,IfcProduct product, double doorWidth, double doorHeight, double xLocal){
         IfcBuildingStorey buildingStorey = getBuildingStorey(product);
-        addOpening(ifcModel, nameDoor, product, doorWidth, doorHeight, xLocal, 0.0);
-        IfcOpeningElement opening = getOpening(ifcModel, nameDoor);
+        addOpening(nameDoor, product, doorWidth, doorHeight, xLocal, 0.0);
+        IfcOpeningElement opening = getOpening(nameDoor);
 
 //        // Door style definitions
 //        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
@@ -1347,7 +1322,7 @@ public class IfcHelper {
                 null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(doorHeight)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(doorWidth)));
 
         // Create relation buildingStorey -> door
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(buildingStorey.getName().getDecodedValue());
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
@@ -1384,7 +1359,7 @@ public class IfcHelper {
         ifcModel.addIfcObject(localPointDoor);
         ifcModel.addIfcObject(zLocalDoor);
         ifcModel.addIfcObject(xLocalDoor);
-        addPropertyTypeDoor(ifcModel, door, TypeDoorEnum.UNKNOWN);
+        addPropertyTypeDoor(door, TypeDoorEnum.UNKNOWN);
 
 //        ifcModel.addIfcObject(relDefinesByType);
 //        ifcModel.addIfcObject(doorStyle);
@@ -1393,11 +1368,11 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter une window à un produit (wall ou slab)
-    public static void addWindow (IfcModel ifcModel, String nameWindow,IfcProduct product, double windowWidth, double windowHeight, double xLocal, double zLocal){
+    public void addWindow (String nameWindow,IfcProduct product, double windowWidth, double windowHeight, double xLocal, double zLocal){
 
         IfcBuildingStorey buildingStorey = getBuildingStorey(product);
-        addOpening(ifcModel,nameWindow,product,windowWidth,windowHeight,xLocal,zLocal);
-        IfcOpeningElement opening = getOpening(ifcModel, nameWindow);
+        addOpening(nameWindow,product,windowWidth,windowHeight,xLocal,zLocal);
+        IfcOpeningElement opening = getOpening(nameWindow);
 
 //        // Window style definitions
 //        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
@@ -1438,7 +1413,7 @@ public class IfcHelper {
                 null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowHeight)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowWidth)));
 
         // Create relation buildingStorey -> window
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(buildingStorey.getName().getDecodedValue());
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
@@ -1481,17 +1456,17 @@ public class IfcHelper {
 //        ifcModel.addIfcObject(windowLiningProperties);
 //        ifcModel.addIfcObject(windowPanelProperties);
 
-        addPropertyTypeWindow(ifcModel,window,TypeFenetreEnum.UNKNOWN);
-        addPropertyTypeMenuiserieWindow(ifcModel,window,TypeMenuiserieFenetreEnum.UNKNOWN);
-        addPropertyTypeVitrageWindow(ifcModel,window,TypeVitrageEnum.UNKNOWN);
+        addPropertyTypeWindow(window,TypeFenetreEnum.UNKNOWN);
+        addPropertyTypeMenuiserieWindow(window,TypeMenuiserieFenetreEnum.UNKNOWN);
+        addPropertyTypeVitrageWindow(window,TypeVitrageEnum.UNKNOWN);
     }
 
     // Permet d'ajouter une double window à un produit (wall ou slab)
-    public static void addDoubleWindow (IfcModel ifcModel, String nameWindow,IfcProduct product, double windowWidth, double windowHeight, double xLocal, double zLocal){
+    public void addDoubleWindow (String nameWindow,IfcProduct product, double windowWidth, double windowHeight, double xLocal, double zLocal){
 
         IfcBuildingStorey buildingStorey = getBuildingStorey(product);
-        addOpening(ifcModel,nameWindow,product,windowWidth,windowHeight,xLocal,zLocal);
-        IfcOpeningElement opening = getOpening(ifcModel, nameWindow);
+        addOpening(nameWindow,product,windowWidth,windowHeight,xLocal,zLocal);
+        IfcOpeningElement opening = getOpening(nameWindow);
 
         // Window style definitions
         SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
@@ -1538,7 +1513,7 @@ public class IfcHelper {
                 null, null, new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowHeight)), new IfcPositiveLengthMeasure(new IfcLengthMeasure(windowWidth)));
 
         // Create relation buildingStorey -> window
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = IfcHelper.getRelContainedInSpatialStructure(ifcModel,buildingStorey.getName().getDecodedValue());
+        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(buildingStorey.getName().getDecodedValue());
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
             relatedObject = new SET<>();
@@ -1584,12 +1559,12 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un MaterialLayer à un wallStandardCase
-    public static void addMaterialLayer (IfcModel ifcModel, IfcWallStandardCase wall, ArrayList<MaterialTypeEnum> listMaterial){
+    public void addMaterialLayer (IfcWallStandardCase wall, ArrayList<MaterialTypeEnum> listMaterial){
         SET<IfcRoot> relatedObjects = new SET<>();
         relatedObjects.add(wall);
         LIST<IfcMaterialLayer> materialLayerLIST = new LIST<>();
         double nbMaterial = listMaterial.size();
-        double wallThickness = IfcHelper.getWallThickness(wall);
+        double wallThickness = this.getWallThickness(wall);
 
         for (MaterialTypeEnum actualMaterial:listMaterial){
             IfcMaterial material = new IfcMaterial(new IfcLabel(actualMaterial.toString(),true));
@@ -1616,12 +1591,12 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un MaterialLayer à un slab
-    public static void addMaterialLayerToSlab (IfcModel ifcModel, IfcSlab slab, ArrayList<MaterialTypeEnum> listMaterial){
+    public void addMaterialLayerToSlab (IfcSlab slab, ArrayList<MaterialTypeEnum> listMaterial){
         SET<IfcRoot> relatedObjects = new SET<>();
         relatedObjects.add(slab);
         LIST<IfcMaterialLayer> materialLayerLIST = new LIST<>();
         double nbMaterial = listMaterial.size();
-        double slabThickness = IfcHelper.getSlabThickness(slab);
+        double slabThickness = this.getSlabThickness(slab);
 
         for (MaterialTypeEnum actualMaterial:listMaterial){
             IfcMaterial material = new IfcMaterial(new IfcLabel(actualMaterial.toString(),true));
@@ -1648,15 +1623,15 @@ public class IfcHelper {
     }
 
     // Permet de supprimer le placement d'un objet dans un model
-    public static void deleteObjectPlacement(IfcModel ifcModel, IfcObjectPlacement objectPlacement){
+    public void deleteObjectPlacement(IfcObjectPlacement objectPlacement){
         if(objectPlacement instanceof IfcLocalPlacement){
             IfcAxis2Placement axis2Placement =((IfcLocalPlacement) objectPlacement).getRelativePlacement();
             ifcModel.removeIfcObject(objectPlacement);
             if (axis2Placement instanceof IfcAxis2Placement2D){
-                IfcHelper.deleteAxis2Placement2D(ifcModel, (IfcAxis2Placement2D) axis2Placement);
+                this.deleteAxis2Placement2D((IfcAxis2Placement2D) axis2Placement);
             }else{
                 // axis2Placement instanceof IfcAxis2Placement3D
-                IfcHelper.deleteAxis2Placement3D(ifcModel,(IfcAxis2Placement3D)axis2Placement);
+                this.deleteAxis2Placement3D((IfcAxis2Placement3D) axis2Placement);
             }
         }else{
             // objectPlacement instanceof IfcGridPlacement
@@ -1664,7 +1639,7 @@ public class IfcHelper {
     }
 
     // Permet de supprimer le placement d'un objet dans un model
-    public static void deleteAxis2Placement3D(IfcModel ifcModel, IfcAxis2Placement3D axis2Placement3D){
+    public void deleteAxis2Placement3D(IfcAxis2Placement3D axis2Placement3D){
         IfcCartesianPoint cartesianPoint = axis2Placement3D.getLocation();
         IfcDirection axis = axis2Placement3D.getAxis();
         IfcDirection refDirection = axis2Placement3D.getRefDirection();
@@ -1679,7 +1654,7 @@ public class IfcHelper {
     }
 
     // Permet de supprimer le placement d'un objet dans un model
-    public static void deleteAxis2Placement2D(IfcModel ifcModel, IfcAxis2Placement2D axis2Placement2D){
+    public void deleteAxis2Placement2D(IfcAxis2Placement2D axis2Placement2D){
         IfcCartesianPoint cartesianPoint = axis2Placement2D.getLocation();
         IfcDirection refDirection = axis2Placement2D.getRefDirection();
         ifcModel.removeIfcObject(axis2Placement2D);
@@ -1688,7 +1663,7 @@ public class IfcHelper {
     }
 
     // Permet de supprimer une représentation
-    public static void deleteRepresentation(IfcModel ifcModel, IfcProductRepresentation productRepresentation){
+    public void deleteRepresentation(IfcProductRepresentation productRepresentation){
         if(productRepresentation instanceof IfcProductDefinitionShape){
             IfcProductDefinitionShape productDefinitionShape = (IfcProductDefinitionShape) productRepresentation;
             ifcModel.removeIfcObject(productDefinitionShape);
@@ -1701,12 +1676,12 @@ public class IfcHelper {
                         IfcExtrudedAreaSolid extrudedAreaSolid = (IfcExtrudedAreaSolid) actualRepresentationItem;
                         ifcModel.removeIfcObject(extrudedAreaSolid);
                         ifcModel.removeIfcObject(extrudedAreaSolid.getExtrudedDirection());
-                        IfcHelper.deleteAxis2Placement3D(ifcModel, extrudedAreaSolid.getPosition());
+                        this.deleteAxis2Placement3D(extrudedAreaSolid.getPosition());
                         IfcProfileDef profileDef = extrudedAreaSolid.getSweptArea();
                         if (profileDef instanceof IfcRectangleProfileDef){
                             IfcRectangleProfileDef rectangleProfileDef = (IfcRectangleProfileDef)profileDef;
                             ifcModel.removeIfcObject(rectangleProfileDef);
-                            IfcHelper.deleteAxis2Placement2D(ifcModel,rectangleProfileDef.getPosition());
+                            this.deleteAxis2Placement2D(rectangleProfileDef.getPosition());
                         }
                         if (profileDef instanceof IfcArbitraryClosedProfileDef){
                             IfcArbitraryClosedProfileDef arbitraryClosedProfileDef = (IfcArbitraryClosedProfileDef)profileDef;
@@ -1752,16 +1727,16 @@ public class IfcHelper {
     }
 
     // Permet de supprimer un opening
-    public static void deleteOpening(IfcModel ifcModel, IfcOpeningElement opening){
+    public void deleteOpening(IfcOpeningElement opening){
 
         // Remove the opening placement
-        IfcHelper.deleteObjectPlacement(ifcModel, opening.getObjectPlacement());
+        this.deleteObjectPlacement(opening.getObjectPlacement());
 
         // Remove the relation WallStandardCase <-> OpeningElement
         ifcModel.removeIfcObject(opening.getVoidsElements_Inverse());
 
         // Remove the representation
-        IfcHelper.deleteRepresentation(ifcModel, opening.getRepresentation());
+        this.deleteRepresentation(opening.getRepresentation());
 
         // Remove the opening
         ifcModel.removeIfcObject(opening);
@@ -1769,13 +1744,13 @@ public class IfcHelper {
     }
 
     // Permet de supprimer une door dans un model
-    public static void deleteDoor (IfcModel ifcModel, IfcDoor door){
+    public void deleteDoor (IfcDoor door){
 
         // Remove the door placement
-        IfcHelper.deleteObjectPlacement(ifcModel, door.getObjectPlacement());
+        this.deleteObjectPlacement(door.getObjectPlacement());
 
         // Remove the opening
-        IfcHelper.deleteOpening(ifcModel, IfcHelper.getOpening(ifcModel, door.getName().getDecodedValue()));
+        this.deleteOpening(this.getOpening(door.getName().getDecodedValue()));
 
         // Remove the parameters of the door
         SET<IfcRelDefines> relDefinesSET = door.getIsDefinedBy_Inverse();
@@ -1812,13 +1787,13 @@ public class IfcHelper {
     }
 
     // Permet de supprimer une window dans un model
-    public static void deleteWindow (IfcModel ifcModel, IfcWindow window){
+    public void deleteWindow (IfcWindow window){
 
         // Remove the window placement
-        IfcHelper.deleteObjectPlacement(ifcModel, window.getObjectPlacement());
+        this.deleteObjectPlacement(window.getObjectPlacement());
 
         // Remove the opening
-        IfcHelper.deleteOpening(ifcModel, IfcHelper.getOpening(ifcModel, window.getName().getDecodedValue()));
+        this.deleteOpening(this.getOpening(window.getName().getDecodedValue()));
 
         // Remove the parameters of the window
         SET<IfcRelDefines> relDefinesSET = window.getIsDefinedBy_Inverse();
@@ -1855,10 +1830,10 @@ public class IfcHelper {
     }
 
     // Permet de supprimer un standardWall dans un model avec tous les éléments associés (doors, windows, ...)
-    public static void deleteWallStandardCase (IfcModel ifcModel, IfcWallStandardCase wallStandardCase){
+    public void deleteWallStandardCase (IfcWallStandardCase wallStandardCase){
 
         // Remove the wall placement
-        IfcHelper.deleteObjectPlacement(ifcModel, wallStandardCase.getObjectPlacement());
+        this.deleteObjectPlacement(wallStandardCase.getObjectPlacement());
 
         // Remove all the elements associated to the Wall
         SET<IfcRelVoidsElement> relVoidsElementSET = wallStandardCase.getHasOpenings_Inverse();
@@ -1869,20 +1844,20 @@ public class IfcHelper {
             for(IfcRelVoidsElement actualRelVoidsElement : relVoidsElementSET){
                 IfcElement openingElement = actualRelVoidsElement.getRelatedOpeningElement();
                 if(openingElement instanceof IfcOpeningElement){
-                    IfcRelFillsElement relFillsElement = IfcHelper.getRelFillsElement(ifcModel,(IfcOpeningElement) openingElement);
+                    IfcRelFillsElement relFillsElement = this.getRelFillsElement((IfcOpeningElement) openingElement);
                     IfcElement buildingElement =  relFillsElement.getRelatedBuildingElement();
                     if (buildingElement instanceof IfcDoor){
-                        IfcHelper.deleteDoor(ifcModel,(IfcDoor) buildingElement);
+                        this.deleteDoor((IfcDoor) buildingElement);
                     }
                     else if (buildingElement instanceof IfcWindow){
-                        IfcHelper.deleteWindow(ifcModel,(IfcWindow) buildingElement);
+                        this.deleteWindow((IfcWindow) buildingElement);
                     }
                 }
             }
         }
 
         // Remove the representations
-        IfcHelper.deleteRepresentation(ifcModel, wallStandardCase.getRepresentation());
+        this.deleteRepresentation(wallStandardCase.getRepresentation());
 
         // Remove the relation BuildingStorey <-> wallStandardCase
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = wallStandardCase.getContainedInStructure_Inverse();
@@ -1905,13 +1880,13 @@ public class IfcHelper {
     }
 
     // Permet de supprimer un slab dans un model
-    public static void deleteSlab (IfcModel ifcModel, IfcSlab slab){
+    public void deleteSlab (IfcSlab slab){
 
         // Remove the slab placement
-        IfcHelper.deleteObjectPlacement(ifcModel, slab.getObjectPlacement());
+        this.deleteObjectPlacement(slab.getObjectPlacement());
 
         // Remove the slab representation
-        IfcHelper.deleteRepresentation(ifcModel, slab.getRepresentation());
+        this.deleteRepresentation(slab.getRepresentation());
 
         // Remove all the elements associated to the Slab
         SET<IfcRelVoidsElement> relVoidsElementSET = slab.getHasOpenings_Inverse();
@@ -1922,13 +1897,13 @@ public class IfcHelper {
             for(IfcRelVoidsElement actualRelVoidsElement : relVoidsElementSET){
                 IfcElement openingElement = actualRelVoidsElement.getRelatedOpeningElement();
                 if(openingElement instanceof IfcOpeningElement){
-                    IfcRelFillsElement relFillsElement = IfcHelper.getRelFillsElement(ifcModel,(IfcOpeningElement) openingElement);
+                    IfcRelFillsElement relFillsElement = this.getRelFillsElement((IfcOpeningElement) openingElement);
                     IfcElement buildingElement =  relFillsElement.getRelatedBuildingElement();
                     if (buildingElement instanceof IfcDoor){
-                        IfcHelper.deleteDoor(ifcModel,(IfcDoor) buildingElement);
+                        this.deleteDoor((IfcDoor) buildingElement);
                     }
                     else if (buildingElement instanceof IfcWindow){
-                        IfcHelper.deleteWindow(ifcModel,(IfcWindow) buildingElement);
+                        this.deleteWindow((IfcWindow) buildingElement);
                     }
                 }
             }
@@ -1956,7 +1931,7 @@ public class IfcHelper {
     }
 
     // Permet de supprimer la materiau d'un wall
-    public static void deleteMaterialLayerWall (IfcModel ifcModel, IfcWallStandardCase wall){
+    public void deleteMaterialLayerWall (IfcWallStandardCase wall){
         System.out.println("coucou");
         SET<IfcRelAssociates> relAssociatesSET = wall.getHasAssociations_Inverse();
         for (IfcRelAssociates actualRelAssociates : relAssociatesSET){
@@ -1972,7 +1947,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier la position d'un mur
-    public static void setWallPosition (IfcModel ifcModel, IfcWallStandardCase wall, double newPosX, double newPosY){
+    public void setWallPosition (IfcWallStandardCase wall, double newPosX, double newPosY){
         IfcObjectPlacement objectPlacement = wall.getObjectPlacement();
         if(objectPlacement instanceof IfcLocalPlacement){
             IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
@@ -1987,7 +1962,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier l'orientation d'un mur
-    public static void setWallOrientation (IfcModel ifcModel, IfcWallStandardCase wall, double newDirectionRatioX, double newDirectionRatioY){
+    public void setWallOrientation (IfcWallStandardCase wall, double newDirectionRatioX, double newDirectionRatioY){
         IfcObjectPlacement objectPlacement = wall.getObjectPlacement();
         if(objectPlacement instanceof IfcLocalPlacement){
             IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
@@ -2002,7 +1977,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier l'épaisseur d'un mur
-    public static void setWallThickness (IfcModel ifcModel, IfcWallStandardCase wall, double newThickness){
+    public void setWallThickness (IfcWallStandardCase wall, double newThickness){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
@@ -2032,14 +2007,14 @@ public class IfcHelper {
             }
         }
         // Change also thickness of the openings present in the wall
-        SET<IfcOpeningElement> openingElementSET = IfcHelper.getOpeningRelToWall(wall);
+        SET<IfcOpeningElement> openingElementSET = this.getOpeningRelToWall(wall);
         for(IfcOpeningElement actualOpeningElement : openingElementSET){
-            IfcHelper.setOpeningThickness(ifcModel,actualOpeningElement,newThickness);
+            this.setOpeningThickness(actualOpeningElement, newThickness);
         }
     }
 
     // Permet de modifier la longueur d'un mur
-    public static void setWallLength (IfcModel ifcModel, IfcWallStandardCase wall, double newLength){
+    public void setWallLength (IfcWallStandardCase wall, double newLength){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
@@ -2091,7 +2066,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier la hauteur d'un mur
-    public static void setWallHeight (IfcModel ifcModel, IfcWallStandardCase wall, double newHeight){
+    public void setWallHeight (IfcWallStandardCase wall, double newHeight){
         IfcProductRepresentation productRepresentation = wall.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST){
@@ -2107,7 +2082,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier la position d'un opening
-    public static void setOpeningPosition (IfcModel ifcModel, IfcOpeningElement opening, double newPosX, double newPosZ){
+    public void setOpeningPosition (IfcOpeningElement opening, double newPosX, double newPosZ){
         IfcObjectPlacement objectPlacement = opening.getObjectPlacement();
         if(objectPlacement instanceof IfcLocalPlacement){
             IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
@@ -2122,7 +2097,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier l'épaisseur d'un opening
-    public static void setOpeningThickness (IfcModel ifcModel, IfcOpeningElement opening, double newThickness){
+    public void setOpeningThickness (IfcOpeningElement opening, double newThickness){
         IfcObjectPlacement objectPlacement = opening.getObjectPlacement();
         if(objectPlacement instanceof IfcLocalPlacement){
             IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
@@ -2148,7 +2123,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier la largeur d'un opening
-    public static void setOpeningWidth (IfcOpeningElement opening, double newWidth){
+    public void setOpeningWidth (IfcOpeningElement opening, double newWidth){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -2172,7 +2147,7 @@ public class IfcHelper {
     }
 
     // Permet de modifier la hauteur d'un opening
-    public static void setOpeningHeight (IfcOpeningElement opening, double newHeight){
+    public void setOpeningHeight (IfcOpeningElement opening, double newHeight){
         IfcProductRepresentation productRepresentation = opening.getRepresentation();
         LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
         for(IfcRepresentation actualRepresentation : representationLIST) {
@@ -2196,47 +2171,47 @@ public class IfcHelper {
     }
 
     // Permet de modifier la position d'une door
-    public static void setDoorPosition (IfcModel ifcModel, IfcDoor door, double newPosX){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        IfcHelper.setOpeningPosition(ifcModel, opening, newPosX, 0.0);
+    public void setDoorPosition (IfcDoor door, double newPosX){
+        IfcOpeningElement opening = this.getOpeningRelToDoor(door);
+        this.setOpeningPosition(opening, newPosX, 0.0);
     }
 
     // Permet de modifier la largeur d'une door
-    public static void setDoorWidth (IfcModel ifcModel, IfcDoor door, double newWidth){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        IfcHelper.setOpeningWidth(opening, newWidth);
+    public void setDoorWidth (IfcDoor door, double newWidth){
+        IfcOpeningElement opening = this.getOpeningRelToDoor(door);
+        this.setOpeningWidth(opening, newWidth);
         door.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
     }
 
     // Permet de modifier la hauteur d'une door
-    public static void setDoorHeight (IfcModel ifcModel, IfcDoor door, double newHeight){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToDoor(ifcModel, door);
-        IfcHelper.setOpeningHeight(opening, newHeight);
+    public void setDoorHeight (IfcDoor door, double newHeight){
+        IfcOpeningElement opening = this.getOpeningRelToDoor(door);
+        this.setOpeningHeight(opening, newHeight);
         door.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
     // Permet de modifier la position d'une window
-    public static void setWindowPosition (IfcModel ifcModel, IfcWindow window, double newPosX, double newPosY){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        IfcHelper.setOpeningPosition(ifcModel, opening, newPosX, newPosY);
+    public void setWindowPosition (IfcWindow window, double newPosX, double newPosY){
+        IfcOpeningElement opening = this.getOpeningRelToWindow(window);
+        this.setOpeningPosition(opening, newPosX, newPosY);
     }
 
     // Permet de modifier la largeur d'une window
-    public static void setWindowWidth (IfcModel ifcModel, IfcWindow window, double newWidth){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel, window);
-        IfcHelper.setOpeningWidth(opening, newWidth);
+    public void setWindowWidth (IfcWindow window, double newWidth){
+        IfcOpeningElement opening = this.getOpeningRelToWindow(window);
+        this.setOpeningWidth(opening, newWidth);
         window.setOverallWidth(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newWidth)));
     }
 
     // Permet de modifier la hauteur d'une window
-    public static void setWindowHeight (IfcModel ifcModel, IfcWindow window, double newHeight){
-        IfcOpeningElement opening = IfcHelper.getOpeningRelToWindow(ifcModel,window);
-        IfcHelper.setOpeningHeight(opening, newHeight);
+    public void setWindowHeight (IfcWindow window, double newHeight){
+        IfcOpeningElement opening = this.getOpeningRelToWindow(window);
+        this.setOpeningHeight(opening, newHeight);
         window.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
     // Permet d'importer un model au format .ifc
-    public static IfcModel loadIfcModel(String path){
+    public IfcModel loadIfcModel(String path){
         IfcModel ifcModel = new IfcModel();
         File stepFile = new File(path);
         try {
@@ -2248,7 +2223,7 @@ public class IfcHelper {
     }
 
     // Permet d'exporter le model au format .ifc
-    public static void saveIfcModel(IfcModel ifcModel){
+    public void saveIfcModel(){
         File saveStepFile = new File("data/ifc/coucou.ifc");
         try {
             ifcModel.writeStepfile(saveStepFile);
@@ -2259,7 +2234,7 @@ public class IfcHelper {
     }
 
     // Permet de créer notre appt de test
-    public static void createApartmentTest(IfcModel ifcModel){
+    public void createApartmentTest(){
         // Create all the points
         IfcCartesianPoint pointA1 = createCartesianPoint2D(0,-0.09);
         IfcCartesianPoint pointA2 = createCartesianPoint2D(1.40,-0.09);
@@ -2321,55 +2296,55 @@ public class IfcHelper {
         IfcCartesianPoint salon6 = createCartesianPoint2D(0.18,-9.03);
 
         // Create all the walls
-        addWall(ifcModel,"1st floor","WallExt A",pointA1,pointA2,0.18);
-        addWall(ifcModel,"1st floor","WallExt B",pointB1,pointB2,0.18);
-        addWall(ifcModel,"1st floor","WallExt C",pointC1,pointC2,0.18);
-        addWall(ifcModel,"1st floor","WallExt D",pointD1,pointD2,0.18);
-        addWall(ifcModel,"1st floor","WallExt E",pointE1,pointE2,0.18);
-        addWall(ifcModel,"1st floor","WallExt F",pointF1,pointF2,0.18);
-        addWall(ifcModel,"1st floor","WallExt G",pointG1,pointG2,0.18);
-        addWall(ifcModel,"1st floor","WallExt H",pointH1,pointH2,0.18);
-        addWall(ifcModel,"1st floor","WallExt I",pointI1,pointI2,0.18);
-        addWall(ifcModel,"1st floor","WallExt J",pointJ1,pointJ2,0.18);
-        addWall(ifcModel,"1st floor","WallInt K",pointK1,pointK2,0.07);
-        addWall(ifcModel,"1st floor","WallInt L",pointL1,pointL2,0.07);
-        addWall(ifcModel,"1st floor","WallInt M",pointM1,pointM2,0.07);
-        addWall(ifcModel,"1st floor","WallInt N",pointN1,pointN2,0.07);
-        addWall(ifcModel,"1st floor","WallInt O",pointO1,pointO2,0.07);
-        addWall(ifcModel, "1st floor", "WallInt P", pointP1, pointP2, 0.07);
-        IfcWallStandardCase wallA = getWall(ifcModel,"WallExt A");
-        IfcWallStandardCase wallB = getWall(ifcModel,"WallExt B");
-        IfcWallStandardCase wallC = getWall(ifcModel,"WallExt C");
-        IfcWallStandardCase wallD = getWall(ifcModel,"WallExt D");
-        IfcWallStandardCase wallE = getWall(ifcModel,"WallExt E");
-        IfcWallStandardCase wallF = getWall(ifcModel,"WallExt F");
-        IfcWallStandardCase wallG = getWall(ifcModel,"WallExt G");
-        IfcWallStandardCase wallH = getWall(ifcModel,"WallExt H");
-        IfcWallStandardCase wallI = getWall(ifcModel,"WallExt I");
-        IfcWallStandardCase wallJ = getWall(ifcModel,"WallExt J");
-        IfcWallStandardCase wallK = getWall(ifcModel,"WallInt K");
-        IfcWallStandardCase wallL = getWall(ifcModel,"WallInt L");
-        IfcWallStandardCase wallM = getWall(ifcModel,"WallInt M");
-        IfcWallStandardCase wallN = getWall(ifcModel,"WallInt N");
-        IfcWallStandardCase wallO = getWall(ifcModel,"WallInt O");
-        IfcWallStandardCase wallP = getWall(ifcModel,"WallInt P");
+        addWall("1st floor","WallExt A",pointA1,pointA2,0.18);
+        addWall("1st floor","WallExt B",pointB1,pointB2,0.18);
+        addWall("1st floor","WallExt C",pointC1,pointC2,0.18);
+        addWall("1st floor","WallExt D",pointD1,pointD2,0.18);
+        addWall("1st floor","WallExt E",pointE1,pointE2,0.18);
+        addWall("1st floor","WallExt F",pointF1,pointF2,0.18);
+        addWall("1st floor","WallExt G",pointG1,pointG2,0.18);
+        addWall("1st floor","WallExt H",pointH1,pointH2,0.18);
+        addWall("1st floor","WallExt I",pointI1,pointI2,0.18);
+        addWall("1st floor","WallExt J",pointJ1,pointJ2,0.18);
+        addWall("1st floor","WallInt K",pointK1,pointK2,0.07);
+        addWall("1st floor","WallInt L",pointL1,pointL2,0.07);
+        addWall("1st floor","WallInt M",pointM1,pointM2,0.07);
+        addWall("1st floor","WallInt N",pointN1,pointN2,0.07);
+        addWall("1st floor","WallInt O",pointO1,pointO2,0.07);
+        addWall( "1st floor", "WallInt P", pointP1, pointP2, 0.07);
+        IfcWallStandardCase wallA = getWall("WallExt A");
+        IfcWallStandardCase wallB = getWall("WallExt B");
+        IfcWallStandardCase wallC = getWall("WallExt C");
+        IfcWallStandardCase wallD = getWall("WallExt D");
+        IfcWallStandardCase wallE = getWall("WallExt E");
+        IfcWallStandardCase wallF = getWall("WallExt F");
+        IfcWallStandardCase wallG = getWall("WallExt G");
+        IfcWallStandardCase wallH = getWall("WallExt H");
+        IfcWallStandardCase wallI = getWall("WallExt I");
+        IfcWallStandardCase wallJ = getWall("WallExt J");
+        IfcWallStandardCase wallK = getWall("WallInt K");
+        IfcWallStandardCase wallL = getWall("WallInt L");
+        IfcWallStandardCase wallM = getWall("WallInt M");
+        IfcWallStandardCase wallN = getWall("WallInt N");
+        IfcWallStandardCase wallO = getWall("WallInt O");
+        IfcWallStandardCase wallP = getWall("WallInt P");
 
-        addPropertyTypeWall(ifcModel,wallA,false);
-        addPropertyTypeWall(ifcModel,wallB,false);
-        addPropertyTypeWall(ifcModel,wallC,false);
-        addPropertyTypeWall(ifcModel,wallD,false);
-        addPropertyTypeWall(ifcModel,wallE,false);
-        addPropertyTypeWall(ifcModel,wallF,false);
-        addPropertyTypeWall(ifcModel,wallG,false);
-        addPropertyTypeWall(ifcModel,wallH,false);
-        addPropertyTypeWall(ifcModel,wallI,false);
-        addPropertyTypeWall(ifcModel,wallJ,false);
-        addPropertyTypeWall(ifcModel,wallK,true);
-        addPropertyTypeWall(ifcModel,wallL,true);
-        addPropertyTypeWall(ifcModel,wallM,true);
-        addPropertyTypeWall(ifcModel,wallN,true);
-        addPropertyTypeWall(ifcModel,wallO,true);
-        addPropertyTypeWall(ifcModel,wallP,true);
+        addPropertyTypeWall(wallA,false);
+        addPropertyTypeWall(wallB,false);
+        addPropertyTypeWall(wallC,false);
+        addPropertyTypeWall(wallD,false);
+        addPropertyTypeWall(wallE,false);
+        addPropertyTypeWall(wallF,false);
+        addPropertyTypeWall(wallG,false);
+        addPropertyTypeWall(wallH,false);
+        addPropertyTypeWall(wallI,false);
+        addPropertyTypeWall(wallJ,false);
+        addPropertyTypeWall(wallK,true);
+        addPropertyTypeWall(wallL,true);
+        addPropertyTypeWall(wallM,true);
+        addPropertyTypeWall(wallN,true);
+        addPropertyTypeWall(wallO,true);
+        addPropertyTypeWall(wallP,true);
 
 
         // Create all the slabs
@@ -2405,31 +2380,31 @@ public class IfcHelper {
         salon.add(salon4);
         salon.add(salon5);
         salon.add(salon6);
-        addFloor(ifcModel,"1st floor",hall);
-        addFloor(ifcModel,"1st floor",sdb);
-        addFloor(ifcModel,"1st floor",chamber1);
-        addFloor(ifcModel,"1st floor",chamber2);
-        addFloor(ifcModel,"1st floor",chamber3);
-        addFloor(ifcModel,"1st floor",salon);
+        addFloor("1st floor",hall);
+        addFloor("1st floor",sdb);
+        addFloor("1st floor",chamber1);
+        addFloor("1st floor",chamber2);
+        addFloor("1st floor",chamber3);
+        addFloor("1st floor",salon);
 
         // Create all the doors
-        addDoor(ifcModel,"door A",wallA,0.94,2.13,0.32);
-        addDoor(ifcModel,"door K",wallK,0.90,2.04,0.37);
-        addDoor(ifcModel,"door L",wallL,0.90,2.04,0.16);
-        addDoor(ifcModel,"door N",wallN,0.90,2.04,0.625);
-        addDoor(ifcModel,"door O",wallO,0.90,2.04,0.270);
-        addDoor(ifcModel,"door P",wallP,0.80,2.04,0.085);
+        addDoor("door A",wallA,0.94,2.13,0.32);
+        addDoor("door K",wallK,0.90,2.04,0.37);
+        addDoor("door L",wallL,0.90,2.04,0.16);
+        addDoor("door N",wallN,0.90,2.04,0.625);
+        addDoor("door O",wallO,0.90,2.04,0.270);
+        addDoor("door P",wallP,0.80,2.04,0.085);
 
         // Create all the windows
-        addWindow(ifcModel,"window D",wallD,1.00,1.50,1.47,0.50);
-        addWindow(ifcModel,"window F",wallF,1.00,1.50,1.395,0.50);
-        addWindow(ifcModel,"window I1",wallI,1.00,1.50,3.75,0.50);
-        addWindow(ifcModel,"window I2",wallI,2.00,1.50,0.70,0.50);
-        addWindow(ifcModel,"window G",wallG,1.00,1.50,1.63,0.50);
+        addWindow("window D",wallD,1.00,1.50,1.47,0.50);
+        addWindow("window F",wallF,1.00,1.50,1.395,0.50);
+        addWindow("window I1",wallI,1.00,1.50,3.75,0.50);
+        addWindow("window I2",wallI,2.00,1.50,0.70,0.50);
+        addWindow("window G",wallG,1.00,1.50,1.63,0.50);
     }
 
     // Permet de créer un second appartement test (plus simple)
-    public static void createSecondAppartementTest(IfcModel ifcModel){
+    public void createSecondAppartementTest(){
         IfcCartesianPoint pointA = createCartesianPoint2D(0,-0.18);
         IfcCartesianPoint pointB = createCartesianPoint2D(4,-0.18);
         IfcCartesianPoint pointC = createCartesianPoint2D(4,-3);
@@ -2442,28 +2417,28 @@ public class IfcHelper {
         IfcCartesianPoint pointC2 = createCartesianPoint2D(4.09,-3);
         IfcCartesianPoint pointD1 = createCartesianPoint2D(-0.18,-3.09);
         IfcCartesianPoint pointD2 = createCartesianPoint2D(4.18,-3.09);
-        addWall(ifcModel,"1st floor","WallExt A",pointA1,pointA2,0.18);
-        addWall(ifcModel,"1st floor","WallExt B",pointB1,pointB2,0.18);
-        addWall(ifcModel,"1st floor","WallExt C",pointC1,pointC2,0.18);
-        addWall(ifcModel,"1st floor","WallExt D",pointD1,pointD2,0.18);
-        IfcWallStandardCase wallA = getWall(ifcModel,"WallExt A");
-        IfcWallStandardCase wallB = getWall(ifcModel,"WallExt B");
-        IfcWallStandardCase wallC = getWall(ifcModel,"WallExt C");
-        IfcWallStandardCase wallD = getWall(ifcModel, "WallExt D");
+        addWall("1st floor","WallExt A",pointA1,pointA2,0.18);
+        addWall("1st floor","WallExt B",pointB1,pointB2,0.18);
+        addWall("1st floor","WallExt C",pointC1,pointC2,0.18);
+        addWall("1st floor","WallExt D",pointD1,pointD2,0.18);
+        IfcWallStandardCase wallA = getWall("WallExt A");
+        IfcWallStandardCase wallB = getWall("WallExt B");
+        IfcWallStandardCase wallC = getWall("WallExt C");
+        IfcWallStandardCase wallD = getWall("WallExt D");
         LIST<IfcCartesianPoint> hall = new LIST<>();
         hall.add(pointA);
         hall.add(pointB);
         hall.add(pointC);
         hall.add(pointD);
-        addFloor(ifcModel, "1st floor", hall);
-        addDoor(ifcModel, "door A", wallA, 0.98, 2.13, 1.5);
-        addDoor(ifcModel, "door B", wallC, 0.94, 2.13, 1.1);
-        addWindow(ifcModel,"window C",wallB,1.00,1.50,1.5,0.50);
-        addWindow(ifcModel,"window D",wallD,1.00,1.50,1.5,0.50);
+        addFloor("1st floor", hall);
+        addDoor("door A", wallA, 0.98, 2.13, 1.5);
+        addDoor("door B", wallC, 0.94, 2.13, 1.1);
+        addWindow("window C", wallB, 1.00, 1.50, 1.5, 0.50);
+        addWindow("window D",wallD,1.00,1.50,1.5,0.50);
     }
 
     // Permet de calculer la surface habitable du logement
-    public static double calculSurfaceHabitable(IfcModel ifcModel){
+    public double calculSurfaceHabitable(){
         double surfaceHabitable = 0;
         Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
         Iterator buildingStoreyIterator = collectionBuildingStorey.iterator();
@@ -2484,7 +2459,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter une information d'isolation sur un objet
-    public static void addPropertyTypeIsolation(IfcModel ifcModel, IfcProduct product,String typeIsolation){
+    public void addPropertyTypeIsolation(IfcProduct product,String typeIsolation){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
@@ -2543,7 +2518,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter une information d'isolation sur un objet
-    public static String getPropertyTypeIsolation(IfcProduct product){
+    public String getPropertyTypeIsolation(IfcProduct product){
 
         SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
         if (relDefinesSET != null){
@@ -2573,7 +2548,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter une information sur le type de mur
-    public static void addPropertyTypeWall(IfcModel ifcModel, IfcWallStandardCase wall,boolean isInterior){
+    public void addPropertyTypeWall(IfcWallStandardCase wall,boolean isInterior){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
@@ -2632,7 +2607,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer le type de wall (ext ou int)
-    public static String getPropertyTypeWall(IfcWallStandardCase wall) {
+    public String getPropertyTypeWall(IfcWallStandardCase wall) {
         // On va voir si des propriétés existent déja
         SET<IfcRelDefines> relDefinesSET = wall.getIsDefinedBy_Inverse();
         if (relDefinesSET != null) {
@@ -2666,12 +2641,12 @@ public class IfcHelper {
     }
 
     // Permet de calculer le périmètre d'un batiment
-    public static double calculPerimetreBatiment(IfcModel ifcModel){
+    public double calculPerimetreBatiment(){
         double per=0;
-        List<IfcWallStandardCase> wallStandardCaseList = getWallsRelToFirstStage(ifcModel);
+        List<IfcWallStandardCase> wallStandardCaseList = getWallsRelToFirstStage();
 
         for (IfcWallStandardCase actualWall : wallStandardCaseList){
-            if (IfcHelper.getPropertyTypeWall(actualWall)=="ext"){
+            if (this.getPropertyTypeWall(actualWall) == "ext"){
                 per+=getWallLength(actualWall);
             }
         }
@@ -2679,7 +2654,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer le premier étage d'un batiment
-    public static IfcBuildingStorey getFirstStorey(IfcModel ifcModel){
+    public IfcBuildingStorey getFirstStorey(){
         Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
         IfcBuildingStorey buildingStorey = new IfcBuildingStorey();
         double elevation = 100000;
@@ -2693,9 +2668,9 @@ public class IfcHelper {
     }
 
     // Permet de récupérer les murs associés au premier étage
-    public static List<IfcWallStandardCase> getWallsRelToFirstStage(IfcModel ifcModel){
+    public List<IfcWallStandardCase> getWallsRelToFirstStage(){
         List<IfcWallStandardCase> wallStandardCaseList = new ArrayList<>();
-        IfcBuildingStorey firstBuildingStorey = getFirstStorey(ifcModel);
+        IfcBuildingStorey firstBuildingStorey = getFirstStorey();
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = firstBuildingStorey.getContainsElements_Inverse();
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
         SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
@@ -2708,9 +2683,9 @@ public class IfcHelper {
     }
 
     // Permet de récupérer les murs associés au premier étage
-    public static List<IfcSlab> getSlabsRelToFirstStage(IfcModel ifcModel){
+    public List<IfcSlab> getSlabsRelToFirstStage(){
         List<IfcSlab> slabList = new ArrayList<>();
-        IfcBuildingStorey firstBuildingStorey = getFirstStorey(ifcModel);
+        IfcBuildingStorey firstBuildingStorey = getFirstStorey();
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = firstBuildingStorey.getContainsElements_Inverse();
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
         SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
@@ -2723,7 +2698,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter le type de fenetre
-    public static void addPropertyTypeWindow(IfcModel ifcModel, IfcWindow window, TypeFenetreEnum typeFenetre){
+    public void addPropertyTypeWindow(IfcWindow window, TypeFenetreEnum typeFenetre){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
@@ -2782,7 +2757,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter le materiau de contour d'une fenetre
-    public static void addPropertyTypeMenuiserieWindow(IfcModel ifcModel, IfcWindow window, TypeMenuiserieFenetreEnum typeMenuiserie){
+    public void addPropertyTypeMenuiserieWindow(IfcWindow window, TypeMenuiserieFenetreEnum typeMenuiserie){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
@@ -2841,7 +2816,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter le type de vitrage d'une fenetre
-    public static void addPropertyTypeVitrageWindow(IfcModel ifcModel, IfcWindow window, TypeVitrageEnum typeVitrage){
+    public void addPropertyTypeVitrageWindow(IfcWindow window, TypeVitrageEnum typeVitrage){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
@@ -2900,7 +2875,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer les propriétées liées à une fenetre
-    public static String getPropertiesWindow(IfcWindow window, WindowPropertiesEnum windowProperties) {
+    public String getPropertiesWindow(IfcWindow window, WindowPropertiesEnum windowProperties) {
         // On va voir si des propriétés existent déja
         SET<IfcRelDefines> relDefinesSET = window.getIsDefinedBy_Inverse();
         if (relDefinesSET != null) {
@@ -2930,7 +2905,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter le type de porte
-    public static void addPropertyTypeDoor(IfcModel ifcModel, IfcDoor door, TypeDoorEnum typeDoor){
+    public void addPropertyTypeDoor(IfcDoor door, TypeDoorEnum typeDoor){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
@@ -2989,7 +2964,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer les propriétées liées à une door
-    public static String getPropertiesDoor(IfcDoor door, DoorPropertiesEnum doorProperties) {
+    public String getPropertiesDoor(IfcDoor door, DoorPropertiesEnum doorProperties) {
         // On va voir si des propriétés existent déja
         SET<IfcRelDefines> relDefinesSET = door.getIsDefinedBy_Inverse();
         if (relDefinesSET != null) {

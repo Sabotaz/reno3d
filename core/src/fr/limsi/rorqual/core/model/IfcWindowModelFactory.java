@@ -19,12 +19,14 @@ public class IfcWindowModelFactory {
     private IfcWindow window;
     private ModelInstance modelInstanceWindow;
     private AssetManager assets;
+    private IfcHelper ifcHelper;
 
     /*** Constructeur ***/
     public IfcWindowModelFactory(IfcProduct ifcProduct) {
         if (ifcProduct instanceof IfcWindow) {
             this.assets = AssetManager.getInstance();
             this.window = (IfcWindow) ifcProduct;
+            this.ifcHelper = new IfcHelper(IfcHolder.getInstance().getIfcModel());
             this.make();
         }
     }
@@ -35,10 +37,10 @@ public class IfcWindowModelFactory {
         modelInstanceWindow = new ModelInstance((Model)assets.get("modelWindow"));
         BoundingBox b = new BoundingBox();
         m.calculateBoundingBox(b);
-        float d = (float)IfcHelper.getWindowDepth(window) / b.getHeight();
-        float w = (float)IfcHelper.getWindowWidth(window) / b.getWidth();
-        float h = (float)IfcHelper.getWindowHeight(window) / b.getDepth();
-        System.out.println("Depth "+IfcHelper.getWindowDepth(window)+" Width "+IfcHelper.getWindowWidth(window)+" Height "+IfcHelper.getWindowHeight(window));
+        float d = (float)ifcHelper.getWindowDepth(window) / b.getHeight();
+        float w = (float)ifcHelper.getWindowWidth(window) / b.getWidth();
+        float h = (float)ifcHelper.getWindowHeight(window) / b.getDepth();
+        System.out.println("Depth "+ifcHelper.getWindowDepth(window)+" Width "+ifcHelper.getWindowWidth(window)+" Height "+ifcHelper.getWindowHeight(window));
 //        modelInstanceWindow.transform.rotate(0, 1, 0, 90);
         modelInstanceWindow.transform.scale(w, d, h);
     }
