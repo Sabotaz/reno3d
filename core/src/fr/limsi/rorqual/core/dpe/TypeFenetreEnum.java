@@ -6,5 +6,6 @@ package fr.limsi.rorqual.core.dpe;
 public enum TypeFenetreEnum {
     BATTANTE,
     COULISSANTE,
-    TOIT;
+    TOIT,
+    UNKNOWN;
 }

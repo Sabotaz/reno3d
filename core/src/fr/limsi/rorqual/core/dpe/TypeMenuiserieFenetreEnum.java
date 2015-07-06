@@ -6,5 +6,6 @@ package fr.limsi.rorqual.core.dpe;
 public enum TypeMenuiserieFenetreEnum {
     BOIS,
     METALLIQUE,
-    PVC;
+    PVC,
+    UNKNOWN;
 }

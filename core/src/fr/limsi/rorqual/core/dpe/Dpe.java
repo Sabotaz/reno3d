@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,8 +30,9 @@ public class Dpe implements EventListener {
     boolean over=false;
     /*** Attributs liés au model IFC***/
     private IfcModel ifcModel;
-    private HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<IfcWallStandardCase, HashMap<EventType, Object>>();
-    private HashMap<IfcSlab, HashMap<EventType, Object>> slabs_properties = new HashMap<IfcSlab, HashMap<EventType, Object>>();
+    private HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<>();
+    private HashMap<IfcSlab, HashMap<EventType, Object>> slabs_properties = new HashMap<>();
+    private HashMap<IfcWindow, HashMap<EventType, Object>> windows_properties = new HashMap<>();
     private Collection<IfcWallStandardCase> wallStandardCaseCollection;
     private Collection<IfcSlab> slabCollection;
     private Collection<IfcWindow> windowCollection;
@@ -581,6 +583,22 @@ public class Dpe implements EventListener {
         }
     }
 
+    public void tryActualiseWindowDP(IfcWindow window) {
+        if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_FENETRE_RESPONSE))
+            return;
+        TypeFenetreEnum typeFenetre = (TypeFenetreEnum) windows_properties.get(window).get(DpeEvent.TYPE_FENETRE_RESPONSE);
+
+        if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_MENUISERIE_FENETRE_RESPONSE))
+            return;
+        TypeMenuiserieFenetreEnum typeMenuiserieFenetre = (TypeMenuiserieFenetreEnum) windows_properties.get(window).get(DpeEvent.TYPE_MENUISERIE_FENETRE_RESPONSE);
+
+        if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_VITRAGE_FENETRE_RESPONSE))
+            return;
+        TypeVitrageEnum typeVitrageFenetre = (TypeVitrageEnum) windows_properties.get(window).get(DpeEvent.TYPE_VITRAGE_FENETRE_RESPONSE);
+
+        actualiseDP_window(window, typeFenetre, typeMenuiserieFenetre, typeVitrageFenetre);
+    }
+
     public void actualiseDP_mur(IfcWallStandardCase wall, String derriere,String isole,boolean isAnneeIsolationConnue,double anneeIsolation){
         double surface=IfcHelper.getWallSurface(wall);
         double u=0,b=0;
@@ -672,6 +690,141 @@ public class Dpe implements EventListener {
         }
         System.out.println("Aire = "+surface);
         System.out.println("U = " + u);
+    }
+
+    public void actualiseDP_window(IfcWindow window,TypeFenetreEnum typeFenetre,TypeMenuiserieFenetreEnum typeMenuiserie,TypeVitrageEnum typeVitrage){
+        double uFen=0,sFen=IfcHelper.getWindowSurface(ifcModel,window);
+        if (typeMenuiserie.equals(TypeMenuiserieFenetreEnum.METALLIQUE)){
+            if (typeFenetre.equals(TypeFenetreEnum.BATTANTE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uFen=4.95;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uFen=4;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uFen=3.7;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uFen=3.6;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uFen=2.25;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uFen=1.88;
+                }
+            }
+
+            if (typeFenetre.equals(TypeFenetreEnum.COULISSANTE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uFen=4.63;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uFen=3.46;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uFen=3.46;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uFen=3.36;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uFen=2.18;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uFen=1.65;
+                }
+            }
+        }
+        else if (typeMenuiserie.equals(TypeMenuiserieFenetreEnum.PVC)){
+            if (typeFenetre.equals(TypeFenetreEnum.BATTANTE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uFen=3.9;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uFen=2.75;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uFen=2.45;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uFen=2.35;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uFen=1.7;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uFen=1.24;
+                }
+            }
+
+            if (typeFenetre.equals(TypeFenetreEnum.COULISSANTE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uFen=4.25;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uFen=3;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uFen=2.62;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uFen=2.52;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uFen=1.85;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uFen=1.39;
+                }
+            }
+        }
+        else if (typeMenuiserie.equals(TypeMenuiserieFenetreEnum.BOIS)){
+            if (typeFenetre.equals(TypeFenetreEnum.BATTANTE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uFen=4.2;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uFen=2.9;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uFen=2.7;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uFen=2.55;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uFen=1.75;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uFen=1.24;
+                }
+            }
+
+            if (typeFenetre.equals(TypeFenetreEnum.COULISSANTE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uFen=4.2;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uFen=2.9;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uFen=2.7;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uFen=2.55;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uFen=1.75;
+                }
+                else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uFen=1.24;
+                }
+            }
+        }
+        DP_fen += sFen*uFen;
+        System.out.println("Actualise DP Fen -> U="+uFen+"  S="+sFen+"  DPfen="+DP_fen);
     }
 
     public void calc_PT() {
@@ -978,6 +1131,22 @@ public class Dpe implements EventListener {
         EventManager.getInstance().put(Channel.DPE, event);
     }
 
+    /*** Demande à l'utilisateur des informations permettant de déterminer les déperditions au niveau des windows ***/
+    public void demanderWindow(IfcWindow window){
+        windows_properties.put(window, new HashMap<EventType, Object>());
+        DpeEvent eventType = DpeEvent.TYPE_FENETRE;
+        Event event = new Event(eventType, window);
+        EventManager.getInstance().put(Channel.DPE, event);
+
+        eventType = DpeEvent.TYPE_MENUISERIE_FENETRE;
+        event = new Event(eventType, window);
+        EventManager.getInstance().put(Channel.DPE, event);
+
+        eventType = DpeEvent.TYPE_VITRAGE_FENETRE;
+        event = new Event(eventType, window);
+        EventManager.getInstance().put(Channel.DPE, event);
+    }
+
     public void log(){
         System.out.println("************************************************************************************");
         System.out.println("Type d'energie a la construction : " + typeEnergieConstruction);
@@ -1123,9 +1292,32 @@ public class Dpe implements EventListener {
                     {
                         Object[] items = (Object[]) o;
                         slabs_properties.get(items[0]).put(event, items[1]);
-
                         tryActualiseSlabDP((IfcSlab) items[0]);
-
+                        break;
+                    }
+                    case TYPE_FENETRE_RESPONSE: {
+                        Object[] items = (Object[]) o;
+                        IfcWindow window = (IfcWindow)items[0];
+                        TypeFenetreEnum typeFenetre = (TypeFenetreEnum)items[1];
+                        IfcHelper.addPropertyTypeWindow(ifcModel, window, typeFenetre);
+                        windows_properties.get(items[0]).put(event, typeFenetre);
+                        break;
+                    }
+                    case TYPE_MENUISERIE_FENETRE_RESPONSE: {
+                        Object[] items = (Object[]) o;
+                        IfcWindow window = (IfcWindow)items[0];
+                        TypeMenuiserieFenetreEnum typeMenuiserieFenetre = (TypeMenuiserieFenetreEnum)items[1];
+                        IfcHelper.addPropertyTypeMenuiserieWindow(ifcModel, window, typeMenuiserieFenetre);
+                        windows_properties.get(items[0]).put(event, typeMenuiserieFenetre);
+                        break;
+                    }
+                    case TYPE_VITRAGE_FENETRE_RESPONSE: {
+                        Object[] items = (Object[]) o;
+                        IfcWindow window = (IfcWindow)items[0];
+                        TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items[1];
+                        IfcHelper.addPropertyTypeVitrageWindow(ifcModel, window, typeVitrage);
+                        windows_properties.get(items[0]).put(event, typeVitrage);
+                        tryActualiseWindowDP(window);
                         break;
                     }
                     case DPE_REQUEST: {
@@ -1137,6 +1329,10 @@ public class Dpe implements EventListener {
                         if (o instanceof IfcSlab) {
                             IfcSlab slab = (IfcSlab) o;
                             demanderSlab(slab);
+                        }
+                        if (o instanceof IfcWindow) {
+                            IfcWindow window = (IfcWindow) o;
+                            demanderWindow(window);
                         }
                         break;
                     }
