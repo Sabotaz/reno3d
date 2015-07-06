@@ -29,8 +29,8 @@ public class DesktopLauncher {
         config.width = 1280;
 
         IfcHelper.initialiseIfcModel(ifcModel);
-        IfcHelper.createApartmentTest(ifcModel);
-//        IfcHelper.createSecondAppartementTest(ifcModel);
+//        IfcHelper.createApartmentTest(ifcModel);
+        IfcHelper.createSecondAppartementTest(ifcModel);
 //        IfcCartesianPoint pointA1 = IfcHelper.createCartesianPoint2D(0, 0);
 //        IfcCartesianPoint pointA2 = IfcHelper.createCartesianPoint2D(8, 0);
 //        IfcHelper.addWall(ifcModel, "1st floor", "wall", pointA1, pointA2, 0.18);

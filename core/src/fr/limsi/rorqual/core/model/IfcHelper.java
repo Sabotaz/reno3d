@@ -1033,6 +1033,10 @@ public class IfcHelper {
         else{
             relContainedInSpatialStructure.addRelatedElements(ifcSlab);
         }
+        ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<>();
+        materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
+        materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
+        IfcHelper.addMaterialLayerToSlab(ifcModel, ifcSlab, materialTypeEnumArrayList);
 
         // add new Ifc-objects to the model
         ifcModel.addIfcObject(ifcSlab);
@@ -1214,7 +1218,7 @@ public class IfcHelper {
 
         IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,yLocal,0.0);
         IfcDirection zLocalOpening = createDirection3D(0.0,0.0,1.0);
-        IfcDirection xLocalOpening = createDirection3D(1.0,0.0,0.0);
+        IfcDirection xLocalOpening = createDirection3D(1.0, 0.0, 0.0);
         IfcAxis2Placement3D placementOpening = new IfcAxis2Placement3D(
                 localPointOpening, zLocalOpening, xLocalOpening);
         IfcLocalPlacement localPlacementOpening = new IfcLocalPlacement(slab.getObjectPlacement(),
@@ -1228,7 +1232,7 @@ public class IfcHelper {
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
                 centerOpening, zLocalExtrusion, xLocalExtrusion);
         IfcDirection zLocalRectangle = createDirection2D(0.0, 1.0);
-        IfcCartesianPoint originOpening = createCartesianPoint2D(0.0,0.0);
+        IfcCartesianPoint originOpening = createCartesianPoint2D(0.0, 0.0);
         IfcAxis2Placement2D placementRectangle = new IfcAxis2Placement2D(
                 originOpening, zLocalRectangle);
         IfcRectangleProfileDef rectangle = new IfcRectangleProfileDef(new IfcProfileTypeEnum("AREA"),
@@ -1592,6 +1596,38 @@ public class IfcHelper {
                 new IfcLayerSetDirectionEnum("AXIS2"),new IfcDirectionSenseEnum("POSITIVE"),new IfcLengthMeasure(-wallThickness/2));
 
         // Create relation wall <-> material
+        IfcRelAssociatesMaterial relAssociatesMaterial = new IfcRelAssociatesMaterial(
+                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
+                ifcModel.getIfcProject().getOwnerHistory(), null,null,relatedObjects,materialLayerSetUsage);
+
+        // add new Ifc-objects to the model
+        ifcModel.addIfcObject(relAssociatesMaterial);
+        ifcModel.addIfcObject(materialLayerSetUsage);
+        ifcModel.addIfcObject(materialLayerSet);
+    }
+
+    // Permet d'ajouter un MaterialLayer à un slab
+    public static void addMaterialLayerToSlab (IfcModel ifcModel, IfcSlab slab, ArrayList<MaterialTypeEnum> listMaterial){
+        SET<IfcRoot> relatedObjects = new SET<>();
+        relatedObjects.add(slab);
+        LIST<IfcMaterialLayer> materialLayerLIST = new LIST<>();
+        double nbMaterial = listMaterial.size();
+        double slabThickness = IfcHelper.getSlabThickness(slab);
+
+        for (MaterialTypeEnum actualMaterial:listMaterial){
+            IfcMaterial material = new IfcMaterial(new IfcLabel(actualMaterial.toString(),true));
+            ifcModel.addIfcObject(material);
+            IfcMaterialLayer materialLayer = new IfcMaterialLayer(material,
+                    new IfcPositiveLengthMeasure(new IfcLengthMeasure(slabThickness/nbMaterial)),null);
+            materialLayerLIST.add(materialLayer);
+            ifcModel.addIfcObject(materialLayer);
+        }
+
+        IfcMaterialLayerSet materialLayerSet = new IfcMaterialLayerSet(materialLayerLIST,new IfcLabel("LayeredSlab",true));
+        IfcMaterialLayerSetUsage materialLayerSetUsage = new IfcMaterialLayerSetUsage(materialLayerSet,
+                new IfcLayerSetDirectionEnum("AXIS2"),new IfcDirectionSenseEnum("POSITIVE"),new IfcLengthMeasure(-slabThickness/2));
+
+        // Create relation slab <-> material
         IfcRelAssociatesMaterial relAssociatesMaterial = new IfcRelAssociatesMaterial(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
                 ifcModel.getIfcProject().getOwnerHistory(), null,null,relatedObjects,materialLayerSetUsage);
@@ -2385,8 +2421,8 @@ public class IfcHelper {
 
     // Permet de créer un second appartement test (plus simple)
     public static void createSecondAppartementTest(IfcModel ifcModel){
-        IfcCartesianPoint pointA = createCartesianPoint2D(0,0);
-        IfcCartesianPoint pointB = createCartesianPoint2D(4,0);
+        IfcCartesianPoint pointA = createCartesianPoint2D(0,-0.18);
+        IfcCartesianPoint pointB = createCartesianPoint2D(4,-0.18);
         IfcCartesianPoint pointC = createCartesianPoint2D(4,-3);
         IfcCartesianPoint pointD = createCartesianPoint2D(0,-3);
         IfcCartesianPoint pointA1 = createCartesianPoint2D(-0.18,-0.09);
@@ -2412,8 +2448,8 @@ public class IfcHelper {
         hall.add(pointD);
         addFloor(ifcModel, "1st floor", hall);
         addDoor(ifcModel, "door A", wallA, 0.98, 2.13, 1.5);
-        addDoor(ifcModel, "door B", wallB, 0.94, 2.13, 1.1);
-        addWindow(ifcModel,"window C",wallC,1.00,1.50,1.5,0.50);
+        addDoor(ifcModel, "door B", wallC, 0.94, 2.13, 1.1);
+        addWindow(ifcModel,"window C",wallB,1.00,1.50,1.5,0.50);
         addWindow(ifcModel,"window D",wallD,1.00,1.50,1.5,0.50);
     }
 
