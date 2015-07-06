@@ -2433,10 +2433,10 @@ public class IfcHelper {
         IfcCartesianPoint pointC2 = createCartesianPoint2D(4.09,-3);
         IfcCartesianPoint pointD1 = createCartesianPoint2D(-0.18,-3.09);
         IfcCartesianPoint pointD2 = createCartesianPoint2D(4.18,-3.09);
-        addWall(ifcModel,"1st floor","WallExt A",pointA1,pointA2,0.18);
-        addWall(ifcModel,"1st floor","WallExt B",pointB1,pointB2,0.18);
-        addWall(ifcModel,"1st floor","WallExt C",pointC1,pointC2,0.18);
-        addWall(ifcModel,"1st floor","WallExt D",pointD1,pointD2,0.18);
+//        addWall(ifcModel,"1st floor","WallExt A",pointA1,pointA2,0.18);
+//        addWall(ifcModel,"1st floor","WallExt B",pointB1,pointB2,0.18);
+//        addWall(ifcModel,"1st floor","WallExt C",pointC1,pointC2,0.18);
+//        addWall(ifcModel,"1st floor","WallExt D",pointD1,pointD2,0.18);
         IfcWallStandardCase wallA = getWall(ifcModel,"WallExt A");
         IfcWallStandardCase wallB = getWall(ifcModel,"WallExt B");
         IfcWallStandardCase wallC = getWall(ifcModel,"WallExt C");
@@ -2447,10 +2447,10 @@ public class IfcHelper {
         hall.add(pointC);
         hall.add(pointD);
         addFloor(ifcModel, "1st floor", hall);
-        addDoor(ifcModel, "door A", wallA, 0.98, 2.13, 1.5);
-        addDoor(ifcModel, "door B", wallC, 0.94, 2.13, 1.1);
-        addWindow(ifcModel,"window C",wallB,1.00,1.50,1.5,0.50);
-        addWindow(ifcModel,"window D",wallD,1.00,1.50,1.5,0.50);
+//        addDoor(ifcModel, "door A", wallA, 0.98, 2.13, 1.5);
+//        addDoor(ifcModel, "door B", wallC, 0.94, 2.13, 1.1);
+//        addWindow(ifcModel,"window C",wallB,1.00,1.50,1.5,0.50);
+//        addWindow(ifcModel,"window D",wallD,1.00,1.50,1.5,0.50);
     }
 
     // Permet de calculer la surface habitable du logement
