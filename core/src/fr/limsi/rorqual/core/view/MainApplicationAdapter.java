@@ -279,7 +279,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         program.setUniformMatrix("u_proj", cameras[ncam % cameras.length].projection);
         program.setUniformMatrix("u_view", cameras[ncam % cameras.length].view);
         program.setUniformMatrix("u_model", popup.transform);
-        popup.render(program);
+        //popup.render(program);
         program.end();
 
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);

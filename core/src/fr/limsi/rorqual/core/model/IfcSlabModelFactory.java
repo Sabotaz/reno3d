@@ -1,7 +1,10 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
@@ -15,6 +18,7 @@ import eu.mihosoft.vrl.v3d.Vertex;
 import fr.limsi.rorqual.core.model.primitives.ExtrudedAreaSolidModel;
 import fr.limsi.rorqual.core.model.primitives.PolylineModel;
 import fr.limsi.rorqual.core.model.primitives.TrimmedCurveModel;
+import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.IfcObjectPlacementUtils;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDirectionSenseEnum;
@@ -193,6 +197,18 @@ public class IfcSlabModelFactory {
 
     public ModelInstance getModel() {
         //return wall_model.getModel();
-        return new ModelInstance(CSGUtils.toModel(wall_csg));
+        Model model = CSGUtils.toModel(wall_csg);
+
+        Texture diffuse = (Texture) AssetManager.getInstance().get("wood-floorboards-texture");
+
+        diffuse.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+        TextureAttribute tad = TextureAttribute.createDiffuse(diffuse);
+
+        Material material = model.materials.get(0);
+
+        material.set(tad);
+
+        return new ModelInstance(model);
     }
 }

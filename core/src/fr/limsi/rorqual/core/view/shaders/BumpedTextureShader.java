@@ -82,9 +82,13 @@ public class BumpedTextureShader extends FileShader {
         //Texture texture_bump = tab.textureDescription.texture;
         Texture texture_normal = tan.textureDescription.texture;
 
+        set(u_textureUV, tad.offsetU, tad.offsetV, tad.scaleU, tad.scaleV);
+
         Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE2);
         texture_normal.bind();
         set(u_texture_normal, 2);
+
+        //System.out.println( tad.offsetU + "," + tad.offsetV + "," +  tad.scaleU + "," +  tad.scaleV);
 
         //Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE1);
         //texture_bump.bind();
@@ -115,6 +119,15 @@ public class BumpedTextureShader extends FileShader {
         ColorAttribute colorAttr = (ColorAttribute)renderable.material.get(ColorAttribute.Diffuse);
         if (colorAttr != null)
             set(u_color, colorAttr.color);
+
+        HashMap<String, Object> attrs = (HashMap<String, Object>)renderable.userData;
+        if (attrs.containsKey("Color") && attrs.get("Color") != null) {
+            set(u_is_tinted, 1);
+            set(u_tint, (Color)attrs.get("Color"));
+
+        } else {
+            set(u_is_tinted, 0);
+        }
 
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }

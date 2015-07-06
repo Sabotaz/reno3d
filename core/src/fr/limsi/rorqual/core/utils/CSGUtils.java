@@ -63,37 +63,10 @@ public class CSGUtils {
 
         List<Polygon> polygons = csg.getPolygons();
 
-        //Random rand = new Random();
-
         for (int p = 0; p < polygons.size(); p++) {
             Polygon polygon = polygons.get(p);
-            //Color color = new Color(rand.nextFloat(),rand.nextFloat(),rand.nextFloat(),1);
-
-            //meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material("Color", ColorAttribute.createDiffuse(color)));
 
             meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material("Color", ColorAttribute.createDiffuse(Color.WHITE)));
-
-            /*Vector3 p1 = CSGUtils.castVector(polygon.vertices.get(0).pos);
-            for (int i = 0; i < polygon.vertices.size()-2; i++) {
-                Vector3 p2 = CSGUtils.castVector(polygon.vertices.get(i + 1).pos);
-                Vector3 p3 = CSGUtils.castVector(polygon.vertices.get(i + 2).pos);
-                meshBuilder.triangle(p1, p3, p2);
-                meshBuilder.triangle(p1, p2, p3);
-            }*/
-            /*
-            Vector3 p1 = CSGUtils.castVector(polygon.vertices.get(0).pos);
-            Vector3 n1 = CSGUtils.castVector(polygon.vertices.get(0).normal);
-            short i1 = meshBuilder.vertex(p1,n1,Color.WHITE,new Vector2());
-            for (int i = 0; i < polygon.vertices.size()-2; i++) {
-                Vector3 p2 = CSGUtils.castVector(polygon.vertices.get(i + 1).pos);
-                Vector3 n2 = CSGUtils.castVector(polygon.vertices.get(i + 1).normal);
-                Vector3 p3 = CSGUtils.castVector(polygon.vertices.get(i + 2).pos);
-                Vector3 n3 = CSGUtils.castVector(polygon.vertices.get(i + 2).normal);
-                short i2 = meshBuilder.vertex(p2,n2,Color.WHITE,new Vector2());
-                short i3 = meshBuilder.vertex(p3, n3, Color.WHITE, new Vector2());
-                meshBuilder.triangle(i1, i2, i3);
-                meshBuilder.triangle(i1, i3, i2);
-            }*/
 
             Vector3 p1 = CSGUtils.castVector(polygon.vertices.get(0).pos);
             Vector3 N = CSGUtils.castVector(polygon.plane.normal);
@@ -106,59 +79,55 @@ public class CSGUtils {
                 meshBuilder.triangle(vi1,vi2,vi3);
                 //meshBuilder.triangle(vi1,vi3,vi2);
             }
-            /*
-            Vector3d normal = polygon.vertices.get(0).normal.clone();
-            Vector3 n = CSGUtils.castVector(normal);
-
-            boolean cw = !Extrude.isCCW(polygon);
-
-            List<PolygonPoint> points = new ArrayList<>();
-
-            for (Vertex v : polygon.vertices) {
-                PolygonPoint vp = new PolygonPoint(v.pos.x, v.pos.y, v.pos.z);
-                points.add(vp);
-            }
-
-            eu.mihosoft.vrl.v3d.ext.org.poly2tri.Polygon p2tp = new eu.mihosoft.vrl.v3d.ext.org.poly2tri.Polygon(points);
-
-            System.out.println(p2tp.getPoints().size());
-
-            Poly2Tri.triangulate(p2tp);
-
-
-            List<DelaunayTriangle> triangles = p2tp.getTriangles();
-
-            List<Vertex> triPoints = new ArrayList<>();
-
-            for (DelaunayTriangle t : triangles) {
-                TriangulationPoint[] tps = t.points;
-                Vector3 p1 = new Vector3(tps[0].getXf(),tps[0].getYf(),tps[0].getZf());
-                Vector3 p2 = new Vector3(tps[1].getXf(),tps[1].getYf(),tps[1].getZf());
-                Vector3 p3 = new Vector3(tps[2].getXf(),tps[2].getYf(),tps[2].getZf());
-                MeshPartBuilder.VertexInfo vi1 = new MeshPartBuilder.VertexInfo().setPos(p1).setNor(n);
-                MeshPartBuilder.VertexInfo vi2 = new MeshPartBuilder.VertexInfo().setPos(p2).setNor(n);
-                MeshPartBuilder.VertexInfo vi3 = new MeshPartBuilder.VertexInfo().setPos(p3).setNor(n);
-
-                if (cw) {
-                    meshBuilder.triangle(vi1,vi2,vi3);
-                } else {
-                    meshBuilder.triangle(vi1,vi3,vi2);
-                }
-            }*/
         }
-/*
+
+        return builder.end();
+    }
+
+
+    public static Model toModel(CSG csg, Material frontMaterial, Material backMaterial) {
+
+        ModelBuilder builder = new ModelBuilder();
+
+        builder.begin();
+
+        Node node = builder.node();
+        node.id = "base";
+
+        MeshPartBuilder meshBuilder;
+
+        List<Polygon> polygons = csg.getPolygons();
+
         for (int p = 0; p < polygons.size(); p++) {
             Polygon polygon = polygons.get(p);
 
-            meshBuilder = builder.part("polygon_lines_"+p, GL20.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-
             Vector3 p1 = CSGUtils.castVector(polygon.vertices.get(0).pos);
+            Vector3 N = CSGUtils.castVector(polygon.plane.normal);
+
+            Vector2 uv1 = new Vector2(p1.x, p1.z);
+
+            if (N.epsilonEquals(0,1,0,0))
+                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, frontMaterial);
+            else if (N.epsilonEquals(0,-1,0,0))
+                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, backMaterial);
+            else
+                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, new Material("Color", ColorAttribute.createDiffuse(Color.WHITE)));
+
+            MeshPartBuilder.VertexInfo vi1 = new MeshPartBuilder.VertexInfo().setPos(p1).setNor(N).setUV(uv1);
+
             for (int i = 0; i < polygon.vertices.size()-2; i++) {
+
                 Vector3 p2 = CSGUtils.castVector(polygon.vertices.get(i + 1).pos);
                 Vector3 p3 = CSGUtils.castVector(polygon.vertices.get(i + 2).pos);
-                meshBuilder.triangle(p1, p2, p3);
+                Vector2 uv2 = new Vector2(p2.x, p2.z);
+                Vector2 uv3 = new Vector2(p3.x, p3.z);
+                //System.out.println(uv1 + "," + uv2 + "," + uv3);
+                MeshPartBuilder.VertexInfo vi2 = new MeshPartBuilder.VertexInfo().setPos(p2).setNor(N).setUV(uv2);
+                MeshPartBuilder.VertexInfo vi3 = new MeshPartBuilder.VertexInfo().setPos(p3).setNor(N).setUV(uv3);
+                meshBuilder.triangle(vi1,vi2,vi3);
+                //meshBuilder.triangle(vi1,vi3,vi2);
             }
-        }*/
+        }
 
         return builder.end();
     }

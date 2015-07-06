@@ -25,4 +25,8 @@ void main() {
     vec3 Idiff = texColor.rgb * diffuse;
 
     gl_FragColor = vec4(Idiff, 0.0);
+
+    if (u_is_tinted) {
+        gl_FragColor = 0.8 * gl_FragColor + 0.2 * u_tint;
+    }
 }

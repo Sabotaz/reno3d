@@ -5,7 +5,7 @@ attribute vec2 a_texCoord0;
 
 uniform mat4 u_projTrans;
 uniform mat4 u_worldTrans;
-uniform vec4 v_textureUV;
+uniform vec4 u_textureUV;
 uniform mat3 u_normal_matrix;
 uniform vec3 u_light_direction;
 
@@ -16,7 +16,7 @@ varying vec3 v;
 
 void main() {
 
-    v_texCoords = a_texCoord0;
+    v_texCoords = u_textureUV.xy + a_texCoord0 * u_textureUV.zw;
 
     gl_Position =  u_projTrans * u_worldTrans * a_position;
 
