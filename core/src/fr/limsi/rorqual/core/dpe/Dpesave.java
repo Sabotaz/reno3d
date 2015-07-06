@@ -1899,3 +1899,54 @@ public class Dpesave implements EventListener {
 //                dialog.getContentTable().add(textButton5).pad(2);
 //                dialog.getContentTable().add(textButton6).pad(2);
 //                dialog.setSize(textButton3.getWidth()*3+120,textButton1.getHeight()*2+60);
+
+//final Dialog dialog = new Dialog(" Type de porte ", skin, "dialog") {
+//protected void result (Object object) {
+//
+//        }
+//        }.show(stageMenu);
+//        TextButton textButton1 = new TextButton("Porte opaque pleine",skin);
+//        textButton1.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou1");
+//        }
+//        });
+//        TextButton textButton2 = new TextButton("Porte avec moins de 30% de simple vitrage",skin);
+//        textButton2.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou2");
+//        }
+//        });
+//        TextButton textButton3 = new TextButton("Porte avec 30-60% de simple vitrage",skin);
+//        textButton3.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou3");
+//        }
+//        });
+//        TextButton textButton4 = new TextButton("Porte avec double vitrage",skin);
+//        textButton4.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou4");
+//        }
+//        });
+//        TextButton textButton5 = new TextButton("Porte opaque pleine isolee",skin);
+//        textButton5.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou5");
+//        }
+//        });
+//        TextButton textButton6 = new TextButton("Porte precedee d'un SAS",skin);
+//        textButton6.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou6");
+//        }
+//        });
+//        dialog.getContentTable().setDebug(true);
+//        dialog.getContentTable().add(textButton1).pad(2);
+//        dialog.getContentTable().add(textButton2).pad(2);
+//        dialog.getContentTable().add(textButton3).pad(2);
+//        dialog.getContentTable().row();
+//        dialog.getContentTable().add(textButton4).pad(2);
+//        dialog.getContentTable().add(textButton5).pad(2);
+//        dialog.getContentTable().add(textButton6).pad(2);
+//        dialog.setSize(textButton3.getWidth()*3+120,textButton1.getHeight()*2+60);

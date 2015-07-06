@@ -33,6 +33,7 @@ public class Dpe implements EventListener {
     private HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<>();
     private HashMap<IfcSlab, HashMap<EventType, Object>> slabs_properties = new HashMap<>();
     private HashMap<IfcWindow, HashMap<EventType, Object>> windows_properties = new HashMap<>();
+    private HashMap<IfcDoor, HashMap<EventType, Object>> doors_properties = new HashMap<>();
     private Collection<IfcWallStandardCase> wallStandardCaseCollection;
     private Collection<IfcSlab> slabCollection;
     private Collection<IfcWindow> windowCollection;
@@ -827,6 +828,30 @@ public class Dpe implements EventListener {
         System.out.println("Actualise DP Fen -> U="+uFen+"  S="+sFen+"  DPfen="+DP_fen);
     }
 
+    public void actualiseDP_door(IfcDoor door, TypeDoorEnum typeDoor){
+        double sDoor=IfcHelper.getDoorSurface(ifcModel,door),uDoor=0;
+        if (typeDoor.equals(TypeDoorEnum.PORTE_OPAQUE_PLEINE)){
+            uDoor=3.5;
+        }
+        else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE)){
+            uDoor=4;
+        }
+        else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE)){
+            uDoor=4.5;
+        }
+        else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_DOUBLE_VITRAGE)){
+            uDoor=3.3;
+        }
+        else if (typeDoor.equals(TypeDoorEnum.PORTE_OPAQUE_PLEINE_ISOLEE)){
+            uDoor=2;
+        }
+        else if (typeDoor.equals(TypeDoorEnum.PORTE_PRECEDE_DUN_SAS)){
+            uDoor=1.5;
+        }
+        DP_portExt += sDoor*uDoor;
+        System.out.println("Actualise DP Door -> U="+uDoor+"  S="+sDoor+"  DPdoor="+DP_portExt);
+    }
+
     public void calc_PT() {
         if (typeBatiment == typeBatiment.MAISON) {
             double kPbM = 0, lPbM = 0, kPhM = 0.54, lPhM = 0, kPiM = 0, lPiM = 0, kRfM = 0, lRfM = 0, kMen = 0, lMen = 0;
@@ -1015,6 +1040,7 @@ public class Dpe implements EventListener {
         notifierMurs();
         notifierPlanchers();
         notifierFenetres();
+        notifierPortes();
         DpeEvent eventType = DpeEvent.START_DPE;
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
@@ -1107,6 +1133,19 @@ public class Dpe implements EventListener {
         }
     }
 
+    /*** Notifie le statut des doors ***/
+    public void notifierPortes() {
+        IfcDoor door;
+        Iterator<IfcDoor> it = doorCollection.iterator();
+        while (it.hasNext()) {
+            door = it.next();
+            //TODO : ne prendre en considération que les doors reliées aux murs extérieurs
+            Object o[] = {door, DpeState.UNKNOWN};
+            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
+    }
+
     /*** Demande à l'utilisateur des informations permettant de déterminer les déperditions au niveau des murs ***/
     public void demanderMur(IfcWallStandardCase wall) {
         walls_properties.put(wall, new HashMap<EventType, Object>());
@@ -1144,6 +1183,14 @@ public class Dpe implements EventListener {
 
         eventType = DpeEvent.TYPE_VITRAGE_FENETRE;
         event = new Event(eventType, window);
+        EventManager.getInstance().put(Channel.DPE, event);
+    }
+
+    /*** Demande à l'utilisateur des informations permettant de déterminer les déperditions au niveau des portes ***/
+    public void demanderPorte(IfcDoor door){
+        doors_properties.put(door, new HashMap<EventType, Object>());
+        DpeEvent eventType = DpeEvent.TYPE_DOOR;
+        Event event = new Event(eventType, door);
         EventManager.getInstance().put(Channel.DPE, event);
     }
 
@@ -1320,6 +1367,15 @@ public class Dpe implements EventListener {
                         tryActualiseWindowDP(window);
                         break;
                     }
+                    case TYPE_DOOR_RESPONSE:{
+                        Object[] items = (Object[]) o;
+                        IfcDoor door = (IfcDoor)items[0];
+                        TypeDoorEnum typedoor = (TypeDoorEnum)items[1];
+                        IfcHelper.addPropertyTypeDoor(ifcModel, door, typedoor);
+                        doors_properties.get(items[0]).put(event, typedoor);
+                        actualiseDP_door(door,typedoor);
+                        break;
+                    }
                     case DPE_REQUEST: {
                         System.out.println(o.getClass());
                         if (o instanceof IfcWallStandardCase) {
@@ -1333,6 +1389,10 @@ public class Dpe implements EventListener {
                         if (o instanceof IfcWindow) {
                             IfcWindow window = (IfcWindow) o;
                             demanderWindow(window);
+                        }
+                        if (o instanceof IfcDoor) {
+                            IfcDoor door = (IfcDoor) o;
+                            demanderPorte(door);
                         }
                         break;
                     }
