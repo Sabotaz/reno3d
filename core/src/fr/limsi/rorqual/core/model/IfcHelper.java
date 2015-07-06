@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.model;
 
+import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import ifc2x3javatoolbox.ifc2x3tc1.*;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcChangeActionEnum.IfcChangeActionEnum_internal;
@@ -973,7 +974,7 @@ public class IfcHelper {
         IfcBuildingStorey buildingStorey = getBuildingStorey(ifcModel, nameBuildingStorey);
         IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0, 0.0, 0.0);
         IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0, 0.0, 1.0);
-        IfcDirection ifcDirectionXDirectionLocalSlab = createDirection3D(1.0,0.0,0.0);
+        IfcDirection ifcDirectionXDirectionLocalSlab = createDirection3D(1.0, 0.0, 0.0);
         IfcAxis2Placement3D ifcAxis2Placement3DSlab = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginSlab, ifcDirectionZAxisLocalSlab, ifcDirectionXDirectionLocalSlab);
         IfcLocalPlacement ifcLocalPlacementSlab = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
@@ -1558,18 +1559,35 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un MaterialLayer à un wallStandardCase
-    public static void addMaterialLayer (IfcModel ifcModel, IfcWallStandardCase wall, IfcMaterial material){
+    public static void addMaterialLayer (IfcModel ifcModel, IfcWallStandardCase wall, ArrayList<MaterialTypeEnum> listMaterial){
         SET<IfcRoot> relatedObjects = new SET<>();
         relatedObjects.add(wall);
+        LIST<IfcMaterialLayer> materialLayerLIST = new LIST<>();
+        double nbMaterial = listMaterial.size();
+        double wallThickness = IfcHelper.getWallThickness(wall);
+
+        for (MaterialTypeEnum actualMaterial:listMaterial){
+            IfcMaterial material = new IfcMaterial(new IfcLabel(actualMaterial.toString(),true));
+            ifcModel.addIfcObject(material);
+            IfcMaterialLayer materialLayer = new IfcMaterialLayer(material,
+                    new IfcPositiveLengthMeasure(new IfcLengthMeasure(wallThickness/nbMaterial)),null);
+            materialLayerLIST.add(materialLayer);
+            ifcModel.addIfcObject(materialLayer);
+        }
+
+        IfcMaterialLayerSet materialLayerSet = new IfcMaterialLayerSet(materialLayerLIST,new IfcLabel("LayeredWall",true));
+        IfcMaterialLayerSetUsage materialLayerSetUsage = new IfcMaterialLayerSetUsage(materialLayerSet,
+                new IfcLayerSetDirectionEnum("AXIS2"),new IfcDirectionSenseEnum("POSITIVE"),new IfcLengthMeasure(-wallThickness/2));
 
         // Create relation wall <-> material
         IfcRelAssociatesMaterial relAssociatesMaterial = new IfcRelAssociatesMaterial(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcModel.getIfcProject().getOwnerHistory(), null,null,relatedObjects,material);
+                ifcModel.getIfcProject().getOwnerHistory(), null,null,relatedObjects,materialLayerSetUsage);
 
         // add new Ifc-objects to the model
         ifcModel.addIfcObject(relAssociatesMaterial);
-        ifcModel.addIfcObject(material);
+        ifcModel.addIfcObject(materialLayerSetUsage);
+        ifcModel.addIfcObject(materialLayerSet);
     }
 
     // Permet de supprimer le placement d'un objet dans un model
