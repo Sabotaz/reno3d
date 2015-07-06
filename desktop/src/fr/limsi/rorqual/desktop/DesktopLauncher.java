@@ -28,8 +28,7 @@ public class DesktopLauncher {
         config.height = 720;
         config.width = 1280;
 
-        IfcHelper readerWritterIfc = new IfcHelper(ifcModel);
-        readerWritterIfc.initialiseIfcModel(ifcModel);
+        IfcHelper.initialiseIfcModel(ifcModel);
 //        IfcHelper.createApartmentTest(ifcModel);
         IfcHelper.createSecondAppartementTest(ifcModel);
 //        IfcCartesianPoint pointA1 = IfcHelper.createCartesianPoint2D(0, 0);
