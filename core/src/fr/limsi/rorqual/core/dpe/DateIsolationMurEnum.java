@@ -3,7 +3,7 @@ package fr.limsi.rorqual.core.dpe;
 /**
  * Created by ricordeau on 07/07/15.
  */
-public enum DateIsolationMur {
+public enum DateIsolationMurEnum {
     EN_RENOVATION_AVANT_1983,
     EN_RENOVATION_ENTRE_1983_ET_1988,
     EN_RENOVATION_ENTRE_1989_ET_2000,

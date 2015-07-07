@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -27,6 +28,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -41,6 +44,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
+import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
+import fr.limsi.rorqual.core.dpe.TypeMurEnum;
+import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
@@ -60,6 +66,7 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Sun;
 import fr.limsi.rorqual.core.view.shaders.*;
 import fr.limsi.rorqual.core.view.shaders.BillboardShader;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
@@ -203,46 +210,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
-//                dpe.startDPE();
-
-
-        final Dialog dialog = new Dialog(" Isolation du mur " , skin, "dialog") {
-        protected void result(Object object) {
-
-                }
-        }.show(stageMenu);
-                TextButton textButton1 = new TextButton("A la construction",skin);
-                textButton1.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        System.out.println("coucou1");
-                    }});
-                TextButton textButton2 = new TextButton("En renovation",skin);
-                textButton2.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        System.out.println("coucou2");
-                    }});
-                TextButton textButton3 = new TextButton("Aucune",skin);
-                textButton3.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        System.out.println("coucou3");
-                    }});
-                TextButton textButton4 = new TextButton("Inconnue",skin);
-                textButton4.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        System.out.println("coucou4");
-                    }});
-                dialog.getContentTable().add(textButton1).pad(2);
-                dialog.getContentTable().add(textButton2).pad(2);
-                dialog.getContentTable().row();
-                dialog.getContentTable().add(textButton3).pad(2);
-                dialog.getContentTable().add(textButton4).pad(2);
-                dialog.setSize(textButton2.getWidth() * 3, textButton1.getHeight() * 2 + 55);
-                dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-
-
-
-
-
+                dpe.startDPE();
 
             }
         });

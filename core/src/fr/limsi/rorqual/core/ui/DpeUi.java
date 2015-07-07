@@ -14,9 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.concurrent.Semaphore;
 
+import fr.limsi.rorqual.core.dpe.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
+import fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeMenuiserieFenetreEnum;
+import fr.limsi.rorqual.core.dpe.TypeMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Channel;
@@ -555,435 +558,373 @@ public class DpeUi implements EventListener {
                             break;
                         }
 
-
-                        case DERRIERE_MUR: {
+                        case TYPE_MUR: {
                             s.acquire();
                             final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
-                            Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur ? " , skin, "dialog") {
-                                protected void result(Object object) {
-                                    String derriere = "";
-                                    if (object.equals(1)) {
-                                        derriere = "ext";
-                                    } else if (object.equals(2)) {
-                                        derriere = "lnc";
-                                    } else if (object.equals(3)) {
-                                        derriere = "ah";
-                                    } else if (object.equals(4)) {
-                                        derriere = "ver";
-                                    }
-                                    DpeEvent responseType = DpeEvent.DERRIERE_MUR_RESPONSE;
-                                    Object[] items = new Object[2];
-                                    items[0]=wall;
-                                    items[1]=derriere;
-                                    Event response = new Event(responseType, items);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    s.release();
-                                }
-                            }.button("Exterieur", 1).button("Local non chauffe", 2).button("Autre habitation", 3).button("Veranda", 4).show(stage);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            /*Popup popup = new Popup(skin, MainApplicationAdapter.getFromUserObject(wall));
-                            popup.setTitle(" Qu'est-ce qu'il y a derriere ce mur ? ");
-                            popup.getButtonTable().addActor(new TextButton("Exterieur", skin));
-                            popup.getButtonTable().addActor(new TextButton("Local non chauffe", skin));
-                            popup.getButtonTable().addActor(new TextButton("Autre habitation", skin));
-                            popup.getButtonTable().addActor(new TextButton("Veranda", skin));
-                            stage.addActor(popup);*/
-                            break;
-                        }
-
-                        case ISOLATION_MUR: {
-                            s.acquire();
-                            final Object wall = e.getUserObject();
-                            Dialog dialog = new Dialog(" Ce mur est-il isole ? ", skin, "dialog") {
-                                protected void result (Object object) {
-                                    String isole="";
-                                    if(object.equals(1)){
-                                        isole="non";
-                                    }
-                                    else if (object.equals(2)) {
-                                        isole="oui";
-                                    }
-                                    else if (object.equals(3)) {
-                                        isole="inconnue";
-                                    }
-                                    DpeEvent responseType = DpeEvent.ISOLATION_MUR_RESPONSE;
-                                    Object[] items = new Object[2];
-                                    items[0]=wall;
-                                    items[1]=isole;
-                                    Event response = new Event(responseType, items);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    s.release();
-                                }
-                            }.button("Non", 1).button("Oui", 2).button("Inconnue", 3).show(stage);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            break;
-                        }
-
-                        case DATE_ISOLATION_MUR:{
-                            s.acquire();
-                            final Object wall = e.getUserObject();
-                            final Dialog dialog = new Dialog(" En quelle annee ce mur a-t'il ete isole ? ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Type de mur " , skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
                             }.show(stage);
-
-                            TextButton textButton1 = new TextButton("A la construction",skin);
-                            TextButton textButton2 = new TextButton("Inconnue",skin);
-                            TextButton textButton3 = new TextButton("<1983",skin);
-                            TextButton textButton4 = new TextButton("1983-1988",skin);
-                            TextButton textButton5 = new TextButton("1989-2000",skin);
-                            TextButton textButton6 = new TextButton("2001-2005",skin);
-                            TextButton textButton7 = new TextButton("2006-2012",skin);
-                            TextButton textButton8 = new TextButton(">2012",skin);
-                            float largeur = textButton1.getWidth()+textButton2.getWidth()+textButton3.getWidth()+textButton4.getWidth()+45;
-                            float hauteur = textButton1.getHeight()+textButton5.getHeight()+25;
-
-                            dialog.setSize(largeur, hauteur);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(textButton1);
-                            dialog.addActor(textButton2);
-                            dialog.addActor(textButton3);
-                            dialog.addActor(textButton4);
-                            dialog.addActor(textButton5);
-                            dialog.addActor(textButton6);
-                            dialog.addActor(textButton7);
-                            dialog.addActor(textButton8);
-
-                            textButton1.setPosition(4, textButton5.getHeight() + 4);
-                            textButton2.setPosition(textButton1.getX() + textButton1.getWidth() + 10, textButton5.getHeight() + 4);
-                            textButton3.setPosition(textButton2.getX() + textButton2.getWidth() + 10, textButton5.getHeight() + 4);
-                            textButton4.setPosition(textButton3.getX() + textButton3.getWidth() + 10, textButton5.getHeight() + 4);
-                            textButton5.setPosition(24, 4);
-                            textButton6.setPosition(textButton5.getX() + textButton5.getWidth() + 10, 4);
-                            textButton7.setPosition(textButton6.getX() + textButton6.getWidth() + 10, 4);
-                            textButton8.setPosition(textButton7.getX() + textButton7.getWidth() + 10, 4);
-
+                            TextButton textButton1 = new TextButton("Mur donnant sur un local non chauffe",skin);
                             textButton1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = -1;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE;
+                                    DpeEvent responseType = DpeEvent.TYPE_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton2 = new TextButton("Mur donnant sur l'exterieur",skin);
                             textButton2.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = -2;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {false, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
+                                    DpeEvent responseType = DpeEvent.TYPE_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton3 = new TextButton("Mur donnant sur une autre habitation",skin);
                             textButton3.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 1980;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeMurEnum.MUR_DONNANT_SUR_UNE_AUTRE_HABITATION;
+                                    DpeEvent responseType = DpeEvent.TYPE_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton4 = new TextButton("Mur donnant sur une veranda",skin);
                             textButton4.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 1985;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA;
+                                    DpeEvent responseType = DpeEvent.TYPE_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton5 = new TextButton("Mur interieur",skin);
                             textButton5.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 1995;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeMurEnum.MUR_INTERIEUR;
+                                    DpeEvent responseType = DpeEvent.TYPE_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
-                            textButton6.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 2002;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            textButton7.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 2008;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            textButton8.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 2014;
-                                    Object[] items = new Object[2];
-                                    items[0] = wall;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
-                                    Event response = new Event(responseType, items);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
+                            dialog.getContentTable().add(textButton1).pad(2).padTop(10).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton2).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton3).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton4).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton5).pad(2).left();
+                            dialog.setSize(textButton1.getWidth() + 20, textButton1.getHeight() * 5 + 92);
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
 
-                        case DERRIERE_SLAB : {
+                        case DATE_ISOLATION_MUR: {
                             s.acquire();
-                            final IfcSlab slab = (IfcSlab)e.getUserObject();
-                            Dialog dialog = new Dialog(" Qu'est-ce qu'il y a sous ce plancher ? " , skin, "dialog") {
-                                protected void result(Object object) {
-                                    String derriere = "";
-                                    if (object.equals(1)) {
-                                        derriere = "ah";
-                                    } else if (object.equals(2)) {
-                                        derriere = "ss";
-                                    } else if (object.equals(3)) {
-                                        derriere = "vs";
-                                    } else if (object.equals(4)) {
-                                        derriere = "tp";
-                                    }
-                                    DpeEvent responseType = DpeEvent.DERRIERE_SLAB_RESPONSE;
-                                    Object[] items = new Object[2];
-                                    items[0]=slab;
-                                    items[1]=derriere;
-                                    Event response = new Event(responseType, items);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    s.release();
-                                }
-                            }.button("Autre habitation", 1).button("Sous-sol", 2).button("Vide-Sanitaire", 3).button("Terre plein", 4).show(stage);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            break;
-                        }
-
-                        case ISOLATION_SLAB: {
-                            s.acquire();
-                            final Object slab = e.getUserObject();
-                            Dialog dialog = new Dialog(" Ce plancher est-il isole ? ", skin, "dialog") {
-                                protected void result (Object object) {
-                                    String isole="";
-                                    if(object.equals(1)){
-                                        isole="non";
-                                    }
-                                    else if (object.equals(2)) {
-                                        isole="oui";
-                                    }
-                                    else if (object.equals(3)) {
-                                        isole="inconnue";
-                                    }
-                                    DpeEvent responseType = DpeEvent.ISOLATION_SLAB_RESPONSE;
-                                    Object[] items = new Object[2];
-                                    items[0]=slab;
-                                    items[1]=isole;
-                                    Event response = new Event(responseType, items);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    s.release();
-                                }
-                            }.button("Non", 1).button("Oui", 2).button("Inconnue", 3).show(stage);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            break;
-                        }
-
-                        case DATE_ISOLATION_SLAB:{
-                            s.acquire();
-                            final Object slab = e.getUserObject();
-                            final Dialog dialog = new Dialog(" En quelle annee ce plancher a-t'il ete isole ? ", skin, "dialog") {
+                            final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
+                            final Dialog dialog = new Dialog(" Date de l'isolation du mur " , skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
                             }.show(stage);
-
-                            TextButton textButton1 = new TextButton("A la construction",skin);
-                            TextButton textButton2 = new TextButton("Inconnue",skin);
-                            TextButton textButton3 = new TextButton("<1983",skin);
-                            TextButton textButton4 = new TextButton("1983-1988",skin);
-                            TextButton textButton5 = new TextButton("1989-2000",skin);
-                            TextButton textButton6 = new TextButton("2001-2005",skin);
-                            TextButton textButton7 = new TextButton("2006-2012",skin);
-                            TextButton textButton8 = new TextButton(">2012",skin);
-                            float largeur = textButton1.getWidth()+textButton2.getWidth()+textButton3.getWidth()+textButton4.getWidth()+45;
-                            float hauteur = textButton1.getHeight()+textButton5.getHeight()+25;
-
-                            dialog.setSize(largeur, hauteur);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(textButton1);
-                            dialog.addActor(textButton2);
-                            dialog.addActor(textButton3);
-                            dialog.addActor(textButton4);
-                            dialog.addActor(textButton5);
-                            dialog.addActor(textButton6);
-                            dialog.addActor(textButton7);
-                            dialog.addActor(textButton8);
-
-                            textButton1.setPosition(4, textButton5.getHeight() + 4);
-                            textButton2.setPosition(textButton1.getX() + textButton1.getWidth() + 10, textButton5.getHeight() + 4);
-                            textButton3.setPosition(textButton2.getX() + textButton2.getWidth() + 10, textButton5.getHeight() + 4);
-                            textButton4.setPosition(textButton3.getX() + textButton3.getWidth() + 10, textButton5.getHeight() + 4);
-                            textButton5.setPosition(24, 4);
-                            textButton6.setPosition(textButton5.getX() + textButton5.getWidth() + 10, 4);
-                            textButton7.setPosition(textButton6.getX() + textButton6.getWidth() + 10, 4);
-                            textButton8.setPosition(textButton7.getX() + textButton7.getWidth() + 10, 4);
-
+                            TextButton textButton1 = new TextButton("Jamais",skin);
                             textButton1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = -1;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.JAMAIS;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton2 = new TextButton("A la construction",skin);
                             textButton2.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = -2;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {false, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.A_LA_CONSTRUCTION;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton3 = new TextButton("En renovation (date inconnue)",skin);
                             textButton3.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 1980;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.EN_RENOVATION_DATE_INCONNUE;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton4 = new TextButton("En renovation avant 1983",skin);
                             textButton4.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 1985;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.EN_RENOVATION_AVANT_1983;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton5 = new TextButton("En renovation entre 1983 et 1988",skin);
                             textButton5.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 1995;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.EN_RENOVATION_ENTRE_1983_ET_1988;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton6 = new TextButton("En renovation entre 1989 et 2000",skin);
                             textButton6.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 2002;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.EN_RENOVATION_ENTRE_1989_ET_2000;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton7 = new TextButton("En renovation entre 2001 et 2005",skin);
                             textButton7.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 2008;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.EN_RENOVATION_ENTRE_2001_ET_2005;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton8 = new TextButton("En renovation entre 2006 et 2012",skin);
                             textButton8.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    double reponse = 2014;
-                                    Object[] items = new Object[2];
-                                    items[0] = slab;
-                                    Object[] r = {true, reponse};
-                                    items[1] = r;
-                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_SLAB_RESPONSE;
-                                    Event response = new Event(responseType, items);
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.EN_RENOVATION_ENTRE_2006_ET_2012;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     dialog.remove();
                                     s.release();
                                 }
                             });
+                            TextButton textButton9 = new TextButton("En renovation apres 2012",skin);
+                            textButton9.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.EN_RENOVATION_APRES_2012;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton10 = new TextButton("Inconnue",skin);
+                            textButton10.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = DateIsolationMurEnum.UNKNOWN;
+                                    DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            dialog.getContentTable().add(textButton1).pad(2).padTop(10).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton2).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton3).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton4).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton5).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton6).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton7).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton8).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton9).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton10).pad(2).left();
+                            dialog.setSize(textButton5.getWidth() + 20, textButton1.getHeight() * 10 + 120);
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
+
+                        case TYPE_ISOLATION_MUR: {
+
+                            s.acquire();
+                            final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
+                            final Dialog dialog = new Dialog(" Type d'isolation thermique " , skin, "dialog") {
+                                protected void result(Object object) {
+
+                                }
+                            }.show(stage);
+                            TextButton textButton1 = new TextButton("Interieure (ITI)",skin);
+                            textButton1.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeIsolationMurEnum.ITI;
+                                    DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton2 = new TextButton("Exterieure (ITE)",skin);
+                            textButton2.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeIsolationMurEnum.ITE;
+                                    DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton3 = new TextButton("Repartie (ITR)",skin);
+                            textButton3.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeIsolationMurEnum.ITR;
+                                    DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton4 = new TextButton("Interieure + Exterieure (ITI+ITE)",skin);
+                            textButton4.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeIsolationMurEnum.ITI_PLUS_ITE;
+                                    DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton5 = new TextButton("Interieure + Repartie (ITI+ITR)",skin);
+                            textButton5.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeIsolationMurEnum.ITI_PLUS_ITR;
+                                    DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton6 = new TextButton("Exterieure + Repartie (ITE+ITR)",skin);
+                            textButton6.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeIsolationMurEnum.ITE_PLUS_ITR;
+                                    DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton7 = new TextButton("Inconnue",skin);
+                            textButton7.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item[] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeIsolationMurEnum.UNKNOWN;
+                                    DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            dialog.getContentTable().add(textButton1).pad(2).padTop(10).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton2).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton3).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton4).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton5).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton6).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton7).pad(2).left();
+                            dialog.setSize(textButton4.getWidth() + 20, textButton1.getHeight() * 7 + 100);
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            break;
+                        }
+
                         case TYPE_FENETRE: {
                             s.acquire();
                             final IfcWindow window = (IfcWindow)e.getUserObject();
@@ -1025,9 +966,11 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(imageButton1).pad(10);
                             dialog.getContentTable().add(imageButton2).pad(10);
                             dialog.setSize(image1.getWidth() + image2.getWidth() + 60, Math.max(image1.getHeight(), image2.getHeight()) + 55);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
+
+
                         case TYPE_MENUISERIE_FENETRE:{
                             s.acquire();
                             final IfcWindow window = (IfcWindow)e.getUserObject();
@@ -1085,7 +1028,7 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(imageButton2).pad(10);
                             dialog.getContentTable().add(imageButton3).pad(10);
                             dialog.setSize(image1.getWidth() + image2.getWidth() + image3.getWidth() + 80, image1.getHeight() + 55);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
                         case TYPE_VITRAGE_FENETRE: {
@@ -1174,15 +1117,19 @@ public class DpeUi implements EventListener {
                                     s.release();
                                 }
                             });
-                            dialog.getContentTable().add(textButton1).pad(2);
-                            dialog.getContentTable().add(textButton2).pad(2);
-                            dialog.getContentTable().add(textButton3).pad(2);
+                            dialog.getContentTable().add(textButton1).pad(2).left();
                             dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton4).pad(2);
-                            dialog.getContentTable().add(textButton5).pad(2);
-                            dialog.getContentTable().add(textButton6).pad(2);
-                            dialog.setSize(textButton3.getWidth() * 3 + 120, textButton1.getHeight() * 2 + 55);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.getContentTable().add(textButton2).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton3).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton4).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton5).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton6).pad(2).left();
+                            dialog.setSize(textButton4.getWidth() + 40, textButton1.getHeight() * 6 + 92);
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
                         case TYPE_DOOR: {
@@ -1191,7 +1138,7 @@ public class DpeUi implements EventListener {
                             final Dialog dialog = new Dialog(" Type de porte ", skin, "dialog") {
                                 protected void result (Object object) {
 
-                                        }
+                                }
                             }.show(stage);
                             TextButton textButton1 = new TextButton("Porte opaque pleine",skin);
                             textButton1.addListener(new ClickListener() {
@@ -1271,15 +1218,19 @@ public class DpeUi implements EventListener {
                                     s.release();
                                 }
                             });
-                            dialog.getContentTable().add(textButton1).pad(2);
-                            dialog.getContentTable().add(textButton2).pad(2);
-                            dialog.getContentTable().add(textButton3).pad(2);
+                            dialog.getContentTable().add(textButton1).pad(2).left();
                             dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton4).pad(2);
-                            dialog.getContentTable().add(textButton5).pad(2);
-                            dialog.getContentTable().add(textButton6).pad(2);
-                            dialog.setSize(textButton3.getWidth() * 3 + 120, textButton1.getHeight() * 2 + 55);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.getContentTable().add(textButton2).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton3).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton4).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton5).pad(2).left();
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton6).pad(2).left();
+                            dialog.setSize(textButton2.getWidth() + 25, textButton1.getHeight() * 6 + 88);
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
                     }
