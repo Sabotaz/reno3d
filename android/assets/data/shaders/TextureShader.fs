@@ -15,8 +15,20 @@ varying vec3 N;
 varying vec3 v;
 
 void main() {
-    vec4 texColor = texture2D(u_texture, v_texCoords);
 
+    // Light Color * max(dot(N,L), 0.0) = Diffuse
+    vec3 diffuse = u_light_color.rgb * max(-dot(N,u_light_direction), 0.0);
+
+    // Ambiant + diffuse * attenuation = intensity
+    vec3 intensity = u_ambient_color.rgb + diffuse;
+
+    // DiffuseColor * intensity = final color
+    vec4 texColor = texture2D(u_texture, v_texCoords);
+    vec3 finalColor = texColor.rgb * intensity;
+
+    gl_FragColor = vec4(finalColor, texColor.a);
+
+/*
     vec3 Idiff = (0.2 * u_light_color.rgb +  0.8 * texColor.rgb) * max(-dot(N,u_light_direction), 0.0);
 
     vec4 ambient;
@@ -26,7 +38,7 @@ void main() {
         ambient = u_ambient_color;
     }
     gl_FragColor = 0.7 * vec4(Idiff, 1.0) + 0.3 * ambient;
-
+*/
     if (u_is_tinted) {
         gl_FragColor = 0.8 * gl_FragColor + 0.2 * u_tint;
     }

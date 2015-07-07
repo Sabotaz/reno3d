@@ -104,7 +104,7 @@ public class LightShader extends FileShader {
             set(u_opacity, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity);
         } else {
             set(u_is_blended, 0);
-            set(u_opacity, 1.0f);
+            set(u_opacity, 0.0f);
         }
 
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);

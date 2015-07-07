@@ -229,9 +229,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //popup = new Popup(0,0,800,800);
 	}
 
+    public void act() {
+        light.direction.rotate(1, 0, 0, 1);
+        sun.transform.setToTranslation(light.direction.cpy().scl(-100));
+    }
+
 	@Override
 	public void render () {
-        light.direction.rotate(1, 0, 0, 1);
+        act();
         update_cam();
 
         stageMenu.act();
