@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
@@ -33,6 +34,9 @@ public class SunShader extends FileShader {
     protected final int u_light_color = register(new Uniform("u_light_color"));
     protected final int u_ambient_color = register(new Uniform("u_ambient_color"));
     protected final int u_normal_matrix = register(new Uniform("u_normal_matrix"));
+
+    protected final int u_texture = register(new Uniform("u_texture"));
+    protected final int u_textureUV = register(new Uniform("u_textureUV"));
 
     protected final int u_is_blended = register(new Uniform("u_is_blended"));
     protected final int u_opacity = register(new Uniform("u_opacity"));
@@ -67,25 +71,30 @@ public class SunShader extends FileShader {
 
     @Override
     public void render (Renderable renderable) {
+
+        TextureAttribute ta = ((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse));
+        Texture texture = ta.textureDescription.texture;
+        texture.bind();
+        set(u_texture, 0);
+        set(u_textureUV, ta.offsetU, ta.offsetV, ta.scaleU, ta.scaleV);
+
+        set(u_worldTrans, renderable.worldTransform);
+
+        final Matrix3 tmpM = new Matrix3();
+        set(u_normal_matrix, tmpM.set(renderable.worldTransform).inv().transpose());
+
+
         if (renderable.environment.directionalLights.size > 0) {
             DirectionalLight light0 = renderable.environment.directionalLights.get(0);
             set(u_light_color, light0.color);
             set(u_light_direction, light0.direction);
         }
+
         Attribute attribute =  renderable.environment.get(ColorAttribute.AmbientLight);
         if (attribute != null) {
             ColorAttribute colorAttribute = (ColorAttribute) attribute;
             set(u_ambient_color, colorAttribute.color);
         }
-
-        final Matrix3 tmpM = new Matrix3();
-        set(u_normal_matrix, tmpM.set(renderable.worldTransform).inv().transpose());
-
-        set(u_worldTrans, renderable.worldTransform);
-
-        ColorAttribute colorAttr = (ColorAttribute)renderable.material.get(ColorAttribute.Diffuse);
-        if (colorAttr != null)
-            set(u_color, colorAttr.color);
 
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }

@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -102,12 +103,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** ??? ***/
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
 
-        /*** Création des lumières ***/
-        environnement = new Environment();
-        environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        light = new DirectionalLight();
-        light.set(1f, 1f, 1f, 0.6f, 0.4f, -1.0f);
-        environnement.add(light);
 
         /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -126,7 +121,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         camera2.viewportWidth = Gdx.graphics.getWidth();
         camera2.position.set(0, -20, 20);
         camera2.near = 1f;
-        camera2.far = 1000f;
+        camera2.far = 10000f;
         camera2.lookAt(0, 0, 0);
         camera2.up.set(0, 0, 1);
         camera2.update();
@@ -151,7 +146,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         sun = new ModelContainer(Sun.getModelInstance());
         sun.setSelectable(false);
-        sun.transform.setToTranslation(light.direction.cpy().scl(-100));
+        sun.transform.setToTranslation(new Vector3(-200,0,0));
 
         ModelContainer popup = new ModelContainer(new Popup(0,0,600,600).getModelInstance());
         popup.setSelectable(false);
@@ -161,6 +156,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         modelGraph.getRoot().add(floor);
         modelGraph.getRoot().add(sun);
+
+        /*** Création des lumières ***/
+        environnement = new Environment();
+        environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        light = new DirectionalLight();
+        light.set(1f, 1f, 1f, 0f, 0f, 0f);
+        environnement.add(light);
+
         //modelGraph.getRoot().add(popup);
 
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
@@ -271,8 +274,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 	}
 
     public void act() {
-        light.direction.rotate(1, 0, 0, 1);
-        sun.transform.setToTranslation(light.direction.cpy().scl(-100));
+        sun.transform.mulLeft(new Matrix4().idt().rotate(0,-1,1,.5f));
+
+        Vector3 light_dir = new Vector3();
+        light_dir = sun.transform.getTranslation(light_dir).scl(-1).nor();
+        light.direction.set(light_dir);
     }
 
 	@Override
@@ -285,7 +291,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         cameras[ncam % cameras.length].update();
         modelBatch.begin(cameras[ncam % cameras.length]);
 
-		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
+        Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);

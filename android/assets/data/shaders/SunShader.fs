@@ -1,26 +1,34 @@
-uniform vec4 u_color;
+
+uniform sampler2D u_texture;
 uniform vec4 u_ambient_color;
 uniform vec4 u_light_color;
 uniform vec3 u_light_direction;
 
+uniform bool u_is_colored;
+uniform vec4 u_color;
+
 uniform bool u_is_tinted;
 uniform vec4 u_tint;
 
-uniform bool u_is_blended;
-uniform float u_opacity;
-
+varying vec2 v_texCoords;
 varying vec3 N;
 varying vec3 v;
 
 void main() {
-    vec3 Idiff = u_light_color.rgb * max(-dot(N,u_light_direction), 0.0);
-    //Idiff = clamp(Idiff, 0.0, 1.0);
-    gl_FragColor = 0.4*vec4(Idiff, 1.0) + 0.2 * u_ambient_color + 0.4 * u_color;
-    if (u_is_tinted) {
-        gl_FragColor = 0.8 * gl_FragColor + 0.2 * u_tint;
-    }
-    if (u_is_blended) {
-        gl_FragColor.a *= (1.0 - u_opacity);
-    }
-    //gl_FragColor = Idiff;
+
+    // Light Color * max(dot(N,L), 0.0) = Diffuse
+    //vec3 diffuse = u_light_color.rgb * max(-dot(N,u_light_direction), 0.0);
+    // it IS the light
+
+    vec3 diffuse = u_light_color.rgb;
+
+    // Ambiant + diffuse * attenuation = intensity
+    vec3 intensity = diffuse;
+
+    // DiffuseColor * intensity = final color
+    vec4 texColor = texture2D(u_texture, v_texCoords);
+    vec3 finalColor = texColor.rgb * intensity;
+
+    gl_FragColor = vec4(finalColor, texColor.a);
+
 }
