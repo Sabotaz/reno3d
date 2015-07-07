@@ -104,14 +104,18 @@ public class CSGUtils {
             Vector3 p1 = CSGUtils.castVector(polygon.vertices.get(0).pos);
             Vector3 N = CSGUtils.castVector(polygon.plane.normal);
 
-            Vector2 uv1 = new Vector2(p1.x, p1.z);
-
             if (N.epsilonEquals(0,1,0,0))
                 meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, frontMaterial);
-            else if (N.epsilonEquals(0,-1,0,0))
-                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, backMaterial);
             else
-                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, new Material("Color", ColorAttribute.createDiffuse(Color.WHITE)));
+                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, backMaterial);
+
+            Vector2 uv1, uv2, uv3;
+            if (N.epsilonEquals(0,1,0,0) || N.epsilonEquals(0,-1,0,0))
+                uv1 = new Vector2(p1.x, p1.z);
+            else if (N.epsilonEquals(1,0,0,0) || N.epsilonEquals(-1,0,0,0))
+                uv1 = new Vector2(p1.y, p1.z);
+            else
+                uv1 = new Vector2(p1.x, p1.y);
 
             MeshPartBuilder.VertexInfo vi1 = new MeshPartBuilder.VertexInfo().setPos(p1).setNor(N).setUV(uv1);
 
@@ -119,8 +123,17 @@ public class CSGUtils {
 
                 Vector3 p2 = CSGUtils.castVector(polygon.vertices.get(i + 1).pos);
                 Vector3 p3 = CSGUtils.castVector(polygon.vertices.get(i + 2).pos);
-                Vector2 uv2 = new Vector2(p2.x, p2.z);
-                Vector2 uv3 = new Vector2(p3.x, p3.z);
+
+                if (N.epsilonEquals(0,1,0,0) || N.epsilonEquals(0,-1,0,0)) {
+                    uv2 = new Vector2(p2.x, p2.z);
+                    uv3 = new Vector2(p3.x, p3.z);
+                } else if (N.epsilonEquals(1,0,0,0) || N.epsilonEquals(-1,0,0,0)) {
+                    uv2 = new Vector2(p2.y, p2.z);
+                    uv3 = new Vector2(p3.y, p3.z);
+                } else {
+                    uv2 = new Vector2(p2.x, p2.y);
+                    uv3 = new Vector2(p3.x, p3.y);
+                }
                 //System.out.println(uv1 + "," + uv2 + "," + uv3);
                 MeshPartBuilder.VertexInfo vi2 = new MeshPartBuilder.VertexInfo().setPos(p2).setNor(N).setUV(uv2);
                 MeshPartBuilder.VertexInfo vi3 = new MeshPartBuilder.VertexInfo().setPos(p3).setNor(N).setUV(uv3);
