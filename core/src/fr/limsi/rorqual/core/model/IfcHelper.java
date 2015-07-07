@@ -2417,9 +2417,9 @@ public class IfcHelper {
         IfcCartesianPoint pointC2 = createCartesianPoint2D(4.09,-3);
         IfcCartesianPoint pointD1 = createCartesianPoint2D(-0.18,-3.09);
         IfcCartesianPoint pointD2 = createCartesianPoint2D(4.18,-3.09);
-        addWall("1st floor","WallExt A",pointA1,pointA2,0.18);
+        addWall("1st floor","WallExt A",pointA2,pointA1,0.18);
         addWall("1st floor","WallExt B",pointB1,pointB2,0.18);
-        addWall("1st floor","WallExt C",pointC1,pointC2,0.18);
+        addWall("1st floor","WallExt C",pointC2,pointC1,0.18);
         addWall("1st floor","WallExt D",pointD1,pointD2,0.18);
         IfcWallStandardCase wallA = getWall("WallExt A");
         IfcWallStandardCase wallB = getWall("WallExt B");

@@ -1950,3 +1950,58 @@ public class Dpesave implements EventListener {
 //        dialog.getContentTable().add(textButton5).pad(2);
 //        dialog.getContentTable().add(textButton6).pad(2);
 //        dialog.setSize(textButton3.getWidth()*3+120,textButton1.getHeight()*2+60);
+
+
+
+
+
+
+
+
+
+//final Dialog dialog = new Dialog(" Type de mur " , skin, "dialog") {
+//protected void result(Object object) {
+//
+//        }
+//        }.show(stageMenu);
+//        TextButton textButton1 = new TextButton("Mur portant sur un local non chauffe",skin);
+//        textButton1.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou1");
+//        }
+//        });
+//        TextButton textButton2 = new TextButton("Mur portant sur l'exterieur",skin);
+//        textButton2.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou2");
+//        }
+//        });
+//        TextButton textButton3 = new TextButton("Mur portant sur une autre habitation",skin);
+//        textButton3.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou3");
+//        }
+//        });
+//        TextButton textButton4 = new TextButton("Mur portant sur une veranda",skin);
+//        textButton4.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou4");
+//        }
+//        });
+//        TextButton textButton5 = new TextButton("Mur interieur",skin);
+//        textButton5.addListener(new ClickListener() {
+//public void clicked(InputEvent event, float x, float y) {
+//        System.out.println("coucou5");
+//        }
+//        });
+//        dialog.getContentTable().add(textButton1).pad(2);
+//        dialog.getContentTable().add(textButton2).pad(2);
+//        dialog.getContentTable().add(textButton3).pad(2);
+//        dialog.getContentTable().row();
+//        dialog.getContentTable().add(textButton4).pad(2);
+//        dialog.getContentTable().add(textButton5).pad(2);
+//        dialog.setSize(textButton1.getWidth() * 3, textButton1.getHeight() * 2 + 55);
+//        dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+
+
+

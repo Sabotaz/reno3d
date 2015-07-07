@@ -39,6 +39,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
+import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
@@ -199,7 +200,47 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
-                dpe.startDPE();
+//                dpe.startDPE();
+
+
+        final Dialog dialog = new Dialog(" Isolation du mur " , skin, "dialog") {
+        protected void result(Object object) {
+
+                }
+        }.show(stageMenu);
+                TextButton textButton1 = new TextButton("A la construction",skin);
+                textButton1.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        System.out.println("coucou1");
+                    }});
+                TextButton textButton2 = new TextButton("En renovation",skin);
+                textButton2.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        System.out.println("coucou2");
+                    }});
+                TextButton textButton3 = new TextButton("Aucune",skin);
+                textButton3.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        System.out.println("coucou3");
+                    }});
+                TextButton textButton4 = new TextButton("Inconnue",skin);
+                textButton4.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        System.out.println("coucou4");
+                    }});
+                dialog.getContentTable().add(textButton1).pad(2);
+                dialog.getContentTable().add(textButton2).pad(2);
+                dialog.getContentTable().row();
+                dialog.getContentTable().add(textButton3).pad(2);
+                dialog.getContentTable().add(textButton4).pad(2);
+                dialog.setSize(textButton2.getWidth() * 3, textButton1.getHeight() * 2 + 55);
+                dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+
+
+
+
+
+
             }
         });
         stageMenu.addActor(buttonDPE);

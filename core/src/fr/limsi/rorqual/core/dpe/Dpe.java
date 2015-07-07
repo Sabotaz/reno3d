@@ -62,18 +62,6 @@ public class Dpe implements EventListener {
         ELECTRIQUE,
         AUTRE;
     }
-    private enum deperditionsPlancherBasAppartement{
-        EXT,
-        LNC,
-        AH,
-        TP;
-    }
-    private enum deperditionsPlancherHautAppartement{
-        EXT,
-        LNC,
-        AH,
-        TOITURE;
-    }
     private enum typeVentilation{
         NATURELLE,
         MECANIQUE,
@@ -100,8 +88,6 @@ public class Dpe implements EventListener {
     private double PER;
     private double C_niv;
     private String configuration_Appartement;
-    private List<deperditionsPlancherBasAppartement> deperditionsPlancherBasAppartementList;
-    private List<deperditionsPlancherHautAppartement> deperditionsPlancherHautAppartementList;
 
     // 1.Expression du besoin de chauffage
     private double BV;
@@ -147,8 +133,6 @@ public class Dpe implements EventListener {
         doorCollection = ifcModel.getCollection(IfcDoor.class);
         SH = ifcHelper.calculSurfaceHabitable();
         PER = ifcHelper.calculPerimetreBatiment();
-        deperditionsPlancherBasAppartementList = new ArrayList<>();
-        deperditionsPlancherHautAppartementList = new ArrayList<>();
         EventManager.getInstance().addListener(Channel.DPE, this);
     }
 

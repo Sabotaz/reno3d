@@ -1024,7 +1024,7 @@ public class DpeUi implements EventListener {
                             });
                             dialog.getContentTable().add(imageButton1).pad(10);
                             dialog.getContentTable().add(imageButton2).pad(10);
-                            dialog.setSize(image1.getWidth() + image2.getWidth() + 60, Math.max(image1.getHeight(), image2.getHeight()) + 60);
+                            dialog.setSize(image1.getWidth() + image2.getWidth() + 60, Math.max(image1.getHeight(), image2.getHeight()) + 55);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
@@ -1037,7 +1037,7 @@ public class DpeUi implements EventListener {
                             Image image1 = new Image(materiauBois);
                             Image image2 = new Image(materiauMetallique);
                             Image image3 = new Image(materiauPvc);
-                            final Dialog dialog = new Dialog(" Type de fenetre ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Type de menuiserie de la fenetre ", skin, "dialog") {
                                 protected void result (Object object) {
 
                                 }
@@ -1084,14 +1084,14 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(imageButton1).pad(10);
                             dialog.getContentTable().add(imageButton2).pad(10);
                             dialog.getContentTable().add(imageButton3).pad(10);
-                            dialog.setSize(image1.getWidth() + image2.getWidth() + image3.getWidth() + 80, image1.getHeight() + 60);
+                            dialog.setSize(image1.getWidth() + image2.getWidth() + image3.getWidth() + 80, image1.getHeight() + 55);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
                         case TYPE_VITRAGE_FENETRE: {
                             s.acquire();
                             final IfcWindow window = (IfcWindow)e.getUserObject();
-                            final Dialog dialog = new Dialog(" Type de fenetre ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Type de vitrage de la fenetre ", skin, "dialog") {
                                 protected void result (Object object) {
 
                                 }
@@ -1181,7 +1181,7 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(textButton4).pad(2);
                             dialog.getContentTable().add(textButton5).pad(2);
                             dialog.getContentTable().add(textButton6).pad(2);
-                            dialog.setSize(textButton3.getWidth() * 3 + 120, textButton1.getHeight() * 2 + 60);
+                            dialog.setSize(textButton3.getWidth() * 3 + 120, textButton1.getHeight() * 2 + 55);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
@@ -1278,7 +1278,7 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(textButton4).pad(2);
                             dialog.getContentTable().add(textButton5).pad(2);
                             dialog.getContentTable().add(textButton6).pad(2);
-                            dialog.setSize(textButton3.getWidth() * 3 + 120, textButton1.getHeight() * 2 + 60);
+                            dialog.setSize(textButton3.getWidth() * 3 + 120, textButton1.getHeight() * 2 + 55);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
