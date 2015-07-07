@@ -87,24 +87,6 @@ public class SunShader extends FileShader {
         if (colorAttr != null)
             set(u_color, colorAttr.color);
 
-        HashMap<String, Object> attrs = (HashMap<String, Object>)renderable.userData;
-        if (attrs.containsKey("Color") && attrs.get("Color") != null) {
-            set(u_is_tinted, 1);
-            set(u_tint, (Color)attrs.get("Color"));
-
-        } else {
-            set(u_is_tinted, 0);
-        }
-
-        if(renderable.material.get(BlendingAttribute.Type) != null) {
-
-            set(u_is_blended, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).blended ? 1 : 0);
-            set(u_opacity, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity);
-        } else {
-            set(u_is_blended, 0);
-            set(u_opacity, 1.0f);
-        }
-
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }
 

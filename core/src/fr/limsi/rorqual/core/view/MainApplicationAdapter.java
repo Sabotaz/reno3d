@@ -139,7 +139,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** Chargement des shaders ***/
         shaderProvider = new ShaderChooser();
 
-        modelGraph = new ModelGraph(baseCamera, environnement, shaderProvider);
+        modelGraph = new ModelGraph();
+        modelGraph.setCamera(baseCamera);
+
+        modelBatch = new ModelBatch(shaderProvider);
+
         stageMenu = new Stage();
 //        stageMenu.setDebugAll(true);
         System.out.println(stageMenu.getWidth());
@@ -154,9 +158,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         ModelContainer floor = new ModelContainer(Floor.getModelInstance());
         floor.setSelectable(false);
 
-        modelGraph.getRoot().add(sun);
         modelGraph.getRoot().add(floor);
-        modelGraph.getRoot().add(popup);
+        modelGraph.getRoot().add(sun);
+        //modelGraph.getRoot().add(popup);
 
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
@@ -202,7 +206,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** test affichage fenetre ***/
         // A ModelBatch is like a SpriteBatch, just for models.  Use it to batch up geometry for OpenGL
-        modelBatch = new ModelBatch();
+        //modelBatch = new ModelBatch();
         // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
         // Create a model loader passing in our json reader
@@ -229,19 +233,27 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 	public void render () {
         light.direction.rotate(1, 0, 0, 1);
         update_cam();
-        //modelGraph.act();
+
         stageMenu.act();
 
-		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        cameras[ncam % cameras.length].update();
+        modelBatch.begin(cameras[ncam % cameras.length]);
+
+		Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
 
-        modelGraph.draw();
-        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
+        modelGraph.draw(modelBatch, environnement);
+
+        modelBatch.end();
+
+        //Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
+
         stageMenu.draw();
+
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 	}
 

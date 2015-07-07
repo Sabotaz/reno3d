@@ -7,6 +7,7 @@ uniform vec4 u_ambient_color;
 uniform vec4 u_light_color;
 uniform vec3 u_light_direction;
 uniform vec4 u_color;
+uniform mat3 u_normal_matrix;
 
 uniform bool u_is_tinted;
 uniform vec4 u_tint;
@@ -17,14 +18,14 @@ varying vec3 v;
 
 void main() {
 
-    vec3 normal = normalize(texture2D(u_texture_normal, v_texCoords).rgb * 2.0 - 1.0);
-    float diffuse = max(0.0-dot(normal, u_light_direction), 0.0);
+    vec3 normal = normalize(texture2D(u_texture_normal, v_texCoords).rgb);
+    float diffuse = max(-dot(u_normal_matrix * normal, u_light_direction), 0.0);
 
     vec4 texColor = texture2D(u_texture_diffuse, v_texCoords);
 
-    vec3 Idiff = texColor.rgb * diffuse;
+    vec3 Idiff = (0.2 * u_light_color.rgb + 0.8 * texColor.rgb) * diffuse;
 
-    gl_FragColor = vec4(Idiff, 0.0);
+    gl_FragColor = 0.8 * vec4(Idiff, 1.0) + 0.2 * u_ambient_color;
 
     if (u_is_tinted) {
         gl_FragColor = 0.8 * gl_FragColor + 0.2 * u_tint;

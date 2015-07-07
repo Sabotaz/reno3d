@@ -132,7 +132,6 @@ public class BumpedTextureShader extends FileShader {
         } else {
             set(u_is_tinted, 0);
         }
-
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }
 

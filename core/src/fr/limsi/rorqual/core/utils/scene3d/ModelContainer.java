@@ -135,7 +135,6 @@ public class ModelContainer {
 
         // update model mx
         model.transform = updated_global_transform.cpy().mul(model_transform);
-
         // draw
         modelBatch.render(model, environment);
         drawChildren(modelBatch, environment, updated_global_transform);

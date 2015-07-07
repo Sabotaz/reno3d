@@ -1,7 +1,9 @@
 package fr.limsi.rorqual.core.utils.scene3d;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
@@ -17,28 +19,19 @@ import javax.jws.WebParam;
 public class ModelGraph implements InputProcessor {
 
     ModelContainer root;
-    ModelBatch modelBatch;
     Camera camera;
-    Environment environment;
 
     public ModelContainer getRoot() {
         return root;
     }
 
-    public ModelGraph(Camera camera, Environment environment, ShaderProvider shaderProvider) {
+    public ModelGraph() {
         root = new ModelContainer();
         root.root = this;
-
-        modelBatch = new ModelBatch(shaderProvider);
-        this.camera = camera;
-        this.environment = environment;
     }
 
-    public void draw(){
-        camera.update();
-        modelBatch.begin(camera);
+    public void draw(ModelBatch modelBatch, Environment environment){
         root.draw(modelBatch, environment);
-        modelBatch.end();
     }
 
     public ModelContainer getObject(int screenX, int screenY) {
@@ -46,6 +39,8 @@ public class ModelGraph implements InputProcessor {
     }
 
     public ModelContainer hit(int screenX, int screenY) {
+        if (camera == null)
+            return null;
         Ray ray = camera.getPickRay(screenX, screenY);
         return root.hit(ray);
     }

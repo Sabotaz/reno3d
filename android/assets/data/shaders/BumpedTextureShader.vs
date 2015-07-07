@@ -21,5 +21,5 @@ void main() {
     gl_Position =  u_projTrans * u_worldTrans * a_position;
 
     v = vec3(u_projTrans * u_worldTrans * a_position);
-    N = normalize(u_normal_matrix * vec3(0.0,0.0,1.0));
+    N = normalize(u_normal_matrix * a_normal);
 }
