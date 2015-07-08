@@ -71,6 +71,10 @@ public class ModelContainer {
         child.setParent(this);
     }
 
+    public ModelContainer getParent() {
+        return parent;
+    }
+
     private void remove() {
         if (parent != null)
             parent.remove(this);
@@ -126,6 +130,18 @@ public class ModelContainer {
 
     public void draw(ModelBatch modelBatch, Environment environment){
         draw(modelBatch, environment, new Matrix4());
+    }
+
+    public Matrix4 getFullTransform() {
+        Matrix4 mx = new Matrix4();
+        mx.idt();
+        ModelContainer current = this;
+        do {
+            mx.mulLeft(current.transform);
+            current = current.getParent();
+        } while (current != null);
+
+        return mx;
     }
 
     protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
@@ -224,6 +240,14 @@ public class ModelContainer {
     public ModelContainer hit(Ray ray) {
         Hit hit = hit(ray, new Matrix4());
         return hit.hit;
+    }
+
+    public Vector3 getTop() {
+        BoundingBox boundBox = new BoundingBox();
+        model.calculateBoundingBox(boundBox);
+        boundBox.mul(model_transform);
+
+        return new Vector3(boundBox.getCenterX(), boundBox.getCenterY(), boundBox.getCenterZ() + boundBox.getDepth()*0.5f);
     }
 
     public void setColor(Color color){

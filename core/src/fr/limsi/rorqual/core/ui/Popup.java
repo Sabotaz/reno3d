@@ -46,7 +46,7 @@ public class Popup {
         return modelInstance;
     }
 
-    public Popup (int x, int y, int w, int h) {
+    public Popup (int w, int h) {
         super();
         NinePatchSprite background;
         Mesh mesh;
@@ -61,7 +61,7 @@ public class Popup {
         //background.scale(0.01f, 0.01f);
 
         //background.setSize(0, 0, 10, 5);
-        background.setSize(x, y, w, h);
+        background.setSize(0, 0, w, h);
         vertices = background.vertices;
 
         mesh = new Mesh(true, 9*4, 9*2*3,
@@ -103,15 +103,18 @@ public class Popup {
                 0.5f, -0.5f, 0, 0, 1,
                 0, 0.5f, 0, 1, 0 });
         mesh.setIndices(new short[] { 0, 1, 2 });*/
-
+        mesh.transform(new Matrix4().idt().scl(0.01f));
         transform = new Matrix4();
-        transform.translate(0, 5, 0);
+        //transform.translate(1, 1, 1);
+        //transform.translate(5,0,5);
         transform.rotate(1, 0, 0, 180);
-        transform.val[15] = 0.008f;
+        //transform.val[15] = 0.008f;
         //transform.scale(0.01f, 0.01f, 0.01f);
 
         Material material = new Material();
-        material.set(TextureAttribute.createDiffuse(texture));
+        TextureAttribute ta = TextureAttribute.createDiffuse(texture);
+        //ta.scaleU = ta.scaleV = 100f;
+        material.set(ta);
         material.set(new ShaderAttribute(ShaderAttribute.Billboard));
 
         ModelBuilder modelBuilder = new ModelBuilder();

@@ -13,7 +13,9 @@ varying vec3 N;
 varying vec3 v;
 
 void main() {
+
     vec3 diffuse = u_light_color.rgb * max(-dot(N,u_light_direction), 0.0);
+
     vec3 intensity = u_ambient_color.rgb + diffuse;
     vec3 finalColor = u_color.rgb * intensity;
     //Idiff = clamp(Idiff, 0.0, 1.0);

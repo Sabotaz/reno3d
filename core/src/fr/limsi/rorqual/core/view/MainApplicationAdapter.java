@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
@@ -43,12 +42,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
-import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
 import fr.limsi.rorqual.core.dpe.TypeMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.event.Channel;
-import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
@@ -62,9 +59,8 @@ import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
+import fr.limsi.rorqual.core.utils.scene3d.models.Pin;
 import fr.limsi.rorqual.core.utils.scene3d.models.Sun;
-import fr.limsi.rorqual.core.view.shaders.*;
-import fr.limsi.rorqual.core.view.shaders.BillboardShader;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 
@@ -94,6 +90,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Popup popup;
     private DirectionalLight light;
     private ModelContainer sun;
+    private ModelContainer pin;
+    private Vector3 decal_pos;
 
     @Override
 	public void create () {
@@ -151,25 +149,31 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 //        stageMenu.setDebugAll(true);
         System.out.println(stageMenu.getWidth());
 
-        sun = new ModelContainer(Sun.getModelInstance());
-        sun.setSelectable(false);
-        sun.transform.setToTranslation(new Vector3(-200,0,0));
-
-        ModelContainer popup = new ModelContainer(new Popup(0,0,600,600).getModelInstance());
-        popup.setSelectable(false);
-
-        ModelContainer floor = new ModelContainer(Floor.getModelInstance());
-        floor.setSelectable(false);
-
-        modelGraph.getRoot().add(floor);
-        modelGraph.getRoot().add(sun);
-
         /*** Création des lumières ***/
         environnement = new Environment();
         environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         light = new DirectionalLight();
         light.set(1f, 1f, 1f, 0f, 0f, 0f);
         environnement.add(light);
+
+        sun = new ModelContainer(Sun.getModelInstance());
+        sun.setSelectable(false);
+        sun.transform.setToTranslation(new Vector3(-200, 0, 0));
+
+        ModelContainer popup = new ModelContainer(new Popup(600,600).getModelInstance());
+        popup.setSelectable(false);
+        popup.transform.translate(5, 0, 5);
+
+        ModelContainer floor = new ModelContainer(Floor.getModelInstance());
+        floor.setSelectable(false);
+
+        pin = new ModelContainer(Pin.getModelInstance());
+        pin.setSelectable(false);
+        //pin.transform.translate(5, 0, 5);
+
+        modelGraph.getRoot().add(floor);
+        modelGraph.getRoot().add(sun);
+        //modelGraph.getRoot().add(popup);
 
         //modelGraph.getRoot().add(popup);
 
@@ -242,21 +246,21 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 	}
 
     public void act() {
+        update_cam();
+
         sun.transform.mulLeft(new Matrix4().idt().rotate(0,-1,1,.5f));
 
         Vector3 light_dir = new Vector3();
         light_dir = sun.transform.getTranslation(light_dir).scl(-1).nor();
         light.direction.set(light_dir);
-    }
-
-	@Override
-	public void render () {
-        act();
-        update_cam();
 
         stageMenu.act();
+    }
 
-        cameras[ncam % cameras.length].update();
+    @Override
+	public void render () {
+        act();
+
         modelBatch.begin(cameras[ncam % cameras.length]);
 
         Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
@@ -406,14 +410,18 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if (!dragged) {
-            if (selected != null)
+            if (selected != null) {
                 selected.removeColor();
+                selected.remove(pin);
+            }
             selected = modelGraph.getObject(screenX, screenY);
             System.out.println("TOUCH: " + selected);
             if (selected != null) {
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
                 System.out.println("TOUCH: " + selected.getUserData());
                 selected.setColor(Color.YELLOW);
+                selected.add(pin);
+                pin.transform.setToTranslation(selected.getTop());
             }
             return selected != null;
         }

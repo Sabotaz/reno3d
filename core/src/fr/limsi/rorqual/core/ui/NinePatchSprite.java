@@ -173,7 +173,10 @@ public class NinePatchSprite {
         return idx - 4 * 5;
     }
 
-    public void setSize(float x, float y, float width, float height) {
+    public void setSize(float cx, float cy, float width, float height) {
+        float x = cx - width * 0.5f;
+        float y = cy - height * 0.5f;
+
         final float centerColumnX = x + leftWidth;
         final float rightColumnX = x + width - rightWidth;
         final float middleRowY = y + bottomHeight;

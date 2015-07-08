@@ -45,7 +45,7 @@ void main() {
     vec3 finalColor = texColor.rgb * intensity;
 
     gl_FragColor = vec4(finalColor, texColor.a);
-    
+
     if (u_is_tinted) {
         gl_FragColor = 0.8 * gl_FragColor + 0.2 * u_tint;
     }
