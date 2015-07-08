@@ -43,6 +43,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
+import fr.limsi.rorqual.core.dpe.TypeMenuiserieEnum;
 import fr.limsi.rorqual.core.dpe.TypeMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.event.Channel;
@@ -215,6 +216,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
                 dpe.startDPE();
+
+
+
 
             }
         });

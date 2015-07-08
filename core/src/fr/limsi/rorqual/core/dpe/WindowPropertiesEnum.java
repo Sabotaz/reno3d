@@ -5,6 +5,7 @@ package fr.limsi.rorqual.core.dpe;
  */
 public enum WindowPropertiesEnum {
     TYPE_FENETRE,
-    TYPE_MENUISERIE,
-    TYPE_VITRAGE;
+    TYPE_MATERIAU,
+    TYPE_VITRAGE,
+    COEFFICIENT_TRANSMISSION_THERMIQUE;
 }

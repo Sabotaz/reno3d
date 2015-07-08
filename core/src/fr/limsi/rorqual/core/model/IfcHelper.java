@@ -5,7 +5,7 @@ import fr.limsi.rorqual.core.dpe.DoorPropertiesEnum;
 import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
 import fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.TypeMenuiserieFenetreEnum;
+import fr.limsi.rorqual.core.dpe.TypeMenuiserieEnum;
 import fr.limsi.rorqual.core.dpe.TypeMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.dpe.WallPropertiesEnum;
@@ -1368,6 +1368,9 @@ public class IfcHelper {
         ifcModel.addIfcObject(zLocalDoor);
         ifcModel.addIfcObject(xLocalDoor);
         addPropertyTypeDoor(door, TypeDoorEnum.UNKNOWN);
+        addPropertyTypeVitrageMenuiserie(door, TypeVitrageEnum.UNKNOWN);
+        addPropertyTypeMenuiserie(door, TypeMenuiserieEnum.UNKNOWN);
+
 
 //        ifcModel.addIfcObject(relDefinesByType);
 //        ifcModel.addIfcObject(doorStyle);
@@ -1465,8 +1468,8 @@ public class IfcHelper {
 //        ifcModel.addIfcObject(windowPanelProperties);
 
         addPropertyTypeWindow(window,TypeFenetreEnum.UNKNOWN);
-        addPropertyTypeMenuiserieWindow(window,TypeMenuiserieFenetreEnum.UNKNOWN);
-        addPropertyTypeVitrageWindow(window,TypeVitrageEnum.UNKNOWN);
+        addPropertyTypeMenuiserie(window, TypeMenuiserieEnum.UNKNOWN);
+        addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.UNKNOWN);
     }
 
     // Permet d'ajouter une double window à un produit (wall ou slab)
@@ -2831,18 +2834,18 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter le materiau de contour d'une fenetre
-    public void addPropertyTypeMenuiserieWindow(IfcWindow window, TypeMenuiserieFenetreEnum typeMenuiserie){
+    public void addPropertyTypeMenuiserie(IfcProduct product, TypeMenuiserieEnum typeMenuiserie){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
 
         // On créer la property
-        IfcIdentifier nameProperty = new IfcIdentifier(WindowPropertiesEnum.TYPE_MENUISERIE.toString(),true);
+        IfcIdentifier nameProperty = new IfcIdentifier(WindowPropertiesEnum.TYPE_MATERIAU.toString(),true);
         IfcValue valueProperty = new IfcIdentifier(typeMenuiserie.toString(),true);
         IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
 
         // On va voir si des propriétés existent déja
-        SET<IfcRelDefines> relDefinesSET = window.getIsDefinedBy_Inverse();
+        SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
         if (relDefinesSET != null){
             for (IfcRelDefines actualRelDefines : relDefinesSET){
                 if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
@@ -2879,7 +2882,7 @@ public class IfcHelper {
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
             SET<IfcObject> objectSET = new SET<>();
-            objectSET.add(window);
+            objectSET.add(product);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     null,null,objectSET,propertySet);
@@ -2889,8 +2892,8 @@ public class IfcHelper {
         }
     }
 
-    // Permet d'ajouter le type de vitrage d'une fenetre
-    public void addPropertyTypeVitrageWindow(IfcWindow window, TypeVitrageEnum typeVitrage){
+    // Permet d'ajouter le type de vitrage d'une fenetre ou d'une porte
+    public void addPropertyTypeVitrageMenuiserie(IfcProduct product, TypeVitrageEnum typeVitrage){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
@@ -2898,6 +2901,65 @@ public class IfcHelper {
         // On créer la property
         IfcIdentifier nameProperty = new IfcIdentifier(WindowPropertiesEnum.TYPE_VITRAGE.toString(),true);
         IfcValue valueProperty = new IfcIdentifier(typeVitrage.toString(),true);
+        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
+
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null){
+            for (IfcRelDefines actualRelDefines : relDefinesSET){
+                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet){
+                            hasProperties=true;
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET){
+                                if (actualProperty instanceof IfcPropertySingleValue){
+                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
+                                        hasSameProperty=true;
+                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
+                                    }
+                                }
+                            }
+                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
+                                propertySET.add(property);
+                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
+                                ifcModel.addIfcObject(property);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
+        if (!hasProperties){
+            SET<IfcProperty> propertySET = new SET<>();
+            propertySET.add(property);
+            IfcPropertySet propertySet = new IfcPropertySet(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    new IfcLabel("DPE-Properties",true),null,propertySET);
+            SET<IfcObject> objectSET = new SET<>();
+            objectSET.add(product);
+            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    null,null,objectSET,propertySet);
+            ifcModel.addIfcObject(propertySet);
+            ifcModel.addIfcObject(property);
+            ifcModel.addIfcObject(relDefinesByProperties);
+        }
+    }
+
+    // Permet d'ajouter le coefficient de transmission thermique d'une fenêtre
+    public void addPropertyTransmittanceThermiqueWindow(IfcWindow window, String u){
+
+        boolean hasProperties=false;
+        boolean hasSameProperty=false;
+
+        // On créer la property
+        IfcIdentifier nameProperty = new IfcIdentifier(WindowPropertiesEnum.COEFFICIENT_TRANSMISSION_THERMIQUE.toString(),true);
+        IfcValue valueProperty = new IfcIdentifier(u,true);
         IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
 
         // On va voir si des propriétés existent déja
@@ -2987,6 +3049,65 @@ public class IfcHelper {
         // On créer la property
         IfcIdentifier nameProperty = new IfcIdentifier(DoorPropertiesEnum.TYPE_PORTE.toString(),true);
         IfcValue valueProperty = new IfcIdentifier(typeDoor.toString(),true);
+        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
+
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = door.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null){
+            for (IfcRelDefines actualRelDefines : relDefinesSET){
+                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet){
+                            hasProperties=true;
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET){
+                                if (actualProperty instanceof IfcPropertySingleValue){
+                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
+                                        hasSameProperty=true;
+                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
+                                    }
+                                }
+                            }
+                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
+                                propertySET.add(property);
+                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
+                                ifcModel.addIfcObject(property);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
+        if (!hasProperties){
+            SET<IfcProperty> propertySET = new SET<>();
+            propertySET.add(property);
+            IfcPropertySet propertySet = new IfcPropertySet(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    new IfcLabel("DPE-Properties",true),null,propertySET);
+            SET<IfcObject> objectSET = new SET<>();
+            objectSET.add(door);
+            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    null,null,objectSET,propertySet);
+            ifcModel.addIfcObject(propertySet);
+            ifcModel.addIfcObject(property);
+            ifcModel.addIfcObject(relDefinesByProperties);
+        }
+    }
+
+    // Permet d'ajouter le coefficient de transmission thermique d'une porte
+    public void addPropertyTransmittanceThermiqueDoor(IfcDoor door, String u){
+
+        boolean hasProperties=false;
+        boolean hasSameProperty=false;
+
+        // On créer la property
+        IfcIdentifier nameProperty = new IfcIdentifier(DoorPropertiesEnum.COEFFICIENT_TRANSMISSION_THERMIQUE.toString(),true);
+        IfcValue valueProperty = new IfcIdentifier(u,true);
         IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
 
         // On va voir si des propriétés existent déja

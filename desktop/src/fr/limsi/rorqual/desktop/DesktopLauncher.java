@@ -4,21 +4,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
-import fr.limsi.rorqual.core.dpe.TypeMenuiserieFenetreEnum;
-import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
-import fr.limsi.rorqual.core.dpe.WindowPropertiesEnum;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.model.IfcHelper;
-import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
-
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
-import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -42,15 +31,15 @@ public class DesktopLauncher {
 //        materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
 //        ifcHelper.addMaterialLayer(wall, materialTypeEnumArrayList);
 //        ifcHelper.addPropertyTypeWindow(window, TypeFenetreEnum.UNKNOWN);
-//        ifcHelper.addPropertyTypeMenuiserieWindow(window, TypeMenuiserieFenetreEnum.UNKNOWN);
-//        ifcHelper.addPropertyTypeVitrageWindow(window, TypeVitrageEnum.UNKNOWN);
+//        ifcHelper.addPropertyTypeMenuiserie(window, TypeMenuiserieEnum.UNKNOWN);
+//        ifcHelper.addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.UNKNOWN);
 //        ifcHelper.saveIfcModel();
 //        ifcHelper.addPropertyTypeWindow(window, TypeFenetreEnum.BATTANTE);
-//        ifcHelper.addPropertyTypeMenuiserieWindow(window, TypeMenuiserieFenetreEnum.METALLIQUE);
-//        ifcHelper.addPropertyTypeVitrageWindow(window, TypeVitrageEnum.TRIPLE_VITRAGE);
+//        ifcHelper.addPropertyTypeMenuiserie(window, TypeMenuiserieEnum.METALLIQUE);
+//        ifcHelper.addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.TRIPLE_VITRAGE);
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_FENETRE));
-//        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_MENUISERIE));
-//        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_VITRAGE));
+//        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_MATERIAU_MENUISERIE));
+//        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_VITRAGE_MENUISERIE));
         ifcHelper.saveIfcModel();
 
         try {
