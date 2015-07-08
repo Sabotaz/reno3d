@@ -3,11 +3,14 @@ package fr.limsi.rorqual.core.dpe;
 import com.badlogic.gdx.graphics.Color;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 
 /**
  * Created by christophe on 04/06/15.
@@ -43,6 +46,23 @@ public class DpeStateUpdater implements EventListener {
         }
     }
 
+    public void verifyStatesWall(){
+        boolean isAllWallKnown = true;
+        Set<Object> objectSet = states.keySet();
+        Iterator it = objectSet.iterator();
+        while (it.hasNext()){
+            Object cle = it.next();
+            Object valeur = states.get(cle);
+            if (cle instanceof IfcWallStandardCase && valeur.equals(DpeState.UNKNOWN)){
+                isAllWallKnown = false;
+            }
+        }
+        if (isAllWallKnown == true) {
+            Event response = new Event(DpeEvent.DPE_STATE_NO_MORE_WALL_UNKNOWN, null);
+            EventManager.getInstance().put(Channel.DPE, response);
+        }
+    }
+
     public void notify(Channel c, Event e) {
         EventType eventType = e.getEventType();
         if (c == Channel.DPE) {
@@ -68,7 +88,8 @@ public class DpeStateUpdater implements EventListener {
                                 break;
                         }
                         setState(items[0], (DpeState) items[1]);
-                        verifyAllStates();
+                        verifyStatesWall();
+                        //verifyAllStates();
                         break;
                 }
             }

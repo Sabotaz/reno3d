@@ -38,6 +38,7 @@ public enum DpeEvent implements EventType {
     DPE_STATE_CHANGED,
     DPE_STATE_REQUIRED,
     DPE_REQUEST,
+    DPE_STATE_NO_MORE_WALL_UNKNOWN,
     DPE_STATE_NO_MORE_UNKNOWN,
     ;
 }

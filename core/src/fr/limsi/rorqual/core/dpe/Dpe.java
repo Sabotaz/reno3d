@@ -1207,9 +1207,12 @@ public class Dpe implements EventListener {
                         }
                         break;
                     }
-
                     case DPE_STATE_NO_MORE_UNKNOWN:{
-                        logValeursDpe();
+                        //logValeursDpe();
+                    }
+                    case DPE_STATE_NO_MORE_WALL_UNKNOWN:{
+                        System.out.println("Le supra COUCOUCOUCOCOCOCUOCUOCOCUOCUCOUOCUOCUOCUCOUCOCUOCOCUCOUCOCUCOUCOUCOCUOCU");
+                        //logValeursDpe();
                     }
                 }
             }
