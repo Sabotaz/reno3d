@@ -1091,8 +1091,8 @@ public class Dpe implements EventListener {
                         }else{
                             // On signal au model que le calcul thermique vient d'être effectuer sur wall
                             Object o2[] = {wall, DpeState.KNOWN};
-                            Event e2 = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-                            EventManager.getInstance().put(Channel.DPE, e);
+                            Event e2 = new Event(DpeEvent.DPE_STATE_CHANGED, o2);
+                            EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -1211,8 +1211,8 @@ public class Dpe implements EventListener {
                         //logValeursDpe();
                     }
                     case DPE_STATE_NO_MORE_WALL_UNKNOWN:{
-                        System.out.println("Le supra COUCOUCOUCOCOCOCUOCUOCOCUOCUCOUOCUOCUOCUCOUCOCUOCOCUCOUCOCUCOUCOUCOCUOCU");
-                        //logValeursDpe();
+                        notifierFenetres();
+                        notifierPortes();
                     }
                 }
             }
