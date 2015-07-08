@@ -9,5 +9,5 @@ public enum TypeMateriauMenuiserieEnum {
     METALLIQUE_AVANT_2001,
     METALLIQUE_APRES_2001,
     PVC,
-    UNKNOWN;
+    INCONNUE;
 }

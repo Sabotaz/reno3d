@@ -11,5 +11,5 @@ public enum TypeIsolationMurEnum {
     ITI_PLUS_ITE,
     ITI_PLUS_ITR,
     ITE_PLUS_ITR,
-    UNKNOWN;
+    INCONNUE;
 }

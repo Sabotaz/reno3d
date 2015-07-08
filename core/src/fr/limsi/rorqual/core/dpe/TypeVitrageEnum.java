@@ -11,5 +11,5 @@ public enum TypeVitrageEnum {
     DOUBLE_VITRAGE_SUP_1990_INF_2001,
     DOUBLE_VITRAGE_SUP_2001,
     TRIPLE_VITRAGE,
-    UNKNOWN;
+    INCONNUE;
 }

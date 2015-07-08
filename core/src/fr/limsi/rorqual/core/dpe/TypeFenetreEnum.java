@@ -7,5 +7,5 @@ public enum TypeFenetreEnum {
     BATTANTE,
     COULISSANTE,
     TOIT,
-    UNKNOWN;
+    INCONNUE;
 }

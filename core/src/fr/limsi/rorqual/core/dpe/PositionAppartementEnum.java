@@ -6,5 +6,6 @@ package fr.limsi.rorqual.core.dpe;
 public enum PositionAppartementEnum {
     PREMIER_ETAGE,
     ETAGE_INTERMEDIAIRE,
-    DERNIER_ETAGE;
+    DERNIER_ETAGE,
+    INCONNUE;
 }

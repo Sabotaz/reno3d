@@ -798,7 +798,7 @@ public class DpeUi implements EventListener {
                                 public void clicked(InputEvent event, float x, float y) {
                                     Object item [] = new Object[2];
                                     item[0] = wall;
-                                    item[1] = DateIsolationMurEnum.UNKNOWN;
+                                    item[1] = DateIsolationMurEnum.INCONNUE;
                                     DpeEvent responseType = DpeEvent.DATE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
@@ -922,7 +922,7 @@ public class DpeUi implements EventListener {
                                 public void clicked(InputEvent event, float x, float y) {
                                     Object item[] = new Object[2];
                                     item[0] = wall;
-                                    item[1] = TypeIsolationMurEnum.UNKNOWN;
+                                    item[1] = TypeIsolationMurEnum.INCONNUE;
                                     DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
                                     Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);

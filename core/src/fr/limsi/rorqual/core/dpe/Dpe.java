@@ -107,6 +107,11 @@ public class Dpe implements EventListener {
         SH = ifcHelper.calculSurfaceHabitable();
         PER = ifcHelper.calculPerimetreBatiment();
         EventManager.getInstance().addListener(Channel.DPE, this);
+        typeBatiment=TypeBatimentEnum.INCONNUE;
+        positionAppartement=PositionAppartementEnum.INCONNUE;
+        typeEnergieConstruction=TypeEnergieConstructionEnum.INCONNUE;
+        typeVentilation=TypeVentilationEnum.INCONNUE;
+        typeVmc=TypeVmcEnum.INCONNUE;
     }
 
     /*---------------------------------Calculateur DPE-------------------------------------------*/
@@ -249,7 +254,7 @@ public class Dpe implements EventListener {
             return;
         DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum) walls_properties.get(wall).get(DpeEvent.DATE_ISOLATION_MUR_RESPONSE);
 
-        TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.UNKNOWN;
+        TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.INCONNUE;
         if (walls_properties.get(wall).containsKey(DpeEvent.TYPE_ISOLATION_MUR_RESPONSE)){
             typeIsolationMur = (TypeIsolationMurEnum) walls_properties.get(wall).get(DpeEvent.TYPE_ISOLATION_MUR_RESPONSE);
         }
@@ -289,12 +294,12 @@ public class Dpe implements EventListener {
             return;
         TypeDoorEnum typeDoor = (TypeDoorEnum) doors_properties.get(door).get(DpeEvent.TYPE_DOOR_RESPONSE);
 
-        TypeMateriauMenuiserieEnum typeMenuiserieDoor = TypeMateriauMenuiserieEnum.UNKNOWN;
+        TypeMateriauMenuiserieEnum typeMenuiserieDoor = TypeMateriauMenuiserieEnum.INCONNUE;
         if (doors_properties.get(door).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE)){
             typeMenuiserieDoor = (TypeMateriauMenuiserieEnum)doors_properties.get(door).get(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE);
         }
 
-        TypeVitrageEnum typeVitrage = TypeVitrageEnum.UNKNOWN;
+        TypeVitrageEnum typeVitrage = TypeVitrageEnum.INCONNUE;
         if (doors_properties.get(door).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE)){
             typeVitrage = (TypeVitrageEnum)doors_properties.get(door).get(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE);
         }
@@ -312,20 +317,20 @@ public class Dpe implements EventListener {
         if (dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS)){
             uMur=2.5;
         }
-        else if (dateIsolationMur.equals(DateIsolationMurEnum.UNKNOWN) || dateIsolationMur.equals(DateIsolationMurEnum.A_LA_CONSTRUCTION) || dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_DATE_INCONNUE)){
+        else if (dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE) || dateIsolationMur.equals(DateIsolationMurEnum.A_LA_CONSTRUCTION) || dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_DATE_INCONNUE)){
             if (anneeConstruction<1975){
                 if (dateIsolationMur.equals(DateIsolationMurEnum.A_LA_CONSTRUCTION) || dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_DATE_INCONNUE)){
                     uMur=0.8;
                 }else{
                     uMur=2.5;
                 }
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.NON_ISOLE);
                 }
             }
             if (anneeConstruction>=1975 && anneeConstruction<=1977){
                 uMur=1;
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
                 }
             }
@@ -335,7 +340,7 @@ public class Dpe implements EventListener {
                 }else{
                     uMur=1;
                 }
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
                 }
             }
@@ -345,7 +350,7 @@ public class Dpe implements EventListener {
                 }else{
                     uMur=0.8;
                 }
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
                 }
             }
@@ -355,62 +360,62 @@ public class Dpe implements EventListener {
                 }else{
                     uMur=0.5;
                 }
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
                 }
             }
             if (anneeConstruction>=2001 && anneeConstruction<=2005){
                 uMur=0.4;
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
                 }
             }
             if (anneeConstruction>=2006 && anneeConstruction<=2012){
                 uMur=0.35;
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITE);
                 }
             }
             if (anneeConstruction>2012){
                 uMur=0.2;
-                if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+                if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                     ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITE);
                 }
             }
         }
         else if (dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_AVANT_1983)){
             uMur=0.82;
-            if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+            if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                 ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
             }
         }
         else if (dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_ENTRE_1983_ET_1988)){
             uMur=0.75;
-            if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+            if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                 ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
             }
         }
         else if (dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_ENTRE_1989_ET_2000)){
             uMur=0.48;
-            if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+            if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                 ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
             }
         }
         else if (dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_ENTRE_2001_ET_2005)){
             uMur=0.42;
-            if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+            if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                 ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
             }
         }
         else if (dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_ENTRE_2006_ET_2012)){
             uMur=0.36;
-            if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+            if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                 ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
             }
         }
         else if (dateIsolationMur.equals(DateIsolationMurEnum.EN_RENOVATION_APRES_2012)){
             uMur=0.24;
-            if (typeIsolationMur.equals(TypeIsolationMurEnum.UNKNOWN)){
+            if (typeIsolationMur.equals(TypeIsolationMurEnum.INCONNUE)){
                 ifcHelper.addPropertyTypeIsolationWall(wall,TypeIsolationMurEnum.ITI);
             }
         }
@@ -425,7 +430,7 @@ public class Dpe implements EventListener {
         }
         else if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE)){
             double b_lnc=0;
-            if (dateIsolationMur.equals(DateIsolationMurEnum.UNKNOWN) || dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS)){
+            if (dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE) || dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS)){
                 b_lnc=0.95;
             }else{
                 b_lnc=0.85;
@@ -678,8 +683,8 @@ public class Dpe implements EventListener {
             if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE.toString())){
                 double b_ver=0.6;
                 // TODO considérer l'orientation du mur pour mieux fixer la valeur de b_ver
-                DP_portVer += b_ver*sDoor*uDoor;
-                System.out.println("Actualise DP_portVer -> U="+uDoor+"  S="+sDoor+" b="+b_ver+"  DP_portVer="+DP_portVer);
+                DP_pfenVer += b_ver*sDoor*uDoor;
+                System.out.println("Actualise DP_pfenVer -> U="+uDoor+"  S="+sDoor+" b="+b_ver+"  DP_pfenVer="+DP_pfenVer);
             }else{
                 DP_pfen += sDoor*uDoor;
                 System.out.println("Actualise DP_pfen -> U="+uDoor+"  S="+sDoor+"  DP_pfen="+DP_pfen);
@@ -755,8 +760,8 @@ public class Dpe implements EventListener {
             if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE.toString())){
                 double b_ver=0.6;
                 // TODO considérer l'orientation du mur pour mieux fixer la valeur de b_ver
-                DP_portVer += b_ver*sDoor*uDoor;
-                System.out.println("Actualise DP_portVer -> U="+uDoor+"  S="+sDoor+" b="+b_ver+"  DP_portVer="+DP_portVer);
+                DP_pfenVer += b_ver*sDoor*uDoor;
+                System.out.println("Actualise DP_pfenVer -> U="+uDoor+"  S="+sDoor+" b="+b_ver+"  DP_pfenVer="+DP_pfenVer);
             }else{
                 DP_pfen += sDoor*uDoor;
                 System.out.println("Actualise DP_pfen -> U="+uDoor+"  S="+sDoor+"  DP_pfen="+DP_pfen);
@@ -789,7 +794,7 @@ public class Dpe implements EventListener {
             else if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE.toString())){
                 double b_lnc;
                 if (ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.DATE_ISOLATION_MUR).equals(DateIsolationMurEnum.JAMAIS)
-                        || ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.DATE_ISOLATION_MUR).equals(DateIsolationMurEnum.UNKNOWN)){
+                        || ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.DATE_ISOLATION_MUR).equals(DateIsolationMurEnum.INCONNUE)){
                     b_lnc=0.95;
                 }else{
                     b_lnc=0.85;
@@ -964,6 +969,52 @@ public class Dpe implements EventListener {
         EventManager.getInstance().put(Channel.DPE, event);
     }
 
+    /*** Log les valeurs du DPE dans la console ***/
+    public void logValeursDpe(){
+        System.out.println("**************************** LOG DPE ***********************************");
+        System.out.println("typeBatiment = "+typeBatiment.toString());
+        System.out.println("positionAppartement = "+positionAppartement.toString());
+        System.out.println("typeEnergieConstruction = "+typeEnergieConstruction.toString());
+        System.out.println("typeVentilation = "+typeVentilation.toString());
+        System.out.println("typeVmc = "+typeVmc.toString());
+        System.out.println("anneeConstruction = "+anneeConstruction);
+        System.out.println("SH = "+SH);
+        System.out.println("NIV = "+NIV);
+        System.out.println("MIT = "+MIT);
+        System.out.println("MIT2 = "+MIT2);
+        System.out.println("FOR = "+FOR);
+        System.out.println("Per = "+Per);
+        System.out.println("PER = "+PER);
+        System.out.println("C_niv = "+C_niv);
+        System.out.println("configuration_Appartement = "+configuration_Appartement);
+        System.out.println("BV = "+BV);
+        System.out.println("GV = "+GV);
+        System.out.println("F = "+F);
+        System.out.println("DP_murExt = "+DP_murExt);
+        System.out.println("DP_murLnc = "+DP_murLnc);
+        System.out.println("DP_murAh = "+DP_murAh);
+        System.out.println("DP_murVer = "+DP_murVer);
+        System.out.println("DP_toiTer = "+DP_toiTer);
+        System.out.println("DP_toiCp = "+DP_toiCp);
+        System.out.println("DP_toiCa = "+DP_toiCa);
+        System.out.println("DP_planVs = "+DP_planVs);
+        System.out.println("DP_planTp = "+DP_planTp);
+        System.out.println("DP_planSs = "+DP_planSs);
+        System.out.println("DP_planAh = "+DP_planAh);
+        System.out.println("DP_fen = "+DP_fen);
+        System.out.println("DP_pfen = "+DP_pfen);
+        System.out.println("DP_fenVer = "+DP_fenVer);
+        System.out.println("DP_pfenVer = "+DP_pfenVer);
+        System.out.println("DP_portExt = "+DP_portExt);
+        System.out.println("DP_portLnc = "+DP_portLnc);
+        System.out.println("DP_portVer = "+DP_portVer);
+        System.out.println("PT = "+PT);
+        System.out.println("DR = "+DR);
+        System.out.println("Tint = "+Tint);
+        System.out.println("Sdep = "+Sdep);
+        System.out.println("*************************** FIN LOG DPE ********************************");
+    }
+
     public void notify(Channel c, Event e) throws InterruptedException {
 
         EventType eventType = e.getEventType();
@@ -1052,7 +1103,7 @@ public class Dpe implements EventListener {
                         DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum)items[1];
                         ifcHelper.addPropertyDateIsolationWall(wall, dateIsolationMur);
                         walls_properties.get(items[0]).put(event, dateIsolationMur);
-                        if (!dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) && !dateIsolationMur.equals(DateIsolationMurEnum.UNKNOWN)){
+                        if (!dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) && !dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE)){
                             eventType = DpeEvent.TYPE_ISOLATION_MUR;
                             Event event2 = new Event(eventType, wall);
                             EventManager.getInstance().put(Channel.DPE, event2);
@@ -1158,8 +1209,7 @@ public class Dpe implements EventListener {
                     }
 
                     case DPE_STATE_NO_MORE_UNKNOWN:{
-                        System.out.println("######################### COUCOU !!! #########################");
-                        //calc_PT();
+                        logValeursDpe();
                     }
                 }
             }

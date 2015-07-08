@@ -39,9 +39,9 @@ public class DesktopLauncher {
 //        IfcWallStandardCase wall2 = ifcHelper.getWallRelToDoor(door);
 //        IfcWallStandardCase wall3 = ifcHelper.getWallRelToWindow(window);
 //        ifcHelper.addMaterialLayer(wall, materialTypeEnumArrayList);
-//        ifcHelper.addPropertyTypeWindow(window, TypeFenetreEnum.UNKNOWN);
-//        ifcHelper.addPropertyTypeMenuiserie(window, TypeMateriauMenuiserieEnum.UNKNOWN);
-//        ifcHelper.addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.UNKNOWN);
+//        ifcHelper.addPropertyTypeWindow(window, TypeFenetreEnum.INCONNUE);
+//        ifcHelper.addPropertyTypeMenuiserie(window, TypeMateriauMenuiserieEnum.INCONNUE);
+//        ifcHelper.addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.INCONNUE);
 //        ifcHelper.saveIfcModel();
 //        ifcHelper.addPropertyTypeWindow(window, TypeFenetreEnum.BATTANTE);
 //        ifcHelper.addPropertyTypeMenuiserie(window, TypeMateriauMenuiserieEnum.METALLIQUE);

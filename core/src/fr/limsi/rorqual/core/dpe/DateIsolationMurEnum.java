@@ -13,5 +13,5 @@ public enum DateIsolationMurEnum {
     EN_RENOVATION_DATE_INCONNUE,
     A_LA_CONSTRUCTION,
     JAMAIS,
-    UNKNOWN;
+    INCONNUE;
 }

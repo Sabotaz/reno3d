@@ -6,5 +6,5 @@ package fr.limsi.rorqual.core.dpe;
 public enum TypeVentilationEnum {
     NATURELLE,
     MECANIQUE,
-    INCONNUE;
+    INCONNUE,
 }

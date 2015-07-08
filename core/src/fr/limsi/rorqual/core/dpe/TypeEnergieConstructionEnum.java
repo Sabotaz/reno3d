@@ -5,5 +5,6 @@ package fr.limsi.rorqual.core.dpe;
  */
 public enum TypeEnergieConstructionEnum {
     ELECTRIQUE,
-    AUTRE;
+    AUTRE,
+    INCONNUE;
 }

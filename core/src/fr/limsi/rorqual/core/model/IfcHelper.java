@@ -986,10 +986,10 @@ public class IfcHelper {
         materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
         materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
         this.addMaterialLayer(ifcWallStandardCase, materialTypeEnumArrayList);
-        addPropertyTypeWall(ifcWallStandardCase, TypeMurEnum.UNKNOWN);
-        addPropertyTypeIsolationWall(ifcWallStandardCase, TypeIsolationMurEnum.UNKNOWN);
-        addPropertyDateIsolationWall(ifcWallStandardCase, DateIsolationMurEnum.UNKNOWN);
-        addPropertyTransmittanceThermiqueWall(ifcWallStandardCase,"UNKNOWN");
+        addPropertyTypeWall(ifcWallStandardCase, TypeMurEnum.INCONNUE);
+        addPropertyTypeIsolationWall(ifcWallStandardCase, TypeIsolationMurEnum.INCONNUE);
+        addPropertyDateIsolationWall(ifcWallStandardCase, DateIsolationMurEnum.INCONNUE);
+        addPropertyTransmittanceThermiqueWall(ifcWallStandardCase,"INCONNUE");
     }
 
     // Permet d'ajouter un floor à un IfcModel
@@ -1391,9 +1391,9 @@ public class IfcHelper {
         ifcModel.addIfcObject(localPointDoor);
         ifcModel.addIfcObject(zLocalDoor);
         ifcModel.addIfcObject(xLocalDoor);
-        addPropertyTypeDoor(door, TypeDoorEnum.UNKNOWN);
-        addPropertyTypeVitrageMenuiserie(door, TypeVitrageEnum.UNKNOWN);
-        addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.UNKNOWN);
+        addPropertyTypeDoor(door, TypeDoorEnum.INCONNUE);
+        addPropertyTypeVitrageMenuiserie(door, TypeVitrageEnum.INCONNUE);
+        addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.INCONNUE);
 
 
 //        ifcModel.addIfcObject(relDefinesByType);
@@ -1491,9 +1491,9 @@ public class IfcHelper {
 //        ifcModel.addIfcObject(windowLiningProperties);
 //        ifcModel.addIfcObject(windowPanelProperties);
 
-        addPropertyTypeWindow(window,TypeFenetreEnum.UNKNOWN);
-        addPropertyTypeMenuiserie(window, TypeMateriauMenuiserieEnum.UNKNOWN);
-        addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.UNKNOWN);
+        addPropertyTypeWindow(window,TypeFenetreEnum.INCONNUE);
+        addPropertyTypeMenuiserie(window, TypeMateriauMenuiserieEnum.INCONNUE);
+        addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.INCONNUE);
     }
 
     // Permet d'ajouter une double window à un produit (wall ou slab)
