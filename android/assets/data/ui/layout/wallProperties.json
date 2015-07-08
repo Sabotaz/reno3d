@@ -1,0 +1,100 @@
+{
+  "type": "TabWindow",
+  "name": "Propriétés",
+  "content": [
+    {
+      "type": "Table",
+      "name": "Type de mur",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "update": "DpeEvent.TYPE_MUR_RESPONSE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Mur donnant sur un local non chauffé",
+              "value": "TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Mur donnant sur l'extérieur",
+              "value": "TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR"
+            },
+            {
+              "type": "TextButton",
+              "text": "Mur donnant sur une autre habitation",
+              "value": "TypeMurEnum.MUR_DONNANT_SUR_UNE_AUTRE_HABITATION"
+            },
+            {
+              "type": "TextButton",
+              "text": "Mur donnant sur une véranda",
+              "value": "TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA"
+            },
+            {
+              "type": "TextButton",
+              "text": "Mur intérieur",
+              "value": "TypeMurEnum.MUR_INTERIEUR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Isolation",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "update": "DpeEvent.DATE_ISOLATION_MUR_RESPONSE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Jamais",
+              "value": "DateIsolationMurEnum.JAMAIS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Rénové (date inconnue)",
+              "value": "DateIsolationMurEnum.EN_RENOVATION_DATE_INCONNUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Rénové avant 1983",
+              "value": "DateIsolationMurEnum.EN_RENOVATION_AVANT_1983"
+            },
+            {
+              "type": "TextButton",
+              "text": "Rénové entre 1983 et 1988",
+              "value": "DateIsolationMurEnum.EN_RENOVATION_ENTRE_1983_ET_1988"
+            },
+            {
+              "type": "TextButton",
+              "text": "Rénové entre 1989 et 2000",
+              "value": "DateIsolationMurEnum.EN_RENOVATION_ENTRE_1989_ET_2000"
+            },
+            {
+              "type": "TextButton",
+              "text": "Rénové entre 2001 et 2005",
+              "value": "DateIsolationMurEnum.EN_RENOVATION_ENTRE_2001_ET_2005"
+            },
+            {
+              "type": "TextButton",
+              "text": "Rénové entre 2006 et 2012",
+              "value": "DateIsolationMurEnum.EN_RENOVATION_ENTRE_2006_ET_2012"
+            },
+            {
+              "type": "TextButton",
+              "text": "Rénové après 2012",
+              "value": "DateIsolationMurEnum.EN_RENOVATION_APRES_2012"
+            },
+            {
+              "type": "TextButton",
+              "text": "Inconnue",
+              "value": "DateIsolationMurEnum.UNKNOWN"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -23,13 +23,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
@@ -48,7 +51,9 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.ui.DpeUi;
+import fr.limsi.rorqual.core.ui.LayoutReader;
 import fr.limsi.rorqual.core.ui.Popup;
+import fr.limsi.rorqual.core.ui.TabWindow;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
@@ -78,6 +83,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ShaderProgram program;
     private BaseShader shader;
     private Dpe dpe;
+    private DpeUi dpeui;
     private DpeStateUpdater state;
     private Model model;
     private ModelBatch modelBatch;
@@ -89,6 +95,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ModelContainer sun;
     private ModelContainer pin;
     private Vector3 decal_pos;
+    private Actor tb;
 
     @Override
 	public void create () {
@@ -193,7 +200,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         state = new DpeStateUpdater(modelGraph);
 
-        new DpeUi(stageMenu);
+        dpeui = new DpeUi(stageMenu);
         dpe = new Dpe(stageMenu);
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/ui/ui_001.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("dpe");
@@ -244,6 +251,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //shader.init();
         //program = shader.program;
         //popup = new Popup(0,0,800,800);
+        Actor a = LayoutReader.readLayout("data/ui/layout/wallProperties.json");
+        a.setDebug(true);
+        a.setPosition(300, Gdx.graphics.getHeight() - 300);
+        stageMenu.addActor(a);
 	}
 
     public void act() {
@@ -411,9 +422,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if (!dragged) {
+            if (tb != null)
+                tb.remove();
             if (selected != null) {
                 selected.removeColor();
-                selected.remove(pin);
+                //selected.remove(pin);
             }
             selected = modelGraph.getObject(screenX, screenY);
             System.out.println("TOUCH: " + selected);
@@ -421,8 +434,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
                 System.out.println("TOUCH: " + selected.getUserData());
                 selected.setColor(Color.YELLOW);
-                selected.add(pin);
-                pin.transform.setToTranslation(selected.getTop());
+                tb = dpeui.getPropertyWindow(selected.getUserData());
+                stageMenu.addActor(tb);
+                //selected.add(pin);
+                //pin.transform.setToTranslation(selected.getTop());
             }
             return selected != null;
         }
