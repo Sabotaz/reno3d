@@ -42,11 +42,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
-import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
-import fr.limsi.rorqual.core.dpe.TypeMenuiserieEnum;
-import fr.limsi.rorqual.core.dpe.TypeMurEnum;
-import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
@@ -63,7 +60,6 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 import fr.limsi.rorqual.core.utils.scene3d.models.Pin;
 import fr.limsi.rorqual.core.utils.scene3d.models.Sun;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
@@ -216,6 +212,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
                 dpe.startDPE();
+
 
 
 

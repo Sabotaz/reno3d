@@ -14,10 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import java.util.concurrent.Semaphore;
 
 import fr.limsi.rorqual.core.dpe.DateIsolationMurEnum;
+import fr.limsi.rorqual.core.dpe.PositionAppartementEnum;
+import fr.limsi.rorqual.core.dpe.TypeBatimentEnum;
 import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
+import fr.limsi.rorqual.core.dpe.TypeEnergieConstructionEnum;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
 import fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.TypeMenuiserieEnum;
+import fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum;
 import fr.limsi.rorqual.core.dpe.TypeMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.event.DpeEvent;
@@ -62,8 +65,8 @@ public class DpeUi implements EventListener {
                             Texture textureStartDpe = (Texture)assets.get("textureStartDpe");
                             Image image = new Image(textureStartDpe);
                             int largeurImage = textureStartDpe.getWidth() + 10;
-                            int hauteurImage = textureStartDpe.getHeight() + 20;
-                            Dialog dialog = new Dialog(" Objectif du DPE ", skin, "dialog") {
+                            int hauteurImage = textureStartDpe.getHeight();
+                            final Dialog dialog = new Dialog(" Objectif du DPE ", skin, "dialog") {
                                 protected void result(Object object) {
                                     DpeEvent responseType = DpeEvent.START_DPE_RESPONSE;
                                     Event response = new Event(responseType, (boolean) object);
@@ -71,10 +74,9 @@ public class DpeUi implements EventListener {
                                     s.release();
                                 }
                             }.button("Annuler", false).button("Commencer le Dpe", true).show(stage);
+                            dialog.getContentTable().add(image).pad(2);
                             dialog.setSize(largeurImage, hauteurImage + dialog.getHeight());
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            image.setPosition((dialog.getWidth() - image.getWidth()) / 2, 40);
-                            dialog.addActor(image);
                             break;
                         }
 
@@ -84,10 +86,7 @@ public class DpeUi implements EventListener {
                             Texture textureTypeBatiment2 = (Texture)assets.get("textureTypeBatiment2");
                             Image image1 = new Image(textureTypeBatiment1);
                             Image image2 = new Image(textureTypeBatiment2);
-                            int largeur2images = textureTypeBatiment1.getWidth() * 2 + 10;
-                            int hauteurImages = textureTypeBatiment2.getHeight() + 20;
-
-                            Dialog dialog = new Dialog(" Type de batiment ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Type de batiment ", skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
@@ -96,30 +95,30 @@ public class DpeUi implements EventListener {
                             ImageButton imageButton1 = new ImageButton(image1.getDrawable());
                             imageButton1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    String reponse = "maison";
+                                    TypeBatimentEnum typeBatiment = TypeBatimentEnum.MAISON;
                                     DpeEvent responseType = DpeEvent.TYPE_BATIMENT_RESPONSE;
-                                    Event response = new Event(responseType, reponse);
+                                    Event response = new Event(responseType, typeBatiment);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
 
                             ImageButton imageButton2 = new ImageButton(image2.getDrawable());
-                            imageButton2.setPosition(imageButton1.getWidth() + 10, 0);
                             imageButton2.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    String reponse = "appartement";
+                                    TypeBatimentEnum typeBatiment = TypeBatimentEnum.APPARTEMENT;
                                     DpeEvent responseType = DpeEvent.TYPE_BATIMENT_RESPONSE;
-                                    Event response = new Event(responseType, reponse);
+                                    Event response = new Event(responseType, typeBatiment);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
-
-                            dialog.setSize(largeur2images, hauteurImages);
+                            dialog.getContentTable().add(imageButton1).pad(2);
+                            dialog.getContentTable().add(imageButton2).pad(2);
+                            dialog.setSize(imageButton1.getWidth() + imageButton2.getWidth() + 40, imageButton1.getHeight() + 34);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(imageButton1);
-                            dialog.addActor(imageButton2);
                             break;
                         }
 
@@ -138,7 +137,7 @@ public class DpeUi implements EventListener {
                             int largeurImages = textureNbNiveau1.getWidth() + textureNbNiveau2.getWidth() + textureNbNiveau3.getWidth() + textureNbNiveau4.getWidth() + textureNbNiveau5.getWidth() + 45;
                             int hauteurImages = textureNbNiveau1.getHeight() + 20;
 
-                            Dialog dialog = new Dialog(" Nombre de niveaux ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Nombre de niveaux ", skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
@@ -151,6 +150,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.NB_NIVEAUX_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -163,6 +163,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.NB_NIVEAUX_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -175,6 +176,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.NB_NIVEAUX_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -187,6 +189,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.NB_NIVEAUX_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -199,17 +202,17 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.NB_NIVEAUX_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
-
-                            dialog.setSize(largeurImages, hauteurImages);
+                            dialog.getContentTable().add(imageButton1).pad(2);
+                            dialog.getContentTable().add(imageButton2).pad(2);
+                            dialog.getContentTable().add(imageButton3).pad(2);
+                            dialog.getContentTable().add(imageButton4).pad(2);
+                            dialog.getContentTable().add(imageButton5).pad(2);
+                            dialog.setSize(largeurImages + 20, hauteurImages + 20);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(imageButton1);
-                            dialog.addActor(imageButton2);
-                            dialog.addActor(imageButton3);
-                            dialog.addActor(imageButton4);
-                            dialog.addActor(imageButton5);
                             break;
                         }
 
@@ -223,7 +226,7 @@ public class DpeUi implements EventListener {
                             Image image3 = new Image(textureForme3);
                             int largeur3images = textureForme1.getWidth() + textureForme2.getWidth() + textureForme3.getWidth() + 25;
                             int hauteurImages = textureForme1.getHeight() + 20;
-                            Dialog dialog = new Dialog(" Forme de la maison ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Forme de la maison ", skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
@@ -236,6 +239,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.FORME_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -248,6 +252,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.FORME_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -260,15 +265,15 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.FORME_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
-
-                            dialog.setSize(largeur3images, hauteurImages);
+                            dialog.getContentTable().add(imageButton1).pad(2);
+                            dialog.getContentTable().add(imageButton2).pad(2);
+                            dialog.getContentTable().add(imageButton3).pad(2);
+                            dialog.setSize(largeur3images + 20, hauteurImages + 20);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(imageButton1);
-                            dialog.addActor(imageButton2);
-                            dialog.addActor(imageButton3);
                             break;
                         }
 
@@ -287,7 +292,7 @@ public class DpeUi implements EventListener {
                             int largeurImages = textureMit1.getWidth() + textureMit2.getWidth() + textureMit3.getWidth() + textureMit4.getWidth() + textureMit5.getWidth() + 45;
                             int hauteurImages = textureMit1.getHeight() + 20;
 
-                            Dialog dialog = new Dialog(" Mitoyennete avec un autre logement ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Mitoyennete avec un autre logement ", skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
@@ -300,6 +305,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.MITOYENNETE_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -312,6 +318,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.MITOYENNETE_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -324,6 +331,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.MITOYENNETE_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -336,6 +344,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.MITOYENNETE_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -348,17 +357,17 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.MITOYENNETE_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
-
-                            dialog.setSize(largeurImages, hauteurImages);
+                            dialog.getContentTable().add(imageButton1).pad(2);
+                            dialog.getContentTable().add(imageButton2).pad(2);
+                            dialog.getContentTable().add(imageButton3).pad(2);
+                            dialog.getContentTable().add(imageButton4).pad(2);
+                            dialog.getContentTable().add(imageButton5).pad(2);
+                            dialog.setSize(largeurImages + 20, hauteurImages + 20);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(imageButton1);
-                            dialog.addActor(imageButton2);
-                            dialog.addActor(imageButton3);
-                            dialog.addActor(imageButton4);
-                            dialog.addActor(imageButton5);
                             break;
                         }
                         case POSITION_APPARTEMENT: {
@@ -382,10 +391,11 @@ public class DpeUi implements EventListener {
                             ImageButton imageButton1 = new ImageButton(image1.getDrawable());
                             imageButton1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    String reponse = "bas";
+                                    PositionAppartementEnum positionAppartement = PositionAppartementEnum.PREMIER_ETAGE;
                                     DpeEvent responseType = DpeEvent.POSITION_APPARTEMENT_RESPONSE;
-                                    Event response = new Event(responseType, reponse);
+                                    Event response = new Event(responseType, positionAppartement);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -394,10 +404,11 @@ public class DpeUi implements EventListener {
                             imageButton2.setPosition(imageButton1.getWidth() + 10, 0);
                             imageButton2.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    String reponse = "int";
+                                    PositionAppartementEnum positionAppartement = PositionAppartementEnum.ETAGE_INTERMEDIAIRE;
                                     DpeEvent responseType = DpeEvent.POSITION_APPARTEMENT_RESPONSE;
-                                    Event response = new Event(responseType, reponse);
+                                    Event response = new Event(responseType, positionAppartement);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -406,25 +417,25 @@ public class DpeUi implements EventListener {
                             imageButton3.setPosition(imageButton2.getX() + imageButton2.getWidth() + 10, 0);
                             imageButton3.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    String reponse = "haut";
+                                    PositionAppartementEnum positionAppartement = PositionAppartementEnum.DERNIER_ETAGE;
                                     DpeEvent responseType = DpeEvent.POSITION_APPARTEMENT_RESPONSE;
-                                    Event response = new Event(responseType, reponse);
+                                    Event response = new Event(responseType, positionAppartement);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
-
-                            dialog.setSize(largeur3images, hauteurImages);
+                            dialog.getContentTable().add(imageButton1).pad(2);
+                            dialog.getContentTable().add(imageButton2).pad(2);
+                            dialog.getContentTable().add(imageButton3).pad(2);
+                            dialog.setSize(largeur3images+20, hauteurImages+20);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(imageButton1);
-                            dialog.addActor(imageButton2);
-                            dialog.addActor(imageButton3);
                             break;
                         }
 
                         case ANNEE_CONSTRUCTION: {
                             s.acquire();
-                            Dialog dialog = new Dialog(" Annee de construction du batiment ", skin, "dialog") {
+                            final Dialog dialog = new Dialog(" Annee de construction du batiment ", skin, "dialog") {
                                 protected void result(Object object) {
 
                                 }
@@ -441,32 +452,13 @@ public class DpeUi implements EventListener {
                             float largeur = textButton1.getWidth()+textButton2.getWidth()+textButton3.getWidth()+textButton4.getWidth()+45;
                             float hauteur = textButton1.getHeight()+textButton5.getHeight()+25;
 
-                            dialog.setSize(largeur, hauteur);
-                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            dialog.addActor(textButton1);
-                            dialog.addActor(textButton2);
-                            dialog.addActor(textButton3);
-                            dialog.addActor(textButton4);
-                            dialog.addActor(textButton5);
-                            dialog.addActor(textButton6);
-                            dialog.addActor(textButton7);
-                            dialog.addActor(textButton8);
-
-                            textButton1.setPosition(4, textButton5.getHeight() + 4);
-                            textButton2.setPosition(textButton1.getX()+textButton1.getWidth()+10,textButton5.getHeight()+4);
-                            textButton3.setPosition(textButton2.getX()+textButton2.getWidth()+10,textButton5.getHeight()+4);
-                            textButton4.setPosition(textButton3.getX()+textButton3.getWidth()+10,textButton5.getHeight()+4);
-                            textButton5.setPosition(4,4);
-                            textButton6.setPosition(textButton5.getX()+textButton5.getWidth()+10,4);
-                            textButton7.setPosition(textButton6.getX()+textButton6.getWidth()+10,4);
-                            textButton8.setPosition(textButton7.getX()+textButton7.getWidth()+10,4);
-
                             textButton1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     double reponse = 1970;
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -476,6 +468,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -485,6 +478,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -494,6 +488,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -503,6 +498,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -512,6 +508,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -521,6 +518,7 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
@@ -530,9 +528,21 @@ public class DpeUi implements EventListener {
                                     DpeEvent responseType = DpeEvent.ANNEE_CONSTRUCTION_RESPONSE;
                                     Event response = new Event(responseType, reponse);
                                     EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
                                     s.release();
                                 }
                             });
+                            dialog.getContentTable().add(textButton1).pad(2);
+                            dialog.getContentTable().add(textButton2).pad(2);
+                            dialog.getContentTable().add(textButton3).pad(2);
+                            dialog.getContentTable().add(textButton4).pad(2);
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton5).pad(2);
+                            dialog.getContentTable().add(textButton6).pad(2);
+                            dialog.getContentTable().add(textButton7).pad(2);
+                            dialog.getContentTable().add(textButton8).pad(2);
+                            dialog.setSize(largeur+40, hauteur+20);
+                            dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
 
@@ -540,14 +550,14 @@ public class DpeUi implements EventListener {
                             s.acquire();
                             Dialog dialog = new Dialog(" Type d'energie a la construction ", skin, "dialog") {
                                 protected void result (Object object) {
-                                    String reponse;
+                                    TypeEnergieConstructionEnum typeEnergieConstruction;
                                     if ((int)object==1){
-                                        reponse = "elec";
+                                        typeEnergieConstruction=TypeEnergieConstructionEnum.ELECTRIQUE;
                                     }else{
-                                        reponse = "autre";
+                                        typeEnergieConstruction=TypeEnergieConstructionEnum.AUTRE;
                                     }
                                     DpeEvent responseType = DpeEvent.ENERGIE_CONSTRUCTION_RESPONSE;
-                                    Event response = new Event(responseType, reponse);
+                                    Event response = new Event(responseType, typeEnergieConstruction);
                                     EventManager.getInstance().put(Channel.DPE, response);
                                     s.release();
                                 }
@@ -603,12 +613,12 @@ public class DpeUi implements EventListener {
                                     s.release();
                                 }
                             });
-                            TextButton textButton4 = new TextButton("Mur donnant sur une veranda",skin);
+                            TextButton textButton4 = new TextButton("Mur donnant sur une veranda chauffee",skin);
                             textButton4.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     Object item [] = new Object[2];
                                     item[0] = wall;
-                                    item[1] = TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA;
+                                    item[1] = TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE;
                                     DpeEvent responseType = DpeEvent.TYPE_MUR_RESPONSE;
                                     Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
@@ -616,8 +626,21 @@ public class DpeUi implements EventListener {
                                     s.release();
                                 }
                             });
-                            TextButton textButton5 = new TextButton("Mur interieur",skin);
+                            TextButton textButton5 = new TextButton("Mur donnant sur une veranda non chauffee",skin);
                             textButton5.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    Object item [] = new Object[2];
+                                    item[0] = wall;
+                                    item[1] = TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE;
+                                    DpeEvent responseType = DpeEvent.TYPE_MUR_RESPONSE;
+                                    Event response = new Event(responseType, item);
+                                    EventManager.getInstance().put(Channel.DPE, response);
+                                    dialog.remove();
+                                    s.release();
+                                }
+                            });
+                            TextButton textButton6 = new TextButton("Mur interieur",skin);
+                            textButton6.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     Object item [] = new Object[2];
                                     item[0] = wall;
@@ -638,7 +661,9 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(textButton4).pad(2).left();
                             dialog.getContentTable().row();
                             dialog.getContentTable().add(textButton5).pad(2).left();
-                            dialog.setSize(textButton1.getWidth() + 20, textButton1.getHeight() * 5 + 92);
+                            dialog.getContentTable().row();
+                            dialog.getContentTable().add(textButton6).pad(2).left();
+                            dialog.setSize(textButton5.getWidth() + 20, textButton1.getHeight() * 6 + 92);
                             dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
@@ -989,7 +1014,7 @@ public class DpeUi implements EventListener {
                                 public void clicked(InputEvent event, float x, float y) {
                                     Object item [] = new Object[2];
                                     item[0] = product;
-                                    item[1] = TypeMenuiserieEnum.BOIS;
+                                    item[1] = TypeMateriauMenuiserieEnum.BOIS;
                                     DpeEvent responseType = DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE;
                                     Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
@@ -1002,7 +1027,7 @@ public class DpeUi implements EventListener {
                                 public void clicked(InputEvent event, float x, float y) {
                                     Object item [] = new Object[2];
                                     item[0] = product;
-                                    item[1] = TypeMenuiserieEnum.METALLIQUE;
+                                    item[1] = TypeMateriauMenuiserieEnum.METALLIQUE;
                                     DpeEvent responseType = DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE;
                                     Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);
@@ -1015,7 +1040,7 @@ public class DpeUi implements EventListener {
                                 public void clicked(InputEvent event, float x, float y) {
                                     Object item[] = new Object[2];
                                     item[0] = product;
-                                    item[1] = TypeMenuiserieEnum.PVC;
+                                    item[1] = TypeMateriauMenuiserieEnum.PVC;
                                     DpeEvent responseType = DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE;
                                     Event response = new Event(responseType, item);
                                     EventManager.getInstance().put(Channel.DPE, response);

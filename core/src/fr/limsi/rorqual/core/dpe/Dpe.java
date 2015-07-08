@@ -46,35 +46,11 @@ public class Dpe implements EventListener {
     /*** Attributs liés au calcul du DPE ***/
 
     // 0.Variables générales hors model IFC
-    private enum typeBatiment{
-        MAISON,
-        APPARTEMENT;
-    }
-    private enum positionAppartement{
-        PREMIER_ETAGE,
-        ETAGE_INTERMEDIAIRE,
-        DERNIER_ETAGE;
-    }
-    private enum typeEnergieConstruction{
-        ELECTRIQUE,
-        AUTRE;
-    }
-    private enum typeVentilation{
-        NATURELLE,
-        MECANIQUE,
-        INCONNUE
-    }
-    private enum typeVMC{
-        VMC_AUTOREGLABLE_AVANT_1982,
-        VMC_AUTOREGLABLE_APRES_1982,
-        VMC_HYGRO_B,
-        VMC_DOUBLE_FLUX,
-        INCONNUE;
-    }
-    private typeBatiment typeBatiment;
-    private positionAppartement positionAppartement;
-    private typeEnergieConstruction typeEnergieConstruction;
-//    private type
+    TypeBatimentEnum typeBatiment;
+    PositionAppartementEnum positionAppartement;
+    TypeEnergieConstructionEnum typeEnergieConstruction;
+    TypeVentilationEnum typeVentilation;
+    TypeVmcEnum typeVmc;
     private double anneeConstruction;
     private double SH;
     private double NIV;
@@ -294,7 +270,7 @@ public class Dpe implements EventListener {
 
         if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE))
             return;
-        TypeMenuiserieEnum typeMenuiserieFenetre = (TypeMenuiserieEnum) windows_properties.get(window).get(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE);
+        TypeMateriauMenuiserieEnum typeMenuiserieFenetre = (TypeMateriauMenuiserieEnum) windows_properties.get(window).get(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE);
 
         if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE))
             return;
@@ -313,12 +289,22 @@ public class Dpe implements EventListener {
             return;
         TypeDoorEnum typeDoor = (TypeDoorEnum) doors_properties.get(door).get(DpeEvent.TYPE_DOOR_RESPONSE);
 
+        TypeMateriauMenuiserieEnum typeMenuiserieDoor = TypeMateriauMenuiserieEnum.UNKNOWN;
+        if (doors_properties.get(door).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE)){
+            typeMenuiserieDoor = (TypeMateriauMenuiserieEnum)doors_properties.get(door).get(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE);
+        }
+
+        TypeVitrageEnum typeVitrage = TypeVitrageEnum.UNKNOWN;
+        if (doors_properties.get(door).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE)){
+            typeVitrage = (TypeVitrageEnum)doors_properties.get(door).get(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE);
+        }
+
         // On signal au model que le calcul thermique vient d'être effectuer sur wall
         Object o[] = {door, DpeState.KNOWN};
         Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
         EventManager.getInstance().put(Channel.DPE, e);
 
-        //actualiseDP_wall(wall, typeMur, dateIsolationMur, typeIsolationMur);
+        actualiseDP_door(door, typeDoor, typeMenuiserieDoor, typeVitrage);
     }
 
     public void actualiseDP_wall(IfcWallStandardCase wall, TypeMurEnum typeMur, DateIsolationMurEnum dateIsolationMur, TypeIsolationMurEnum typeIsolationMur){
@@ -344,7 +330,7 @@ public class Dpe implements EventListener {
                 }
             }
             if (anneeConstruction>=1978 && anneeConstruction<=1982){
-                if (typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
+                if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
                     uMur=0.8;
                 }else{
                     uMur=1;
@@ -354,7 +340,7 @@ public class Dpe implements EventListener {
                 }
             }
             if (anneeConstruction>=1983 && anneeConstruction<=1988){
-                if (typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
+                if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
                     uMur=0.7;
                 }else{
                     uMur=0.8;
@@ -364,7 +350,7 @@ public class Dpe implements EventListener {
                 }
             }
             if (anneeConstruction>=1989 && anneeConstruction<=2000){
-                if (typeEnergieConstruction.equals(typeEnergieConstruction.ELECTRIQUE)){
+                if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
                     uMur=0.45;
                 }else{
                     uMur=0.5;
@@ -433,11 +419,11 @@ public class Dpe implements EventListener {
             DP_murExt += sMur*uMur;
             System.out.println("Actualise DP Mur ext -> U="+uMur+"  S="+sMur+"  DPmurExt="+DP_murExt);
         }
-        if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_AUTRE_HABITATION)){
+        else if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_AUTRE_HABITATION)){
             DP_murAh += sMur*uMur*0.2;
             System.out.println("Actualise DP Mur ah -> U="+uMur+"  S="+sMur+" b=0.2"+"  DPmurAh="+DP_murAh);
         }
-        if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE)){
+        else if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE)){
             double b_lnc=0;
             if (dateIsolationMur.equals(DateIsolationMurEnum.UNKNOWN) || dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS)){
                 b_lnc=0.95;
@@ -447,61 +433,77 @@ public class Dpe implements EventListener {
             DP_murLnc += sMur*uMur*b_lnc;
             System.out.println("Actualise DP Mur lnc -> U="+uMur+"  S="+sMur+" b="+b_lnc+"  DPmurLnc="+DP_murLnc);
         }
-        if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA)){
+        else if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE)){
             double b_ver=0.6;
             // TODO -> quand on connaitra l'orientation du mur, on pourra affiner le calcul de b_ver
             DP_murVer += sMur*uMur*b_ver;
             System.out.println("Actualise DP Mur ver -> U="+uMur+"  S="+sMur+" b="+b_ver+"  DPmurVer="+DP_murVer);
         }
+        else if (typeMur.equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE)){
+            DP_murVer += sMur*uMur;
+            System.out.println("Actualise DP Mur ver -> U="+uMur+"  S="+sMur+"  DPmurVer="+DP_murVer);
+        }
         ifcHelper.addPropertyTransmittanceThermiqueWall(wall, String.valueOf(uMur));
     }
 
-    public void actualiseDP_window(IfcWindow window,TypeFenetreEnum typeFenetre,TypeMenuiserieEnum typeMenuiserie,TypeVitrageEnum typeVitrage){
+    public void actualiseDP_window(IfcWindow window,TypeFenetreEnum typeFenetre,TypeMateriauMenuiserieEnum typeMenuiserie,TypeVitrageEnum typeVitrage){
         double uFen=0,sFen=ifcHelper.getWindowSurface(window);
-        if (typeMenuiserie.equals(TypeMenuiserieEnum.METALLIQUE)){
+        if (typeMenuiserie.equals(TypeMateriauMenuiserieEnum.METALLIQUE)){
             if (typeFenetre.equals(TypeFenetreEnum.BATTANTE)){
                 if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
                     uFen=4.95;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
                     uFen=4;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
                     uFen=3.7;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
                     uFen=3.6;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
                     uFen=2.25;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
                     uFen=1.88;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
                 }
             }
 
             if (typeFenetre.equals(TypeFenetreEnum.COULISSANTE)){
                 if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
                     uFen=4.63;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
                     uFen=3.46;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
                     uFen=3.46;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
                     uFen=3.36;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
                     uFen=2.18;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
                 }
                 else if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
                     uFen=1.65;
+                    ifcHelper.addPropertyTypeMenuiserie(window,TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
                 }
             }
         }
-        else if (typeMenuiserie.equals(TypeMenuiserieEnum.PVC)){
+        else if (typeMenuiserie.equals(TypeMateriauMenuiserieEnum.PVC)){
             if (typeFenetre.equals(TypeFenetreEnum.BATTANTE)){
                 if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
                     uFen=3.9;
@@ -544,7 +546,7 @@ public class Dpe implements EventListener {
                 }
             }
         }
-        else if (typeMenuiserie.equals(TypeMenuiserieEnum.BOIS)){
+        else if (typeMenuiserie.equals(TypeMateriauMenuiserieEnum.BOIS)){
             if (typeFenetre.equals(TypeFenetreEnum.BATTANTE)){
                 if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
                     uFen=4.2;
@@ -587,34 +589,227 @@ public class Dpe implements EventListener {
                 }
             }
         }
+
+
+        IfcWallStandardCase wallRelToWindow = ifcHelper.getWallRelToWindow(window);
+        if(ifcHelper.getPropertiesWall(wallRelToWindow,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE.toString())){
+            double b_ver=0.6;
+            // TODO considérer l'orientation du mur pour mieux fixer la valeur de b_ver
+            DP_fenVer += b_ver*sFen*uFen;
+            System.out.println("Actualise DP_fenVer -> U="+uFen+"  S="+sFen+" b="+b_ver+"  DPmurLnc="+DP_fenVer);
+        }
+
         DP_fen += sFen*uFen;
         System.out.println("Actualise DP Fen -> U="+uFen+"  S="+sFen+"  DPfen="+DP_fen);
         ifcHelper.addPropertyTransmittanceThermiqueWindow(window, String.valueOf(uFen));
     }
 
-    public void actualiseDP_door(IfcDoor door, TypeDoorEnum typeDoor){
+    public void actualiseDP_door(IfcDoor door, TypeDoorEnum typeDoor, TypeMateriauMenuiserieEnum typeMateriauMenuiserieDoor, TypeVitrageEnum typeVitrage){
         double sDoor=ifcHelper.getDoorSurface(door),uDoor=0;
-        if (typeDoor.equals(TypeDoorEnum.PORTE_OPAQUE_PLEINE)){
-            uDoor=3.5;
+        IfcWallStandardCase wallRelToDoor = ifcHelper.getWallRelToDoor(door);
+
+        if (typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_BATTANTE)){
+            if (typeMateriauMenuiserieDoor.equals(TypeMateriauMenuiserieEnum.METALLIQUE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uDoor=4.87;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uDoor=3.62;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uDoor=3.54;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uDoor=3.44;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uDoor=2.18;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uDoor=1.73;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
+                }
+            }
+            if (typeMateriauMenuiserieDoor.equals(TypeMateriauMenuiserieEnum.PVC)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uDoor=3.99;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uDoor=2.83;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uDoor=2.45;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uDoor=2.35;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uDoor=1.70;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uDoor=1.24;
+                }
+            }
+            if (typeMateriauMenuiserieDoor.equals(TypeMateriauMenuiserieEnum.BOIS)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uDoor=4.29;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uDoor=2.98;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uDoor=2.7;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uDoor=2.55;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uDoor=1.75;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uDoor=1.17;
+                }
+            }
+            if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE.toString())){
+                double b_ver=0.6;
+                // TODO considérer l'orientation du mur pour mieux fixer la valeur de b_ver
+                DP_portVer += b_ver*sDoor*uDoor;
+                System.out.println("Actualise DP_portVer -> U="+uDoor+"  S="+sDoor+" b="+b_ver+"  DP_portVer="+DP_portVer);
+            }else{
+                DP_pfen += sDoor*uDoor;
+                System.out.println("Actualise DP_pfen -> U="+uDoor+"  S="+sDoor+"  DP_pfen="+DP_pfen);
+            }
         }
-        else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE)){
-            uDoor=4;
+        else if (typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_COULISSANTE)){
+            if (typeMateriauMenuiserieDoor.equals(TypeMateriauMenuiserieEnum.METALLIQUE)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uDoor=4.79;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uDoor=3.31;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uDoor=3.31;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uDoor=3.12;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_AVANT_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uDoor=2.10;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uDoor=1.58;
+                    ifcHelper.addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.METALLIQUE_APRES_2001);
+                }
+            }
+            if (typeMateriauMenuiserieDoor.equals(TypeMateriauMenuiserieEnum.PVC)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uDoor=4.34;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uDoor=3;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uDoor=2.7;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uDoor=2.61;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uDoor=1.85;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uDoor=1.31;
+                }
+            }
+            if (typeMateriauMenuiserieDoor.equals(TypeMateriauMenuiserieEnum.BOIS)){
+                if (typeVitrage.equals(TypeVitrageEnum.SIMPLE_VITRAGE)){
+                    uDoor=4.29;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.SURVITRAGE)){
+                    uDoor=2.98;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990)){
+                    uDoor=2.7;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001)){
+                    uDoor=2.55;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001)){
+                    uDoor=1.75;
+                }
+                if (typeVitrage.equals(TypeVitrageEnum.TRIPLE_VITRAGE)){
+                    uDoor=1.17;
+                }
+            }
+            if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE.toString())){
+                double b_ver=0.6;
+                // TODO considérer l'orientation du mur pour mieux fixer la valeur de b_ver
+                DP_portVer += b_ver*sDoor*uDoor;
+                System.out.println("Actualise DP_portVer -> U="+uDoor+"  S="+sDoor+" b="+b_ver+"  DP_portVer="+DP_portVer);
+            }else{
+                DP_pfen += sDoor*uDoor;
+                System.out.println("Actualise DP_pfen -> U="+uDoor+"  S="+sDoor+"  DP_pfen="+DP_pfen);
+            }
         }
-        else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE)){
-            uDoor=4.5;
+        else { //pas une porte-fenetre
+            if (typeDoor.equals(TypeDoorEnum.PORTE_OPAQUE_PLEINE)){
+                uDoor=3.5;
+            }
+            else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE)){
+                uDoor=4;
+            }
+            else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE)){
+                uDoor=4.5;
+            }
+            else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_DOUBLE_VITRAGE)){
+                uDoor=3.3;
+            }
+            else if (typeDoor.equals(TypeDoorEnum.PORTE_OPAQUE_PLEINE_ISOLEE)){
+                uDoor=2;
+            }
+            else if (typeDoor.equals(TypeDoorEnum.PORTE_PRECEDE_DUN_SAS)){
+                uDoor=1.5;
+            }
+
+            if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR.toString())){
+                DP_portExt += 2*uDoor;
+                System.out.println("Actualise DP_portExt -> U="+uDoor+"  S="+sDoor+"  DPdoor="+DP_portExt);
+            }
+            else if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE.toString())){
+                double b_lnc;
+                if (ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.DATE_ISOLATION_MUR).equals(DateIsolationMurEnum.JAMAIS)
+                        || ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.DATE_ISOLATION_MUR).equals(DateIsolationMurEnum.UNKNOWN)){
+                    b_lnc=0.95;
+                }else{
+                    b_lnc=0.85;
+                }
+                DP_portLnc += b_lnc*2*uDoor;
+                System.out.println("Actualise DP_portLnc -> U="+uDoor+"  S="+sDoor+" b="+b_lnc+"  DPmurLnc="+DP_portLnc);
+            }
+            else if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE.toString())){
+                double b_ver=0.6;
+                // TODO considérer l'orientation du mur pour mieux fixer la valeur de b_ver
+                DP_portVer += b_ver*2*uDoor;
+                System.out.println("Actualise DP_portVer -> U="+uDoor+"  S="+sDoor+" b="+b_ver+"  DPmurLnc="+DP_portVer);
+            }
+            else if(ifcHelper.getPropertiesWall(wallRelToDoor,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE.toString())){
+                DP_portVer += 2*uDoor;
+                System.out.println("Actualise DP_portVer -> U="+uDoor+"  S="+sDoor+"  DPmurLnc="+DP_portVer);
+            }
         }
-        else if (typeDoor.equals(TypeDoorEnum.PORTE_AVEC_DOUBLE_VITRAGE)){
-            uDoor=3.3;
-        }
-        else if (typeDoor.equals(TypeDoorEnum.PORTE_OPAQUE_PLEINE_ISOLEE)){
-            uDoor=2;
-        }
-        else if (typeDoor.equals(TypeDoorEnum.PORTE_PRECEDE_DUN_SAS)){
-            uDoor=1.5;
-        }
-        DP_portExt += sDoor*uDoor;
-        System.out.println("Actualise DP Door -> U="+uDoor+"  S="+sDoor+"  DPdoor="+DP_portExt);
-        ifcHelper.addPropertyTransmittanceThermiqueDoor(door, String.valueOf(uDoor)); // On rajoute le coeff thermique dans le .ifc
+
+        ifcHelper.addPropertyTransmittanceThermiqueDoor(door, String.valueOf(uDoor));
     }
 
     public void calc_DR() {
@@ -625,13 +820,10 @@ public class Dpe implements EventListener {
 
     /*** Explique ce qu'est le DPE et demande de continuer ou non ***/
     public void startDPE() {
-        notifierMurs();
-        notifierPlanchers();
-        notifierFenetres();
-        notifierPortes();
         DpeEvent eventType = DpeEvent.START_DPE;
         Event event = new Event(eventType);
         EventManager.getInstance().put(Channel.DPE, event);
+        notifierMurs();
     }
 
     /*** Demande le type de batiment ***/
@@ -742,10 +934,10 @@ public class Dpe implements EventListener {
 
     /*** Demande à l'utilisateur des informations permettant de déterminer les déperditions au niveau des slabs ***/
     public void demanderSlab(IfcSlab slab){
-        slabs_properties.put(slab, new HashMap<EventType, Object>());
-        DpeEvent eventType = DpeEvent.DERRIERE_SLAB;
-        Event event = new Event(eventType, slab);
-        EventManager.getInstance().put(Channel.DPE, event);
+//        slabs_properties.put(slab, new HashMap<EventType, Object>());
+//        DpeEvent eventType = DpeEvent.DERRIERE_SLAB;
+//        Event event = new Event(eventType, slab);
+//        EventManager.getInstance().put(Channel.DPE, event);
     }
 
     /*** Demande à l'utilisateur des informations permettant de déterminer les déperditions au niveau des windows ***/
@@ -772,34 +964,6 @@ public class Dpe implements EventListener {
         EventManager.getInstance().put(Channel.DPE, event);
     }
 
-    public void log(){
-        System.out.println("************************************************************************************");
-        System.out.println("Type d'energie a la construction : " + typeEnergieConstruction);
-        System.out.println("Type de batiment : " + typeBatiment);
-        System.out.println("Annee de construction : " + anneeConstruction);
-        if(typeBatiment==typeBatiment.APPARTEMENT){
-            System.out.println("PositionAppt : " + positionAppartement);
-        }
-        else{
-            System.out.println("NIV : " + NIV);
-            System.out.println("MIT : " + MIT);
-            System.out.println("MIT2 : " + MIT2);
-            System.out.println("FOR : " + FOR);
-        }
-        System.out.println("Surface habitable : " + SH);
-        System.out.println("DP mur ext : " + DP_murExt);
-        System.out.println("DP mur ah : " + DP_murAh);
-        System.out.println("DP mur lnc : " + DP_murLnc);
-        System.out.println("DP mur ver : " + DP_murVer);
-        System.out.println("DP plancher ah : " + DP_planAh);
-        System.out.println("DP plancher ss : " + DP_planSs);
-        System.out.println("DP plancher tp : " + DP_planTp);
-        System.out.println("DP plancher vs : " + DP_planVs);
-        System.out.println("DP plancher vs : " + DP_fen);
-        System.out.println("PT : "+PT);
-        System.out.println("************************************************************************************");
-    }
-
     public void notify(Channel c, Event e) throws InterruptedException {
 
         EventType eventType = e.getEventType();
@@ -818,28 +982,23 @@ public class Dpe implements EventListener {
                     }
 
                     case TYPE_BATIMENT_RESPONSE: {
-                        String reponse = (String) o;
-                        stage.getActors().pop();
-                        if (reponse == "maison") {
-                            typeBatiment = typeBatiment.MAISON;
+                        typeBatiment = (TypeBatimentEnum) o;
+                        if (typeBatiment.equals(TypeBatimentEnum.MAISON)) {
                             this.demandeNbNiveau();
                         } else {
-                            typeBatiment = typeBatiment.APPARTEMENT;
-                            demandePositionAppartement();
+                            this.demandePositionAppartement();
                         }
                         break;
                     }
 
                     case NB_NIVEAUX_RESPONSE: {
                         NIV = (double) o;
-                        stage.getActors().pop();
                         this.demandeForme();
                         break;
                     }
 
                     case FORME_RESPONSE: {
                         FOR = (double) o;
-                        stage.getActors().pop();
                         this.demandeMitoyennete();
                         break;
                     }
@@ -847,42 +1006,24 @@ public class Dpe implements EventListener {
                     case MITOYENNETE_RESPONSE: {
                         MIT = (double) o;
                         this.calc_MIT2();
-                        stage.getActors().pop();
                         this.demandeAnneeConstruction();
                         break;
                     }
 
                     case POSITION_APPARTEMENT_RESPONSE:{
-                        String reponse = (String) o;
-                        if (reponse.equals("bas")){
-                            positionAppartement=positionAppartement.PREMIER_ETAGE;
-                            configuration_Appartement="10";
-                        } else if (reponse.equals("int")){
-                            positionAppartement=positionAppartement.ETAGE_INTERMEDIAIRE;
-                            configuration_Appartement="7";
-                        } else if (reponse.equals("haut")){
-                            positionAppartement=positionAppartement.DERNIER_ETAGE;
-                            configuration_Appartement="2";
-                        }
-                        stage.getActors().pop();
+                        positionAppartement = (PositionAppartementEnum)o;
                         this.demandeAnneeConstruction();
                         break;
                     }
 
                     case ANNEE_CONSTRUCTION_RESPONSE: {
                         anneeConstruction = (double) o;
-                        stage.getActors().pop();
                         this.demandeTypeEnergieConstruction();
                         break;
                     }
 
                     case ENERGIE_CONSTRUCTION_RESPONSE: {
-                        String reponse = (String) o;
-                        if (reponse.equals("elec")){
-                            typeEnergieConstruction=typeEnergieConstruction.ELECTRIQUE;
-                        }else{
-                            typeEnergieConstruction=typeEnergieConstruction.AUTRE;
-                        }
+                        typeEnergieConstruction = (TypeEnergieConstructionEnum)o;
                         break;
                     }
 
@@ -896,6 +1037,11 @@ public class Dpe implements EventListener {
                             eventType = DpeEvent.DATE_ISOLATION_MUR;
                             Event event2 = new Event(eventType, wall);
                             EventManager.getInstance().put(Channel.DPE, event2);
+                        }else{
+                            // On signal au model que le calcul thermique vient d'être effectuer sur wall
+                            Object o2[] = {wall, DpeState.KNOWN};
+                            Event e2 = new Event(DpeEvent.DPE_STATE_CHANGED, o);
+                            EventManager.getInstance().put(Channel.DPE, e);
                         }
                         break;
                     }
@@ -939,9 +1085,18 @@ public class Dpe implements EventListener {
                         Object[] items = (Object[]) o;
                         if (items[0] instanceof IfcWindow){
                             IfcWindow window = (IfcWindow)items[0];
-                            TypeMenuiserieEnum typeMenuiserieFenetre = (TypeMenuiserieEnum)items[1];
+                            TypeMateriauMenuiserieEnum typeMenuiserieFenetre = (TypeMateriauMenuiserieEnum)items[1];
                             ifcHelper.addPropertyTypeMenuiserie(window, typeMenuiserieFenetre);
                             windows_properties.get(items[0]).put(event, typeMenuiserieFenetre);
+                        }
+                        if (items[0] instanceof IfcDoor){
+                            IfcDoor door = (IfcDoor)items[0];
+                            TypeMateriauMenuiserieEnum typeMenuiserieDoor = (TypeMateriauMenuiserieEnum)items[1];
+                            ifcHelper.addPropertyTypeMenuiserie(door, typeMenuiserieDoor);
+                            doors_properties.get(items[0]).put(event, typeMenuiserieDoor);
+                            eventType = DpeEvent.TYPE_VITRAGE_MENUISERIE;
+                            Event event2 = new Event(eventType, door);
+                            EventManager.getInstance().put(Channel.DPE, event2);
                         }
                         break;
                     }
@@ -955,6 +1110,13 @@ public class Dpe implements EventListener {
                             windows_properties.get(items[0]).put(event, typeVitrage);
                             tryActualiseWindowDP(window);
                         }
+                        if (items[0] instanceof IfcDoor){
+                            IfcDoor door = (IfcDoor)items[0];
+                            TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items[1];
+                            ifcHelper.addPropertyTypeVitrageMenuiserie(door, typeVitrage);
+                            doors_properties.get(items[0]).put(event, typeVitrage);
+                            tryActualiseDoorDP(door);
+                        }
                         break;
                     }
 
@@ -965,7 +1127,9 @@ public class Dpe implements EventListener {
                         ifcHelper.addPropertyTypeDoor(door, typeDoor);
                         doors_properties.get(items[0]).put(event, typeDoor);
                         if (typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_BATTANTE) || typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_COULISSANTE)){
-
+                            eventType = DpeEvent.TYPE_MATERIAU_MENUISERIE;
+                            Event event2 = new Event(eventType, door);
+                            EventManager.getInstance().put(Channel.DPE, event2);
                         }else{
                             tryActualiseDoorDP(door);
                         }
@@ -996,7 +1160,6 @@ public class Dpe implements EventListener {
                     case DPE_STATE_NO_MORE_UNKNOWN:{
                         System.out.println("######################### COUCOU !!! #########################");
                         //calc_PT();
-                        log();
                     }
                 }
             }

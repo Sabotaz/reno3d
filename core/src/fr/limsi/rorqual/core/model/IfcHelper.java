@@ -5,7 +5,7 @@ import fr.limsi.rorqual.core.dpe.DoorPropertiesEnum;
 import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
 import fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.TypeMenuiserieEnum;
+import fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum;
 import fr.limsi.rorqual.core.dpe.TypeMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.dpe.WallPropertiesEnum;
@@ -501,6 +501,30 @@ public class IfcHelper {
             }
         }
         return null;
+    }
+
+    // Permet de récupérer le wall sur lequel se trouve une porte
+    public IfcWallStandardCase getWallRelToDoor(IfcDoor door){
+        IfcWallStandardCase wall = new IfcWallStandardCase();
+        IfcOpeningElement openingRelToDoor = this.getOpeningRelToDoor(door);
+        IfcRelVoidsElement relVoidsElement = openingRelToDoor.getVoidsElements_Inverse();
+        IfcElement element = relVoidsElement.getRelatingBuildingElement();
+        if (element instanceof IfcWallStandardCase){
+            wall = (IfcWallStandardCase)element;
+        }
+        return wall;
+    }
+
+    // Permet de récupérer le wall sur lequel se trouve une fenetre
+    public IfcWallStandardCase getWallRelToWindow(IfcWindow window){
+        IfcWallStandardCase wall = new IfcWallStandardCase();
+        IfcOpeningElement openingRelToWindow = this.getOpeningRelToWindow(window);
+        IfcRelVoidsElement relVoidsElement = openingRelToWindow.getVoidsElements_Inverse();
+        IfcElement element = relVoidsElement.getRelatingBuildingElement();
+        if (element instanceof IfcWallStandardCase){
+            wall = (IfcWallStandardCase)element;
+        }
+        return wall;
     }
 
     // Permet de récupérer la largeur d'une door
@@ -1369,7 +1393,7 @@ public class IfcHelper {
         ifcModel.addIfcObject(xLocalDoor);
         addPropertyTypeDoor(door, TypeDoorEnum.UNKNOWN);
         addPropertyTypeVitrageMenuiserie(door, TypeVitrageEnum.UNKNOWN);
-        addPropertyTypeMenuiserie(door, TypeMenuiserieEnum.UNKNOWN);
+        addPropertyTypeMenuiserie(door, TypeMateriauMenuiserieEnum.UNKNOWN);
 
 
 //        ifcModel.addIfcObject(relDefinesByType);
@@ -1468,7 +1492,7 @@ public class IfcHelper {
 //        ifcModel.addIfcObject(windowPanelProperties);
 
         addPropertyTypeWindow(window,TypeFenetreEnum.UNKNOWN);
-        addPropertyTypeMenuiserie(window, TypeMenuiserieEnum.UNKNOWN);
+        addPropertyTypeMenuiserie(window, TypeMateriauMenuiserieEnum.UNKNOWN);
         addPropertyTypeVitrageMenuiserie(window, TypeVitrageEnum.UNKNOWN);
     }
 
@@ -2834,7 +2858,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter le materiau de contour d'une fenetre
-    public void addPropertyTypeMenuiserie(IfcProduct product, TypeMenuiserieEnum typeMenuiserie){
+    public void addPropertyTypeMenuiserie(IfcProduct product, TypeMateriauMenuiserieEnum typeMenuiserie){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;
