@@ -28,10 +28,10 @@ public class Dpe implements EventListener {
     /*** Attributs liés au model IFC***/
     private IfcModel ifcModel;
     private IfcHelper ifcHelper;
-    private HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<>();
-    private HashMap<IfcSlab, HashMap<EventType, Object>> slabs_properties = new HashMap<>();
-    private HashMap<IfcWindow, HashMap<EventType, Object>> windows_properties = new HashMap<>();
-    private HashMap<IfcDoor, HashMap<EventType, Object>> doors_properties = new HashMap<>();
+    private HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<IfcWallStandardCase, HashMap<EventType, Object>>();
+    private HashMap<IfcSlab, HashMap<EventType, Object>> slabs_properties = new HashMap<IfcSlab, HashMap<EventType, Object>>();
+    private HashMap<IfcWindow, HashMap<EventType, Object>> windows_properties = new HashMap<IfcWindow, HashMap<EventType, Object>>();
+    private HashMap<IfcDoor, HashMap<EventType, Object>> doors_properties = new HashMap<IfcDoor, HashMap<EventType, Object>>();
     private Collection<IfcWallStandardCase> wallCollection;
     private Collection<IfcSlab> slabCollection;
     private Collection<IfcWindow> windowCollection;

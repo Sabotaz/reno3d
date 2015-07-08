@@ -46,10 +46,10 @@ public class IfcHelper {
     public IfcModel initialiseIfcModel (){
 
         // Initialize File Name
-        LIST<STRING> authors = new LIST<>();
+        LIST<STRING> authors = new LIST<STRING>();
         authors.add(new STRING("Thomas Ricordeau",true));
         authors.add(new STRING("Julien Christophe",true));
-        LIST<STRING> organisation = new LIST<>();
+        LIST<STRING> organisation = new LIST<STRING>();
         organisation.add(new STRING("LIMSI-CNRS",true));
         File_Name fileName = new File_Name(new STRING("3DReno first IFC",true),null,authors,
                 organisation,new STRING("",true),new STRING("",true),new STRING("",true));
@@ -96,11 +96,11 @@ public class IfcHelper {
         IfcGeometricRepresentationContext ifcGeometricRepresentationContext =
                 new IfcGeometricRepresentationContext(null, new IfcLabel("Model", true),
                 new IfcDimensionCount(3),new DOUBLE(1.0E-5), ifcAxis2Placement3DWorld, null);
-        SET<IfcRepresentationContext> contexts = new SET<>();
+        SET<IfcRepresentationContext> contexts = new SET<IfcRepresentationContext>();
         contexts.add(ifcGeometricRepresentationContext);
 
         // Create UnitsInContext
-        SET<IfcUnit> units = new SET<>();
+        SET<IfcUnit> units = new SET<IfcUnit>();
         IfcSIUnit lengthUnit = new IfcSIUnit(null, new IfcUnitEnum(
                 IfcUnitEnum_internal.LENGTHUNIT.name()), null/*new IfcSIPrefix(IfcSIPrefix.IfcSIPrefix_internal.CENTI.name())*/,
                 new IfcSIUnitName(IfcSIUnitName_internal.METRE.name()));
@@ -166,7 +166,7 @@ public class IfcHelper {
 
         // Create relation IfcProject --> IfcSite
         SET<IfcObjectDefinition> relatedObjects;
-        relatedObjects = new SET<>();
+        relatedObjects = new SET<IfcObjectDefinition>();
         relatedObjects.add(ifcSite);
         IfcRelAggregates relationProjectToSite;
         relationProjectToSite = new IfcRelAggregates(new IfcGloballyUniqueId(
@@ -174,7 +174,7 @@ public class IfcHelper {
                 new IfcText("ProjectContainer for Sites",true), ifcProject, relatedObjects);
 
         // Create relation IfcSite --> IfcBuilding
-        relatedObjects = new SET<>();
+        relatedObjects = new SET<IfcObjectDefinition>();
         relatedObjects.add(ifcBuilding);
         IfcRelAggregates relationSiteToBuilding;
         relationSiteToBuilding = new IfcRelAggregates(new IfcGloballyUniqueId(
@@ -182,7 +182,7 @@ public class IfcHelper {
                 new IfcText("SiteContainer for Building",true), ifcSite, relatedObjects);
 
         // Create relation IfcBuilding --> IfcBuildingStorey
-        relatedObjects = new SET<>();
+        relatedObjects = new SET<IfcObjectDefinition>();
         relatedObjects.add(ifcBuildingStorey);
         IfcRelAggregates relationBuildingToBuildingStorey;
         relationBuildingToBuildingStorey = new IfcRelAggregates(new IfcGloballyUniqueId(
@@ -407,7 +407,7 @@ public class IfcHelper {
 
     // Permet de récupérer les openings liées à un wall
     public SET<IfcOpeningElement> getOpeningRelToWall (IfcWallStandardCase wall){
-        SET<IfcOpeningElement> openingElementSET = new SET<>();
+        SET<IfcOpeningElement> openingElementSET = new SET<IfcOpeningElement>();
         if (wall.getHasOpenings_Inverse()!=null){
             SET<IfcRelVoidsElement> relVoidsElementSET = wall.getHasOpenings_Inverse();
             for(IfcRelVoidsElement actualRelVoidsElement : relVoidsElementSET){
@@ -597,7 +597,7 @@ public class IfcHelper {
 
     // Permet de récupérer l'ensemble des slabs rattaché à un building Storey
     public LIST<IfcSlab> getSlabs (String nameBuildingStorey){
-        LIST<IfcSlab> slabs = new LIST<>();
+        LIST<IfcSlab> slabs = new LIST<IfcSlab>();
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
         for(IfcProduct actualProduct : productSET){
@@ -663,7 +663,7 @@ public class IfcHelper {
 
     // Permet de créer un point cartésien en 2D à partir de deux doubles
     public IfcCartesianPoint createCartesianPoint2D(double x, double y){
-        LIST<IfcLengthMeasure> coordinates = new LIST<>();
+        LIST<IfcLengthMeasure> coordinates = new LIST<IfcLengthMeasure>();
         coordinates.add(new IfcLengthMeasure(x));
         coordinates.add(new IfcLengthMeasure(y));
         return new IfcCartesianPoint(coordinates);
@@ -671,7 +671,7 @@ public class IfcHelper {
 
     // Permet de créer un point cartésien en 3D à partir de trois doubles
     public IfcCartesianPoint createCartesianPoint3D(double x, double y, double z){
-        LIST<IfcLengthMeasure> coordinates = new LIST<>();
+        LIST<IfcLengthMeasure> coordinates = new LIST<IfcLengthMeasure>();
         coordinates.add(new IfcLengthMeasure(x));
         coordinates.add(new IfcLengthMeasure(y));
         coordinates.add(new IfcLengthMeasure(z));
@@ -680,7 +680,7 @@ public class IfcHelper {
 
     // Permet de créer une direction à partir de deux doubles
     public IfcDirection createDirection2D(double x, double y){
-        LIST<DOUBLE> coordinates = new LIST<>();
+        LIST<DOUBLE> coordinates = new LIST<DOUBLE>();
         coordinates.add(new DOUBLE(x));
         coordinates.add(new DOUBLE(y));
         return new IfcDirection(coordinates);
@@ -688,7 +688,7 @@ public class IfcHelper {
 
     // Permet de créer une direction à partir de trois doubles
     public IfcDirection createDirection3D(double x, double y, double z){
-        LIST<DOUBLE> coordinates = new LIST<>();
+        LIST<DOUBLE> coordinates = new LIST<DOUBLE>();
         coordinates.add(new DOUBLE(x));
         coordinates.add(new DOUBLE(y));
         coordinates.add(new DOUBLE(z));
@@ -733,7 +733,7 @@ public class IfcHelper {
                 ifcCartesianPointOriginWall, ifcDirectionZAxisWall, ifcDirectionXDirectionWall);
         IfcLocalPlacement ifcLocalPlacementWall = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
                 ifcAxis2Placement3DWall);
-        LIST<IfcRepresentation> ifcWallRepresentationsList = new LIST<>();
+        LIST<IfcRepresentation> ifcWallRepresentationsList = new LIST<IfcRepresentation>();
 
         // First representation : Geometric representation (2D)
         IfcCartesianPoint ifcWallPoints2D1 = createCartesianPoint2D(0.0,0.0);
@@ -742,20 +742,20 @@ public class IfcHelper {
         IfcVector wallAxisVector = new IfcVector(ifcWallAxisDirection,new IfcLengthMeasure(wallLength));
         IfcCartesianPoint ifcWallPoints2D0 = createCartesianPoint2D(0.0,0.0);
         IfcLine wallAxisLine =new IfcLine(ifcWallPoints2D0,wallAxisVector);
-        SET<IfcTrimmingSelect> Trim1 = new SET<>();
-        SET<IfcTrimmingSelect> Trim2 = new SET<>();
+        SET<IfcTrimmingSelect> Trim1 = new SET<IfcTrimmingSelect>();
+        SET<IfcTrimmingSelect> Trim2 = new SET<IfcTrimmingSelect>();
         Trim1.add(ifcWallPoints2D1);
         Trim2.add(ifcWallPoints2D2);
         IfcTrimmedCurve wallTrimmedCurve = new IfcTrimmedCurve(wallAxisLine,Trim1,Trim2,
                 new BOOLEAN(true),new IfcTrimmingPreference("CARTESIAN"));
-        SET<IfcRepresentationItem> ifcWallRepresentation2DItem = new SET<>();
+        SET<IfcRepresentationItem> ifcWallRepresentation2DItem = new SET<IfcRepresentationItem>();
         ifcWallRepresentation2DItem.add(wallTrimmedCurve);
         IfcShapeRepresentation ifcWallCurve2DRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Axis",true), new IfcLabel("Curve2D",true), ifcWallRepresentation2DItem);
         ifcWallRepresentationsList.add(ifcWallCurve2DRepresentation);
 
         // Second representation : SweptSolid representation (3D)
-        LIST<IfcCartesianPoint> wallAllPoints = new LIST<>();
+        LIST<IfcCartesianPoint> wallAllPoints = new LIST<IfcCartesianPoint>();
         IfcCartesianPoint wallCartesianPoint1 = createCartesianPoint2D(0.0,wallThickness/2);
         wallAllPoints.add(wallCartesianPoint1);
         IfcCartesianPoint wallCartesianPoint2 = createCartesianPoint2D(wallLength,wallThickness/2);
@@ -774,7 +774,7 @@ public class IfcHelper {
         IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(wallHeight);
         IfcExtrudedAreaSolid extrudedWall = new IfcExtrudedAreaSolid(wallArbitraryClosedProfileDef,
                 ifcAxis2Placement3DWallRepresentation,ifcWallExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
-        SET<IfcRepresentationItem> ifcWallRepresentation3DItem = new SET<>();
+        SET<IfcRepresentationItem> ifcWallRepresentation3DItem = new SET<IfcRepresentationItem>();
         ifcWallRepresentation3DItem.add(extrudedWall);
         IfcShapeRepresentation ifcWallSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcWallRepresentation3DItem);
@@ -792,7 +792,7 @@ public class IfcHelper {
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
-            relatedObject = new SET<>();
+            relatedObject = new SET<IfcProduct>();
             relatedObject.add(ifcWallStandardCase);
             IfcRelContainedInSpatialStructure relationBuildingStoreyToWall;
             relationBuildingStoreyToWall = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
@@ -855,7 +855,7 @@ public class IfcHelper {
                 ifcCartesianPointOriginWall, ifcDirectionZAxisWall, ifcDirectionXDirectionWall);
         IfcLocalPlacement ifcLocalPlacementWall = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
                 ifcAxis2Placement3DWall);
-        LIST<IfcRepresentation> ifcWallRepresentationsList = new LIST<>();
+        LIST<IfcRepresentation> ifcWallRepresentationsList = new LIST<IfcRepresentation>();
 
         // First representation : Geometric representation (2D)
         IfcCartesianPoint ifcWallPoints2D1 = createCartesianPoint2D(0.0,0.0);
@@ -864,20 +864,20 @@ public class IfcHelper {
         IfcVector wallAxisVector = new IfcVector(ifcWallAxisDirection,new IfcLengthMeasure(wallLength));
         IfcCartesianPoint ifcWallPoints2D0 = createCartesianPoint2D(0.0,0.0);
         IfcLine wallAxisLine =new IfcLine(ifcWallPoints2D0,wallAxisVector);
-        SET<IfcTrimmingSelect> Trim1 = new SET<>();
-        SET<IfcTrimmingSelect> Trim2 = new SET<>();
+        SET<IfcTrimmingSelect> Trim1 = new SET<IfcTrimmingSelect>();
+        SET<IfcTrimmingSelect> Trim2 = new SET<IfcTrimmingSelect>();
         Trim1.add(ifcWallPoints2D1);
         Trim2.add(ifcWallPoints2D2);
         IfcTrimmedCurve wallTrimmedCurve = new IfcTrimmedCurve(wallAxisLine,Trim1,Trim2,
                 new BOOLEAN(true),new IfcTrimmingPreference("CARTESIAN"));
-        SET<IfcRepresentationItem> ifcWallRepresentation2DItem = new SET<>();
+        SET<IfcRepresentationItem> ifcWallRepresentation2DItem = new SET<IfcRepresentationItem>();
         ifcWallRepresentation2DItem.add(wallTrimmedCurve);
         IfcShapeRepresentation ifcWallCurve2DRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Axis",true), new IfcLabel("Curve2D",true), ifcWallRepresentation2DItem);
         ifcWallRepresentationsList.add(ifcWallCurve2DRepresentation);
 
         // Second representation : SweptSolid representation (3D)
-        LIST<IfcCartesianPoint> wallAllPoints = new LIST<>();
+        LIST<IfcCartesianPoint> wallAllPoints = new LIST<IfcCartesianPoint>();
         IfcCartesianPoint wallCartesianPoint1 = createCartesianPoint2D(0.0,wallThickness/2);
         wallAllPoints.add(wallCartesianPoint1);
         IfcCartesianPoint wallCartesianPoint2 = createCartesianPoint2D(wallLength,wallThickness/2);
@@ -897,7 +897,7 @@ public class IfcHelper {
         IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(wallHeight);
         IfcExtrudedAreaSolid extrudedWall = new IfcExtrudedAreaSolid(wallArbitraryClosedProfileDef,
                 ifcAxis2Placement3DWallRepresentation,ifcWallExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
-        SET<IfcRepresentationItem> ifcWallRepresentation3DItem = new SET<>();
+        SET<IfcRepresentationItem> ifcWallRepresentation3DItem = new SET<IfcRepresentationItem>();
         ifcWallRepresentation3DItem.add(extrudedWall);
         IfcShapeRepresentation ifcWallSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcWallRepresentation3DItem);
@@ -915,7 +915,7 @@ public class IfcHelper {
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
-            relatedObject = new SET<>();
+            relatedObject = new SET<IfcProduct>();
             relatedObject.add(ifcWallStandardCase);
             IfcRelContainedInSpatialStructure relationBuildingStoreyToWall;
             relationBuildingStoreyToWall = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
@@ -958,7 +958,7 @@ public class IfcHelper {
         ifcModel.addIfcObject(wallCartesianPoint2);
         ifcModel.addIfcObject(wallCartesianPoint3);
         ifcModel.addIfcObject(wallCartesianPoint4);
-        ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<>();
+        ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<MaterialTypeEnum>();
         materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
         materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
         this.addMaterialLayer(ifcWallStandardCase, materialTypeEnumArrayList);
@@ -978,7 +978,7 @@ public class IfcHelper {
                 ifcCartesianPointOriginSlab, ifcDirectionZAxisLocalSlab, ifcDirectionXDirectionLocalSlab);
         IfcLocalPlacement ifcLocalPlacementSlab = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
                 ifcAxis2Placement3DSlab);
-        LIST<IfcRepresentation> ifcSlabRepresentationsList = new LIST<>();
+        LIST<IfcRepresentation> ifcSlabRepresentationsList = new LIST<IfcRepresentation>();
         LIST<IfcLengthMeasure> lengthMeasureLIST = listSlabCartesianPoint.get(0).getCoordinates();
         IfcCartesianPoint firstCartesianPoint = new IfcCartesianPoint(lengthMeasureLIST);
         listSlabCartesianPoint.add(firstCartesianPoint);
@@ -994,7 +994,7 @@ public class IfcHelper {
         IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(0.2);
         IfcExtrudedAreaSolid extrudedSlab = new IfcExtrudedAreaSolid(slabArbitraryClosedProfileDef,
                 ifcAxis2Placement3DSlabRepresentation,ifcSlabExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
-        SET<IfcRepresentationItem> ifcSlabRepresentation3DItem = new SET<>();
+        SET<IfcRepresentationItem> ifcSlabRepresentation3DItem = new SET<IfcRepresentationItem>();
         ifcSlabRepresentation3DItem.add(extrudedSlab);
         IfcShapeRepresentation ifcSlabSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcSlabRepresentation3DItem);
@@ -1012,7 +1012,7 @@ public class IfcHelper {
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
-            relatedObject = new SET<>();
+            relatedObject = new SET<IfcProduct>();
             relatedObject.add(ifcSlab);
             IfcRelContainedInSpatialStructure relationBuildingStoreyToSlab;
             relationBuildingStoreyToSlab = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
@@ -1024,7 +1024,7 @@ public class IfcHelper {
         else{
             relContainedInSpatialStructure.addRelatedElements(ifcSlab);
         }
-        ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<>();
+        ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<MaterialTypeEnum>();
         materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
         materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
         this.addMaterialLayerToSlab(ifcSlab, materialTypeEnumArrayList);
@@ -1061,7 +1061,7 @@ public class IfcHelper {
                 ifcCartesianPointOriginSlab, ifcDirectionZAxisLocalSlab, ifcDirectionXDirectionLocalSlab);
         IfcLocalPlacement ifcLocalPlacementSlab = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
                 ifcAxis2Placement3DSlab);
-        LIST<IfcRepresentation> ifcSlabRepresentationsList = new LIST<>();
+        LIST<IfcRepresentation> ifcSlabRepresentationsList = new LIST<IfcRepresentation>();
 
         // Slab representation : SweptSolid representation (3D)
         IfcPolyline slabPolyline = new IfcPolyline(listSlabCartesianPoint);
@@ -1074,7 +1074,7 @@ public class IfcHelper {
         IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(0.2);
         IfcExtrudedAreaSolid extrudedSlab = new IfcExtrudedAreaSolid(slabArbitraryClosedProfileDef,
                 ifcAxis2Placement3DSlabRepresentation,ifcSlabExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
-        SET<IfcRepresentationItem> ifcSlabRepresentation3DItem = new SET<>();
+        SET<IfcRepresentationItem> ifcSlabRepresentation3DItem = new SET<IfcRepresentationItem>();
         ifcSlabRepresentation3DItem.add(extrudedSlab);
         IfcShapeRepresentation ifcSlabSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcSlabRepresentation3DItem);
@@ -1092,7 +1092,7 @@ public class IfcHelper {
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
-            relatedObject = new SET<>();
+            relatedObject = new SET<IfcProduct>();
             relatedObject.add(ifcSlab);
             IfcRelContainedInSpatialStructure relationBuildingStoreyToSlab;
             relationBuildingStoreyToSlab = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
@@ -1140,7 +1140,7 @@ public class IfcHelper {
                 localPointOpening, zLocalOpening, xLocalOpening);
         IfcLocalPlacement localPlacementOpening = new IfcLocalPlacement(wall.getObjectPlacement(),
                 placementOpening);
-        LIST<IfcRepresentation> openingRepresentationsList = new LIST<>();
+        LIST<IfcRepresentation> openingRepresentationsList = new LIST<IfcRepresentation>();
 
         // Opening geometry with extruded area solid placement
         IfcDirection zLocalExtrusion = createDirection3D(0.0,1.0,0.0);
@@ -1158,7 +1158,7 @@ public class IfcHelper {
         IfcDirection openingExtrusionDirection = createDirection3D(0.0,0.0,1.0);
         IfcExtrudedAreaSolid extrudedOpening = new IfcExtrudedAreaSolid(rectangle, placementCenterOpening,
                 openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingThickness)));
-        SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<>();
+        SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<IfcRepresentationItem>();
         openingRepresentation3DItem.add(extrudedOpening);
         IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), openingRepresentation3DItem);
@@ -1214,7 +1214,7 @@ public class IfcHelper {
                 localPointOpening, zLocalOpening, xLocalOpening);
         IfcLocalPlacement localPlacementOpening = new IfcLocalPlacement(slab.getObjectPlacement(),
                 placementOpening);
-        LIST<IfcRepresentation> openingRepresentationsList = new LIST<>();
+        LIST<IfcRepresentation> openingRepresentationsList = new LIST<IfcRepresentation>();
 
         // Opening geometry with extruded area solid placement
         IfcDirection zLocalExtrusion = createDirection3D(0.0,0.0,1.0);
@@ -1232,7 +1232,7 @@ public class IfcHelper {
         IfcDirection openingExtrusionDirection = createDirection3D(0.0,0.0,1.0);
         IfcExtrudedAreaSolid extrudedOpening = new IfcExtrudedAreaSolid(rectangle, placementCenterOpening,
                 openingExtrusionDirection,new IfcPositiveLengthMeasure(new IfcLengthMeasure(openingThickness)));
-        SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<>();
+        SET<IfcRepresentationItem> openingRepresentation3DItem = new SET<IfcRepresentationItem>();
         openingRepresentation3DItem.add(extrudedOpening);
         IfcShapeRepresentation openingSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
                 new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), openingRepresentation3DItem);
@@ -1292,7 +1292,7 @@ public class IfcHelper {
         IfcOpeningElement opening = getOpening(nameDoor);
 
 //        // Door style definitions
-//        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
+//        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<IfcPropertySetDefinition>();
 //
 //        IfcDoorLiningProperties doorLiningProperties = new IfcDoorLiningProperties(
 //                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -1333,7 +1333,7 @@ public class IfcHelper {
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(buildingStorey.getName().getDecodedValue());
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
-            relatedObject = new SET<>();
+            relatedObject = new SET<IfcProduct>();
             relatedObject.add(door);
             IfcRelContainedInSpatialStructure relationBuildingStoreyToDoor;
             relationBuildingStoreyToDoor = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
@@ -1352,7 +1352,7 @@ public class IfcHelper {
                 new IfcText("OpeningContainer for Door",true),opening,door);
 
 //        // Create relation IfcDoor <-> IfcDoorStyle
-//        SET<IfcObject> ifcDoorSET = new SET<>();
+//        SET<IfcObject> ifcDoorSET = new SET<IfcObject>();
 //        ifcDoorSET.add(door);
 //        IfcRelDefinesByType relDefinesByType = new IfcRelDefinesByType(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
 //                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Door Container", true),
@@ -1386,7 +1386,7 @@ public class IfcHelper {
         IfcOpeningElement opening = getOpening(nameWindow);
 
 //        // Window style definitions
-//        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
+//        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<IfcPropertySetDefinition>();
 //
 //        IfcWindowLiningProperties windowLiningProperties = new IfcWindowLiningProperties(
 //                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -1427,7 +1427,7 @@ public class IfcHelper {
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(buildingStorey.getName().getDecodedValue());
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
-            relatedObject = new SET<>();
+            relatedObject = new SET<IfcProduct>();
             relatedObject.add(window);
             IfcRelContainedInSpatialStructure relationBuildingStoreyToWindow;
             relationBuildingStoreyToWindow = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
@@ -1446,7 +1446,7 @@ public class IfcHelper {
                 new IfcText("OpeningContainer for Window",true),opening,window);
 
 //        // Create relation IfcWindow <-> IfcWindowStyle
-//        SET<IfcObject> ifcWindowSET = new SET<>();
+//        SET<IfcObject> ifcWindowSET = new SET<IfcObject>();
 //        ifcWindowSET.add(window);
 //        IfcRelDefinesByType relDefinesByType = new IfcRelDefinesByType(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
 //                ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Window Container", true),
@@ -1480,7 +1480,7 @@ public class IfcHelper {
         IfcOpeningElement opening = getOpening(nameWindow);
 
         // Window style definitions
-        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<>();
+        SET<IfcPropertySetDefinition> propertySetDefinitions = new SET<IfcPropertySetDefinition>();
 
         IfcWindowLiningProperties windowLiningProperties = new IfcWindowLiningProperties(
                 new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -1527,7 +1527,7 @@ public class IfcHelper {
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(buildingStorey.getName().getDecodedValue());
         if(relContainedInSpatialStructure == null){
             SET<IfcProduct> relatedObject;
-            relatedObject = new SET<>();
+            relatedObject = new SET<IfcProduct>();
             relatedObject.add(window);
             IfcRelContainedInSpatialStructure relationBuildingStoreyToWindow;
             relationBuildingStoreyToWindow = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
@@ -1546,7 +1546,7 @@ public class IfcHelper {
                 new IfcText("OpeningContainer for Window",true),opening,window);
 
         // Create relation IfcWindow <-> IfcWindowStyle
-        SET<IfcObject> ifcWindowSET = new SET<>();
+        SET<IfcObject> ifcWindowSET = new SET<IfcObject>();
         ifcWindowSET.add(window);
         IfcRelDefinesByType relDefinesByType = new IfcRelDefinesByType(new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
                 ifcModel.getIfcProject().getOwnerHistory(),new IfcLabel("Window Container", true),
@@ -1571,9 +1571,9 @@ public class IfcHelper {
 
     // Permet d'ajouter un MaterialLayer à un wallStandardCase
     public void addMaterialLayer (IfcWallStandardCase wall, ArrayList<MaterialTypeEnum> listMaterial){
-        SET<IfcRoot> relatedObjects = new SET<>();
+        SET<IfcRoot> relatedObjects = new SET<IfcRoot>();
         relatedObjects.add(wall);
-        LIST<IfcMaterialLayer> materialLayerLIST = new LIST<>();
+        LIST<IfcMaterialLayer> materialLayerLIST = new LIST<IfcMaterialLayer>();
         double nbMaterial = listMaterial.size();
         double wallThickness = this.getWallThickness(wall);
 
@@ -1603,9 +1603,9 @@ public class IfcHelper {
 
     // Permet d'ajouter un MaterialLayer à un slab
     public void addMaterialLayerToSlab (IfcSlab slab, ArrayList<MaterialTypeEnum> listMaterial){
-        SET<IfcRoot> relatedObjects = new SET<>();
+        SET<IfcRoot> relatedObjects = new SET<IfcRoot>();
         relatedObjects.add(slab);
-        LIST<IfcMaterialLayer> materialLayerLIST = new LIST<>();
+        LIST<IfcMaterialLayer> materialLayerLIST = new LIST<IfcMaterialLayer>();
         double nbMaterial = listMaterial.size();
         double slabThickness = this.getSlabThickness(slab);
 
@@ -2341,32 +2341,32 @@ public class IfcHelper {
         IfcWallStandardCase wallP = getWall("WallInt P");
 
         // Create all the slabs
-        LIST<IfcCartesianPoint> hall = new LIST<>();
+        LIST<IfcCartesianPoint> hall = new LIST<IfcCartesianPoint>();
         hall.add(hall1);
         hall.add(hall2);
         hall.add(hall3);
         hall.add(hall4);
-        LIST<IfcCartesianPoint> sdb = new LIST<>();
+        LIST<IfcCartesianPoint> sdb = new LIST<IfcCartesianPoint>();
         sdb.add(sdb1);
         sdb.add(sdb2);
         sdb.add(sdb3);
         sdb.add(sdb4);
-        LIST<IfcCartesianPoint> chamber1 = new LIST<>();
+        LIST<IfcCartesianPoint> chamber1 = new LIST<IfcCartesianPoint>();
         chamber1.add(chamberOne1);
         chamber1.add(chamberOne2);
         chamber1.add(chamberOne3);
         chamber1.add(chamberOne4);
-        LIST<IfcCartesianPoint> chamber2 = new LIST<>();
+        LIST<IfcCartesianPoint> chamber2 = new LIST<IfcCartesianPoint>();
         chamber2.add(chamberTwo1);
         chamber2.add(chamberTwo2);
         chamber2.add(chamberTwo3);
         chamber2.add(chamberTwo4);
-        LIST<IfcCartesianPoint> chamber3 = new LIST<>();
+        LIST<IfcCartesianPoint> chamber3 = new LIST<IfcCartesianPoint>();
         chamber3.add(chamberThree1);
         chamber3.add(chamberThree2);
         chamber3.add(chamberThree3);
         chamber3.add(chamberThree4);
-        LIST<IfcCartesianPoint> salon = new LIST<>();
+        LIST<IfcCartesianPoint> salon = new LIST<IfcCartesianPoint>();
         salon.add(salon1);
         salon.add(salon2);
         salon.add(salon3);
@@ -2418,7 +2418,7 @@ public class IfcHelper {
         IfcWallStandardCase wallB = getWall("WallExt B");
         IfcWallStandardCase wallC = getWall("WallExt C");
         IfcWallStandardCase wallD = getWall("WallExt D");
-        LIST<IfcCartesianPoint> hall = new LIST<>();
+        LIST<IfcCartesianPoint> hall = new LIST<IfcCartesianPoint>();
         hall.add(pointA);
         hall.add(pointB);
         hall.add(pointC);
@@ -2439,7 +2439,7 @@ public class IfcHelper {
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = buildingStorey.getContainsElements_Inverse();
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
         SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
-        LIST<IfcSlab> slabLIST = new LIST<>();
+        LIST<IfcSlab> slabLIST = new LIST<IfcSlab>();
         for (IfcProduct actualProduct : productSET){
             if (actualProduct instanceof IfcSlab){
                 slabLIST.add((IfcSlab)actualProduct);
@@ -2480,7 +2480,7 @@ public class IfcHelper {
 
     // Permet de récupérer les murs associés au premier étage
     public List<IfcWallStandardCase> getWallsRelToFirstStage(){
-        List<IfcWallStandardCase> wallStandardCaseList = new ArrayList<>();
+        List<IfcWallStandardCase> wallStandardCaseList = new ArrayList<IfcWallStandardCase>();
         IfcBuildingStorey firstBuildingStorey = getFirstStorey();
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = firstBuildingStorey.getContainsElements_Inverse();
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
@@ -2495,7 +2495,7 @@ public class IfcHelper {
 
     // Permet de récupérer les murs associés au premier étage
     public List<IfcSlab> getSlabsRelToFirstStage(){
-        List<IfcSlab> slabList = new ArrayList<>();
+        List<IfcSlab> slabList = new ArrayList<IfcSlab>();
         IfcBuildingStorey firstBuildingStorey = getFirstStorey();
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = firstBuildingStorey.getContainsElements_Inverse();
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
@@ -2551,12 +2551,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(wall);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -2610,12 +2610,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(wall);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -2669,12 +2669,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(wall);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -2728,12 +2728,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(wall);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -2817,12 +2817,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(window);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -2876,12 +2876,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(product);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -2935,12 +2935,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(product);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -2994,12 +2994,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(window);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -3083,12 +3083,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(door);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
@@ -3142,12 +3142,12 @@ public class IfcHelper {
 
         // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
         if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<>();
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
             propertySET.add(property);
             IfcPropertySet propertySet = new IfcPropertySet(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
                     new IfcLabel("DPE-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<>();
+            SET<IfcObject> objectSET = new SET<IfcObject>();
             objectSET.add(door);
             IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
                     new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
