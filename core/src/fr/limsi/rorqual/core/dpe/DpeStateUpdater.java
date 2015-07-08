@@ -17,8 +17,9 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
  */
 public class DpeStateUpdater implements EventListener {
 
-    HashMap<Object, DpeState> states = new HashMap<Object, DpeState>();
-    ModelGraph modelGraph;
+    private HashMap<Object, DpeState> states = new HashMap<Object, DpeState>();
+    private ModelGraph modelGraph;
+    private boolean regardeEtatWall=true;
 
     public DpeStateUpdater(ModelGraph m) {
         modelGraph = m;
@@ -58,6 +59,7 @@ public class DpeStateUpdater implements EventListener {
             }
         }
         if (isAllWallKnown == true) {
+            regardeEtatWall=false;
             Event response = new Event(DpeEvent.DPE_STATE_NO_MORE_WALL_UNKNOWN, null);
             EventManager.getInstance().put(Channel.DPE, response);
         }
@@ -88,7 +90,9 @@ public class DpeStateUpdater implements EventListener {
                                 break;
                         }
                         setState(items[0], (DpeState) items[1]);
-                        verifyStatesWall();
+                        if (regardeEtatWall){
+                            verifyStatesWall();
+                        }
                         //verifyAllStates();
                         break;
                 }
