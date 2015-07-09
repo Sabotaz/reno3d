@@ -13,6 +13,7 @@ import java.util.Iterator;
 import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
+import fr.limsi.rorqual.core.ui.Layout;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
@@ -1077,7 +1078,67 @@ public class Dpe implements EventListener {
                         typeEnergieConstruction = (TypeEnergieConstructionEnum)o;
                         break;
                     }
+                    case TYPE_MUR_RESPONSE: {
+                        Object[] items = (Object[]) o;
+                        IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
+                        TypeMurEnum typeMur = (TypeMurEnum)items[1];
+                        Layout layout = (Layout)items[2];
+                        ifcHelper.addPropertyTypeWall(wall, typeMur);
+                        if (!walls_properties.containsKey(wall))
+                            walls_properties.put(wall, new HashMap<EventType, Object>());
+                        walls_properties.get(wall).put(event, typeMur);
 
+                        if (!typeMur.equals(TypeMurEnum.MUR_INTERIEUR)){/*
+                            eventType = DpeEvent.DATE_ISOLATION_MUR;
+                            Event event2 = new Event(eventType, wall);
+                            EventManager.getInstance().put(Channel.DPE, event2);*/
+                            layout.getFromId("date_isolation").setVisible(true);
+                            layout.getFromId("type_isolation").setVisible(true);
+                        }else{
+                            layout.getFromId("date_isolation").setVisible(false);
+                            layout.getFromId("type_isolation").setVisible(false);
+                            // On signal au model que le calcul thermique vient d'être effectuer sur wall
+                            Object o2[] = {wall, DpeState.KNOWN};
+                            Event e2 = new Event(DpeEvent.DPE_STATE_CHANGED, o2);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        tryActualiseWallDP(wall);
+                        break;
+                    }
+
+                    case DATE_ISOLATION_MUR_RESPONSE: {
+                        Object[] items = (Object[]) o;
+                        IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
+                        DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum)items[1];
+                        Layout layout = (Layout)items[2];
+                        ifcHelper.addPropertyDateIsolationWall(wall, dateIsolationMur);
+                        if (!walls_properties.containsKey(wall))
+                            walls_properties.put(wall, new HashMap<EventType, Object>());
+                        walls_properties.get(wall).put(event, dateIsolationMur);
+                        if (!dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) && !dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE)){
+                            /*eventType = DpeEvent.TYPE_ISOLATION_MUR;
+                            Event event2 = new Event(eventType, wall);
+                            EventManager.getInstance().put(Channel.DPE, event2);*/
+                            layout.getFromId("type_isolation").setVisible(true);
+                        } else {
+                            layout.getFromId("type_isolation").setVisible(false);
+                        }
+                        tryActualiseWallDP(wall);
+                        break;
+                    }
+
+                    case TYPE_ISOLATION_MUR_RESPONSE: {
+                        Object[] items = (Object[]) o;
+                        IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
+                        TypeIsolationMurEnum typeIsolationMur = (TypeIsolationMurEnum)items[1];
+                        ifcHelper.addPropertyTypeIsolationWall(wall, typeIsolationMur);
+                        if (!walls_properties.containsKey(wall))
+                            walls_properties.put(wall, new HashMap<EventType, Object>());
+                        walls_properties.get(wall).put(event, typeIsolationMur);
+                        tryActualiseWallDP(wall);
+                        break;
+                    }
+/*
                     case TYPE_MUR_RESPONSE: {
                         Object[] items = (Object[]) o;
                         IfcWallStandardCase wall = (IfcWallStandardCase)items[0];
@@ -1122,7 +1183,7 @@ public class Dpe implements EventListener {
                         tryActualiseWallDP(wall);
                         break;
                     }
-
+*/
                     case TYPE_FENETRE_RESPONSE: {
                         Object[] items = (Object[]) o;
                         IfcWindow window = (IfcWindow)items[0];

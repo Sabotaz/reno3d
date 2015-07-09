@@ -5,6 +5,7 @@
     {
       "type": "Table",
       "name": "Type de mur",
+      "id": "type_mur",
       "content": [
         {
           "type": "ButtonGroup",
@@ -43,6 +44,7 @@
     {
       "type": "Table",
       "name": "Isolation",
+      "id": "date_isolation",
       "content": [
         {
           "type": "ButtonGroup",
@@ -92,6 +94,54 @@
               "type": "TextButton",
               "text": "Inconnue",
               "value": "fr.limsi.rorqual.core.dpe.DateIsolationMurEnum.UNKNOWN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Type d'isolation",
+      "id": "type_isolation",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "update": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR_RESPONSE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Interieure (ITI)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum.ITI"
+            },
+            {
+              "type": "TextButton",
+              "text": "Exterieure (ITE)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum.ITE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Repartie (ITR)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum.ITR"
+            },
+            {
+              "type": "TextButton",
+              "text": "Interieure + Exterieure (ITI+ITE)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum.ITI_PLUS_ITE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Interieure + Repartie (ITI+ITR)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum.ITI_PLUS_ITR"
+            },
+            {
+              "type": "TextButton",
+              "text": "Exterieure + Repartie (ITE+ITR)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum.ITE_PLUS_ITR"
+            },
+            {
+              "type": "TextButton",
+              "text": "Inconnue",
+              "value": "fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum.INCONNUE"
             }
           ]
         }

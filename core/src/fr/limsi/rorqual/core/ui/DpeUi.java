@@ -9,21 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.concurrent.Semaphore;
 
-import fr.limsi.rorqual.core.dpe.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.PositionAppartementEnum;
 import fr.limsi.rorqual.core.dpe.TypeBatimentEnum;
 import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
 import fr.limsi.rorqual.core.dpe.TypeEnergieConstructionEnum;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
-import fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum;
-import fr.limsi.rorqual.core.dpe.TypeMurEnum;
 import fr.limsi.rorqual.core.dpe.TypeVitrageEnum;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Channel;
@@ -54,7 +50,7 @@ public class DpeUi implements EventListener {
 
     public Actor getPropertyWindow(Object o) {
         if (o instanceof IfcWallStandardCase) {
-            Actor a = LayoutReader.readLayout("data/ui/layout/wallProperties.json");
+            Actor a = Layout.fromJson("data/ui/layout/wallProperties.json").getRoot();
             a.setUserObject(o);
             return a;
         }
