@@ -48,24 +48,26 @@ public class TabWindow extends Table {
         buttonTab = new Table();
         contentTab = new Table();
         window.add(buttonTab).row();
-        window.add(contentTab);
-        window.setDebug(true);
+        window.add(contentTab).left().padTop(5);
         this.add(window);
     }
 
     public void addTable(Actor tab) {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
-        Button button = new TextButton(tab.getName(), skin);
+        Button button = new TextButton(tab.getName(), skin, "tab");
         button.addListener(clickListener);
         tabs.put(button, tab);
         buttons.add(button);
-        buttonTab.add(button);
+        buttonTab.add(button).padLeft(1).padTop(1);
 
         if (no_content_yet) {
-            contentTab.add(tabs.get(button));
+            last = tabs.get(button);
+            contentTab.add(last);
             no_content_yet = false;
         }
     }
+
+    Actor last = null;
 
     public void buttonClicked(Button button) {
         float wcx = window.getX();
@@ -75,13 +77,22 @@ public class TabWindow extends Table {
         float tx = this.getX();
         float ty = this.getY();
 
-        float wx = tx + wcx + wcw/2;
-        float wy = ty + wcy + wch/2+1;
+        Actor next = tabs.get(button);
+        float last_mid_height = last.getHeight()/2;
+        float next_mid_height = next.getHeight()/2;
+        float last_mid_width = last.getWidth()/2;
+        float next_mid_width = next.getWidth()/2;
+
+        float wx = tx + wcx + wcw/2 - (next_mid_width-last_mid_width);
+        float wy = ty + wcy + wch/2+1 - (next_mid_height-last_mid_height);
+
 
         contentTab.clear();
-        contentTab.add(tabs.get(button));
+        contentTab.add(next);
+        last = next;
+        //button.setChecked(true);
 
-        this.setPosition((int)wx, (int)wy);
+        this.setPosition((int) wx, (int)wy);
         window.setPosition(-(int)(wcw/2), -(int)(wch/2));
     }
 

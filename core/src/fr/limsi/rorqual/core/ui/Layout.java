@@ -181,7 +181,7 @@ public class Layout {
             while ((json_child = json.get("content").get(i)) != null) {
                 if ((child = getActor(json_child, updater, root)) != null) {
                     if (child instanceof Button) {
-                        table.add(child).row();
+                        table.add(child).left().pad(1).row();
                         buttons.add((Button)child);
                     }
                 }

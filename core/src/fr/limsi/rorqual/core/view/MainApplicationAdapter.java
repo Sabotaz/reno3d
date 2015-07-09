@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -25,14 +24,9 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
@@ -46,14 +40,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.event.Channel;
-import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.ui.DpeUi;
-import fr.limsi.rorqual.core.ui.LayoutReader;
 import fr.limsi.rorqual.core.ui.Popup;
-import fr.limsi.rorqual.core.ui.TabWindow;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
@@ -435,8 +426,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 System.out.println("TOUCH: " + selected.getUserData());
                 selected.setColor(Color.YELLOW);
                 tb = dpeui.getPropertyWindow(selected.getUserData());
-                if (tb != null)
+                if (tb != null) {
+                    tb.setPosition(500,500);
                     stageMenu.addActor(tb);
+                }
                 //selected.add(pin);
                 //pin.transform.setToTranslation(selected.getTop());
             }
