@@ -76,13 +76,13 @@ public class TabWindow extends Table {
         float ty = this.getY();
 
         float wx = tx + wcx + wcw/2;
-        float wy = ty + wcy + wch/2;
+        float wy = ty + wcy + wch/2+1;
 
         contentTab.clear();
         contentTab.add(tabs.get(button));
 
-        this.setPosition(wx, wy);
-        window.setPosition(-wcw/2, -wch/2);
+        this.setPosition((int)wx, (int)wy);
+        window.setPosition(-(int)(wcw/2), -(int)(wch/2));
     }
 
 
