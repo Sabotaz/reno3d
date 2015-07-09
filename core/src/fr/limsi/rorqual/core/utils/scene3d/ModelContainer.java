@@ -144,16 +144,27 @@ public class ModelContainer {
         return mx;
     }
 
+    private boolean visible = true;
+
+    public void setVisible(boolean b) {
+        visible = b;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
     protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
+        if (isVisible()) {
+            // update mx
+            Matrix4 updated_global_transform = global_transform.cpy().mul(transform);
 
-        // update mx
-        Matrix4 updated_global_transform = global_transform.cpy().mul(transform);
-
-        // update model mx
-        model.transform = updated_global_transform.cpy().mul(model_transform);
-        // draw
-        modelBatch.render(model, environment);
-        drawChildren(modelBatch, environment, updated_global_transform);
+            // update model mx
+            model.transform = updated_global_transform.cpy().mul(model_transform);
+            // draw
+            modelBatch.render(model, environment);
+            drawChildren(modelBatch, environment, updated_global_transform);
+        }
     }
 
     protected void drawChildren(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
