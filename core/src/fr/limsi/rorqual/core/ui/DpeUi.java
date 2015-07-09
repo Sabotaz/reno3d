@@ -2,12 +2,14 @@ package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -49,6 +51,23 @@ public class DpeUi implements EventListener {
         assets = AssetManager.getInstance();
     }
     Semaphore s = new Semaphore(1,true);
+
+    public Actor getPropertyWindow(Object o) {
+        Skin skin = (Skin)assets.get("uiskin");
+
+        TabWindow tb = new TabWindow();
+        Table tab = new Table();
+        tab.setName("Test");
+        tab.add(new TextButton("Content", skin));
+
+        Table tab2 = new Table();
+        tab2.setName("Test2");
+        tab2.add(new TextButton("Content2", skin));
+        tb.addTable(tab);
+        tb.addTable(tab2);
+        tb.setPosition(100, Gdx.graphics.getHeight() - 100);
+        return tb;
+    }
 
     public void notify(Channel c, Event e) {
         try {
@@ -842,7 +861,7 @@ public class DpeUi implements EventListener {
                             TextButton textButton1 = new TextButton("Interieure (ITI)",skin);
                             textButton1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    Object item [] = new Object[2];
+                                    Object item[] = new Object[2];
                                     item[0] = wall;
                                     item[1] = TypeIsolationMurEnum.ITI;
                                     DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
@@ -855,7 +874,7 @@ public class DpeUi implements EventListener {
                             TextButton textButton2 = new TextButton("Exterieure (ITE)",skin);
                             textButton2.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    Object item [] = new Object[2];
+                                    Object item[] = new Object[2];
                                     item[0] = wall;
                                     item[1] = TypeIsolationMurEnum.ITE;
                                     DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
@@ -868,7 +887,7 @@ public class DpeUi implements EventListener {
                             TextButton textButton3 = new TextButton("Repartie (ITR)",skin);
                             textButton3.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    Object item [] = new Object[2];
+                                    Object item[] = new Object[2];
                                     item[0] = wall;
                                     item[1] = TypeIsolationMurEnum.ITR;
                                     DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
@@ -881,7 +900,7 @@ public class DpeUi implements EventListener {
                             TextButton textButton4 = new TextButton("Interieure + Exterieure (ITI+ITE)",skin);
                             textButton4.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    Object item [] = new Object[2];
+                                    Object item[] = new Object[2];
                                     item[0] = wall;
                                     item[1] = TypeIsolationMurEnum.ITI_PLUS_ITE;
                                     DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
@@ -894,7 +913,7 @@ public class DpeUi implements EventListener {
                             TextButton textButton5 = new TextButton("Interieure + Repartie (ITI+ITR)",skin);
                             textButton5.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    Object item [] = new Object[2];
+                                    Object item[] = new Object[2];
                                     item[0] = wall;
                                     item[1] = TypeIsolationMurEnum.ITI_PLUS_ITR;
                                     DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
@@ -907,7 +926,7 @@ public class DpeUi implements EventListener {
                             TextButton textButton6 = new TextButton("Exterieure + Repartie (ITE+ITR)",skin);
                             textButton6.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    Object item [] = new Object[2];
+                                    Object item[] = new Object[2];
                                     item[0] = wall;
                                     item[1] = TypeIsolationMurEnum.ITE_PLUS_ITR;
                                     DpeEvent responseType = DpeEvent.TYPE_ISOLATION_MUR_RESPONSE;
