@@ -53,20 +53,12 @@ public class DpeUi implements EventListener {
     Semaphore s = new Semaphore(1,true);
 
     public Actor getPropertyWindow(Object o) {
-        Skin skin = (Skin)assets.get("uiskin");
-
-        TabWindow tb = new TabWindow();
-        Table tab = new Table();
-        tab.setName("Test");
-        tab.add(new TextButton("Content", skin));
-
-        Table tab2 = new Table();
-        tab2.setName("Test2");
-        tab2.add(new TextButton("Content2", skin));
-        tb.addTable(tab);
-        tb.addTable(tab2);
-        tb.setPosition(100, Gdx.graphics.getHeight() - 100);
-        return tb;
+        if (o instanceof IfcWallStandardCase) {
+            Actor a = LayoutReader.readLayout("data/ui/layout/wallProperties.json");
+            a.setUserObject(o);
+            return a;
+        }
+        return null;
     }
 
     public void notify(Channel c, Event e) {
@@ -447,7 +439,7 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(imageButton1).pad(2);
                             dialog.getContentTable().add(imageButton2).pad(2);
                             dialog.getContentTable().add(imageButton3).pad(2);
-                            dialog.setSize(largeur3images+20, hauteurImages+20);
+                            dialog.setSize(largeur3images + 20, hauteurImages + 20);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
@@ -560,7 +552,7 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().add(textButton6).pad(2);
                             dialog.getContentTable().add(textButton7).pad(2);
                             dialog.getContentTable().add(textButton8).pad(2);
-                            dialog.setSize(largeur+40, hauteur+20);
+                            dialog.setSize(largeur + 40, hauteur + 20);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
@@ -585,7 +577,7 @@ public class DpeUi implements EventListener {
                             break;
                         }
 
-                        case TYPE_MUR: {
+                        case TYPE_MUR: {/*
                             s.acquire();
                             final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
                             final Dialog dialog = new Dialog(" Type de mur " , skin, "dialog") {
@@ -683,11 +675,11 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().row();
                             dialog.getContentTable().add(textButton6).pad(2).left();
                             dialog.setSize(textButton5.getWidth() + 20, textButton1.getHeight() * 6 + 92);
-                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));*/
                             break;
                         }
 
-                        case DATE_ISOLATION_MUR: {
+                        case DATE_ISOLATION_MUR: {/*
                             s.acquire();
                             final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
                             final Dialog dialog = new Dialog(" Date de l'isolation du mur " , skin, "dialog") {
@@ -845,11 +837,11 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().row();
                             dialog.getContentTable().add(textButton10).pad(2).left();
                             dialog.setSize(textButton5.getWidth() + 20, textButton1.getHeight() * 10 + 120);
-                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));*/
                             break;
                         }
 
-                        case TYPE_ISOLATION_MUR: {
+                        case TYPE_ISOLATION_MUR: {/*
 
                             s.acquire();
                             final IfcWallStandardCase wall = (IfcWallStandardCase)e.getUserObject();
@@ -963,7 +955,7 @@ public class DpeUi implements EventListener {
                             dialog.getContentTable().row();
                             dialog.getContentTable().add(textButton7).pad(2).left();
                             dialog.setSize(textButton4.getWidth() + 20, textButton1.getHeight() * 7 + 100);
-                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
+                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));*/
                             break;
                         }
 

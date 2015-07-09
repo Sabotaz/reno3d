@@ -251,10 +251,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //shader.init();
         //program = shader.program;
         //popup = new Popup(0,0,800,800);
-        Actor a = LayoutReader.readLayout("data/ui/layout/wallProperties.json");
+        /*Actor a = LayoutReader.readLayout("data/ui/layout/wallProperties.json");
         a.setDebug(true);
         a.setPosition(300, Gdx.graphics.getHeight() - 300);
-        stageMenu.addActor(a);
+        stageMenu.addActor(a);*/
 	}
 
     public void act() {
@@ -435,7 +435,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 System.out.println("TOUCH: " + selected.getUserData());
                 selected.setColor(Color.YELLOW);
                 tb = dpeui.getPropertyWindow(selected.getUserData());
-                stageMenu.addActor(tb);
+                if (tb != null)
+                    stageMenu.addActor(tb);
                 //selected.add(pin);
                 //pin.transform.setToTranslation(selected.getTop());
             }
