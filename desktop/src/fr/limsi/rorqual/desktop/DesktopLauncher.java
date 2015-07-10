@@ -23,7 +23,7 @@ public class DesktopLauncher {
         config.width = 1280;
 
         IfcHelper ifcHelper = new IfcHelper();
-//        ifcHelper.createApartmentTest(ifcModel);
+//        ifcHelper.createApartmentTest();
         ifcHelper.createSecondAppartementTest();
 //        IfcCartesianPoint pointA1 = ifcHelper.createCartesianPoint2D(0, 0);
 //        IfcCartesianPoint pointA2 = ifcHelper.createCartesianPoint2D(8, 0);
@@ -49,6 +49,9 @@ public class DesktopLauncher {
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_FENETRE));
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_MATERIAU_MENUISERIE));
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_VITRAGE_MENUISERIE));
+
+        ifcHelper.getBuildingStoreySortedByElevation();
+
         ifcHelper.saveIfcModel();
 
         try {

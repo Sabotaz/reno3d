@@ -2,6 +2,8 @@ package fr.limsi.rorqual.core.model;
 
 import fr.limsi.rorqual.core.dpe.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.DoorPropertiesEnum;
+import fr.limsi.rorqual.core.dpe.LocationSlabsEnum;
+import fr.limsi.rorqual.core.dpe.SlabProperties;
 import fr.limsi.rorqual.core.dpe.TypeDoorEnum;
 import fr.limsi.rorqual.core.dpe.TypeFenetreEnum;
 import fr.limsi.rorqual.core.dpe.TypeIsolationMurEnum;
@@ -16,14 +18,20 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcChangeActionEnum.IfcChangeActionEnum_internal;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSIUnitName.IfcSIUnitName_internal;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcUnitEnum.IfcUnitEnum_internal;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Created by ricordeau on 08/04/2015.
@@ -992,8 +1000,8 @@ public class IfcHelper {
         addPropertyTransmittanceThermiqueWall(ifcWallStandardCase,"INCONNUE");
     }
 
-    // Permet d'ajouter un floor à un IfcModel
-    public void addFloor (String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint){
+    // Permet d'ajouter un slab à un IfcModel
+    public void addSlab(String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint){
         IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
         IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0, 0.0, 0.0);
         IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0, 0.0, 1.0);
@@ -1052,82 +1060,7 @@ public class IfcHelper {
         materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
         materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
         this.addMaterialLayerToSlab(ifcSlab, materialTypeEnumArrayList);
-
-        // add new Ifc-objects to the model
-        ifcModel.addIfcObject(ifcSlab);
-        ifcModel.addIfcObject(ifcLocalPlacementSlab);
-        ifcModel.addIfcObject(ifcAxis2Placement3DSlab);
-        ifcModel.addIfcObject(ifcCartesianPointOriginSlab);
-        ifcModel.addIfcObject(ifcDirectionZAxisLocalSlab);
-        ifcModel.addIfcObject(ifcDirectionXDirectionLocalSlab);
-
-        ifcModel.addIfcObject(ifcSlabDefinitionShape);
-
-        ifcModel.addIfcObject(ifcSlabSweptSolidRepresentation);
-        ifcModel.addIfcObject(extrudedSlab);
-        ifcModel.addIfcObject(ifcAxis2Placement3DSlabRepresentation);
-        ifcModel.addIfcObject(ifcCartesianPointOriginSlabRepresentation);
-        ifcModel.addIfcObject(ifcSlabExtrudedDirection);
-        ifcModel.addIfcObject(slabArbitraryClosedProfileDef);
-        ifcModel.addIfcObject(slabPolyline);
-        for(IfcCartesianPoint actualPoint : listSlabCartesianPoint){
-            ifcModel.addIfcObject(actualPoint);
-        }
-    }
-
-    // Permet d'ajouter un roof à un IfcModel
-    public void addRoof (String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint, double elevation){
-        IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
-        IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0, 0.0, elevation);
-        IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0,0.0,1.0);
-        IfcDirection ifcDirectionXDirectionLocalSlab = createDirection3D(1.0,0.0,0.0);
-        IfcAxis2Placement3D ifcAxis2Placement3DSlab = new IfcAxis2Placement3D(
-                ifcCartesianPointOriginSlab, ifcDirectionZAxisLocalSlab, ifcDirectionXDirectionLocalSlab);
-        IfcLocalPlacement ifcLocalPlacementSlab = new IfcLocalPlacement(buildingStorey.getObjectPlacement(),
-                ifcAxis2Placement3DSlab);
-        LIST<IfcRepresentation> ifcSlabRepresentationsList = new LIST<IfcRepresentation>();
-
-        // Slab representation : SweptSolid representation (3D)
-        IfcPolyline slabPolyline = new IfcPolyline(listSlabCartesianPoint);
-        IfcArbitraryClosedProfileDef slabArbitraryClosedProfileDef = new IfcArbitraryClosedProfileDef(
-                new IfcProfileTypeEnum ("AREA"), null, slabPolyline);
-        IfcCartesianPoint ifcCartesianPointOriginSlabRepresentation = createCartesianPoint3D(0.0,0.0,0.0);
-        IfcAxis2Placement3D ifcAxis2Placement3DSlabRepresentation = new IfcAxis2Placement3D(
-                ifcCartesianPointOriginSlabRepresentation, null, null);
-        IfcDirection ifcSlabExtrudedDirection = createDirection3D(0.0,0.0,1.0);
-        IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(0.2);
-        IfcExtrudedAreaSolid extrudedSlab = new IfcExtrudedAreaSolid(slabArbitraryClosedProfileDef,
-                ifcAxis2Placement3DSlabRepresentation,ifcSlabExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
-        SET<IfcRepresentationItem> ifcSlabRepresentation3DItem = new SET<IfcRepresentationItem>();
-        ifcSlabRepresentation3DItem.add(extrudedSlab);
-        IfcShapeRepresentation ifcSlabSweptSolidRepresentation = new IfcShapeRepresentation(getGeometricRepresentationContext(),
-                new IfcLabel ("Body",true), new IfcLabel("SweptSolid",true), ifcSlabRepresentation3DItem);
-        ifcSlabRepresentationsList.add(ifcSlabSweptSolidRepresentation);
-
-        // Create the Slab
-        IfcProductDefinitionShape ifcSlabDefinitionShape = new IfcProductDefinitionShape(null,null,ifcSlabRepresentationsList);
-        IfcSlab ifcSlab = new IfcSlab(
-                new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()),
-                ifcModel.getIfcProject().getOwnerHistory(), new IfcLabel("Slab", true),
-                new IfcText("Slab = roof / etage = " + nameBuildingStorey, true), null, ifcLocalPlacementSlab,
-                ifcSlabDefinitionShape, null, new IfcSlabTypeEnum("ROOF"));
-
-        // Create relation IfcBuildingStorey --> IfcWallStandardCase
-        IfcRelContainedInSpatialStructure relContainedInSpatialStructure = this.getRelContainedInSpatialStructure(nameBuildingStorey);
-        if(relContainedInSpatialStructure == null){
-            SET<IfcProduct> relatedObject;
-            relatedObject = new SET<IfcProduct>();
-            relatedObject.add(ifcSlab);
-            IfcRelContainedInSpatialStructure relationBuildingStoreyToSlab;
-            relationBuildingStoreyToSlab = new IfcRelContainedInSpatialStructure(new IfcGloballyUniqueId(
-                    ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                    new IfcLabel("BuildingStoreyContainer",true),new IfcText("BuildingStoreyContainer for Slab",true),
-                    relatedObject, buildingStorey);
-            ifcModel.addIfcObject(relationBuildingStoreyToSlab);
-        }
-        else{
-            relContainedInSpatialStructure.addRelatedElements(ifcSlab);
-        }
+        this.addPropertyLocationSlab(ifcSlab, LocationSlabsEnum.INCONNUE);
 
         // add new Ifc-objects to the model
         ifcModel.addIfcObject(ifcSlab);
@@ -1167,7 +1100,7 @@ public class IfcHelper {
         LIST<IfcRepresentation> openingRepresentationsList = new LIST<IfcRepresentation>();
 
         // Opening geometry with extruded area solid placement
-        IfcDirection zLocalExtrusion = createDirection3D(0.0,1.0,0.0);
+        IfcDirection zLocalExtrusion = createDirection3D(0.0, 1.0, 0.0);
         IfcDirection xLocalExtrusion = createDirection3D(0.0,0.0,1.0);
         IfcCartesianPoint centerOpening = createCartesianPoint3D(openingWidth/2,0.0,openingHeight/2);
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
@@ -2397,12 +2330,12 @@ public class IfcHelper {
         salon.add(salon4);
         salon.add(salon5);
         salon.add(salon6);
-        addFloor("1st floor",hall);
-        addFloor("1st floor",sdb);
-        addFloor("1st floor",chamber1);
-        addFloor("1st floor",chamber2);
-        addFloor("1st floor",chamber3);
-        addFloor("1st floor",salon);
+        addSlab("1st floor", hall);
+        addSlab("1st floor", sdb);
+        addSlab("1st floor", chamber1);
+        addSlab("1st floor", chamber2);
+        addSlab("1st floor", chamber3);
+        addSlab("1st floor", salon);
 
         // Create all the doors
         addDoor("door A",wallA,0.94,2.13,0.32);
@@ -2447,19 +2380,21 @@ public class IfcHelper {
         hall.add(pointB);
         hall.add(pointC);
         hall.add(pointD);
-        addFloor("1st floor", hall);
+        addSlab("1st floor", hall);
         addDoor("door A", wallA, 0.98, 2.13, 1.5);
         addDoor("door B", wallC, 0.94, 2.13, 1.1);
         addWindow("window C", wallB, 1.00, 1.50, 1.5, 0.50);
-        addWindow("window D",wallD,1.00,1.50,1.5,0.50);
+        addWindow("window D", wallD, 1.00, 1.50, 1.5, 0.50);
+        addBuildingStorey("2nd floor", 2.80);
+        addBuildingStorey("3rd floor",5.60);
+        addSlab("2nd floor", hall);
+        addSlab("3rd floor", hall);
     }
 
     // Permet de calculer la surface habitable du logement
     public double calculSurfaceHabitable(){
         double surfaceHabitable = 0;
-        Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
-        Iterator buildingStoreyIterator = collectionBuildingStorey.iterator();
-        IfcBuildingStorey buildingStorey = (IfcBuildingStorey)buildingStoreyIterator.next();
+        IfcBuildingStorey buildingStorey = this.getFirstStorey();
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = buildingStorey.getContainsElements_Inverse();
         IfcRelContainedInSpatialStructure relContainedInSpatialStructure = relContainedInSpatialStructureSET.iterator().next();
         SET<IfcProduct> productSET = relContainedInSpatialStructure.getRelatedElements();
@@ -2478,13 +2413,12 @@ public class IfcHelper {
     // Permet de calculer le périmètre d'un batiment
     public double calculPerimetreBatiment(){
         double per=0;
-        List<IfcWallStandardCase> wallStandardCaseList = getWallsRelToFirstStage();
-
-//        for (IfcWallStandardCase actualWall : wallStandardCaseList){
-//            if (this.getPropertyTypeWall(actualWall) == "ext"){
-//                per+=getWallLength(actualWall);
-//            }
-//        }
+        List<IfcWallStandardCase> wallStandardCaseList = getWallsRelToFirstStorey();
+        for (IfcWallStandardCase actualWall : wallStandardCaseList){
+            if (!(this.getPropertiesWall(actualWall,WallPropertiesEnum.TYPE_DE_MUR).equals(TypeMurEnum.MUR_INTERIEUR))){
+                per+=getWallLength(actualWall);
+            }
+        }
         return per;
     }
 
@@ -2503,7 +2437,7 @@ public class IfcHelper {
     }
 
     // Permet de récupérer les murs associés au premier étage
-    public List<IfcWallStandardCase> getWallsRelToFirstStage(){
+    public List<IfcWallStandardCase> getWallsRelToFirstStorey(){
         List<IfcWallStandardCase> wallStandardCaseList = new ArrayList<IfcWallStandardCase>();
         IfcBuildingStorey firstBuildingStorey = getFirstStorey();
         SET<IfcRelContainedInSpatialStructure> relContainedInSpatialStructureSET = firstBuildingStorey.getContainsElements_Inverse();
@@ -3182,6 +3116,65 @@ public class IfcHelper {
         }
     }
 
+    // Permet d'ajouter la location d'un slab
+    public void addPropertyLocationSlab(IfcSlab slab, LocationSlabsEnum locationSlab){
+
+        boolean hasProperties=false;
+        boolean hasSameProperty=false;
+
+        // On créer la property
+        IfcIdentifier nameProperty = new IfcIdentifier(SlabProperties.LOCATION_SLAB.toString(),true);
+        IfcValue valueProperty = new IfcIdentifier(locationSlab.toString(),true);
+        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
+
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = slab.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null){
+            for (IfcRelDefines actualRelDefines : relDefinesSET){
+                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet){
+                            hasProperties=true;
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET){
+                                if (actualProperty instanceof IfcPropertySingleValue){
+                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
+                                        hasSameProperty=true;
+                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
+                                    }
+                                }
+                            }
+                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
+                                propertySET.add(property);
+                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
+                                ifcModel.addIfcObject(property);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
+        if (!hasProperties){
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
+            propertySET.add(property);
+            IfcPropertySet propertySet = new IfcPropertySet(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    new IfcLabel("DPE-Properties",true),null,propertySET);
+            SET<IfcObject> objectSET = new SET<IfcObject>();
+            objectSET.add(slab);
+            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    null,null,objectSET,propertySet);
+            ifcModel.addIfcObject(propertySet);
+            ifcModel.addIfcObject(property);
+            ifcModel.addIfcObject(relDefinesByProperties);
+        }
+    }
+
     // Permet de récupérer les propriétées liées à une door
     public String getPropertiesDoor(IfcDoor door, DoorPropertiesEnum doorProperties) {
         // On va voir si des propriétés existent déja
@@ -3211,6 +3204,28 @@ public class IfcHelper {
         }
         return "null";
     }
+
+    // Permet de retourner un tableau de buildingstorey trié par altitude
+    public List<IfcBuildingStorey> getBuildingStoreySortedByElevation(){
+        Collection<IfcBuildingStorey> collectionBuildingStorey = ifcModel.getCollection(IfcBuildingStorey.class);
+        List<IfcBuildingStorey> buildingStoreysSortedByElevationList = new ArrayList<IfcBuildingStorey>();
+        IfcBuildingStorey buildingStoreyElevationMin = new IfcBuildingStorey();
+        while(!collectionBuildingStorey.isEmpty()){
+            double elevation = 100000;
+            for (IfcBuildingStorey actualBuildingStorey : collectionBuildingStorey){
+                if (elevation > actualBuildingStorey.getElevation().value){
+                    elevation = actualBuildingStorey.getElevation().value;
+                    buildingStoreyElevationMin = actualBuildingStorey;
+                }
+            }
+            buildingStoreysSortedByElevationList.add(buildingStoreyElevationMin);
+            collectionBuildingStorey.remove(buildingStoreyElevationMin);
+        }
+        return buildingStoreysSortedByElevationList;
+    }
+
+    // Permet de
+
 }
 
 
