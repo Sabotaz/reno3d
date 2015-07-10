@@ -50,8 +50,6 @@ public class DesktopLauncher {
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_MATERIAU_MENUISERIE));
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_VITRAGE_MENUISERIE));
 
-        ifcHelper.getBuildingStoreySortedByElevation();
-
         ifcHelper.saveIfcModel();
 
         try {

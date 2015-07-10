@@ -2387,8 +2387,8 @@ public class IfcHelper {
         addWindow("window D", wallD, 1.00, 1.50, 1.5, 0.50);
         addBuildingStorey("2nd floor", 2.80);
         addBuildingStorey("3rd floor",5.60);
-        addSlab("2nd floor", hall);
-        addSlab("3rd floor", hall);
+//        addSlab("2nd floor", hall);
+//        addSlab("3rd floor", hall);
     }
 
     // Permet de calculer la surface habitable du logement

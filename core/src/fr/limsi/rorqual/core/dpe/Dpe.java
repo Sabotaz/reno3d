@@ -1275,10 +1275,10 @@ public class Dpe implements EventListener {
                     case DPE_STATE_NO_MORE_WALL_UNKNOWN:{
                         notifierFenetres();
                         notifierPortes();
+                        ifcHelper.saveIfcModel();
                     }
                 }
             }
         }
     }
-
 }

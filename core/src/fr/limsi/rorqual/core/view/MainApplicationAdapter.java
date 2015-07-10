@@ -103,7 +103,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** ??? ***/
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
 
-
         /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera1.viewportHeight = Gdx.graphics.getHeight();
