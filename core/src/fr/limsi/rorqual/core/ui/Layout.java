@@ -188,12 +188,13 @@ public class Layout {
                 i++;
             }
         }
+        buttons.uncheckAll();
         return table;
     }
 
     private Actor makeTextButton(JsonValue json, Updater updater, Actor root) {
 
-        TextButton textButton = new TextButton(json.getString("text", ""), skin);
+        TextButton textButton = new TextButton(json.getString("text", ""), skin, "toggle");
 
         if (root == null)
             root = textButton;

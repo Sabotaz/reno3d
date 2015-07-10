@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -50,6 +51,11 @@ public class TabWindow extends Table {
         contentTab = new Table();
         window.add(buttonTab).row();
         window.add(contentTab).left().padTop(5);
+        window.addListener(new EventListener() {
+            public boolean handle(Event event) {
+                return true;
+            }
+        });
         this.add(window);
     }
 
@@ -57,7 +63,6 @@ public class TabWindow extends Table {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
         Button button = new TextButton(tab.getName(), skin, "tab");
         button.addListener(clickListener);
-
         tabs.put(button, tab);
         reversed_tabs.put(tab, button);
 
