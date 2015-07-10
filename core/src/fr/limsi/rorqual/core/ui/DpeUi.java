@@ -50,8 +50,7 @@ public class DpeUi implements EventListener {
 
     public Actor getPropertyWindow(Object o) {
         if (o instanceof IfcWallStandardCase) {
-            Actor a = Layout.fromJson("data/ui/layout/wallProperties.json").getRoot();
-            a.setUserObject(o);
+            Actor a = Layout.fromJson("data/ui/layout/wallProperties.json", o).getRoot();
             return a;
         }
         return null;
