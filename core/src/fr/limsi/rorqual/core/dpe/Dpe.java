@@ -14,6 +14,7 @@ import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.ui.Layout;
+import fr.limsi.rorqual.core.ui.TabWindow;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
@@ -1092,11 +1093,11 @@ public class Dpe implements EventListener {
                             eventType = DpeEvent.DATE_ISOLATION_MUR;
                             Event event2 = new Event(eventType, wall);
                             EventManager.getInstance().put(Channel.DPE, event2);*/
-                            layout.getFromId("date_isolation").setVisible(true);
-                            layout.getFromId("type_isolation").setVisible(true);
+                            ((TabWindow)layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("date_isolation"), true);
+                            ((TabWindow)layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
                         }else{
-                            layout.getFromId("date_isolation").setVisible(false);
-                            layout.getFromId("type_isolation").setVisible(false);
+                            ((TabWindow)layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("date_isolation"), false);
+                            ((TabWindow)layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
                             // On signal au model que le calcul thermique vient d'être effectuer sur wall
                             Object o2[] = {wall, DpeState.KNOWN};
                             Event e2 = new Event(DpeEvent.DPE_STATE_CHANGED, o2);
@@ -1115,13 +1116,13 @@ public class Dpe implements EventListener {
                         if (!walls_properties.containsKey(wall))
                             walls_properties.put(wall, new HashMap<EventType, Object>());
                         walls_properties.get(wall).put(event, dateIsolationMur);
-                        if (!dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) && !dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE)){
+                        if (dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) || dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE)){
+                            ((TabWindow)layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
+                        } else {
                             /*eventType = DpeEvent.TYPE_ISOLATION_MUR;
                             Event event2 = new Event(eventType, wall);
                             EventManager.getInstance().put(Channel.DPE, event2);*/
-                            layout.getFromId("type_isolation").setVisible(true);
-                        } else {
-                            layout.getFromId("type_isolation").setVisible(false);
+                            ((TabWindow)layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
                         }
                         tryActualiseWallDP(wall);
                         break;

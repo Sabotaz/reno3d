@@ -23,6 +23,7 @@ import fr.limsi.rorqual.core.utils.AssetManager;
  */
 public class TabWindow extends Table {
     HashMap<Button, Actor> tabs = new HashMap<Button, Actor>();
+    HashMap<Actor, Button> reversed_tabs = new HashMap<Actor, Button>();
     ButtonGroup<Button> buttons = new ButtonGroup<Button>();
 
     Window window;
@@ -56,7 +57,10 @@ public class TabWindow extends Table {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
         Button button = new TextButton(tab.getName(), skin, "tab");
         button.addListener(clickListener);
+
         tabs.put(button, tab);
+        reversed_tabs.put(tab, button);
+
         buttons.add(button);
         buttonTab.add(button).padLeft(1).padTop(1);
 
@@ -83,8 +87,8 @@ public class TabWindow extends Table {
         float last_mid_width = last.getWidth()/2;
         float next_mid_width = next.getWidth()/2;
 
-        float wx = tx + wcx + wcw/2 - (next_mid_width-last_mid_width);
-        float wy = ty + wcy + wch/2+1 - (next_mid_height-last_mid_height);
+        float wx = tx + wcx + wcw/2 ;//- (next_mid_width-last_mid_width);
+        float wy = ty + wcy + wch/2+1 ;//- (next_mid_height-last_mid_height);
 
 
         contentTab.clear();
@@ -94,6 +98,13 @@ public class TabWindow extends Table {
 
         this.setPosition((int) wx, (int)wy);
         window.setPosition(-(int)(wcw/2), -(int)(wch/2));
+    }
+
+    public void setTableDisabled(Actor table, boolean visibility) {
+        if (reversed_tabs.containsKey(table)) {
+            Button b = reversed_tabs.get(table);
+            b.setVisible(visibility);
+        }
     }
 
 

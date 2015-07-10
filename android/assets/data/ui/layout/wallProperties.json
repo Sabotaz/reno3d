@@ -1,6 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés",
+  "id": "tab_window",
   "content": [
     {
       "type": "Table",
@@ -29,8 +30,13 @@
             },
             {
               "type": "TextButton",
-              "text": "Mur donnant sur une véranda",
-              "value": "fr.limsi.rorqual.core.dpe.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA"
+              "text": "Mur donnant sur une véranda chauffée",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Mur donnant sur une véranda non chauffée",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE"
             },
             {
               "type": "TextButton",
@@ -48,7 +54,8 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "update": "fr.limsi.rorqual.core.event.DpeEvent.DATE_ISOLATION_MUR_RESPONSE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_ISOLATION_MUR_RESPONSE",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
           "content": [
             {
               "type": "TextButton",
@@ -93,7 +100,7 @@
             {
               "type": "TextButton",
               "text": "Inconnue",
-              "value": "fr.limsi.rorqual.core.dpe.DateIsolationMurEnum.UNKNOWN"
+              "value": "fr.limsi.rorqual.core.dpe.DateIsolationMurEnum.INCONNUE"
             }
           ]
         }
@@ -106,7 +113,8 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "update": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR_RESPONSE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR_RESPONSE",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
           "content": [
             {
               "type": "TextButton",
