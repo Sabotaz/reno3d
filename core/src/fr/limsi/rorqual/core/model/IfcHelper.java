@@ -18,7 +18,6 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcChangeActionEnum.IfcChangeActionEnum_internal;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSIUnitName.IfcSIUnitName_internal;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcUnitEnum.IfcUnitEnum_internal;
-import javafx.util.Pair;
 
 import java.io.File;
 import java.io.IOException;

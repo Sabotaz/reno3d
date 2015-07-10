@@ -17,7 +17,9 @@ import java.util.HashMap;
 
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.EventType;
 import fr.limsi.rorqual.core.utils.AssetManager;
 
@@ -32,25 +34,57 @@ public class Layout {
 
     Actor root = null;
 
-    private class Updater {
+    private class Updater implements EventListener {
         private Channel channel;
-        private EventType event;
+        private EventType eventType;
+
+        private Object default_value = null;
+        private boolean default_value_received = false;
+
         public Updater(Channel c, EventType e) {
             channel = c;
-            event = e;
+            eventType = e;
+            EventManager.getInstance().addListener(channel, Updater.this);
+            Event ev = new Event(eventType, new Object[]{userObject, EventRequest.GET_STATE});
+            EventManager.getInstance().put(channel, ev);
         }
+
         public void trigger(Object content) {
-            Event e = new Event(event, content);
+            Event e = new Event(eventType, content);
             EventManager.getInstance().put(channel, e);
+        }
+
+        public void notify(Channel c, Event e) {
+            if (e.getEventType() == (EventType) eventType) {
+                Object[] response = (Object[]) e.getUserObject();
+                if (response[0] == userObject && response[1] == EventRequest.CURRENT_STATE) {
+                    default_value = response[2];
+                    default_value_received = true;
+                }
+            }
+        }
+
+        public Object getDefaultValue() {
+            while (!default_value_received) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ie) {
+
+                }
+            }
+            return default_value;
         }
     }
 
-    private Layout(String name) {
+    Object userObject = null;
+
+    private Layout(String name, Object o) {
+        userObject = o;
         root = readLayout(name);
     }
 
-    public static Layout fromJson(String name) {
-        return new Layout(name);
+    public static Layout fromJson(String name, Object userObject) {
+        return new Layout(name, userObject);
     }
 
     public Actor getRoot() {
@@ -64,61 +98,56 @@ public class Layout {
     private Actor readLayout(String name) {
         FileHandle handle = Gdx.files.internal(name);
         JsonValue json = new JsonReader().parse(handle.readString());
-        Actor root = getActor(json, null, null);
+        Actor root = getActor(json, null);
         return root;
     }
 
-    private Actor getActor(JsonValue json, Updater parent_updater, Actor root) {
+    private Object getEnumConstant(JsonValue json, String key) {
+        try {
+            String str = json.getString(key);
+            int last_point = str.lastIndexOf(".");
+            String enum_name = str.substring(0, last_point);
+            String enum_value = str.substring(last_point + 1, str.length());
+            Class<?> clz = Class.forName(enum_name);
+            Object[] consts = clz.getEnumConstants();
+            Object value = null;
+            for (Object o : consts) {
+                if (o.toString().equals(enum_value))
+                    value = o;
+            }
+            return value;
+        }
+        catch (ClassNotFoundException cnfe) {
+            System.out.println(cnfe);
+            return null;
+        }
+    }
+
+    private Actor getActor(JsonValue json, Updater parent_updater) {
         Actor actor;
         Updater updater = parent_updater;
 
         if (json.has("event") && json.has("channel")) {
-            try {
-                String event =  json.getString("event");
-                int last_point = event.lastIndexOf(".");
-                String enum_name = event.substring(0, last_point);
-                String enum_value = event.substring(last_point + 1, event.length());
-                Class<?> clz = Class.forName(enum_name);
-                Object[] consts = clz.getEnumConstants();
-                Object event_value = null;
-                for (Object o : consts) {
-                    if (o.toString().equals(enum_value))
-                        event_value = o;
-                }
+            Object event_value = getEnumConstant(json, "event");
+            Object channel_value = getEnumConstant(json, "channel");
 
-                String channel =  json.getString("channel");
-                last_point = channel.lastIndexOf(".");
-                enum_name = channel.substring(0, last_point);
-                enum_value = channel.substring(last_point + 1, channel.length());
-                clz = Class.forName(enum_name);
-                consts = clz.getEnumConstants();
-                Object channel_value = null;
-                for (Object o : consts) {
-                    if (o.toString().equals(enum_value))
-                        channel_value = o;
-                }
-
-                if (event_value != null && channel_value != null) {
-                    updater = new Updater((Channel) channel_value, (EventType) event_value);
-                }
-
-            } catch (ClassNotFoundException cnfe) {
-                System.out.println(cnfe);
+            if (event_value != null && channel_value != null) {
+                updater = new Updater((Channel) channel_value, (EventType) event_value);
             }
         }
 
         switch(json.getString("type", "")) {
             case "TabWindow":
-                actor = makeTabWindow(json, updater, root);
+                actor = makeTabWindow(json, updater);
                 break;
             case "Table":
-                actor = makeTable(json, updater, root);
+                actor = makeTable(json, updater);
                 break;
             case "ButtonGroup":
-                actor = makeButtonGroup(json, updater, root);
+                actor = makeButtonGroup(json, updater);
                 break;
             case "TextButton":
-                actor = makeTextButton(json, updater, root);
+                actor = makeTextButton(json, updater);
                 break;
             default:
                 return null;
@@ -130,18 +159,16 @@ public class Layout {
         return actor;
     }
 
-    private Actor makeTabWindow(JsonValue json, Updater updater, Actor root) {
+    private Actor makeTabWindow(JsonValue json, Updater updater) {
 
         TabWindow tabWindow= new TabWindow();
         tabWindow.setName(json.getString("name", ""));
-        if (root == null)
-            root = tabWindow;
         if (json.get("content") != null) {
             JsonValue json_tab;
             Actor tab;
             int i = 0;
             while ((json_tab = json.get("content").get(i)) != null) {
-                if ((tab = getActor(json_tab, updater, root)) != null)
+                if ((tab = getActor(json_tab, updater)) != null)
                     tabWindow.addTable(tab);
                 i++;
             }
@@ -149,18 +176,16 @@ public class Layout {
         return tabWindow;
     }
 
-    private Actor makeTable(JsonValue json, Updater updater, Actor root) {
+    private Actor makeTable(JsonValue json, Updater updater) {
 
         Table table = new Table();
         table.setName(json.getString("name", ""));
-        if (root == null)
-            root = table;
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;
             int i = 0;
             while ((json_child = json.get("content").get(i)) != null) {
-                if ((child = getActor(json_child, updater, root)) != null)
+                if ((child = getActor(json_child, updater)) != null)
                     table.add(child);
                 i++;
             }
@@ -168,18 +193,17 @@ public class Layout {
         return table;
     }
 
-    private Actor makeButtonGroup(JsonValue json, Updater updater, Actor root) {
+    private Actor makeButtonGroup(JsonValue json, Updater updater) {
 
         ButtonGroup<Button> buttons= new ButtonGroup<Button>();
+        buttons.setMinCheckCount(0);
         Table table= new Table();
-        if (root == null)
-            root = table;
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;
             int i = 0;
             while ((json_child = json.get("content").get(i)) != null) {
-                if ((child = getActor(json_child, updater, root)) != null) {
+                if ((child = getActor(json_child, updater)) != null) {
                     if (child instanceof Button) {
                         table.add(child).left().pad(1).row();
                         buttons.add((Button)child);
@@ -188,50 +212,36 @@ public class Layout {
                 i++;
             }
         }
-        buttons.uncheckAll();
+        buttons.setMinCheckCount(1);
         return table;
     }
 
-    private Actor makeTextButton(JsonValue json, Updater updater, Actor root) {
+    private Actor makeTextButton(JsonValue json, Updater updater) {
 
         TextButton textButton = new TextButton(json.getString("text", ""), skin, "toggle");
 
-        if (root == null)
-            root = textButton;
-
         if (updater != null & json.has("value")) {
-            try {
-                String value =  json.getString("value");
-                int last_point = value.lastIndexOf(".");
-                String enum_name = value.substring(0, last_point);
-                String enum_value = value.substring(last_point + 1, value.length());
-                Class<?> clz = Class.forName(enum_name);
-                Object[] consts = clz.getEnumConstants();
-                Object value_value = null;
-                for (Object o : consts) {
-                    if (o.toString().equals(enum_value))
-                        value_value = o;
-                }
+            Object value_value = getEnumConstant(json, "value");
 
-                if (value_value != null) {
-                    final Object last_value = value_value;
-                    final Updater last_updater = updater;
-                    final Actor final_root = root;
-                    textButton.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            Object[] value = new Object[3];
-                            value[0] = final_root.getUserObject();
-                            value[1] = last_value;
-                            value[2] = Layout.this;
+            if (updater.getDefaultValue() == value_value) {
+                textButton.setChecked(true);
+            }
 
-                            last_updater.trigger(value);
-                        }
-                    });
-                }
+            if (value_value != null) {
+                final Object last_value = value_value;
+                final Updater last_updater = updater;
+                textButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Object[] value = new Object[4];
+                        value[0] = userObject;
+                        value[1] = EventRequest.UPDATE_STATE;
+                        value[2] = last_value;
+                        value[3] = Layout.this;
 
-            } catch (ClassNotFoundException cnfe) {
-                System.out.println(cnfe);
+                        last_updater.trigger(value);
+                    }
+                });
             }
         }
 

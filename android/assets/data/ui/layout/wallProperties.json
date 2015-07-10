@@ -10,8 +10,8 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MUR_RESPONSE",
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MUR",
           "content": [
             {
               "type": "TextButton",
@@ -54,8 +54,8 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_ISOLATION_MUR_RESPONSE",
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_ISOLATION_MUR",
           "content": [
             {
               "type": "TextButton",
@@ -113,8 +113,8 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR_RESPONSE",
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR",
           "content": [
             {
               "type": "TextButton",
