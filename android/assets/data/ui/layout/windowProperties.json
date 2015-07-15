@@ -1,0 +1,110 @@
+{
+  "type": "TabWindow",
+  "name": "Propriétés",
+  "id": "tab_window",
+  "content": [
+    {
+      "type": "Table",
+      "name": "Type de fenetre",
+      "id": "type_fenetre",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FENETRE",
+          "layout": "column",
+          "content": [
+            {
+              "type": "ImageButton",
+              "image": "textureWindowTypeBattante",
+              "value": "fr.limsi.rorqual.core.dpe.TypeFenetreEnum.BATTANTE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureWindowTypeCoulissante",
+              "value": "fr.limsi.rorqual.core.dpe.TypeFenetreEnum.COULISSANTE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Materiau fenetre",
+      "id": "materiau_fenetre",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MATERIAU_MENUISERIE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Bois",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.BOIS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Metal",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.METALLIQUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "PVC",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.PVC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Vitrage fenetre",
+      "id": "vitrage_fenetre",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VITRAGE_MENUISERIE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Simple vitrage",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.SIMPLE_VITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Survitrage",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.SURVITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Double vitrage avant 1990",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990"
+            },
+            {
+              "type": "TextButton",
+              "text": "Double vitrage entre 1990 et 2001",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Double vitrage apres 2001",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Triple vitrage",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.TRIPLE_VITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Inconnue",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.INCONNUE"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

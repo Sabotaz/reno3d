@@ -2,10 +2,16 @@ package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -149,6 +155,9 @@ public class Layout {
             case "TextButton":
                 actor = makeTextButton(json, updater);
                 break;
+            case "ImageButton":
+                actor = makeImageButton(json, updater);
+                break;
             default:
                 return null;
         }
@@ -198,6 +207,10 @@ public class Layout {
         ButtonGroup<Button> buttons= new ButtonGroup<Button>();
         buttons.setMinCheckCount(0);
         Table table= new Table();
+        boolean row = true;
+        String layout = json.getString("layout", "row");
+        if (layout.equals("column"))
+            row = false;
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;
@@ -205,7 +218,10 @@ public class Layout {
             while ((json_child = json.get("content").get(i)) != null) {
                 if ((child = getActor(json_child, updater)) != null) {
                     if (child instanceof Button) {
-                        table.add(child).left().pad(1).row();
+                        if (row)
+                            table.add(child).left().pad(1).row();
+                        else
+                            table.add(child).pad(1);
                         buttons.add((Button)child);
                     }
                 }
@@ -244,8 +260,51 @@ public class Layout {
                 });
             }
         }
-
         return textButton;
     }
 
+    private Actor makeImageButton (JsonValue json, Updater updater){
+        String nameImage = json.getString("image");
+        Texture textureImage = (Texture) AssetManager.getInstance().get(nameImage);
+        Image image = new Image(textureImage);
+
+        final ImageButton imageButton = new ImageButton(image.getDrawable()) {
+            @Override
+            public void draw(Batch batch, float parentAlpha) {
+                super.draw(batch, parentAlpha);
+                if (this.isChecked()){
+                    ShapeRenderer shapeRenderer = new ShapeRenderer();
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                    shapeRenderer.setColor(1, 0, 0, 0.5f);
+                    shapeRenderer.rect(0, 0, 10, 10);
+                    shapeRenderer.end();
+                }
+            }
+        };
+
+        if (updater != null & json.has("value")) {
+            Object value_value = getEnumConstant(json, "value");
+
+            if (updater.getDefaultValue() == value_value) {
+                imageButton.setChecked(true);
+            }
+
+            if (value_value != null) {
+                final Object last_value = value_value;
+                final Updater last_updater = updater;
+                imageButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Object[] value = new Object[4];
+                        value[0] = userObject;
+                        value[1] = EventRequest.UPDATE_STATE;
+                        value[2] = last_value;
+                        value[3] = Layout.this;
+                        last_updater.trigger(value);
+                    }
+                });
+            }
+        }
+        return imageButton;
+    }
 }

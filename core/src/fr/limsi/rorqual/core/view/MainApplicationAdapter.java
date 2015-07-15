@@ -71,8 +71,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private static int ncam = 1;
     private Environment environnement;
     private ShaderProvider shaderProvider;
-    private ShaderProgram program;
-    private BaseShader shader;
     private Dpe dpe;
     private DpeUi dpeui;
     private DpeStateUpdater state;

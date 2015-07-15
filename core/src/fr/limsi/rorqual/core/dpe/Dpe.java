@@ -280,50 +280,6 @@ public class Dpe implements EventListener {
         actualiseDP_wall(wall, typeMur, dateIsolationMur, typeIsolationMur);
     }
 
-    public void tryActualiseWindowDP(IfcWindow window) {
-        if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_FENETRE_RESPONSE))
-            return;
-        TypeFenetreEnum typeFenetre = (TypeFenetreEnum) windows_properties.get(window).get(DpeEvent.TYPE_FENETRE_RESPONSE);
-
-        if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE))
-            return;
-        TypeMateriauMenuiserieEnum typeMenuiserieFenetre = (TypeMateriauMenuiserieEnum) windows_properties.get(window).get(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE);
-
-        if (!windows_properties.get(window).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE))
-            return;
-        TypeVitrageEnum typeVitrageFenetre = (TypeVitrageEnum) windows_properties.get(window).get(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE);
-
-        // On signal au model que le calcul thermique vient d'être effectuer sur window
-        Object o[] = {window, DpeState.KNOWN};
-        Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-        EventManager.getInstance().put(Channel.DPE, e);
-
-        actualiseDP_window(window, typeFenetre, typeMenuiserieFenetre, typeVitrageFenetre);
-    }
-
-    public void tryActualiseDoorDP(IfcDoor door) {
-        if (!doors_properties.get(door).containsKey(DpeEvent.TYPE_DOOR_RESPONSE))
-            return;
-        TypeDoorEnum typeDoor = (TypeDoorEnum) doors_properties.get(door).get(DpeEvent.TYPE_DOOR_RESPONSE);
-
-        TypeMateriauMenuiserieEnum typeMenuiserieDoor = TypeMateriauMenuiserieEnum.INCONNUE;
-        if (doors_properties.get(door).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE)){
-            typeMenuiserieDoor = (TypeMateriauMenuiserieEnum)doors_properties.get(door).get(DpeEvent.TYPE_MATERIAU_MENUISERIE_RESPONSE);
-        }
-
-        TypeVitrageEnum typeVitrage = TypeVitrageEnum.INCONNUE;
-        if (doors_properties.get(door).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE)){
-            typeVitrage = (TypeVitrageEnum)doors_properties.get(door).get(DpeEvent.TYPE_VITRAGE_MENUISERIE_RESPONSE);
-        }
-
-        // On signal au model que le calcul thermique vient d'être effectuer sur wall
-        Object o[] = {door, DpeState.KNOWN};
-        Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-        EventManager.getInstance().put(Channel.DPE, e);
-
-        actualiseDP_door(door, typeDoor, typeMenuiserieDoor, typeVitrage);
-    }
-
     public void actualiseDP_wall(IfcWallStandardCase wall, TypeMurEnum typeMur, DateIsolationMurEnum dateIsolationMur, TypeIsolationMurEnum typeIsolationMur){
         double uMur=0,sMur=ifcHelper.getWallSurface(wall);
         if (dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS)){
@@ -963,14 +919,6 @@ public class Dpe implements EventListener {
         DpeEvent eventType = DpeEvent.TYPE_FENETRE;
         Event event = new Event(eventType, window);
         EventManager.getInstance().put(Channel.DPE, event);
-
-        eventType = DpeEvent.TYPE_MATERIAU_MENUISERIE;
-        event = new Event(eventType, window);
-        EventManager.getInstance().put(Channel.DPE, event);
-
-        eventType = DpeEvent.TYPE_VITRAGE_MENUISERIE;
-        event = new Event(eventType, window);
-        EventManager.getInstance().put(Channel.DPE, event);
     }
 
     /*** Demande à l'utilisateur des informations permettant de déterminer les déperditions au niveau des portes ***/
@@ -1100,10 +1048,7 @@ public class Dpe implements EventListener {
                             if (!walls_properties.containsKey(wall))
                                 walls_properties.put(wall, new HashMap<EventType, Object>());
                             walls_properties.get(wall).put(event, typeMur);
-                            if (!typeMur.equals(TypeMurEnum.MUR_INTERIEUR)) {/*
-                            eventType = DpeEvent.DATE_ISOLATION_MUR;
-                            Event event2 = new Event(eventType, wall);
-                            EventManager.getInstance().put(Channel.DPE, event2);*/
+                            if (!typeMur.equals(TypeMurEnum.MUR_INTERIEUR)) {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("date_isolation"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
                             } else {
@@ -1140,9 +1085,6 @@ public class Dpe implements EventListener {
                             if (dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) || dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE)) {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
                             } else {
-                                /*eventType = DpeEvent.TYPE_ISOLATION_MUR;
-                                Event event2 = new Event(eventType, wall);
-                                EventManager.getInstance().put(Channel.DPE, event2);*/
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
                             }
                             tryActualiseWallDP(wall);
@@ -1179,50 +1121,89 @@ public class Dpe implements EventListener {
                         }
                         break;
                     }
-                    case TYPE_FENETRE_RESPONSE: {
+
+                    case TYPE_FENETRE: {
                         Object[] items = (Object[]) o;
                         IfcWindow window = (IfcWindow)items[0];
-                        TypeFenetreEnum typeFenetre = (TypeFenetreEnum)items[1];
-                        ifcHelper.addPropertyTypeWindow(window, typeFenetre);
-                        windows_properties.get(items[0]).put(event, typeFenetre);
+
+                        if (items[1] == EventRequest.UPDATE_STATE) {
+                            TypeFenetreEnum typeFenetre = (TypeFenetreEnum) items[2];
+                            Layout layout = (Layout) items[3];
+                            ifcHelper.addPropertyTypeWindow(window, typeFenetre);
+                            if (!windows_properties.containsKey(window)){
+                                windows_properties.put(window, new HashMap<EventType, Object>());
+                            }
+                            windows_properties.get(window).put(event, typeFenetre);
+                            // On signal au model que le calcul thermique vient d'être effectuer sur wall
+                            Object o2[] = {window, DpeState.KNOWN};
+                            Event e2 = new Event(DpeEvent.DPE_STATE_CHANGED, o2);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+
+                        } else if (items[1] == EventRequest.GET_STATE) {
+                            Object type = null;
+                            if (windows_properties.containsKey(window))
+                                if (windows_properties.get(window).containsKey(DpeEvent.TYPE_FENETRE))
+                                    type = windows_properties.get(window).get(DpeEvent.TYPE_FENETRE);
+                            Object o2[] = {window, EventRequest.CURRENT_STATE, type};
+                            Event e2 = new Event(DpeEvent.TYPE_FENETRE, o2);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
                         break;
                     }
 
-                    case TYPE_MATERIAU_MENUISERIE_RESPONSE: {
+                    case TYPE_MATERIAU_MENUISERIE: {
                         Object[] items = (Object[]) o;
                         if (items[0] instanceof IfcWindow){
                             IfcWindow window = (IfcWindow)items[0];
-                            TypeMateriauMenuiserieEnum typeMenuiserieFenetre = (TypeMateriauMenuiserieEnum)items[1];
-                            ifcHelper.addPropertyTypeMenuiserie(window, typeMenuiserieFenetre);
-                            windows_properties.get(items[0]).put(event, typeMenuiserieFenetre);
+
+                            if (items[1] == EventRequest.UPDATE_STATE) {
+                                TypeMateriauMenuiserieEnum typeMateriauMenuiserie = (TypeMateriauMenuiserieEnum) items[2];
+                                ifcHelper.addPropertyTypeMenuiserie(window, typeMateriauMenuiserie);
+                                if (!windows_properties.containsKey(window))
+                                    windows_properties.put(window, new HashMap<EventType, Object>());
+                                windows_properties.get(window).put(event, typeMateriauMenuiserie);
+                                //tryActualiseWallDP(window);
+                            } else if (items[1] == EventRequest.GET_STATE) {
+                                Object type = null;
+                                if (windows_properties.containsKey(window))
+                                    if (windows_properties.get(window).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE))
+                                        type = (TypeMateriauMenuiserieEnum) windows_properties.get(window).get(DpeEvent.TYPE_MATERIAU_MENUISERIE);
+                                Object o2[] = {window, EventRequest.CURRENT_STATE, type};
+                                Event e2 = new Event(DpeEvent.TYPE_MATERIAU_MENUISERIE, o2);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
                         }
                         if (items[0] instanceof IfcDoor){
-                            IfcDoor door = (IfcDoor)items[0];
-                            TypeMateriauMenuiserieEnum typeMenuiserieDoor = (TypeMateriauMenuiserieEnum)items[1];
-                            ifcHelper.addPropertyTypeMenuiserie(door, typeMenuiserieDoor);
-                            doors_properties.get(items[0]).put(event, typeMenuiserieDoor);
-                            eventType = DpeEvent.TYPE_VITRAGE_MENUISERIE;
-                            Event event2 = new Event(eventType, door);
-                            EventManager.getInstance().put(Channel.DPE, event2);
+
                         }
                         break;
                     }
 
-                    case TYPE_VITRAGE_MENUISERIE_RESPONSE: {
+                    case TYPE_VITRAGE_MENUISERIE: {
                         Object[] items = (Object[]) o;
                         if (items[0] instanceof IfcWindow){
                             IfcWindow window = (IfcWindow)items[0];
-                            TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items[1];
-                            ifcHelper.addPropertyTypeVitrageMenuiserie(window, typeVitrage);
-                            windows_properties.get(items[0]).put(event, typeVitrage);
-                            tryActualiseWindowDP(window);
+
+                            if (items[1] == EventRequest.UPDATE_STATE) {
+                                TypeVitrageEnum TypeVitrage = (TypeVitrageEnum) items[2];
+                                ifcHelper.addPropertyTypeVitrageMenuiserie(window, TypeVitrage);
+                                if (!windows_properties.containsKey(window))
+                                    windows_properties.put(window, new HashMap<EventType, Object>());
+                                windows_properties.get(window).put(event, TypeVitrage);
+                                //tryActualiseWallDP(window);
+                            } else if (items[1] == EventRequest.GET_STATE) {
+                                Object type = null;
+                                if (windows_properties.containsKey(window))
+                                    if (windows_properties.get(window).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE))
+                                        type = (TypeIsolationMurEnum) windows_properties.get(window).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
+                                Object o2[] = {window, EventRequest.CURRENT_STATE, type};
+                                Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, o2);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
+
                         }
                         if (items[0] instanceof IfcDoor){
-                            IfcDoor door = (IfcDoor)items[0];
-                            TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items[1];
-                            ifcHelper.addPropertyTypeVitrageMenuiserie(door, typeVitrage);
-                            doors_properties.get(items[0]).put(event, typeVitrage);
-                            tryActualiseDoorDP(door);
+
                         }
                         break;
                     }
@@ -1238,7 +1219,7 @@ public class Dpe implements EventListener {
                             Event event2 = new Event(eventType, door);
                             EventManager.getInstance().put(Channel.DPE, event2);
                         }else{
-                            tryActualiseDoorDP(door);
+                            //tryActualiseDoorDP(door);
                         }
                         break;
                     }
@@ -1263,14 +1244,14 @@ public class Dpe implements EventListener {
                         }
                         break;
                     }
-                    case DPE_STATE_NO_MORE_UNKNOWN:{
-                        //logValeursDpe();
-                    }
-                    case DPE_STATE_NO_MORE_WALL_UNKNOWN:{
-                        notifierFenetres();
-                        notifierPortes();
-                        ifcHelper.saveIfcModel();
-                    }
+//                    case DPE_STATE_NO_MORE_UNKNOWN:{
+//                        //logValeursDpe();
+//                    }
+//                    case DPE_STATE_NO_MORE_WALL_UNKNOWN:{
+//                        notifierFenetres();
+//                        notifierPortes();
+//                        ifcHelper.saveIfcModel();
+//                    }
                 }
             }
         }
