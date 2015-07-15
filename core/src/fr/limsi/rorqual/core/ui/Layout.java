@@ -2,8 +2,11 @@ package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -269,16 +273,21 @@ public class Layout {
         Image image = new Image(textureImage);
 
         final ImageButton imageButton = new ImageButton(image.getDrawable()) {
+
+            Texture clicked_texture;
+            {
+                Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
+                p.setColor(Color.RED);
+                p.drawRectangle(0, 0, (int)this.getWidth(),(int)this.getHeight());
+                p.drawRectangle(1, 1, (int)this.getWidth()-2,(int)this.getHeight()-2);
+                clicked_texture = new Texture(p);
+            }
+
             @Override
-            public void draw(Batch batch, float parentAlpha) {
-                super.draw(batch, parentAlpha);
-                if (this.isChecked()){
-                    ShapeRenderer shapeRenderer = new ShapeRenderer();
-                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                    shapeRenderer.setColor(1, 0, 0, 0.5f);
-                    shapeRenderer.rect(0, 0, 10, 10);
-                    shapeRenderer.end();
-                }
+            public void draw(Batch batch, float arg1) {
+                super.draw(batch, arg1);
+                if (this.isChecked())
+                    batch.draw(clicked_texture, this.getX(), this.getY());
             }
         };
 
