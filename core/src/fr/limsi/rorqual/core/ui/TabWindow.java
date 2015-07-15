@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.ui;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -46,7 +47,11 @@ public class TabWindow extends Table {
 
     public TabWindow() {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
-        window = new Window("Properties", skin);
+
+        Window.WindowStyle ws = skin.get(Window.WindowStyle.class);
+        ws.titleFont = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+
+        window = new Window("", ws);
         buttonTab = new Table();
         contentTab = new Table();
         window.add(buttonTab).row();
@@ -59,9 +64,17 @@ public class TabWindow extends Table {
         this.add(window);
     }
 
+    public void setTitle(String title) {
+        window.setTitle(title);
+    }
+
     public void addTable(Actor tab) {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
-        Button button = new TextButton(tab.getName(), skin, "tab");
+
+        TextButton.TextButtonStyle tbs = skin.get("tab", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+
+        Button button = new TextButton(tab.getName(), tbs);
         button.addListener(clickListener);
         tabs.put(button, tab);
         reversed_tabs.put(tab, button);

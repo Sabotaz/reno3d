@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -91,6 +92,16 @@ public class AssetManager {
             for (FileHandle f : file.list()) {
                 assets.put(f.nameWithoutExtension(), new Texture(f));
             }
+
+        // fonts
+        BitmapFont font;
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/FreeSans.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 14;
+        font = generator.generateFont(parameter); // font size 24*d pixels
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        assets.put("default.fnt", font);
+
     }
 
     public Object get(String s) {

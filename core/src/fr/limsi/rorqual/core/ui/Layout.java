@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -175,7 +176,7 @@ public class Layout {
     private Actor makeTabWindow(JsonValue json, Updater updater) {
 
         TabWindow tabWindow= new TabWindow();
-        tabWindow.setName(json.getString("name", ""));
+        tabWindow.setTitle(json.getString("name", ""));
         if (json.get("content") != null) {
             JsonValue json_tab;
             Actor tab;
@@ -237,8 +238,9 @@ public class Layout {
     }
 
     private Actor makeTextButton(JsonValue json, Updater updater) {
-
-        TextButton textButton = new TextButton(json.getString("text", ""), skin, "toggle");
+        TextButton.TextButtonStyle tbs = skin.get("toggle", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        TextButton textButton = new TextButton(json.getString("text", ""), tbs);
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
