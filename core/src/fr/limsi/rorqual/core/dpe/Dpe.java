@@ -924,7 +924,7 @@ public class Dpe implements EventListener {
     /*** Demande à l'utilisateur des informations permettant de déterminer les déperditions au niveau des portes ***/
     public void demanderPorte(IfcDoor door){
         doors_properties.put(door, new HashMap<EventType, Object>());
-        DpeEvent eventType = DpeEvent.TYPE_DOOR;
+        DpeEvent eventType = DpeEvent.TYPE_PORTE;
         Event event = new Event(eventType, door);
         EventManager.getInstance().put(Channel.DPE, event);
     }
@@ -1134,10 +1134,6 @@ public class Dpe implements EventListener {
                                 windows_properties.put(window, new HashMap<EventType, Object>());
                             }
                             windows_properties.get(window).put(event, typeFenetre);
-                            // On signal au model que le calcul thermique vient d'être effectuer sur wall
-                            Object o2[] = {window, DpeState.KNOWN};
-                            Event e2 = new Event(DpeEvent.DPE_STATE_CHANGED, o2);
-                            EventManager.getInstance().put(Channel.DPE, e2);
 
                         } else if (items[1] == EventRequest.GET_STATE) {
                             Object type = null;
@@ -1174,6 +1170,24 @@ public class Dpe implements EventListener {
                             }
                         }
                         if (items[0] instanceof IfcDoor){
+                            IfcDoor door = (IfcDoor)items[0];
+
+                            if (items[1] == EventRequest.UPDATE_STATE) {
+                                TypeMateriauMenuiserieEnum typeMateriauMenuiserie = (TypeMateriauMenuiserieEnum) items[2];
+                                ifcHelper.addPropertyTypeMenuiserie(door, typeMateriauMenuiserie);
+                                if (!doors_properties.containsKey(door))
+                                    doors_properties.put(door, new HashMap<EventType, Object>());
+                                doors_properties.get(door).put(event, typeMateriauMenuiserie);
+                                //tryActualiseWallDP(window);
+                            } else if (items[1] == EventRequest.GET_STATE) {
+                                Object type = null;
+                                if (doors_properties.containsKey(door))
+                                    if (doors_properties.get(door).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE))
+                                        type = (TypeMateriauMenuiserieEnum) doors_properties.get(door).get(DpeEvent.TYPE_MATERIAU_MENUISERIE);
+                                Object o2[] = {door, EventRequest.CURRENT_STATE, type};
+                                Event e2 = new Event(DpeEvent.TYPE_MATERIAU_MENUISERIE, o2);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
 
                         }
                         break;
@@ -1195,7 +1209,7 @@ public class Dpe implements EventListener {
                                 Object type = null;
                                 if (windows_properties.containsKey(window))
                                     if (windows_properties.get(window).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE))
-                                        type = (TypeIsolationMurEnum) windows_properties.get(window).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
+                                        type = (TypeVitrageEnum) windows_properties.get(window).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
                                 Object o2[] = {window, EventRequest.CURRENT_STATE, type};
                                 Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, o2);
                                 EventManager.getInstance().put(Channel.DPE, e2);
@@ -1203,23 +1217,55 @@ public class Dpe implements EventListener {
 
                         }
                         if (items[0] instanceof IfcDoor){
+                            IfcDoor door = (IfcDoor)items[0];
+
+                            if (items[1] == EventRequest.UPDATE_STATE) {
+                                TypeVitrageEnum TypeVitrage = (TypeVitrageEnum) items[2];
+                                ifcHelper.addPropertyTypeVitrageMenuiserie(door, TypeVitrage);
+                                if (!doors_properties.containsKey(door))
+                                    doors_properties.put(door, new HashMap<EventType, Object>());
+                                doors_properties.get(door).put(event, TypeVitrage);
+                                //tryActualiseWallDP(window);
+                            } else if (items[1] == EventRequest.GET_STATE) {
+                                Object type = null;
+                                if (doors_properties.containsKey(door))
+                                    if (doors_properties.get(door).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE))
+                                        type = (TypeVitrageEnum) doors_properties.get(door).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
+                                Object o2[] = {door, EventRequest.CURRENT_STATE, type};
+                                Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, o2);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
 
                         }
                         break;
                     }
 
-                    case TYPE_DOOR_RESPONSE:{
+                    case TYPE_PORTE: {
                         Object[] items = (Object[]) o;
                         IfcDoor door = (IfcDoor)items[0];
-                        TypeDoorEnum typeDoor = (TypeDoorEnum)items[1];
-                        ifcHelper.addPropertyTypeDoor(door, typeDoor);
-                        doors_properties.get(items[0]).put(event, typeDoor);
-                        if (typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_BATTANTE) || typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_COULISSANTE)){
-                            eventType = DpeEvent.TYPE_MATERIAU_MENUISERIE;
-                            Event event2 = new Event(eventType, door);
-                            EventManager.getInstance().put(Channel.DPE, event2);
-                        }else{
-                            //tryActualiseDoorDP(door);
+                        if (items[1] == EventRequest.UPDATE_STATE) {
+                            TypeDoorEnum typeDoor = (TypeDoorEnum)items[2];
+                            Layout layout = (Layout) items[3];
+                            ifcHelper.addPropertyTypeDoor(door, typeDoor);
+                            if (!doors_properties.containsKey(door))
+                                doors_properties.put(door, new HashMap<EventType, Object>());
+                            doors_properties.get(door).put(event, typeDoor);
+                            if (typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_COULISSANTE)||typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_BATTANTE)) {
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("materiau_porte"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("vitrage_porte"), true);
+                            } else {
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("materiau_porte"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("vitrage_porte"), false);
+                            }
+                            //tryActualiseWallDP(wall);
+                        } else if (items[1] == EventRequest.GET_STATE) {
+                            Object type = null;
+                            if (doors_properties.containsKey(door))
+                                if (doors_properties.get(door).containsKey(DpeEvent.TYPE_PORTE))
+                                    type = doors_properties.get(door).get(DpeEvent.TYPE_PORTE);
+                            Object o2[] = {door, EventRequest.CURRENT_STATE, type};
+                            Event e2 = new Event(DpeEvent.TYPE_PORTE, o2);
+                            EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }

@@ -1,0 +1,139 @@
+{
+  "type": "TabWindow",
+  "name": "Propriétés",
+  "id": "tab_window",
+  "content": [
+    {
+      "type": "Table",
+      "name": "Type de porte",
+      "id": "type_porte",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_PORTE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Porte opaque pleine",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_OPAQUE_PLEINE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Porte avec simple vitrage (< 30%)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Porte avec simple vitrage (entre 30% et 60%)",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Porte avec double vitrage",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_AVEC_DOUBLE_VITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Porte opaque pleine isolee",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_OPAQUE_PLEINE_ISOLEE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Porte precede d'un SAS",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_PRECEDE_DUN_SAS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Porte-fenetre battante",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_FENETRE_BATTANTE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Porte-fenetre coulissante",
+              "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_FENETRE_COULISSANTE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Materiau porte",
+      "id": "materiau_porte",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MATERIAU_MENUISERIE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Bois",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.BOIS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Metal",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.METALLIQUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "PVC",
+              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.PVC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Vitrage porte",
+      "id": "vitrage_porte",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VITRAGE_MENUISERIE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Simple vitrage",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.SIMPLE_VITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Survitrage",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.SURVITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Double vitrage avant 1990",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990"
+            },
+            {
+              "type": "TextButton",
+              "text": "Double vitrage entre 1990 et 2001",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Double vitrage apres 2001",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Triple vitrage",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.TRIPLE_VITRAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Inconnue",
+              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.INCONNUE"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

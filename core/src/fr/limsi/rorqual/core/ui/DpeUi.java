@@ -36,6 +36,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
 /**
  * Created by christophe on 03/06/15.
  */
+
 public class DpeUi implements EventListener {
 
     private Stage stage;
@@ -55,6 +56,10 @@ public class DpeUi implements EventListener {
         }
         if (o instanceof IfcWindow) {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
+            return a;
+        }
+        if (o instanceof IfcDoor) {
+            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
             return a;
         }
         return null;
@@ -573,138 +578,6 @@ public class DpeUi implements EventListener {
                                 }
                             }.button("Electrique", 1).button("Autre",2).show(stage);
                             dialog.setPosition((Gdx.graphics.getWidth() - dialog.getWidth()) / 2, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
-                            break;
-                        }
-
-                        case TYPE_DOOR: {
-                            s.acquire();
-                            final IfcDoor door = (IfcDoor)e.getUserObject();
-                            final Dialog dialog = new Dialog(" Type de porte ", skin, "dialog") {
-                                protected void result (Object object) {
-
-                                }
-                            }.show(stage);
-                            TextButton textButton1 = new TextButton("Porte opaque pleine",skin);
-                            textButton1.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_OPAQUE_PLEINE;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            TextButton textButton2 = new TextButton("Porte avec moins de 30% de simple vitrage",skin);
-                            textButton2.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            TextButton textButton3 = new TextButton("Porte avec 30-60% de simple vitrage",skin);
-                            textButton3.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            TextButton textButton4 = new TextButton("Porte avec double vitrage",skin);
-                            textButton4.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_AVEC_DOUBLE_VITRAGE;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            TextButton textButton5 = new TextButton("Porte opaque pleine isolee",skin);
-                            textButton5.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_OPAQUE_PLEINE_ISOLEE;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            TextButton textButton6 = new TextButton("Porte precedee d'un SAS",skin);
-                            textButton6.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_PRECEDE_DUN_SAS;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            TextButton textButton7 = new TextButton("Porte-fenetre battante",skin);
-                            textButton7.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_FENETRE_BATTANTE;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            TextButton textButton8 = new TextButton("Porte-fenetre coulissante",skin);
-                            textButton8.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    Object item[] = new Object[2];
-                                    item[0] = door;
-                                    item[1] = TypeDoorEnum.PORTE_FENETRE_COULISSANTE;
-                                    DpeEvent responseType = DpeEvent.TYPE_DOOR_RESPONSE;
-                                    Event response = new Event(responseType, item);
-                                    EventManager.getInstance().put(Channel.DPE, response);
-                                    dialog.remove();
-                                    s.release();
-                                }
-                            });
-                            dialog.getContentTable().add(textButton1).pad(2).padTop(10).left();
-                            dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton2).pad(2).left();
-                            dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton3).pad(2).left();
-                            dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton4).pad(2).left();
-                            dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton5).pad(2).left();
-                            dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton6).pad(2).left();
-                            dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton7).pad(2).left();
-                            dialog.getContentTable().row();
-                            dialog.getContentTable().add(textButton8).pad(2).left();
-                            dialog.setSize(textButton2.getWidth() + 25, textButton1.getHeight() * 8 + 100);
-                            dialog.setPosition(10, (Gdx.graphics.getHeight() - dialog.getHeight() - 10));
                             break;
                         }
                     }
