@@ -63,6 +63,8 @@ public class TabWindow extends Table {
             }
         });
         this.add(window);
+        this.setDebug(true);
+        contentTab.setDebug(true);
     }
 
     public void setTitle(String title) {
@@ -86,6 +88,8 @@ public class TabWindow extends Table {
         if (no_content_yet) {
             last = tabs.get(button);
             contentTab.add(last);
+            if (last instanceof Table)
+                contentTab.align(((Table)last).getAlign());
             no_content_yet = false;
         }
     }
@@ -119,6 +123,10 @@ public class TabWindow extends Table {
 
         contentTab.clear();
         contentTab.add(next);
+
+        if (next instanceof Table)
+            contentTab.align(((Table)next).getAlign());
+
         last = next;
         button.setChecked(true);
         this.setPosition(nextX,nextY);
