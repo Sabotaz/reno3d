@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -55,22 +56,21 @@ public class TabWindow extends Table {
         window = new Window("", ws);
         buttonTab = new Table();
         contentTab = new Table();
-        window.add(buttonTab).left().row();
-        window.add(contentTab).left().padTop(5);
+        window.add(buttonTab).left().expandX().row();
+        window.add(contentTab).left().padTop(5).expandX().fillX().left();
+        contentTab.setDebug(true);
+
         window.addListener(new EventListener() {
             public boolean handle(Event event) {
                 return true;
             }
         });
         this.add(window);
-        this.setDebug(true);
-        contentTab.setDebug(true);
     }
 
     public void setTitle(String title) {
         window.setTitle(title);
     }
-
     public void addTable(Actor tab) {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
 
@@ -84,12 +84,9 @@ public class TabWindow extends Table {
 
         buttons.add(button);
         buttonTab.add(button).padLeft(1).padTop(1);
-
         if (no_content_yet) {
             last = tabs.get(button);
-            contentTab.add(last);
-            if (last instanceof Table)
-                contentTab.align(((Table)last).getAlign());
+            contentTab.add(last).expandX().fillX().left();
             no_content_yet = false;
         }
     }
@@ -122,10 +119,7 @@ public class TabWindow extends Table {
         }
 
         contentTab.clear();
-        contentTab.add(next);
-
-        if (next instanceof Table)
-            contentTab.align(((Table)next).getAlign());
+        contentTab.add(next).expandX().fillX().left();
 
         last = next;
         button.setChecked(true);

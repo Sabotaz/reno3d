@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.JsonReader;
@@ -200,7 +201,7 @@ public class Layout {
             int i = 0;
             while ((json_child = json.get("content").get(i)) != null) {
                 if ((child = getActor(json_child, updater)) != null)
-                    table.add(child);
+                    table.add(child).expandX().fillX().left();
                 i++;
             }
         }
@@ -216,6 +217,20 @@ public class Layout {
         String layout = json.getString("layout", "row");
         if (layout.equals("column"))
             row = false;
+
+        String align = json.getString("align", "left");
+        switch (align) {
+            case "left":
+                table.align(Align.left);
+                break;
+            case "right":
+                table.align(Align.right);
+                break;
+            case "center":
+                table.align(Align.center);
+                break;
+        }
+
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;

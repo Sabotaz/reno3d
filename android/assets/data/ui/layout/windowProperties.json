@@ -13,6 +13,7 @@
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
           "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FENETRE",
           "layout": "column",
+          "align": "center",
           "content": [
             {
               "type": "ImageButton",
