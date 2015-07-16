@@ -96,6 +96,9 @@ public class TabWindow extends Table {
 
         Actor next = tabs.get(button);
         float lastWidth = last.getWidth();
+        if (lastWidth<buttonTab.getWidth()){
+            lastWidth=buttonTab.getWidth();
+        }
         float lastHeight = last.getHeight();
         float nextWidth=0;
         float nextHeight = 0;
@@ -107,22 +110,12 @@ public class TabWindow extends Table {
         if (next instanceof Table){
             nextWidth = ((Table) next).getPrefWidth();
             nextHeight = ((Table) next).getPrefHeight();
-            if(lastWidth>=buttonTab.getWidth()){
-                nextX += (nextWidth-lastWidth)/2;
-                System.out.println("coucou1");
-            }else{
-                nextX += (buttonTab.getWidth()-lastWidth)/2;
-                System.out.println("coucou2");
+            if (nextWidth<buttonTab.getWidth()){
+                nextWidth=buttonTab.getWidth();
             }
-
-            nextY += (lastHeight-nextHeight)/2;
+            nextX += (int)(nextWidth-lastWidth)/2;
+            nextY += (int)(lastHeight-nextHeight)/2;
         }
-
-        System.out.println();
-        System.out.println("buttonTabWidth"+buttonTab.getWidth());
-        System.out.println("lastWidth"+lastWidth);
-        System.out.println("nextWidth"+nextWidth);
-        System.out.println();
 
         contentTab.clear();
         contentTab.add(next);
@@ -137,6 +130,4 @@ public class TabWindow extends Table {
             b.setVisible(visibility);
         }
     }
-
-
 }
