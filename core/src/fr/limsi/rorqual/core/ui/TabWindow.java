@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class TabWindow extends Table {
         window = new Window("", ws);
         buttonTab = new Table();
         contentTab = new Table();
-        window.add(buttonTab).row();
+        window.add(buttonTab).left().row();
         window.add(contentTab).left().padTop(5);
         window.addListener(new EventListener() {
             public boolean handle(Event event) {
@@ -92,30 +93,42 @@ public class TabWindow extends Table {
     Actor last = null;
 
     public void buttonClicked(Button button) {
-        float wcx = window.getX();
-        float wcy = window.getY();
-        float wcw = window.getWidth();
-        float wch = window.getHeight();
-        float tx = this.getX();
-        float ty = this.getY();
 
         Actor next = tabs.get(button);
-        float last_mid_height = last.getHeight()/2;
-        float next_mid_height = next.getHeight()/2;
-        float last_mid_width = last.getWidth()/2;
-        float next_mid_width = next.getWidth()/2;
+        float lastWidth = last.getWidth();
+        float lastHeight = last.getHeight();
+        float nextWidth=0;
+        float nextHeight = 0;
+        float lastX=this.getX();
+        float lastY=this.getY();
+        float nextX=lastX;
+        float nextY=lastY;
 
-        float wx = tx + wcx + wcw/2 ;//- (next_mid_width-last_mid_width);
-        float wy = ty + wcy + wch/2+1 ;//- (next_mid_height-last_mid_height);
+        if (next instanceof Table){
+            nextWidth = ((Table) next).getPrefWidth();
+            nextHeight = ((Table) next).getPrefHeight();
+            if(lastWidth>=buttonTab.getWidth()){
+                nextX += (nextWidth-lastWidth)/2;
+                System.out.println("coucou1");
+            }else{
+                nextX += (buttonTab.getWidth()-lastWidth)/2;
+                System.out.println("coucou2");
+            }
 
+            nextY += (lastHeight-nextHeight)/2;
+        }
+
+        System.out.println();
+        System.out.println("buttonTabWidth"+buttonTab.getWidth());
+        System.out.println("lastWidth"+lastWidth);
+        System.out.println("nextWidth"+nextWidth);
+        System.out.println();
 
         contentTab.clear();
         contentTab.add(next);
         last = next;
-        //button.setChecked(true);
-
-        this.setPosition((int) wx, (int)wy);
-        window.setPosition(-(int)(wcw/2), -(int)(wch/2));
+        button.setChecked(true);
+        this.setPosition(nextX,nextY);
     }
 
     public void setTableDisabled(Actor table, boolean visibility) {

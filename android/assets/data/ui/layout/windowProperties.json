@@ -5,7 +5,7 @@
   "content": [
     {
       "type": "Table",
-      "name": "Type de fenetre",
+      "name": "Type de fenêtre",
       "id": "type_fenetre",
       "content": [
         {
@@ -30,7 +30,7 @@
     },
     {
       "type": "Table",
-      "name": "Materiau fenetre",
+      "name": "Materiau fenêtre",
       "id": "materiau_fenetre",
       "content": [
         {
@@ -45,7 +45,7 @@
             },
             {
               "type": "TextButton",
-              "text": "Metal",
+              "text": "Métal",
               "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.METALLIQUE"
             },
             {
@@ -59,7 +59,7 @@
     },
     {
       "type": "Table",
-      "name": "Vitrage fenetre",
+      "name": "Vitrage fenêtre",
       "id": "vitrage_fenetre",
       "content": [
         {

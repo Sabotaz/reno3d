@@ -276,7 +276,6 @@ public class Dpe implements EventListener {
         Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
         EventManager.getInstance().put(Channel.DPE, e);
 
-
         actualiseDP_wall(wall, typeMur, dateIsolationMur, typeIsolationMur);
     }
 

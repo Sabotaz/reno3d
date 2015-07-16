@@ -18,14 +18,15 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 public class AndroidLauncher extends AndroidApplication {
     IfcModel ifcModel = new IfcModel();
+    IfcHelper ifcHelper = new IfcHelper();
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         try {
 
-            IfcHelper.initialiseIfcModel(ifcModel);
-            IfcHelper.createApartmentTest(ifcModel);
-            IfcHelper.saveIfcModel(ifcModel);
+            ifcHelper.initialiseIfcModel();
+            ifcHelper.createApartmentTest();
+            ifcHelper.saveIfcModel();
             InputStream inputStream = getAssets().open("data/ifc/example.ifc");
             String root = Environment.getExternalStorageDirectory().toString();
             File f = new File(root + "/example.ifc");

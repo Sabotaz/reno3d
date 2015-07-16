@@ -1051,8 +1051,7 @@ public class IfcHelper {
             relContainedInSpatialStructure.addRelatedElements(ifcSlab);
         }
         ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<MaterialTypeEnum>();
-        materialTypeEnumArrayList.add(MaterialTypeEnum.BRIQUE);
-        materialTypeEnumArrayList.add(MaterialTypeEnum.PIERRE);
+        materialTypeEnumArrayList.add(MaterialTypeEnum.PARQUET);
         this.addMaterialLayerToSlab(ifcSlab, materialTypeEnumArrayList);
         this.addPropertyLocationSlab(ifcSlab, LocationSlabsEnum.INCONNUE);
 

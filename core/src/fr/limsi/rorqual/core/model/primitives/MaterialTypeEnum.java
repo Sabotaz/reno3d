@@ -9,7 +9,8 @@ import fr.limsi.rorqual.core.utils.AssetManager;
  */
 public enum MaterialTypeEnum {
     BRIQUE("brickwork-texture", "brickwork_normal-map"),
-    PIERRE("masonry-wall-texture", "masonry-wall-normal-map");
+    PIERRE("masonry-wall-texture", "masonry-wall-normal-map"),
+    PARQUET("wood-floorboards-texture",null);
 
     private String diffuse;
     private String normal;
@@ -24,6 +25,11 @@ public enum MaterialTypeEnum {
     }
 
     public Texture getNormal() {
-        return (Texture)AssetManager.getInstance().get(normal);
+        if (normal == null){
+            return null;
+        }
+        else{
+            return (Texture)AssetManager.getInstance().get(normal);
+        }
     }
 }

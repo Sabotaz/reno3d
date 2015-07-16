@@ -35,22 +35,22 @@
             },
             {
               "type": "TextButton",
-              "text": "Porte opaque pleine isolee",
+              "text": "Porte opaque pleine isolée",
               "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_OPAQUE_PLEINE_ISOLEE"
             },
             {
               "type": "TextButton",
-              "text": "Porte precede d'un SAS",
+              "text": "Porte précédée d'un SAS",
               "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_PRECEDE_DUN_SAS"
             },
             {
               "type": "TextButton",
-              "text": "Porte-fenetre battante",
+              "text": "Porte-fenêtre battante",
               "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_FENETRE_BATTANTE"
             },
             {
               "type": "TextButton",
-              "text": "Porte-fenetre coulissante",
+              "text": "Porte-fenêtre coulissante",
               "value": "fr.limsi.rorqual.core.dpe.TypeDoorEnum.PORTE_FENETRE_COULISSANTE"
             }
           ]
@@ -59,7 +59,7 @@
     },
     {
       "type": "Table",
-      "name": "Materiau porte",
+      "name": "Matériau porte",
       "id": "materiau_porte",
       "content": [
         {
@@ -74,7 +74,7 @@
             },
             {
               "type": "TextButton",
-              "text": "Metal",
+              "text": "Métal",
               "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.METALLIQUE"
             },
             {
