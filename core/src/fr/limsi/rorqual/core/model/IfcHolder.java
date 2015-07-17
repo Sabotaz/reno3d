@@ -15,9 +15,11 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 public class IfcHolder {
 
     private IfcModel ifcModel = null;
+    private IfcHelper ifcHelper = null;
+
     private DefaultMutableTreeNode spatialStructureTreeNode = new DefaultMutableTreeNode("no model loaded");
 
-    public IfcHolder() {}
+    private IfcHolder() {}
 
     /** Holder */
     private static class IfcHolderHolder
@@ -32,6 +34,20 @@ public class IfcHolder {
 
     public IfcModel getIfcModel() {
         return this.ifcModel;
+    }
+
+    public IfcHelper getHelper() {
+        if (ifcHelper == null) {
+            ifcHelper = new IfcHelper(ifcModel);
+            if (ifcModel == null)
+                ifcModel = ifcHelper.getModel();
+        }
+        return ifcHelper;
+    }
+
+    public void setIfcModel(IfcModel model) {
+        this.ifcModel = model;
+        spatialStructureTreeNode = new IfcSpatialStructure(ifcModel).getSpatialStructureRoot(false);
     }
 
     public void openModel(File stepFile) throws Exception {

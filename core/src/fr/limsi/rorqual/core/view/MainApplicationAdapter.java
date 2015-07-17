@@ -43,6 +43,7 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
+import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Popup;
 import fr.limsi.rorqual.core.utils.AssetManager;
@@ -85,6 +86,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ModelContainer pin;
     private Vector3 decal_pos;
     private Actor tb;
+    PerspectiveCameraUpdater cam_updater;
 
     @Override
 	public void create () {
@@ -116,13 +118,18 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera2.viewportHeight = Gdx.graphics.getHeight();
         camera2.viewportWidth = Gdx.graphics.getWidth();
-        camera2.position.set(0, -20, 20);
+        camera2.position.set(0, -20, 1.65f);
         camera2.near = 1f;
         camera2.far = 10000f;
-        camera2.lookAt(0, 0, 0);
+        //camera2.lookAt(0, 0, 0);
+        camera2.direction.set(0,1,0);
         camera2.up.set(0, 0, 1);
         camera2.update();
         cameras[1] = camera2;
+
+        Logic.getInstance().setCamera(camera2);
+
+        cam_updater = new PerspectiveCameraUpdater(camera2);
 
         //viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera1);
 
@@ -134,6 +141,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         modelGraph = new ModelGraph();
         modelGraph.setCamera(baseCamera);
+        Logic.getInstance().setModelGraph(modelGraph);
 
         modelBatch = new ModelBatch(shaderProvider);
 
@@ -172,7 +180,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, this, modelGraph));
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, cam_updater));
 
         /*** Ajout du bouton EXIT ***/
         buttonExit = new TextButton("EXIT", textButtonStyle);
@@ -183,8 +191,21 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
+
         });
-        stageMenu.addActor(buttonExit);
+
+        /*** Ajout du bouton MUR ***/
+        TextButton buttonMur = new TextButton("MUR", textButtonStyle);
+        buttonMur.setName("MUR");
+        buttonMur.setSize(100, 40);
+        buttonMur.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight()));
+        buttonMur.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Logic.getInstance().startWall();
+            }
+        });
+
+        stageMenu.addActor(buttonMur);
 
         state = new DpeStateUpdater(modelGraph);
 
@@ -255,6 +276,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light.direction.set(light_dir);
 
         stageMenu.act();
+
+        modelGraph.act();
     }
 
     @Override
@@ -307,48 +330,18 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     }
 
-    private static enum Sense {
-        GAUCHE,
-        DROITE,
-        HAUT,
-        BAS,
-        NONE;
-    }
-
-    private Sense camera_mov = Sense.NONE;
-
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.LEFT:
-                camera_mov = Sense.GAUCHE;
-                return true;
-            case Input.Keys.RIGHT:
-                camera_mov = Sense.DROITE;
-                return true;
-            case Input.Keys.UP:
-                camera_mov = Sense.HAUT;
-                return true;
-            case Input.Keys.DOWN:
-                camera_mov = Sense.BAS;
-                return true;
-        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         switch (keycode) {
-        //NinePatch patch = atlas.createPatch("wall");
-            case Input.Keys.LEFT:
-            case Input.Keys.RIGHT:
-            case Input.Keys.UP:
-            case Input.Keys.DOWN:
-                camera_mov = Sense.NONE;
-                return true;
             case Input.Keys.C:
                 ncam++;
                 modelGraph.setCamera(cameras[ncam % cameras.length]);
+                Logic.getInstance().setCamera(cameras[ncam % cameras.length]);
                 return true;
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();
@@ -443,18 +436,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Camera camera = cameras[ncam%cameras.length];
         if (camera instanceof OrthographicCamera) {
             OrthographicCamera oc = (OrthographicCamera) camera;
-            oc.translate(-diffX*oc.zoom, diffY*oc.zoom, 0);
-        } else {
-            Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY,1)).sub(camera.position).nor();
-            Vector3 after = camera.unproject(new Vector3(screenX, screenY,1)).sub(camera.position).nor();
-
-            if (!before.isCollinear(after))
-                camera.rotate(after.cpy().crs(before), (float)(Math.acos(after.dot(before)) * 180. / Math.PI));
-            camera.up.set(0,0,1);
+            oc.translate(-diffX * oc.zoom, diffY * oc.zoom, 0);
+            last_screenX = screenX;
+            last_screenY = screenY;
+            return true;
         }
-        last_screenX = screenX;
-        last_screenY = screenY;
-        return true;
+        return false;
     }
 
     @Override
@@ -469,11 +456,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         if (camera instanceof OrthographicCamera) {
             OrthographicCamera oc = (OrthographicCamera) camera;
             oc.zoom = oc.zoom * (1+amount/10f);
-        } else if (camera instanceof PerspectiveCamera) {
-            PerspectiveCamera pc = (PerspectiveCamera) camera;
-            pc.position.scl(1+amount/10f);
-            pc.update();
-            //pc.fieldOfView = pc.fieldOfView * (1+amount/10f);
         }
         return true;
     }
@@ -493,22 +475,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     private void update_cam() {
         if (cameras[ncam%cameras.length] instanceof PerspectiveCamera) {
-            PerspectiveCamera camera = (PerspectiveCamera) cameras[ncam%cameras.length];
-            switch (camera_mov) {
-                case GAUCHE:
-                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), -5);
-                    break;
-                case DROITE:
-                    camera.rotateAround(new Vector3(), new Vector3(0,0,1), 5);
-                    break;
-                case HAUT:
-                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), 5);
-                    break;
-                case BAS:
-                    camera.rotateAround(new Vector3(), camera.up.cpy().crs(camera.direction), -5);
-                    break;
-            }
-            camera.update();
+            cam_updater.act();
         }
     }
 }

@@ -50,6 +50,12 @@ public class ModelContainer {
         setModel(m);
     }
 
+    public void act() {
+        for (ModelContainer c : children) {
+            c.act();
+        }
+    }
+
     public void setShaderProgram(Shader s) {
         prefered_shader = s;
     }

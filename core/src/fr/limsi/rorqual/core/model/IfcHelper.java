@@ -1,5 +1,7 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.math.Vector3;
+
 import fr.limsi.rorqual.core.dpe.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.DoorPropertiesEnum;
 import fr.limsi.rorqual.core.dpe.LocationSlabsEnum;
@@ -35,12 +37,19 @@ public class IfcHelper {
     private IfcModel ifcModel;
 
     public IfcHelper(){
-        ifcModel = new IfcModel();
-        this.initialiseIfcModel();
+        this(null);
     }
 
     public IfcHelper(IfcModel model){
-        ifcModel = model;
+        if (model == null) {
+            ifcModel = new IfcModel();
+            this.initialiseIfcModel();
+        } else
+            ifcModel = model;
+    }
+
+    public IfcModel getModel() {
+        return ifcModel;
     }
 
     // Permet de compléter un model de départ contenant les informations du projet, un site,
@@ -704,6 +713,14 @@ public class IfcHelper {
         return new IfcCartesianPoint(coordinates);
     }
 
+    public IfcCartesianPoint createCartesianPoint3D(Vector3 v){
+        LIST<IfcLengthMeasure> coordinates = new LIST<IfcLengthMeasure>();
+        coordinates.add(new IfcLengthMeasure(v.x));
+        coordinates.add(new IfcLengthMeasure(v.y));
+        coordinates.add(new IfcLengthMeasure(v.z));
+        return new IfcCartesianPoint(coordinates);
+    }
+
     // Permet de créer une direction à partir de deux doubles
     public IfcDirection createDirection2D(double x, double y){
         LIST<DOUBLE> coordinates = new LIST<DOUBLE>();
@@ -864,6 +881,14 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un mur à un IfcModel
+    public void addWall(Vector3 pointA, Vector3 pointB, double wallThickness){
+        addWall("1st floor",
+                new IfcGloballyUniqueId().getDecodedValue(),
+                createCartesianPoint3D(pointA),
+                createCartesianPoint3D(pointB),
+                wallThickness);
+    }
+
     public void addWall(String nameBuildingStorey, String nameWall, IfcCartesianPoint pointA, IfcCartesianPoint pointB, double wallThickness){
         IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
         double wallHeight = 2.80;

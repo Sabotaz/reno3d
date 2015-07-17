@@ -16,7 +16,7 @@ import javax.jws.WebParam;
 /**
  * Created by christophe on 30/06/15.
  */
-public class ModelGraph implements InputProcessor {
+public class ModelGraph {
 
     ModelContainer root;
     Camera camera;
@@ -49,46 +49,6 @@ public class ModelGraph implements InputProcessor {
         camera = c;
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
-
     HashMap<Object, ModelContainer> objects_map = new HashMap<Object, ModelContainer>();
 
     public ModelContainer getFromUserObject(Object o) {
@@ -104,6 +64,10 @@ public class ModelGraph implements InputProcessor {
     public void remove(ModelContainer m) {
         if (m.getUserData() != null && objects_map.containsKey(m.getUserData()))
             objects_map.remove(m.getUserData());
+    }
+
+    public void act() {
+        root.act();
     }
 
 }
