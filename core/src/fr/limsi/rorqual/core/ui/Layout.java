@@ -56,8 +56,11 @@ public class Layout {
         public Updater(Channel c, EventType e) {
             channel = c;
             eventType = e;
+            HashMap<String,Object> items = new HashMap<String, Object>();
+            items.put("userObject",userObject);
+            items.put("eventRequest",EventRequest.GET_STATE);
             EventManager.getInstance().addListener(channel, Updater.this);
-            Event ev = new Event(eventType, new Object[]{userObject, EventRequest.GET_STATE});
+            Event ev = new Event(eventType, items);
             EventManager.getInstance().put(channel, ev);
         }
 
@@ -68,9 +71,9 @@ public class Layout {
 
         public void notify(Channel c, Event e) {
             if (e.getEventType() == (EventType) eventType) {
-                Object[] response = (Object[]) e.getUserObject();
-                if (response[0] == userObject && response[1] == EventRequest.CURRENT_STATE) {
-                    default_value = response[2];
+                HashMap<String,Object> response = (HashMap<String,Object>) e.getUserObject();
+                if (response.get("userObject") == userObject && response.get("eventRequest") == EventRequest.CURRENT_STATE) {
+                    default_value = response.get("lastValue");
                     default_value_received = true;
                 }
             }
@@ -270,13 +273,12 @@ public class Layout {
                 textButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Object[] value = new Object[4];
-                        value[0] = userObject;
-                        value[1] = EventRequest.UPDATE_STATE;
-                        value[2] = last_value;
-                        value[3] = Layout.this;
-
-                        last_updater.trigger(value);
+                        HashMap<String,Object> items = new HashMap<String, Object>();
+                        items.put("userObject",userObject);
+                        items.put("eventRequest",EventRequest.UPDATE_STATE);
+                        items.put("lastValue",last_value);
+                        items.put("layout",Layout.this);
+                        last_updater.trigger(items);
                     }
                 });
             }
@@ -321,12 +323,12 @@ public class Layout {
                 imageButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Object[] value = new Object[4];
-                        value[0] = userObject;
-                        value[1] = EventRequest.UPDATE_STATE;
-                        value[2] = last_value;
-                        value[3] = Layout.this;
-                        last_updater.trigger(value);
+                        HashMap<String,Object> items = new HashMap<String, Object>();
+                        items.put("userObject",userObject);
+                        items.put("eventRequest",EventRequest.UPDATE_STATE);
+                        items.put("lastValue",last_value);
+                        items.put("layout",Layout.this);
+                        last_updater.trigger(items);
                     }
                 });
             }

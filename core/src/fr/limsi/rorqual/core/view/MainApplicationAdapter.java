@@ -40,6 +40,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
@@ -147,7 +148,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         stageMenu = new Stage();
 //        stageMenu.setDebugAll(true);
-        System.out.println(stageMenu.getWidth());
+        //System.out.println(stageMenu.getWidth());
 
         /*** Création des lumières ***/
         environnement = new Environment();
@@ -227,12 +228,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
-                dpe.startDPE();
-
-
-
-
-
+                tb = dpeui.getPropertyWindow(DpeEvent.START_DPE);
+                if (tb != null) {
+                    tb.setPosition(Gdx.graphics.getWidth()/2-100,Gdx.graphics.getHeight()-100);
+                    stageMenu.addActor(tb);
+                }
             }
         });
         stageMenu.addActor(buttonDPE);
@@ -410,10 +410,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 //selected.remove(pin);
             }
             selected = modelGraph.getObject(screenX, screenY);
-            System.out.println("TOUCH: " + selected);
+            //System.out.println("TOUCH: " + selected);
             if (selected != null) {
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
-                System.out.println("TOUCH: " + selected.getUserData());
+                //System.out.println("TOUCH: " + selected.getUserData());
                 selected.setColor(Color.YELLOW);
                 tb = dpeui.getPropertyWindow(selected.getUserData());
                 if (tb != null) {
@@ -460,12 +460,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         return true;
     }
 
-
     public void print(DefaultMutableTreeNode treeNode, int tab) {
 
-        System.out.print(new String(new char[tab]).replace('\0', ' '));
+        //System.out.print(new String(new char[tab]).replace('\0', ' '));
 
-        System.out.println(treeNode.getUserObject() + " [" + treeNode.getUserObject().getClass().getName() + "]");
+        //System.out.println(treeNode.getUserObject() + " [" + treeNode.getUserObject().getClass().getName() + "]");
 
         for (int i = 0; i < treeNode.getChildCount(); i++) {
             DefaultMutableTreeNode currentTreeNode = (DefaultMutableTreeNode)treeNode.getChildAt(i);

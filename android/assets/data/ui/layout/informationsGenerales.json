@@ -1,0 +1,62 @@
+{
+  "type": "TabWindow",
+  "name": "Informations générales",
+  "id": "tab_window",
+  "content": [
+    {
+      "type": "Table",
+      "name": "Type de bâtiment",
+      "id": "type_batiment",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_BATIMENT",
+          "layout": "column",
+          "content": [
+            {
+              "type": "ImageButton",
+              "image": "textureTypeBatiment1",
+              "value": "fr.limsi.rorqual.core.dpe.TypeBatimentEnum.MAISON"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureTypeBatiment2",
+              "value": "fr.limsi.rorqual.core.dpe.TypeBatimentEnum.APPARTEMENT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Forme de la maison",
+      "id": "forme_maison",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.FORME_MAISON",
+          "layout": "column",
+          "content": [
+            {
+              "type": "ImageButton",
+              "image": "textureForme1",
+              "value": "fr.limsi.rorqual.core.dpe.FormeMaisonEnum.CARRE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureForme2",
+              "value": "fr.limsi.rorqual.core.dpe.FormeMaisonEnum.ALLONGE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureForme3",
+              "value": "fr.limsi.rorqual.core.dpe.FormeMaisonEnum.DEVELOPPE"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
