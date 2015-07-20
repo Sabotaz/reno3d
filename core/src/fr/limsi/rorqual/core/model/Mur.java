@@ -1,5 +1,7 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.Date;
@@ -7,6 +9,11 @@ import java.util.Date;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
+
+import java.util.ArrayList;
+
+import fr.limsi.rorqual.core.model.utils.Coin;
+import fr.limsi.rorqual.core.model.utils.MyVector2;
 
 /**
  * Created by ricordeau on 20/07/15.
@@ -24,6 +31,8 @@ public class Mur extends ActableModel {
 
     private static float DEFAULT_DEPTH = 0.2f;
     private static float DEFAULT_HEIGHT = 2.8f;
+
+    private ArrayList<Coin> coins = new ArrayList<Coin>();
 
     public Mur(Vector3 a, Vector3 b) {
         this(a, b, DEFAULT_DEPTH, DEFAULT_HEIGHT);
@@ -108,16 +117,49 @@ public class Mur extends ActableModel {
         this.dateIsolationMurEnum = dateIsolationMurEnum;
     }
 
-    public void anchorAto(Mur other) {
-        anchorTo(A, other);
-    }
+    public ArrayList<Vector3> getAnchors(Vector3 pt, float depth) {
+        ArrayList<Vector3> anchors = new ArrayList<Vector3>();
+        anchors.add(A);
+        anchors.add(B);
 
-    public void anchorBto(Mur other) {
-        anchorTo(B, other);
-    }
+        Vector3 x_dir = B.cpy().sub(A).setLength(depth/2);
+        Vector3 y_dir = x_dir.cpy().crs(Vector3.Z).setLength(this.depth/2);
 
-    private void anchorTo(Vector3 v, Mur other) {
+        // px : +x_dir      mx : -x_dir
+        // py : +y_dir      my : -y_dir
+        Vector3 a_px_py = A.cpy().add(x_dir).add(y_dir);
+        Vector3 a_mx_py = A.cpy().sub(x_dir).add(y_dir);
+        Vector3 a_px_my = A.cpy().add(x_dir).sub(y_dir);
+        Vector3 a_mx_my = A.cpy().sub(x_dir).sub(y_dir);
+        anchors.add(a_px_py);
+        anchors.add(a_mx_py);
+        anchors.add(a_px_my);
+        anchors.add(a_mx_my);
 
+        Vector3 b_px_py = B.cpy().add(x_dir).add(y_dir);
+        Vector3 b_mx_py = B.cpy().sub(x_dir).add(y_dir);
+        Vector3 b_px_my = B.cpy().add(x_dir).sub(y_dir);
+        Vector3 b_mx_my = B.cpy().sub(x_dir).sub(y_dir);
+        anchors.add(b_px_py);
+        anchors.add(b_mx_py);
+        anchors.add(b_px_my);
+        anchors.add(b_mx_my);
+
+        Vector2 intersection = new Vector2();
+        Vector2 pt1 = new MyVector2(pt);
+        Vector2 pt2 = new MyVector2(pt.cpy().add(y_dir));
+        // intersect +y_dir
+        Vector2 coin1 = new MyVector2(A.cpy().add(y_dir));
+        Vector2 coin2 = new MyVector2(A.cpy().sub(y_dir));
+        if (Intersector.intersectLines(pt1, pt2, coin1, coin2, intersection))
+            anchors.add(new Vector3(intersection.x, intersection.y, 0));
+        // intersect -y_dir
+        coin1 = new MyVector2(B.cpy().add(y_dir));
+        coin2 = new MyVector2(B.cpy().sub(y_dir));
+        if (Intersector.intersectLines(pt2, pt2, coin1, coin2, intersection))
+            anchors.add(new Vector3(intersection.x, intersection.y, 0));
+
+        return anchors;
     }
 
     public void act() {
