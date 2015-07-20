@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Created by ricordeau on 20/07/15.
  */
-public class Mur {
+public class Mur extends ActableModel {
 
     private Vector3 A = new Vector3();
     private Vector3 B = new Vector3();
@@ -71,5 +71,21 @@ public class Mur {
 
     public void setB(Vector3 b) {
         B = b;
+    }
+
+    public void anchorAto(Mur other) {
+        anchorTo(A, other);
+    }
+
+    public void anchorBto(Mur other) {
+        anchorTo(B, other);
+    }
+
+    private void anchorTo(Vector3 v, Mur other) {
+
+    }
+
+    public void act() {
+
     }
 }

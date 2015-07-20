@@ -9,4 +9,8 @@ public class Etages {
 
     private ArrayList<Mur> murs = new ArrayList<Mur>();
 
+    public ArrayList<Mur> getMurs() {
+        return this.murs;
+    }
+
 }
