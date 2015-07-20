@@ -12,8 +12,8 @@ public class Etages {
         return murs;
     }
 
-    public void setMurs(ArrayList<Mur> murs) {
-        this.murs = murs;
+    public void addMur(Mur mur) {
+        this.murs.add(mur);
     }
 
     public int getNumber() {
