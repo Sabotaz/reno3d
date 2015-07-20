@@ -18,12 +18,12 @@
             {
               "type": "ImageButton",
               "image": "textureWindowTypeBattante",
-              "value": "fr.limsi.rorqual.core.dpe.TypeFenetreEnum.BATTANTE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum.BATTANTE"
             },
             {
               "type": "ImageButton",
               "image": "textureWindowTypeCoulissante",
-              "value": "fr.limsi.rorqual.core.dpe.TypeFenetreEnum.COULISSANTE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum.COULISSANTE"
             }
           ]
         }
@@ -42,17 +42,17 @@
             {
               "type": "TextButton",
               "text": "Bois",
-              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.BOIS"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS"
             },
             {
               "type": "TextButton",
               "text": "Métal",
-              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.METALLIQUE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.METALLIQUE"
             },
             {
               "type": "TextButton",
               "text": "PVC",
-              "value": "fr.limsi.rorqual.core.dpe.TypeMateriauMenuiserieEnum.PVC"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.PVC"
             }
           ]
         }
@@ -71,37 +71,37 @@
             {
               "type": "TextButton",
               "text": "Simple vitrage",
-              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.SIMPLE_VITRAGE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.SIMPLE_VITRAGE"
             },
             {
               "type": "TextButton",
               "text": "Survitrage",
-              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.SURVITRAGE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.SURVITRAGE"
             },
             {
               "type": "TextButton",
               "text": "Double vitrage avant 1990",
-              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990"
             },
             {
               "type": "TextButton",
               "text": "Double vitrage entre 1990 et 2001",
-              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001"
             },
             {
               "type": "TextButton",
               "text": "Double vitrage apres 2001",
-              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001"
             },
             {
               "type": "TextButton",
               "text": "Triple vitrage",
-              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.TRIPLE_VITRAGE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.TRIPLE_VITRAGE"
             },
             {
               "type": "TextButton",
               "text": "Inconnue",
-              "value": "fr.limsi.rorqual.core.dpe.TypeVitrageEnum.INCONNUE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.INCONNUE"
             }
           ]
         }

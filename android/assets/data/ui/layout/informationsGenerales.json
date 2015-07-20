@@ -1,11 +1,11 @@
 {
   "type": "TabWindow",
-  "name": "Informations générales",
+  "name": "Informations générales du bâtiment",
   "id": "tab_window",
   "content": [
     {
       "type": "Table",
-      "name": "Type de bâtiment",
+      "name": "Type",
       "id": "type_batiment",
       "content": [
         {
@@ -13,16 +13,17 @@
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
           "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_BATIMENT",
           "layout": "column",
+          "align": "center",
           "content": [
             {
               "type": "ImageButton",
               "image": "textureTypeBatiment1",
-              "value": "fr.limsi.rorqual.core.dpe.TypeBatimentEnum.MAISON"
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeBatimentEnum.MAISON"
             },
             {
               "type": "ImageButton",
               "image": "textureTypeBatiment2",
-              "value": "fr.limsi.rorqual.core.dpe.TypeBatimentEnum.APPARTEMENT"
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeBatimentEnum.APPARTEMENT"
             }
           ]
         }
@@ -30,7 +31,7 @@
     },
     {
       "type": "Table",
-      "name": "Forme de la maison",
+      "name": "Forme",
       "id": "forme_maison",
       "content": [
         {
@@ -38,21 +39,172 @@
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
           "event": "fr.limsi.rorqual.core.event.DpeEvent.FORME_MAISON",
           "layout": "column",
+          "align": "center",
           "content": [
             {
               "type": "ImageButton",
               "image": "textureForme1",
-              "value": "fr.limsi.rorqual.core.dpe.FormeMaisonEnum.CARRE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.CARRE"
             },
             {
               "type": "ImageButton",
               "image": "textureForme2",
-              "value": "fr.limsi.rorqual.core.dpe.FormeMaisonEnum.ALLONGE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.ALLONGE"
             },
             {
               "type": "ImageButton",
               "image": "textureForme3",
-              "value": "fr.limsi.rorqual.core.dpe.FormeMaisonEnum.DEVELOPPE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.DEVELOPPE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Mitoyenneté",
+      "id": "mitoyennete_maison",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.MITOYENNETE_MAISON",
+          "layout": "column",
+          "align": "center",
+          "content": [
+            {
+              "type": "ImageButton",
+              "image": "textureMit1",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.NON_ACCOLE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureMit2",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_PETIT_COTE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureMit3",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_OU_DEUX_PETITS_COTES"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureMit4",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_ET_UN_PETIT_COTE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureMit5",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_DEUX_GRANDS_COTES"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Position",
+      "id": "position_appartement",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.POSITION_APPARTEMENT",
+          "layout": "column",
+          "align": "center",
+          "content": [
+            {
+              "type": "ImageButton",
+              "image": "texturePosAppt1",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.PREMIER_ETAGE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "texturePosAppt2",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.ETAGE_INTERMEDIAIRE"
+            },
+            {
+              "type": "ImageButton",
+              "image": "texturePosAppt3",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.DERNIER_ETAGE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Année de construction",
+      "id": "annee_construction",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.ANNEE_CONSTRUCTION",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Avant 1975",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.AVANT_1975"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1975 et 1977",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1975_ET_1977"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1978 et 1982",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1978_ET_1982"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1983 et 1988",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1983_ET_1988"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1989 et 2000",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1989_ET_2000"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 2001 et 2005",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2001_ET_2005"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 2006 et 2012",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2006_ET_2012"
+            },
+            {
+              "type": "TextButton",
+              "text": "Après 2012",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.APRES_2012"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Énergie à la construction",
+      "id": "energie_construction",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.ENERGIE_CONSTRUCTION",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Electrique",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEnergieConstructionEnum.ELECTRIQUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Autre",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEnergieConstructionEnum.AUTRE"
             }
           ]
         }

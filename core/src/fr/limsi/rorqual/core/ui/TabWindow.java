@@ -60,7 +60,7 @@ public class TabWindow extends Table {
         contentTab = new Table();
         window.add(buttonTab).left().expandX().row();
         window.add(contentTab).left().padTop(5).expandX().fillX().left();
-        contentTab.setDebug(true);
+//        contentTab.setDebug(true);
 
         window.addListener(new EventListener() {
             public boolean handle(Event event) {
@@ -119,6 +119,13 @@ public class TabWindow extends Table {
             nextX += (int)(nextWidth-lastWidth)/2;
             nextY += (int)(lastHeight-nextHeight)/2;
         }
+
+        System.out.println();
+        System.out.println("nextWidth = "+nextWidth);
+        System.out.println("nextHeight = "+nextHeight);
+        System.out.println("lastWidth = "+lastWidth);
+        System.out.println("lastHeight = "+lastHeight);
+        System.out.println();
 
         contentTab.clear();
         contentTab.add(next).expandX().fillX().left();

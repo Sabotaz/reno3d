@@ -1,4 +1,4 @@
-package fr.limsi.rorqual.core.dpe;
+package fr.limsi.rorqual.core.dpe.enums.wallproperties;
 
 /**
  * Created by ricordeau on 07/07/15.
