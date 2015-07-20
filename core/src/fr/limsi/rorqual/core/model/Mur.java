@@ -2,6 +2,12 @@ package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.Date;
+
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
+
 /**
  * Created by ricordeau on 20/07/15.
  */
@@ -9,10 +15,12 @@ public class Mur extends ActableModel {
 
     private Vector3 A = new Vector3();
     private Vector3 B = new Vector3();
-
     private float height;
     private float width;
     private float depth;
+    private TypeMurEnum typeMurEnum;
+    private TypeIsolationMurEnum typeIsolationMurEnum;
+    private DateIsolationMurEnum dateIsolationMurEnum;
 
     private static float DEFAULT_DEPTH = 0.2f;
     private static float DEFAULT_HEIGHT = 2.8f;
@@ -31,6 +39,9 @@ public class Mur extends ActableModel {
         this.height = h;
         this.depth = d;
         this.width = b.cpy().sub(a).len();
+        this.typeMurEnum = TypeMurEnum.INCONNUE;
+        this.typeIsolationMurEnum = TypeIsolationMurEnum.NON_ISOLE;
+        this.dateIsolationMurEnum = DateIsolationMurEnum.JAMAIS;
     }
 
     public float getHeight() {
@@ -71,6 +82,30 @@ public class Mur extends ActableModel {
 
     public void setB(Vector3 b) {
         B = b;
+    }
+
+    public TypeMurEnum getTypeMurEnum() {
+        return typeMurEnum;
+    }
+
+    public void setTypeMurEnum(TypeMurEnum typeMurEnum) {
+        this.typeMurEnum = typeMurEnum;
+    }
+
+    public TypeIsolationMurEnum getTypeIsolationMurEnum() {
+        return typeIsolationMurEnum;
+    }
+
+    public void setTypeIsolationMurEnum(TypeIsolationMurEnum typeIsolationMurEnum) {
+        this.typeIsolationMurEnum = typeIsolationMurEnum;
+    }
+
+    public DateIsolationMurEnum getDateIsolationMurEnum() {
+        return dateIsolationMurEnum;
+    }
+
+    public void setDateIsolationMurEnum(DateIsolationMurEnum dateIsolationMurEnum) {
+        this.dateIsolationMurEnum = dateIsolationMurEnum;
     }
 
     public void anchorAto(Mur other) {
