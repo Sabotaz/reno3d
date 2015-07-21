@@ -234,10 +234,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             }
         });
 
-        tableStage.add(buttonExit).right().row();
-        tableStage.add(buttonMur).right().row();
-        tableStage.add(buttonDPE).right().row();
-        tableStage.setDebug(true);
+        tableStage.add(buttonExit).right().width(150).padTop(10).padRight(10).row();
+        tableStage.add(buttonMur).right().width(150).padTop(10).padRight(10).row();
+        tableStage.add(buttonDPE).right().size(150,150).padTop(10).padRight(10).row();
         float tableWidth = tableStage.getPrefWidth();
         float tableHeight = tableStage.getPrefHeight();
         tableStage.setPosition(Gdx.graphics.getWidth()-tableWidth/2,Gdx.graphics.getHeight()-tableHeight/2);
