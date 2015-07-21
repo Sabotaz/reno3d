@@ -1,47 +1,69 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.Date;
 
+import eu.mihosoft.vrl.v3d.CSG;
+import eu.mihosoft.vrl.v3d.Extrude;
+import eu.mihosoft.vrl.v3d.Polygon;
+import eu.mihosoft.vrl.v3d.Vector3d;
+import eu.mihosoft.vrl.v3d.Vertex;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
+import fr.limsi.rorqual.core.utils.CSGUtils;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
  * Created by ricordeau on 20/07/15.
  */
 public class Mur extends ActableModel {
 
+    private static float DEFAULT_DEPTH = 0.2f;
+    private static float DEFAULT_HEIGHT = 2.8f;
+
     private Vector3 A = new Vector3();
     private Vector3 B = new Vector3();
     private float height;
     private float width;
     private float depth;
-    private TypeMurEnum typeMurEnum;
-    private TypeIsolationMurEnum typeIsolationMur;
-    private DateIsolationMurEnum dateIsolationMur;
-    private OrientationMurEnum orientationMur;
-
-    private static float DEFAULT_DEPTH = 0.2f;
-    private static float DEFAULT_HEIGHT = 2.8f;
+    private TypeMurEnum typeMurEnum = TypeMurEnum.INCONNUE;
+    private TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
+    private DateIsolationMurEnum dateIsolationMur = DateIsolationMurEnum.JAMAIS;
+    private OrientationMurEnum orientationMur = OrientationMurEnum.INCONNUE;
 
     private ArrayList<Coin> coins = new ArrayList<Coin>();
+
+    private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
 
     public Mur(Vector3 a, Vector3 b) {
         this(a, b, DEFAULT_DEPTH, DEFAULT_HEIGHT);
     }
 
     public Mur(Vector3 a, Vector3 b, float d) {
-        this(a,b,d, DEFAULT_HEIGHT);
+        this(a, b, d, DEFAULT_HEIGHT);
     }
 
     public Mur(Vector3 a, Vector3 b, float d, float h) {
@@ -50,10 +72,8 @@ public class Mur extends ActableModel {
         this.height = h;
         this.depth = d;
         this.width = b.cpy().sub(a).len();
-        this.typeMurEnum = TypeMurEnum.INCONNUE;
-        this.typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
-        this.dateIsolationMur = DateIsolationMurEnum.JAMAIS;
-        this.orientationMur = OrientationMurEnum.INCONNUE;
+        makeMesh();
+        act();
     }
 
     public float getHeight() {
@@ -120,6 +140,14 @@ public class Mur extends ActableModel {
         this.dateIsolationMur = dateIsolationMurEnum;
     }
 
+    public OrientationMurEnum getOrientationMur() {
+        return orientationMur;
+    }
+
+    public void setOrientationMur(OrientationMurEnum orientationMur) {
+        this.orientationMur = orientationMur;
+    }
+
     public ArrayList<Vector3> getAnchors(Vector3 pt, float depth) {
         ArrayList<Vector3> anchors = new ArrayList<Vector3>();
         anchors.add(A);
@@ -165,7 +193,27 @@ public class Mur extends ActableModel {
         return anchors;
     }
 
-    public void act() {
+    private void makeMesh() {
 
+        Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
+        Vector3 y_dir = B.cpy().sub(A).crs(Vector3.Z).setLength(this.depth / 2);
+
+        Vector3d dir = CSGUtils.castVector(z_shape);
+
+        List<Vector3d> face = new ArrayList<Vector3d>();
+        face.add(CSGUtils.castVector(A.cpy().add(y_dir)));
+        face.add(CSGUtils.castVector(A.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(B.cpy().add(y_dir)));
+        face.add(CSGUtils.castVector(B.cpy().sub(y_dir)));
+
+        CSG csg = Extrude.points(dir, face);
+
+        for (Ouverture o : ouvertures) {
+            csg = csg.difference(o.getCSG());
+        }
+    }
+
+    public void act() {
+        makeMesh();
     }
 }
