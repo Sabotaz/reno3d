@@ -236,26 +236,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             }
         });
 
+        region = atlas.findRegion("chauffage");
+        TextureRegionDrawable chauffage_drawable = new TextureRegionDrawable(region);
+        Drawable chauffage_drawable2 = chauffage_drawable.tint(new Color(0.8f, 0.8f, 0.8f, 1));
+
+        textButtonStyle = new TextButton.TextButtonStyle(chauffage_drawable,chauffage_drawable2,null,fontBlack);
         /*** Ajout du bouton Chauffage ***/
-        Texture textureButtonChauffage = (Texture) assets.getInstance().get("textureBoutonChauffage");
-        Image imageChauffage = new Image(textureButtonChauffage);
-        ImageButton buttonChauffage = new ImageButton(imageChauffage.getDrawable()) {
-            Texture clicked_texture;
-            {
-                Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
-                p.setColor(Color.RED);
-                p.drawRectangle(0, 0, (int)this.getWidth(),(int)this.getHeight());
-                p.drawRectangle(1, 1, (int)this.getWidth()-2,(int)this.getHeight()-2);
-                clicked_texture = new Texture(p);
-            }
-            @Override
-            public void draw(Batch batch, float arg1) {
-                super.draw(batch, arg1);
-                if (this.isChecked()){
-                    batch.draw(clicked_texture, this.getX(), this.getY());
-                }
-            }
-        };
+        Button buttonChauffage = new Button(textButtonStyle);
+        buttonChauffage.setName("Chauffage");
+
         buttonChauffage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 tb = dpeui.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
@@ -269,7 +258,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         tableStage.add(buttonExit).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonMur).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonDPE).right().size(150, 150).padTop(10).padRight(10).row();
-        tableStage.add(buttonChauffage).right().padTop(10).padRight(10).row();
+        tableStage.add(buttonChauffage).right().size(150, 150).padTop(10).padRight(10).row();
         float tableWidth = tableStage.getPrefWidth();
         float tableHeight = tableStage.getPrefHeight();
         tableStage.setPosition(Gdx.graphics.getWidth()-tableWidth/2,Gdx.graphics.getHeight()-tableHeight/2);
