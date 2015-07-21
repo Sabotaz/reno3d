@@ -228,6 +228,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 //        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (tb != null)
+                    tb.remove();
                 tb = dpeui.getPropertyWindow(DpeEvent.INFOS_GENERALES);
                 if (tb != null) {
                     tb.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() - 100);
@@ -247,6 +249,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         buttonChauffage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (tb != null)
+                    tb.remove();
                 tb = dpeui.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
                 if (tb != null) {
                     tb.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() - 100);
