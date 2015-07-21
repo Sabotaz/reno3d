@@ -11,3 +11,4 @@ public enum TypeFermetureEnum {
     VOLET_BATTANT_BOIS,
     VOLET_ROULANT_PVC;
 }
+

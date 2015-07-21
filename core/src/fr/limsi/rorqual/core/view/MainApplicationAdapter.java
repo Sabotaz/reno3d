@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
@@ -183,11 +184,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** On autorise les inputs en entrée ***/
         Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, cam_updater));
 
+        Table tableStage = new Table();
+
         /*** Ajout du bouton EXIT ***/
         buttonExit = new TextButton("EXIT", textButtonStyle);
         buttonExit.setName("EXIT");
         buttonExit.setSize(100, 40);
-        buttonExit.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight()));
         buttonExit.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
@@ -205,9 +207,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 Logic.getInstance().startWall();
             }
         });
-
-        stageMenu.addActor(buttonMur);
-
         state = new DpeStateUpdater(modelGraph);
 
         dpeui = new DpeUi(stageMenu);
@@ -219,23 +218,30 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //NinePatch patch = atlas.createPatch("wall");
 
         textButtonStyle = new TextButton.TextButtonStyle(dpe_drawable,dpe_drawable2,null,fontBlack);
-
         /*** Ajout du bouton DPE ***/
         buttonDPE = new Button(textButtonStyle);
         buttonDPE.setName("DPE");
-        buttonDPE.setSize(150, 150);
-        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
+//        buttonDPE.setSize(150, 150);
+//        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 //                buttonDPE.setVisible(false);
                 tb = dpeui.getPropertyWindow(DpeEvent.START_DPE);
                 if (tb != null) {
-                    tb.setPosition(Gdx.graphics.getWidth()/2-100,Gdx.graphics.getHeight()-100);
+                    tb.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() - 100);
                     stageMenu.addActor(tb);
                 }
             }
         });
-        stageMenu.addActor(buttonDPE);
+
+        tableStage.add(buttonExit).right().row();
+        tableStage.add(buttonMur).right().row();
+        tableStage.add(buttonDPE).right().row();
+        tableStage.setDebug(true);
+        float tableWidth = tableStage.getPrefWidth();
+        float tableHeight = tableStage.getPrefHeight();
+        tableStage.setPosition(Gdx.graphics.getWidth()-tableWidth/2,Gdx.graphics.getHeight()-tableHeight/2);
+        stageMenu.addActor(tableStage);
 
         /*** test affichage fenetre ***/
         // A ModelBatch is like a SpriteBatch, just for models.  Use it to batch up geometry for OpenGL
