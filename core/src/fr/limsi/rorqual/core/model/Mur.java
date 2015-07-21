@@ -58,6 +58,8 @@ public class Mur extends ActableModel {
 
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
 
+    private boolean changed = true;
+
     public Mur(Vector3 a, Vector3 b) {
         this(a, b, DEFAULT_DEPTH, DEFAULT_HEIGHT);
     }
@@ -67,13 +69,12 @@ public class Mur extends ActableModel {
     }
 
     public Mur(Vector3 a, Vector3 b, float d, float h) {
+        super();
         this.A = new Vector3(a);
         this.B = new Vector3(b);
         this.height = h;
         this.depth = d;
         this.width = b.cpy().sub(a).len();
-        makeMesh();
-        act();
     }
 
     public float getHeight() {
@@ -82,6 +83,7 @@ public class Mur extends ActableModel {
 
     public void setHeight(float height) {
         this.height = height;
+        changed = true;
     }
 
     public float getWidth() {
@@ -98,6 +100,7 @@ public class Mur extends ActableModel {
 
     public void setDepth(float depth) {
         this.depth = depth;
+        changed = true;
     }
 
     public Vector3 getA() {
@@ -105,7 +108,9 @@ public class Mur extends ActableModel {
     }
 
     public void setA(Vector3 a) {
-        A = a;
+        A.set(a);
+        this.width = B.cpy().sub(A).len();
+        changed = true;
     }
 
     public Vector3 getB() {
@@ -113,7 +118,9 @@ public class Mur extends ActableModel {
     }
 
     public void setB(Vector3 b) {
-        B = b;
+        B.set(b);
+        this.width = B.cpy().sub(A).len();
+        changed = true;
     }
 
     public TypeMurEnum getTypeMurEnum() {
@@ -194,26 +201,38 @@ public class Mur extends ActableModel {
     }
 
     private void makeMesh() {
-
+        if (B.equals(A))
+            return;
         Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
         Vector3 y_dir = B.cpy().sub(A).crs(Vector3.Z).setLength(this.depth / 2);
 
         Vector3d dir = CSGUtils.castVector(z_shape);
 
         List<Vector3d> face = new ArrayList<Vector3d>();
-        face.add(CSGUtils.castVector(A.cpy().add(y_dir)));
-        face.add(CSGUtils.castVector(A.cpy().sub(y_dir)));
         face.add(CSGUtils.castVector(B.cpy().add(y_dir)));
         face.add(CSGUtils.castVector(B.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(A.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(A.cpy().add(y_dir)));
 
         CSG csg = Extrude.points(dir, face);
 
         for (Ouverture o : ouvertures) {
             csg = csg.difference(o.getCSG());
         }
+
+        Model model = CSGUtils.toModel(csg);
+
+        this.materials.clear();     this.materials.addAll(model.materials);
+        this.meshes.clear();        this.meshes.addAll(model.meshes);
+        this.meshParts.clear();     this.meshParts.addAll(model.meshParts);
+        this.nodes.clear();         this.nodes.addAll(model.nodes);
+        this.animations.clear();    this.animations.addAll(model.animations);
     }
 
     public void act() {
+        if (!changed)
+            return;
         makeMesh();
+        changed = false;
     }
 }

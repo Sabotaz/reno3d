@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Intersector;
@@ -22,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import eu.mihosoft.vrl.v3d.Vector3d;
+import fr.limsi.rorqual.core.model.ActableModel;
+import fr.limsi.rorqual.core.model.ModelProvider;
 
 /**
  * Created by christophe on 30/06/15.
@@ -32,7 +35,7 @@ public class ModelContainer {
     protected ModelGraph root;
 
     protected List<ModelContainer> children = new ArrayList<ModelContainer>();
-    protected ModelInstance model;
+    protected RenderableProvider model;
     public Matrix4 transform;
     private Matrix4 model_transform;
     private Shader prefered_shader;
@@ -129,9 +132,9 @@ public class ModelContainer {
     }
 
     public void setModel(ModelInstance m) {
+        m.userData = modelData;
         model = m;
-        model_transform = model.transform.cpy();
-        model.userData = modelData;
+        model_transform = m.transform.cpy();
     }
 
     public void draw(ModelBatch modelBatch, Environment environment){
@@ -166,7 +169,10 @@ public class ModelContainer {
             Matrix4 updated_global_transform = global_transform.cpy().mul(transform);
 
             // update model mx
-            model.transform = updated_global_transform.cpy().mul(model_transform);
+            if (model instanceof ModelInstance)
+                ((ModelInstance)model).transform = updated_global_transform.cpy().mul(model_transform);
+            else if (model instanceof ActableModel)
+                ((ActableModel)model).transform = updated_global_transform.cpy().mul(model_transform);
             // draw
             modelBatch.render(model, environment);
             drawChildren(modelBatch, environment, updated_global_transform);
@@ -179,9 +185,9 @@ public class ModelContainer {
         }
     }
 
-    public ModelInstance getModel() {
-        return model;
-    }
+    //public ModelInstance getModel() {
+    //    return model;
+    //}
 
     private float intersectsMesh(Ray ray, BoundingBox boundBox) {
         Vector3 pt = new Vector3();
@@ -203,7 +209,12 @@ public class ModelContainer {
 
         BoundingBox boundBox = new BoundingBox();
         Vector3 center = new Vector3();
-        model.calculateBoundingBox(boundBox);
+
+        if (model instanceof ModelInstance)
+            ((ModelInstance)model).calculateBoundingBox(boundBox);
+        else if (model instanceof ActableModel)
+            ((ActableModel)model).calculateBoundingBox(boundBox);
+
         Matrix4 local_transform = global_transform.cpy().mul(model_transform);
         boundBox.mul(local_transform);
         boundBox.getCenter(center);
@@ -261,7 +272,12 @@ public class ModelContainer {
 
     public Vector3 getTop() {
         BoundingBox boundBox = new BoundingBox();
-        model.calculateBoundingBox(boundBox);
+
+        if (model instanceof ModelInstance)
+            ((ModelInstance)model).calculateBoundingBox(boundBox);
+        else if (model instanceof ActableModel)
+            ((ActableModel)model).calculateBoundingBox(boundBox);
+
         boundBox.mul(model_transform);
 
         return new Vector3(boundBox.getCenterX(), boundBox.getCenterY(), boundBox.getCenterZ() + boundBox.getDepth()*0.5f);

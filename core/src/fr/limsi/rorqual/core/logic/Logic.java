@@ -30,6 +30,7 @@ import java.io.File;
 
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
@@ -94,6 +95,7 @@ public class Logic implements InputProcessor {
     final Vector3 end = new Vector3();
     ModelContainer wall;
     boolean making_wall = false;
+    Mur mur;
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (currentState == State.WALL) {
@@ -108,79 +110,18 @@ public class Logic implements InputProcessor {
             } else {
                 making_wall = true;
             }
-
             start.set(intersection);
             end.set(intersection);
-            Vector3 dir = end.cpy().sub(start);
 
-            float y = 0.2f;
-            float z = 2.8f;
-            float x = dir.len();
-            float[] vertices = new float[]{
-                    0,0,0,
-                    0,0,z,
-                    0,y,z,
-                    0,y,0,
-                    x,y,0,
-                    x,0,0,
-                    x,0,z,
-                    x,y,z
-            };
-            short[] indices = new short[]{
-                    0,1,2, 2,3,0,
-                    0,3,4, 4,5,0,
-                    0,5,6, 6,1,0,
+            mur = new Mur(start, end);
 
-                    1,6,7, 7,2,1,
-                    7,4,3, 3,2,7,
-                    4,7,6, 6,5,4
-            };
-
-            Mesh mesh = new Mesh(true, 8, 6*2*3,
-                    new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"));
-            mesh.setVertices(vertices);
-            mesh.setIndices(indices);
-
-            Material material = new Material();
-            material.set(ColorAttribute.createDiffuse(Color.TEAL));
-
-            ModelBuilder modelBuilder = new ModelBuilder();
-            modelBuilder.begin();
-            MeshPartBuilder meshBuilder;
-            meshBuilder = modelBuilder.part("part1", GL20.GL_TRIANGLES, mesh.getVertexAttributes(), material);
-            meshBuilder.addMesh(mesh);
-
-            Model model = modelBuilder.end();
-
-            wall = new ModelContainer(new ModelInstance(model)) {
+            wall = new ModelContainer(new ModelInstance(mur)) {
                 public void act() {
                     super.act();
-                    Mesh mesh = super.model.nodes.get(0).parts.get(0).meshPart.mesh;
-
-                    float y = 0.2f;
-                    float z = 2.8f;
-                    float x = Logic.this.end.cpy().sub(Logic.this.start).len();
-                    float[] vertices = new float[]{
-                            0,0,0,
-                            0,0,z,
-                            0,y,z,
-                            0,y,0,
-                            x,y,0,
-                            x,0,0,
-                            x,0,z,
-                            x,y,z
-                    };
-                    mesh.setVertices(vertices);
-
-                    if (!start.equals(end)) {
-                        Matrix4 mx = new Matrix4().idt();
-
-                        float angle = new Vector2(end.x-start.x, end.y-start.y).angle();
-
-                        mx.translate(start).rotate(0, 0, 1, angle);
-
-                        this.transform = mx;
-                    }
+                    mur.setA(start);
+                    mur.setB(end);
+                    mur.act();
+                    this.setModel(new ModelInstance(mur));
                 }
             };
 
