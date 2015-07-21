@@ -3,12 +3,14 @@ package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Intersector;
@@ -31,6 +33,7 @@ import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.CSGUtils;
@@ -53,6 +56,8 @@ public class Mur extends ActableModel {
     private TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
     private DateIsolationMurEnum dateIsolationMur = DateIsolationMurEnum.JAMAIS;
     private OrientationMurEnum orientationMur = OrientationMurEnum.INCONNUE;
+
+    private ArrayList<MaterialTypeEnum> materialLayersMaterials = new ArrayList<MaterialTypeEnum>();
 
     private ArrayList<Coin> coins = new ArrayList<Coin>();
 
@@ -220,7 +225,41 @@ public class Mur extends ActableModel {
             csg = csg.difference(o.getCSG());
         }
 
-        Model model = CSGUtils.toModel(csg);
+        Material frontMaterial = new Material();
+        Material backMaterial = new Material();
+
+        if (materialLayersMaterials.size() > 0) {
+            Texture texture1_diff = materialLayersMaterials.get(0).getDiffuse();
+            Texture texture1_norm = materialLayersMaterials.get(0).getNormal();
+
+            Texture texture2_diff = materialLayersMaterials.get(materialLayersMaterials.size()-1).getDiffuse();
+            Texture texture2_norm = materialLayersMaterials.get(materialLayersMaterials.size()-1).getNormal();
+
+            texture1_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            texture1_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            texture2_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            texture2_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+
+            TextureAttribute ta1_diff = TextureAttribute.createDiffuse(texture1_diff);
+            TextureAttribute ta1_norm = TextureAttribute.createNormal(texture1_norm);
+            TextureAttribute ta2_diff = TextureAttribute.createDiffuse(texture2_diff);
+            TextureAttribute ta2_norm = TextureAttribute.createNormal(texture2_norm);
+
+            ta1_diff.scaleU = ta1_diff.scaleV = 0.5f;
+            ta1_norm.scaleU = ta1_norm.scaleV = 0.5f;
+            ta2_diff.scaleU = ta2_diff.scaleV = 0.5f;
+            ta2_norm.scaleU = ta2_norm.scaleV = 0.5f;
+
+            frontMaterial.set(ta1_diff, ta1_norm);
+            backMaterial.set(ta2_diff, ta2_norm);
+        }
+        else {
+            frontMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
+            backMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
+        }
+
+
+        Model model = CSGUtils.toModel(csg, frontMaterial, backMaterial);
 
         this.materials.clear();     this.materials.addAll(model.materials);
         this.meshes.clear();        this.meshes.addAll(model.meshes);
