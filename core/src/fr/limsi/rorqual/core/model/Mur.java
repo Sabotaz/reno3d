@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.Date;
 
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 
@@ -26,8 +27,9 @@ public class Mur extends ActableModel {
     private float width;
     private float depth;
     private TypeMurEnum typeMurEnum;
-    private TypeIsolationMurEnum typeIsolationMurEnum;
-    private DateIsolationMurEnum dateIsolationMurEnum;
+    private TypeIsolationMurEnum typeIsolationMur;
+    private DateIsolationMurEnum dateIsolationMur;
+    private OrientationMurEnum orientationMur;
 
     private static float DEFAULT_DEPTH = 0.2f;
     private static float DEFAULT_HEIGHT = 2.8f;
@@ -49,8 +51,9 @@ public class Mur extends ActableModel {
         this.depth = d;
         this.width = b.cpy().sub(a).len();
         this.typeMurEnum = TypeMurEnum.INCONNUE;
-        this.typeIsolationMurEnum = TypeIsolationMurEnum.NON_ISOLE;
-        this.dateIsolationMurEnum = DateIsolationMurEnum.JAMAIS;
+        this.typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
+        this.dateIsolationMur = DateIsolationMurEnum.JAMAIS;
+        this.orientationMur = OrientationMurEnum.INCONNUE;
     }
 
     public float getHeight() {
@@ -102,19 +105,19 @@ public class Mur extends ActableModel {
     }
 
     public TypeIsolationMurEnum getTypeIsolationMurEnum() {
-        return typeIsolationMurEnum;
+        return typeIsolationMur;
     }
 
     public void setTypeIsolationMurEnum(TypeIsolationMurEnum typeIsolationMurEnum) {
-        this.typeIsolationMurEnum = typeIsolationMurEnum;
+        this.typeIsolationMur = typeIsolationMurEnum;
     }
 
     public DateIsolationMurEnum getDateIsolationMurEnum() {
-        return dateIsolationMurEnum;
+        return dateIsolationMur;
     }
 
     public void setDateIsolationMurEnum(DateIsolationMurEnum dateIsolationMurEnum) {
-        this.dateIsolationMurEnum = dateIsolationMurEnum;
+        this.dateIsolationMur = dateIsolationMurEnum;
     }
 
     public ArrayList<Vector3> getAnchors(Vector3 pt, float depth) {

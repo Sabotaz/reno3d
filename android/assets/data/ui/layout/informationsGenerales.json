@@ -209,6 +209,50 @@
           ]
         }
       ]
+    },
+    {
+      "type": "Table",
+      "name": "Ventilation",
+      "id": "type_ventilation",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VENTILATION",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Naturelle",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.NATURELLE"
+            },
+            {
+              "type": "TextButton",
+              "text": "VMC auto-réglable (année d'installation < 1982)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_AVANT_1982"
+            },
+            {
+              "type": "TextButton",
+              "text": "VMC auto-réglable (année d'installation > 1982)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_APRES_1982"
+            },
+            {
+              "type": "TextButton",
+              "text": "VMC Hygro b",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_HYGRO"
+            },
+            {
+              "type": "TextButton",
+              "text": "VMC double flux",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_DOUBLE_FLUX"
+            },
+            {
+              "type": "TextButton",
+              "text": "Inconnue",
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.INCONNUE"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

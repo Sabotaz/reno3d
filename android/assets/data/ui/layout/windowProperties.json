@@ -1,11 +1,11 @@
 {
   "type": "TabWindow",
-  "name": "Propriétés",
+  "name": "Propriétés de la fenêtre",
   "id": "tab_window",
   "content": [
     {
       "type": "Table",
-      "name": "Type de fenêtre",
+      "name": "Type",
       "id": "type_fenetre",
       "content": [
         {
@@ -31,7 +31,7 @@
     },
     {
       "type": "Table",
-      "name": "Materiau fenêtre",
+      "name": "Materiau",
       "id": "materiau_fenetre",
       "content": [
         {
@@ -60,7 +60,7 @@
     },
     {
       "type": "Table",
-      "name": "Vitrage fenêtre",
+      "name": "Vitrage",
       "id": "vitrage_fenetre",
       "content": [
         {
@@ -102,6 +102,50 @@
               "type": "TextButton",
               "text": "Inconnue",
               "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.INCONNUE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Fermeture",
+      "id": "fermeture_fenetre",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FERMETURE_MENUISERIE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Jalousie accordéon",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.JALOUSIE_ACCORDEON"
+            },
+            {
+              "type": "TextButton",
+              "text": "Volet battant avec ajoures fixes",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_BATTANT_AVEC_AJOURES_FIXES"
+            },
+            {
+              "type": "TextButton",
+              "text": "Volet roulant en métal",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_ROULANT_EN_METAL"
+            },
+            {
+              "type": "TextButton",
+              "text": "Fermeture sans ajoures",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.FERMETURE_SANS_AJOURES"
+            },
+            {
+              "type": "TextButton",
+              "text": "Volet battant bois",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_BATTANT_BOIS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Volet roulant PVC",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_ROULANT_PVC"
             }
           ]
         }
