@@ -26,10 +26,10 @@ public abstract class Ouverture {
     protected float height;
     protected float surface;
     protected Model model;
-    protected TypeMateriauMenuiserieEnum typeMateriauMenuiserie;
-    protected TypeVitrageEnum typeVitrage;
-    protected float coefficientDeTransmissionThermique;
-    protected float deperdition;
+    protected TypeMateriauMenuiserieEnum typeMateriauMenuiserie = TypeMateriauMenuiserieEnum.INCONNUE;
+    protected TypeVitrageEnum typeVitrage = TypeVitrageEnum.INCONNUE;
+    protected float coefficientDeTransmissionThermique = 2;
+    protected float deperdition = surface*coefficientDeTransmissionThermique;
 
     // Constructeur
     public Ouverture(Mur mur, Vector2 position, float width, float height, Model model){
@@ -39,10 +39,6 @@ public abstract class Ouverture {
         this.height=height;
         this.surface=width*height;
         this.model = model;
-        this.typeMateriauMenuiserie = TypeMateriauMenuiserieEnum.INCONNUE;
-        this.typeVitrage = TypeVitrageEnum.INCONNUE;
-        this.coefficientDeTransmissionThermique=2;
-        this.deperdition=surface*coefficientDeTransmissionThermique;
     }
 
     // Getter & Setter
