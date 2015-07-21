@@ -4,7 +4,9 @@ package fr.limsi.rorqual.core.event;
  * Created by christophe on 03/06/15.
  */
 public enum DpeEvent implements EventType {
-    START_DPE,
+    INFOS_GENERALES,
+    INFOS_CHAUFFAGE,
+
     TYPE_BATIMENT,
     NB_NIVEAUX_MAISON,
     FORME_MAISON,
@@ -13,6 +15,8 @@ public enum DpeEvent implements EventType {
     ANNEE_CONSTRUCTION,
     ENERGIE_CONSTRUCTION,
     TYPE_VENTILATION,
+
+    TYPE_CHAUFFAGE,
 
     TYPE_MUR,
     DATE_ISOLATION_MUR,

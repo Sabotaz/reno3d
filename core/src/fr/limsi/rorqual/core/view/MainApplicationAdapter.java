@@ -9,15 +9,16 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
@@ -26,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -109,8 +112,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera1.viewportHeight = Gdx.graphics.getHeight();
         camera1.viewportWidth = Gdx.graphics.getWidth();
-        camera1.zoom = 1f/10;
-        camera1.position.set(0.f, 0, 10f);
+        camera1.zoom = 1f/100;
+        camera1.position.set(0.f,0,10f);
         camera1.lookAt(0f, 0f, 0f);
         camera1.up.set(0, 1, 0);
         camera1.update();
@@ -225,8 +228,37 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 //        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
         buttonDPE.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-//                buttonDPE.setVisible(false);
-                tb = dpeui.getPropertyWindow(DpeEvent.START_DPE);
+                tb = dpeui.getPropertyWindow(DpeEvent.INFOS_GENERALES);
+                if (tb != null) {
+                    tb.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() - 100);
+                    stageMenu.addActor(tb);
+                }
+            }
+        });
+
+        /*** Ajout du bouton Chauffage ***/
+        Texture textureButtonChauffage = (Texture) assets.getInstance().get("textureBoutonChauffage");
+        Image imageChauffage = new Image(textureButtonChauffage);
+        ImageButton buttonChauffage = new ImageButton(imageChauffage.getDrawable()) {
+            Texture clicked_texture;
+            {
+                Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
+                p.setColor(Color.RED);
+                p.drawRectangle(0, 0, (int)this.getWidth(),(int)this.getHeight());
+                p.drawRectangle(1, 1, (int)this.getWidth()-2,(int)this.getHeight()-2);
+                clicked_texture = new Texture(p);
+            }
+            @Override
+            public void draw(Batch batch, float arg1) {
+                super.draw(batch, arg1);
+                if (this.isChecked()){
+                    batch.draw(clicked_texture, this.getX(), this.getY());
+                }
+            }
+        };
+        buttonChauffage.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                tb = dpeui.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
                 if (tb != null) {
                     tb.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() - 100);
                     stageMenu.addActor(tb);
@@ -236,7 +268,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         tableStage.add(buttonExit).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonMur).right().width(150).padTop(10).padRight(10).row();
-        tableStage.add(buttonDPE).right().size(150,150).padTop(10).padRight(10).row();
+        tableStage.add(buttonDPE).right().size(150, 150).padTop(10).padRight(10).row();
+        tableStage.add(buttonChauffage).right().padTop(10).padRight(10).row();
         float tableWidth = tableStage.getPrefWidth();
         float tableHeight = tableStage.getPrefHeight();
         tableStage.setPosition(Gdx.graphics.getWidth()-tableWidth/2,Gdx.graphics.getHeight()-tableHeight/2);

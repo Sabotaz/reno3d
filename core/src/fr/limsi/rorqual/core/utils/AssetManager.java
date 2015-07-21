@@ -80,6 +80,7 @@ public class AssetManager {
         assets.put("textureWindowMateriauPvc", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Materiaux/pvc.png")));
         assets.put("textureWindowTypeBattante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/battante.png")));
         assets.put("textureWindowTypeCoulissante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/coulissante.png")));
+        assets.put("textureBoutonChauffage", new Texture(Gdx.files.internal("data/img/menuPrincipal/chauffage.jpeg")));
 
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);

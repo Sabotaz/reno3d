@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -25,7 +26,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.Event;
@@ -161,11 +165,17 @@ public class Layout {
             case "ButtonGroup":
                 actor = makeButtonGroup(json, updater);
                 break;
+            case "CheckBoxGroup":
+                actor = makeCheckBoxGroup(json, updater);
+                break;
             case "TextButton":
                 actor = makeTextButton(json, updater);
                 break;
             case "ImageButton":
                 actor = makeImageButton(json, updater);
+                break;
+            case "CheckBox":
+                actor = makeCheckBox(json, updater);
                 break;
             default:
                 return null;
@@ -255,6 +265,51 @@ public class Layout {
         return table;
     }
 
+    private Actor makeCheckBoxGroup(JsonValue json, Updater updater) {
+
+        ButtonGroup<CheckBox> checkBoxTab= new ButtonGroup<CheckBox>();
+        checkBoxTab.setMinCheckCount(1);
+        checkBoxTab.setMaxCheckCount(3);
+        Table table= new Table();
+        boolean row = true;
+        String layout = json.getString("layout", "row");
+        if (layout.equals("column"))
+            row = false;
+
+        String align = json.getString("align", "left");
+        switch (align) {
+            case "left":
+                table.align(Align.left);
+                break;
+            case "right":
+                table.align(Align.right);
+                break;
+            case "center":
+                table.align(Align.center);
+                break;
+        }
+
+        if (json.get("content") != null) {
+            JsonValue json_child;
+            Actor child;
+            int i = 0;
+            while ((json_child = json.get("content").get(i)) != null) {
+                if ((child = getActor(json_child, updater)) != null) {
+                    if (child instanceof CheckBox) {
+                        if (row)
+                            table.add(child).left().pad(1).row();
+                        else
+                            table.add(child).pad(1);
+                        checkBoxTab.add((CheckBox)child);
+                    }
+                }
+                i++;
+            }
+        }
+        checkBoxTab.setMinCheckCount(1);
+        return table;
+    }
+
     private Actor makeTextButton(JsonValue json, Updater updater) {
         TextButton.TextButtonStyle tbs = skin.get("toggle", TextButton.TextButtonStyle.class);
         tbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
@@ -334,5 +389,40 @@ public class Layout {
             }
         }
         return imageButton;
+    }
+
+    LinkedList<Object> tabValueCheckBox = new LinkedList<Object>();
+
+    private Actor makeCheckBox (JsonValue json, Updater updater){
+        String text = "  " + json.getString("text");
+        CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
+        cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        cbs.fontColor = Color.DARK_GRAY;
+        CheckBox checkBox = new CheckBox(text,cbs);
+
+        if (updater != null & json.has("value")) {
+            Object value_value = getEnumConstant(json, "value");
+
+            if (updater.getDefaultValue() == value_value) {
+                checkBox.setChecked(true);
+            }
+
+            if (value_value != null) {
+                final Object last_value = value_value;
+                final Updater last_updater = updater;
+                checkBox.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        HashMap<String,Object> items = new HashMap<String, Object>();
+                        items.put("userObject",userObject);
+                        items.put("eventRequest",EventRequest.UPDATE_STATE);
+                        items.put("lastValue",last_value);
+                        items.put("layout",Layout.this);
+                        last_updater.trigger(items);
+                    }
+                });
+            }
+        }
+        return checkBox;
     }
 }

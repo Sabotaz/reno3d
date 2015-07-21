@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.*;
@@ -40,6 +41,7 @@ public class Dpe implements EventListener {
     private HashMap<IfcWindow, HashMap<EventType, Object>> windows_properties = new HashMap<IfcWindow, HashMap<EventType, Object>>();
     private HashMap<IfcDoor, HashMap<EventType, Object>> doors_properties = new HashMap<IfcDoor, HashMap<EventType, Object>>();
     private HashMap<EventType,Object> general_properties = new HashMap<EventType,Object>();
+    private HashMap<EventType,Object> chauffage_properties = new HashMap<EventType,Object>();
     private Collection<IfcWallStandardCase> wallCollection;
     private Collection<IfcSlab> slabCollection;
     private Collection<IfcWindow> windowCollection;
@@ -381,13 +383,21 @@ public class Dpe implements EventListener {
                 DpeEvent event = (DpeEvent) eventType;
                 Object o = e.getUserObject();
                 switch (event) {
-
                     case TYPE_BATIMENT: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeBatimentEnum typeBatiment = (TypeBatimentEnum) items.get("lastValue");
                             Layout layout = (Layout)items.get("layout");
+                            if (typeBatiment.equals(TypeBatimentEnum.MAISON)) {
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), false);
+                            } else {
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
+                            }
                             general_properties.put(DpeEvent.TYPE_BATIMENT, typeBatiment);
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
@@ -533,6 +543,27 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_VENTILATION, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case TYPE_CHAUFFAGE :{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypeChauffageEnum typeChauffage = (TypeChauffageEnum) items.get("lastValue");
+                            chauffage_properties.put(DpeEvent.TYPE_CHAUFFAGE, typeChauffage);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            TypeChauffageEnum type = null;
+                            if (chauffage_properties.containsKey(DpeEvent.TYPE_CHAUFFAGE)){
+                                type = (TypeChauffageEnum) chauffage_properties.get(DpeEvent.TYPE_CHAUFFAGE);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_CHAUFFAGE, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
