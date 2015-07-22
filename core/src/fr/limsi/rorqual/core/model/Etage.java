@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by christophe on 20/07/15.
  */
-public class Etages {
+public class Etage {
     private ArrayList<Mur> murs = new ArrayList<Mur>();
     private int number;
     public ArrayList<Mur> getMurs() {
