@@ -46,6 +46,50 @@
           ]
         }
       ]
+    },
+    {
+      "type": "Table",
+      "name": "Type de chauffage",
+      "id": "annee_construction",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_POMPE_A_CHALEUR",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Chauffage électrique",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUFFAGE_ELETRIQUE"
+            },
+            {
+              "type": "CheckBox",
+              "text": "Plancher chauffant",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.PLANCHER_CHAUFFANT"
+            },
+            {
+              "type": "CheckBox",
+              "text": "Chaudière",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE"
+            },
+            {
+              "type": "CheckBox",
+              "text": "Pompe à chaleur",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.POMPE_A_CHALEUR"
+            },
+            {
+              "type": "CheckBox",
+              "text": "Pôele ou insert",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.POELE_OU_INSERT"
+            },
+            {
+              "type": "CheckBox",
+              "text": "Radiateur à gaz",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.RADIATEUR_A_GAZ"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
