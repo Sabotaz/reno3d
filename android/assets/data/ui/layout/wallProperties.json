@@ -159,6 +159,42 @@
           ]
         }
       ]
+    },
+    {
+      "type": "Table",
+      "name": "Orientation",
+      "id": "orientation_mur",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.ORIENTATION_MUR",
+          "layout": "column",
+          "align": "center",
+          "content": [
+            {
+              "type": "ImageButton",
+              "image": "textureOrientationNord",
+              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.NORD"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureOrientationEst",
+              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.EST"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureOrientationSud",
+              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.SUD"
+            },
+            {
+              "type": "ImageButton",
+              "image": "textureOrientationOuest",
+              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.OUEST"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

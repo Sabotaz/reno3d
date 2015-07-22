@@ -5,52 +5,154 @@
   "content": [
     {
       "type": "Table",
-      "name": "Type de chauffage",
-      "id": "type_chauffage",
+      "name": "Chauffage principal",
+      "id": "type_chauffage_principal",
       "content": [
         {
-          "type": "CheckBoxGroup",
+          "type": "ButtonGroup",
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFAGE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFAGE_PRINCIPAL",
           "content": [
             {
-              "type": "CheckBox",
+              "type": "TextButton",
               "text": "Chauffage électrique",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUFFAGE_ELETRIQUE"
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUFFAGE_ELECTRIQUE"
             },
             {
-              "type": "CheckBox",
-              "text": "Plancher chauffant",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.PLANCHER_CHAUFFANT"
+              "type": "TextButton",
+              "text": "Chaudière gaz classique",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_GAZ_CLASSIQUE"
             },
             {
-              "type": "CheckBox",
-              "text": "Chaudière",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE"
+              "type": "TextButton",
+              "text": "Chaudière gaz basse température",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_GAZ_BASSE_TEMPERATURE"
             },
             {
-              "type": "CheckBox",
+              "type": "TextButton",
+              "text": "Chaudière gaz à condensation",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_GAZ_CONDENSATION"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chaudière fioul classique",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_FIOUL_CLASSIQUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chaudière fioul basse température",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_FIOUL_BASSE_TEMPERATURE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chaudière fioul à condensation",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_FIOUL_CONDENSATION"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chaudière électrique",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_ELECTRIQUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chaudière bois",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_BOIS"
+            },
+            {
+              "type": "TextButton",
               "text": "Pompe à chaleur",
               "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.POMPE_A_CHALEUR"
             },
             {
-              "type": "CheckBox",
-              "text": "Pôele ou insert",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.POELE_OU_INSERT"
-            },
-            {
-              "type": "CheckBox",
+              "type": "TextButton",
               "text": "Radiateur à gaz",
               "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.RADIATEUR_A_GAZ"
+            },
+            {
+              "type": "TextButton",
+              "text": "Poêle ou insert bois",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.POELE_OU_INSERT"
             }
           ]
         }
       ]
     },
     {
+      "type": "ButtonGroup",
+      "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+      "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFAGE_SECONDAIRE",
+      "content": [
+        {
+          "type": "TextButton",
+          "text": "Chauffage électrique",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUFFAGE_ELECTRIQUE"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière gaz classique",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_GAZ_CLASSIQUE"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière gaz basse température",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_GAZ_BASSE_TEMPERATURE"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière gaz à condensation",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_GAZ_CONDENSATION"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière fioul classique",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_FIOUL_CLASSIQUE"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière fioul basse température",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_FIOUL_BASSE_TEMPERATURE"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière fioul à condensation",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_FIOUL_CONDENSATION"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière électrique",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_ELECTRIQUE"
+        },
+        {
+          "type": "TextButton",
+          "text": "Chaudière bois",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.CHAUDIERE_BOIS"
+        },
+        {
+          "type": "TextButton",
+          "text": "Pompe à chaleur",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.POMPE_A_CHALEUR"
+        },
+        {
+          "type": "TextButton",
+          "text": "Radiateur à gaz",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.RADIATEUR_A_GAZ"
+        },
+        {
+          "type": "TextButton",
+          "text": "Poêle ou insert",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.POELE_OU_INSERT"
+        },
+        {
+          "type": "TextButton",
+          "text": "Aucun",
+          "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum.AUCUN"
+        }
+      ]
+    },
+    {
       "type": "Table",
       "name": "Type de PAC",
-      "id": "type_PAC",
+      "id": "type_pac",
       "content": [
         {
           "type": "ButtonGroup",
@@ -59,23 +161,405 @@
           "content": [
             {
               "type": "TextButton",
-              "text": "erf",
+              "text": "Pompe à chaleur air/air",
               "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_AIR_AIR"
             },
             {
               "type": "TextButton",
-              "text": "xaze",
+              "text": "Pompe à chaleur air/eau",
               "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_AIR_EAU"
             },
             {
               "type": "TextButton",
-              "text": "gerf",
+              "text": "Pompe à chaleur sur nappe",
               "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_SUR_NAPPE"
             },
             {
               "type": "TextButton",
-              "text": "qsdfze",
+              "text": "Pompe à chaleur géothermique",
               "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_GEOTHERMIQUE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Type de Poil / Insert",
+      "id": "type_poil_ou_insert",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_POIL_OU_INSERT",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Poil ou insert bois (<2001)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_OU_INSERT_BOIS_AVANT_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Poil ou insert bois (>2001)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_OU_INSERT_BOIS_APRES_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Poil fioul ou GPL",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_FIOUL_OU_GPL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Date chaudière",
+      "id": "date_chaudiere_gaz_classique",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_CHAUDIERE_GAZ_CLASSIQUE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Avant 2001",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazClassiqueEnum.AVANT_1981"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1981 et 1986",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazClassiqueEnum.ENTRE_1981_ET_1986"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1986 et 1991",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazClassiqueEnum.ENTRE_1986_ET_1991"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1991 et 2001",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazClassiqueEnum.ENTRE_1991_ET_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Après 2001",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazClassiqueEnum.APRES_2001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Date chaudière",
+      "id": "date_chaudiere_gaz_condensation",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_CHAUDIERE_GAZ_CONDENSATION",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Avant 1986",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazCondensationEnum.AVANT_1986"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1986 et 2001",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazCondensationEnum.ENTRE_1986_ET_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Après 2001",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazCondensationEnum.APRES_2001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Date chaudière",
+      "id": "date_chaudiere_gaz_basse_temperature",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_CHAUDIERE_GAZ_BASSE_TEMPERATURE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Avant 2001",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazBasseTemperatureEnum.AVANT_2001"
+            },
+            {
+              "type": "TextButton",
+              "text": "Après 2001",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereGazBasseTemperatureEnum.APRES_2001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Date chaudière",
+      "id": "date_chaudiere_fioul",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_CHAUDIERE_FIOUL",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Avant 1970",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereFioulEnum.AVANT_1970"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1970 et 1976",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereFioulEnum.ENTRE_1970_ET_1976"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1976 et 1981",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereFioulEnum.ENTRE_1976_ET_1981"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 1981 et 1991",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereFioulEnum.ENTRE_1981_ET_1991"
+            },
+            {
+              "type": "TextButton",
+              "text": "Après 1991",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.DateChaudiereFioulEnum.APRES_1991"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Age chaudière",
+      "id": "age_chaudiere_bois",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.AGE_CHAUDIERE_BOIS",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Plus de 15 ans",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.AgeChaudiereBoisEnum.PLUS_DE_15_ANS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Moins de 15 ans",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.AgeChaudiereBoisEnum.MOINS_DE_15_ANS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Age chauffage électrique",
+      "id": "age_chauffage_electrique",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.AGE_CHAUFFAGE_ELECTRIQUE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Ancien",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.AgeChauffageElectriqueEnum.ANCIEN"
+            },
+            {
+              "type": "TextButton",
+              "text": "Récent",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.AgeChauffageElectriqueEnum.RECENT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Température intérieur",
+      "id": "temperature_interieur",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TEMPERATURE_INTERIEUR",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Entre 16°C et 17°C",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TemperatureInterieurEnum.ENTRE_16_ET_17"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 18°C et 19°C",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TemperatureInterieurEnum.ENTRE_18_ET_19"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 20°C et 21°C",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TemperatureInterieurEnum.ENTRE_20_ET_21"
+            },
+            {
+              "type": "TextButton",
+              "text": "Entre 22°C et 23°C",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TemperatureInterieurEnum.ENTRE_22_ET_23"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Émetteur",
+      "id": "emetteur",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_EMETTEUR_DE_CHALEUR",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Radiateur",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.RADIATEUR"
+            },
+            {
+              "type": "TextButton",
+              "text": "Plancher chauffant",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.PLANCHER_CHAUFFANT"
+            },
+            {
+              "type": "TextButton",
+              "text": "Soufflage",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.SYSTEME_DE_SOUFFLAGE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Solution mixte",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.SOLUTION_MIXTE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Thermostat et sonde",
+      "id": "thermostat",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Présence d'un thermostat d'ambiance ou d'une sonde de température extérieure",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.PresenceThermostatEnum.PRESENCE_THERMOSTAT_OU_SONDE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Absence de thermostat et de sonde",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.PresenceThermostatEnum.AUCUN_DES_DEUX"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Robinet thermostatique",
+      "id": "robinet",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.PRESENCE_ROBINET_THERMOSTATIQUE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Présent sur les radiateurs",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.PresenceRobinetEnum.PRESENCE_ROBINET_THERMOSTATIQUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Absent",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.PresenceRobinetEnum.ABSENCE_ROBINET_THERMOSTATIQUE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Programmation chauffage",
+      "id": "programmation",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.SYSTEME_PROGRAMMABLE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Impossible",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.ProgrammationSystemeEnum.IMPOSSIBLE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Possible",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.ProgrammationSystemeEnum.POSSIBLE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Utilisation poil / insert",
+      "id": "utilisation_poil",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.FREQUENCE_UTILISATION_POIL_OU_INSERT",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Rarement",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.TRES_PEU"
+            },
+            {
+              "type": "TextButton",
+              "text": "De temps en temps",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.DE_TEMPS_EN_TEMPS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Souvent",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.PRINCIPALEMENT"
+            },
+            {
+              "type": "TextButton",
+              "text": "Quasi exclusivement",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.QUASI_EXCLUSIVEMENT"
             }
           ]
         }

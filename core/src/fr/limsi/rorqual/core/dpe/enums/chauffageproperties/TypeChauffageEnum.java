@@ -4,7 +4,7 @@ package fr.limsi.rorqual.core.dpe.enums.chauffageproperties;
  * Created by ricordeau on 21/07/15.
  */
 public enum TypeChauffageEnum {
-    CHAUFFAGE_ELETRIQUE,
+    CHAUFFAGE_ELECTRIQUE,
     CHAUDIERE_GAZ_CLASSIQUE,
     CHAUDIERE_GAZ_BASSE_TEMPERATURE,
     CHAUDIERE_GAZ_CONDENSATION,
@@ -15,5 +15,6 @@ public enum TypeChauffageEnum {
     CHAUDIERE_BOIS,
     POMPE_A_CHALEUR,
     RADIATEUR_A_GAZ,
-    POELE_OU_INSERT,;
+    POELE_OU_INSERT,
+    AUCUN;
 }

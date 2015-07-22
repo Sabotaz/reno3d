@@ -409,9 +409,9 @@ public class IfcHelper {
 
     public ArrayList<IfcCartesianPoint> getWallPosition (IfcWallStandardCase wall){
         ArrayList<IfcCartesianPoint> cartesianPointArrayList = new ArrayList<IfcCartesianPoint>();
-        IfcCartesianPoint pointA = new IfcCartesianPoint();
-        IfcCartesianPoint pointB = new IfcCartesianPoint();
-        IfcDirection direction = new IfcDirection();
+        IfcCartesianPoint pointA;
+        IfcCartesianPoint pointB;
+        IfcDirection direction;
         double wallLength = this.getWallLength(wall);
         double xA=0,yA=0,zA=0;
         double xB=0,yB=0,zB=0;
@@ -435,7 +435,6 @@ public class IfcHelper {
                 cartesianPointArrayList.add(pointB);
             }
         }
-
         return cartesianPointArrayList;
     }
 

@@ -81,6 +81,10 @@ public class AssetManager {
         assets.put("textureWindowTypeBattante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/battante.png")));
         assets.put("textureWindowTypeCoulissante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/coulissante.png")));
         assets.put("textureBoutonChauffage", new Texture(Gdx.files.internal("data/img/menuPrincipal/chauffage.jpeg")));
+        assets.put("textureOrientationNord", new Texture(Gdx.files.internal("data/img/dpe/Orientation/nord.png")));
+        assets.put("textureOrientationEst", new Texture(Gdx.files.internal("data/img/dpe/Orientation/est.png")));
+        assets.put("textureOrientationSud", new Texture(Gdx.files.internal("data/img/dpe/Orientation/sud.png")));
+        assets.put("textureOrientationOuest", new Texture(Gdx.files.internal("data/img/dpe/Orientation/ouest.png")));
 
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
