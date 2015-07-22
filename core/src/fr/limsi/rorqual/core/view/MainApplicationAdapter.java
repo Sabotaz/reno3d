@@ -49,6 +49,9 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.model.Batiment;
+import fr.limsi.rorqual.core.model.Etage;
+import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Popup;
 import fr.limsi.rorqual.core.utils.AssetManager;
@@ -107,6 +110,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** ??? ***/
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
+
+        ModelHolder.getInstance().setBatiment(new Batiment());
+        ModelHolder.getInstance().getBatiment().setWorkingEtage(new Etage());
 
         /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

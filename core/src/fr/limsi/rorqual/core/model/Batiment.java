@@ -9,12 +9,20 @@ public class Batiment {
 
     private ArrayList<Etage> etages = new ArrayList<Etage>();
 
+    Etage current;
+
     public ArrayList<Etage> getEtages() {
         return etages;
     }
 
     public void addEtage(Etage e) {
         etages.add(e);
+    }
+
+    public void setWorkingEtage(Etage e) {
+        current = e;
+        if (!etages.contains(e))
+            etages.add(e);
     }
 
 }
