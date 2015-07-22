@@ -268,7 +268,6 @@ public class Layout {
     private Actor makeCheckBoxGroup(JsonValue json, Updater updater) {
 
         ButtonGroup<CheckBox> checkBoxTab= new ButtonGroup<CheckBox>();
-        checkBoxTab.setMinCheckCount(1);
         checkBoxTab.setMaxCheckCount(3);
         Table table= new Table();
         boolean row = true;
@@ -306,7 +305,6 @@ public class Layout {
                 i++;
             }
         }
-        checkBoxTab.setMinCheckCount(1);
         return table;
     }
 

@@ -381,6 +381,64 @@ public class IfcHelper {
         return surfaceWall;
     }
 
+    public ArrayList<IfcCartesianPoint> getWallPositionCoins (IfcWallStandardCase wall){
+        ArrayList<IfcCartesianPoint> cartesianPointArrayList = new ArrayList<IfcCartesianPoint>();
+        IfcProductRepresentation productRepresentation = wall.getRepresentation();
+        LIST<IfcRepresentation> representationLIST = productRepresentation.getRepresentations();
+        for(IfcRepresentation actualRepresentation : representationLIST) {
+            if (actualRepresentation.getRepresentationType().getDecodedValue().equals("SweptSolid")) {
+                SET<IfcRepresentationItem> representationItemSET = actualRepresentation.getItems();
+                for (IfcRepresentationItem actualRepresentationItem : representationItemSET) {
+                    if (actualRepresentationItem instanceof IfcExtrudedAreaSolid) {
+                        IfcProfileDef profileDef = ((IfcExtrudedAreaSolid) actualRepresentationItem).getSweptArea();
+                        if (profileDef instanceof IfcArbitraryClosedProfileDef) {
+                            IfcCurve curve = ((IfcArbitraryClosedProfileDef) profileDef).getOuterCurve();
+                            if (curve instanceof IfcPolyline) {
+                                LIST<IfcCartesianPoint> cartesianPointLIST = ((IfcPolyline) curve).getPoints();
+                                for (IfcCartesianPoint actualCartesianPoint : cartesianPointLIST){
+                                    cartesianPointArrayList.add(actualCartesianPoint);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return cartesianPointArrayList;
+    }
+
+    public ArrayList<IfcCartesianPoint> getWallPosition (IfcWallStandardCase wall){
+        ArrayList<IfcCartesianPoint> cartesianPointArrayList = new ArrayList<IfcCartesianPoint>();
+        IfcCartesianPoint pointA = new IfcCartesianPoint();
+        IfcCartesianPoint pointB = new IfcCartesianPoint();
+        IfcDirection direction = new IfcDirection();
+        double wallLength = this.getWallLength(wall);
+        double xA=0,yA=0,zA=0;
+        double xB=0,yB=0,zB=0;
+
+        IfcObjectPlacement objectPlacement = wall.getObjectPlacement();
+        if (objectPlacement instanceof IfcLocalPlacement){
+            IfcAxis2Placement axis2Placement = ((IfcLocalPlacement) objectPlacement).getRelativePlacement();
+            if (axis2Placement instanceof IfcAxis2Placement3D){
+                pointA = ((IfcAxis2Placement3D) axis2Placement).getLocation();
+                xA = pointA.getCoordinates().get(0).value;
+                yA = pointA.getCoordinates().get(1).value;
+                zA = pointA.getCoordinates().get(2).value;
+                direction = ((IfcAxis2Placement3D) axis2Placement).getRefDirection();
+                LIST<DOUBLE> directionRatios = direction.getDirectionRatios();
+                xB = directionRatios.get(0).value*wallLength+xA;
+                yB = directionRatios.get(1).value*wallLength+yA;
+                zB = directionRatios.get(2).value*wallLength+zA;
+                pointA = this.createCartesianPoint3D(xA,yA,zA);
+                pointB = this.createCartesianPoint3D(xB,yB,zB);
+                cartesianPointArrayList.add(pointA);
+                cartesianPointArrayList.add(pointB);
+            }
+        }
+
+        return cartesianPointArrayList;
+    }
+
     // Permet de récupérer un Opening dans un model en fonction de son nom
     public IfcOpeningElement getOpening (String nameOpening){
         Collection<IfcOpeningElement> collectionOpening = ifcModel.getCollection(IfcOpeningElement.class);

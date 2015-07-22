@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum;
+import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.*;
@@ -564,6 +565,27 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_CHAUFFAGE, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case TYPE_POMPE_A_CHALEUR :{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypePompeChaleurEnum typePompeChaleur = (TypePompeChaleurEnum) items.get("lastValue");
+                            chauffage_properties.put(DpeEvent.TYPE_POMPE_A_CHALEUR, typePompeChaleur);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            TypePompeChaleurEnum type = null;
+                            if (chauffage_properties.containsKey(DpeEvent.TYPE_POMPE_A_CHALEUR)){
+                                type = (TypePompeChaleurEnum) chauffage_properties.get(DpeEvent.TYPE_POMPE_A_CHALEUR);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_POMPE_A_CHALEUR, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;

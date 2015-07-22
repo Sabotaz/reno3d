@@ -25,10 +25,11 @@ public class DesktopLauncher {
         IfcHelper ifcHelper = new IfcHelper();
 //        ifcHelper.createApartmentTest();
         ifcHelper.createSecondAppartementTest();
-//        IfcCartesianPoint pointA1 = ifcHelper.createCartesianPoint2D(0, 0);
-//        IfcCartesianPoint pointA2 = ifcHelper.createCartesianPoint2D(8, 0);
+//        IfcCartesianPoint pointA1 = ifcHelper.createCartesianPoint2D(2,1);
+//        IfcCartesianPoint pointA2 = ifcHelper.createCartesianPoint2D(3,4);
 //        ifcHelper.addWall("1st floor", "wall", pointA1, pointA2, 0.18);
 //        IfcWallStandardCase wall = ifcHelper.getWall("wall");
+//        ArrayList<IfcCartesianPoint> list = ifcHelper.getWallPosition(wall);
 //        ifcHelper.addDoor("door", wall, 1, 2.2, 1);
 //        ifcHelper.addWindow("window", wall, 1.0, 1.0, 5.5, 1.3);
 //        IfcWindow window = ifcHelper.getWindow("window");
