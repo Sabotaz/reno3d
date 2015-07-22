@@ -24,6 +24,7 @@ import java.util.List;
 
 import eu.mihosoft.vrl.v3d.Vector3d;
 import fr.limsi.rorqual.core.model.ActableModel;
+import fr.limsi.rorqual.core.model.ActableModelInstance;
 import fr.limsi.rorqual.core.model.ModelProvider;
 
 /**
@@ -35,7 +36,7 @@ public class ModelContainer {
     protected ModelGraph root;
 
     protected List<ModelContainer> children = new ArrayList<ModelContainer>();
-    protected RenderableProvider model;
+    protected ActableModel model = null;
     public Matrix4 transform;
     private Matrix4 model_transform;
     private Shader prefered_shader;
@@ -45,7 +46,11 @@ public class ModelContainer {
     public ModelContainer() {
         transform = new Matrix4();
         model_transform = new Matrix4();
-        model = new ModelInstance(new Model());
+    }
+
+    public ModelContainer(ActableModel m) {
+        transform = new Matrix4();
+        setModel(m);
     }
 
     public ModelContainer(ModelInstance m) {
@@ -54,6 +59,8 @@ public class ModelContainer {
     }
 
     public void act() {
+        if (model != null)
+            model.act();
         for (ModelContainer c : children) {
             c.act();
         }
@@ -131,9 +138,15 @@ public class ModelContainer {
         }
     }
 
-    public void setModel(ModelInstance m) {
+    public void setModel(ActableModel m) {
         m.userData = modelData;
         model = m;
+        model_transform = m.transform.cpy();
+    }
+
+    public void setModel(ModelInstance m) {
+        m.userData = modelData;
+        model = new ActableModelInstance(m);
         model_transform = m.transform.cpy();
     }
 
@@ -168,13 +181,13 @@ public class ModelContainer {
             // update mx
             Matrix4 updated_global_transform = global_transform.cpy().mul(transform);
 
-            // update model mx
-            if (model instanceof ModelInstance)
-                ((ModelInstance)model).transform = updated_global_transform.cpy().mul(model_transform);
-            else if (model instanceof ActableModel)
-                ((ActableModel)model).transform = updated_global_transform.cpy().mul(model_transform);
-            // draw
-            modelBatch.render(model, environment);
+            if (model != null) {
+                // update model mx
+                model.transform = updated_global_transform.cpy().mul(model_transform);
+                // draw
+                modelBatch.render(model, environment);
+            }
+
             drawChildren(modelBatch, environment, updated_global_transform);
         }
     }
@@ -205,15 +218,12 @@ public class ModelContainer {
 
     private float intersects(Ray ray, Matrix4 global_transform) {
 
-        if (!selectable) return -1;
+        if (!selectable || model == null) return -1;
 
         BoundingBox boundBox = new BoundingBox();
         Vector3 center = new Vector3();
 
-        if (model instanceof ModelInstance)
-            ((ModelInstance)model).calculateBoundingBox(boundBox);
-        else if (model instanceof ActableModel)
-            ((ActableModel)model).calculateBoundingBox(boundBox);
+        model.calculateBoundingBox(boundBox);
 
         Matrix4 local_transform = global_transform.cpy().mul(model_transform);
         boundBox.mul(local_transform);
@@ -271,12 +281,12 @@ public class ModelContainer {
     }
 
     public Vector3 getTop() {
+        if(model == null)
+            return null;
+
         BoundingBox boundBox = new BoundingBox();
 
-        if (model instanceof ModelInstance)
-            ((ModelInstance)model).calculateBoundingBox(boundBox);
-        else if (model instanceof ActableModel)
-            ((ActableModel)model).calculateBoundingBox(boundBox);
+        model.calculateBoundingBox(boundBox);
 
         boundBox.mul(model_transform);
 

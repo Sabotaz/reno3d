@@ -30,6 +30,7 @@ import java.io.File;
 
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
+import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
@@ -91,8 +92,8 @@ public class Logic implements InputProcessor {
         return false;
     }
 
-    final Vector3 start = new Vector3();
-    final Vector3 end = new Vector3();
+    Vector3 start = new Vector3();
+    Vector3 end = new Vector3();
     ModelContainer wall;
     boolean making_wall = false;
     Mur mur;
@@ -110,22 +111,23 @@ public class Logic implements InputProcessor {
             } else {
                 making_wall = true;
             }
-            start.set(intersection);
-            end.set(intersection);
+
+            start = new Vector3(intersection);
+            end = new Vector3(intersection);
 
             mur = new Mur(start, end);
 
-            wall = new ModelContainer(new ModelInstance(mur)) {
+            wall = new ModelContainer(mur) {
                 public void act() {
                     super.act();
                     mur.setA(start);
                     mur.setB(end);
                     mur.act();
-                    this.setModel(new ModelInstance(mur));
                 }
             };
-
-            modelGraph.getRoot().add(wall);
+            //ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(mur);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(wall);
+            //modelGraph.getRoot().add(wall);
 
             return true;
         } else
@@ -135,9 +137,12 @@ public class Logic implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (currentState == State.WALL && making_wall) {
-            modelGraph.getRoot().remove(wall);
-            if (!start.equals(end))
-                IfcHolder.getInstance().getHelper().addWall(start, end, 0.2);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(wall);
+
+            if (!start.equals(end)) {
+                Mur copy_mur = new Mur(mur);
+                ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(copy_mur);
+            }
             return true;
         } else
             return false;

@@ -65,6 +65,10 @@ public class Mur extends ActableModel {
 
     private boolean changed = true;
 
+    public Mur(Mur other) {
+        this(other.getA().cpy(), other.getB().cpy(), other.getDepth(), other.getHeight());
+    }
+
     public Mur(Vector3 a, Vector3 b) {
         this(a, b, DEFAULT_DEPTH, DEFAULT_HEIGHT);
     }

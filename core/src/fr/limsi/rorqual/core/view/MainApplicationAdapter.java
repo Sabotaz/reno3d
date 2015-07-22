@@ -162,26 +162,16 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light.set(1f, 1f, 1f, 0f, 0f, 0f);
         environnement.add(light);
 
-        sun = new ModelContainer(Sun.getModelInstance());
+        sun = new ModelContainer();
         sun.setSelectable(false);
         sun.transform.setToTranslation(new Vector3(-200, 0, 0));
 
-        ModelContainer popup = new ModelContainer(new Popup(600,600).getModelInstance());
-        popup.setSelectable(false);
-        popup.transform.translate(5, 0, 5);
-
-        ModelContainer floor = new ModelContainer(Floor.getModelInstance());
-        floor.setSelectable(false);
-
-        pin = new ModelContainer(Pin.getModelInstance());
-        pin.setSelectable(false);
         //pin.transform.translate(5, 0, 5);
 
-        modelGraph.getRoot().add(floor);
-        modelGraph.getRoot().add(sun);
         //modelGraph.getRoot().add(popup);
 
         //modelGraph.getRoot().add(popup);
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
 
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
@@ -310,6 +300,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         stageMenu.act();
 
         modelGraph.act();
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().act();
     }
 
     @Override
@@ -325,7 +316,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
 
-        modelGraph.draw(modelBatch, environnement);
+        //modelGraph.draw(modelBatch, environnement);
 
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().draw(modelBatch, environnement);
 
