@@ -2,6 +2,8 @@ package fr.limsi.rorqual.core.model;
 
 import java.util.ArrayList;
 
+import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+
 /**
  * Created by christophe on 20/07/15.
  */
@@ -23,4 +25,9 @@ public class Etage {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public ModelGraph getModelGraph() {
+        return new ModelGraph();
+    }
+
 }

@@ -9,9 +9,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -27,8 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -112,7 +107,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
 
         ModelHolder.getInstance().setBatiment(new Batiment());
-        ModelHolder.getInstance().getBatiment().setWorkingEtage(new Etage());
+        ModelHolder.getInstance().getBatiment().setCurrentEtage(new Etage());
 
         /*** Création de la caméra 2D vue de dessus ***/
         OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -331,6 +326,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
 
         modelGraph.draw(modelBatch, environnement);
+
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().draw(modelBatch, environnement);
 
         modelBatch.end();
 

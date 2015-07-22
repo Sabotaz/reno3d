@@ -19,10 +19,14 @@ public class Batiment {
         etages.add(e);
     }
 
-    public void setWorkingEtage(Etage e) {
+    public void setCurrentEtage(Etage e) {
         current = e;
         if (!etages.contains(e))
             etages.add(e);
+    }
+
+    public Etage getCurrentEtage() {
+        return current;
     }
 
 }
