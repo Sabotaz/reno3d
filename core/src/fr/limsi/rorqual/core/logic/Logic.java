@@ -77,6 +77,10 @@ public class Logic implements InputProcessor {
         currentState = State.WALL;
     }
 
+    public void stop() {
+        currentState = State.NONE;
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         return false;

@@ -192,13 +192,17 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         });
 
         /*** Ajout du bouton MUR ***/
-        TextButton buttonMur = new TextButton("MUR", textButtonStyle);
+        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
+        final TextButton buttonMur = new TextButton("MUR", textButtonStyle);
         buttonMur.setName("MUR");
         buttonMur.setSize(100, 40);
         buttonMur.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight()));
         buttonMur.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Logic.getInstance().startWall();
+                if (buttonMur.isChecked())
+                    Logic.getInstance().startWall();
+                else
+                    Logic.getInstance().stop();
             }
         });
         state = new DpeStateUpdater(modelGraph);
