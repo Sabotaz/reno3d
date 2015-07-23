@@ -150,6 +150,10 @@ public class ModelContainer {
         model_transform = m.transform.cpy();
     }
 
+    public ActableModel getModel() {
+        return model;
+    }
+
     public void draw(ModelBatch modelBatch, Environment environment){
         draw(modelBatch, environment, new Matrix4());
     }

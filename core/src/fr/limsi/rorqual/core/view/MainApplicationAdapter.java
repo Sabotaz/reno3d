@@ -205,6 +205,22 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     Logic.getInstance().stop();
             }
         });
+
+        /*** Ajout du bouton fenetre ***/
+        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
+        final TextButton buttonFenetre = new TextButton("FENÊTRE", textButtonStyle);
+        buttonFenetre.setName("FENÊTRE");
+        buttonFenetre.setSize(100, 40);
+        buttonFenetre.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight()));
+        buttonFenetre.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (buttonFenetre.isChecked())
+                    Logic.getInstance().startFenetre();
+                else
+                    Logic.getInstance().stop();
+            }
+        });
+
         state = new DpeStateUpdater(modelGraph);
 
         dpeui = new DpeUi(stageMenu);
@@ -256,6 +272,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         tableStage.add(buttonExit).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonMur).right().width(150).padTop(10).padRight(10).row();
+        tableStage.add(buttonFenetre).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonDPE).right().size(150, 150).padTop(10).padRight(10).row();
         tableStage.add(buttonChauffage).right().size(150, 150).padTop(10).padRight(10).row();
         float tableWidth = tableStage.getPrefWidth();
@@ -438,7 +455,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 selected.removeColor();
                 //selected.remove(pin);
             }
-            selected = modelGraph.getObject(screenX, screenY);
+            //selected = modelGraph.getObject(screenX, screenY);
+            selected = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getObject(screenX, screenY);
             //System.out.println("TOUCH: " + selected);
             if (selected != null) {
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));

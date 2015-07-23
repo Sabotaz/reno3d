@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
@@ -13,11 +14,14 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
  */
 public class Etage {
     private ArrayList<Mur> murs = new ArrayList<Mur>();
+    private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
+    private HashMap<Object, ModelContainer> containerHashMap = new HashMap<Object, ModelContainer>();
     private int number;
     private ModelGraph modelGraph = new ModelGraph();
 
     {
         ModelContainer floor = new ModelContainer(Floor.getModelInstance());
+        containerHashMap.put(Floor.getModelInstance(), floor);
         floor.setSelectable(false);
         modelGraph.getRoot().add(floor);
     }
@@ -28,7 +32,21 @@ public class Etage {
 
     public void addMur(Mur mur) {
         this.murs.add(mur);
-        this.modelGraph.getRoot().add(new ModelContainer(mur));
+        mur.setEtage(this);
+        ModelContainer container = new ModelContainer(mur);
+        containerHashMap.put(mur, container);
+        this.modelGraph.getRoot().add(container);
+    }
+
+    public void addOuverture(Ouverture ouverture) {
+        ModelContainer container = new ModelContainer(ouverture);
+        containerHashMap.put(ouverture, container);
+        this.ouvertures.add(ouverture);
+        containerHashMap.get(ouverture.getMur()).add(container);
+    }
+
+    public ArrayList<Ouverture> getOuvertures() {
+        return ouvertures;
     }
 
     public int getNumber() {

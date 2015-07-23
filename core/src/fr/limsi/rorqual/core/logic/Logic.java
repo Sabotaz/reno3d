@@ -28,6 +28,8 @@ import com.badlogic.gdx.math.collision.Ray;
 
 import java.io.File;
 
+import fr.limsi.rorqual.core.model.ActableModel;
+import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.model.ModelHolder;
@@ -47,6 +49,7 @@ public class Logic implements InputProcessor {
     private enum State {
         NONE,
         WALL,
+        FENETRE,
         ;
     }
 
@@ -75,6 +78,10 @@ public class Logic implements InputProcessor {
 
     public void startWall() {
         currentState = State.WALL;
+    }
+
+    public void startFenetre() {
+        currentState = State.FENETRE;
     }
 
     public void stop() {
@@ -133,6 +140,20 @@ public class Logic implements InputProcessor {
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(wall);
             //modelGraph.getRoot().add(wall);
 
+            return true;
+        } else if (currentState == State.FENETRE) {
+            Ray ray = camera.getPickRay(screenX, screenY);
+            ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
+            ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
+            ActableModel model = modelContainer.getModel();
+            if (model instanceof Mur) {
+                Mur mur = (Mur) model;
+                BoundingBox b = new BoundingBox();
+                model.calculateBoundingBox(b);
+                Vector3 intersection = new Vector3();
+                Intersector.intersectRayBounds(ray, b, intersection);
+                Fenetre fenetre = new Fenetre(mur, intersection.x);
+            }
             return true;
         } else
             return false;

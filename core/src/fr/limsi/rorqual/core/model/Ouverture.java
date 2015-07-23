@@ -17,7 +17,7 @@ import fr.limsi.rorqual.core.utils.CSGUtils;
 /**
  * Created by ricordeau on 20/07/15.
  */
-public abstract class Ouverture {
+public abstract class Ouverture extends ActableModel {
 
     // Attributs
     protected Mur mur;
@@ -25,20 +25,19 @@ public abstract class Ouverture {
     protected float width;
     protected float height;
     protected float surface;
-    protected Model model;
     protected TypeMateriauMenuiserieEnum typeMateriauMenuiserie = TypeMateriauMenuiserieEnum.INCONNUE;
     protected TypeVitrageEnum typeVitrage = TypeVitrageEnum.INCONNUE;
     protected float coefficientDeTransmissionThermique = 2;
     protected float deperdition = surface*coefficientDeTransmissionThermique;
 
     // Constructeur
-    public Ouverture(Mur mur, Vector2 position, float width, float height, Model model){
+    public Ouverture(Mur mur, Vector2 position, float width, float height){
         this.mur=mur;
+        mur.addOuverture(this);
         this.position=position;
         this.width=width;
         this.height=height;
         this.surface=width*height;
-        this.model = model;
     }
 
     // Getter & Setter
@@ -71,12 +70,6 @@ public abstract class Ouverture {
     }
     public void setSurface(float surface) {
         this.surface = surface;
-    }
-    public Model getModel() {
-        return model;
-    }
-    public void setModel(Model model) {
-        this.model = model;
     }
     public TypeMateriauMenuiserieEnum getTypeMateriauMenuiserie() {
         return typeMateriauMenuiserie;
@@ -127,5 +120,9 @@ public abstract class Ouverture {
         CSG csg = Extrude.points(dir, face);
 
         return csg;
+    }
+
+    public void act() {
+
     }
 }

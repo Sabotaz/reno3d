@@ -10,13 +10,20 @@ import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum;
  */
 public class Fenetre extends Ouverture {
 
+    static float DEFAULT_Y = 1.f;
+    static float DEFAULT_WIDTH = 0.6f;
+    static float DEFAULT_HEIGHT = 0.75f;
+
     // Attributs
     private TypeFenetreEnum typeFenetre;
 
     // Constructeur
-    public Fenetre(Mur mur, Vector2 position, float width, float height, Model model, TypeFenetreEnum typeFenetre) {
-        super(mur, position, width, height, model);
-        this.typeFenetre = typeFenetre;
+    public Fenetre(Mur mur, float x) {
+        this(mur, x, DEFAULT_Y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    public Fenetre(Mur mur, float x, float y, float width, float height) {
+        super(mur, new Vector2(x, y), width, height);
     }
 
     // Getter & Setter

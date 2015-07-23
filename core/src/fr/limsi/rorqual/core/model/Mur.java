@@ -63,6 +63,8 @@ public class Mur extends ActableModel {
 
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
 
+    private Etage etage = null;
+
     private boolean changed = true;
 
     public Mur(Mur other) {
@@ -84,6 +86,10 @@ public class Mur extends ActableModel {
         this.height = h;
         this.depth = d;
         this.width = b.cpy().sub(a).len();
+    }
+
+    public void setEtage(Etage e) {
+        etage = e;
     }
 
     public float getHeight() {
@@ -265,11 +271,7 @@ public class Mur extends ActableModel {
 
         Model model = CSGUtils.toModel(csg, frontMaterial, backMaterial);
 
-        this.materials.clear();     this.materials.addAll(model.materials);
-        this.meshes.clear();        this.meshes.addAll(model.meshes);
-        this.meshParts.clear();     this.meshParts.addAll(model.meshParts);
-        this.nodes.clear();         this.nodes.addAll(model.nodes);
-        this.animations.clear();    this.animations.addAll(model.animations);
+        this.setModel(model);
     }
 
     public void act() {
@@ -277,5 +279,10 @@ public class Mur extends ActableModel {
             return;
         makeMesh();
         changed = false;
+    }
+
+    public void addOuverture(Ouverture o) {
+        ouvertures.add(o);
+        etage.addOuverture(o);
     }
 }
