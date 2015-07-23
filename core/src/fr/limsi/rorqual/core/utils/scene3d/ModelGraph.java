@@ -27,6 +27,7 @@ public class ModelGraph {
 
     public ModelGraph() {
         root = new ModelContainer();
+        root.setSelectable(false);
         root.root = this;
     }
 

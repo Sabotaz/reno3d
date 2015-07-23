@@ -145,6 +145,8 @@ public class Logic implements InputProcessor {
             Ray ray = camera.getPickRay(screenX, screenY);
             ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
             ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
+            if (modelContainer == null)
+                return true;
             ActableModel model = modelContainer.getModel();
             if (model instanceof Mur) {
                 Mur mur = (Mur) model;
@@ -169,6 +171,10 @@ public class Logic implements InputProcessor {
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(copy_mur);
             }
             return true;
+
+        } else if (currentState == State.FENETRE) {
+            return true;
+
         } else
             return false;
     }
@@ -186,6 +192,8 @@ public class Logic implements InputProcessor {
             else
                 end.set(start);
 
+            return true;
+        } else if (currentState == State.FENETRE) {
             return true;
         } else
             return false;

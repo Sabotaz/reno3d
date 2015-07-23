@@ -172,6 +172,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         //modelGraph.getRoot().add(popup);
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(camera2);
 
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
