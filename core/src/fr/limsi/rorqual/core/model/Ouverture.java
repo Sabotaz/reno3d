@@ -53,6 +53,11 @@ public abstract class Ouverture extends ModelContainer {
     }
     public void setPosition(Vector2 position) {
         this.position = position;
+        mur.setChanged();
+    }
+    public void setX(float x) {
+        this.position.x = x-this.width/2;
+        mur.setChanged();
     }
     public float getWidth() {
         return width;
@@ -108,7 +113,7 @@ public abstract class Ouverture extends ModelContainer {
         Vector3 openingA = A.cpy().add(x_dir.cpy().setLength(this.position.x)).add(z_shape.cpy().setLength(this.position.y));
         Vector3 openingB = openingA.cpy().add(x_dir.cpy().setLength(this.width));
 
-        Vector3 y_dir = x_dir.cpy().crs(Vector3.Z).setLength(mur.getDepth()/2);
+        Vector3 y_dir = x_dir.cpy().crs(Vector3.Z).setLength(mur.getDepth()/2 + Float.MIN_VALUE);
 
         Vector3d dir = CSGUtils.castVector(z_shape);
 

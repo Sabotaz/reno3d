@@ -264,6 +264,7 @@ public class Mur extends ModelContainer {
     }
 
     public void act() {
+        super.act();
         if (!changed)
             return;
         makeMesh();
@@ -274,6 +275,10 @@ public class Mur extends ModelContainer {
         ouvertures.add(o);
         this.add(o);
         etage.addOuverture(o);
+        changed = true;
+    }
+
+    public void setChanged() {
         changed = true;
     }
 }

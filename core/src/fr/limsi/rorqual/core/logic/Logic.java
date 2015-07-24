@@ -83,6 +83,8 @@ public class Logic implements InputProcessor {
     Vector3 end = new Vector3();
     boolean making_wall = false;
     Mur mur;
+    Fenetre fenetre;
+    Vector2 pos = new Vector2();
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (currentState == State.WALL) {
@@ -128,7 +130,13 @@ public class Logic implements InputProcessor {
                 // intersection in world space, not in wall space
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
-                Fenetre fenetre = new Fenetre(mur, v2.dot(v1));
+                pos.x = v2.dot(v1);
+                fenetre = new Fenetre(mur, pos.x) {
+                    public void act() {
+                        super.act();
+                        setX(pos.x);
+                    }
+                };
             }
             return true;
         } else
@@ -147,6 +155,8 @@ public class Logic implements InputProcessor {
             return true;
 
         } else if (currentState == State.FENETRE) {
+            fenetre.getMur().remove(fenetre);
+            new Fenetre(fenetre.getMur(), pos.x);
             return true;
 
         } else
@@ -168,6 +178,23 @@ public class Logic implements InputProcessor {
 
             return true;
         } else if (currentState == State.FENETRE) {
+            Ray ray = camera.getPickRay(screenX, screenY);
+            ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
+            ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
+            if (modelContainer == null)
+                return true;
+            if (modelContainer instanceof Mur) {
+                Mur mur = (Mur) modelContainer;
+                BoundingBox b = new BoundingBox();
+                modelContainer.calculateBoundingBox(b);
+                Vector3 intersection = new Vector3();
+                Intersector.intersectRayBounds(ray, b, intersection);
+                // intersection in world space, not in wall space
+                Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
+                Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
+                pos.x = v2.dot(v1);
+                fenetre.setMur(mur);
+            }
             return true;
         } else
             return false;
