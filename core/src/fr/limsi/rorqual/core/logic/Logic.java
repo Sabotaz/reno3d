@@ -123,10 +123,7 @@ public class Logic implements InputProcessor {
                 return true;
             if (modelContainer instanceof Mur) {
                 Mur mur = (Mur) modelContainer;
-                BoundingBox b = new BoundingBox();
-                modelContainer.calculateBoundingBox(b);
-                Vector3 intersection = new Vector3();
-                Intersector.intersectRayBounds(ray, b, intersection);
+                Vector3 intersection = mur.getIntersection(ray, mur.getFullTransform());
                 // intersection in world space, not in wall space
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
@@ -155,8 +152,11 @@ public class Logic implements InputProcessor {
             return true;
 
         } else if (currentState == State.FENETRE) {
-            fenetre.getMur().remove(fenetre);
-            new Fenetre(fenetre.getMur(), pos.x);
+            Mur mur = fenetre.getMur();
+            mur.remove(fenetre);
+            fenetre.setMur(null);
+
+            new Fenetre(mur, pos.x);
             return true;
 
         } else
@@ -185,10 +185,7 @@ public class Logic implements InputProcessor {
                 return true;
             if (modelContainer instanceof Mur) {
                 Mur mur = (Mur) modelContainer;
-                BoundingBox b = new BoundingBox();
-                modelContainer.calculateBoundingBox(b);
-                Vector3 intersection = new Vector3();
-                Intersector.intersectRayBounds(ray, b, intersection);
+                Vector3 intersection = mur.getIntersection(ray, mur.getFullTransform());
                 // intersection in world space, not in wall space
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));

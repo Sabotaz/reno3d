@@ -1,14 +1,17 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
@@ -18,6 +21,7 @@ import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -278,7 +282,58 @@ public class Mur extends ModelContainer {
         changed = true;
     }
 
+    public void removeOuverture(Ouverture o) {
+        ouvertures.remove(o);
+        this.remove(o);
+        etage.removeOuverture(o);
+        changed = true;
+    }
+
     public void setChanged() {
         changed = true;
+    }
+
+    public Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
+        float min_dist = -1;
+        Vector3 intersection = null;
+        for (Mesh mesh : meshes) {
+            short[] indices = {0, 0, 0};
+            FloatBuffer fb = mesh.getVerticesBuffer();
+            for (int i = 0; i < mesh.getNumIndices(); i += 3) {
+                mesh.getIndices(i, 3, indices, 0);
+                int size = mesh.getVertexSize() / Float.SIZE;
+                Vector3 p1 = new Vector3(
+                        fb.get(indices[0] * size),
+                        fb.get(indices[0] * size + 1),
+                        fb.get(indices[0] * size + 2)).mul(global_transform);
+                Vector3 p2 = new Vector3(
+                        fb.get(indices[1] * size),
+                        fb.get(indices[1] * size + 1),
+                        fb.get(indices[1] * size + 2)).mul(global_transform);
+                Vector3 p3 = new Vector3(
+                        fb.get(indices[2] * size),
+                        fb.get(indices[2] * size + 1),
+                        fb.get(indices[2] * size + 2)).mul(global_transform);
+                Vector3 inter = new Vector3();
+                boolean intersect = Intersector.intersectRayTriangle(ray, p1, p2, p3, inter);
+                if (intersect) {
+                    float dist2cam = inter.dst(ray.origin);
+                    if (dist2cam < min_dist || min_dist == -1) {
+                        min_dist = dist2cam;
+                        intersection = inter;
+                    }
+                }
+            }
+        }
+        return intersection;
+    }
+
+    protected float intersects(Ray ray, Matrix4 global_transform) {
+        if (super.intersects(ray, global_transform) == -1)
+            return -1;
+        else {
+            Vector3 inter = getIntersection(ray, global_transform.cpy().mul(model_transform));
+            return inter == null ? -1 : inter.dst(ray.origin);
+        }
     }
 }

@@ -37,6 +37,9 @@ public class Etage {
     public void addOuverture(Ouverture ouverture) {
         this.ouvertures.add(ouverture);
     }
+    public void removeOuverture(Ouverture ouverture) {
+        this.ouvertures.remove(ouverture);
+    }
 
     public ArrayList<Ouverture> getOuvertures() {
         return ouvertures;

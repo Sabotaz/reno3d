@@ -46,8 +46,15 @@ public abstract class Ouverture extends ModelContainer {
         return mur;
     }
     public void setMur(Mur mur) {
+        if (this.mur != null)
+            this.mur.removeOuverture(this);
+
         this.mur = mur;
+        if (this.mur != null) {
+            this.mur.addOuverture(this);
+        }
     }
+
     public Vector2 getPosition() {
         return position;
     }

@@ -28,7 +28,7 @@ public class ModelContainer extends ActableModel {
 
     protected List<ModelContainer> children = new ArrayList<ModelContainer>();
     public Matrix4 transform;
-    private Matrix4 model_transform;
+    protected Matrix4 model_transform;
     private Shader prefered_shader;
     private Object userData;
     private HashMap<String,Object> modelData = new HashMap<String, Object>();
@@ -146,7 +146,7 @@ public class ModelContainer extends ActableModel {
 
     public Matrix4 getFullTransform() {
         Matrix4 mx = new Matrix4();
-        mx.idt();
+        mx.idt().mul(model_transform);
         ModelContainer current = this;
         do {
             mx.mulLeft(current.transform);
@@ -204,7 +204,7 @@ public class ModelContainer extends ActableModel {
         selectable = b;
     }
 
-    private float intersects(Ray ray, Matrix4 global_transform) {
+    protected float intersects(Ray ray, Matrix4 global_transform) {
 
         if (!selectable) return -1;
 
@@ -254,7 +254,7 @@ public class ModelContainer extends ActableModel {
         }
 
         if (temp.hit == null) {
-            float dist2 = intersects(ray, current_mx);
+            float dist2 = this.intersects(ray, current_mx);
             if (dist2 >= 0f) {
                 temp.hit = this;
                 temp.distance = dist2;
