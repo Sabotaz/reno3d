@@ -91,7 +91,7 @@ public class LightShader extends FileShader {
         set(u_color, colorAttr.color);
 
         HashMap<String, Object> attrs = (HashMap<String, Object>)renderable.userData;
-        if (attrs.containsKey("Color") && attrs.get("Color") != null) {
+        if (attrs != null && attrs.containsKey("Color") && attrs.get("Color") != null) {
             set(u_is_tinted, 1);
             set(u_tint, (Color)attrs.get("Color"));
 

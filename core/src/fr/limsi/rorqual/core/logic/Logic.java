@@ -1,45 +1,21 @@
 package fr.limsi.rorqual.core.logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.model.MeshPart;
-import com.badlogic.gdx.graphics.g3d.model.Node;
-import com.badlogic.gdx.graphics.g3d.model.NodePart;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 
-import java.io.File;
-
-import fr.limsi.rorqual.core.model.ActableModel;
+import fr.limsi.rorqual.core.model.utils.MyVector2;
+import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.model.Fenetre;
-import fr.limsi.rorqual.core.model.IfcHelper;
-import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
-import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
-import fr.limsi.rorqual.core.view.shaders.ShaderAttribute;
-import ifc2x3javatoolbox.helpers.IfcSpatialStructure;
-import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 /**
  * Created by christophe on 20/03/15.
@@ -105,7 +81,6 @@ public class Logic implements InputProcessor {
 
     Vector3 start = new Vector3();
     Vector3 end = new Vector3();
-    ModelContainer wall;
     boolean making_wall = false;
     Mur mur;
     @Override
@@ -126,18 +101,15 @@ public class Logic implements InputProcessor {
             start = new Vector3(intersection);
             end = new Vector3(intersection);
 
-            mur = new Mur(start, end);
-
-            wall = new ModelContainer(mur) {
+            mur = new Mur(start, end) {
                 public void act() {
                     super.act();
-                    mur.setA(start);
-                    mur.setB(end);
-                    mur.act();
+                    setA(start);
+                    setB(end);
                 }
             };
             //ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(mur);
-            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(wall);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(mur);
             //modelGraph.getRoot().add(wall);
 
             return true;
@@ -147,14 +119,16 @@ public class Logic implements InputProcessor {
             ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
             if (modelContainer == null)
                 return true;
-            ActableModel model = modelContainer.getModel();
-            if (model instanceof Mur) {
-                Mur mur = (Mur) model;
+            if (modelContainer instanceof Mur) {
+                Mur mur = (Mur) modelContainer;
                 BoundingBox b = new BoundingBox();
-                model.calculateBoundingBox(b);
+                modelContainer.calculateBoundingBox(b);
                 Vector3 intersection = new Vector3();
                 Intersector.intersectRayBounds(ray, b, intersection);
-                Fenetre fenetre = new Fenetre(mur, intersection.x);
+                // intersection in world space, not in wall space
+                Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
+                Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
+                Fenetre fenetre = new Fenetre(mur, v2.dot(v1));
             }
             return true;
         } else
@@ -164,7 +138,7 @@ public class Logic implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (currentState == State.WALL && making_wall) {
-            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(wall);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(mur);
 
             if (!start.equals(end)) {
                 Mur copy_mur = new Mur(mur);

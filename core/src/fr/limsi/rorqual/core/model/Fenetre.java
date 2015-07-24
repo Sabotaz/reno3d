@@ -19,6 +19,7 @@ public class Fenetre extends Ouverture {
 
     // Constructeur
     public Fenetre(Mur mur, float x) {
+        // x est le milieu ?
         this(mur, x, DEFAULT_Y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 

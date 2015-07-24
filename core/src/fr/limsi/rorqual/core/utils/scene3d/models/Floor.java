@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
  * Created by christophe on 03/07/15.
@@ -20,10 +20,10 @@ public class Floor {
 
     private static Model model = null;
 
-    public static ModelInstance getModelInstance() {
+    public static ModelContainer getModel() {
         if (model == null)
             makeModel();
-        return new ModelInstance(model);
+        return new ModelContainer(model);
     }
 
     public static void makeModel() {

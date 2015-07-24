@@ -1,30 +1,18 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import java.util.Date;
-
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
-import eu.mihosoft.vrl.v3d.Polygon;
 import eu.mihosoft.vrl.v3d.Vector3d;
-import eu.mihosoft.vrl.v3d.Vertex;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
@@ -37,12 +25,13 @@ import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.CSGUtils;
+import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
  * Created by ricordeau on 20/07/15.
  */
-public class Mur extends ActableModel {
+public class Mur extends ModelContainer {
 
     private static float DEFAULT_DEPTH = 0.2f;
     private static float DEFAULT_HEIGHT = 2.8f;
@@ -283,6 +272,8 @@ public class Mur extends ActableModel {
 
     public void addOuverture(Ouverture o) {
         ouvertures.add(o);
+        this.add(o);
         etage.addOuverture(o);
+        changed = true;
     }
 }

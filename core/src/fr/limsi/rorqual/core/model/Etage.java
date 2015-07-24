@@ -1,7 +1,5 @@
 package fr.limsi.rorqual.core.model;
 
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,8 +18,8 @@ public class Etage {
     private ModelGraph modelGraph = new ModelGraph();
 
     {
-        ModelContainer floor = new ModelContainer(Floor.getModelInstance());
-        containerHashMap.put(Floor.getModelInstance(), floor);
+        ModelContainer floor = Floor.getModel();
+        containerHashMap.put(Floor.getModel(), floor);
         floor.setSelectable(false);
         modelGraph.getRoot().add(floor);
     }
@@ -33,16 +31,11 @@ public class Etage {
     public void addMur(Mur mur) {
         this.murs.add(mur);
         mur.setEtage(this);
-        ModelContainer container = new ModelContainer(mur);
-        containerHashMap.put(mur, container);
-        this.modelGraph.getRoot().add(container);
+        this.modelGraph.getRoot().add(mur);
     }
 
     public void addOuverture(Ouverture ouverture) {
-        ModelContainer container = new ModelContainer(ouverture);
-        containerHashMap.put(ouverture, container);
         this.ouvertures.add(ouverture);
-        containerHashMap.get(ouverture.getMur()).add(container);
     }
 
     public ArrayList<Ouverture> getOuvertures() {

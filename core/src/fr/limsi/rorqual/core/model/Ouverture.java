@@ -1,6 +1,5 @@
 package fr.limsi.rorqual.core.model;
 
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -13,11 +12,13 @@ import eu.mihosoft.vrl.v3d.Vector3d;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum;
 import fr.limsi.rorqual.core.utils.CSGUtils;
+import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
  * Created by ricordeau on 20/07/15.
  */
-public abstract class Ouverture extends ActableModel {
+public abstract class Ouverture extends ModelContainer {
 
     // Attributs
     protected Mur mur;
@@ -112,10 +113,10 @@ public abstract class Ouverture extends ActableModel {
         Vector3d dir = CSGUtils.castVector(z_shape);
 
         List<Vector3d> face = new ArrayList<Vector3d>();
-        face.add(CSGUtils.castVector(openingA.cpy().add(y_dir)));
-        face.add(CSGUtils.castVector(openingA.cpy().sub(y_dir)));
         face.add(CSGUtils.castVector(openingB.cpy().add(y_dir)));
         face.add(CSGUtils.castVector(openingB.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(openingA.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(openingA.cpy().add(y_dir)));
 
         CSG csg = Extrude.points(dir, face);
 

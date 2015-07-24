@@ -1,15 +1,11 @@
 package fr.limsi.rorqual.core.utils.scene3d;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.Shader;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -22,21 +18,15 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
-import eu.mihosoft.vrl.v3d.Vector3d;
-import fr.limsi.rorqual.core.model.ActableModel;
-import fr.limsi.rorqual.core.model.ActableModelInstance;
-import fr.limsi.rorqual.core.model.ModelProvider;
-
 /**
  * Created by christophe on 30/06/15.
  */
-public class ModelContainer {
+public class ModelContainer extends ActableModel {
 
     protected ModelContainer parent;
     protected ModelGraph root;
 
     protected List<ModelContainer> children = new ArrayList<ModelContainer>();
-    protected ActableModel model = null;
     public Matrix4 transform;
     private Matrix4 model_transform;
     private Shader prefered_shader;
@@ -48,19 +38,31 @@ public class ModelContainer {
         model_transform = new Matrix4();
     }
 
-    public ModelContainer(ActableModel m) {
+    public ModelContainer(Model model) {
         transform = new Matrix4();
-        setModel(m);
+        model_transform = new Matrix4();
+
+        super.materials.clear();     this.materials.addAll(model.materials);
+        super.meshes.clear();        this.meshes.addAll(model.meshes);
+        super.meshParts.clear();     this.meshParts.addAll(model.meshParts);
+        super.nodes.clear();         this.nodes.addAll(model.nodes);
+        super.animations.clear();    this.animations.addAll(model.animations);
     }
 
-    public ModelContainer(ModelInstance m) {
+    public ModelContainer(ModelInstance modelInstance) {
         transform = new Matrix4();
-        setModel(m);
+        model_transform = modelInstance.transform;
+
+        Model model = modelInstance.model;
+
+        super.materials.clear();     this.materials.addAll(model.materials);
+        super.meshes.clear();        this.meshes.addAll(model.meshes);
+        super.meshParts.clear();     this.meshParts.addAll(model.meshParts);
+        super.nodes.clear();         this.nodes.addAll(model.nodes);
+        super.animations.clear();    this.animations.addAll(model.animations);
     }
 
     public void act() {
-        if (model != null)
-            model.act();
         for (ModelContainer c : children) {
             c.act();
         }
@@ -138,22 +140,6 @@ public class ModelContainer {
         }
     }
 
-    public void setModel(ActableModel m) {
-        m.userData = modelData;
-        model = m;
-        model_transform = m.transform.cpy();
-    }
-
-    public void setModel(ModelInstance m) {
-        m.userData = modelData;
-        model = new ActableModelInstance(m);
-        model_transform = m.transform.cpy();
-    }
-
-    public ActableModel getModel() {
-        return model;
-    }
-
     public void draw(ModelBatch modelBatch, Environment environment){
         draw(modelBatch, environment, new Matrix4());
     }
@@ -185,12 +171,10 @@ public class ModelContainer {
             // update mx
             Matrix4 updated_global_transform = global_transform.cpy().mul(transform);
 
-            if (model != null) {
-                // update model mx
-                model.transform = updated_global_transform.cpy().mul(model_transform);
-                // draw
-                modelBatch.render(model, environment);
-            }
+            // update model mx
+            transform = updated_global_transform.cpy().mul(model_transform);
+            // draw
+            modelBatch.render(this, environment);
 
             drawChildren(modelBatch, environment, updated_global_transform);
         }
@@ -222,12 +206,12 @@ public class ModelContainer {
 
     private float intersects(Ray ray, Matrix4 global_transform) {
 
-        if (!selectable || model == null) return -1;
+        if (!selectable) return -1;
 
         BoundingBox boundBox = new BoundingBox();
         Vector3 center = new Vector3();
 
-        model.calculateBoundingBox(boundBox);
+        calculateBoundingBox(boundBox);
 
         Matrix4 local_transform = global_transform.cpy().mul(model_transform);
         boundBox.mul(local_transform);
@@ -285,12 +269,9 @@ public class ModelContainer {
     }
 
     public Vector3 getTop() {
-        if(model == null)
-            return null;
-
         BoundingBox boundBox = new BoundingBox();
 
-        model.calculateBoundingBox(boundBox);
+        calculateBoundingBox(boundBox);
 
         boundBox.mul(model_transform);
 
