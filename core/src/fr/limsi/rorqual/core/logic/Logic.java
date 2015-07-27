@@ -194,8 +194,6 @@ public class Logic implements InputProcessor {
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
                 pos.x = v2.dot(v1);
-                System.out.println("p: " + intersection);
-                System.out.println("d: " + pos.x);
                 fenetre.setMur(mur);
             }
             return true;
