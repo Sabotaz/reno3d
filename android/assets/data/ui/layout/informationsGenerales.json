@@ -134,6 +134,23 @@
     },
     {
       "type": "Table",
+      "name": "Département",
+      "id": "departement_batiment",
+      "content": [
+        {
+          "type": "ScrollPaneElement",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.DEPARTEMENT_BATIMENT",
+          "content": [
+            {
+              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum.values"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
       "name": "Année de construction",
       "id": "annee_construction",
       "content": [

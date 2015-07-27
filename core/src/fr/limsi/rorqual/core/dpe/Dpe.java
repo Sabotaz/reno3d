@@ -463,6 +463,27 @@ public class Dpe implements EventListener {
                         break;
                     }
 
+                    case DEPARTEMENT_BATIMENT:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            DepartementBatimentEnum departement = (DepartementBatimentEnum) items.get("lastValue");
+                            general_properties.put(DpeEvent.DEPARTEMENT_BATIMENT, departement);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            DepartementBatimentEnum type = null;
+                            if (general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
+                                type = (DepartementBatimentEnum) general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.DEPARTEMENT_BATIMENT, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
                     case POSITION_APPARTEMENT:{
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
@@ -1169,6 +1190,104 @@ public class Dpe implements EventListener {
                         break;
                     }
 
+                    case MASQUE_PROCHE_MENUISERIE:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (items.get("userObject") instanceof IfcWindow){
+                            IfcWindow window = (IfcWindow)items.get("userObject");
+                            if (eventRequest == EventRequest.UPDATE_STATE) {
+                                TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
+                                if (!windows_properties.containsKey(window))
+                                    windows_properties.put(window, new HashMap<EventType, Object>());
+                                windows_properties.get(window).put(event, masque);
+                                //tryActualiseWallDP(window);
+                            } else if (eventRequest == EventRequest.GET_STATE) {
+                                TypeMasqueEnum type = null;
+                                if (windows_properties.containsKey(window))
+                                    if (windows_properties.get(window).containsKey(DpeEvent.MASQUE_PROCHE_MENUISERIE))
+                                        type = (TypeMasqueEnum) windows_properties.get(window).get(DpeEvent.MASQUE_PROCHE_MENUISERIE);
+                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                                currentItems.put("lastValue",type);
+                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                                currentItems.put("userObject", window);
+                                Event e2 = new Event(DpeEvent.MASQUE_PROCHE_MENUISERIE, currentItems);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
+
+                        }
+                        else if (items.get("userObject") instanceof IfcDoor){
+                            IfcDoor door = (IfcDoor)items.get("userObject");
+                            if (eventRequest == EventRequest.UPDATE_STATE) {
+                                TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
+                                if (!doors_properties.containsKey(door))
+                                    doors_properties.put(door, new HashMap<EventType, Object>());
+                                doors_properties.get(door).put(event, masque);
+                                //tryActualiseWallDP(window);
+                            } else if (eventRequest == EventRequest.GET_STATE) {
+                                TypeMasqueEnum type = null;
+                                if (doors_properties.containsKey(door))
+                                    if (doors_properties.get(door).containsKey(DpeEvent.MASQUE_PROCHE_MENUISERIE))
+                                        type = (TypeMasqueEnum) doors_properties.get(door).get(DpeEvent.MASQUE_PROCHE_MENUISERIE);
+                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                                currentItems.put("lastValue",type);
+                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                                currentItems.put("userObject", door);
+                                Event e2 = new Event(DpeEvent.MASQUE_PROCHE_MENUISERIE, currentItems);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
+                        }
+                        break;
+                    }
+
+                    case MASQUE_LOINTAIN_MENUISERIE:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (items.get("userObject") instanceof IfcWindow){
+                            IfcWindow window = (IfcWindow)items.get("userObject");
+                            if (eventRequest == EventRequest.UPDATE_STATE) {
+                                TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
+                                if (!windows_properties.containsKey(window))
+                                    windows_properties.put(window, new HashMap<EventType, Object>());
+                                windows_properties.get(window).put(event, masque);
+                                //tryActualiseWallDP(window);
+                            } else if (eventRequest == EventRequest.GET_STATE) {
+                                TypeMasqueEnum type = null;
+                                if (windows_properties.containsKey(window))
+                                    if (windows_properties.get(window).containsKey(DpeEvent.MASQUE_LOINTAIN_MENUISERIE))
+                                        type = (TypeMasqueEnum) windows_properties.get(window).get(DpeEvent.MASQUE_LOINTAIN_MENUISERIE);
+                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                                currentItems.put("lastValue",type);
+                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                                currentItems.put("userObject", window);
+                                Event e2 = new Event(DpeEvent.MASQUE_LOINTAIN_MENUISERIE, currentItems);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
+
+                        }
+                        else if (items.get("userObject") instanceof IfcDoor){
+                            IfcDoor door = (IfcDoor)items.get("userObject");
+                            if (eventRequest == EventRequest.UPDATE_STATE) {
+                                TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
+                                if (!doors_properties.containsKey(door))
+                                    doors_properties.put(door, new HashMap<EventType, Object>());
+                                doors_properties.get(door).put(event, masque);
+                                //tryActualiseWallDP(window);
+                            } else if (eventRequest == EventRequest.GET_STATE) {
+                                TypeMasqueEnum type = null;
+                                if (doors_properties.containsKey(door))
+                                    if (doors_properties.get(door).containsKey(DpeEvent.MASQUE_LOINTAIN_MENUISERIE))
+                                        type = (TypeMasqueEnum) doors_properties.get(door).get(DpeEvent.MASQUE_LOINTAIN_MENUISERIE);
+                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                                currentItems.put("lastValue",type);
+                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                                currentItems.put("userObject", door);
+                                Event e2 = new Event(DpeEvent.MASQUE_LOINTAIN_MENUISERIE, currentItems);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+                            }
+                        }
+                        break;
+                    }
+
                     case TYPE_PORTE: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         IfcDoor door = (IfcDoor)items.get("userObject");
@@ -1183,10 +1302,14 @@ public class Dpe implements EventListener {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("materiau_porte"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("vitrage_porte"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("fermeture_porte"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("masque_proche_porte"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("masque_lointain_porte"), true);
                             } else {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("materiau_porte"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("vitrage_porte"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("fermeture_porte"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("masque_proche_porte"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("masque_lointain_porte"), false);
                             }
                             //tryActualiseWallDP(wall);
                         } else if (eventRequest == EventRequest.GET_STATE) {

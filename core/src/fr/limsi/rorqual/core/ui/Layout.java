@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -17,9 +18,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -31,7 +35,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum;
 import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
@@ -92,6 +98,10 @@ public class Layout {
                 }
             }
             return default_value;
+        }
+
+        public EventType getEventType(){
+            return this.eventType;
         }
     }
 
@@ -174,8 +184,14 @@ public class Layout {
             case "ImageButton":
                 actor = makeImageButton(json, updater);
                 break;
-            case "CheckBox":
-                actor = makeCheckBox(json, updater);
+//            case "CheckBox":
+//                actor = makeCheckBox(json, updater);
+//                break;
+//            case "TextField":
+//                actor = makeTextField(json, updater);
+//                break;
+            case "ScrollPaneElement":
+                actor = makeScrollPane(json, updater);
                 break;
             default:
                 return null;
@@ -389,38 +405,122 @@ public class Layout {
         return imageButton;
     }
 
-    LinkedList<Object> tabValueCheckBox = new LinkedList<Object>();
+//    LinkedList<Object> tabValueCheckBox = new LinkedList<Object>();
+//
+//    private Actor makeCheckBox (JsonValue json, Updater updater){
+//        String text = "  " + json.getString("text");
+//        CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
+//        cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+//        cbs.fontColor = Color.DARK_GRAY;
+//        CheckBox checkBox = new CheckBox(text,cbs);
+//
+//        if (updater != null & json.has("value")) {
+//            Object value_value = getEnumConstant(json, "value");
+//
+//            if (updater.getDefaultValue() == value_value) {
+//                checkBox.setChecked(true);
+//            }
+//
+//            if (value_value != null) {
+//                final Object last_value = value_value;
+//                final Updater last_updater = updater;
+//                checkBox.addListener(new ClickListener() {
+//                    @Override
+//                    public void clicked(InputEvent event, float x, float y) {
+//                        HashMap<String,Object> items = new HashMap<String, Object>();
+//                        items.put("userObject",userObject);
+//                        items.put("eventRequest",EventRequest.UPDATE_STATE);
+//                        items.put("lastValue",last_value);
+//                        items.put("layout",Layout.this);
+//                        last_updater.trigger(items);
+//                    }
+//                });
+//            }
+//        }
+//        return checkBox;
+//    }
 
-    private Actor makeCheckBox (JsonValue json, Updater updater){
-        String text = "  " + json.getString("text");
-        CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
-        cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
-        cbs.fontColor = Color.DARK_GRAY;
-        CheckBox checkBox = new CheckBox(text,cbs);
+//    private Actor makeTextField (JsonValue json, Updater updater){
+//
+//        String labelName = json.getString("label");
+//        Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
+//        lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+//        lbs.fontColor=Color.BLACK;
+//        Label label = new Label(labelName,lbs);
+//
+//        final TextField textField = new TextField("", skin);
+//        Table table = new Table();
+//        table.add(label).pad(10);
+//        table.add(textField).pad(10);
+//
+//        if (updater != null){
+//            final Updater last_updater = updater;
+//            textField.setTextFieldListener(new TextField.TextFieldListener() {
+//                @Override
+//                public void keyTyped(TextField textField, char key) {
+//                    if (key == '\r' || key == '\n') {
+//                        HashMap<String, Object> items = new HashMap<String, Object>();
+//                        items.put("userObject", userObject);
+//                        items.put("eventRequest", EventRequest.UPDATE_STATE);
+//                        items.put("lastValue", textField.getText());
+//                        items.put("layout", Layout.this);
+//                        last_updater.trigger(items);
+//                    }
+//                }
+//            });
+//        }
+//        return table;
+//    }
 
-        if (updater != null & json.has("value")) {
-            Object value_value = getEnumConstant(json, "value");
+    private static float lastVisualScrollY=0;
 
-            if (updater.getDefaultValue() == value_value) {
-                checkBox.setChecked(true);
-            }
+    private Actor makeScrollPane(JsonValue json, Updater updater) {
 
-            if (value_value != null) {
-                final Object last_value = value_value;
-                final Updater last_updater = updater;
-                checkBox.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        HashMap<String,Object> items = new HashMap<String, Object>();
-                        items.put("userObject",userObject);
-                        items.put("eventRequest",EventRequest.UPDATE_STATE);
-                        items.put("lastValue",last_value);
-                        items.put("layout",Layout.this);
-                        last_updater.trigger(items);
-                    }
-                });
-            }
+        Table table = new Table();
+        EventType event = updater.getEventType();
+        Object[] tabObject=null;
+        final Updater last_updater = updater;
+        final DepartementBatimentEnum[] dpt = DepartementBatimentEnum.values();
+        tabObject = new Object[dpt.length];
+        for(int i=0;i<dpt.length;i++) {
+            tabObject[i] = dpt[i].getNameDpt();
         }
-        return checkBox;
+
+        com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle lls = skin.get("default", com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle.class);
+        lls.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        final com.badlogic.gdx.scenes.scene2d.ui.List list = new com.badlogic.gdx.scenes.scene2d.ui.List(lls);
+        list.setItems(tabObject);
+        list.getSelection().setMultiple(false);
+        list.getSelection().setRequired(true);
+        if (updater.getDefaultValue() != null) {
+            list.setSelectedIndex(((DepartementBatimentEnum)updater.getDefaultValue()).getIndex());
+        }
+        ScrollPane.ScrollPaneStyle sps = skin.get("perso",ScrollPane.ScrollPaneStyle.class);
+        final ScrollPane scrollPane = new ScrollPane(list, sps);
+        scrollPane.setFlickScroll(false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.layout();
+        scrollPane.setScrollY(lastVisualScrollY);
+        scrollPane.updateVisualScroll();
+
+//        scrollPane.setupFadeScrollBars(1f,0.5f);
+
+        list.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int index = list.getSelectedIndex();
+                HashMap<String,Object> items = new HashMap<String, Object>();
+                items.put("userObject",userObject);
+                items.put("eventRequest",EventRequest.UPDATE_STATE);
+                items.put("lastValue",dpt[index]);
+                items.put("layout", Layout.this);
+                last_updater.trigger(items);
+
+                lastVisualScrollY = scrollPane.getVisualScrollY();
+            }
+        });
+
+        table.add(scrollPane).left().size(300, 150).pad(10);
+        return table;
     }
 }

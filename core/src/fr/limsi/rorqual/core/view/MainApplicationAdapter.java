@@ -24,9 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -36,12 +40,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
+import fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
@@ -278,8 +287,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         tableStage.add(buttonChauffage).right().size(150, 150).padTop(10).padRight(10).row();
         float tableWidth = tableStage.getPrefWidth();
         float tableHeight = tableStage.getPrefHeight();
-        tableStage.setPosition(Gdx.graphics.getWidth()-tableWidth/2,Gdx.graphics.getHeight()-tableHeight/2);
+        tableStage.setPosition(Gdx.graphics.getWidth() - tableWidth / 2, Gdx.graphics.getHeight() - tableHeight / 2);
         stageMenu.addActor(tableStage);
+
 
         /*** test affichage fenetre ***/
         // A ModelBatch is like a SpriteBatch, just for models.  Use it to batch up geometry for OpenGL

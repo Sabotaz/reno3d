@@ -150,6 +150,59 @@
           ]
         }
       ]
+    },
+    {
+      "type": "Table",
+      "name": "Masque proche",
+      "id": "masque_proche_fenetre",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.MASQUE_PROCHE_MENUISERIE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Présence d'un masque proche obstruant le soleil (ex : balcon, auvent)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.PRESENCE_MASQUE_PROCHE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Absence de masque proche",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.ABSENCE_MASQUE_PROCHE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Masque lointain",
+      "id": "masque_lointain_fenetre",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.MASQUE_LOINTAIN_MENUISERIE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Présence d'un masque lointain obstruant partiellement le soleil en hiver (ex : arbre, autre construction)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.PRESENCE_MASQUE_PROCHE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Présence d'un masque lointain obstruant totalement le soleil en hiver (ex : arbre, autre construction)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.PRESENCE_MASQUE_PROCHE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Absence de masque lointain",
+              "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.ABSENCE_MASQUE_PROCHE"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
