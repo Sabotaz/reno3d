@@ -9,6 +9,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
+import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.model.Fenetre;
@@ -32,8 +36,6 @@ public class Logic implements InputProcessor {
     private Camera camera = null;
 
     private State currentState = State.NONE;
-
-    private ModelGraph modelGraph;
 
     private Logic() {}
 
@@ -93,16 +95,48 @@ public class Logic implements InputProcessor {
             Plane plane = new Plane(Vector3.Z.cpy(), Vector3.Zero.cpy()); /// floor
 
             Vector3 intersection = new Vector3();
-            boolean intersect = Intersector.intersectRayPlane(ray, plane, intersection);
-            if (!intersect) {
+//            boolean intersect = Intersector.intersectRayPlane(ray, plane, intersection);
+//            if (!intersect) {
+//                making_wall = false;
+//                return false;
+//            } else {
+//                making_wall = true;
+//            }
+            ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+
+            if (obj == null) {
                 making_wall = false;
                 return false;
             } else {
+                intersection = obj.getIntersection();
                 making_wall = true;
             }
+            // anchor
+            float anchor_length = 1.f;
+            ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
 
-            start = new Vector3(intersection);
-            end = new Vector3(intersection);
+            ArrayList<Vector3> anchors = new ArrayList<Vector3>();
+
+            for (Mur mur : murs)
+                anchors.addAll(mur.getAnchors(intersection, Mur.DEFAULT_DEPTH));
+
+            Vector3 anchor = null;
+            float dist = -1;
+            for (Vector3 v : anchors) {
+                float d = intersection.cpy().sub(v).len();
+                if (d < anchor_length && (d < dist || dist == -1)) {
+                    dist = d;
+                    anchor = v;
+                }
+            }
+
+            if (anchor != null) {
+                start = new Vector3(anchor);
+                end = new Vector3(anchor);
+            } else {
+                start = new Vector3(intersection);
+                end = new Vector3(intersection);
+            }
 
             mur = new Mur(start, end) {
                 public void act() {
@@ -111,6 +145,7 @@ public class Logic implements InputProcessor {
                     setB(end);
                 }
             };
+            mur.setSelectable(false);
             //ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(mur);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(mur);
             //modelGraph.getRoot().add(wall);
@@ -124,7 +159,7 @@ public class Logic implements InputProcessor {
                 making_fenetre = false;
             } else if (modelContainer instanceof Mur) {
                 Mur mur = (Mur) modelContainer;
-                Vector3 intersection = mur.getIntersection(ray, mur.getFullTransform());
+                Vector3 intersection = mur.getIntersection();
                 // intersection in world space, not in wall space
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
@@ -174,9 +209,39 @@ public class Logic implements InputProcessor {
             Plane plane = new Plane(Vector3.Z.cpy(), Vector3.Zero.cpy()); /// floor
 
             Vector3 intersection = new Vector3();
-            boolean intersect = Intersector.intersectRayPlane(ray, plane, intersection);
-            if (intersect)
-                end.set(intersection);
+            //boolean intersect = Intersector.intersectRayPlane(ray, plane, intersection);
+
+            ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+
+            if (obj != null) {
+                intersection = obj.getIntersection();
+                // anchor
+                float anchor_length = 1.f;
+                ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
+
+                ArrayList<Vector3> anchors = new ArrayList<Vector3>();
+
+                for (Mur mur : murs)
+                    anchors.addAll(mur.getAnchors(intersection, Mur.DEFAULT_DEPTH));
+
+                Vector3 anchor = null;
+                float dist = -1;
+                for (Vector3 v : anchors) {
+                    float d = intersection.cpy().sub(v).len();
+                    if (d < anchor_length && (d < dist || dist == -1)) {
+                        dist = d;
+                        anchor = v;
+                    }
+                }
+
+                if (anchor != null)
+                    end.set(anchor);
+                else {
+                    Vector3 pos = intersection.cpy();
+                    pos.z = 0;
+                    end.set(pos);
+                }
+            }
             else
                 end.set(start);
 
@@ -189,7 +254,7 @@ public class Logic implements InputProcessor {
                 return true;
             if (modelContainer instanceof Mur) {
                 Mur mur = (Mur) modelContainer;
-                Vector3 intersection = mur.getIntersection(ray, mur.getFullTransform());
+                Vector3 intersection = mur.getIntersection();
                 // intersection in world space, not in wall space
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
@@ -197,8 +262,9 @@ public class Logic implements InputProcessor {
                 fenetre.setMur(mur);
             }
             return true;
-        } else if (currentState == State.NONE)
+        } else if (currentState == State.NONE) {
             return false;
+        }
         return true;
     }
 
@@ -210,9 +276,5 @@ public class Logic implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    public void setModelGraph(ModelGraph modelGraph) {
-        this.modelGraph = modelGraph;
     }
 }

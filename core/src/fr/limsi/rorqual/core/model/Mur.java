@@ -39,8 +39,8 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
  */
 public class Mur extends ModelContainer {
 
-    private static float DEFAULT_DEPTH = 0.2f;
-    private static float DEFAULT_HEIGHT = 2.8f;
+    public final static float DEFAULT_DEPTH = 0.2f;
+    public final static float DEFAULT_HEIGHT = 2.8f;
 
     private Vector3 A = new Vector3();
     private Vector3 B = new Vector3();
@@ -298,7 +298,7 @@ public class Mur extends ModelContainer {
         changed = true;
     }
 
-    public Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
+    private Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
         float min_dist = -1;
         Vector3 intersection = null;
         for (Mesh mesh : model_non_perce.meshes) {
@@ -351,8 +351,8 @@ public class Mur extends ModelContainer {
         if (super.intersects(ray, global_transform) == -1)
             return -1;
         else {
-            Vector3 inter = getIntersection(ray, global_transform.cpy().mul(model_transform));
-            return inter == null ? -1 : inter.dst(ray.origin);
+            intersection = getIntersection(ray, global_transform.cpy().mul(model_transform));
+            return intersection == null ? -1 : intersection.dst(ray.origin);
         }
     }
 }

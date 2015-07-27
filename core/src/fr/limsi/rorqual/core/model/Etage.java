@@ -20,7 +20,7 @@ public class Etage {
     {
         ModelContainer floor = Floor.getModel();
         containerHashMap.put(Floor.getModel(), floor);
-        floor.setSelectable(false);
+        //floor.setSelectable(false);
         modelGraph.getRoot().add(floor);
     }
 

@@ -155,7 +155,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         modelGraph = new ModelGraph();
         modelGraph.setCamera(baseCamera);
-        Logic.getInstance().setModelGraph(modelGraph);
 
         modelBatch = new ModelBatch(shaderProvider);
 

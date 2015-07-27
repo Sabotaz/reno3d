@@ -193,7 +193,7 @@ public class ModelContainer extends ActableModel {
     private float intersectsMesh(Ray ray, BoundingBox boundBox) {
         Vector3 pt = new Vector3();
         Boolean intersect = Intersector.intersectRayBounds(ray, boundBox, pt);
-
+        intersection = pt;
         final float dist2cam = pt.dst(ray.origin);
         return intersect ? dist2cam : -1f;
     }
@@ -204,7 +204,14 @@ public class ModelContainer extends ActableModel {
         selectable = b;
     }
 
+    protected Vector3 intersection = null;
+
+    public Vector3 getIntersection() {
+        return intersection;
+    }
+
     protected float intersects(Ray ray, Matrix4 global_transform) {
+        intersection = null;
 
         if (!selectable) return -1;
 
@@ -232,7 +239,7 @@ public class ModelContainer extends ActableModel {
     }
 
     private class Hit {
-        ModelContainer hit;
+        ModelContainer hit = null;
         float distance = -1;
 
         public boolean isCloserThan(Hit other) {
