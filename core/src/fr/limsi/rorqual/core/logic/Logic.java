@@ -20,6 +20,7 @@ import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 
 /**
  * Created by christophe on 20/03/15.
@@ -146,6 +147,7 @@ public class Logic implements InputProcessor {
                 }
             };
             mur.setSelectable(false);
+            mur.add(new Cote(mur));
             //ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(mur);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(mur);
             //modelGraph.getRoot().add(wall);

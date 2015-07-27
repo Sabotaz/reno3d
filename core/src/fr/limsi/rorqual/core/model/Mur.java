@@ -33,11 +33,12 @@ import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
+import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 
 /**
  * Created by ricordeau on 20/07/15.
  */
-public class Mur extends ModelContainer {
+public class Mur extends ModelContainer implements Cote.Cotable {
 
     public final static float DEFAULT_DEPTH = 0.2f;
     public final static float DEFAULT_HEIGHT = 2.8f;

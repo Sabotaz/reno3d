@@ -104,8 +104,9 @@ public class AssetManager {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 14;
         font = generator.generateFont(parameter); // font size 24*d pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        //generator.dispose(); // don't forget to dispose to avoid memory leaks!
         assets.put("default.fnt", font);
+        assets.put("default.fnt.generator", generator);
 
     }
 
