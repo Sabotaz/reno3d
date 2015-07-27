@@ -3,6 +3,8 @@ package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -208,6 +210,8 @@ public class Mur extends ModelContainer {
         return anchors;
     }
 
+    private Model model_non_perce = null;
+
     private void makeMesh() {
         if (B.equals(A))
             return;
@@ -223,6 +227,7 @@ public class Mur extends ModelContainer {
         face.add(CSGUtils.castVector(A.cpy().add(y_dir)));
 
         CSG csg = Extrude.points(dir, face);
+        model_non_perce = CSGUtils.toModel(csg);
 
         for (Ouverture o : ouvertures) {
             csg = csg.difference(o.getCSG());
@@ -296,24 +301,38 @@ public class Mur extends ModelContainer {
     public Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
         float min_dist = -1;
         Vector3 intersection = null;
-        for (Mesh mesh : meshes) {
+        for (Mesh mesh : model_non_perce.meshes) {
             short[] indices = {0, 0, 0};
-            FloatBuffer fb = mesh.getVerticesBuffer();
+            FloatBuffer flbu = mesh.getVerticesBuffer().asReadOnlyBuffer();
+            flbu.position(0);
+            int l = flbu.remaining();
+            float[] fb = new float[l];
+            flbu.get(fb);
             for (int i = 0; i < mesh.getNumIndices(); i += 3) {
                 mesh.getIndices(i, 3, indices, 0);
-                int size = mesh.getVertexSize() / Float.SIZE;
+                int size = mesh.getVertexSize(); // bytes
+                VertexAttribute va = mesh.getVertexAttribute(VertexAttributes.Usage.Position);
+                assert va.numComponents == 3;
+                int offset = va.offset; // bytes
+
+                int n = (indices[0] * size + offset) / (Float.SIZE / 8);
                 Vector3 p1 = new Vector3(
-                        fb.get(indices[0] * size),
-                        fb.get(indices[0] * size + 1),
-                        fb.get(indices[0] * size + 2)).mul(global_transform);
+                        fb[n + 0],
+                        fb[n + 1],
+                        fb[n + 2]).mul(global_transform);
+
+                n = (indices[1] * size + offset) / (Float.SIZE / 8);
                 Vector3 p2 = new Vector3(
-                        fb.get(indices[1] * size),
-                        fb.get(indices[1] * size + 1),
-                        fb.get(indices[1] * size + 2)).mul(global_transform);
+                        fb[n + 0],
+                        fb[n + 1],
+                        fb[n + 2]).mul(global_transform);
+
+                n = (indices[2] * size + offset) / (Float.SIZE / 8);
                 Vector3 p3 = new Vector3(
-                        fb.get(indices[2] * size),
-                        fb.get(indices[2] * size + 1),
-                        fb.get(indices[2] * size + 2)).mul(global_transform);
+                        fb[n + 0],
+                        fb[n + 1],
+                        fb[n + 2]).mul(global_transform);
+
                 Vector3 inter = new Vector3();
                 boolean intersect = Intersector.intersectRayTriangle(ray, p1, p2, p3, inter);
                 if (intersect) {

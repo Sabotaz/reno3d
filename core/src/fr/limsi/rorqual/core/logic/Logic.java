@@ -84,6 +84,7 @@ public class Logic implements InputProcessor {
     boolean making_wall = false;
     Mur mur;
     Fenetre fenetre;
+    boolean making_fenetre = false;
     Vector2 pos = new Vector2();
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -119,9 +120,9 @@ public class Logic implements InputProcessor {
             Ray ray = camera.getPickRay(screenX, screenY);
             ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
             ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
-            if (modelContainer == null)
-                return true;
-            if (modelContainer instanceof Mur) {
+            if (modelContainer == null) {
+                making_fenetre = false;
+            } else if (modelContainer instanceof Mur) {
                 Mur mur = (Mur) modelContainer;
                 Vector3 intersection = mur.getIntersection(ray, mur.getFullTransform());
                 // intersection in world space, not in wall space
@@ -134,6 +135,7 @@ public class Logic implements InputProcessor {
                         setX(pos.x);
                     }
                 };
+                making_fenetre = true;
             }
             return true;
         } else
@@ -151,7 +153,7 @@ public class Logic implements InputProcessor {
             }
             return true;
 
-        } else if (currentState == State.FENETRE) {
+        } else if (currentState == State.FENETRE && making_fenetre) {
             Mur mur = fenetre.getMur();
             mur.remove(fenetre);
             fenetre.setMur(null);
@@ -159,8 +161,10 @@ public class Logic implements InputProcessor {
             new Fenetre(mur, pos.x);
             return true;
 
-        } else
+        } else if (currentState == State.NONE)
             return false;
+        else
+            return true;
     }
 
     @Override
@@ -177,7 +181,7 @@ public class Logic implements InputProcessor {
                 end.set(start);
 
             return true;
-        } else if (currentState == State.FENETRE) {
+        } else if (currentState == State.FENETRE && making_fenetre) {
             Ray ray = camera.getPickRay(screenX, screenY);
             ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
             ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
@@ -190,11 +194,14 @@ public class Logic implements InputProcessor {
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
                 pos.x = v2.dot(v1);
+                System.out.println("p: " + intersection);
+                System.out.println("d: " + pos.x);
                 fenetre.setMur(mur);
             }
             return true;
-        } else
+        } else if (currentState == State.NONE)
             return false;
+        return true;
     }
 
     @Override
