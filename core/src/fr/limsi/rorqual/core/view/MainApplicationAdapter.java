@@ -77,7 +77,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Stage stageMenu;
     private Skin skin;
     private Button buttonDPE, buttonExit;
-    private TextButton.TextButtonStyle textButtonStyle;
     private BitmapFont fontBlack;
     private BitmapFont fontWhite;
     private static Camera[] cameras = new Camera[2];
@@ -108,7 +107,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         fontBlack = new BitmapFont(Gdx.files.internal("data/font/black.fnt"));
         fontWhite = new BitmapFont(Gdx.files.internal("data/font/white.fnt"));
         skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
-        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
 
         AssetManager.getInstance().init();
 
