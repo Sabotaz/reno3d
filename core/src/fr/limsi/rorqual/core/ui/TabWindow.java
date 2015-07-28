@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -61,7 +62,7 @@ public class TabWindow extends Table {
 
         window = new Window("", ws);
         buttonTab = new Table();
-        buttonTab.setDebug(true);
+//        buttonTab.setDebug(true);
         contentTab = new Table();
         window.add(buttonTab).left().expandX().row();
         window.add(contentTab).left().padTop(5).expandX().fillX().left();
@@ -123,16 +124,31 @@ public class TabWindow extends Table {
             if (nextWidth<buttonTab.getWidth()){
                 nextWidth=buttonTab.getWidth();
             }
-            nextX += (int)(nextWidth-lastWidth)/2;
-            nextY += (int)(lastHeight-nextHeight)/2;
+            if ((nextWidth-lastWidth)%2==0){
+                nextX += (nextWidth-lastWidth)/2;
+            }else if (nextWidth%2==0 && lastWidth%2==1){
+                nextX += (nextWidth-lastWidth-1)/2;
+            }else if (nextWidth%2==1 && lastWidth%2==0){
+                nextX += (nextWidth-lastWidth+1)/2;
+            }
+
+            if ((lastHeight-nextHeight)%2==0){
+                nextY += (lastHeight-nextHeight)/2;
+            }else if (lastHeight%2==0 && nextHeight%2==1){
+                nextY += (lastHeight-nextHeight-1)/2;
+            }else if (lastHeight%2==1 && nextHeight%2==0){
+                nextY += (lastHeight-nextHeight+1)/2;
+            }
         }
 
-        System.out.println();
-        System.out.println("nextWidth = "+nextWidth);
-        System.out.println("nextHeight = "+nextHeight);
-        System.out.println("lastWidth = "+lastWidth);
-        System.out.println("lastHeight = "+lastHeight);
-        System.out.println();
+//        System.out.println();
+//        System.out.println("nextWidth = "+nextWidth);
+//        System.out.println("nextHeight = "+nextHeight);
+//        System.out.println("lastWidth = "+lastWidth);
+//        System.out.println("lastHeight = "+lastHeight);
+//        System.out.println("lastX = "+lastX);
+//        System.out.println("lastY = "+lastY);
+//        System.out.println();
 
         contentTab.clear();
         contentTab.add(next).expandX().fillX().left();
@@ -156,18 +172,46 @@ public class TabWindow extends Table {
 
             for (Actor actualActor : orderedActors){
                 if (visible_actors.get(actualActor)){
-                    buttonTab.add((Button)actualActor);
+                    buttonTab.add((Button)actualActor).padLeft(1).padTop(1);
                 }
             }
-//            this.setPositionWindow(lastWidth,lastHeight,lastX,lastY);
+            this.setPositionWindow(lastWidth,lastHeight,lastX,lastY);
         }
     }
 
     private void setPositionWindow(float lastWidth,float lastHeight,float lastX,float lastY){
         float actualWidth = this.getPrefWidth();
         float actualHeight = this.getPrefHeight();
-        float actualX = lastX + (int) (actualWidth-lastWidth)/2;
-        float actualY = lastY + (int) (lastHeight-actualHeight)/2;
+        float actualX = lastX;
+        float actualY = lastY;
+
+        if ((actualWidth-lastWidth)%2==0){
+            actualX += (actualWidth-lastWidth)/2;
+        }else if (actualWidth%2==0 && lastWidth%2==1){
+            actualX += (actualWidth-lastWidth+1)/2;
+        }else if (actualWidth%2==1 && lastWidth%2==0){
+            actualX += (actualWidth-lastWidth-1)/2;
+        }
+
+        if ((lastHeight-actualHeight)%2==0){
+            actualY += (lastHeight-actualHeight)/2;
+        }else if (lastHeight%2==0 && actualHeight%2==1){
+            actualY += (lastHeight-actualHeight-1)/2;
+        }else if (lastHeight%2==1 && actualHeight%2==0){
+            actualY += (lastHeight-actualHeight+1)/2;
+        }
+
+//        System.out.println();
+//        System.out.println("actualWidth = "+actualWidth);
+//        System.out.println("actualHeight = "+actualHeight);
+//        System.out.println("lastWidth = "+lastWidth);
+//        System.out.println("lastHeight = "+lastHeight);
+//        System.out.println("lastX = "+lastX);
+//        System.out.println("lastY = "+lastY);
+//        System.out.println("actualX = "+actualX);
+//        System.out.println("actualY = "+actualY);
+//        System.out.println();
+
         this.setPosition(actualX,actualY);
     }
 }

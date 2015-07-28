@@ -42,7 +42,6 @@ public class Dpe implements EventListener {
     private HashMap<IfcDoor, HashMap<EventType, Object>> doors_properties = new HashMap<IfcDoor, HashMap<EventType, Object>>();
     private HashMap<EventType,Object> general_properties = new HashMap<EventType,Object>();
     private HashMap<EventType,Object> chauffage_properties = new HashMap<EventType,Object>();
-    private HashMap<DpePropertiesEnum,Layout> sauvegarde_layout = new HashMap<DpePropertiesEnum,Layout>();
     private Collection<IfcWallStandardCase> wallCollection;
     private Collection<IfcSlab> slabCollection;
     private Collection<IfcWindow> windowCollection;
@@ -111,6 +110,8 @@ public class Dpe implements EventListener {
         SH = ifcHelper.calculSurfaceHabitable();
         PER = ifcHelper.calculPerimetreBatiment();
         EventManager.getInstance().addListener(Channel.DPE, this);
+//
+        general_properties.put(DpeEvent.TYPE_BATIMENT,TypeBatimentEnum.MAISON);
     }
 
     /*---------------------------------Calculateur DPE-------------------------------------------*/
@@ -394,26 +395,16 @@ public class Dpe implements EventListener {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), false);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("departement_batiment"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("annee_construction"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("energie_construction"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_ventilation"), true);
-
                             } else {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("departement_batiment"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("annee_construction"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("energie_construction"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_ventilation"), true);
                             }
-                            sauvegarde_layout.put(DpePropertiesEnum.GENERAL,layout);
                             general_properties.put(DpeEvent.TYPE_BATIMENT, typeBatiment);
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TypeBatimentEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.TYPE_BATIMENT)){
+                            if (general_properties.containsKey(DpeEvent.TYPE_BATIMENT)) {
                                 type = (TypeBatimentEnum) general_properties.get(DpeEvent.TYPE_BATIMENT);
                             }
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();

@@ -251,7 +251,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     tb.remove();
                 tb = dpeui.getPropertyWindow(DpeEvent.INFOS_GENERALES);
                 if (tb != null) {
-                    tb.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() - 100);
+                    if(!dpeui.getWasCreated()){
+                        tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 100);
+                    }
                     stageMenu.addActor(tb);
                 }
             }
