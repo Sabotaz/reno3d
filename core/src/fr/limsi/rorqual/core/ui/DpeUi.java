@@ -44,7 +44,7 @@ public class DpeUi  {
             Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
             return a;
         }
-        if(o.equals(DpeEvent.INFOS_GENERALES)){
+        if(o == DpeEvent.INFOS_GENERALES){
             Actor a = null;
             if (!sauvegarde_layout.containsKey(DpePropertiesEnum.GENERAL)){
                 Layout l = Layout.fromJson("data/ui/layout/informationsGenerales.json", null);
@@ -57,7 +57,7 @@ public class DpeUi  {
             }
             return a;
         }
-        if(o.equals(DpeEvent.INFOS_CHAUFFAGE)){
+        if(o == DpeEvent.INFOS_CHAUFFAGE){
             Actor a = Layout.fromJson("data/ui/layout/chauffageProperties.json", null).getRoot();
             return a;
         }
