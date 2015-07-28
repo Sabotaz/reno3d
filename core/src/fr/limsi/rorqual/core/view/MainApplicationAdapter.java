@@ -57,6 +57,8 @@ import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.ui.DpeUi;
+import fr.limsi.rorqual.core.ui.Layout;
+import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.Popup;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
@@ -96,8 +98,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ModelContainer sun;
     private ModelContainer pin;
     private Vector3 decal_pos;
-    private Actor tb;
     PerspectiveCameraUpdater cam_updater;
+    private MainUiControleur mainUiControleur;
 
     @Override
 	public void create () {
@@ -186,131 +188,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         /*** On autorise les inputs en entrée ***/
         Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, cam_updater));
 
-        Table tableStage = new Table();
-
-        /*** Ajout du bouton EXIT ***/
-        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
-        buttonExit = new TextButton("EXIT", textButtonStyle);
-        buttonExit.setName("EXIT");
-        buttonExit.setSize(100, 40);
-        buttonExit.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
-
-        /*** Ajout du bouton MUR ***/
-        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
-        final TextButton buttonMur = new TextButton("MUR", textButtonStyle);
-        buttonMur.setName("MUR");
-        buttonMur.setSize(100, 40);
-        buttonMur.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight()));
-        buttonMur.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (buttonMur.isChecked())
-                    Logic.getInstance().startWall();
-                else
-                    Logic.getInstance().stop();
-            }
-        });
-
-        /*** Ajout du bouton fenetre ***/
-        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
-        final TextButton buttonFenetre = new TextButton("FENÊTRE", textButtonStyle);
-        buttonFenetre.setName("FENÊTRE");
-        buttonFenetre.setSize(100, 40);
-        buttonFenetre.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()), (Gdx.graphics.getHeight() - buttonExit.getHeight()));
-        buttonFenetre.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (buttonFenetre.isChecked())
-                    Logic.getInstance().startFenetre();
-                else
-                    Logic.getInstance().stop();
-            }
-        });
-
         state = new DpeStateUpdater(modelGraph);
 
-        dpeui = new DpeUi(stageMenu);
-        dpe = new Dpe(stageMenu);
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/ui/ui_001.atlas"));
-        TextureAtlas.AtlasRegion region = atlas.findRegion("dpe");
-        TextureRegionDrawable dpe_drawable = new TextureRegionDrawable(region);
-        Drawable dpe_drawable2 = dpe_drawable.tint(new Color(0.8f, 0.8f, 0.8f, 1));
-        //NinePatch patch = atlas.createPatch("wall");
+        dpe = new Dpe();
 
-        TextButton.TextButtonStyle textButtonStyle2 = new TextButton.TextButtonStyle(dpe_drawable,dpe_drawable2,null,fontBlack);
-        /*** Ajout du bouton DPE ***/
-        buttonDPE = new Button(textButtonStyle2);
-        buttonDPE.setName("DPE");
-//        buttonDPE.setSize(150, 150);
-//        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
-        buttonDPE.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (tb != null)
-                    tb.remove();
-                tb = dpeui.getPropertyWindow(DpeEvent.INFOS_GENERALES);
-                if (tb != null) {
-                    if(!dpeui.getWasCreated()){
-                        tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 100);
-                    }
-                    stageMenu.addActor(tb);
-                }
-            }
-        });
+        mainUiControleur = MainUiControleur.getInstance();
+        mainUiControleur.setStage(stageMenu);
 
-        region = atlas.findRegion("chauffage");
-        TextureRegionDrawable chauffage_drawable = new TextureRegionDrawable(region);
-        Drawable chauffage_drawable2 = chauffage_drawable.tint(new Color(0.8f, 0.8f, 0.8f, 1));
-
-        textButtonStyle2 = new TextButton.TextButtonStyle(chauffage_drawable,chauffage_drawable2,null,fontBlack);
-        /*** Ajout du bouton Chauffage ***/
-        Button buttonChauffage = new Button(textButtonStyle2);
-        buttonChauffage.setName("Chauffage");
-
-        buttonChauffage.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (tb != null)
-                    tb.remove();
-                tb = dpeui.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
-                if (tb != null) {
-                    tb.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() - 100);
-                    stageMenu.addActor(tb);
-                }
-            }
-        });
-
-        /*** Ajout du bouton Eau chaude sanitaire ***/
-        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
-        TextButton buttonECS = new TextButton("ECS", textButtonStyle);
-        buttonECS.setName("ECS");
-        buttonECS.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("coucou");
-            }
-        });
-
-        /*** Ajout du bouton Électroménager ***/
-        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
-        TextButton buttonElectromenager = new TextButton("Électroménager", textButtonStyle);
-        buttonElectromenager.setName("Électroménager");
-        buttonElectromenager.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("coucou");
-            }
-        });
-
-        tableStage.add(buttonExit).right().width(150).padTop(10).padRight(10).row();
-        tableStage.add(buttonMur).right().width(150).padTop(10).padRight(10).row();
-        tableStage.add(buttonFenetre).right().width(150).padTop(10).padRight(10).row();
-        tableStage.add(buttonDPE).right().size(150, 150).padTop(10).padRight(10).row();
-        tableStage.add(buttonChauffage).right().size(150, 150).padTop(10).padRight(10).row();
-        tableStage.add(buttonECS).right().width(200).padTop(10).padRight(10).row();
-        tableStage.add(buttonElectromenager).right().width(200).padTop(10).padRight(10).row();
-        float tableWidth = tableStage.getPrefWidth();
-        float tableHeight = tableStage.getPrefHeight();
-        tableStage.setPosition(Gdx.graphics.getWidth() - tableWidth / 2, Gdx.graphics.getHeight() - tableHeight / 2);
-        stageMenu.addActor(tableStage);
+        stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
 
 
         /*** test affichage fenetre ***/
@@ -377,8 +262,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         modelBatch.end();
 
         //Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
-
-        stageMenu.draw();
+        synchronized (stageMenu) {
+            stageMenu.draw();
+        }
 
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 	}
@@ -420,6 +306,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             case Input.Keys.C:
                 ncam++;
                 modelGraph.setCamera(cameras[ncam % cameras.length]);
+                ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(cameras[ncam % cameras.length]);
                 Logic.getInstance().setCamera(cameras[ncam % cameras.length]);
                 return true;
             case Input.Keys.ESCAPE:
@@ -482,8 +369,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if (!dragged) {
-            if (tb != null)
-                tb.remove();
+
+            mainUiControleur.removeTb();
             if (selected != null) {
                 selected.removeColor();
                 //selected.remove(pin);
@@ -495,11 +382,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
                 //System.out.println("TOUCH: " + selected.getUserData());
                 selected.setColor(Color.YELLOW);
-                tb = dpeui.getPropertyWindow(selected.getUserData());
-                if (tb != null) {
-                    tb.setPosition(500,500);
-                    stageMenu.addActor(tb);
-                }
+                mainUiControleur.addTb(dpeui.getPropertyWindow(selected.getUserData()));
                 //selected.add(pin);
                 //pin.transform.setToTranslation(selected.getTop());
             }

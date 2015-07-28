@@ -1,0 +1,131 @@
+{
+  "type": "Table",
+  "name": "Main UI",
+  "id": "main_ui",
+  "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+  "event": "fr.limsi.rorqual.core.event.UiEvent.BUTTON_CLICKED",
+  "position": "top-right",
+  "align": "right",
+  "content": [
+    {
+      "type": "ButtonGroup",
+      "content": [
+        {
+          "type": "TextButton",
+          "text": "EXIT",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.EXIT",
+          "height": 40,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            null,
+            "default.fnt"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ButtonGroup",
+      "content": [
+        {
+          "type": "TextButton",
+          "text": "MUR",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
+          "height": 40,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            "skin:uiskin.json:default-round-down",
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "FENETRE",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.FENETRE",
+          "height": 40,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            "skin:uiskin.json:default-round-down",
+            "default.fnt"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ButtonGroup",
+      "content": [
+        {
+          "type": "Button",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.DPE",
+          "name": "dpe",
+          "height": 120,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "atlas:ui_001.atlas:dpe",
+            "atlas:ui_001.atlas:dpe:tint:CCCCCC",
+            "atlas:ui_001.atlas:dpe:tint:CCCCCC",
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "Button",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.CHAUFFAGE",
+          "name": "chauffage",
+          "height": 120,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "atlas:ui_001.atlas:chauffage",
+            "atlas:ui_001.atlas:chauffage:tint:CCCCCC",
+            "atlas:ui_001.atlas:chauffage:tint:CCCCCC",
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "ECS",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.ECS",
+          "height": 40,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            "skin:uiskin.json:default-round-down",
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "Électroménager",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.ELECTROMENAGER",
+          "height": 40,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            "skin:uiskin.json:default-round-down",
+            "default.fnt"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -72,7 +74,7 @@ public class Layout {
             EventManager.getInstance().addListener(channel, Updater.this);
             HashMap<String,Object> items = new HashMap<String, Object>();
             items.put("userObject",userObject);
-            items.put("eventRequest",EventRequest.GET_STATE);
+            items.put("eventRequest", EventRequest.GET_STATE);
             items.put("layout", Layout.this);
             Event ev = new Event(eventType, items);
             EventManager.getInstance().put(channel, ev);
@@ -160,7 +162,6 @@ public class Layout {
     private Actor getActor(JsonValue json, Updater parent_updater) {
         Actor actor;
         Updater updater = parent_updater;
-
         if (json.has("event") && json.has("channel")) {
             Object event_value = getEnumConstant(json, "event");
             Object channel_value = getEnumConstant(json, "channel");
@@ -185,6 +186,9 @@ public class Layout {
                 break;
             case "TextButton":
                 actor = makeTextButton(json, updater);
+                break;
+            case "Button":
+                actor = makeButton(json, updater);
                 break;
             case "ImageButton":
                 actor = makeImageButton(json, updater);
@@ -229,16 +233,77 @@ public class Layout {
 
         Table table = new Table();
         table.setName(json.getString("name", ""));
+
+        String align = json.getString("align", "left");
+        switch (align) {
+            case "left":
+                table.align(Align.left);
+                break;
+            case "right":
+                table.align(Align.right);
+                break;
+            case "center":
+                table.align(Align.center);
+                break;
+        }
+
+        boolean row = true;
+        String layout = json.getString("layout", "row");
+        if (layout.equals("column"))
+            row = false;
+
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;
             int i = 0;
             while ((json_child = json.get("content").get(i)) != null) {
-                if ((child = getActor(json_child, updater)) != null)
-                    table.add(child).expandX().fillX().left();
+                if ((child = getActor(json_child, updater)) != null) {
+                    Cell c = table.add(child);
+                    c.expandX().fillX().left();
+
+                    if (json_child.has("padTop"))
+                        c.padTop(json_child.getFloat("padTop"));
+                    if (json_child.has("padBottom"))
+                        c.padBottom(json_child.getFloat("padBottom"));
+                    if (json_child.has("padLeft"))
+                        c.padLeft(json_child.getFloat("padLeft"));
+                    if (json_child.has("padRight"))
+                        c.padRight(json_child.getFloat("padRight"));
+
+                    if (row)
+                        c.left().row();
+                }
                 i++;
             }
         }
+
+        String position = json.getString("position", "top-left");
+        String[] xy = position.split("-");
+
+        switch (xy[0]) {
+            case "top":
+                table.setY(Gdx.graphics.getHeight() - table.getPrefHeight() / 2);
+                break;
+            case "bottom":
+                table.setY(0);
+                break;
+            case "center":
+                table.setY(Gdx.graphics.getHeight() / 2);
+                break;
+        }
+
+        switch (xy[1]) {
+            case "left":
+                table.setX(0);
+                break;
+            case "right":
+                table.setX(Gdx.graphics.getWidth() - table.getPrefWidth());
+                break;
+            case "center":
+                table.setX(Gdx.graphics.getWidth()/2);
+                break;
+        }
+
         return table;
     }
 
@@ -265,6 +330,7 @@ public class Layout {
                 break;
         }
 
+
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;
@@ -272,10 +338,22 @@ public class Layout {
             while ((json_child = json.get("content").get(i)) != null) {
                 if ((child = getActor(json_child, updater)) != null) {
                     if (child instanceof Button) {
+
+                        Cell c = table.add(child).pad(1);
                         if (row)
-                            table.add(child).left().pad(1).row();
-                        else
-                            table.add(child).pad(1);
+                            c.left().row();
+
+                        c.size(child.getWidth(), child.getHeight());
+
+                        if (json_child.has("padTop"))
+                            c.padTop(json_child.getFloat("padTop"));
+                        if (json_child.has("padBottom"))
+                            c.padBottom(json_child.getFloat("padBottom"));
+                        if (json_child.has("padLeft"))
+                            c.padLeft(json_child.getFloat("padLeft"));
+                        if (json_child.has("padRight"))
+                            c.padRight(json_child.getFloat("padRight"));
+
                         buttons.add((Button)child);
                     }
                 }
@@ -329,10 +407,65 @@ public class Layout {
         return table;
     }
 
+    private Actor makeButton(JsonValue json, Updater updater) {
+
+        final Button button;
+
+        if (json.has("style")) {
+            JsonValue style_list = json.get("style");
+            TextButton.TextButtonStyle style = StyleFactory.getTextButtonStyle(style_list.asStringArray());
+            button = new Button(style);
+        } else {
+            button = new Button();
+        }
+
+        if (json.has("height") && json.has("width"))
+            button.setSize(json.getFloat("width"), json.getFloat("height"));
+
+        if (updater != null & json.has("value")) {
+            Object value_value = getEnumConstant(json, "value");
+
+            if (updater.getDefaultValue() == value_value) {
+                button.setChecked(true);
+            }
+            if (value_value != null) {
+                final Object last_value = value_value;
+                final Updater last_updater = updater;
+                button.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        System.out.println("click");
+                        HashMap<String,Object> items = new HashMap<String, Object>();
+                        items.put("userObject",userObject);
+                        items.put("eventRequest",EventRequest.UPDATE_STATE);
+                        items.put("lastValue",last_value);
+                        items.put("layout", Layout.this);
+                        items.put("button",button);
+                        last_updater.trigger(items);
+                    }
+                });
+            }
+        }
+        return button;
+    }
+
     private Actor makeTextButton(JsonValue json, Updater updater) {
-        TextButton.TextButtonStyle tbs = skin.get("toggle", TextButton.TextButtonStyle.class);
-        tbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
-        TextButton textButton = new TextButton(json.getString("text", ""), tbs);
+        final TextButton textButton;
+        TextButton.TextButtonStyle tbs;
+
+        if (json.has("style")) {
+            JsonValue style_list = json.get("style");
+            tbs = StyleFactory.getTextButtonStyle(style_list.asStringArray());
+
+        } else {
+            tbs = skin.get("toggle", TextButton.TextButtonStyle.class);
+            tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+        }
+
+        textButton = new TextButton(json.getString("text", ""), tbs);
+
+        if (json.has("height") && json.has("width"))
+            textButton.setSize(json.getFloat("width"), json.getFloat("height"));
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -352,6 +485,7 @@ public class Layout {
                         items.put("eventRequest",EventRequest.UPDATE_STATE);
                         items.put("lastValue",last_value);
                         items.put("layout",Layout.this);
+                        items.put("button",textButton);
                         last_updater.trigger(items);
                     }
                 });
@@ -367,22 +501,35 @@ public class Layout {
 
         final ImageButton imageButton = new ImageButton(image.getDrawable()) {
 
-            Texture clicked_texture;
+            Texture clicked_texture = null;
             {
-                Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
+                final Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
                 p.setColor(Color.RED);
                 p.drawRectangle(0, 0, (int)this.getWidth(),(int)this.getHeight());
                 p.drawRectangle(1, 1, (int)this.getWidth()-2,(int)this.getHeight()-2);
-                clicked_texture = new Texture(p);
+
+                // run on UI thread
+                Runnable runable = new Runnable() {
+                    @Override
+                    public void run() {
+                        clicked_texture = new Texture(p);
+                    }
+                };
+
+                Gdx.app.postRunnable(runable);
             }
 
             @Override
             public void draw(Batch batch, float arg1) {
                 super.draw(batch, arg1);
-                if (this.isChecked())
+                if (this.isChecked() && clicked_texture != null)
                     batch.draw(clicked_texture, this.getX(), this.getY());
             }
         };
+
+
+        if (json.has("height") && json.has("width"))
+            imageButton.setSize(json.getFloat("width"), json.getFloat("height"));
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -402,6 +549,7 @@ public class Layout {
                         items.put("eventRequest",EventRequest.UPDATE_STATE);
                         items.put("lastValue",last_value);
                         items.put("layout",Layout.this);
+                        items.put("button",imageButton);
                         last_updater.trigger(items);
                     }
                 });

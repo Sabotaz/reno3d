@@ -18,20 +18,9 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
 
 public class DpeUi  {
 
-    private Stage stage;
-    private AssetManager assets;
-    private HashMap<DpePropertiesEnum,Layout> sauvegarde_layout = new HashMap<DpePropertiesEnum,Layout>();
-    private boolean wasCreated;
+    private static HashMap<DpePropertiesEnum,Layout> sauvegarde_layout = new HashMap<DpePropertiesEnum,Layout>();
 
-    public DpeUi(Stage stage2d) {
-        stage = stage2d;
-        assets = AssetManager.getInstance();
-    }
-
-    public boolean getWasCreated() {return wasCreated;}
-
-    public Actor getPropertyWindow(Object o) {
-        wasCreated=false;
+    public static Actor getPropertyWindow(Object o) {
         if (o instanceof IfcWallStandardCase) {
             Actor a = Layout.fromJson("data/ui/layout/wallProperties.json", o).getRoot();
             return a;
@@ -51,7 +40,6 @@ public class DpeUi  {
                 a = l.getRoot();
                 sauvegarde_layout.put(DpePropertiesEnum.GENERAL,l);
             }else{
-                wasCreated=true;
                 Layout l = sauvegarde_layout.get(DpePropertiesEnum.GENERAL);
                 a = l.getRoot();
             }

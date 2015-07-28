@@ -50,7 +50,6 @@ public class Dpe implements EventListener {
     /*** Attributs liés à l'interface graphique de libGDX ***/
     private Skin skin;
     private BitmapFont fontBlack, fontWhite;
-    private Stage stage;
     private TextButton.TextButtonStyle textButtonStyle;
 
     /*** Attributs liés au calcul du DPE ***/
@@ -95,14 +94,13 @@ public class Dpe implements EventListener {
     private double Sdep;
 
     /*** Constructeur ***/
-    public Dpe (Stage stageMenu) {
+    public Dpe () {
         fontBlack = new BitmapFont(Gdx.files.internal("data/font/black.fnt"));
         fontWhite = new BitmapFont(Gdx.files.internal("data/font/white.fnt"));
         skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
         textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
         ifcModel = IfcHolder.getInstance().getIfcModel();
         ifcHelper = new IfcHelper(ifcModel);
-        stage = stageMenu;
         wallCollection = ifcModel.getCollection(IfcWallStandardCase.class);
         slabCollection = ifcModel.getCollection(IfcSlab.class);
         windowCollection = ifcModel.getCollection(IfcWindow.class);
@@ -415,6 +413,7 @@ public class Dpe implements EventListener {
                                 EventManager.getInstance().put(Channel.DPE, e2);
 
                                 // wait for layout to be  populated
+                                /*
                                 while (!layout.getIsInitialised()){
                                     try {
                                         System.out.println("coucou");
@@ -432,7 +431,7 @@ public class Dpe implements EventListener {
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), false);
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
-                                }
+                                }*/
                             } else {
                                 System.out.println("PROPRIETE PAR DEFAUT NON PRESENTE !!!  ->  "+DpeEvent.TYPE_BATIMENT);
                             }

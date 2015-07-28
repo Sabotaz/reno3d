@@ -160,22 +160,24 @@ public class TabWindow extends Table {
 
     public void setTableDisabled(Actor table, boolean visibility) {
         if (reversed_tabs.containsKey(table)) {
-
             float lastWidth = this.getPrefWidth();
             float lastHeight = this.getPrefHeight();
             float lastX = this.getX();
             float lastY = this.getY();
             Button b = reversed_tabs.get(table);
-            visible_actors.put(b,visibility);
+            visible_actors.put(b, visibility);
 
-            buttonTab.clearChildren();
+            synchronized (MainUiControleur.getInstance().getStage()) {
+                buttonTab.clearChildren();
 
-            for (Actor actualActor : orderedActors){
-                if (visible_actors.get(actualActor)){
-                    buttonTab.add((Button)actualActor).padLeft(1).padTop(1);
+                for (Actor actualActor : orderedActors) {
+                    if (visible_actors.get(actualActor)) {
+                        buttonTab.add((Button) actualActor).padLeft(1).padTop(1);
+                    }
                 }
             }
-            this.setPositionWindow(lastWidth,lastHeight,lastX,lastY);
+
+            this.setPositionWindow(lastWidth, lastHeight, lastX, lastY);
         }
     }
 

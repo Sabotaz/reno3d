@@ -25,7 +25,7 @@ public class AssetManager {
     private AssetManager assetManager = null;
     private DefaultMutableTreeNode spatialStructureTreeNode = new DefaultMutableTreeNode("no model loaded");
 
-    public AssetManager() {}
+    private AssetManager() {}
 
     /** Holder */
     private static class AssetManagerHolder
@@ -42,6 +42,7 @@ public class AssetManager {
 
     public void init() {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/ui/ui_001.atlas"));
+        assets.put("ui_001.atlas", atlas);
         TextureAtlas.AtlasRegion region = atlas.findRegion("ask");
         System.out.println(atlas.getRegions().size);
         System.out.println(atlas.getTextures().size);
@@ -56,6 +57,8 @@ public class AssetManager {
         assets.put("black.fnt", new BitmapFont(Gdx.files.internal("data/font/black.fnt")));
 
         assets.put("uiskin", new Skin(Gdx.files.internal("data/ui/uiskin.json")));
+        assets.put("uiskin.json", new Skin(Gdx.files.internal("data/ui/uiskin.json")));
+
         assets.put("textureStartDpe", new Texture(Gdx.files.internal("data/img/dpe/StartDpe.png")));
         assets.put("textureTypeBatiment1", new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/maison.png")));
         assets.put("textureTypeBatiment2", new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/appt.png")));
