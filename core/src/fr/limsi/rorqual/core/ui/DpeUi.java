@@ -3,6 +3,9 @@ package fr.limsi.rorqual.core.ui;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import java.util.HashMap;
+
+import fr.limsi.rorqual.core.dpe.enums.DpePropertiesEnum;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
@@ -17,6 +20,7 @@ public class DpeUi  {
 
     private Stage stage;
     private AssetManager assets;
+    private HashMap<DpePropertiesEnum,Layout> sauvegarde_layout = new HashMap<DpePropertiesEnum,Layout>();
 
     public DpeUi(Stage stage2d) {
         stage = stage2d;
@@ -37,7 +41,15 @@ public class DpeUi  {
             return a;
         }
         if(o.equals(DpeEvent.INFOS_GENERALES)){
-            Actor a = Layout.fromJson("data/ui/layout/informationsGenerales.json", null).getRoot();
+            Actor a = null;
+            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.GENERAL)){
+                Layout l = Layout.fromJson("data/ui/layout/informationsGenerales.json", null);
+                a = l.getRoot();
+                sauvegarde_layout.put(DpePropertiesEnum.GENERAL,l);
+            }else{
+                Layout l = sauvegarde_layout.get(DpePropertiesEnum.GENERAL);
+                a = l.getRoot();
+            }
             return a;
         }
         if(o.equals(DpeEvent.INFOS_CHAUFFAGE)){

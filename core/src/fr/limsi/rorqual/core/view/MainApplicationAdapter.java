@@ -189,6 +189,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Table tableStage = new Table();
 
         /*** Ajout du bouton EXIT ***/
+        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
         buttonExit = new TextButton("EXIT", textButtonStyle);
         buttonExit.setName("EXIT");
         buttonExit.setSize(100, 40);
@@ -196,7 +197,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
-
         });
 
         /*** Ajout du bouton MUR ***/
@@ -239,9 +239,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Drawable dpe_drawable2 = dpe_drawable.tint(new Color(0.8f, 0.8f, 0.8f, 1));
         //NinePatch patch = atlas.createPatch("wall");
 
-        textButtonStyle = new TextButton.TextButtonStyle(dpe_drawable,dpe_drawable2,null,fontBlack);
+        TextButton.TextButtonStyle textButtonStyle2 = new TextButton.TextButtonStyle(dpe_drawable,dpe_drawable2,null,fontBlack);
         /*** Ajout du bouton DPE ***/
-        buttonDPE = new Button(textButtonStyle);
+        buttonDPE = new Button(textButtonStyle2);
         buttonDPE.setName("DPE");
 //        buttonDPE.setSize(150, 150);
 //        buttonDPE.setPosition((Gdx.graphics.getWidth() - buttonDPE.getWidth()), (Gdx.graphics.getHeight() - buttonDPE.getHeight() - buttonExit.getHeight()));
@@ -261,9 +261,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         TextureRegionDrawable chauffage_drawable = new TextureRegionDrawable(region);
         Drawable chauffage_drawable2 = chauffage_drawable.tint(new Color(0.8f, 0.8f, 0.8f, 1));
 
-        textButtonStyle = new TextButton.TextButtonStyle(chauffage_drawable,chauffage_drawable2,null,fontBlack);
+        textButtonStyle2 = new TextButton.TextButtonStyle(chauffage_drawable,chauffage_drawable2,null,fontBlack);
         /*** Ajout du bouton Chauffage ***/
-        Button buttonChauffage = new Button(textButtonStyle);
+        Button buttonChauffage = new Button(textButtonStyle2);
         buttonChauffage.setName("Chauffage");
 
         buttonChauffage.addListener(new ClickListener() {
@@ -278,11 +278,33 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             }
         });
 
+        /*** Ajout du bouton Eau chaude sanitaire ***/
+        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
+        TextButton buttonECS = new TextButton("ECS", textButtonStyle);
+        buttonECS.setName("ECS");
+        buttonECS.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("coucou");
+            }
+        });
+
+        /*** Ajout du bouton Électroménager ***/
+        textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),skin.getDrawable("default-round-down"),fontBlack);
+        TextButton buttonElectromenager = new TextButton("Électroménager", textButtonStyle);
+        buttonElectromenager.setName("Électroménager");
+        buttonElectromenager.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("coucou");
+            }
+        });
+
         tableStage.add(buttonExit).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonMur).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonFenetre).right().width(150).padTop(10).padRight(10).row();
         tableStage.add(buttonDPE).right().size(150, 150).padTop(10).padRight(10).row();
         tableStage.add(buttonChauffage).right().size(150, 150).padTop(10).padRight(10).row();
+        tableStage.add(buttonECS).right().width(200).padTop(10).padRight(10).row();
+        tableStage.add(buttonElectromenager).right().width(200).padTop(10).padRight(10).row();
         float tableWidth = tableStage.getPrefWidth();
         float tableHeight = tableStage.getPrefHeight();
         tableStage.setPosition(Gdx.graphics.getWidth() - tableWidth / 2, Gdx.graphics.getHeight() - tableHeight / 2);
