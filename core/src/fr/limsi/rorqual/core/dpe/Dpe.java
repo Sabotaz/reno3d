@@ -404,8 +404,25 @@ public class Dpe implements EventListener {
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TypeBatimentEnum type = TypeBatimentEnum.APPARTEMENT;
+                            while (!layout.getIsInitialised()){
+                                try {
+                                    layout = (Layout)items.get("layout");
+                                    Thread.sleep(10);
+                                } catch (InterruptedException ie) {
+
+                                }
+                            }
                             if (general_properties.containsKey(DpeEvent.TYPE_BATIMENT)) {
                                 type = (TypeBatimentEnum) general_properties.get(DpeEvent.TYPE_BATIMENT);
+                                if (type.equals(TypeBatimentEnum.MAISON)) {
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), true);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), true);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), false);
+                                } else {
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), false);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
+                                }
                             }
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);

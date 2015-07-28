@@ -56,6 +56,9 @@ public class Layout {
 
     Actor root = null;
 
+    private boolean isInitialised = false;
+    public boolean getIsInitialised(){return this.isInitialised;}
+
     private class Updater implements EventListener {
         private Channel channel;
         private EventType eventType;
@@ -70,6 +73,7 @@ public class Layout {
             HashMap<String,Object> items = new HashMap<String, Object>();
             items.put("userObject",userObject);
             items.put("eventRequest",EventRequest.GET_STATE);
+            items.put("layout", Layout.this);
             Event ev = new Event(eventType, items);
             EventManager.getInstance().put(channel, ev);
         }
@@ -110,6 +114,7 @@ public class Layout {
     private Layout(String name, Object o) {
         userObject = o;
         root = readLayout(name);
+        this.isInitialised = true;
     }
 
     public static Layout fromJson(String name, Object userObject) {
