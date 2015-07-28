@@ -403,17 +403,26 @@ public class Dpe implements EventListener {
                             general_properties.put(DpeEvent.TYPE_BATIMENT, typeBatiment);
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeBatimentEnum type = TypeBatimentEnum.APPARTEMENT;
-                            while (!layout.getIsInitialised()){
-                                try {
-                                    layout = (Layout)items.get("layout");
-                                    Thread.sleep(10);
-                                } catch (InterruptedException ie) {
 
-                                }
-                            }
                             if (general_properties.containsKey(DpeEvent.TYPE_BATIMENT)) {
-                                type = (TypeBatimentEnum) general_properties.get(DpeEvent.TYPE_BATIMENT);
+                                TypeBatimentEnum type = (TypeBatimentEnum) general_properties.get(DpeEvent.TYPE_BATIMENT);
+
+                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                                currentItems.put("lastValue",type);
+                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                                Event e2 = new Event(DpeEvent.TYPE_BATIMENT, currentItems);
+                                EventManager.getInstance().put(Channel.DPE, e2);
+
+                                // wait for layout to be  populated
+                                while (!layout.getIsInitialised()){
+                                    try {
+                                        System.out.println("coucou");
+                                        Thread.sleep(10);
+                                    } catch (InterruptedException ie) {
+
+                                    }
+                                }
+
                                 if (type.equals(TypeBatimentEnum.MAISON)) {
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), true);
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), true);
@@ -423,12 +432,15 @@ public class Dpe implements EventListener {
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
                                 }
+                            } else {
+
+                                TypeBatimentEnum type = TypeBatimentEnum.APPARTEMENT;
+                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                                currentItems.put("lastValue",type);
+                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                                Event e2 = new Event(DpeEvent.TYPE_BATIMENT, currentItems);
+                                EventManager.getInstance().put(Channel.DPE, e2);
                             }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            Event e2 = new Event(DpeEvent.TYPE_BATIMENT, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
