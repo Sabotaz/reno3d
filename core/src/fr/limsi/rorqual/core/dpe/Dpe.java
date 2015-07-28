@@ -110,8 +110,8 @@ public class Dpe implements EventListener {
         SH = ifcHelper.calculSurfaceHabitable();
         PER = ifcHelper.calculPerimetreBatiment();
         EventManager.getInstance().addListener(Channel.DPE, this);
-//
-//        general_properties.put(DpeEvent.TYPE_BATIMENT,TypeBatimentEnum.MAISON);
+
+        general_properties.put(DpeEvent.TYPE_BATIMENT,TypeBatimentEnum.MAISON);
     }
 
     /*---------------------------------Calculateur DPE-------------------------------------------*/
@@ -386,6 +386,7 @@ public class Dpe implements EventListener {
                 Object o = e.getUserObject();
                 switch (event) {
                     case TYPE_BATIMENT: {
+
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         Layout layout = (Layout)items.get("layout");
@@ -433,13 +434,7 @@ public class Dpe implements EventListener {
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
                                 }
                             } else {
-
-                                TypeBatimentEnum type = TypeBatimentEnum.APPARTEMENT;
-                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                                currentItems.put("lastValue",type);
-                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                Event e2 = new Event(DpeEvent.TYPE_BATIMENT, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                System.out.println("PROPRIETE PAR DEFAUT NON PRESENTE !!!  ->  "+DpeEvent.TYPE_BATIMENT);
                             }
                         }
                         break;
