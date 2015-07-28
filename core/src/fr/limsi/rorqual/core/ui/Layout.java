@@ -66,10 +66,10 @@ public class Layout {
         public Updater(Channel c, EventType e) {
             channel = c;
             eventType = e;
+            EventManager.getInstance().addListener(channel, Updater.this);
             HashMap<String,Object> items = new HashMap<String, Object>();
             items.put("userObject",userObject);
             items.put("eventRequest",EventRequest.GET_STATE);
-            EventManager.getInstance().addListener(channel, Updater.this);
             Event ev = new Event(eventType, items);
             EventManager.getInstance().put(channel, ev);
         }

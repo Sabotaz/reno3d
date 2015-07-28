@@ -111,7 +111,7 @@ public class Dpe implements EventListener {
         PER = ifcHelper.calculPerimetreBatiment();
         EventManager.getInstance().addListener(Channel.DPE, this);
 //
-        general_properties.put(DpeEvent.TYPE_BATIMENT,TypeBatimentEnum.MAISON);
+//        general_properties.put(DpeEvent.TYPE_BATIMENT,TypeBatimentEnum.MAISON);
     }
 
     /*---------------------------------Calculateur DPE-------------------------------------------*/
@@ -403,7 +403,7 @@ public class Dpe implements EventListener {
                             general_properties.put(DpeEvent.TYPE_BATIMENT, typeBatiment);
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeBatimentEnum type = null;
+                            TypeBatimentEnum type = TypeBatimentEnum.APPARTEMENT;
                             if (general_properties.containsKey(DpeEvent.TYPE_BATIMENT)) {
                                 type = (TypeBatimentEnum) general_properties.get(DpeEvent.TYPE_BATIMENT);
                             }
