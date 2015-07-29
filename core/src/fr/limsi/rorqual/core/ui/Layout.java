@@ -349,7 +349,7 @@ public class Layout {
                 i++;
             }
         }
-        buttons.setMinCheckCount(1);
+        buttons.setMinCheckCount(json.getInt("minChecked", 1));
         return table;
     }
 

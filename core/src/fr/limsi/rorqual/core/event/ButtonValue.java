@@ -7,6 +7,7 @@ public enum ButtonValue {
     EXIT,
     MUR,
     FENETRE,
+    PORTE,
     DPE,
     CHAUFFAGE,
     ECS,

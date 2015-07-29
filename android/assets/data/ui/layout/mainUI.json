@@ -29,6 +29,7 @@
     },
     {
       "type": "ButtonGroup",
+      "minChecked": 0,
       "content": [
         {
           "type": "TextButton",
@@ -49,6 +50,21 @@
           "type": "TextButton",
           "text": "FENETRE",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.FENETRE",
+          "height": 40,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            "skin:uiskin.json:default-round-down",
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "PORTE",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.PORTE",
           "height": 40,
           "width": 120,
           "padTop": 10,

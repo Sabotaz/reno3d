@@ -2,19 +2,16 @@ package fr.limsi.rorqual.core.logic;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
-import fr.limsi.rorqual.core.model.Batiment;
+import fr.limsi.rorqual.core.model.Ouverture;
+import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
-import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
@@ -31,6 +28,7 @@ public class Logic implements InputProcessor {
         NONE,
         WALL,
         FENETRE,
+        PORTE,
         ;
     }
 
@@ -63,6 +61,10 @@ public class Logic implements InputProcessor {
         currentState = State.FENETRE;
     }
 
+    public void startPorte() {
+        currentState = State.PORTE;
+    }
+
     public void stop() {
         currentState = State.NONE;
     }
@@ -86,8 +88,8 @@ public class Logic implements InputProcessor {
     Vector3 end = new Vector3();
     boolean making_wall = false;
     Mur mur;
-    Fenetre fenetre;
-    boolean making_fenetre = false;
+    Ouverture ouverture;
+    boolean making_ouverture = false;
     Vector2 pos = new Vector2();
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -153,12 +155,12 @@ public class Logic implements InputProcessor {
             //modelGraph.getRoot().add(wall);
 
             return true;
-        } else if (currentState == State.FENETRE) {
+        } else if (currentState == State.FENETRE || currentState == State.PORTE) {
             Ray ray = camera.getPickRay(screenX, screenY);
             ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
             ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
             if (modelContainer == null) {
-                making_fenetre = false;
+                making_ouverture = false;
             } else if (modelContainer instanceof Mur) {
                 Mur mur = (Mur) modelContainer;
                 Vector3 intersection = mur.getIntersection();
@@ -166,13 +168,22 @@ public class Logic implements InputProcessor {
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
                 pos.x = v2.dot(v1);
-                fenetre = new Fenetre(mur, pos.x) {
-                    public void act() {
-                        super.act();
-                        setX(pos.x);
-                    }
-                };
-                making_fenetre = true;
+                if (currentState == State.FENETRE) {
+                    ouverture = new Fenetre(mur, pos.x) {
+                        public void act() {
+                            super.act();
+                            setX(pos.x);
+                        }
+                    };
+                } else {
+                    ouverture = new Porte(mur, pos.x) {
+                        public void act() {
+                            super.act();
+                            setX(pos.x);
+                        }
+                    };
+                }
+                making_ouverture = true;
             }
             return true;
         } else
@@ -190,12 +201,14 @@ public class Logic implements InputProcessor {
             }
             return true;
 
-        } else if (currentState == State.FENETRE && making_fenetre) {
-            Mur mur = fenetre.getMur();
-            mur.remove(fenetre);
-            fenetre.setMur(null);
-
-            new Fenetre(mur, pos.x);
+        } else if ((currentState == State.FENETRE || currentState == State.PORTE) && making_ouverture) {
+            Mur mur = ouverture.getMur();
+            mur.remove(ouverture);
+            ouverture.setMur(null);
+            if (currentState == State.FENETRE)
+                new Fenetre(mur, pos.x);
+            else if (currentState == State.PORTE)
+                new Porte(mur, pos.x);
             return true;
 
         } else if (currentState == State.NONE)
@@ -248,7 +261,7 @@ public class Logic implements InputProcessor {
                 end.set(start);
 
             return true;
-        } else if (currentState == State.FENETRE && making_fenetre) {
+        } else if ((currentState == State.FENETRE || currentState == State.PORTE) && making_ouverture) {
             Ray ray = camera.getPickRay(screenX, screenY);
             ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
             ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
@@ -261,7 +274,7 @@ public class Logic implements InputProcessor {
                 Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
                 Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
                 pos.x = v2.dot(v1);
-                fenetre.setMur(mur);
+                ouverture.setMur(mur);
             }
             return true;
         } else if (currentState == State.NONE) {

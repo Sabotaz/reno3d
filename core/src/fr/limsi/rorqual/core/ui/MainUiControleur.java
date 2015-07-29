@@ -98,6 +98,12 @@ public class MainUiControleur implements EventListener {
                             else
                                 Logic.getInstance().stop();
                             break;
+                        case PORTE:
+                            if (((Button) items.get("button")).isChecked())
+                                Logic.getInstance().startPorte();
+                            else
+                                Logic.getInstance().stop();
+                            break;
                         case DPE:
                             addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES));
                             break;
