@@ -327,9 +327,7 @@ public class Layout {
                 if ((child = getActor(json_child, updater)) != null) {
                     if (child instanceof Button) {
 
-                        Cell c = table.add(child).pad(1);
-                        if (row)
-                            c.left().row();
+                        Cell c = table.add(child);
 
                         c.size(child.getWidth(), child.getHeight());
 
@@ -341,6 +339,9 @@ public class Layout {
                             c.padLeft(json_child.getFloat("padLeft"));
                         if (json_child.has("padRight"))
                             c.padRight(json_child.getFloat("padRight"));
+
+                        if (row)
+                            c.left().row();
 
                         buttons.add((Button)child);
                     }
