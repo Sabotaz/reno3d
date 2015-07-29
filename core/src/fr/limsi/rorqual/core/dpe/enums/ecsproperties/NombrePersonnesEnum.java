@@ -31,8 +31,9 @@ public enum NombrePersonnesEnum {
         this.nombre=nb;
     }
 
-    public int getNombre(){
-        return this.nombre;
+    @Override
+    public String toString(){
+        return Integer.toString(this.nombre);
     }
 
 }

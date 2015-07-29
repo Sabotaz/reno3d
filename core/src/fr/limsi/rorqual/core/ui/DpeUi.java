@@ -45,6 +45,18 @@ public class DpeUi  {
             }
             return a;
         }
+        if(o == DpeEvent.INFOS_ECS){
+            Actor a = null;
+            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.ECS)){
+                Layout l = Layout.fromJson("data/ui/layout/ecsProperties.json", null);
+                a = l.getRoot();
+                sauvegarde_layout.put(DpePropertiesEnum.ECS,l);
+            }else{
+                Layout l = sauvegarde_layout.get(DpePropertiesEnum.ECS);
+                a = l.getRoot();
+            }
+            return a;
+        }
         if(o == DpeEvent.INFOS_CHAUFFAGE){
             Actor a = Layout.fromJson("data/ui/layout/chauffageProperties.json", null).getRoot();
             return a;

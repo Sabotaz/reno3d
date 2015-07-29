@@ -13,6 +13,7 @@ import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.*;
+import fr.limsi.rorqual.core.dpe.enums.ecsproperties.*;
 import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
@@ -39,6 +40,7 @@ public class Dpe implements EventListener {
     private HashMap<IfcDoor, HashMap<EventType, Object>> doors_properties = new HashMap<IfcDoor, HashMap<EventType, Object>>();
     private HashMap<EventType,Object> general_properties = new HashMap<EventType,Object>();
     private HashMap<EventType,Object> chauffage_properties = new HashMap<EventType,Object>();
+    private HashMap<EventType,Object> ecs_properties = new HashMap<EventType,Object>();
     private Collection<IfcWallStandardCase> wallCollection;
     private Collection<IfcSlab> slabCollection;
     private Collection<IfcWindow> windowCollection;
@@ -924,6 +926,111 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.FREQUENCE_UTILISATION_POIL_OU_INSERT, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case TYPE_EQUIPEMENT_ECS:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypeEquipementEcsEnum typeEquipementEcs = (TypeEquipementEcsEnum) items.get("lastValue");
+                            ecs_properties.put(DpeEvent.TYPE_EQUIPEMENT_ECS, typeEquipementEcs);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            TypeEquipementEcsEnum type = null;
+                            if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
+                                type = (TypeEquipementEcsEnum) chauffage_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_EQUIPEMENT_ECS, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case TYPE_BALLON_ELECTRIQUE:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypeBallonElectriqueEnum typeBallonElectrique= (TypeBallonElectriqueEnum) items.get("lastValue");
+                            ecs_properties.put(DpeEvent.TYPE_BALLON_ELECTRIQUE, typeBallonElectrique);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            TypeBallonElectriqueEnum type = null;
+                            if (ecs_properties.containsKey(DpeEvent.TYPE_BALLON_ELECTRIQUE)){
+                                type = (TypeBallonElectriqueEnum) chauffage_properties.get(DpeEvent.TYPE_BALLON_ELECTRIQUE);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_BALLON_ELECTRIQUE, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case TYPE_CHAUFFE_EAU:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypeChauffeEauEnum typeChauffeEau= (TypeChauffeEauEnum) items.get("lastValue");
+                            ecs_properties.put(DpeEvent.TYPE_CHAUFFE_EAU, typeChauffeEau);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            TypeChauffeEauEnum type = null;
+                            if (ecs_properties.containsKey(DpeEvent.TYPE_CHAUFFE_EAU)){
+                                type = (TypeChauffeEauEnum) chauffage_properties.get(DpeEvent.TYPE_CHAUFFE_EAU);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_CHAUFFE_EAU, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case TYPE_ACCUMULATEUR:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypeAccumulateurEnum typeAccumulateur= (TypeAccumulateurEnum) items.get("lastValue");
+                            ecs_properties.put(DpeEvent.TYPE_ACCUMULATEUR, typeAccumulateur);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            TypeAccumulateurEnum type = null;
+                            if (ecs_properties.containsKey(DpeEvent.TYPE_ACCUMULATEUR)){
+                                type = (TypeAccumulateurEnum) chauffage_properties.get(DpeEvent.TYPE_ACCUMULATEUR);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_ACCUMULATEUR, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case NOMBRE_PERSONNES_DANS_LOGEMENT:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            NombrePersonnesEnum nbPersonnesPresentent= (NombrePersonnesEnum) items.get("lastValue");
+                            ecs_properties.put(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT, nbPersonnesPresentent);
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            NombrePersonnesEnum type = null;
+                            if (ecs_properties.containsKey(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT)){
+                                type = (NombrePersonnesEnum) chauffage_properties.get(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;

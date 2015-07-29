@@ -111,7 +111,7 @@ public class MainUiControleur implements EventListener {
                             addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
                             break;
                         case ECS:
-                            System.out.println("coucou");
+                            addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_ECS));
                             break;
                         case ELECTROMENAGER:
                             System.out.println("coucou");

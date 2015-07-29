@@ -6,6 +6,7 @@ package fr.limsi.rorqual.core.event;
 public enum DpeEvent implements EventType {
     INFOS_GENERALES,
     INFOS_CHAUFFAGE,
+    INFOS_ECS,
 
     TYPE_BATIMENT,
     NB_NIVEAUX_MAISON,
