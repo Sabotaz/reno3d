@@ -141,11 +141,7 @@
           "type": "ScrollPaneElement",
           "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
           "event": "fr.limsi.rorqual.core.event.DpeEvent.DEPARTEMENT_BATIMENT",
-          "content": [
-            {
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum.values"
-            }
-          ]
+          "enum": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum"
         }
       ]
     },

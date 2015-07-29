@@ -492,6 +492,7 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             DepartementBatimentEnum departement = (DepartementBatimentEnum) items.get("lastValue");
+                            System.out.println(departement);
                             general_properties.put(DpeEvent.DEPARTEMENT_BATIMENT, departement);
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {

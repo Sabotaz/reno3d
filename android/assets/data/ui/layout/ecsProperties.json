@@ -1,0 +1,167 @@
+{
+  "type": "TabWindow",
+  "name": "Production d'eau chaude sanitaire du logement",
+  "id": "tab_window",
+  "content": [
+    {
+      "type": "Table",
+      "name": "Equipement utilisé",
+      "id": "equipement_utilise",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_EQUIPEMENT_ECS",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Source de chauffage primaire",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFAGE_PRINCIPAL"
+            },
+            {
+              "type": "TextButton",
+              "text": "Source de chauffage secondaire",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFAGE_SECONDAIRE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Ballon électrique",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chauffe-eau",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU"
+            },
+            {
+              "type": "TextButton",
+              "text": "Accumulateur",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Type de ballon électrique",
+      "id": "type_ballon_electrique",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_BALLON_ELECTRIQUE",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Ballon électrique horizontal (age < 15ans)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Ballon électrique horizontal (age > 15ans)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Ballon électrique vertical (age < 15ans)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Ballon électrique vertical (age > 15ans)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Type de chauffe-eau",
+      "id": "type_chauffe_eau",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFE_EAU",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Chauffe-eau thermodynamique sur air extrait",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chauffe-eau thermodynamique sur air extérieur",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chauffe-eau gaz (date < 1991)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_INF_1991"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chauffe-eau gaz (date entre 1991 et 2002)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
+            },
+            {
+              "type": "TextButton",
+              "text": "Chauffe-eau gaz (date > 2003)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_SUP_2003"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Type d'accumulateur",
+      "id": "type_accumulateur",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ACCUMULATEUR",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Accumulateur gaz classique (date < 1990)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1990"
+            },
+            {
+              "type": "TextButton",
+              "text": "Accumulateur gaz classique (date entre 1990 et 2000)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1990_2000"
+            },
+            {
+              "type": "TextButton",
+              "text": "Accumulateur gaz classique (date > 2000)",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2000"
+            },
+            {
+              "type": "TextButton",
+              "text": "Accumulateur gaz condensation",
+              "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CONDENSATION"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Nombre de personnes vivant dans le logement",
+      "id": "nb_personnes",
+      "content": [
+        {
+          "type": "ScrollPaneElement",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT",
+          "enum": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.NombrePersonnesEnum"
+        }
+      ]
+    }
+  ]
+}
+

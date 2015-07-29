@@ -214,6 +214,40 @@
     },
     {
       "type": "Table",
+      "name": "Utilisation poil / insert",
+      "id": "utilisation_poil",
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+          "event": "fr.limsi.rorqual.core.event.DpeEvent.FREQUENCE_UTILISATION_POIL_OU_INSERT",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Rarement",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.TRES_PEU"
+            },
+            {
+              "type": "TextButton",
+              "text": "De temps en temps",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.DE_TEMPS_EN_TEMPS"
+            },
+            {
+              "type": "TextButton",
+              "text": "Souvent",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.PRINCIPALEMENT"
+            },
+            {
+              "type": "TextButton",
+              "text": "Quasi exclusivement",
+              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.QUASI_EXCLUSIVEMENT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
       "name": "Date chaudière",
       "id": "date_chaudiere_gaz_classique",
       "content": [
@@ -526,40 +560,6 @@
               "type": "TextButton",
               "text": "Possible",
               "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.ProgrammationSystemeEnum.POSSIBLE"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Utilisation poil / insert",
-      "id": "utilisation_poil",
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.FREQUENCE_UTILISATION_POIL_OU_INSERT",
-          "content": [
-            {
-              "type": "TextButton",
-              "text": "Rarement",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.TRES_PEU"
-            },
-            {
-              "type": "TextButton",
-              "text": "De temps en temps",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.DE_TEMPS_EN_TEMPS"
-            },
-            {
-              "type": "TextButton",
-              "text": "Souvent",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.PRINCIPALEMENT"
-            },
-            {
-              "type": "TextButton",
-              "text": "Quasi exclusivement",
-              "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.FrequenceUtilisationPoilEnum.QUASI_EXCLUSIVEMENT"
             }
           ]
         }

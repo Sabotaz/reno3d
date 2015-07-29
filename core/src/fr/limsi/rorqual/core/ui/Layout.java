@@ -147,6 +147,19 @@ public class Layout {
         }
     }
 
+    private Object[] getClass(JsonValue json, String key) {
+        try {
+            String enum_name = json.getString(key);
+            Class<?> clz = Class.forName(enum_name);
+            Object[] consts = clz.getEnumConstants();
+            return consts;
+        }
+        catch (ClassNotFoundException cnfe) {
+            System.out.println(cnfe);
+            return null;
+        }
+    }
+
     private Actor getActor(JsonValue json, Updater parent_updater) {
         Actor actor;
         Updater updater = parent_updater;
@@ -169,9 +182,6 @@ public class Layout {
             case "ButtonGroup":
                 actor = makeButtonGroup(json, updater);
                 break;
-            case "CheckBoxGroup":
-                actor = makeCheckBoxGroup(json, updater);
-                break;
             case "TextButton":
                 actor = makeTextButton(json, updater);
                 break;
@@ -181,12 +191,9 @@ public class Layout {
             case "ImageButton":
                 actor = makeImageButton(json, updater);
                 break;
-//            case "CheckBox":
-//                actor = makeCheckBox(json, updater);
-//                break;
-//            case "TextField":
-//                actor = makeTextField(json, updater);
-//                break;
+            case "CheckBox":
+                actor = makeCheckBox(json, updater);
+                break;
             case "ScrollPaneElement":
                 actor = makeScrollPane(json, updater);
                 break;
@@ -353,49 +360,6 @@ public class Layout {
         return table;
     }
 
-    private Actor makeCheckBoxGroup(JsonValue json, Updater updater) {
-
-        ButtonGroup<CheckBox> checkBoxTab= new ButtonGroup<CheckBox>();
-        checkBoxTab.setMaxCheckCount(3);
-        Table table= new Table();
-        boolean row = true;
-        String layout = json.getString("layout", "row");
-        if (layout.equals("column"))
-            row = false;
-
-        String align = json.getString("align", "left");
-        switch (align) {
-            case "left":
-                table.align(Align.left);
-                break;
-            case "right":
-                table.align(Align.right);
-                break;
-            case "center":
-                table.align(Align.center);
-                break;
-        }
-
-        if (json.get("content") != null) {
-            JsonValue json_child;
-            Actor child;
-            int i = 0;
-            while ((json_child = json.get("content").get(i)) != null) {
-                if ((child = getActor(json_child, updater)) != null) {
-                    if (child instanceof CheckBox) {
-                        if (row)
-                            table.add(child).left().pad(1).row();
-                        else
-                            table.add(child).pad(1);
-                        checkBoxTab.add((CheckBox)child);
-                    }
-                }
-                i++;
-            }
-        }
-        return table;
-    }
-
     private Actor makeButton(JsonValue json, Updater updater) {
 
         final Button button;
@@ -547,85 +511,50 @@ public class Layout {
         return imageButton;
     }
 
-//    LinkedList<Object> tabValueCheckBox = new LinkedList<Object>();
-//
-//    private Actor makeCheckBox (JsonValue json, Updater updater){
-//        String text = "  " + json.getString("text");
-//        CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
-//        cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
-//        cbs.fontColor = Color.DARK_GRAY;
-//        CheckBox checkBox = new CheckBox(text,cbs);
-//
-//        if (updater != null & json.has("value")) {
-//            Object value_value = getEnumConstant(json, "value");
-//
-//            if (updater.getDefaultValue() == value_value) {
-//                checkBox.setChecked(true);
-//            }
-//
-//            if (value_value != null) {
-//                final Object last_value = value_value;
-//                final Updater last_updater = updater;
-//                checkBox.addListener(new ClickListener() {
-//                    @Override
-//                    public void clicked(InputEvent event, float x, float y) {
-//                        HashMap<String,Object> items = new HashMap<String, Object>();
-//                        items.put("userObject",userObject);
-//                        items.put("eventRequest",EventRequest.UPDATE_STATE);
-//                        items.put("lastValue",last_value);
-//                        items.put("layout",Layout.this);
-//                        last_updater.trigger(items);
-//                    }
-//                });
-//            }
-//        }
-//        return checkBox;
-//    }
+    private Actor makeCheckBox (JsonValue json, Updater updater){
+        String text = "  " + json.getString("text");
+        CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
+        cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        cbs.fontColor = Color.DARK_GRAY;
+        CheckBox checkBox = new CheckBox(text,cbs);
 
-//    private Actor makeTextField (JsonValue json, Updater updater){
-//
-//        String labelName = json.getString("label");
-//        Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
-//        lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
-//        lbs.fontColor=Color.BLACK;
-//        Label label = new Label(labelName,lbs);
-//
-//        final TextField textField = new TextField("", skin);
-//        Table table = new Table();
-//        table.add(label).pad(10);
-//        table.add(textField).pad(10);
-//
-//        if (updater != null){
-//            final Updater last_updater = updater;
-//            textField.setTextFieldListener(new TextField.TextFieldListener() {
-//                @Override
-//                public void keyTyped(TextField textField, char key) {
-//                    if (key == '\r' || key == '\n') {
-//                        HashMap<String, Object> items = new HashMap<String, Object>();
-//                        items.put("userObject", userObject);
-//                        items.put("eventRequest", EventRequest.UPDATE_STATE);
-//                        items.put("lastValue", textField.getText());
-//                        items.put("layout", Layout.this);
-//                        last_updater.trigger(items);
-//                    }
-//                }
-//            });
-//        }
-//        return table;
-//    }
+        if (updater != null & json.has("value")) {
+            Object value_value = getEnumConstant(json, "value");
+
+            if (updater.getDefaultValue() == value_value) {
+                checkBox.setChecked(true);
+            }
+
+            if (value_value != null) {
+                final Object last_value = value_value;
+                final Updater last_updater = updater;
+                checkBox.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        HashMap<String,Object> items = new HashMap<String, Object>();
+                        items.put("userObject",userObject);
+                        items.put("eventRequest",EventRequest.UPDATE_STATE);
+                        items.put("lastValue",last_value);
+                        items.put("layout",Layout.this);
+                        last_updater.trigger(items);
+                    }
+                });
+            }
+        }
+        return checkBox;
+    }
 
     private static float lastVisualScrollY=0;
 
     private Actor makeScrollPane(JsonValue json, Updater updater) {
 
         Table table = new Table();
-        EventType event = updater.getEventType();
         Object[] tabObject=null;
         final Updater last_updater = updater;
-        final DepartementBatimentEnum[] dpt = DepartementBatimentEnum.values();
-        tabObject = new Object[dpt.length];
-        for(int i=0;i<dpt.length;i++) {
-            tabObject[i] = dpt[i].getNameDpt();
+        final Object[] valuesEnum = getClass(json, "enum");
+        tabObject = new Object[valuesEnum.length];
+        for(int i=0;i<valuesEnum.length;i++) {
+            tabObject[i] = valuesEnum[i].toString();
         }
 
         com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle lls = skin.get("default", com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle.class);
@@ -635,7 +564,7 @@ public class Layout {
         list.getSelection().setMultiple(false);
         list.getSelection().setRequired(true);
         if (updater.getDefaultValue() != null) {
-            list.setSelectedIndex(((DepartementBatimentEnum)updater.getDefaultValue()).getIndex());
+            list.setSelected(updater.getDefaultValue());
         }
         ScrollPane.ScrollPaneStyle sps = skin.get("perso",ScrollPane.ScrollPaneStyle.class);
         final ScrollPane scrollPane = new ScrollPane(list, sps);
@@ -654,7 +583,7 @@ public class Layout {
                 HashMap<String,Object> items = new HashMap<String, Object>();
                 items.put("userObject",userObject);
                 items.put("eventRequest",EventRequest.UPDATE_STATE);
-                items.put("lastValue",dpt[index]);
+                items.put("lastValue",valuesEnum[index]);
                 items.put("layout", Layout.this);
                 last_updater.trigger(items);
 
