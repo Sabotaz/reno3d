@@ -2,7 +2,6 @@ package fr.limsi.rorqual.core.dpe;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -10,12 +9,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import fr.limsi.rorqual.core.dpe.enums.DpePropertiesEnum;
 import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.*;
-import fr.limsi.rorqual.core.dpe.enums.slabproperties.*;
 import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
@@ -388,6 +385,7 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         Layout layout = (Layout)items.get("layout");
+                        Object userObject = items.get("userObject");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeBatimentEnum typeBatiment = (TypeBatimentEnum) items.get("lastValue");
                             if (typeBatiment.equals(TypeBatimentEnum.MAISON)) {
@@ -409,14 +407,14 @@ public class Dpe implements EventListener {
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                                currentItems.put("userObject",userObject);
                                 Event e2 = new Event(DpeEvent.TYPE_BATIMENT, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
 
                                 // wait for layout to be  populated
-                                /*
-                                while (!layout.getIsInitialised()){
+
+                                while (!layout.isInitialised()){
                                     try {
-                                        System.out.println("coucou");
                                         Thread.sleep(10);
                                     } catch (InterruptedException ie) {
 
@@ -431,7 +429,7 @@ public class Dpe implements EventListener {
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), false);
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
                                     ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
-                                }*/
+                                }
                             } else {
                                 System.out.println("PROPRIETE PAR DEFAUT NON PRESENTE !!!  ->  "+DpeEvent.TYPE_BATIMENT);
                             }

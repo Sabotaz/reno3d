@@ -58,8 +58,10 @@ public class MainUiControleur implements EventListener {
         removeTb();
         tb = actor;
         if (tb != null) {
-            tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 100);
-            stage.addActor(tb);
+            synchronized (stage) {
+                tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 100);
+                stage.addActor(tb);
+            }
         }
     }
 

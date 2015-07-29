@@ -53,12 +53,25 @@ public class EventManager {
                         Event e = eventQueue.poll(100, TimeUnit.MILLISECONDS);
                         if (e != null) {
                             for (EventListener l : listeners) {
-                                l.notify(c, e);
+                                makeNotificationThread(l, c, e);
                             }
                         }
                     } catch (InterruptedException ie) {
 
                     }
+                }
+            }
+        };
+        t.start();
+    }
+
+    private void makeNotificationThread(final EventListener l, final Channel c, final Event e) {
+        Thread t = new Thread() {
+            public void run() {
+                try {
+                        l.notify(c, e);
+                } catch (InterruptedException ie) {
+
                 }
             }
         };
