@@ -42,6 +42,7 @@ public class Cote extends ModelContainer {
     public Cote(Cotable c) {
         super();
         cotable = c;
+        this.setSelectable(false);
     }
 
     public void act() {

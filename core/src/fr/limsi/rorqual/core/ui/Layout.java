@@ -338,14 +338,10 @@ public class Layout {
 
                         c.size(child.getWidth(), child.getHeight());
 
-                        if (json_child.has("padTop"))
-                            c.padTop(json_child.getFloat("padTop"));
-                        if (json_child.has("padBottom"))
-                            c.padBottom(json_child.getFloat("padBottom"));
-                        if (json_child.has("padLeft"))
-                            c.padLeft(json_child.getFloat("padLeft"));
-                        if (json_child.has("padRight"))
-                            c.padRight(json_child.getFloat("padRight"));
+                        c.padTop(json_child.getFloat("padTop", 1));
+                        c.padBottom(json_child.getFloat("padBottom", 1));
+                        c.padLeft(json_child.getFloat("padLeft", 1));
+                        c.padRight(json_child.getFloat("padRight", 1));
 
                         if (row)
                             c.left().row();

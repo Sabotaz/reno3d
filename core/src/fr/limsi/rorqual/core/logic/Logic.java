@@ -17,6 +17,7 @@ import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 
 /**
@@ -91,6 +92,7 @@ public class Logic implements InputProcessor {
     Ouverture ouverture;
     boolean making_ouverture = false;
     Vector2 pos = new Vector2();
+    Anchor anchor = null;
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (currentState == State.WALL) {
@@ -114,31 +116,17 @@ public class Logic implements InputProcessor {
                 intersection = obj.getIntersection();
                 making_wall = true;
             }
-            // anchor
-            float anchor_length = 1.f;
-            ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
 
-            ArrayList<Vector3> anchors = new ArrayList<Vector3>();
+            Anchor a = calculateAnchor(intersection);
 
-            for (Mur mur : murs)
-                anchors.addAll(mur.getAnchors(intersection, Mur.DEFAULT_DEPTH));
-
-            Vector3 anchor = null;
-            float dist = -1;
-            for (Vector3 v : anchors) {
-                float d = intersection.cpy().sub(v).len();
-                if (d < anchor_length && (d < dist || dist == -1)) {
-                    dist = d;
-                    anchor = v;
-                }
-            }
-
-            if (anchor != null) {
-                start = new Vector3(anchor);
-                end = new Vector3(anchor);
+            if (a != null) {
+                start = new Vector3(a.getPt());
+                end = new Vector3(a.getPt());
+                anchor = a;
             } else {
                 start = new Vector3(intersection);
                 end = new Vector3(intersection);
+                anchor = null;
             }
 
             mur = new Mur(start, end) {
@@ -148,10 +136,14 @@ public class Logic implements InputProcessor {
                     setB(end);
                 }
             };
+
             mur.setSelectable(false);
             mur.add(new Cote(mur));
             //ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(mur);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(mur);
+
+            if (anchor != null)
+                ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(anchor);
             //modelGraph.getRoot().add(wall);
 
             return true;
@@ -190,14 +182,90 @@ public class Logic implements InputProcessor {
             return false;
     }
 
+    private Anchor calculateAnchor(Vector3 intersection) {
+        // anchor
+        float anchor_length = 0.5f;
+        ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
+
+        ArrayList<Anchor> anchors = new ArrayList<Anchor>();
+
+        for (Mur mur : murs) {
+            for (Vector3 v : mur.getAnchors(intersection, Mur.DEFAULT_DEPTH))
+                anchors.add(new Anchor(v));
+        }
+
+        // anchor-aligned drawing
+        boolean project = true;
+        /*for (Anchor a : anchors) { // don't project if too close to an anchor
+            if (intersection.dst(a.getPt()) <= anchor_length)
+                project = false;
+        }*/
+
+        if (project) {
+            ArrayList<Anchor> alignments = new ArrayList<Anchor>();
+            for (Anchor a : anchors) {
+                Vector3 projx = intersection.cpy();
+                projx.x = a.getPt().x;
+                // add the projection on Y
+                Vector3 projy = intersection.cpy();
+                projy.y = a.getPt().y;
+
+                if (start != null) { // y or x align each x or y  aligned anchor to the start
+                    Vector3 projyx = projx.cpy();
+                    projyx.y = start.y;
+                    if (projyx.dst(projx) > anchor_length)
+                        alignments.add(new Anchor(projx, a.getPt()));
+                    alignments.add(new Anchor(projyx, a.getPt(), start));
+
+                    Vector3 projxy = projy.cpy();
+                    projxy.x = start.x;
+                    if (projxy.dst(projy) > anchor_length)
+                        alignments.add(new Anchor(projy, a.getPt()));
+                    alignments.add(new Anchor(projxy, a.getPt(), start));
+                }
+            }
+
+            anchors.addAll(alignments);
+
+        }
+
+
+        if (start != null) { // axe-aligned drawing
+            // add the projection on X
+            Vector3 projx = intersection.cpy();
+            projx.x = start.x;
+            anchors.add(new Anchor(projx, start));
+            // add the projection on Y
+            Vector3 projy = intersection.cpy();
+            projy.y = start.y;
+            anchors.add(new Anchor(projy, start));
+        }
+
+
+        Anchor anchor = null;
+        float dist = -1;
+        for (Anchor a : anchors) {
+            float d = intersection.dst(a.getPt());
+            if (d < anchor_length && (d < dist || dist == -1)) {
+                dist = d;
+                anchor = a;
+            }
+        }
+        return anchor;
+    }
+
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (currentState == State.WALL && making_wall) {
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(mur);
+            if (anchor != null)
+                ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
+            anchor = null;
 
             if (!start.equals(end)) {
                 Mur copy_mur = new Mur(mur);
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(copy_mur);
+                start = end = null;
             }
             return true;
 
@@ -230,31 +298,27 @@ public class Logic implements InputProcessor {
 
             if (obj != null) {
                 intersection = obj.getIntersection();
-                // anchor
-                float anchor_length = 1.f;
-                ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
 
-                ArrayList<Vector3> anchors = new ArrayList<Vector3>();
+                Anchor a = calculateAnchor(intersection);
 
-                for (Mur mur : murs)
-                    anchors.addAll(mur.getAnchors(intersection, Mur.DEFAULT_DEPTH));
-
-                Vector3 anchor = null;
-                float dist = -1;
-                for (Vector3 v : anchors) {
-                    float d = intersection.cpy().sub(v).len();
-                    if (d < anchor_length && (d < dist || dist == -1)) {
-                        dist = d;
-                        anchor = v;
+                if (a != null) {
+                    end.set(a.getPt());
+                    if (anchor != null) {
+                        anchor.setPt(a.getPt());
+                        anchor.setA(a.getA());
+                        anchor.setB(a.getB());
+                    } else {
+                        anchor = a;
+                        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(anchor);
                     }
-                }
-
-                if (anchor != null)
-                    end.set(anchor);
-                else {
+                } else {
                     Vector3 pos = intersection.cpy();
                     pos.z = 0;
                     end.set(pos);
+                    if (anchor != null) {
+                        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
+                        anchor = null;
+                    }
                 }
             }
             else
