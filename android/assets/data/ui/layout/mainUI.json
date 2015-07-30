@@ -125,21 +125,6 @@
             "skin:uiskin.json:default-round-down",
             "default.fnt"
           ]
-        },
-        {
-          "type": "TextButton",
-          "text": "Électroménager",
-          "value": "fr.limsi.rorqual.core.event.ButtonValue.ELECTROMENAGER",
-          "height": 40,
-          "width": 120,
-          "padTop": 10,
-          "padRight": 10,
-          "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
-            "skin:uiskin.json:default-round-down",
-            "default.fnt"
-          ]
         }
       ]
     }

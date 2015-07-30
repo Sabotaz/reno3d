@@ -1,6 +1,6 @@
 {
   "type": "TabWindow",
-  "name": "Informations générales du bâtiment",
+  "name": "Informations générales du logement",
   "id": "tab_window",
   "content": [
     {
@@ -18,11 +18,13 @@
             {
               "type": "ImageButton",
               "image": "textureTypeBatiment1",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeBatimentEnum.MAISON"
             },
             {
               "type": "ImageButton",
               "image": "textureTypeBatiment2",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeBatimentEnum.APPARTEMENT"
             }
           ]
@@ -44,16 +46,19 @@
             {
               "type": "ImageButton",
               "image": "textureForme1",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.CARRE"
             },
             {
               "type": "ImageButton",
               "image": "textureForme2",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.ALLONGE"
             },
             {
               "type": "ImageButton",
               "image": "textureForme3",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.DEVELOPPE"
             }
           ]
@@ -75,26 +80,31 @@
             {
               "type": "ImageButton",
               "image": "textureMit1",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.NON_ACCOLE"
             },
             {
               "type": "ImageButton",
               "image": "textureMit2",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_PETIT_COTE"
             },
             {
               "type": "ImageButton",
               "image": "textureMit3",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_OU_DEUX_PETITS_COTES"
             },
             {
               "type": "ImageButton",
               "image": "textureMit4",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_ET_UN_PETIT_COTE"
             },
             {
               "type": "ImageButton",
               "image": "textureMit5",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_DEUX_GRANDS_COTES"
             }
           ]
@@ -116,16 +126,19 @@
             {
               "type": "ImageButton",
               "image": "texturePosAppt1",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.PREMIER_ETAGE"
             },
             {
               "type": "ImageButton",
               "image": "texturePosAppt2",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.ETAGE_INTERMEDIAIRE"
             },
             {
               "type": "ImageButton",
               "image": "texturePosAppt3",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.DERNIER_ETAGE"
             }
           ]
@@ -158,66 +171,50 @@
             {
               "type": "TextButton",
               "text": "Avant 1975",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.AVANT_1975"
             },
             {
               "type": "TextButton",
               "text": "Entre 1975 et 1977",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1975_ET_1977"
             },
             {
               "type": "TextButton",
               "text": "Entre 1978 et 1982",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1978_ET_1982"
             },
             {
               "type": "TextButton",
               "text": "Entre 1983 et 1988",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1983_ET_1988"
             },
             {
               "type": "TextButton",
               "text": "Entre 1989 et 2000",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1989_ET_2000"
             },
             {
               "type": "TextButton",
               "text": "Entre 2001 et 2005",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2001_ET_2005"
             },
             {
               "type": "TextButton",
               "text": "Entre 2006 et 2012",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2006_ET_2012"
             },
             {
               "type": "TextButton",
               "text": "Après 2012",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.APRES_2012"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Énergie à la construction",
-      "id": "energie_construction",
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.ENERGIE_CONSTRUCTION",
-          "content": [
-            {
-              "type": "TextButton",
-              "text": "Electrique",
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEnergieConstructionEnum.ELECTRIQUE"
-            },
-            {
-              "type": "TextButton",
-              "text": "Autre",
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEnergieConstructionEnum.AUTRE"
             }
           ]
         }
@@ -236,32 +233,294 @@
             {
               "type": "TextButton",
               "text": "Naturelle",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.NATURELLE"
             },
             {
               "type": "TextButton",
               "text": "VMC auto-réglable (année d'installation < 1982)",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_AVANT_1982"
             },
             {
               "type": "TextButton",
               "text": "VMC auto-réglable (année d'installation > 1982)",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_APRES_1982"
             },
             {
               "type": "TextButton",
               "text": "VMC Hygro b",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_HYGRO"
             },
             {
               "type": "TextButton",
               "text": "VMC double flux",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_DOUBLE_FLUX"
             },
             {
               "type": "TextButton",
               "text": "Inconnue",
+              "pad": 2,
               "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.INCONNUE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Énergie",
+      "id": "energie_logement",
+      "content": [
+        {
+          "type": "Table",
+          "label": "Type d'énergie à la construction : ",
+          "labelPad": 5,
+          "labelWidth": 263,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.ENERGIE_CONSTRUCTION",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Électrique",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEnergieConstructionEnum.ELECTRIQUE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Autre",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEnergieConstructionEnum.AUTRE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Présence d'un système de climatisation : ",
+          "labelPad": 5,
+          "labelWidth": 263,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CLIMATISATION_LOGEMENT",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Oui",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.OUI"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Non",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.NON"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Type d'abonnement électrique : ",
+          "labelPad": 5,
+          "labelWidth": 263,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.ABONNEMENT_ELECTRIQUE",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Double tarif (heures creuses/heures pleines)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeAbonnementElectriqueEnum.DOUBLE_TARIF"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Autre",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeAbonnementElectriqueEnum.AUTRE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Équipement pour l'éclairage : ",
+          "labelPad": 5,
+          "labelWidth": 263,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.EQUIPEMENT_ECLAIRAGE",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Ampoule basse consommation (uniquement)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementEclairageEnum.UNIQUEMENT_BASSE_CONSOMMATION"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ampoule basse consommation (majoritairement)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementEclairageEnum.MAJORITAIREMENT_BASSE_CONSOMMATION"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ampoule à incandescence (majoritairement)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementEclairageEnum.MAJORITAIREMENT_AMPOULE_A_INCANDESCENCE"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Électroménager",
+      "id": "electromenager",
+      "content": [
+        {
+          "type": "Table",
+          "label": "Équipement électroménager : ",
+          "labelPad": 5,
+          "labelWidth": 193,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.EQUIPEMENT_ELECTROMENAGER",
+              "minChecked": 0,
+              "maxChecked": 11,
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Téléviseur",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.TELEVISEUR"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Lecteur DVD/Magnétoscope",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.LECTEUR_DVD_MAGNETOSCOPE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ordinateur fixe",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.ORDINATEUR_FIXE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ordinateur portable",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.ORDINATEUR_PORTABLE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Sèche-linge",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.SECHE_LINGE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Lave-linge",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.LAVE_LINGE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Lave-vaisselle",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.LAVE_VAISSELLE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Fer à repasser",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.FER_A_REPASSER"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Réfrigérateur",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.REFRIGERATEUR"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Congélateur",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.CONGELATEUR"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Aspirateur",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementElectromenagerEnum.ASPIRATEUR"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Équipement cuisson : ",
+          "labelPad": 5,
+          "labelWidth": 193,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.EQUIPEMENT_CUISSON",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Plaques mixtes + Four électrique",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.PLAQUES_MIXTES_ET_FOUR_ELECTRIQUE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Plaques mixtes + Four gaz",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.PLAQUES_MIXTES_ET_FOUR_GAZ"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Plaques électrique + Four électrique",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.PLAQUES_ELECTRIQUES_ET_FOUR_ELECTRIQUE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Feux gaz + Four électrique",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.FEUX_GAZ_ET_FOUR_ELECTRIQUE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Feux gaz + Four gaz",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.FEUX_GAZ_ET_FOUR_GAZ"
+                }
+              ]
             }
           ]
         }

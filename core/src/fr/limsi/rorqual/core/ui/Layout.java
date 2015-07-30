@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -247,6 +248,17 @@ public class Layout {
         if (layout.equals("column"))
             row = false;
 
+        if (json.get("label") != null){
+            Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
+            lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+            lbs.fontColor = Color.DARK_GRAY;
+            Label label = new Label(json.getString("label"),lbs);
+            table.add(label).top().width(json.getFloat("labelWidth",516)).pad(json.getFloat("labelPad",1));
+
+//            table.add(label).top().pad(json.getFloat("labelPad",1));
+//            System.out.println("prefWidth"+table.getPrefWidth());
+        }
+
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;
@@ -298,7 +310,7 @@ public class Layout {
                 table.setX(Gdx.graphics.getWidth()/2);
                 break;
         }
-
+        table.pad(7);
         return table;
     }
 
@@ -325,26 +337,27 @@ public class Layout {
                 break;
         }
 
-
         if (json.get("content") != null) {
             JsonValue json_child;
             Actor child;
             int i = 0;
             while ((json_child = json.get("content").get(i)) != null) {
                 if ((child = getActor(json_child, updater)) != null) {
-                    if (child instanceof Button) {
 
-                        Cell c = table.add(child);
+                    Cell c = table.add(child);
 
-                        c.size(child.getWidth(), child.getHeight());
+                    c.size(child.getWidth(), child.getHeight());
 
                         c.padTop(json_child.getFloat("padTop", 1));
                         c.padBottom(json_child.getFloat("padBottom", 1));
                         c.padLeft(json_child.getFloat("padLeft", 1));
                         c.padRight(json_child.getFloat("padRight", 1));
+                        c.pad(json_child.getFloat("pad", 1));
 
-                        if (row)
-                            c.left().row();
+                    if (row)
+                        c.left().row();
+
+                    if (child instanceof Button) {
 
                         buttons.add((Button)child);
                     }
@@ -353,6 +366,7 @@ public class Layout {
             }
         }
         buttons.setMinCheckCount(json.getInt("minChecked", 1));
+        buttons.setMaxCheckCount(json.getInt("maxChecked", 1));
         return table;
     }
 
@@ -508,7 +522,7 @@ public class Layout {
     }
 
     private Actor makeCheckBox (JsonValue json, Updater updater){
-        String text = "  " + json.getString("text");
+        String text = " " + json.getString("label");
         CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
         cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
         cbs.fontColor = Color.DARK_GRAY;
