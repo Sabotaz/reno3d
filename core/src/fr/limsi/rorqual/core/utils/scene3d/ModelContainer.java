@@ -27,21 +27,14 @@ public class ModelContainer extends ActableModel {
     protected ModelGraph root;
 
     protected List<ModelContainer> children = new ArrayList<ModelContainer>();
-    public Matrix4 transform;
-    protected Matrix4 model_transform;
     private Shader prefered_shader;
     private Object userData;
     private HashMap<String,Object> modelData = new HashMap<String, Object>();
 
     public ModelContainer() {
-        transform = new Matrix4();
-        model_transform = new Matrix4();
     }
 
     public ModelContainer(Model model) {
-        transform = new Matrix4();
-        model_transform = new Matrix4();
-
         super.materials.clear();     this.materials.addAll(model.materials);
         super.meshes.clear();        this.meshes.addAll(model.meshes);
         super.meshParts.clear();     this.meshParts.addAll(model.meshParts);
@@ -50,7 +43,6 @@ public class ModelContainer extends ActableModel {
     }
 
     public ModelContainer(ModelInstance modelInstance) {
-        transform = new Matrix4();
         model_transform = modelInstance.transform;
 
         Model model = modelInstance.model;
@@ -149,7 +141,7 @@ public class ModelContainer extends ActableModel {
         mx.idt().mul(model_transform);
         ModelContainer current = this;
         do {
-            mx.mulLeft(current.transform);
+            mx.mulLeft(current.local_transform);
             current = current.getParent();
         } while (current != null);
 
@@ -169,10 +161,10 @@ public class ModelContainer extends ActableModel {
     protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
         if (isVisible()) {
             // update mx
-            Matrix4 updated_global_transform = global_transform.cpy().mul(transform);
+            Matrix4 updated_global_transform = global_transform.cpy().mul(local_transform);
 
             // update model mx
-            transform = updated_global_transform.cpy().mul(model_transform);
+            world_transform = updated_global_transform.cpy().mul(model_transform);
             // draw
             modelBatch.render(this, environment);
 
@@ -228,7 +220,7 @@ public class ModelContainer extends ActableModel {
         boundBox.getDimensions(dimensions);
         float radius = dimensions.len() / 2f;
 
-        //transform.getTranslation(position).cpy().add(center);
+        //local_transform.getTranslation(position).cpy().add(center);
         final float len = ray.direction.dot(center.x-ray.origin.x, center.y-ray.origin.y, center.z-ray.origin.z);
         //final float dist2cam = position.dst(ray.origin);
         if (len < 0f)
@@ -252,7 +244,7 @@ public class ModelContainer extends ActableModel {
     }
 
     private Hit hit(Ray ray, Matrix4 mx) {
-        Matrix4 current_mx = mx.cpy().mul(transform);
+        Matrix4 current_mx = mx.cpy().mul(local_transform);
         Hit temp = new Hit();
         for (ModelContainer child : children) {
             Hit hit = child.hit(ray, current_mx);

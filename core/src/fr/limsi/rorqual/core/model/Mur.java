@@ -94,7 +94,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setHeight(float height) {
         this.height = height;
-        changed = true;
+        setChanged();
     }
 
     public float getWidth() {
@@ -111,7 +111,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setDepth(float depth) {
         this.depth = depth;
-        changed = true;
+        setChanged();
     }
 
     public Vector3 getA() {
@@ -121,7 +121,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setA(Vector3 a) {
         A.set(a);
         this.width = B.cpy().sub(A).len();
-        changed = true;
+        setChanged();
     }
 
     public Vector3 getB() {
@@ -131,7 +131,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setB(Vector3 b) {
         B.set(b);
         this.width = B.cpy().sub(A).len();
-        changed = true;
+        setChanged();
     }
 
     public TypeMurEnum getTypeMurEnum() {
@@ -285,18 +285,20 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         ouvertures.add(o);
         this.add(o);
         etage.addOuverture(o);
-        changed = true;
+        setChanged();
     }
 
     public void removeOuverture(Ouverture o) {
         ouvertures.remove(o);
         this.remove(o);
         etage.removeOuverture(o);
-        changed = true;
+        setChanged();
     }
 
     public void setChanged() {
         changed = true;
+        for (Ouverture o : ouvertures)
+            o.setChanged();
     }
 
     private Vector3 getIntersection(Ray ray, Matrix4 global_transform) {

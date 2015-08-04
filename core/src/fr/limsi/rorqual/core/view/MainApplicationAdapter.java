@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -20,37 +19,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.utils.UBJsonReader;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
-import fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum;
 import fr.limsi.rorqual.core.event.Channel;
-import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
-import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
@@ -67,9 +50,6 @@ import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
-import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
-import fr.limsi.rorqual.core.utils.scene3d.models.Pin;
-import fr.limsi.rorqual.core.utils.scene3d.models.Sun;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
 
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
@@ -173,9 +153,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         sun = new ModelContainer();
         sun.setSelectable(false);
-        sun.transform.setToTranslation(new Vector3(-200, 0, 0));
+        sun.local_transform.setToTranslation(new Vector3(-200, 0, 0));
 
-        //pin.transform.translate(5, 0, 5);
+        //pin.local_transform.translate(5, 0, 5);
 
         //modelGraph.getRoot().add(popup);
 
@@ -212,10 +192,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
-        //modelInstance.transform.rotate(1, 0, 0, -90);
+        //modelInstance.local_transform.rotate(1, 0, 0, -90);
         //move the model down a bit on the screen ( in a z-up world, down is -z ).
         modelInstance.transform.translate(0, 0, 4);
-//        modelInstance.transform.scale(0.5f, 0.5f, 0.5f);
+//        modelInstance.local_transform.scale(0.5f, 0.5f, 0.5f);
 
         //shader = new BillboardShader();
         //shader.init();
@@ -230,10 +210,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public void act() {
         update_cam();
 
-        sun.transform.mulLeft(new Matrix4().idt().rotate(0,-1,1,.5f));
+        sun.local_transform.mulLeft(new Matrix4().idt().rotate(0,-1,1,.5f));
 
         Vector3 light_dir = new Vector3();
-        light_dir = sun.transform.getTranslation(light_dir).scl(-1).nor();
+        light_dir = sun.local_transform.getTranslation(light_dir).scl(-1).nor();
         light.direction.set(light_dir);
 
         stageMenu.act();
@@ -346,8 +326,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         if (selected != null) {
             //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
             selected.setColor(Color.YELLOW);
-            cameras[ncam%cameras.length].position.set(selected.transform.getTranslation(new Vector3()).add(5, 5, 5));
-            cameras[ncam%cameras.length].lookAt(selected.transform.getTranslation(new Vector3()).add(0, 0, 2));
+            cameras[ncam%cameras.length].position.set(selected.local_transform.getTranslation(new Vector3()).add(5, 5, 5));
+            cameras[ncam%cameras.length].lookAt(selected.local_transform.getTranslation(new Vector3()).add(0, 0, 2));
             cameras[ncam%cameras.length].up.set(0, 0, 1);
             cameras[ncam%cameras.length].update();
         }
@@ -384,7 +364,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 selected.setColor(Color.YELLOW);
                 mainUiControleur.addTb(dpeui.getPropertyWindow(selected.getUserData()));
                 //selected.add(pin);
-                //pin.transform.setToTranslation(selected.getTop());
+                //pin.local_transform.setToTranslation(selected.getTop());
             }
             return selected != null;
         }

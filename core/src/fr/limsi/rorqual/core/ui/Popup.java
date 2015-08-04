@@ -105,11 +105,11 @@ public class Popup {
         mesh.setIndices(new short[] { 0, 1, 2 });*/
         mesh.transform(new Matrix4().idt().scl(0.01f));
         transform = new Matrix4();
-        //transform.translate(1, 1, 1);
-        //transform.translate(5,0,5);
+        //local_transform.translate(1, 1, 1);
+        //local_transform.translate(5,0,5);
         transform.rotate(1, 0, 0, 180);
-        //transform.val[15] = 0.008f;
-        //transform.scale(0.01f, 0.01f, 0.01f);
+        //local_transform.val[15] = 0.008f;
+        //local_transform.scale(0.01f, 0.01f, 0.01f);
 
         Material material = new Material();
         TextureAttribute ta = TextureAttribute.createDiffuse(texture);

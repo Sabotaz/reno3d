@@ -53,7 +53,7 @@ public class SceneGraphMaker {
                 IfcGridPlacement gridPlacement = (IfcGridPlacement) placement;
                 //ToDo
             }
-            node.transform.mul(loc);
+            node.local_transform.mul(loc);
         }
     }
 

@@ -41,7 +41,7 @@ public class IfcWindowModelFactory {
         float w = (float)ifcHelper.getWindowWidth(window) / b.getWidth();
         float h = (float)ifcHelper.getWindowHeight(window) / b.getDepth();
         System.out.println("Depth "+ifcHelper.getWindowDepth(window)+" Width "+ifcHelper.getWindowWidth(window)+" Height "+ifcHelper.getWindowHeight(window));
-//        modelInstanceWindow.transform.rotate(0, 1, 0, 90);
+//        modelInstanceWindow.local_transform.rotate(0, 1, 0, 90);
         modelInstanceWindow.transform.scale(w, d, h);
     }
 

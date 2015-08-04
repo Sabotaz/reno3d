@@ -2,7 +2,6 @@ package fr.limsi.rorqual.core.utils.scene3d;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.model.Node;
@@ -16,7 +15,10 @@ import com.badlogic.gdx.utils.Pool;
  */
 public abstract class ActableModel extends Model implements RenderableProvider {
 
-    public Matrix4 transform = new Matrix4().idt();
+    public Matrix4 local_transform = new Matrix4().idt();
+    public Matrix4 model_transform = new Matrix4().idt();
+    protected Matrix4 world_transform = new Matrix4().idt();
+
     public Object userData = null;
 
     public abstract void act();
@@ -43,10 +45,11 @@ public abstract class ActableModel extends Model implements RenderableProvider {
 
     public Renderable getRenderable (final Renderable out, final Node node, final NodePart nodePart) {
         nodePart.setRenderable(out);
-        if (nodePart.bones == null && transform != null)
-            out.worldTransform.set(transform).mul(node.globalTransform);
-        else if (transform != null)
-            out.worldTransform.set(transform);
+        if (nodePart.bones == null && world_transform != null) {
+            out.worldTransform.set(world_transform).mul(node.globalTransform);
+        }
+        else if (world_transform != null)
+            out.worldTransform.set(world_transform);
         else
             out.worldTransform.idt();
         out.userData = userData;

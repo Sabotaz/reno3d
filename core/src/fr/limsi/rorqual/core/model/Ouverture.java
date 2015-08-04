@@ -1,5 +1,8 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -12,7 +15,6 @@ import eu.mihosoft.vrl.v3d.Vector3d;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum;
 import fr.limsi.rorqual.core.utils.CSGUtils;
-import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
@@ -61,22 +63,28 @@ public abstract class Ouverture extends ModelContainer {
     public void setPosition(Vector2 position) {
         this.position = position;
         mur.setChanged();
+        changed = true;
     }
     public void setX(float x) {
         this.position.x = x-this.width/2;
         mur.setChanged();
     }
+
+    private boolean changed = true;
+
     public float getWidth() {
         return width;
     }
     public void setWidth(float width) {
         this.width = width;
+        changed = true;
     }
     public float getHeight() {
         return height;
     }
     public void setHeight(float height) {
         this.height = height;
+        changed = true;
     }
     public float getSurface() {
         return surface;
@@ -120,7 +128,7 @@ public abstract class Ouverture extends ModelContainer {
         Vector3 openingA = A.cpy().add(x_dir.cpy().setLength(this.position.x)).add(z_shape.cpy().setLength(this.position.y));
         Vector3 openingB = openingA.cpy().add(x_dir.cpy().setLength(this.width));
 
-        Vector3 y_dir = x_dir.cpy().crs(Vector3.Z).setLength(mur.getDepth()/2 + Float.MIN_VALUE);
+        Vector3 y_dir = x_dir.cpy().crs(Vector3.Z).setLength(mur.getDepth()/2 + 0.001f);
 
         Vector3d dir = CSGUtils.castVector(z_shape);
 
@@ -135,7 +143,27 @@ public abstract class Ouverture extends ModelContainer {
         return csg;
     }
 
+    public void setChanged() {
+        changed = true;
+    }
+
     public void act() {
+        super.act();
+        if (changed)
+            makeModel();
+        changed = false;
+        Matrix4 mx = new Matrix4();
+        Vector3 vx = new Vector3(position.x, -mur.getDepth()/2, position.y);
+        mx.translate(mur.getA()).rotate(new Vector3(1,0,0), mur.getB().cpy().sub(mur.getA()).nor()).translate(vx);
+        local_transform.idt();
+        local_transform.mul(mx);
+    }
+
+    @Override
+    protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform) {
+        super.draw(modelBatch, environment, global_transform);
 
     }
+
+    protected abstract void makeModel();
 }
