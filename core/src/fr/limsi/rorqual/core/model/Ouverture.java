@@ -119,24 +119,20 @@ public abstract class Ouverture extends ModelContainer {
 
     public CSG getCSG() {
 
-        Vector3 A = mur.getA();
-        Vector3 B = mur.getB();
-
         Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
 
-        Vector3 x_dir = B.cpy().sub(A);
-        Vector3 openingA = A.cpy().add(x_dir.cpy().setLength(this.position.x)).add(z_shape.cpy().setLength(this.position.y));
-        Vector3 openingB = openingA.cpy().add(x_dir.cpy().setLength(this.width));
+        Vector3 p1 = new Vector3(this.position.x, 0, this.position.y);
+        Vector3 p2 = p1.cpy().add(Vector3.X.cpy().setLength(this.width));
 
-        Vector3 y_dir = x_dir.cpy().crs(Vector3.Z).setLength(mur.getDepth()/2 + 0.001f);
+        Vector3 y_dir = Vector3.Y.cpy().setLength(mur.getDepth() / 2 + 0.001f);
 
         Vector3d dir = CSGUtils.castVector(z_shape);
 
         List<Vector3d> face = new ArrayList<Vector3d>();
-        face.add(CSGUtils.castVector(openingB.cpy().add(y_dir)));
-        face.add(CSGUtils.castVector(openingB.cpy().sub(y_dir)));
-        face.add(CSGUtils.castVector(openingA.cpy().sub(y_dir)));
-        face.add(CSGUtils.castVector(openingA.cpy().add(y_dir)));
+        face.add(CSGUtils.castVector(p2.cpy().add(y_dir)));
+        face.add(CSGUtils.castVector(p2.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(p1.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(p1.cpy().add(y_dir)));
 
         CSG csg = Extrude.points(dir, face);
 
@@ -154,7 +150,7 @@ public abstract class Ouverture extends ModelContainer {
         changed = false;
         Matrix4 mx = new Matrix4();
         Vector3 vx = new Vector3(position.x, -mur.getDepth()/2, position.y);
-        mx.translate(mur.getA()).rotate(new Vector3(1,0,0), mur.getB().cpy().sub(mur.getA()).nor()).translate(vx);
+        mx.translate(vx);
         local_transform.idt();
         local_transform.mul(mx);
     }

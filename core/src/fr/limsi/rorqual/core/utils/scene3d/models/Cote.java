@@ -53,18 +53,17 @@ public class Cote extends ModelContainer {
     private float len = 0.0f;
 
     private void makeMesh() {
-        Vector3 p1 = cotable.getA();
-        Vector3 p2 = cotable.getB();
+        Vector3 p1 = Vector3.Zero.cpy();
+        Vector3 p2 = Vector3.X.cpy().setLength(cotable.getA().dst(cotable.getB()));
         p1.add(Vector3.Z.cpy().setLength(0.01f));
         p2.add(Vector3.Z.cpy().setLength(0.01f));
 
         Vector3 x_dir = p2.cpy().sub(p1);
-        len = x_dir.len();
+        len = cotable.getA().dst(cotable.getB());
 
         Vector3 mid = p1.cpy().add(x_dir.cpy().scl(0.5f));
 
-        Vector3 y_dir = x_dir.cpy().crs(Vector3.Z);
-        y_dir.setLength(1);
+        Vector3 y_dir = Vector3.Y.cpy();
         Vector3 my_dir = y_dir.cpy().scl(-1);
 
 

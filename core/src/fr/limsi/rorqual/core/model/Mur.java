@@ -82,6 +82,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.height = h;
         this.depth = d;
         this.width = b.cpy().sub(a).len();
+        materialLayersMaterials.add(MaterialTypeEnum.BRIQUE);
+        materialLayersMaterials.add(MaterialTypeEnum.PIERRE);
     }
 
     public void setEtage(Etage e) {
@@ -217,17 +219,19 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         if (B.equals(A))
             return;
         Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
-        Vector3 y_dir = B.cpy().sub(A).crs(Vector3.Z).setLength(this.depth / 2);
+        Vector3 p1 = Vector3.Zero.cpy();
+        Vector3 p2 = Vector3.X.cpy().setLength(A.dst(B));
+        Vector3 y_dir = Vector3.Y.cpy().setLength(this.depth / 2);
 
-        Vector3d dir = CSGUtils.castVector(z_shape);
+        Vector3d z = CSGUtils.castVector(z_shape);
 
         List<Vector3d> face = new ArrayList<Vector3d>();
-        face.add(CSGUtils.castVector(B.cpy().add(y_dir)));
-        face.add(CSGUtils.castVector(B.cpy().sub(y_dir)));
-        face.add(CSGUtils.castVector(A.cpy().sub(y_dir)));
-        face.add(CSGUtils.castVector(A.cpy().add(y_dir)));
+        face.add(CSGUtils.castVector(p2.cpy().add(y_dir)));
+        face.add(CSGUtils.castVector(p2.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(p1.cpy().sub(y_dir)));
+        face.add(CSGUtils.castVector(p1.cpy().add(y_dir)));
 
-        CSG csg = Extrude.points(dir, face);
+        CSG csg = Extrude.points(z, face);
         model_non_perce = CSGUtils.toModel(csg);
 
         for (Ouverture o : ouvertures) {
@@ -271,6 +275,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         Model model = CSGUtils.toModel(csg, frontMaterial, backMaterial);
 
         this.setModel(model);
+
+        Matrix4 mx = new Matrix4();
+        mx.translate(A).rotate(new Vector3(1,0,0), B.cpy().sub(A).nor());
+        local_transform.idt();
+        local_transform.mul(mx);
     }
 
     public void act() {
