@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
@@ -19,6 +20,7 @@ public class PieceMaker extends ModelMaker {
     boolean making_piece = false;
     Mur[] murs = new Mur[4];
     Cote[] cotes = new Cote[2];
+    Slab slab;
     Anchor anchor = null;
 
     public void begin(int screenX, int screenY) {
@@ -54,6 +56,11 @@ public class PieceMaker extends ModelMaker {
 
             cotes[1] = new Cote(murs[1]);
             murs[1].add(cotes[1]);
+
+            ArrayList<Vector3> coins = new ArrayList<Vector3>();
+            slab = new Slab(null);
+            slab.setSelectable(false);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(slab);
 
             if (anchor != null)
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(anchor);
@@ -132,6 +139,13 @@ public class PieceMaker extends ModelMaker {
                 murs[i].setB(pts[i][1]);
             }
 
+            ArrayList<Vector3> coins = new ArrayList<Vector3>();
+            coins.add(new Vector3(start.x, start.y, 0).add(Vector3.X.cpy().setLength(d).scl(signe_x)).add(Vector3.Y.cpy().setLength(d).scl(signe_y)));
+            coins.add(new Vector3(start.x, end.y, 0).add(Vector3.X.cpy().setLength(d).scl(signe_x)).add(Vector3.Y.cpy().setLength(d).scl(-signe_y)));
+            coins.add(new Vector3(end.x, end.y, 0).add(Vector3.X.cpy().setLength(d).scl(-signe_x)).add(Vector3.Y.cpy().setLength(d).scl(-signe_y)));
+            coins.add(new Vector3(end.x, start.y, 0).add(Vector3.X.cpy().setLength(d).scl(-signe_x)).add(Vector3.Y.cpy().setLength(d).scl(signe_y)));
+            slab.setCoins(coins);
+
         } else {
             for (Mur mur : murs)
                 mur.setB(start);
@@ -156,6 +170,7 @@ public class PieceMaker extends ModelMaker {
         if (murs[0].getWidth() == 0 || murs[1].getWidth() == 0) {
             for (Mur mur : murs)
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(slab);
         }
         for (Mur mur: murs)
             mur.setSelectable(true);
@@ -175,6 +190,7 @@ public class PieceMaker extends ModelMaker {
 
         for (Mur mur: murs)
             ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(slab);
 
         making_piece = false;
 

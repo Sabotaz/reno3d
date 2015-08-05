@@ -63,6 +63,7 @@ public class Logic implements InputProcessor {
     public void stop() {
         if (modelMaker != null)
             modelMaker.abort();
+        modelMaker = null;
     }
 
     @Override
