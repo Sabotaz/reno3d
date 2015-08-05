@@ -245,7 +245,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         }
 
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
-	}
+    }
 
     @Override
     public void dispose() {

@@ -44,6 +44,7 @@ public class Logic implements InputProcessor {
     public void startPiece() {
         stop();
 
+        modelMaker = new PieceMaker();
     }
 
     public void startFenetre() {
