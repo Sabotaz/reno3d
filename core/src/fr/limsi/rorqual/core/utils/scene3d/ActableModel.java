@@ -69,6 +69,7 @@ public abstract class ActableModel extends Model implements RenderableProvider {
     }
 
     public void setModel(Model model) {
+        this.dispose();
         this.materials.clear();     this.materials.addAll(model.materials);
         this.meshes.clear();        this.meshes.addAll(model.meshes);
         this.meshParts.clear();     this.meshParts.addAll(model.meshParts);

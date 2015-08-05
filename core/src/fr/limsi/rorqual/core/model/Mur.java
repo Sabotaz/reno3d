@@ -63,10 +63,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     private boolean changed = true;
 
-    public Mur(Mur other) {
-        this(other.getA().cpy(), other.getB().cpy(), other.getDepth(), other.getHeight());
-    }
-
     public Mur(Vector3 a, Vector3 b) {
         this(a, b, DEFAULT_DEPTH, DEFAULT_HEIGHT);
     }
@@ -84,6 +80,40 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.width = b.cpy().sub(a).len();
         materialLayersMaterials.add(MaterialTypeEnum.BRIQUE);
         materialLayersMaterials.add(MaterialTypeEnum.PIERRE);
+        makeMaterials();
+    }
+
+    private void makeMaterials() {
+
+        if (materialLayersMaterials.size() > 0) {
+            Texture texture1_diff = materialLayersMaterials.get(0).getDiffuse();
+            Texture texture1_norm = materialLayersMaterials.get(0).getNormal();
+
+            Texture texture2_diff = materialLayersMaterials.get(materialLayersMaterials.size()-1).getDiffuse();
+            Texture texture2_norm = materialLayersMaterials.get(materialLayersMaterials.size()-1).getNormal();
+
+            texture1_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            texture1_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            texture2_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            texture2_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+
+            TextureAttribute ta1_diff = TextureAttribute.createDiffuse(texture1_diff);
+            TextureAttribute ta1_norm = TextureAttribute.createNormal(texture1_norm);
+            TextureAttribute ta2_diff = TextureAttribute.createDiffuse(texture2_diff);
+            TextureAttribute ta2_norm = TextureAttribute.createNormal(texture2_norm);
+
+            ta1_diff.scaleU = ta1_diff.scaleV = 0.5f;
+            ta1_norm.scaleU = ta1_norm.scaleV = 0.5f;
+            ta2_diff.scaleU = ta2_diff.scaleV = 0.5f;
+            ta2_norm.scaleU = ta2_norm.scaleV = 0.5f;
+
+            frontMaterial.set(ta1_diff, ta1_norm);
+            backMaterial.set(ta2_diff, ta2_norm);
+        }
+        else {
+            frontMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
+            backMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
+        }
     }
 
     public void setEtage(Etage e) {
@@ -215,6 +245,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     private Model model_non_perce = null;
 
+    Material frontMaterial = new Material();
+    Material backMaterial = new Material();
+
     private void makeMesh() {
         if (B.equals(A))
             return;
@@ -238,46 +271,14 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             csg = csg.difference(o.getCSG());
         }
 
-        Material frontMaterial = new Material();
-        Material backMaterial = new Material();
-
-        if (materialLayersMaterials.size() > 0) {
-            Texture texture1_diff = materialLayersMaterials.get(0).getDiffuse();
-            Texture texture1_norm = materialLayersMaterials.get(0).getNormal();
-
-            Texture texture2_diff = materialLayersMaterials.get(materialLayersMaterials.size()-1).getDiffuse();
-            Texture texture2_norm = materialLayersMaterials.get(materialLayersMaterials.size()-1).getNormal();
-
-            texture1_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            texture1_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            texture2_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            texture2_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-
-            TextureAttribute ta1_diff = TextureAttribute.createDiffuse(texture1_diff);
-            TextureAttribute ta1_norm = TextureAttribute.createNormal(texture1_norm);
-            TextureAttribute ta2_diff = TextureAttribute.createDiffuse(texture2_diff);
-            TextureAttribute ta2_norm = TextureAttribute.createNormal(texture2_norm);
-
-            ta1_diff.scaleU = ta1_diff.scaleV = 0.5f;
-            ta1_norm.scaleU = ta1_norm.scaleV = 0.5f;
-            ta2_diff.scaleU = ta2_diff.scaleV = 0.5f;
-            ta2_norm.scaleU = ta2_norm.scaleV = 0.5f;
-
-            frontMaterial.set(ta1_diff, ta1_norm);
-            backMaterial.set(ta2_diff, ta2_norm);
-        }
-        else {
-            frontMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
-            backMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
-        }
-
-
         Model model = CSGUtils.toModel(csg, frontMaterial, backMaterial);
 
         this.setModel(model);
 
         Matrix4 mx = new Matrix4();
-        mx.translate(A).rotate(new Vector3(1,0,0), B.cpy().sub(A).nor());
+        Vector3 dir = B.cpy().sub(A);
+        final float angle = Vector2.X.angle(new Vector2(dir.x, dir.y));
+        mx.translate(A).rotate(Vector3.Z, angle);
         local_transform.idt();
         local_transform.mul(mx);
     }

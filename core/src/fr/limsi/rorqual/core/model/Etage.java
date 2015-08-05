@@ -34,6 +34,12 @@ public class Etage {
         this.modelGraph.getRoot().add(mur);
     }
 
+    public void removeMur(Mur mur) {
+        this.murs.remove(mur);
+        this.modelGraph.getRoot().remove(mur);
+        mur.setEtage(null);
+    }
+
     public void addOuverture(Ouverture ouverture) {
         this.ouvertures.add(ouverture);
     }

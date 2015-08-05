@@ -92,6 +92,12 @@ public class MainUiControleur implements EventListener {
                             else
                                 Logic.getInstance().stop();
                             break;
+                        case PIECE:
+                            if (((Button) items.get("button")).isChecked())
+                                Logic.getInstance().startPiece();
+                            else
+                                Logic.getInstance().stop();
+                            break;
                         case FENETRE:
                             if (((Button) items.get("button")).isChecked())
                                 Logic.getInstance().startFenetre();

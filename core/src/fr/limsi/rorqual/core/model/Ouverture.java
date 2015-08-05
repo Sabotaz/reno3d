@@ -36,11 +36,11 @@ public abstract class Ouverture extends ModelContainer {
     // Constructeur
     public Ouverture(Mur mur, Vector2 position, float width, float height){
         this.mur=mur;
-        mur.addOuverture(this);
         this.position=position;
         this.width=width;
         this.height=height;
         this.surface=width*height;
+        mur.addOuverture(this);
     }
 
     // Getter & Setter
@@ -145,6 +145,8 @@ public abstract class Ouverture extends ModelContainer {
 
     public void act() {
         super.act();
+        if (mur == null)
+            return;
         if (changed)
             makeModel();
         changed = false;

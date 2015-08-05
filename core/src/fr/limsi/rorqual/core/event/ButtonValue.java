@@ -6,6 +6,7 @@ package fr.limsi.rorqual.core.event;
 public enum ButtonValue {
     EXIT,
     MUR,
+    PIECE,
     FENETRE,
     PORTE,
     DPE,

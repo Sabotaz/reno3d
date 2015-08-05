@@ -67,6 +67,17 @@ public class ModelGraph {
             objects_map.remove(m.getUserData());
     }
 
+    private int count(ModelContainer current) {
+        int i = 1;
+        for (ModelContainer child : current.getChildren())
+            i += count(child);
+        return i;
+    }
+
+    public int count() {
+        return count(this.getRoot());
+    }
+
     public void act() {
         root.act();
     }

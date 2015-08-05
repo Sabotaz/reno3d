@@ -123,8 +123,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         camera2.update();
         cameras[1] = camera2;
 
-        Logic.getInstance().setCamera(camera2);
-
         cam_updater = new PerspectiveCameraUpdater(camera2);
 
         //viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera1);
@@ -287,7 +285,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 ncam++;
                 modelGraph.setCamera(cameras[ncam % cameras.length]);
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(cameras[ncam % cameras.length]);
-                Logic.getInstance().setCamera(cameras[ncam % cameras.length]);
                 return true;
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();
