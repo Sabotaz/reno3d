@@ -15,8 +15,8 @@ import fr.limsi.rorqual.core.dpe.enums.wallproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.ecsproperties.*;
 import fr.limsi.rorqual.core.event.*;
-import fr.limsi.rorqual.core.model.IfcHelper;
-import fr.limsi.rorqual.core.model.IfcHolder;
+import fr.limsi.rorqual.core.model.*;
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.TabWindow;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
@@ -34,17 +34,13 @@ public class Dpe implements EventListener {
     /*** Attributs liés au model IFC***/
     private IfcModel ifcModel;
     private IfcHelper ifcHelper;
-    private HashMap<IfcWallStandardCase, HashMap<EventType, Object>> walls_properties = new HashMap<IfcWallStandardCase, HashMap<EventType, Object>>();
-    private HashMap<IfcSlab, HashMap<EventType, Object>> slabs_properties = new HashMap<IfcSlab, HashMap<EventType, Object>>();
-    private HashMap<IfcWindow, HashMap<EventType, Object>> windows_properties = new HashMap<IfcWindow, HashMap<EventType, Object>>();
-    private HashMap<IfcDoor, HashMap<EventType, Object>> doors_properties = new HashMap<IfcDoor, HashMap<EventType, Object>>();
+    private HashMap<Mur, HashMap<EventType, Object>> walls_properties = new HashMap<Mur, HashMap<EventType, Object>>();
+    private HashMap<Slab, HashMap<EventType, Object>> slabs_properties = new HashMap<Slab, HashMap<EventType, Object>>();
+    private HashMap<Fenetre, HashMap<EventType, Object>> windows_properties = new HashMap<Fenetre, HashMap<EventType, Object>>();
+    private HashMap<Porte, HashMap<EventType, Object>> doors_properties = new HashMap<Porte, HashMap<EventType, Object>>();
     private HashMap<EventType,Object> general_properties = new HashMap<EventType,Object>();
     private HashMap<EventType,Object> chauffage_properties = new HashMap<EventType,Object>();
     private HashMap<EventType,Object> ecs_properties = new HashMap<EventType,Object>();
-    private Collection<IfcWallStandardCase> wallCollection;
-    private Collection<IfcSlab> slabCollection;
-    private Collection<IfcWindow> windowCollection;
-    private Collection<IfcDoor> doorCollection;
 
     /*** Attributs liés à l'interface graphique de libGDX ***/
     private Skin skin;
@@ -102,10 +98,6 @@ public class Dpe implements EventListener {
         textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
         /*ifcModel = IfcHolder.getInstance().getIfcModel();
         ifcHelper = new IfcHelper(ifcModel);
-        wallCollection = ifcModel.getCollection(IfcWallStandardCase.class);
-        slabCollection = ifcModel.getCollection(IfcSlab.class);
-        windowCollection = ifcModel.getCollection(IfcWindow.class);
-        doorCollection = ifcModel.getCollection(IfcDoor.class);
         SH = ifcHelper.calculSurfaceHabitable();
         PER = ifcHelper.calculPerimetreBatiment();*/
         EventManager.getInstance().addListener(Channel.DPE, this);
@@ -121,13 +113,6 @@ public class Dpe implements EventListener {
 
     public void calc_GV() {
         GV = DP_murExt + DP_murLnc + DP_murAh + DP_murVer + DP_toiTer + DP_toiCp + DP_toiCa + DP_planVs + DP_planTp + DP_planSs + DP_planAh + DP_fen + DP_pfen + DP_fenVer + DP_pfenVer + DP_portExt + DP_portLnc + DP_portVer + PT + DR;
-    }
-
-    public void calc_Sdep(){
-        Sdep=0;
-        for (IfcWindow actualWindow : windowCollection){
-            Sdep += ifcHelper.getWindowSurface(actualWindow);
-        }
     }
 
     public void calc_MIT2(){
@@ -225,109 +210,6 @@ public class Dpe implements EventListener {
             }
         }
         return lRfm;
-    }
-
-    public double calc_lMen(){
-        double lMen=0,largeurFenetre=0,hauteurFenetre=0,largeurPorte=0,hauteurPorte=0;
-
-        for (IfcWindow actualWindow : windowCollection){
-            largeurFenetre=ifcHelper.getWindowWidth(actualWindow);
-            hauteurFenetre=ifcHelper.getWindowHeight(actualWindow);
-            lMen += (2*largeurFenetre+2*hauteurFenetre);
-        }
-
-        for (IfcDoor actualDoor : doorCollection){
-            largeurPorte=ifcHelper.getDoorWidth(actualDoor);
-            hauteurPorte=ifcHelper.getDoorHeight(actualDoor);
-            lMen += (2*largeurPorte+2*hauteurPorte);
-        }
-        return lMen;
-    }
-
-    public void tryActualiseWallDP(IfcWallStandardCase wall) {
-
-        // si pas de type de mur
-        if (!walls_properties.get(wall).containsKey(DpeEvent.TYPE_MUR))
-            return;
-
-        TypeMurEnum typeMur = (TypeMurEnum) walls_properties.get(wall).get(DpeEvent.TYPE_MUR);
-
-        // si mur connu mais pas de date d'isolation
-        if (typeMur != TypeMurEnum.INCONNUE && !walls_properties.get(wall).containsKey(DpeEvent.DATE_ISOLATION_MUR))
-            return;
-
-        DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum) walls_properties.get(wall).get(DpeEvent.DATE_ISOLATION_MUR);
-
-        // si date connue mais pas de type d'isolation
-        TypeIsolationMurEnum typeIsolationMur;
-
-        if (dateIsolationMur == DateIsolationMurEnum.INCONNUE || dateIsolationMur == DateIsolationMurEnum.JAMAIS)
-            typeIsolationMur = TypeIsolationMurEnum.INCONNUE;
-        else if (!walls_properties.get(wall).containsKey(DpeEvent.TYPE_ISOLATION_MUR))
-            return;
-        else
-            typeIsolationMur = (TypeIsolationMurEnum) walls_properties.get(wall).get(DpeEvent.TYPE_ISOLATION_MUR);
-
-        // On signal au model que le calcul thermique vient d'être effectuer sur wall
-        Object o[] = {wall, DpeState.KNOWN};
-        Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-        EventManager.getInstance().put(Channel.DPE, e);
-
-        //actualiseDP_wall(wall, typeMur, dateIsolationMur, typeIsolationMur);
-    }
-
-    public void calc_DR() {
-        double Sdep=0,Q4PaConv=0,Q4PaEnv=0,Smea=0,Q4Pa=0;
-    }
-
-    /*** Notifie le statut des planchers ***/
-    public void notifierPlanchers() {
-        IfcSlab slab;
-        Iterator<IfcSlab> it = slabCollection.iterator();
-        while (it.hasNext()) {
-            slab = it.next();
-            Object o[] = {slab, DpeState.UNKNOWN};
-            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-            EventManager.getInstance().put(Channel.DPE, e);
-        }
-    }
-
-    /*** Notifie le statut des murs ***/
-    public void notifierMurs() {
-        IfcWallStandardCase wall;
-        Iterator<IfcWallStandardCase> it = wallCollection.iterator();
-        while (it.hasNext()) {
-            wall = it.next();
-            // TODO : ne pas notifier les murs intérieurs
-            Object o[] = {wall, DpeState.UNKNOWN};
-            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-            EventManager.getInstance().put(Channel.DPE, e);
-        }
-    }
-
-    /*** Notifie le statut des fenetres ***/
-    public void notifierFenetres() {
-        IfcWindow window;
-        Iterator<IfcWindow> it = windowCollection.iterator();
-        while (it.hasNext()) {
-            window = it.next();
-            Object o[] = {window, DpeState.UNKNOWN};
-            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-            EventManager.getInstance().put(Channel.DPE, e);
-        }
-    }
-
-    /*** Notifie le statut des doors ***/
-    public void notifierPortes() {
-        IfcDoor door;
-        Iterator<IfcDoor> it = doorCollection.iterator();
-        while (it.hasNext()) {
-            door = it.next();
-            //TODO : ne prendre en considération que les doors reliées aux murs extérieurs
-            Object o[] = {door, DpeState.UNKNOWN};
-            Event e = new Event(DpeEvent.DPE_STATE_CHANGED, o);
-            EventManager.getInstance().put(Channel.DPE, e);
-        }
     }
 
     /*** Log les valeurs du DPE dans la console ***/
@@ -1316,14 +1198,14 @@ public class Dpe implements EventListener {
 
                     case TYPE_MUR: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        IfcWallStandardCase wall = (IfcWallStandardCase)items.get("userObject");
+                        Mur mur = (Mur)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeMurEnum typeMur = (TypeMurEnum)items.get("lastValue");
                             Layout layout = (Layout)items.get("layout");
-                            if (!walls_properties.containsKey(wall))
-                                walls_properties.put(wall, new HashMap<EventType, Object>());
-                            walls_properties.get(wall).put(event, typeMur);
+                            if (!walls_properties.containsKey(mur))
+                                walls_properties.put(mur, new HashMap<EventType, Object>());
+                            walls_properties.get(mur).put(event, typeMur);
                             if (!typeMur.equals(TypeMurEnum.MUR_INTERIEUR)) {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("date_isolation"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
@@ -1331,16 +1213,15 @@ public class Dpe implements EventListener {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("date_isolation"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
                             }
-                            tryActualiseWallDP(wall);
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             TypeMurEnum type = null;
-                            if (walls_properties.containsKey(wall))
-                                if (walls_properties.get(wall).containsKey(DpeEvent.TYPE_MUR))
-                                    type = (TypeMurEnum) walls_properties.get(wall).get(DpeEvent.TYPE_MUR);
+                            if (walls_properties.containsKey(mur))
+                                if (walls_properties.get(mur).containsKey(DpeEvent.TYPE_MUR))
+                                    type = (TypeMurEnum) walls_properties.get(mur).get(DpeEvent.TYPE_MUR);
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", wall);
+                            currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.TYPE_MUR, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
@@ -1349,29 +1230,28 @@ public class Dpe implements EventListener {
 
                     case DATE_ISOLATION_MUR: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        IfcWallStandardCase wall = (IfcWallStandardCase)items.get("userObject");
+                        Mur mur = (Mur)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum)items.get("lastValue");
                             Layout layout = (Layout) items.get("layout");
-                            if (!walls_properties.containsKey(wall))
-                                walls_properties.put(wall, new HashMap<EventType, Object>());
-                            walls_properties.get(wall).put(event, dateIsolationMur);
+                            if (!walls_properties.containsKey(mur))
+                                walls_properties.put(mur, new HashMap<EventType, Object>());
+                            walls_properties.get(mur).put(event, dateIsolationMur);
                             if (dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) || dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE)) {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
                             } else {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
                             }
-                            tryActualiseWallDP(wall);
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             DateIsolationMurEnum type = null;
-                            if (walls_properties.containsKey(wall))
-                                if (walls_properties.get(wall).containsKey(DpeEvent.DATE_ISOLATION_MUR))
-                                    type = (DateIsolationMurEnum) walls_properties.get(wall).get(DpeEvent.DATE_ISOLATION_MUR);
+                            if (walls_properties.containsKey(mur))
+                                if (walls_properties.get(mur).containsKey(DpeEvent.DATE_ISOLATION_MUR))
+                                    type = (DateIsolationMurEnum) walls_properties.get(mur).get(DpeEvent.DATE_ISOLATION_MUR);
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", wall);
+                            currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.DATE_ISOLATION_MUR, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
@@ -1380,23 +1260,22 @@ public class Dpe implements EventListener {
 
                     case TYPE_ISOLATION_MUR: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        IfcWallStandardCase wall = (IfcWallStandardCase)items.get("userObject");
+                        Mur mur = (Mur)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeIsolationMurEnum typeIsolationMur = (TypeIsolationMurEnum) items.get("lastValue");
-                            if (!walls_properties.containsKey(wall))
-                                walls_properties.put(wall, new HashMap<EventType, Object>());
-                            walls_properties.get(wall).put(event, typeIsolationMur);
-                            tryActualiseWallDP(wall);
+                            if (!walls_properties.containsKey(mur))
+                                walls_properties.put(mur, new HashMap<EventType, Object>());
+                            walls_properties.get(mur).put(event, typeIsolationMur);
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             TypeIsolationMurEnum type = null;
-                            if (walls_properties.containsKey(wall))
-                                if (walls_properties.get(wall).containsKey(DpeEvent.TYPE_ISOLATION_MUR))
-                                    type = (TypeIsolationMurEnum) walls_properties.get(wall).get(DpeEvent.TYPE_ISOLATION_MUR);
+                            if (walls_properties.containsKey(mur))
+                                if (walls_properties.get(mur).containsKey(DpeEvent.TYPE_ISOLATION_MUR))
+                                    type = (TypeIsolationMurEnum) walls_properties.get(mur).get(DpeEvent.TYPE_ISOLATION_MUR);
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", wall);
+                            currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.TYPE_ISOLATION_MUR, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
@@ -1405,23 +1284,22 @@ public class Dpe implements EventListener {
 
                     case ORIENTATION_MUR: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        IfcWallStandardCase wall = (IfcWallStandardCase)items.get("userObject");
+                        Mur mur = (Mur)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             OrientationMurEnum orientationMur = (OrientationMurEnum) items.get("lastValue");
-                            if (!walls_properties.containsKey(wall))
-                                walls_properties.put(wall, new HashMap<EventType, Object>());
-                            walls_properties.get(wall).put(event, orientationMur);
-                            tryActualiseWallDP(wall);
+                            if (!walls_properties.containsKey(mur))
+                                walls_properties.put(mur, new HashMap<EventType, Object>());
+                            walls_properties.get(mur).put(event, orientationMur);
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             OrientationMurEnum type = null;
-                            if (walls_properties.containsKey(wall))
-                                if (walls_properties.get(wall).containsKey(DpeEvent.ORIENTATION_MUR))
-                                    type = (OrientationMurEnum) walls_properties.get(wall).get(DpeEvent.ORIENTATION_MUR);
+                            if (walls_properties.containsKey(mur))
+                                if (walls_properties.get(mur).containsKey(DpeEvent.ORIENTATION_MUR))
+                                    type = (OrientationMurEnum) walls_properties.get(mur).get(DpeEvent.ORIENTATION_MUR);
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", wall);
+                            currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.ORIENTATION_MUR, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
@@ -1430,24 +1308,24 @@ public class Dpe implements EventListener {
 
                     case TYPE_FENETRE: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        IfcWindow window = (IfcWindow)items.get("userObject");
+                        Fenetre fenetre = (Fenetre)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeFenetreEnum typeFenetre = (TypeFenetreEnum)items.get("lastValue");
-                            if (!windows_properties.containsKey(window)){
-                                windows_properties.put(window, new HashMap<EventType, Object>());
+                            if (!windows_properties.containsKey(fenetre)){
+                                windows_properties.put(fenetre, new HashMap<EventType, Object>());
                             }
-                            windows_properties.get(window).put(event, typeFenetre);
+                            windows_properties.get(fenetre).put(event, typeFenetre);
 
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             TypeFenetreEnum type = null;
-                            if (windows_properties.containsKey(window))
-                                if (windows_properties.get(window).containsKey(DpeEvent.TYPE_FENETRE))
-                                    type = (TypeFenetreEnum)windows_properties.get(window).get(DpeEvent.TYPE_FENETRE);
+                            if (windows_properties.containsKey(fenetre))
+                                if (windows_properties.get(fenetre).containsKey(DpeEvent.TYPE_FENETRE))
+                                    type = (TypeFenetreEnum)windows_properties.get(fenetre).get(DpeEvent.TYPE_FENETRE);
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", window);
+                            currentItems.put("userObject", fenetre);
                             Event e2 = new Event(DpeEvent.TYPE_FENETRE, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
@@ -1458,43 +1336,43 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (items.get("userObject") instanceof IfcWindow){
-                            IfcWindow window = (IfcWindow)items.get("userObject");
+                            Fenetre fenetre = (Fenetre)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMateriauMenuiserieEnum typeMateriauMenuiserie = (TypeMateriauMenuiserieEnum)items.get("lastValue");
-                                if (!windows_properties.containsKey(window))
-                                    windows_properties.put(window, new HashMap<EventType, Object>());
-                                windows_properties.get(window).put(event, typeMateriauMenuiserie);
+                                if (!windows_properties.containsKey(fenetre))
+                                    windows_properties.put(fenetre, new HashMap<EventType, Object>());
+                                windows_properties.get(fenetre).put(event, typeMateriauMenuiserie);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeMateriauMenuiserieEnum type = null;
-                                if (windows_properties.containsKey(window))
-                                    if (windows_properties.get(window).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE))
-                                        type = (TypeMateriauMenuiserieEnum) windows_properties.get(window).get(DpeEvent.TYPE_MATERIAU_MENUISERIE);
+                                if (windows_properties.containsKey(fenetre))
+                                    if (windows_properties.get(fenetre).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE))
+                                        type = (TypeMateriauMenuiserieEnum) windows_properties.get(fenetre).get(DpeEvent.TYPE_MATERIAU_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", window);
+                                currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.TYPE_MATERIAU_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }
                         else if (items.get("userObject") instanceof IfcDoor){
-                            IfcDoor door = (IfcDoor)items.get("userObject");
+                            Porte porte = (Porte)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMateriauMenuiserieEnum typeMateriauMenuiserie = (TypeMateriauMenuiserieEnum)items.get("lastValue");
-                                if (!doors_properties.containsKey(door))
-                                    doors_properties.put(door, new HashMap<EventType, Object>());
-                                doors_properties.get(door).put(event, typeMateriauMenuiserie);
+                                if (!doors_properties.containsKey(porte))
+                                    doors_properties.put(porte, new HashMap<EventType, Object>());
+                                doors_properties.get(porte).put(event, typeMateriauMenuiserie);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeMateriauMenuiserieEnum type = null;
-                                if (doors_properties.containsKey(door))
-                                    if (doors_properties.get(door).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE))
-                                        type = (TypeMateriauMenuiserieEnum) doors_properties.get(door).get(DpeEvent.TYPE_MATERIAU_MENUISERIE);
+                                if (doors_properties.containsKey(porte))
+                                    if (doors_properties.get(porte).containsKey(DpeEvent.TYPE_MATERIAU_MENUISERIE))
+                                        type = (TypeMateriauMenuiserieEnum) doors_properties.get(porte).get(DpeEvent.TYPE_MATERIAU_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", door);
+                                currentItems.put("userObject", porte);
                                 Event e2 = new Event(DpeEvent.TYPE_MATERIAU_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
@@ -1506,44 +1384,44 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (items.get("userObject") instanceof IfcWindow){
-                            IfcWindow window = (IfcWindow)items.get("userObject");
+                            Fenetre fenetre = (Fenetre)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeVitrageEnum TypeVitrage = (TypeVitrageEnum)items.get("lastValue");
-                                if (!windows_properties.containsKey(window))
-                                    windows_properties.put(window, new HashMap<EventType, Object>());
-                                windows_properties.get(window).put(event, TypeVitrage);
+                                if (!windows_properties.containsKey(fenetre))
+                                    windows_properties.put(fenetre, new HashMap<EventType, Object>());
+                                windows_properties.get(fenetre).put(event, TypeVitrage);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeVitrageEnum type = null;
-                                if (windows_properties.containsKey(window))
-                                    if (windows_properties.get(window).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE))
-                                        type = (TypeVitrageEnum) windows_properties.get(window).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
+                                if (windows_properties.containsKey(fenetre))
+                                    if (windows_properties.get(fenetre).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE))
+                                        type = (TypeVitrageEnum) windows_properties.get(fenetre).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", window);
+                                currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
 
                         }
                         else if (items.get("userObject") instanceof IfcDoor){
-                            IfcDoor door = (IfcDoor)items.get("userObject");
+                            Porte porte = (Porte)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeVitrageEnum TypeVitrage = (TypeVitrageEnum)items.get("lastValue");
-                                if (!doors_properties.containsKey(door))
-                                    doors_properties.put(door, new HashMap<EventType, Object>());
-                                doors_properties.get(door).put(event, TypeVitrage);
+                                if (!doors_properties.containsKey(porte))
+                                    doors_properties.put(porte, new HashMap<EventType, Object>());
+                                doors_properties.get(porte).put(event, TypeVitrage);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeVitrageEnum type = null;
-                                if (doors_properties.containsKey(door))
-                                    if (doors_properties.get(door).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE))
-                                        type = (TypeVitrageEnum) doors_properties.get(door).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
+                                if (doors_properties.containsKey(porte))
+                                    if (doors_properties.get(porte).containsKey(DpeEvent.TYPE_VITRAGE_MENUISERIE))
+                                        type = (TypeVitrageEnum) doors_properties.get(porte).get(DpeEvent.TYPE_VITRAGE_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", door);
+                                currentItems.put("userObject", porte);
                                 Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
@@ -1555,44 +1433,44 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (items.get("userObject") instanceof IfcWindow){
-                            IfcWindow window = (IfcWindow)items.get("userObject");
+                            Fenetre fenetre = (Fenetre)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
-                                if (!windows_properties.containsKey(window))
-                                    windows_properties.put(window, new HashMap<EventType, Object>());
-                                windows_properties.get(window).put(event, typeFermeture);
+                                if (!windows_properties.containsKey(fenetre))
+                                    windows_properties.put(fenetre, new HashMap<EventType, Object>());
+                                windows_properties.get(fenetre).put(event, typeFermeture);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeFermetureEnum type = null;
-                                if (windows_properties.containsKey(window))
-                                    if (windows_properties.get(window).containsKey(DpeEvent.TYPE_FERMETURE_MENUISERIE))
-                                        type = (TypeFermetureEnum) windows_properties.get(window).get(DpeEvent.TYPE_FERMETURE_MENUISERIE);
+                                if (windows_properties.containsKey(fenetre))
+                                    if (windows_properties.get(fenetre).containsKey(DpeEvent.TYPE_FERMETURE_MENUISERIE))
+                                        type = (TypeFermetureEnum) windows_properties.get(fenetre).get(DpeEvent.TYPE_FERMETURE_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", window);
+                                currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.TYPE_FERMETURE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
 
                         }
                         else if (items.get("userObject") instanceof IfcDoor){
-                            IfcDoor door = (IfcDoor)items.get("userObject");
+                            Porte porte = (Porte)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
-                                if (!doors_properties.containsKey(door))
-                                    doors_properties.put(door, new HashMap<EventType, Object>());
-                                doors_properties.get(door).put(event, typeFermeture);
+                                if (!doors_properties.containsKey(porte))
+                                    doors_properties.put(porte, new HashMap<EventType, Object>());
+                                doors_properties.get(porte).put(event, typeFermeture);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeFermetureEnum type = null;
-                                if (doors_properties.containsKey(door))
-                                    if (doors_properties.get(door).containsKey(DpeEvent.TYPE_FERMETURE_MENUISERIE))
-                                        type = (TypeFermetureEnum) doors_properties.get(door).get(DpeEvent.TYPE_FERMETURE_MENUISERIE);
+                                if (doors_properties.containsKey(porte))
+                                    if (doors_properties.get(porte).containsKey(DpeEvent.TYPE_FERMETURE_MENUISERIE))
+                                        type = (TypeFermetureEnum) doors_properties.get(porte).get(DpeEvent.TYPE_FERMETURE_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", door);
+                                currentItems.put("userObject", porte);
                                 Event e2 = new Event(DpeEvent.TYPE_FERMETURE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
@@ -1604,44 +1482,44 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (items.get("userObject") instanceof IfcWindow){
-                            IfcWindow window = (IfcWindow)items.get("userObject");
+                            Fenetre fenetre = (Fenetre)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
-                                if (!windows_properties.containsKey(window))
-                                    windows_properties.put(window, new HashMap<EventType, Object>());
-                                windows_properties.get(window).put(event, masque);
+                                if (!windows_properties.containsKey(fenetre))
+                                    windows_properties.put(fenetre, new HashMap<EventType, Object>());
+                                windows_properties.get(fenetre).put(event, masque);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeMasqueEnum type = null;
-                                if (windows_properties.containsKey(window))
-                                    if (windows_properties.get(window).containsKey(DpeEvent.MASQUE_PROCHE_MENUISERIE))
-                                        type = (TypeMasqueEnum) windows_properties.get(window).get(DpeEvent.MASQUE_PROCHE_MENUISERIE);
+                                if (windows_properties.containsKey(fenetre))
+                                    if (windows_properties.get(fenetre).containsKey(DpeEvent.MASQUE_PROCHE_MENUISERIE))
+                                        type = (TypeMasqueEnum) windows_properties.get(fenetre).get(DpeEvent.MASQUE_PROCHE_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", window);
+                                currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.MASQUE_PROCHE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
 
                         }
                         else if (items.get("userObject") instanceof IfcDoor){
-                            IfcDoor door = (IfcDoor)items.get("userObject");
+                            Porte porte = (Porte)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
-                                if (!doors_properties.containsKey(door))
-                                    doors_properties.put(door, new HashMap<EventType, Object>());
-                                doors_properties.get(door).put(event, masque);
+                                if (!doors_properties.containsKey(porte))
+                                    doors_properties.put(porte, new HashMap<EventType, Object>());
+                                doors_properties.get(porte).put(event, masque);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeMasqueEnum type = null;
-                                if (doors_properties.containsKey(door))
-                                    if (doors_properties.get(door).containsKey(DpeEvent.MASQUE_PROCHE_MENUISERIE))
-                                        type = (TypeMasqueEnum) doors_properties.get(door).get(DpeEvent.MASQUE_PROCHE_MENUISERIE);
+                                if (doors_properties.containsKey(porte))
+                                    if (doors_properties.get(porte).containsKey(DpeEvent.MASQUE_PROCHE_MENUISERIE))
+                                        type = (TypeMasqueEnum) doors_properties.get(porte).get(DpeEvent.MASQUE_PROCHE_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", door);
+                                currentItems.put("userObject", porte);
                                 Event e2 = new Event(DpeEvent.MASQUE_PROCHE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
@@ -1653,44 +1531,44 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (items.get("userObject") instanceof IfcWindow){
-                            IfcWindow window = (IfcWindow)items.get("userObject");
+                            Fenetre fenetre = (Fenetre)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
-                                if (!windows_properties.containsKey(window))
-                                    windows_properties.put(window, new HashMap<EventType, Object>());
-                                windows_properties.get(window).put(event, masque);
+                                if (!windows_properties.containsKey(fenetre))
+                                    windows_properties.put(fenetre, new HashMap<EventType, Object>());
+                                windows_properties.get(fenetre).put(event, masque);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeMasqueEnum type = null;
-                                if (windows_properties.containsKey(window))
-                                    if (windows_properties.get(window).containsKey(DpeEvent.MASQUE_LOINTAIN_MENUISERIE))
-                                        type = (TypeMasqueEnum) windows_properties.get(window).get(DpeEvent.MASQUE_LOINTAIN_MENUISERIE);
+                                if (windows_properties.containsKey(fenetre))
+                                    if (windows_properties.get(fenetre).containsKey(DpeEvent.MASQUE_LOINTAIN_MENUISERIE))
+                                        type = (TypeMasqueEnum) windows_properties.get(fenetre).get(DpeEvent.MASQUE_LOINTAIN_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", window);
+                                currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.MASQUE_LOINTAIN_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
 
                         }
                         else if (items.get("userObject") instanceof IfcDoor){
-                            IfcDoor door = (IfcDoor)items.get("userObject");
+                            Porte porte = (Porte)items.get("userObject");
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
-                                if (!doors_properties.containsKey(door))
-                                    doors_properties.put(door, new HashMap<EventType, Object>());
-                                doors_properties.get(door).put(event, masque);
+                                if (!doors_properties.containsKey(porte))
+                                    doors_properties.put(porte, new HashMap<EventType, Object>());
+                                doors_properties.get(porte).put(event, masque);
                                 //tryActualiseWallDP(window);
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeMasqueEnum type = null;
-                                if (doors_properties.containsKey(door))
-                                    if (doors_properties.get(door).containsKey(DpeEvent.MASQUE_LOINTAIN_MENUISERIE))
-                                        type = (TypeMasqueEnum) doors_properties.get(door).get(DpeEvent.MASQUE_LOINTAIN_MENUISERIE);
+                                if (doors_properties.containsKey(porte))
+                                    if (doors_properties.get(porte).containsKey(DpeEvent.MASQUE_LOINTAIN_MENUISERIE))
+                                        type = (TypeMasqueEnum) doors_properties.get(porte).get(DpeEvent.MASQUE_LOINTAIN_MENUISERIE);
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", door);
+                                currentItems.put("userObject", porte);
                                 Event e2 = new Event(DpeEvent.MASQUE_LOINTAIN_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
@@ -1700,14 +1578,14 @@ public class Dpe implements EventListener {
 
                     case TYPE_PORTE: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        IfcDoor door = (IfcDoor)items.get("userObject");
+                        Porte porte = (Porte)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeDoorEnum typeDoor = (TypeDoorEnum)items.get("lastValue");
                             Layout layout = (Layout)items.get("layout");
-                            if (!doors_properties.containsKey(door))
-                                doors_properties.put(door, new HashMap<EventType, Object>());
-                            doors_properties.get(door).put(event, typeDoor);
+                            if (!doors_properties.containsKey(porte))
+                                doors_properties.put(porte, new HashMap<EventType, Object>());
+                            doors_properties.get(porte).put(event, typeDoor);
                             if (typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_COULISSANTE)||typeDoor.equals(TypeDoorEnum.PORTE_FENETRE_BATTANTE)) {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("materiau_porte"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("vitrage_porte"), true);
@@ -1724,13 +1602,13 @@ public class Dpe implements EventListener {
                             //tryActualiseWallDP(wall);
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             TypeDoorEnum type = null;
-                            if (doors_properties.containsKey(door))
-                                if (doors_properties.get(door).containsKey(DpeEvent.TYPE_PORTE))
-                                    type = (TypeDoorEnum) doors_properties.get(door).get(DpeEvent.TYPE_PORTE);
+                            if (doors_properties.containsKey(porte))
+                                if (doors_properties.get(porte).containsKey(DpeEvent.TYPE_PORTE))
+                                    type = (TypeDoorEnum) doors_properties.get(porte).get(DpeEvent.TYPE_PORTE);
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", door);
+                            currentItems.put("userObject", porte);
                             Event e2 = new Event(DpeEvent.TYPE_PORTE, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
