@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,8 +14,18 @@ public class OrthographicCameraUpdater extends CameraUpdater {
 
     OrthographicCamera camera;
 
-    public OrthographicCameraUpdater(OrthographicCamera c) {
-        camera = c;
+    public OrthographicCameraUpdater() {
+
+        OrthographicCamera orthographicCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        orthographicCamera.viewportHeight = Gdx.graphics.getHeight();
+        orthographicCamera.viewportWidth = Gdx.graphics.getWidth();
+        orthographicCamera.zoom = 1f/100;
+        orthographicCamera.position.set(0.f, 0, 10f);
+        orthographicCamera.lookAt(0f, 0f, 0f);
+        orthographicCamera.up.set(0, 1, 0);
+        orthographicCamera.update();
+
+        camera = orthographicCamera;
     }
 
     public Camera getCamera() {

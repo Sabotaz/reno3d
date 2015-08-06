@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
@@ -13,8 +14,20 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     PerspectiveCamera camera;
 
-    public PerspectiveCameraUpdater(PerspectiveCamera c) {
-        camera = c;
+    public PerspectiveCameraUpdater() {
+
+        PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
+        perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
+        perspectiveCamera.position.set(0, -20, 1.65f);
+        perspectiveCamera.near = 1f;
+        perspectiveCamera.far = 10000f;
+        //perspectiveCamera.lookAt(0, 0, 0);
+        perspectiveCamera.direction.set(0,1,0);
+        perspectiveCamera.up.set(0, 0, 1);
+        perspectiveCamera.update();
+
+        camera = perspectiveCamera;
     }
 
     private enum Sense {

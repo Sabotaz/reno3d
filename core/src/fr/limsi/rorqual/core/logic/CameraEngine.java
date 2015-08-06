@@ -25,27 +25,8 @@ public class CameraEngine implements InputProcessor {
         private CameraUpdater updater;
 
         static {
-            OrthographicCamera orthographicCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            orthographicCamera.viewportHeight = Gdx.graphics.getHeight();
-            orthographicCamera.viewportWidth = Gdx.graphics.getWidth();
-            orthographicCamera.zoom = 1f/100;
-            orthographicCamera.position.set(0.f, 0, 10f);
-            orthographicCamera.lookAt(0f, 0f, 0f);
-            orthographicCamera.up.set(0, 1, 0);
-            orthographicCamera.update();
-            ORTHOGRAPHIC.updater = new OrthographicCameraUpdater(orthographicCamera);
-
-            PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
-            perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
-            perspectiveCamera.position.set(0, -20, 1.65f);
-            perspectiveCamera.near = 1f;
-            perspectiveCamera.far = 10000f;
-            //perspectiveCamera.lookAt(0, 0, 0);
-            perspectiveCamera.direction.set(0,1,0);
-            perspectiveCamera.up.set(0, 0, 1);
-            perspectiveCamera.update();
-            PERSPECTIVE.updater = new PerspectiveCameraUpdater(perspectiveCamera);
+            ORTHOGRAPHIC.updater = new OrthographicCameraUpdater();
+            PERSPECTIVE.updater = new PerspectiveCameraUpdater();
         }
 
         public CameraUpdater getCameraUpdater() {
