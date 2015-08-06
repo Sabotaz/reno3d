@@ -5,6 +5,7 @@ package fr.limsi.rorqual.core.event;
  */
 public enum ButtonValue {
     EXIT,
+    SWITCH_2D_3D,
     MUR,
     PIECE,
     FENETRE,

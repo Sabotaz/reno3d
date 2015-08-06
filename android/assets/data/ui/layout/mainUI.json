@@ -29,6 +29,26 @@
     },
     {
       "type": "ButtonGroup",
+      "content": [
+        {
+          "type": "TextButton",
+          "text": "2D/3D",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
+          "height": 40,
+          "width": 120,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            null,
+            "default.fnt"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ButtonGroup",
       "minChecked": 0,
       "content": [
         {

@@ -15,6 +15,7 @@ import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.UiEvent;
+import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
 
 /**
@@ -88,6 +89,9 @@ public class MainUiControleur implements EventListener {
                     switch (lastValue) {
                         case EXIT:
                             Gdx.app.exit();
+                            break;
+                        case SWITCH_2D_3D:
+                            CameraEngine.getInstance().switchCamera();
                             break;
                         case MUR:
                             if (((Button) items.get("button")).isChecked())

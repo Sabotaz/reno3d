@@ -38,6 +38,7 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
+import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
@@ -64,7 +65,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Button buttonDPE, buttonExit;
     private BitmapFont fontBlack;
     private BitmapFont fontWhite;
-    private static Camera[] cameras = new Camera[2];
     private static int ncam = 1;
     private Environment environnement;
     private ShaderProvider shaderProvider;
@@ -81,7 +81,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ModelContainer sun;
     private ModelContainer pin;
     private Vector3 decal_pos;
-    PerspectiveCameraUpdater cam_updater;
     private MainUiControleur mainUiControleur;
 
     @Override
@@ -102,42 +101,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         ModelHolder.getInstance().setBatiment(new Batiment());
         ModelHolder.getInstance().getBatiment().setCurrentEtage(new Etage());
 
-        /*** Création de la caméra 2D vue de dessus ***/
-        OrthographicCamera camera1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera1.viewportHeight = Gdx.graphics.getHeight();
-        camera1.viewportWidth = Gdx.graphics.getWidth();
-        camera1.zoom = 1f/100;
-        camera1.position.set(0.f,0,10f);
-        camera1.lookAt(0f, 0f, 0f);
-        camera1.up.set(0, 1, 0);
-        camera1.update();
-        cameras[0] = camera1;
-
-        /*** Création de la caméra 3D ***/
-        PerspectiveCamera camera2 = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera2.viewportHeight = Gdx.graphics.getHeight();
-        camera2.viewportWidth = Gdx.graphics.getWidth();
-        camera2.position.set(0, -20, 1.65f);
-        camera2.near = 1f;
-        camera2.far = 10000f;
-        //camera2.lookAt(0, 0, 0);
-        camera2.direction.set(0,1,0);
-        camera2.up.set(0, 0, 1);
-        camera2.update();
-        cameras[1] = camera2;
-
-        cam_updater = new PerspectiveCameraUpdater(camera2);
-
         //viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera1);
 
         /*** Création d'un tableau de caméras ***/
-        Camera baseCamera = cameras[ncam%cameras.length];
 
         /*** Chargement des shaders ***/
         shaderProvider = new ShaderChooser();
 
         modelGraph = new ModelGraph();
-        modelGraph.setCamera(baseCamera);
+        modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
 
         modelBatch = new ModelBatch(shaderProvider);
 
@@ -162,12 +134,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         //modelGraph.getRoot().add(popup);
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
-        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(camera2);
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
 
         SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, cam_updater));
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, CameraEngine.getInstance()));
 
         state = new DpeStateUpdater(modelGraph);
 
@@ -236,7 +208,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 	public void render () {
         act();
 
-        modelBatch.begin(cameras[ncam % cameras.length]);
+        modelBatch.begin(CameraEngine.getInstance().getCurrentCamera());
 
         Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -268,10 +240,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     @Override
     public void resize(int width, int height) {
-        cameras[0].viewportHeight = height;
-        cameras[0].viewportWidth = width;
-        cameras[1].viewportHeight = height;
-        cameras[1].viewportWidth = width;
+        CameraEngine.getInstance().updateViewport(height, width);
         stageMenu.getViewport().update(width, height, true);
     }
 
@@ -295,8 +264,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         switch (keycode) {
             case Input.Keys.C:
                 ncam++;
-                modelGraph.setCamera(cameras[ncam % cameras.length]);
-                ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(cameras[ncam % cameras.length]);
+                modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
+                ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
                 return true;
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();
@@ -335,20 +304,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         if (selected != null) {
             //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
             selected.setColor(Color.YELLOW);
-            cameras[ncam%cameras.length].position.set(selected.local_transform.getTranslation(new Vector3()).add(5, 5, 5));
-            cameras[ncam%cameras.length].lookAt(selected.local_transform.getTranslation(new Vector3()).add(0, 0, 2));
-            cameras[ncam%cameras.length].up.set(0, 0, 1);
-            cameras[ncam%cameras.length].update();
         }
     }
 
     public static void deselect() {
         if (selected != null) {
             selected.removeColor();
-            cameras[ncam%cameras.length].position.set(0, -20, 20);
-            cameras[ncam%cameras.length].lookAt(0, 0, 0);
-            cameras[ncam%cameras.length].up.set(0, 0, 1);
-            cameras[ncam%cameras.length].update();
         }
         selected = null;
         //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
@@ -385,7 +346,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         dragged = true;
         int diffX = screenX - last_screenX;
         int diffY = screenY - last_screenY;
-        Camera camera = cameras[ncam%cameras.length];
+        Camera camera = CameraEngine.getInstance().getCurrentCamera();
         if (camera instanceof OrthographicCamera) {
             OrthographicCamera oc = (OrthographicCamera) camera;
             oc.translate(-diffX * oc.zoom, diffY * oc.zoom, 0);
@@ -404,7 +365,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     @Override
     public boolean scrolled(int amount) {
 
-        Camera camera = cameras[ncam%cameras.length];
+        Camera camera = CameraEngine.getInstance().getCurrentCamera();
         if (camera instanceof OrthographicCamera) {
             OrthographicCamera oc = (OrthographicCamera) camera;
             oc.zoom = oc.zoom * (1+amount/10f);
@@ -425,8 +386,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     private void update_cam() {
-        if (cameras[ncam%cameras.length] instanceof PerspectiveCamera) {
-            cam_updater.act();
+        if (CameraEngine.getInstance().getCurrentCamera() instanceof PerspectiveCamera) {
+            CameraEngine.getInstance().getCurrentCameraUpdater().act();
         }
     }
 }

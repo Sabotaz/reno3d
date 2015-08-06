@@ -2,17 +2,18 @@ package fr.limsi.rorqual.core.view;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 
 /**
  * Created by christophe on 15/07/15.
  */
-public class PerspectiveCameraUpdater implements InputProcessor {
+public class PerspectiveCameraUpdater extends CameraUpdater {
 
     PerspectiveCamera camera;
 
-    PerspectiveCameraUpdater(PerspectiveCamera c) {
+    public PerspectiveCameraUpdater(PerspectiveCamera c) {
         camera = c;
     }
 
@@ -29,6 +30,10 @@ public class PerspectiveCameraUpdater implements InputProcessor {
     private Sense camera_mov = Sense.NONE;
 
     private boolean ctrl = false;
+
+    public Camera getCamera() {
+        return camera;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
