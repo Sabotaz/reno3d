@@ -3,7 +3,6 @@ package fr.limsi.rorqual.core.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -25,7 +24,10 @@ public class EventManager {
     }
 
     public void addListener(Channel c, EventListener l) {
-        eventListeners.get(c).add(l);
+        List<EventListener> listeners = eventListeners.get(c);
+        synchronized (listeners) {
+            listeners.add(l);
+        }
     }
 
     public void put(Channel c, Event e) {
@@ -48,13 +50,16 @@ public class EventManager {
             public void run() {
                 BlockingQueue<Event> eventQueue = eventQueues.get(c);
                 List<EventListener> listeners = eventListeners.get(c);
+
                 while (running) {
                     try {
                         Event e = eventQueue.poll(100, TimeUnit.MILLISECONDS);
                         if (e != null) {
-                            Iterator<EventListener> iterator = listeners.iterator();
-                            while (iterator.hasNext())
-                                makeNotificationThread(iterator.next(), c, e);
+                            synchronized (listeners) {
+                                for (EventListener l : listeners) {
+                                    makeNotificationThread(l, c, e);
+                                }
+                            }
                         }
                     } catch (InterruptedException ie) {
 
