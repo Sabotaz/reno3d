@@ -125,21 +125,6 @@
             "atlas:ui_001.atlas:chauffage:tint:CCCCCC",
             "default.fnt"
           ]
-        },
-        {
-          "type": "TextButton",
-          "text": "ECS",
-          "value": "fr.limsi.rorqual.core.event.ButtonValue.ECS",
-          "height": 40,
-          "width": 120,
-          "padTop": 10,
-          "padRight": 10,
-          "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
-            "skin:uiskin.json:default-round-down",
-            "default.fnt"
-          ]
         }
       ]
     }

@@ -40,7 +40,6 @@ public class MainUiControleur implements EventListener {
         return MainUiControleurHolder.INSTANCE;
     }
 
-
     public void setStage(Stage s) {
         stage = s;
     }
@@ -59,7 +58,11 @@ public class MainUiControleur implements EventListener {
         tb = actor;
         if (tb != null) {
             synchronized (stage) {
-                tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 100);
+                if (tb instanceof TabWindow){
+                    tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 20 - ((TabWindow) tb).getPrefHeight()/2);
+                }else{
+                    tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 100);
+                }
                 stage.addActor(tb);
             }
         }
@@ -115,9 +118,6 @@ public class MainUiControleur implements EventListener {
                             break;
                         case CHAUFFAGE:
                             addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
-                            break;
-                        case ECS:
-                            addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_ECS));
                             break;
                         default:
                             System.out.println(lastValue);

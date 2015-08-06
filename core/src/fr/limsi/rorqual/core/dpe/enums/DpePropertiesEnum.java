@@ -6,7 +6,6 @@ package fr.limsi.rorqual.core.dpe.enums;
 public enum DpePropertiesEnum {
     CHAUFFAGE,
     GENERAL,
-    ECS,
     MENUISERIE,
     SLAB,
     MUR;

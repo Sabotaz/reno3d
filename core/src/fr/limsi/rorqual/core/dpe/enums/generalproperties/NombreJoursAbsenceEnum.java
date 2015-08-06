@@ -1,9 +1,9 @@
-package fr.limsi.rorqual.core.dpe.enums.ecsproperties;
+package fr.limsi.rorqual.core.dpe.enums.generalproperties;
 
 /**
- * Created by ricordeau on 29/07/15.
+ * Created by ricordeau on 04/08/15.
  */
-public enum NombrePersonnesEnum {
+public enum NombreJoursAbsenceEnum {
     UNE(1),
     DEUX(2),
     TROIS(3),
@@ -27,13 +27,16 @@ public enum NombrePersonnesEnum {
 
     private int nombre;
 
-    NombrePersonnesEnum(int nb){
+    NombreJoursAbsenceEnum(int nb){
         this.nombre=nb;
     }
 
     @Override
     public String toString(){
-        return Integer.toString(this.nombre);
+        if (this.nombre>1){
+            return Integer.toString(this.nombre)+" jours";
+        }else{
+            return Integer.toString(this.nombre)+" jour";
+        }
     }
-
 }

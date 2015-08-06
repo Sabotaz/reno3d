@@ -1,9 +1,9 @@
 package fr.limsi.rorqual.core.dpe.enums.chauffageproperties;
 
 /**
- * Created by ricordeau on 21/07/15.
+ * Created by ricordeau on 04/08/15.
  */
-public enum TypeChauffageEnum {
+public enum TypeChauffageSansPoilEnum {
     CHAUFFAGE_ELECTRIQUE_DIRECT_ANCIEN("Chauffage électrique direct ancien"),
     CHAUDIERE_ELECTRIQUE_DIRECT_RECENT("Chauffage électrique direct récent"),
     CHAUDIERE_ELECTRIQUE("Chaudière électrique"),
@@ -11,9 +11,6 @@ public enum TypeChauffageEnum {
     POMPE_A_CHALEUR_AIR_EAU("Pompe à chaleur air/eau"),
     POMPE_A_CHALEUR_SUR_NAPPE("Pompe à chaleur sur nappe"),
     POMPE_A_CHALEUR_GEOTHERMIQUE("Pompe à chaleur géothermique"),
-    POIL_OU_INSERT_BOIS_AVANT_2001("Poil ou insert bois installé avant 2001"),
-    POIL_OU_INSERT_BOIS_APRES_2001("Poil ou insert bois installé à partir de 2001"),
-    POIL_FIOUL_OU_GPL("Poil fioul ou GPL"),
     CHAUDIERE_CLASSIQUE_AVANT_1981("Chaudière classique (<1981)"),
     CHAUDIERE_CLASSIQUE_ENTRE_1981_ET_1986("Chaudière classique (entre 1981 et 1985)"),
     CHAUDIERE_CLASSIQUE_ENTRE_1986_ET_1991("Chaudière classique (entre 1986 et 1990)"),
@@ -36,7 +33,7 @@ public enum TypeChauffageEnum {
     RADIATEUR_GAZ("Radiateur gaz");
 
     private String name;
-    TypeChauffageEnum(String name){
+    TypeChauffageSansPoilEnum(String name){
         this.name = name;
     }
 

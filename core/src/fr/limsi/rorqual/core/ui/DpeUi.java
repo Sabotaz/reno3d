@@ -45,20 +45,16 @@ public class DpeUi  {
             }
             return a;
         }
-        if(o == DpeEvent.INFOS_ECS){
+        if(o == DpeEvent.INFOS_CHAUFFAGE){
             Actor a = null;
-            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.ECS)){
-                Layout l = Layout.fromJson("data/ui/layout/ecsProperties.json", null);
+            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.CHAUFFAGE)){
+                Layout l = Layout.fromJson("data/ui/layout/chauffageProperties.json", null);
                 a = l.getRoot();
-                sauvegarde_layout.put(DpePropertiesEnum.ECS,l);
+                sauvegarde_layout.put(DpePropertiesEnum.CHAUFFAGE,l);
             }else{
-                Layout l = sauvegarde_layout.get(DpePropertiesEnum.ECS);
+                Layout l = sauvegarde_layout.get(DpePropertiesEnum.CHAUFFAGE);
                 a = l.getRoot();
             }
-            return a;
-        }
-        if(o == DpeEvent.INFOS_CHAUFFAGE){
-            Actor a = Layout.fromJson("data/ui/layout/chauffageProperties.json", null).getRoot();
             return a;
         }
         return null;

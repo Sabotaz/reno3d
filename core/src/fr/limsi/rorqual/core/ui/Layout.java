@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -20,8 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -198,6 +201,9 @@ public class Layout {
             case "ScrollPaneElement":
                 actor = makeScrollPane(json, updater);
                 break;
+            case "TextField":
+                actor = makeTextField(json, updater);
+                break;
             default:
                 return null;
         }
@@ -229,6 +235,7 @@ public class Layout {
 
         Table table = new Table();
         table.setName(json.getString("name", ""));
+//        table.setDebug(true);
 
         String align = json.getString("align", "left");
         switch (align) {
@@ -248,7 +255,7 @@ public class Layout {
         if (layout.equals("column"))
             row = false;
 
-        if (json.get("label") != null){
+        if (json.has("label")){
             Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
             lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
             lbs.fontColor = Color.DARK_GRAY;
@@ -259,7 +266,7 @@ public class Layout {
 //            System.out.println("prefWidth"+table.getPrefWidth());
         }
 
-        if (json.get("content") != null) {
+        if (json.has("content")) {
             JsonValue json_child;
             Actor child;
             int i = 0;
@@ -268,14 +275,11 @@ public class Layout {
                     Cell c = table.add(child);
                     c.expandX().fillX().left();
 
-                    if (json_child.has("padTop"))
-                        c.padTop(json_child.getFloat("padTop"));
-                    if (json_child.has("padBottom"))
-                        c.padBottom(json_child.getFloat("padBottom"));
-                    if (json_child.has("padLeft"))
-                        c.padLeft(json_child.getFloat("padLeft"));
-                    if (json_child.has("padRight"))
-                        c.padRight(json_child.getFloat("padRight"));
+                    c.padTop(json_child.getFloat("padTop", 1));
+                    c.padBottom(json_child.getFloat("padBottom", 1));
+                    c.padLeft(json_child.getFloat("padLeft", 1));
+                    c.padRight(json_child.getFloat("padRight", 1));
+                    c.pad(json_child.getFloat("pad", 1));
 
                     if (row)
                         c.left().row();
@@ -284,31 +288,33 @@ public class Layout {
             }
         }
 
-        String position = json.getString("position", "top-left");
-        String[] xy = position.split("-");
+        if (json.has("position")){
+            String position = json.getString("position");
+            String[] xy = position.split("-");
 
-        switch (xy[0]) {
-            case "top":
-                table.setY(Gdx.graphics.getHeight() - table.getPrefHeight() / 2);
-                break;
-            case "bottom":
-                table.setY(0);
-                break;
-            case "center":
-                table.setY(Gdx.graphics.getHeight() / 2);
-                break;
-        }
+            switch (xy[0]) {
+                case "top":
+                    table.setY(Gdx.graphics.getHeight() - table.getPrefHeight() / 2);
+                    break;
+                case "bottom":
+                    table.setY(0);
+                    break;
+                case "center":
+                    table.setY(Gdx.graphics.getHeight() / 2);
+                    break;
+            }
 
-        switch (xy[1]) {
-            case "left":
-                table.setX(0);
-                break;
-            case "right":
-                table.setX(Gdx.graphics.getWidth() - table.getPrefWidth());
-                break;
-            case "center":
-                table.setX(Gdx.graphics.getWidth()/2);
-                break;
+            switch (xy[1]) {
+                case "left":
+                    table.setX(0);
+                    break;
+                case "right":
+                    table.setX(Gdx.graphics.getWidth() - table.getPrefWidth());
+                    break;
+                case "center":
+                    table.setX(Gdx.graphics.getWidth()/2);
+                    break;
+            }
         }
         table.pad(7);
         return table;
@@ -358,7 +364,6 @@ public class Layout {
                         c.left().row();
 
                     if (child instanceof Button) {
-
                         buttons.add((Button)child);
                     }
                 }
@@ -397,7 +402,7 @@ public class Layout {
                 button.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        System.out.println("click");
+//                        System.out.println("click");
                         HashMap<String,Object> items = new HashMap<String, Object>();
                         items.put("userObject",userObject);
                         items.put("eventRequest",EventRequest.UPDATE_STATE);
@@ -554,17 +559,33 @@ public class Layout {
         return checkBox;
     }
 
-    private static float lastVisualScrollY=0;
-
     private Actor makeScrollPane(JsonValue json, Updater updater) {
 
         Table table = new Table();
+
+        String align = json.getString("align", "center");
+        switch (align) {
+            case "left":
+                table.align(Align.left);
+                break;
+            case "right":
+                table.align(Align.right);
+                break;
+            case "center":
+                table.align(Align.center);
+                break;
+        }
+
         Object[] tabObject=null;
         final Updater last_updater = updater;
         final Object[] valuesEnum = getClass(json, "enum");
         tabObject = new Object[valuesEnum.length];
+        int sizeMaxEnum=0;
         for(int i=0;i<valuesEnum.length;i++) {
             tabObject[i] = valuesEnum[i].toString();
+            if (valuesEnum[i].toString().length()>sizeMaxEnum){
+                sizeMaxEnum = valuesEnum[i].toString().length();
+            }
         }
 
         com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle lls = skin.get("default", com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle.class);
@@ -581,7 +602,6 @@ public class Layout {
         scrollPane.setFlickScroll(false);
         scrollPane.setFadeScrollBars(false);
         scrollPane.layout();
-        scrollPane.setScrollY(lastVisualScrollY);
         scrollPane.updateVisualScroll();
 
 //        scrollPane.setupFadeScrollBars(1f,0.5f);
@@ -596,12 +616,98 @@ public class Layout {
                 items.put("lastValue",valuesEnum[index]);
                 items.put("layout", Layout.this);
                 last_updater.trigger(items);
-
-                lastVisualScrollY = scrollPane.getVisualScrollY();
             }
         });
 
-        table.add(scrollPane).left().size(300, 150).pad(10);
+        table.add(scrollPane).size(sizeMaxEnum * 7 + 50, 93).pad(5);
         return table;
     }
+
+    private Actor makeTextField(JsonValue json, Updater updater) {
+
+        Table table = new Table();
+
+        String align = json.getString("align", "left");
+        switch (align) {
+            case "left":
+                table.align(Align.left);
+                break;
+            case "right":
+                table.align(Align.right);
+                break;
+            case "center":
+                table.align(Align.center);
+                break;
+        }
+
+        final Updater last_updater = updater;
+
+        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
+        tfs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+
+        final TextField textField = new TextField("",tfs);
+        textField.setFocusTraversal(false);
+
+        if (json.has("maxLength")){
+            textField.setMaxLength(json.getInt("maxLength"));
+        }
+
+        textField.setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char key) {
+                if ((key == '\r' || key == '\n')) {
+                    String textSaisie = textField.getText();
+                    HashMap<String, Object> items = new HashMap<String, Object>();
+                    items.put("userObject", userObject);
+                    items.put("eventRequest", EventRequest.UPDATE_STATE);
+                    items.put("lastValue", textSaisie);
+                    items.put("layout", Layout.this);
+                    last_updater.trigger(items);
+                }
+            }
+        });
+
+        textField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
+                    return true;
+                return false;
+            }
+        });
+
+        textField.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
+                if (!focused) {
+                    System.out.println("coucou1");
+                } else {
+                    System.out.println("coucou2");
+                }
+                if (!event.isFocused()) {
+                    System.out.println("coucou3");
+                } else {
+                    System.out.println("coucou4");
+                }
+            }
+
+            @Override
+            public void scrollFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
+                if (!focused) {
+                    System.out.println("coucou5");
+                } else {
+                    System.out.println("coucou6");
+                }
+                if (!event.isFocused()) {
+                    System.out.println("coucou7");
+                } else {
+                    System.out.println("coucou8");
+                }
+            }
+        });
+
+        table.add(textField).pad(5);
+        return table;
+    }
+
 }
