@@ -216,7 +216,7 @@ public class Layout {
 
     private Actor makeTabWindow(JsonValue json, Updater updater) {
 
-        TabWindow tabWindow= new TabWindow();
+        TabWindow tabWindow= new TabWindow(json.getFloat("width",900));
         tabWindow.setTitle(json.getString("name", ""));
         if (json.get("content") != null) {
             JsonValue json_tab;
@@ -657,10 +657,16 @@ public class Layout {
             public void keyTyped(TextField textField, char key) {
                 if ((key == '\r' || key == '\n')) {
                     String textSaisie = textField.getText();
+                    double result = 0;
+                    try {
+                        result = Double.parseDouble(textSaisie);
+                    }catch (NumberFormatException e){
+
+                    }
                     HashMap<String, Object> items = new HashMap<String, Object>();
                     items.put("userObject", userObject);
                     items.put("eventRequest", EventRequest.UPDATE_STATE);
-                    items.put("lastValue", textSaisie);
+                    items.put("lastValue", result);
                     items.put("layout", Layout.this);
                     last_updater.trigger(items);
                 }
@@ -680,28 +686,19 @@ public class Layout {
             @Override
             public void keyboardFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
                 if (!focused) {
-                    System.out.println("coucou1");
-                } else {
-                    System.out.println("coucou2");
-                }
-                if (!event.isFocused()) {
-                    System.out.println("coucou3");
-                } else {
-                    System.out.println("coucou4");
-                }
-            }
+                    String textSaisie = textField.getText();
+                    double result = 0;
+                    try {
+                        result = Double.parseDouble(textSaisie);
+                    }catch (NumberFormatException e){
 
-            @Override
-            public void scrollFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
-                if (!focused) {
-                    System.out.println("coucou5");
-                } else {
-                    System.out.println("coucou6");
-                }
-                if (!event.isFocused()) {
-                    System.out.println("coucou7");
-                } else {
-                    System.out.println("coucou8");
+                    }
+                    HashMap<String, Object> items = new HashMap<String, Object>();
+                    items.put("userObject", userObject);
+                    items.put("eventRequest", EventRequest.UPDATE_STATE);
+                    items.put("lastValue", result);
+                    items.put("layout", Layout.this);
+                    last_updater.trigger(items);
                 }
             }
         });

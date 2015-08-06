@@ -1,6 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Informations relatives au chauffage",
+  "width": 773,
   "id": "tab_window",
   "content": [
     {
@@ -750,7 +751,7 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Entre 16°C et 17°C",
+                  "label": "Entre 22°C et 23°C",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TemperatureInterieurEnum.ENTRE_22_ET_23"
                 }

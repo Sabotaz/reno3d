@@ -2,6 +2,7 @@
   "type": "TabWindow",
   "name": "Informations générales du logement",
   "id": "tab_window",
+  "width": 763,
   "content": [
     {
       "type": "Table",
@@ -31,6 +32,69 @@
                   "image": "textureTypeBatiment2",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeBatimentEnum.APPARTEMENT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Année de construction : ",
+          "labelPad": 5,
+          "labelWidth": 180,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.ANNEE_CONSTRUCTION",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Avant 1975",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.AVANT_1975"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Entre 1975 et 1977",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1975_ET_1977"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Entre 1978 et 1982",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1978_ET_1982"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Entre 1983 et 1988",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1983_ET_1988"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Entre 1989 et 2000",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1989_ET_2000"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Entre 2001 et 2005",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2001_ET_2005"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Entre 2006 et 2012",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2006_ET_2012"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Après 2012",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.APRES_2012"
                 }
               ]
             }
@@ -99,33 +163,88 @@
     },
     {
       "type": "Table",
-      "name": "Forme",
-      "id": "forme_maison",
+      "name": "Maison",
+      "id": "maison",
       "content": [
         {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.FORME_MAISON",
-          "layout": "column",
-          "align": "center",
+          "type": "Table",
+          "label": "Forme : ",
+          "labelPad": 5,
+          "labelWidth": 96,
           "content": [
             {
-              "type": "ImageButton",
-              "image": "textureForme1",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.CARRE"
-            },
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.FORME_MAISON",
+              "layout": "column",
+              "align": "center",
+              "content": [
+                {
+                  "type": "ImageButton",
+                  "image": "textureForme1",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.CARRE"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureForme2",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.ALLONGE"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureForme3",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.DEVELOPPE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Mitoyenneté : ",
+          "labelPad": 5,
+          "labelWidth": 96,
+          "content": [
             {
-              "type": "ImageButton",
-              "image": "textureForme2",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.ALLONGE"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureForme3",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.FormeMaisonEnum.DEVELOPPE"
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.MITOYENNETE_MAISON",
+              "layout": "column",
+              "align": "center",
+              "content": [
+                {
+                  "type": "ImageButton",
+                  "image": "textureMit1",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.NON_ACCOLE"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureMit2",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_PETIT_COTE"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureMit3",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_OU_DEUX_PETITS_COTES"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureMit4",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_ET_UN_PETIT_COTE"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureMit5",
+                  "pad": 2,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_DEUX_GRANDS_COTES"
+                }
+              ]
             }
           ]
         }
@@ -133,212 +252,7 @@
     },
     {
       "type": "Table",
-      "name": "Mitoyenneté",
-      "id": "mitoyennete_maison",
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.MITOYENNETE_MAISON",
-          "layout": "column",
-          "align": "center",
-          "content": [
-            {
-              "type": "ImageButton",
-              "image": "textureMit1",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.NON_ACCOLE"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureMit2",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_PETIT_COTE"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureMit3",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_OU_DEUX_PETITS_COTES"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureMit4",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_GRAND_ET_UN_PETIT_COTE"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureMit5",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.MitoyenneteMaisonEnum.ACCOLE_DEUX_GRANDS_COTES"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Position",
-      "id": "position_appartement",
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.POSITION_APPARTEMENT",
-          "layout": "column",
-          "align": "center",
-          "content": [
-            {
-              "type": "ImageButton",
-              "image": "texturePosAppt1",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.PREMIER_ETAGE"
-            },
-            {
-              "type": "ImageButton",
-              "image": "texturePosAppt2",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.ETAGE_INTERMEDIAIRE"
-            },
-            {
-              "type": "ImageButton",
-              "image": "texturePosAppt3",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PositionAppartementEnum.DERNIER_ETAGE"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Département",
-      "id": "departement_batiment",
-      "content": [
-        {
-          "type": "ScrollPaneElement",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.DEPARTEMENT_BATIMENT",
-          "enum": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum"
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Année de construction",
-      "id": "annee_construction",
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.ANNEE_CONSTRUCTION",
-          "content": [
-            {
-              "type": "TextButton",
-              "text": "Avant 1975",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.AVANT_1975"
-            },
-            {
-              "type": "TextButton",
-              "text": "Entre 1975 et 1977",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1975_ET_1977"
-            },
-            {
-              "type": "TextButton",
-              "text": "Entre 1978 et 1982",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1978_ET_1982"
-            },
-            {
-              "type": "TextButton",
-              "text": "Entre 1983 et 1988",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1983_ET_1988"
-            },
-            {
-              "type": "TextButton",
-              "text": "Entre 1989 et 2000",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_1989_ET_2000"
-            },
-            {
-              "type": "TextButton",
-              "text": "Entre 2001 et 2005",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2001_ET_2005"
-            },
-            {
-              "type": "TextButton",
-              "text": "Entre 2006 et 2012",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.ENTRE_2006_ET_2012"
-            },
-            {
-              "type": "TextButton",
-              "text": "Après 2012",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum.APRES_2012"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Ventilation",
-      "id": "type_ventilation",
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VENTILATION",
-          "content": [
-            {
-              "type": "TextButton",
-              "text": "Naturelle",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.NATURELLE"
-            },
-            {
-              "type": "TextButton",
-              "text": "VMC auto-réglable (année d'installation < 1982)",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_AVANT_1982"
-            },
-            {
-              "type": "TextButton",
-              "text": "VMC auto-réglable (année d'installation > 1982)",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_APRES_1982"
-            },
-            {
-              "type": "TextButton",
-              "text": "VMC Hygro b",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_HYGRO"
-            },
-            {
-              "type": "TextButton",
-              "text": "VMC double flux",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_DOUBLE_FLUX"
-            },
-            {
-              "type": "TextButton",
-              "text": "Inconnue",
-              "pad": 2,
-              "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.INCONNUE"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Énergie",
+      "name": "Énergie & Ventilation",
       "id": "energie_logement",
       "content": [
         {
@@ -363,33 +277,6 @@
                   "label": "Autre",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEnergieConstructionEnum.AUTRE"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Présence d'un système de climatisation : ",
-          "labelPad": 5,
-          "labelWidth": 263,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.CLIMATISATION_LOGEMENT",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Oui",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.OUI"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Non",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.NON"
                 }
               ]
             }
@@ -450,6 +337,84 @@
                   "label": "Ampoule à incandescence (majoritairement)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementEclairageEnum.MAJORITAIREMENT_AMPOULE_A_INCANDESCENCE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Présence d'un système de climatisation : ",
+          "labelPad": 5,
+          "labelWidth": 263,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CLIMATISATION_LOGEMENT",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Oui",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.OUI"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Non",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.NON"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Type de ventilation : ",
+          "labelPad": 5,
+          "labelWidth": 263,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VENTILATION",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Naturelle",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.NATURELLE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "VMC auto-réglable (année d'installation < 1982)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_AVANT_1982"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "VMC auto-réglable (année d'installation > 1982)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_APRES_1982"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "VMC Hygro b",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_HYGRO"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "VMC double flux",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_DOUBLE_FLUX"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Inconnue",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.INCONNUE"
                 }
               ]
             }
@@ -594,36 +559,49 @@
     },
     {
       "type": "Table",
-      "name": "Habitant",
+      "name": "Divers",
       "id": "habitant",
       "content": [
         {
           "type": "Table",
-          "label": "Nombre de personnes vivant dans le logement : ",
+          "label": "Département : ",
           "labelPad": 5,
-          "labelWidth": 396,
+          "labelWidth": 176,
           "content": [
             {
               "type": "ScrollPaneElement",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT",
-              "align" : "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.generalproperties.NombrePersonnesEnum"
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.DEPARTEMENT_BATIMENT",
+              "enum": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum",
+              "align": "left"
             }
           ]
         },
         {
           "type": "Table",
-          "label": "Nombre de jours/an sans aucune personne dans le logement : ",
+          "label": "Nombre d'habitants : ",
           "labelPad": 5,
-          "labelWidth": 396,
+          "labelWidth": 176,
           "content": [
             {
-              "type": "ScrollPaneElement",
+              "type": "TextField",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT",
+              "maxLength": 2
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Nombre de jours/an où\nle logement est inoccupé : ",
+          "labelPad": 5,
+          "labelWidth": 176,
+          "content": [
+            {
+              "type": "TextField",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.NOMBRE_JOURS_ABSENCE",
-              "align" : "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.generalproperties.NombreJoursAbsenceEnum"
+              "maxLength": 3
             }
           ]
         }

@@ -54,7 +54,7 @@ public class TabWindow extends Table {
         };
     };
 
-    public TabWindow() {
+    public TabWindow(float widthWindow) {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
 
         Window.WindowStyle ws = skin.get(Window.WindowStyle.class);
@@ -65,7 +65,7 @@ public class TabWindow extends Table {
 //        buttonTab.setDebug(true);
         contentTab = new Table();
         window.add(buttonTab).left().expandX().row();
-        window.add(contentTab).left().padTop(5).expandX().fillX().left();
+        window.add(contentTab).left().padTop(5).expandX().fillX().width(widthWindow).left();
 //        contentTab.setDebug(true);
 
         window.addListener(new EventListener() {
@@ -155,7 +155,9 @@ public class TabWindow extends Table {
 
         last = next;
         button.setChecked(true);
-        this.setPosition(nextX, nextY);
+        this.setPosition(lastX, nextY);
+
+//        System.out.println("largeurFenetre = " + this.getPrefWidth());
     }
 
     public void setTableDisabled(Actor table, boolean visibility) {
@@ -176,8 +178,11 @@ public class TabWindow extends Table {
                         buttonTab.add((Button) actualActor).padLeft(1).padTop(1);
                     }
                 }
+//                this.setPositionWindow(lastWidth, lastHeight, lastX, lastY);
 
-                this.setPositionWindow(lastWidth, lastHeight, lastX, lastY);
+//                this.setHeight(573);
+//                this.setWidth(773);
+//                this.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight() - 20 - 573/2);
             }
         }
     }

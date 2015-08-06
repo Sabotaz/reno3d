@@ -11,7 +11,6 @@ import java.util.Iterator;
 
 import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
-import fr.limsi.rorqual.core.dpe.enums.generalproperties.NombrePersonnesEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.ecsproperties.*;
@@ -56,6 +55,8 @@ public class Dpe implements EventListener {
 
     // 0.Variables générales hors model IFC
     private double SH;
+    private double nbHabitant;
+    private double nbJoursAbsenceParAn;
     private double NIV;
     private double MIT;
     private double MIT2;
@@ -391,13 +392,9 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeBatimentEnum typeBatiment = (TypeBatimentEnum) items.get("lastValue");
                             if (typeBatiment == TypeBatimentEnum.MAISON) {
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("maison"), true);
                             } else {
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), false);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("maison"), false);
                             }
                             general_properties.put(DpeEvent.TYPE_BATIMENT, typeBatiment);
 
@@ -420,10 +417,7 @@ public class Dpe implements EventListener {
 
                                 }
                             }
-
-                            ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("forme_maison"), false);
-                            ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("mitoyennete_maison"), false);
-                            ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("position_appartement"), false);
+                            ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("maison"), false);
                         }
                         break;
                     }
@@ -456,7 +450,6 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             SH = (double) items.get("lastValue");
-//                            System.out.println("SH = "+SH);
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue", SH);
@@ -729,20 +722,14 @@ public class Dpe implements EventListener {
                     }
 
                     case NOMBRE_PERSONNES_DANS_LOGEMENT:{
-                        HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        HashMap<String, Object> items = (HashMap<String, Object>) o;
+                        EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            NombrePersonnesEnum nbPersonnesPresentent= (NombrePersonnesEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT, nbPersonnesPresentent);
-                        }
-                        else if (eventRequest == EventRequest.GET_STATE) {
-                            NombrePersonnesEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT)){
-                                type = (NombrePersonnesEnum) ecs_properties.get(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT);
-                            }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            nbHabitant = (double) items.get("lastValue");
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            HashMap<String, Object> currentItems = new HashMap<String, Object>();
+                            currentItems.put("lastValue", nbHabitant);
+                            currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
@@ -750,20 +737,14 @@ public class Dpe implements EventListener {
                     }
 
                     case NOMBRE_JOURS_ABSENCE:{
-                        HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        HashMap<String, Object> items = (HashMap<String, Object>) o;
+                        EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            NombreJoursAbsenceEnum nbJoursAbsences= (NombreJoursAbsenceEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.NOMBRE_JOURS_ABSENCE, nbJoursAbsences);
-                        }
-                        else if (eventRequest == EventRequest.GET_STATE) {
-                            NombreJoursAbsenceEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.NOMBRE_JOURS_ABSENCE)){
-                                type = (NombreJoursAbsenceEnum) ecs_properties.get(DpeEvent.NOMBRE_JOURS_ABSENCE);
-                            }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            nbJoursAbsenceParAn = (double) items.get("lastValue");
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            HashMap<String, Object> currentItems = new HashMap<String, Object>();
+                            currentItems.put("lastValue", nbJoursAbsenceParAn);
+                            currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.NOMBRE_JOURS_ABSENCE, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
