@@ -332,7 +332,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
                 //System.out.println("TOUCH: " + selected.getUserData());
                 selected.setColor(Color.YELLOW);
-                mainUiControleur.addTb(dpeui.getPropertyWindow(selected.getUserData()));
+                mainUiControleur.addTb(dpeui.getPropertyWindow(selected));
                 //selected.add(pin);
                 //pin.local_transform.setToTranslation(selected.getTop());
             }

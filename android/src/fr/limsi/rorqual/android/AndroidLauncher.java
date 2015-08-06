@@ -22,30 +22,6 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        try {
-
-            ifcHelper.initialiseIfcModel();
-            ifcHelper.createApartmentTest();
-            ifcHelper.saveIfcModel();
-            InputStream inputStream = getAssets().open("data/ifc/example.ifc");
-            String root = Environment.getExternalStorageDirectory().toString();
-            File f = new File(root + "/example.ifc");
-            OutputStream outputStream = new FileOutputStream(f);
-            byte buffer[] = new byte[1024];
-            int length = 0;
-
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-
-            outputStream.close();
-            inputStream.close();
-
-            IfcHolder.getInstance().openModel(f);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         MainApplicationAdapter application = new MainApplicationAdapter();

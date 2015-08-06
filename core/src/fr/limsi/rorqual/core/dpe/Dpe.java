@@ -100,14 +100,14 @@ public class Dpe implements EventListener {
         fontWhite = new BitmapFont(Gdx.files.internal("data/font/white.fnt"));
         skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
         textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
-        ifcModel = IfcHolder.getInstance().getIfcModel();
+        /*ifcModel = IfcHolder.getInstance().getIfcModel();
         ifcHelper = new IfcHelper(ifcModel);
         wallCollection = ifcModel.getCollection(IfcWallStandardCase.class);
         slabCollection = ifcModel.getCollection(IfcSlab.class);
         windowCollection = ifcModel.getCollection(IfcWindow.class);
         doorCollection = ifcModel.getCollection(IfcDoor.class);
         SH = ifcHelper.calculSurfaceHabitable();
-        PER = ifcHelper.calculPerimetreBatiment();
+        PER = ifcHelper.calculPerimetreBatiment();*/
         EventManager.getInstance().addListener(Channel.DPE, this);
         SH=0;
 
