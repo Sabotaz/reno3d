@@ -47,6 +47,7 @@ public class OuvertureMaker extends ModelMaker {
             try {
                 Constructor<? extends Ouverture> ctor = type.getConstructor(Mur.class, float.class);
                 ouverture = ctor.newInstance(mur, x);
+                ouverture.setSelectable(false);
                 making_ouverture = true;
             } catch (Exception e) {
                 System.out.println("A very bad thing append here... " );
@@ -79,6 +80,8 @@ public class OuvertureMaker extends ModelMaker {
 
         if (!making_ouverture)
             return;
+
+        ouverture.setSelectable(true);
 
         making_ouverture = false;
     }

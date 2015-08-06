@@ -24,7 +24,6 @@ public class Fenetre extends Ouverture {
     public Fenetre(Mur mur, float x) {
         // x est le milieu ?
         this(mur, x - DEFAULT_WIDTH / 2, DEFAULT_Y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        this.setSelectable(false);
     }
 
     public Fenetre(Mur mur, float x, float y, float width, float height) {

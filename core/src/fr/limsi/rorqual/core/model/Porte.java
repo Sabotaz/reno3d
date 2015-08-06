@@ -27,7 +27,6 @@ public class Porte extends Ouverture{
 
     public Porte(Mur mur, float x, float y, float width, float height) {
         super(mur, new Vector2(x, y), width, height);
-        this.setSelectable(false);
     }
 
     // Getter & Setter
