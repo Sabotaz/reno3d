@@ -19,6 +19,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -26,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -172,6 +175,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         mainUiControleur = MainUiControleur.getInstance();
         mainUiControleur.setStage(stageMenu);
+
+        stageMenu.getRoot().addCaptureListener(
+            new InputListener() {
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    if (!(event.getTarget() instanceof TextField))
+                        stageMenu.setKeyboardFocus(null);
+                    return false;
+                }
+            });
 
         stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
 
