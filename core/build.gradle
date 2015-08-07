@@ -7,9 +7,8 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 
 task convert << {
 
-    FileTree tree = fileTree(dir: '../android/assets/data/blender/fbx/', include: '**/*.fbx')
-
-    FileTree textures = fileTree(dir: '../android/assets/data/blender/fbx/', exclude: '**/*.fbx')
+    // copy textures
+    FileTree textures = fileTree(dir: '../android/assets/data/models/fbx/', exclude: '**/*.fbx')
 
     textures.each { File file ->
         File target = new File(file.getPath().replaceAll('fbx', 'g3db'))
@@ -20,6 +19,9 @@ task convert << {
         }
     }
 
+    // export fbx to g3db
+    FileTree tree = fileTree(dir: '../android/assets/data/models/fbx/', include: '**/*.fbx')
+
     tree.each {File file ->
         println 'compiling ' + file.getName() + '...'
         task "makeG3DB${file.getParentFile().getName()}"(type:Exec) {
@@ -28,9 +30,8 @@ task convert << {
             File target = new File(file.getPath().replaceAll('fbx', 'g3db'))
             target.getParentFile().mkdirs()
 
-            workingDir '../android/assets/data/blender/fbx-conv/'
+            workingDir '../android/assets/data/models/fbx-conv/'
             environment('LD_LIBRARY_PATH', '.')
-
 
             //linux
             commandLine './fbx-conv-lin64', file, target

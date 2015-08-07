@@ -67,7 +67,6 @@ project(":jcsg") {
 project(":core") {
     apply plugin: "java"
 
-
     dependencies {
         compile project(":jcsg")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
