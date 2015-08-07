@@ -88,13 +88,14 @@ public class AssetManager {
         assets.put("textureOrientationEst", new Texture(Gdx.files.internal("data/img/dpe/Orientation/est.png")));
         assets.put("textureOrientationSud", new Texture(Gdx.files.internal("data/img/dpe/Orientation/sud.png")));
         assets.put("textureOrientationOuest", new Texture(Gdx.files.internal("data/img/dpe/Orientation/ouest.png")));
-
+/*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         assets.put("modelDoor", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/Door5.g3db", Files.FileType.Internal)));
         assets.put("modelWindow", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/window7.g3db", Files.FileType.Internal)));
         assets.put("modelWindowTest", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/window7.g3db", Files.FileType.Internal)));
-
+        assets.put("fenetre_coulissante", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/fenetre_coulissante.g3db", Files.FileType.Internal)));
+*/
         FileHandle file = Gdx.files.internal("data/textures/");
         if (file.isDirectory())
             for (FileHandle f : file.list()) {

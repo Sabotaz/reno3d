@@ -136,7 +136,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
 
-        SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
+        //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
         Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, CameraEngine.getInstance()));
@@ -170,13 +170,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         this.assets = AssetManager.getInstance();
-        model = (Model)assets.get("modelWindowTest");
+ //       model = (Model)assets.get("modelWindowTest");
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
-        modelInstance = new ModelInstance(model);
+ //       modelInstance = new ModelInstance(model);
         //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
         //modelInstance.local_transform.rotate(1, 0, 0, -90);
         //move the model down a bit on the screen ( in a z-up world, down is -z ).
-        modelInstance.transform.translate(0, 0, 4);
+ //       modelInstance.transform.translate(0, 0, 4);
 //        modelInstance.local_transform.scale(0.5f, 0.5f, 0.5f);
 
         //shader = new BillboardShader();

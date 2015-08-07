@@ -41,7 +41,7 @@ public class Fenetre extends Ouverture {
     @Override
     protected void makeModel() {
 
-        Model m = (Model) AssetManager.getInstance().get("modelWindow");
+        Model m = (Model) AssetManager.getInstance().get("fenetre_coulissante");
         BoundingBox b = new BoundingBox();
         m.calculateBoundingBox(b);
         float w = this.getWidth() / b.getWidth();

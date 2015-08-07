@@ -1,8 +1,12 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.utils.UBJsonReader;
 
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum;
 import fr.limsi.rorqual.core.utils.AssetManager;
@@ -17,7 +21,11 @@ public class Porte extends Ouverture{
     static float DEFAULT_HEIGHT = 2.15f;
 
     // Attributs
-    private TypeDoorEnum typePorte;
+    public TypeDoorEnum typePorte;
+
+    public Porte() {
+        this(null, DEFAULT_WIDTH);
+    }
 
     // Constructeur
     public Porte(Mur mur, float x) {
@@ -39,14 +47,11 @@ public class Porte extends Ouverture{
 
     @Override
     protected void makeModel() {
-
-        Model m = (Model) AssetManager.getInstance().get("modelDoor");
         BoundingBox b = new BoundingBox();
-        m.calculateBoundingBox(b);
+        this.calculateBoundingBox(b);
         float w = this.getWidth() / b.getWidth();
         float h = this.getMur().getDepth() / b.getHeight();
         float d = this.getHeight() / b.getDepth();
-        this.setModel(m);
         model_transform.idt().rotate(0, 0, 1, 180).scale(w, h, d);
     }
 }

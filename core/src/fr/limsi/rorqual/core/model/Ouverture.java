@@ -28,19 +28,18 @@ public abstract class Ouverture extends ModelContainer {
     protected float width;
     protected float height;
     protected float surface;
-    protected TypeMateriauMenuiserieEnum typeMateriauMenuiserie = TypeMateriauMenuiserieEnum.INCONNUE;
-    protected TypeVitrageEnum typeVitrage = TypeVitrageEnum.INCONNUE;
-    protected float coefficientDeTransmissionThermique = 2;
+    public TypeMateriauMenuiserieEnum typeMateriauMenuiserie = TypeMateriauMenuiserieEnum.INCONNUE;
+    public TypeVitrageEnum typeVitrage = TypeVitrageEnum.INCONNUE;
+    public float coefficientDeTransmissionThermique = 2;
     protected float deperdition = surface*coefficientDeTransmissionThermique;
 
     // Constructeur
     public Ouverture(Mur mur, Vector2 position, float width, float height){
-        this.mur=mur;
+        this.setMur(mur);
         this.position=position;
         this.width=width;
         this.height=height;
         this.surface=width*height;
-        mur.addOuverture(this);
     }
 
     // Getter & Setter

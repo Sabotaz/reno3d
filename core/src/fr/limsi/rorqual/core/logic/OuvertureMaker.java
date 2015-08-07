@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.ModelLoader;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Porte;
@@ -22,10 +23,10 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 public class OuvertureMaker extends ModelMaker {
 
-    Class< ? extends Ouverture> type;
+    String properties;
 
-    public OuvertureMaker(Class< ? extends Ouverture> type) {
-        this.type = type;
+    public OuvertureMaker(String file) {
+        properties = file;
     }
 
     Ouverture ouverture;
@@ -44,12 +45,14 @@ public class OuvertureMaker extends ModelMaker {
             Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
             Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
             float x = v2.dot(v1);
-            try {
-                Constructor<? extends Ouverture> ctor = type.getConstructor(Mur.class, float.class);
-                ouverture = ctor.newInstance(mur, x);
+            ModelContainer container = ModelLoader.fromJson(properties);
+            if (container instanceof Ouverture) {
+                ouverture = (Ouverture) container;
+                ouverture.setMur(mur);
+                ouverture.setX(x);
                 ouverture.setSelectable(false);
                 making_ouverture = true;
-            } catch (Exception e) {
+            } else {
                 System.out.println("A very bad thing append here... " );
                 making_ouverture = false;
             }
