@@ -184,4 +184,8 @@ public class ModelLibrary {
     private void makeNewTab(TabWindow tw, String subcategory, HashMap<Integer, ModelLoader> models) {
 
     }
+
+    public ModelContainer getModelFromId(int id) {
+        return models.get(id).getInstance();
+    }
 }

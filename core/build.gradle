@@ -31,14 +31,15 @@ task convert << {
 
     blend_tree.each {File file ->
         println 'compiling ' + file.getName() + '...'
-        task "makeFBX${file.getParentFile().getName()}"(type:Exec) {
+        task "makeFBX${file.path}"(type:Exec) {
 
             // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
             File target = new File(file.getPath().replaceAll('blend', 'fbx'))
             target.getParentFile().mkdirs()
+
             //linux
             // blender foobar.blend --background --python fbxexporter.py -- foobar.fbx
-            commandLine 'blender', '-b', file, '--python', 'android/assets/data/models/scripts/fbxexporter.py', '--', target
+            commandLine 'blender', '-b', file, '--python', "$projectDir/../android/assets/data/models/scripts/fbxexporter.py", '--', target
 
             standardOutput = new ByteArrayOutputStream()
 
@@ -50,7 +51,7 @@ task convert << {
         }
 
 
-        task "makeMiniature${file.getParentFile().getName()}"(type:Exec) {
+        task "makeMiniature${file.path}"(type:Exec) {
 
             // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
             File target = new File(file.getPath().replaceAll('blend', 'g3db'))
@@ -81,7 +82,8 @@ task convert << {
 
     fbx_tree.each {File file ->
         println 'compiling ' + file.getName() + '...'
-        task "makeG3DB${file.getParentFile().getName()}"(type:Exec) {
+
+        task "makeG3DB${file.path}"(type:Exec) {
 
             // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
             File target = new File(file.getPath().replaceAll('fbx', 'g3db'))
@@ -101,7 +103,6 @@ task convert << {
             execute()
         }
     }
-
 }
 
 eclipse.project {

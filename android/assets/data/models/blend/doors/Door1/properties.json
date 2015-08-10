@@ -1,0 +1,13 @@
+{
+  "name":"Porte vitrée",
+  "file":"Door",
+  "category":"Menuiserie",
+  "subcategory":"Porte",
+  "id":4,
+  "class":"fr.limsi.rorqual.core.model.Porte",
+  "properties": {
+    "typePorte": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_OPAQUE_PLEINE",
+    "typeMateriauMenuiserie":"fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS",
+    "typeVitrage":"fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.AUCUNE_VITRE"
+  }
+}
