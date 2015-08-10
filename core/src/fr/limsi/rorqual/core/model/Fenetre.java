@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum;
@@ -18,7 +19,11 @@ public class Fenetre extends Ouverture {
     static float DEFAULT_HEIGHT = 0.75f;
 
     // Attributs
-    private TypeFenetreEnum typeFenetre;
+    public TypeFenetreEnum typeFenetre;
+
+    public Fenetre() {
+        this(null, DEFAULT_WIDTH);
+    }
 
     // Constructeur
     public Fenetre(Mur mur, float x) {
@@ -40,14 +45,12 @@ public class Fenetre extends Ouverture {
 
     @Override
     protected void makeModel() {
-
-        Model m = (Model) AssetManager.getInstance().get("fenetre_coulissante");
         BoundingBox b = new BoundingBox();
-        m.calculateBoundingBox(b);
+        this.calculateBoundingBox(b);
         float w = this.getWidth() / b.getWidth();
         float h = this.getMur().getDepth() / b.getHeight();
         float d = this.getHeight() / b.getDepth();
-        this.setModel(m);
-        model_transform.idt().scale(w, h, d);
+        Vector3 dmin = b.getMin(new Vector3()).scl(-1);
+        model_transform.idt().scale(w, h, d).translate(dmin);
     }
 }

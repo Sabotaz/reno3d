@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.UBJsonReader;
 
@@ -52,6 +53,7 @@ public class Porte extends Ouverture{
         float w = this.getWidth() / b.getWidth();
         float h = this.getMur().getDepth() / b.getHeight();
         float d = this.getHeight() / b.getDepth();
-        model_transform.idt().rotate(0, 0, 1, 180).scale(w, h, d);
+        Vector3 dmin = b.getMin(new Vector3()).scl(-1);
+        model_transform.idt().scale(w, h, d).translate(dmin);
     }
 }
