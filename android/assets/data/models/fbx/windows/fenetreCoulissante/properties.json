@@ -1,0 +1,10 @@
+{
+  "name":"Fenetre coulissante",
+  "file":"fenetre_coulissante",
+  "category":"Fenetre",
+  "class":"fr.limsi.rorqual.core.model.Fenetre",
+  "properties": {
+    "typeFenetre": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum.COULISSANTE",
+    "typeMateriauMenuiserie":"fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS"
+  }
+}
