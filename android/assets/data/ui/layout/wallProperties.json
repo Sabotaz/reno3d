@@ -1,47 +1,97 @@
 {
   "type": "TabWindow",
   "name": "Propriétés du mur",
+  "width": 624,
   "id": "tab_window",
   "content": [
     {
       "type": "Table",
-      "name": "Type de mur",
-      "id": "type_mur",
+      "name": "Voisinage & orientation",
+      "id": "voisinage_orientation",
       "content": [
         {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MUR",
+          "type": "Table",
+          "label": "Le mur donne sur : ",
+          "labelPad": 5,
+          "labelWidth": 131,
           "content": [
             {
-              "type": "TextButton",
-              "text": "Mur donnant sur un local non chauffé",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE"
-            },
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MUR",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Un local non chauffé",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "L'extérieur",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Une autre habitation",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_AUTRE_HABITATION"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Une véranda chauffée",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Une véranda non chauffée",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Orientation : ",
+          "labelPad": 5,
+          "labelWidth": 131,
+          "content": [
             {
-              "type": "TextButton",
-              "text": "Mur donnant sur l'extérieur",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR"
-            },
-            {
-              "type": "TextButton",
-              "text": "Mur donnant sur une autre habitation",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_AUTRE_HABITATION"
-            },
-            {
-              "type": "TextButton",
-              "text": "Mur donnant sur une véranda chauffée",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE"
-            },
-            {
-              "type": "TextButton",
-              "text": "Mur donnant sur une véranda non chauffée",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE"
-            },
-            {
-              "type": "TextButton",
-              "text": "Mur intérieur",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_INTERIEUR"
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.ORIENTATION_MUR",
+              "layout": "column",
+              "align": "left",
+              "content": [
+                {
+                  "type": "ImageButton",
+                  "image": "textureOrientationNord",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.NORD"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureOrientationEst",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.EST"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureOrientationSud",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.SUD"
+                },
+                {
+                  "type": "ImageButton",
+                  "image": "textureOrientationOuest",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.OUEST"
+                }
+              ]
             }
           ]
         }
@@ -49,148 +99,120 @@
     },
     {
       "type": "Table",
-      "name": "Date de l'isolation",
-      "id": "date_isolation",
+      "name": "Isolation",
+      "id": "isolation_mur",
       "content": [
         {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_ISOLATION_MUR",
+          "type": "Table",
+          "label": "Isolation thermique : ",
+          "labelPad": 5,
+          "labelWidth": 138,
           "content": [
             {
-              "type": "TextButton",
-              "text": "Jamais",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.JAMAIS"
-            },
-            {
-              "type": "TextButton",
-              "text": "A la construction",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.A_LA_CONSTRUCTION"
-            },
-            {
-              "type": "TextButton",
-              "text": "Rénové (date inconnue)",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_DATE_INCONNUE"
-            },
-            {
-              "type": "TextButton",
-              "text": "Rénové avant 1983",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_AVANT_1983"
-            },
-            {
-              "type": "TextButton",
-              "text": "Rénové entre 1983 et 1988",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_1983_ET_1988"
-            },
-            {
-              "type": "TextButton",
-              "text": "Rénové entre 1989 et 2000",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_1989_ET_2000"
-            },
-            {
-              "type": "TextButton",
-              "text": "Rénové entre 2001 et 2005",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_2001_ET_2005"
-            },
-            {
-              "type": "TextButton",
-              "text": "Rénové entre 2006 et 2012",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_2006_ET_2012"
-            },
-            {
-              "type": "TextButton",
-              "text": "Rénové après 2012",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_APRES_2012"
-            },
-            {
-              "type": "TextButton",
-              "text": "Inconnue",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.INCONNUE"
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Interieur (ITI)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITI"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Exterieure (ITE)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Repartie (ITR)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITR"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Inconnue",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.INCONNUE"
+                }
+              ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Type d'isolation",
-      "id": "type_isolation",
-      "content": [
+        },
         {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR",
+          "type": "Table",
+          "label": "Date de l'isolation : ",
+          "labelPad": 5,
+          "labelWidth": 138,
           "content": [
             {
-              "type": "TextButton",
-              "text": "Interieure (ITI)",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITI"
-            },
-            {
-              "type": "TextButton",
-              "text": "Exterieure (ITE)",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITE"
-            },
-            {
-              "type": "TextButton",
-              "text": "Repartie (ITR)",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITR"
-            },
-            {
-              "type": "TextButton",
-              "text": "Interieure + Exterieure (ITI+ITE)",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITI_PLUS_ITE"
-            },
-            {
-              "type": "TextButton",
-              "text": "Interieure + Repartie (ITI+ITR)",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITI_PLUS_ITR"
-            },
-            {
-              "type": "TextButton",
-              "text": "Exterieure + Repartie (ITE+ITR)",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITE_PLUS_ITR"
-            },
-            {
-              "type": "TextButton",
-              "text": "Inconnue",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.INCONNUE"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Orientation",
-      "id": "orientation_mur",
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-          "event": "fr.limsi.rorqual.core.event.DpeEvent.ORIENTATION_MUR",
-          "layout": "column",
-          "align": "center",
-          "content": [
-            {
-              "type": "ImageButton",
-              "image": "textureOrientationNord",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.NORD"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureOrientationEst",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.EST"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureOrientationSud",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.SUD"
-            },
-            {
-              "type": "ImageButton",
-              "image": "textureOrientationOuest",
-              "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.OUEST"
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.DATE_ISOLATION_MUR",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Jamais",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.JAMAIS"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "A la construction",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.A_LA_CONSTRUCTION"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Rénovation effectuée (date inconnue)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_DATE_INCONNUE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Rénovation effectuée avant 1983",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_AVANT_1983"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Rénovation effectuée entre 1983 et 1988",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_1983_ET_1988"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Rénovation effectuée entre 1989 et 2000",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_1989_ET_2000"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Rénovation effectuée entre 2001 et 2005",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_2001_ET_2005"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Rénovation effectuée entre 2006 et 2012",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_2006_ET_2012"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Rénovation effectuée après 2012",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_APRES_2012"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Inconnue",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.INCONNUE"
+                }
+              ]
             }
           ]
         }

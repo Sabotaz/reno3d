@@ -66,6 +66,7 @@ public class TabWindow extends Table {
         contentTab = new Table();
         window.add(buttonTab).left().expandX().row();
         window.add(contentTab).left().padTop(5).expandX().fillX().width(widthWindow).left();
+//        window.add(contentTab).left().padTop(5).expandX().fillX().left();
 //        contentTab.setDebug(true);
 
         window.addListener(new EventListener() {

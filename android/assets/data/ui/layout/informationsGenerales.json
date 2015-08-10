@@ -252,7 +252,7 @@
     },
     {
       "type": "Table",
-      "name": "Énergie & Ventilation",
+      "name": "Énergie / Ventilation",
       "id": "energie_logement",
       "content": [
         {

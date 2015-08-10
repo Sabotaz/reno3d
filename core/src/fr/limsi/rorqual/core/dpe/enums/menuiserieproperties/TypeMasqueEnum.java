@@ -6,7 +6,6 @@ package fr.limsi.rorqual.core.dpe.enums.menuiserieproperties;
 public enum TypeMasqueEnum {
     PRESENCE_MASQUE_PROCHE,
     ABSENCE_MASQUE_PROCHE,
-
     ABSENCE_MASQUE_LOINTAIN,
     PRESENCE_MASQUE_LOINTAIN_PARTIEL,
     PRESENCE_MASQUE_LOINTAIN_TOTAL;
