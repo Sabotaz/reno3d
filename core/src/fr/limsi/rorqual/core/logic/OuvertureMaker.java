@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
-import fr.limsi.rorqual.core.model.ModelLoader;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Porte;
@@ -44,7 +43,7 @@ public class OuvertureMaker extends ModelMaker {
             // intersection in world space, not in wall space
             Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
             Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
-            float x = v2.dot(v1);
+            float x = v2.dot(v1);/*
             ModelContainer container = ModelLoader.fromJson(properties);
             if (container instanceof Ouverture) {
                 ouverture = (Ouverture) container;
@@ -55,7 +54,7 @@ public class OuvertureMaker extends ModelMaker {
             } else {
                 System.out.println("A very bad thing append here... " );
                 making_ouverture = false;
-            }
+            }*/
         }
     }
 

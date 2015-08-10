@@ -1,7 +1,9 @@
 {
   "name":"Fenetre coulissante",
   "file":"fenetre_coulissante",
-  "category":"Fenetre",
+  "category":"Menuiserie",
+  "subcategory":"Fenetre",
+  "id":2,
   "class":"fr.limsi.rorqual.core.model.Fenetre",
   "properties": {
     "typeFenetre": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum.COULISSANTE",

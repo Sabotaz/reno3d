@@ -46,6 +46,7 @@ import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
+import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.ui.Popup;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;

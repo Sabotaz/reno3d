@@ -54,6 +54,10 @@ public class TabWindow extends Table {
         };
     };
 
+    public TabWindow() {
+        this(900);
+    }
+
     public TabWindow(float widthWindow) {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
 
