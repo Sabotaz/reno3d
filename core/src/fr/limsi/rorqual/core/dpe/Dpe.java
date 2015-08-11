@@ -675,13 +675,13 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeChauffageEnum typeChauffage = (TypeChauffageEnum) items.get("lastValue");
+                            TypeChauffage.Generateur typeChauffage = (TypeChauffage.Generateur) items.get("lastValue");
                             chauffage_properties.put(DpeEvent.TYPE_CHAUFFAGE, typeChauffage);
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeChauffageEnum type = null;
+                            TypeChauffage.Generateur type = null;
                             if (chauffage_properties.containsKey(DpeEvent.TYPE_CHAUFFAGE)){
-                                type = (TypeChauffageEnum) chauffage_properties.get(DpeEvent.TYPE_CHAUFFAGE);
+                                type = (TypeChauffage.Generateur) chauffage_properties.get(DpeEvent.TYPE_CHAUFFAGE);
                             }
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
@@ -864,13 +864,13 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeEmetteurEnum typeEmetteur = (TypeEmetteurEnum) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR, typeEmetteur);
+                            TypeChauffage.Emission typeEmission = (TypeChauffage.Emission) items.get("lastValue");
+                            chauffage_properties.put(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR, typeEmission);
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeEmetteurEnum type = null;
+                            TypeChauffage.Emission type = null;
                             if (chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-                                type = (TypeEmetteurEnum) chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR);
+                                type = (TypeChauffage.Emission) chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR);
                             }
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
