@@ -154,8 +154,10 @@ project(":core") {
                     return standardOutput.toString()
                 }
 
-                // remove trailing frame number
-                new File(output + '1.jpg').renameTo(new File(output + '.jpg'))
+                doLast {
+                    // remove trailing frame number
+                    new File(output + '1.jpg').renameTo(new File(output + '.jpg'))
+                }
 
             }
 
