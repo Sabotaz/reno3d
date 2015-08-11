@@ -3,14 +3,10 @@ package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.math.Vector3;
 
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.enums.slabproperties.LocationSlabsEnum;
+import fr.limsi.rorqual.core.dpe.enums.slabproperties.LocationSlabEnum;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.SlabProperties;
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum;
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.WallPropertiesEnum;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import ifc2x3javatoolbox.ifc2x3tc1.*;
@@ -1133,7 +1129,7 @@ public class IfcHelper {
         ArrayList<MaterialTypeEnum> materialTypeEnumArrayList = new ArrayList<MaterialTypeEnum>();
         materialTypeEnumArrayList.add(MaterialTypeEnum.PARQUET);
         this.addMaterialLayerToSlab(ifcSlab, materialTypeEnumArrayList);
-        this.addPropertyLocationSlab(ifcSlab, LocationSlabsEnum.INCONNUE);
+        this.addPropertyLocationSlab(ifcSlab, LocationSlabEnum.INCONNUE);
 
         // add new Ifc-objects to the model
         ifcModel.addIfcObject(ifcSlab);
@@ -2800,7 +2796,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter la location d'un slab
-    public void addPropertyLocationSlab(IfcSlab slab, LocationSlabsEnum locationSlab){
+    public void addPropertyLocationSlab(IfcSlab slab, LocationSlabEnum locationSlab){
 
         boolean hasProperties=false;
         boolean hasSameProperty=false;

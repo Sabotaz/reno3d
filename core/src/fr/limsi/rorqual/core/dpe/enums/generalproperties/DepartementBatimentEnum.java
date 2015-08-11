@@ -103,7 +103,7 @@ public enum DepartementBatimentEnum {
     VAL_D_OISE("Val d'Oise","95",5500,61000,72,0,0,ZoneEte.Eb,1,-7,396,1),
     ;
 
-    private enum ZoneEte {
+    public enum ZoneEte {
         Ea,
         Eb,
         Ec,
@@ -125,15 +125,15 @@ public enum DepartementBatimentEnum {
 
 
     DepartementBatimentEnum(String dept, String numb, int nref, int dhref, int pref, float c3, float c4, ZoneEte zoneEte, int zoneHiver, int tempExtBase, int e, int clAltMax) {
-        Nref = nref;
-        Dhref = dhref;
-        Pref = pref;
-        C3 = c3;
-        C4 = c4;
+        this.Nref = nref;
+        this.Dhref = dhref;
+        this.Pref = pref;
+        this.C3 = c3;
+        this.C4 = c4;
         this.zoneEte = zoneEte;
         this.zoneHiver = zoneHiver;
         this.tempExtBase = tempExtBase;
-        E = e;
+        this.E = e;
         this.clAltMax = clAltMax;
         this.dept = dept;
         this.numb = numb;
@@ -153,35 +153,35 @@ public enum DepartementBatimentEnum {
     }
 
     public int getDhref() {
-        return Dhref;
+        return this.Dhref;
     }
 
     public int getPref() {
-        return Pref;
+        return this.Pref;
     }
 
     public float getC3() {
-        return C3;
+        return this.C3;
     }
 
     public float getC4() {
-        return C4;
+        return this.C4;
     }
 
     public int getZoneHiver() {
-        return zoneHiver;
+        return this.zoneHiver;
     }
 
     public int getTempExtBase() {
-        return tempExtBase;
+        return this.tempExtBase;
     }
 
     public int getE() {
-        return E;
+        return this.E;
     }
 
     public int getClAltMax() {
-        return clAltMax;
+        return this.clAltMax;
     }
 
 }

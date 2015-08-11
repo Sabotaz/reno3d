@@ -1,10 +1,9 @@
 package fr.limsi.rorqual.core.dpe;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
@@ -13,33 +12,25 @@ import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.ecsproperties.*;
 import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.model.*;
-import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.TabWindow;
 
-/**
- * Created by ricordeau on 20/05/15.
- */
 public class Dpe implements EventListener {
 
-    private HashMap<Mur, HashMap<EventType, Object>> walls_properties = new HashMap<Mur, HashMap<EventType, Object>>();
-    private HashMap<Slab, HashMap<EventType, Object>> slabs_properties = new HashMap<Slab, HashMap<EventType, Object>>();
-    private HashMap<Fenetre, HashMap<EventType, Object>> windows_properties = new HashMap<Fenetre, HashMap<EventType, Object>>();
-    private HashMap<Porte, HashMap<EventType, Object>> doors_properties = new HashMap<Porte, HashMap<EventType, Object>>();
+    private HashMap<Mur, HashMap<EventType,Object>> walls_properties = new HashMap<Mur, HashMap<EventType,Object>>();
+    private HashMap<Slab, HashMap<EventType,Object>> slabs_properties = new HashMap<Slab, HashMap<EventType,Object>>();
+    private HashMap<Fenetre, HashMap<EventType,Object>> windows_properties = new HashMap<Fenetre, HashMap<EventType,Object>>();
+    private HashMap<Porte, HashMap<EventType,Object>> doors_properties = new HashMap<Porte, HashMap<EventType,Object>>();
     private HashMap<EventType,Object> general_properties = new HashMap<EventType,Object>();
     private HashMap<EventType,Object> chauffage_properties = new HashMap<EventType,Object>();
     private HashMap<EventType,Object> ecs_properties = new HashMap<EventType,Object>();
-
-    /*** Attributs liés à l'interface graphique de libGDX ***/
-    private Skin skin;
-    private BitmapFont fontBlack;
+    private Set<Object> reponses_manquantes = new HashSet<Object>();
 
     /*** Attributs liés au calcul du DPE ***/
 
     // 0.Variables générales
-    private double SH;
-    private double nbHabitant;
-    private double nbJoursAbsenceParAn;
+    private double SH = 500;
+    private double consommationTotaleAnnuel=0;
     private double NIV;
     private double MIT;
     private double MIT2;
@@ -49,195 +40,153 @@ public class Dpe implements EventListener {
     private double C_niv;
 
     // 1.Expression du besoin de chauffage
-    private double BV;
-    private double GV;
-    private double F;
+    private double bv=8847;
+    private double gv=9000; //TODO : trouver le GV défavorable en faisant plusieurs simulations ...
+    private double f=0.017; //TODO : trouver le F défavorable en faisant plusieurs simulations ...
 
     // 2.Calcul des déperditions de l'enveloppe GV
-    private double DP_murExt;
-    private double DP_murLnc;
-    private double DP_murAh;
-    private double DP_murVer;
-    private double DP_toiTer;
-    private double DP_toiCp;
-    private double DP_toiCa;
-    private double DP_planVs;
-    private double DP_planTp;
-    private double DP_planSs;
-    private double DP_planAh;
-    private double DP_fen;
-    private double DP_pfen;
-    private double DP_fenVer;
-    private double DP_pfenVer;
-    private double DP_portExt;
-    private double DP_portLnc;
-    private double DP_portVer;
-    private double PT;
-    private double DR;
-    private double Tint;
-    private double Sdep;
+    private double dpMur;
+    private double dpToit;
+    private double dpPlancher;
+    private double dpFenetre;
+    private double dpPorte;
+    private double pontThermique;
+    private double renouvellementAir;
+    private double tInt;
+    private double sDep;
+
+    // 2.6.Calcul de f : on cherche à minimiser x donc à minimiser aS et aI et à maximiser GV et DHcor
+    private double x=0.017; //TODO : trouver le x défavorable en faisant plusieurs simulations ...
+    private double dhcor=82600;
+    private double dhref=71000;
+    private double kdh=2;
+    private double nRef=5800;
+    private double e=340;
+    private double aI=1209399000;
+    private double aS=680000;
+    private double sse=2; //TODO : trouver le sse défavorable en faisant plusieurs simulations ...
+
+    // 3.Traitement de l'intermittence
+    private double intermittence = 0.62;
+    private double i0 = 1; // Cas le plus défavorable (cf partie 3)
+    private double g = 7.2; // (9000/2.5*500)
+
+    // 4.Calcul du besoin et des consommations
+
+    // 5.Rendements des installations
+
+    // 6.Rendement de génération des chaudières
+
+    // 7.Expression du besoin de la consommation d'ECS
+    private double bEcs;
+    private double nbJoursAbsenceParAn;
+    private double nbHabitant;
+    private double cEcs;
+    private double iEcs;
+    private double fEcs;
+
+    // 8.Rendements de l'installation d'ECS
+
+
+    // 9.Consommation de climatisation
+    private double cClimatisation=700; // Cas le plus défavorable (7*100)
+    private double rClimatisation=7; // Cas le plus défavorable (voir 9)
+    private double sClimatisation=100; // On considère que l'on climatise une grande surface
+
+    // 10.Concommation des usages spécifiques
+    private double cElectromenager=1906; // Comme si on possède tous les éléments électroménager (voir 10.3)
+    private double cEclairageSurfacique = 3.7; // Consommation max annuel des lampes (voir 10.2)
+    private double cEclairage = 1850; // SH max * cEclairageSurfacique max = 500*3.7
+    private double cCuisson = 1660; // Conso cuisson max (cf 10.1)
 
     /*** Constructeur ***/
     public Dpe () {
-        fontBlack = new BitmapFont(Gdx.files.internal("data/font/black.fnt"));
-        skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
-
         EventManager.getInstance().addListener(Channel.DPE, this);
-        SH=0;
-
     }
 
     /*---------------------------------Calculateur DPE-------------------------------------------*/
 
-    public void calc_BV() {
-        BV = GV*(1-F);
+    public void actualiseConsommationTotaleAnnuel(){
+        consommationTotaleAnnuel = cElectromenager+cEclairage+cCuisson+cClimatisation;
+//        System.out.println("consommationTotaleAnnuel = "+consommationTotaleAnnuel+" cElectromenager = "+cElectromenager+" cEclairage = "+cEclairage+" cCuisson = "+cCuisson+" cClimatisation = "+cClimatisation);
     }
 
-    public void calc_GV() {
-        GV = DP_murExt + DP_murLnc + DP_murAh + DP_murVer + DP_toiTer + DP_toiCp + DP_toiCa + DP_planVs + DP_planTp + DP_planSs + DP_planAh + DP_fen + DP_pfen + DP_fenVer + DP_pfenVer + DP_portExt + DP_portLnc + DP_portVer + PT + DR;
+    public void actualiseConsommationEclairageSurfacique() {
+        if (general_properties.containsKey(DpeEvent.EQUIPEMENT_ECLAIRAGE)){
+            TypeEquipementEclairageEnum equipementEclairage = (TypeEquipementEclairageEnum)general_properties.get(DpeEvent.EQUIPEMENT_ECLAIRAGE);
+            cEclairageSurfacique=equipementEclairage.getConsommationEclairage();
+        }else{
+            cEclairageSurfacique=3.7;
+        }
+        this.actualiseConsommationEclairage();
     }
 
-    public void calc_MIT2(){
-        if (FOR == 4.12){ // Forme carré ou rectangulaire de la maison
-            if (MIT == 1){MIT2=1;}
-            else if (MIT == 0.8){MIT2=0.8;}
-            else if (MIT == 0.7){MIT2=0.675;}
-            else if (MIT == 0.5){MIT2=0.5;}
-            else if (MIT == 0.35){MIT2=0.35;}
-        }
-        else if (FOR == 4.81){ // Forme allongé de la maison
-            if (MIT == 1){MIT2=1;}
-            else if (MIT == 0.8){MIT2=0.9;}
-            else if (MIT == 0.7){MIT2=0.725;}
-            else if (MIT == 0.5){MIT2=0.55;}
-            else if (MIT == 0.35){MIT2=0.4;}
-        }
-        else if (FOR == 5.71){ // Forme développé de la maison
-            if (MIT == 1){MIT2=1;}
-            else if (MIT == 0.8){MIT2=0.9;}
-            else if (MIT == 0.7){MIT2=0.75;}
-            else if (MIT == 0.5){MIT2=0.7;}
-            else if (MIT == 0.35){MIT2=0.55;}
-        }
+    public void actualiseConsommationEclairage(){
+        cEclairage=cEclairageSurfacique*SH;
+        System.out.println("cEclairage = "+cEclairage+" cEclairageSurfacique = "+cEclairageSurfacique+" SH = "+SH);
     }
 
-    public void calc_C_niv(){
-        if (NIV==1){C_niv=0;}
-        else if (NIV==1.5){C_niv=1;}
-        else if (NIV==2){C_niv=1;}
-        else if (NIV==2.5){C_niv=2;}
-        else if (NIV==3){C_niv=2;}
+    public void actualiseConsommationElectromenager(){
+        if(general_properties.containsKey(DpeEvent.EQUIPEMENT_ELECTROMENAGER)){
+            cElectromenager=0;
+            ArrayList<TypeEquipementElectromenagerEnum> listEquipement = (ArrayList<TypeEquipementElectromenagerEnum>)general_properties.get(DpeEvent.EQUIPEMENT_ELECTROMENAGER);
+            for (TypeEquipementElectromenagerEnum actualEquipement : listEquipement){
+                cElectromenager+=actualEquipement.getConsommation();
+            }
+        }
+        System.out.println("cElectromenager = "+cElectromenager);
     }
 
-    public double calc_lRfm(){
-        double lRfm=0;
-        if (SH<90){
-            if (NIV==1){
-                if (FOR==4.12){lRfm=2;}
-                else if (FOR==4.81){lRfm=4;}
-                else if (FOR==5.71){lRfm=6;}
-            }
-            else if (NIV==1.5){
-                if (FOR==4.12){lRfm=2;}
-                else if (FOR==4.81){lRfm=4;}
-                else if (FOR==5.71){lRfm=6;}
-            }
-            else if (NIV==2){
-                lRfm=0;
-            }
-            else if (NIV>=2.5){
-                lRfm=0;
-            }
+    public void actualiseConsommationCuisson(){
+        if (general_properties.containsKey(DpeEvent.EQUIPEMENT_CUISSON)){
+            TypeEquipementCuissonEnum equipementCuisson = (TypeEquipementCuissonEnum)general_properties.get(DpeEvent.EQUIPEMENT_CUISSON);
+            cCuisson = equipementCuisson.getConsommation();
+        }else{
+            cCuisson=1660;
         }
-        else if (SH>90 && SH<160){
-            if (NIV==1){
-                if (FOR==4.12){lRfm=2;}
-                else if (FOR==4.81){lRfm=4;}
-                else if (FOR==5.71){lRfm=6;}
-            }
-            else if (NIV==1.5){
-                if (FOR==4.12){lRfm=2;}
-                else if (FOR==4.81){lRfm=4;}
-                else if (FOR==5.71){lRfm=6;}
-            }
-            else if (NIV==2){
-                if (FOR==4.12){lRfm=4;}
-                else if (FOR==4.81){lRfm=8;}
-                else if (FOR==5.71){lRfm=12;}
-            }
-            else if (NIV>=2.5){
-                lRfm=0;
-            }
-        }
-        else if (SH>160){
-            if (NIV==1){
-                if (FOR==4.12){lRfm=2;}
-                else if (FOR==4.81){lRfm=4;}
-                else if (FOR==5.71){lRfm=6;}
-            }
-            else if (NIV==1.5){
-                if (FOR==4.12){lRfm=2;}
-                else if (FOR==4.81){lRfm=4;}
-                else if (FOR==5.71){lRfm=6;}
-            }
-            else if (NIV==2){
-                if (FOR==4.12){lRfm=4;}
-                else if (FOR==4.81){lRfm=8;}
-                else if (FOR==5.71){lRfm=12;}
-            }
-            else if (NIV>=2.5){
-                if (FOR==4.12){lRfm=4;}
-                else if (FOR==4.81){lRfm=8;}
-                else if (FOR==5.71){lRfm=12;}
-            }
-        }
-        return lRfm;
+        this.actualiseConsommationTotaleAnnuel();
+        System.out.println("cCuisson = "+cCuisson);
     }
 
-    /*** Log les valeurs du DPE dans la console ***/
-    public void logValeursDpe(){
-        System.out.println("**************************** LOG DPE ***********************************");
-//        System.out.println("typeBatiment = "+typeBatiment.toString());
-//        System.out.println("positionAppartement = "+positionAppartement.toString());
-//        System.out.println("typeEnergieConstruction = "+typeEnergieConstruction.toString());
-//        System.out.println("typeVentilation = "+typeVentilation.toString());
-//        System.out.println("typeVmc = "+typeVmc.toString());
-//        System.out.println("anneeConstruction = "+anneeConstruction);
-        System.out.println("SH = "+SH);
-        System.out.println("NIV = "+NIV);
-        System.out.println("MIT = "+MIT);
-        System.out.println("MIT2 = "+MIT2);
-        System.out.println("FOR = "+FOR);
-        System.out.println("Per = "+Per);
-        System.out.println("PER = "+PER);
-        System.out.println("C_niv = "+C_niv);
-//        System.out.println("configuration_Appartement = "+configuration_Appartement);
-        System.out.println("BV = "+BV);
-        System.out.println("GV = "+GV);
-        System.out.println("F = "+F);
-        System.out.println("DP_murExt = "+DP_murExt);
-        System.out.println("DP_murLnc = "+DP_murLnc);
-        System.out.println("DP_murAh = "+DP_murAh);
-        System.out.println("DP_murVer = "+DP_murVer);
-        System.out.println("DP_toiTer = "+DP_toiTer);
-        System.out.println("DP_toiCp = "+DP_toiCp);
-        System.out.println("DP_toiCa = "+DP_toiCa);
-        System.out.println("DP_planVs = "+DP_planVs);
-        System.out.println("DP_planTp = "+DP_planTp);
-        System.out.println("DP_planSs = "+DP_planSs);
-        System.out.println("DP_planAh = "+DP_planAh);
-        System.out.println("DP_fen = "+DP_fen);
-        System.out.println("DP_pfen = "+DP_pfen);
-        System.out.println("DP_fenVer = "+DP_fenVer);
-        System.out.println("DP_pfenVer = "+DP_pfenVer);
-        System.out.println("DP_portExt = "+DP_portExt);
-        System.out.println("DP_portLnc = "+DP_portLnc);
-        System.out.println("DP_portVer = "+DP_portVer);
-        System.out.println("PT = "+PT);
-        System.out.println("DR = "+DR);
-        System.out.println("Tint = "+Tint);
-        System.out.println("Sdep = "+Sdep);
-        System.out.println("*************************** FIN LOG DPE ********************************");
+    public void actualiseResistanceClim(){
+        if (general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
+            DepartementBatimentEnum.ZoneEte zoneEte = ((DepartementBatimentEnum) general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT)).getZoneEte();
+            switch(zoneEte){
+                case Ea:
+                    if (sClimatisation<150){rClimatisation=2;}
+                    else{rClimatisation=4;}
+                    break;
+                case Eb:
+                    if (sClimatisation<150){rClimatisation=3;}
+                    else{rClimatisation=5;}
+                    break;
+                case Ec:
+                    if (sClimatisation<150){rClimatisation=4;}
+                    else{rClimatisation=6;}
+                    break;
+                case Ed:
+                    if (sClimatisation<150){rClimatisation=5;}
+                    else{rClimatisation=7;}
+                    break;
+            }
+        }else{
+            rClimatisation=7;
+        }
+        actualiseConsommationClimatisation();
+    }
+
+    public void actualiseConsommationClimatisation(){
+        if (general_properties.containsKey(DpeEvent.CLIMATISATION_LOGEMENT)){
+            if ((general_properties.get(DpeEvent.CLIMATISATION_LOGEMENT)).equals(PresenceClimatisationLogementEnum.NON)){
+                cClimatisation=0;
+            }else{
+                cClimatisation = rClimatisation * sClimatisation;
+            }
+        }else{
+            cClimatisation=700;
+        }
+        this.actualiseConsommationTotaleAnnuel();
+        System.out.println("cClimatisation = "+cClimatisation+" rClimatisation = "+rClimatisation+" sClimatisation = "+sClimatisation);
     }
 
     public void notify(Channel c, Event e) throws InterruptedException {
@@ -293,7 +242,6 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             CategorieLogementEnum categorieLogement = (CategorieLogementEnum) items.get("lastValue");
                             general_properties.put(DpeEvent.CATEGORIE_BATIMENT, categorieLogement);
-                            System.out.println("SH = " + SH);
 
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             CategorieLogementEnum type = null;
@@ -314,6 +262,11 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             SH = (double) items.get("lastValue");
+                            general_properties.put(DpeEvent.SURFACE_HABITABLE, SH);
+
+                            // On actualise toutes les données où la surface habitable entre en compte
+                            this.actualiseConsommationEclairage();
+
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue", SH);
@@ -379,8 +332,8 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             DepartementBatimentEnum departement = (DepartementBatimentEnum) items.get("lastValue");
-                            System.out.println(departement);
                             general_properties.put(DpeEvent.DEPARTEMENT_BATIMENT, departement);
+                            this.actualiseResistanceClim();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             DepartementBatimentEnum type = null;
@@ -486,6 +439,7 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             PresenceClimatisationLogementEnum presenceClimatisationLogement = (PresenceClimatisationLogementEnum) items.get("lastValue");
                             general_properties.put(DpeEvent.CLIMATISATION_LOGEMENT, presenceClimatisationLogement);
+                            this.actualiseConsommationClimatisation();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             PresenceClimatisationLogementEnum type = null;
@@ -501,12 +455,35 @@ public class Dpe implements EventListener {
                         break;
                     }
 
+                    case SURFACE_CLIMATISATION: {
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            this.sClimatisation = (double) items.get("lastValue");
+                            general_properties.put(DpeEvent.SURFACE_CLIMATISATION, sClimatisation);
+                            this.actualiseResistanceClim();
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            PresenceClimatisationLogementEnum type = null;
+                            if (general_properties.containsKey(DpeEvent.SURFACE_CLIMATISATION)){
+                                type = (PresenceClimatisationLogementEnum) general_properties.get(DpeEvent.SURFACE_CLIMATISATION);
+                            }
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.SURFACE_CLIMATISATION, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
                     case EQUIPEMENT_ECLAIRAGE: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeEquipementEclairageEnum equipementEclairage = (TypeEquipementEclairageEnum) items.get("lastValue");
                             general_properties.put(DpeEvent.EQUIPEMENT_ECLAIRAGE, equipementEclairage);
+                            this.actualiseConsommationEclairageSurfacique();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TypeEquipementEclairageEnum type = null;
@@ -525,9 +502,21 @@ public class Dpe implements EventListener {
                     case EQUIPEMENT_ELECTROMENAGER: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        ArrayList<TypeEquipementElectromenagerEnum> listAppareils = new ArrayList<TypeEquipementElectromenagerEnum>();
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeEquipementElectromenagerEnum equipementElectromenager = (TypeEquipementElectromenagerEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.EQUIPEMENT_ELECTROMENAGER, equipementElectromenager);
+                            if (general_properties.containsKey(DpeEvent.EQUIPEMENT_ELECTROMENAGER)){
+                                listAppareils = (ArrayList) general_properties.get(DpeEvent.EQUIPEMENT_ELECTROMENAGER);
+                                if (!listAppareils.contains(equipementElectromenager)){
+                                    listAppareils.add(equipementElectromenager);
+                                }else{
+                                    listAppareils.remove(equipementElectromenager);
+                                }
+                            }else{
+                                listAppareils.add(equipementElectromenager);
+                            }
+                            general_properties.put(DpeEvent.EQUIPEMENT_ELECTROMENAGER, listAppareils);
+                            this.actualiseConsommationElectromenager();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TypeEquipementElectromenagerEnum type = null;
@@ -549,6 +538,7 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeEquipementCuissonEnum equipementCuisson = (TypeEquipementCuissonEnum) items.get("lastValue");
                             general_properties.put(DpeEvent.EQUIPEMENT_CUISSON, equipementCuisson);
+                            this.actualiseConsommationCuisson();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TypeEquipementCuissonEnum type = null;

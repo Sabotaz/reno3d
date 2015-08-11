@@ -4,15 +4,23 @@ package fr.limsi.rorqual.core.dpe.enums.generalproperties;
  * Created by ricordeau on 30/07/15.
  */
 public enum TypeEquipementElectromenagerEnum {
-    TELEVISEUR,
-    LECTEUR_DVD_MAGNETOSCOPE,
-    ORDINATEUR_FIXE,
-    ORDINATEUR_PORTABLE,
-    SECHE_LINGE,
-    LAVE_LINGE,
-    LAVE_VAISSELLE,
-    FER_A_REPASSER,
-    REFRIGERATEUR,
-    CONGELATEUR,
-    ASPIRATEUR;
+    TELEVISEUR(123),
+    LECTEUR_DVD_MAGNETOSCOPE(122),
+    ORDINATEUR_FIXE(163),
+    ORDINATEUR_PORTABLE(17),
+    SECHE_LINGE(129),
+    LAVE_LINGE(65),
+    LAVE_VAISSELLE(273),
+    FER_A_REPASSER(12),
+    REFRIGERATEUR(492),
+    CONGELATEUR(492),
+    ASPIRATEUR(18);
+
+    private int consommation;
+    TypeEquipementElectromenagerEnum(int consommation){
+        this.consommation=consommation;
+    }
+    public int getConsommation(){
+        return this.consommation;
+    }
 }

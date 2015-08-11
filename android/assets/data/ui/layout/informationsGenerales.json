@@ -344,33 +344,6 @@
         },
         {
           "type": "Table",
-          "label": "Présence d'un système de climatisation : ",
-          "labelPad": 5,
-          "labelWidth": 263,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.CLIMATISATION_LOGEMENT",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Oui",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.OUI"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Non",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.NON"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
           "label": "Type de ventilation : ",
           "labelPad": 5,
           "labelWidth": 263,
@@ -601,6 +574,47 @@
               "type": "TextField",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.NOMBRE_JOURS_ABSENCE",
+              "maxLength": 3
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Présence d'un système\nde climatisation : ",
+          "labelPad": 5,
+          "labelWidth": 176,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CLIMATISATION_LOGEMENT",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Oui",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.OUI"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Non",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.PresenceClimatisationLogementEnum.NON"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Surface climatisée (en m²) : ",
+          "labelPad": 5,
+          "labelWidth": 176,
+          "content": [
+            {
+              "type": "TextField",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.SURFACE_CLIMATISATION",
               "maxLength": 3
             }
           ]
