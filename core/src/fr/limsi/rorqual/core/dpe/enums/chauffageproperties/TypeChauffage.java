@@ -173,7 +173,7 @@ public class TypeChauffage {
         }
     }
 
-    public float getRr() {
+    public float getDefaultRr() {
         switch (emission) {
             case RADIATEUR:
                 return robinetsThermostatiques ? 0.95f : 0.9f;
