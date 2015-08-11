@@ -50,13 +50,13 @@ public class Logic implements InputProcessor {
     public void startFenetre() {
         stop();
 
-        modelMaker = new OuvertureMaker("data/models/g3db/windows/fenetreCoulissante/properties.json");
+        modelMaker = new OuvertureMaker(2);
     }
 
     public void startPorte() {
         stop();
 
-        modelMaker = new OuvertureMaker("data/models/g3db/doors/DoorTest/properties.json");
+        modelMaker = new OuvertureMaker(1);
 
     }
 

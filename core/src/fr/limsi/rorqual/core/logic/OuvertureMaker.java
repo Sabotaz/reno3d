@@ -23,10 +23,10 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 public class OuvertureMaker extends ModelMaker {
 
-    String properties;
+    int modelId;
 
-    public OuvertureMaker(String file) {
-        properties = file;
+    public OuvertureMaker(int modelId) {
+        this.modelId = modelId;
     }
 
     Ouverture ouverture;
@@ -45,7 +45,7 @@ public class OuvertureMaker extends ModelMaker {
             Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
             Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
             float x = v2.dot(v1);
-            ModelContainer container = ModelLibrary.getInstance().getModelFromId(1);
+            ModelContainer container = ModelLibrary.getInstance().getModelFromId(modelId);
             if (container instanceof Ouverture) {
                 ouverture = (Ouverture) container;
                 ouverture.setMur(mur);
