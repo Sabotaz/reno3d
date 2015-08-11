@@ -115,7 +115,9 @@ project(":core") {
                 inputs.file file
                 outputs.file target
 
-                target.getParentFile().mkdirs()
+                doFirst {
+                    target.getParentFile().mkdirs()
+                }
 
                 //linux
                 // blender foobar.blend --background --python fbxexporter.py -- foobar.fbx
@@ -134,7 +136,10 @@ project(":core") {
 
                 // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
                 File target = new File(file.getPath().replaceAll('blend', 'g3db'))
-                target.getParentFile().mkdirs()
+
+                doFirst {
+                    target.getParentFile().mkdirs()
+                }
 
                 // remove extension
                 String output = target.path.lastIndexOf('.').with {
