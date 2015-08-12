@@ -18,7 +18,7 @@
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.SOURCE_CHAUFFAGE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.INSTALLATION_CHAUFFAGE",
               "content": [
                 {
                   "type": "CheckBox",
@@ -204,7 +204,7 @@
             {
               "type": "ScrollPaneElement",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFAGE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUFFAGE_UNIQUE",
               "align": "left",
               "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur"
             }
@@ -226,40 +226,42 @@
             {
               "type": "ScrollPaneElement",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFAGE_SANS_POIL",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUFFAGE_SANS_POIL",
               "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageSansPoilEnum"
+              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
+              "indexMin":0,
+              "indexMax":26
             }
           ]
         },
         {
           "type": "Table",
-          "label": "Poil/insert : ",
+          "label": "Poêle/insert : ",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_POIL_OU_INSERT",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE",
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Poil ou insert bois installé avant 2001",
+                  "label": "Poêle ou insert bois installé avant 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_OU_INSERT_BOIS_AVANT_2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé avant 2001"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Poil ou insert bois installé à partir de 2001",
+                  "label": "Poêle ou insert bois installé à partir de 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_OU_INSERT_BOIS_APRES_2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé à partir de 2001"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Poil fioul ou GPL",
+                  "label": "Poêle fioul ou GPL",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_FIOUL_OU_GPL"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil fioul ou GPL"
                 }
               ]
             }
@@ -267,14 +269,14 @@
         },
         {
           "type": "Table",
-          "label": "Fréquence d'utilisation poil/insert : ",
+          "label": "Fréquence d'utilisation poêle/insert : ",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.FREQUENCE_UTILISATION_POIL_OU_INSERT",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE",
               "content": [
                 {
                   "type": "CheckBox",
@@ -320,9 +322,11 @@
             {
               "type": "ScrollPaneElement",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUDIERE_GAZ_FIOUL",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUDIERE_GAZ_FIOUL",
               "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChaudiereGazFioulEnum"
+              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
+              "indexMin":4,
+              "indexMax":17
             }
           ]
         },
@@ -335,19 +339,19 @@
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUDIERE_BOIS",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUDIERE_BOIS",
               "content": [
                 {
                   "type": "CheckBox",
                   "label": "Chaudière bois ancienne (age > 15 ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChaudiereBoisEnum.CHAUDIERE_BOIS_PLUS_DE_15_ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Chaudière bois ancienne (age > 15 ans)"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chaudière bois récente (age < 15 ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChaudiereBoisEnum.CHAUDIERE_BOIS_MOINS_DE_15_ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Chaudière bois récente (age < 15 ans)"
                 }
               ]
             }
@@ -369,9 +373,11 @@
             {
               "type": "ScrollPaneElement",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUDIERE_CHAUFFAGE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUDIERE_AVEC_PAC",
               "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChaudiereEnum"
+              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
+              "indexMin":0,
+              "indexMax":19
             }
           ]
         },
@@ -384,31 +390,31 @@
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_POMPE_A_CHALEUR",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE",
               "content": [
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/air",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_AIR_AIR"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/air"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/eau",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_AIR_EAU"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/eau"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur sur nappe",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_SUR_NAPPE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur sur nappe"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur géothermique",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_GEOTHERMIQUE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur géothermique"
                 }
               ]
             }
@@ -430,9 +436,11 @@
             {
               "type": "ScrollPaneElement",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUDIERE_CHAUFFAGE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE",
               "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChaudiereEnum"
+              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
+              "indexMin":0,
+              "indexMax":19
             }
           ]
         },
@@ -445,31 +453,31 @@
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_POMPE_A_CHALEUR",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE",
               "content": [
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/air",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_AIR_AIR"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/air"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/eau",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_AIR_EAU"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/eau"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur sur nappe",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_SUR_NAPPE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur sur nappe"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur géothermique",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePompeChaleurEnum.POMPE_A_CHALEUR_GEOTHERMIQUE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur géothermique"
                 }
               ]
             }
@@ -477,32 +485,32 @@
         },
         {
           "type": "Table",
-          "label": "Poil/insert : ",
+          "label": "Poêle/insert : ",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_POIL_OU_INSERT",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC",
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Poil ou insert bois installé avant 2001",
+                  "label": "Poêle ou insert bois installé avant 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_OU_INSERT_BOIS_AVANT_2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé avant 2001"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Poil ou insert bois installé à partir de 2001",
+                  "label": "Poêle ou insert bois installé à partir de 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_OU_INSERT_BOIS_APRES_2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé à partir de 2001"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Poil fioul ou GPL",
+                  "label": "Poêle fioul ou GPL",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypePoilOuInsertEnum.POIL_FIOUL_OU_GPL"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil fioul ou GPL"
                 }
               ]
             }
@@ -510,14 +518,14 @@
         },
         {
           "type": "Table",
-          "label": "Fréquence d'utilisation poil/insert : ",
+          "label": "Fréquence d'utilisation poêle/insert : ",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
             {
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.FREQUENCE_UTILISATION_POIL_OU_INSERT",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC",
               "content": [
                 {
                   "type": "CheckBox",
@@ -688,28 +696,6 @@
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CONDENSATION"
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Équipement ECS",
-      "id": "type_chaudiere",
-      "content": [
-        {
-          "type": "Table",
-          "label": "Type de chaudière : ",
-          "labelPad": 5,
-          "labelWidth": 137,
-          "content": [
-            {
-              "type": "ScrollPaneElement",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUDIERE_ECS",
-              "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChaudiereEnum"
             }
           ]
         }

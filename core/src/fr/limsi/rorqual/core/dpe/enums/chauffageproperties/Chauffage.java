@@ -1,21 +1,14 @@
 package fr.limsi.rorqual.core.dpe.enums.chauffageproperties;
 
+import java.util.ArrayList;
+
 /**
  * Created by ricordeau on 21/07/15.
  */
 public class Chauffage {
 
     public enum Generateur {
-        CHAUFFAGE_ELECTRIQUE_DIRECT_ANCIEN("Chauffage électrique direct ancien"),
-        CHAUFFAGE_ELECTRIQUE_DIRECT_RECENT("Chauffage électrique direct récent"),
         CHAUDIERE_ELECTRIQUE("Chaudière électrique"),
-        POMPE_A_CHALEUR_AIR_AIR("Pompe à chaleur air/air"),
-        POMPE_A_CHALEUR_AIR_EAU("Pompe à chaleur air/eau"),
-        POMPE_A_CHALEUR_SUR_NAPPE("Pompe à chaleur sur nappe"),
-        POMPE_A_CHALEUR_GEOTHERMIQUE("Pompe à chaleur géothermique"),
-        POIL_OU_INSERT_BOIS_AVANT_2001("Poil ou insert bois installé avant 2001"),
-        POIL_OU_INSERT_BOIS_APRES_2001("Poil ou insert bois installé à partir de 2001"),
-        POIL_FIOUL_OU_GPL("Poil fioul ou GPL"),
         CHAUDIERE_CLASSIQUE_AVANT_1981("Chaudière classique (<1981)"),
         CHAUDIERE_CLASSIQUE_ENTRE_1981_ET_1986("Chaudière classique (entre 1981 et 1985)"),
         CHAUDIERE_CLASSIQUE_ENTRE_1986_ET_1991("Chaudière classique (entre 1986 et 1990)"),
@@ -35,7 +28,16 @@ public class Chauffage {
         CHAUDIERE_FIOUL_CONDENSATION("Chaudière fioul condensation"),
         CHAUDIERE_BOIS_PLUS_DE_15_ANS("Chaudière bois ancienne (age > 15 ans)"),
         CHAUDIERE_BOIS_MOINS_DE_15_ANS("Chaudière bois récente (age < 15 ans)"),
-        RADIATEUR_GAZ("Radiateur gaz");
+        POMPE_A_CHALEUR_AIR_AIR("Pompe à chaleur air/air"),
+        POMPE_A_CHALEUR_AIR_EAU("Pompe à chaleur air/eau"),
+        POMPE_A_CHALEUR_SUR_NAPPE("Pompe à chaleur sur nappe"),
+        POMPE_A_CHALEUR_GEOTHERMIQUE("Pompe à chaleur géothermique"),
+        CHAUFFAGE_ELECTRIQUE_DIRECT_ANCIEN("Chauffage électrique direct ancien"),
+        CHAUFFAGE_ELECTRIQUE_DIRECT_RECENT("Chauffage électrique direct récent"),
+        RADIATEUR_GAZ("Radiateur gaz"),
+        POIL_OU_INSERT_BOIS_AVANT_2001("Poil ou insert bois installé avant 2001"),
+        POIL_OU_INSERT_BOIS_APRES_2001("Poil ou insert bois installé à partir de 2001"),
+        POIL_FIOUL_OU_GPL("Poil fioul ou GPL");
 
         private String name;
         Generateur(String name){
@@ -125,7 +127,6 @@ public class Chauffage {
                     throw new NotDefinedException();
             }
         }
-
     }
 
     public enum Type {
@@ -141,27 +142,33 @@ public class Chauffage {
         SOLUTION_MIXTE;
     }
 
-    private Generateur[] generateurs = new Generateur[3];
+    private void actualiseType(){
+        if (this.generateur.equals(Generateur.CHAUFFAGE_ELECTRIQUE_DIRECT_ANCIEN)
+                || this.generateur.equals(Generateur.CHAUFFAGE_ELECTRIQUE_DIRECT_RECENT)
+                || this.generateur.equals(Generateur.POIL_FIOUL_OU_GPL)
+                || this.generateur.equals(Generateur.POIL_OU_INSERT_BOIS_APRES_2001)
+                || this.generateur.equals(Generateur.POIL_OU_INSERT_BOIS_AVANT_2001)
+                || this.generateur.equals(Generateur.RADIATEUR_GAZ))
+        {
+            this.type=Type.DIVISE;
+        }else{
+            this.type=Type.CENTRALE;
+        }
+    }
+
+    private Generateur generateur;
     private Type type;
     private Emission emission;
     private boolean robinetsThermostatiques;
 
-    public Chauffage() {
-        this(null, null, null, false);
+    public Chauffage(Generateur generateur) {
+        this.generateur=generateur;
+        this.actualiseType();
+        this.emission = Emission.RADIATEUR;
+        this.robinetsThermostatiques = false;
     }
 
-    public Chauffage(Generateur[] generateurs, Type type, Emission emission) {
-        this(generateurs, type, emission, false);
-    }
-
-    public Chauffage(Generateur[] generateurs, Type type, Emission emission, boolean robinetsThermostatiques) {
-        if (generateurs != null)
-            this.generateurs = generateurs;
-        this.type = type;
-        this.emission = emission;
-        this.robinetsThermostatiques = robinetsThermostatiques;
-    }
-
+    // Getter
     public float getRe() {
         if (emission == null)
             return 0.95f;
@@ -172,15 +179,19 @@ public class Chauffage {
                 return 0.95f;
         }
     }
-
     public float getDefaultRr() {
+        if (emission==null)
+            return 0.8f;
         switch (emission) {
             case RADIATEUR:
                 return robinetsThermostatiques ? 0.95f : 0.9f;
             case SOLUTION_MIXTE:
                 return 0.8f;
             default:
-                return 0.96f;
+                return 0.8f;
         }
+    }
+    public Type getType(){
+        return this.type;
     }
 }

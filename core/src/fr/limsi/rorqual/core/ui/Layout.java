@@ -141,8 +141,9 @@ public class Layout {
             Object[] consts = clz.getEnumConstants();
             Object value = null;
             for (Object o : consts) {
-                if (o.toString().equals(enum_value))
+                if (o.toString().equals(enum_value)){
                     value = o;
+                }
             }
             return value;
         }
@@ -596,10 +597,15 @@ public class Layout {
         Object[] tabObject=null;
         final Updater last_updater = updater;
         final Object[] valuesEnum = getClass(json, "enum");
-        tabObject = new Object[valuesEnum.length];
+        if (json.has("indexMin") && json.has("indexMax")){
+            int size = json.getInt("indexMax")-json.getInt("indexMin");
+            tabObject = new Object[size];
+        }else{
+            tabObject = new Object[valuesEnum.length];
+        }
         int sizeMaxEnum=0;
-        for(int i=0;i<valuesEnum.length;i++) {
-            tabObject[i] = valuesEnum[i].toString();
+        for(int i=json.getInt("indexMin",0);i<json.getInt("indexMax",valuesEnum.length);i++) {
+            tabObject[i-json.getInt("indexMin",0)] = valuesEnum[i].toString();
             if (valuesEnum[i].toString().length()>sizeMaxEnum){
                 sizeMaxEnum = valuesEnum[i].toString().length();
             }
