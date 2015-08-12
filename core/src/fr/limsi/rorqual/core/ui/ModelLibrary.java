@@ -255,6 +255,7 @@ public class ModelLibrary {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     currentModel = id;
+                    Logic.getInstance().startModel();
                 }
             });
             content.add(imageButton).size(100, 100).left().top();

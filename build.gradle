@@ -151,7 +151,11 @@ project(":core") {
 
                 //linux
                 // blender -b file.blend -o //file -F JPEG -x 1 -f 1
-                commandLine 'blender', '-b', file, '-o', output + '#', '-F', 'JPEG', '-x', '1', '-f', '1'
+                Properties properties = new Properties()
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+                def blender = properties.getProperty('blender')
+
+                commandLine blender, '-b', file, '-o', output + '#', '-F', 'JPEG', '-x', '1', '-f', '1'
 
                 standardOutput = new ByteArrayOutputStream()
 
