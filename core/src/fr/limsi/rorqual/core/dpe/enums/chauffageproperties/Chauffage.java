@@ -3,7 +3,7 @@ package fr.limsi.rorqual.core.dpe.enums.chauffageproperties;
 /**
  * Created by ricordeau on 21/07/15.
  */
-public class TypeChauffage {
+public class Chauffage {
 
     public enum Generateur {
         CHAUFFAGE_ELECTRIQUE_DIRECT_ANCIEN("Chauffage électrique direct ancien"),
@@ -146,15 +146,15 @@ public class TypeChauffage {
     private Emission emission;
     private boolean robinetsThermostatiques;
 
-    public TypeChauffage() {
+    public Chauffage() {
         this(null, null, null, false);
     }
 
-    public TypeChauffage(Generateur[] generateurs, Type type, Emission emission) {
+    public Chauffage(Generateur[] generateurs, Type type, Emission emission) {
         this(generateurs, type, emission, false);
     }
 
-    public TypeChauffage(Generateur[] generateurs, Type type, Emission emission, boolean robinetsThermostatiques) {
+    public Chauffage(Generateur[] generateurs, Type type, Emission emission, boolean robinetsThermostatiques) {
         if (generateurs != null)
             this.generateurs = generateurs;
         this.type = type;

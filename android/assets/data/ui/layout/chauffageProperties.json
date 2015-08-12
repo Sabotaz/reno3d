@@ -164,25 +164,25 @@
                   "type": "CheckBox",
                   "label": "Radiateur",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.RADIATEUR"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.RADIATEUR"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Plancher chauffant",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.PLANCHER_CHAUFFANT"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.PLANCHER_CHAUFFANT"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Système de soufflage",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.SYSTEME_DE_SOUFFLAGE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.SYSTEME_DE_SOUFFLAGE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Solution mixte (ex: radiateur + plancher chauffant)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeEmetteurEnum.SOLUTION_MIXTE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.SOLUTION_MIXTE"
                 }
               ]
             }
@@ -206,7 +206,7 @@
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFAGE",
               "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeChauffageEnum"
+              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur"
             }
           ]
         }
