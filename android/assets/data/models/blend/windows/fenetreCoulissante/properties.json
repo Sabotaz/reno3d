@@ -1,6 +1,6 @@
 {
   "name":"Fenetre coulissante",
-  "file":"Door",
+  "file":"FenetreCoulissante",
   "category":"Menuiserie",
   "subcategory":"Fenetre",
   "id":2,
