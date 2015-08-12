@@ -83,8 +83,8 @@
         },
         {
           "type": "TextButton",
-          "text": "FENETRE",
-          "value": "fr.limsi.rorqual.core.event.ButtonValue.FENETRE",
+          "text": "MENUISERIE",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
           "height": 40,
           "width": 120,
           "padTop": 10,

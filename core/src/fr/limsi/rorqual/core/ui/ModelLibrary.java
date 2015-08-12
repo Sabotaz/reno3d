@@ -3,8 +3,19 @@ package fr.limsi.rorqual.core.ui;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.UBJsonReader;
@@ -13,7 +24,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import fr.limsi.rorqual.core.event.EventRequest;
+import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
@@ -29,17 +44,22 @@ public class ModelLibrary {
         private JsonValue fields;
         private String clazz;
 
-        public ModelLoader(JsonValue json, String path) {
+        public ModelLoader(final JsonValue json, final String path) {
             this.json = json;
             this.path = path;
-
-            UBJsonReader jsonReader = new UBJsonReader();
-            G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-            model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + json.getString("file") + ".g3db", Files.FileType.Internal));
-
             fields = json.get("properties");
-
             clazz = json.getString("class");
+
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    UBJsonReader jsonReader = new UBJsonReader();
+                    G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+                    model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + json.getString("file") + ".g3db", Files.FileType.Internal));
+                }
+            };
+
+            Gdx.app.postRunnable(runnable);
 
         }
 
@@ -105,8 +125,35 @@ public class ModelLibrary {
             }
         }
 
+        private Image image = null;
+
+        public synchronized Image getImage() {
+            if (image == null) {
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Texture t = new Texture(Gdx.files.internal(path + "/" + json.getString("file") + ".jpg"));
+                        image = new Image(t);
+                    }
+                };
+                Gdx.app.postRunnable(runnable);
+                try {
+                    while (image == null)
+                        Thread.sleep(15L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return image;
+        }
+
     }
 
+    private int currentModel = 0;
+
+    public int getCurrentModelId() {
+        return currentModel;
+    }
 
     private ModelLibrary() {
         makeLibrary();
@@ -172,9 +219,13 @@ public class ModelLibrary {
         return tabWindows.get(category);
     }
 
+    public Set<String> getCategories() {
+        return categories.keySet();
+    }
+
     private void makeTabWindow(String category) {
         HashMap<String, HashMap<Integer, ModelLoader>> subcategories = categories.get(category);
-        TabWindow tw = new TabWindow();
+        TabWindow tw = new TabWindow(400);
         tw.setTitle(category);
         for (Map.Entry<String, HashMap<Integer, ModelLoader>> entry : subcategories.entrySet())
             makeNewTab(tw, entry.getKey(), entry.getValue());
@@ -182,6 +233,52 @@ public class ModelLibrary {
     }
 
     private void makeNewTab(TabWindow tw, String subcategory, HashMap<Integer, ModelLoader> models) {
+
+        Table content = new Table();
+        content.setSize(400,400);
+        int start_x = 0;
+        final int MAX_X = 4;
+
+        ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
+
+        for (Map.Entry<Integer, ModelLoader> entry : models.entrySet()) {
+            final int id = entry.getKey();
+            ModelLoader modelLoader = entry.getValue();
+
+            Image image = modelLoader.getImage();
+
+            ImageButton imageButton = new Layout.ClickableImageButton(image.getDrawable());
+            imageButton.setSize(100, 100);
+            group.add(imageButton);
+
+            imageButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    currentModel = id;
+                }
+            });
+            content.add(imageButton).size(100, 100).left().top();
+
+            start_x ++;
+            if (start_x == MAX_X) {
+                start_x = 0;
+                content.row();
+            }
+        }
+        content.layout();
+        content.top().left();
+        Skin skin = (Skin)AssetManager.getInstance().get("uiskin");
+        final ScrollPane scrollPane = new ScrollPane(content, skin, "perso");
+        scrollPane.setFlickScroll(false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.layout();
+        scrollPane.updateVisualScroll();
+
+        Table t = new Table();
+        t.add(scrollPane).size(400,400).top().left();
+        t.setName(subcategory);
+
+        tw.addTable(t);
 
     }
 

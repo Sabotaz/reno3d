@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -462,38 +463,54 @@ public class Layout {
         return textButton;
     }
 
+    public static class ClickableImageButton extends ImageButton {
+
+        public ClickableImageButton(Drawable d) {
+            super(d);
+        }
+
+        Texture clicked_texture = null;
+        {
+            makeTexture();
+        }
+
+        private void makeTexture() {
+            final Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
+            p.setColor(Color.RED);
+            p.drawRectangle(0, 0, (int)this.getWidth(),(int)this.getHeight());
+            p.drawRectangle(1, 1, (int)this.getWidth()-2,(int)this.getHeight()-2);
+
+            // run on UI thread
+            Runnable runable = new Runnable() {
+                @Override
+                public void run() {
+                    clicked_texture = new Texture(p);
+                }
+            };
+
+            Gdx.app.postRunnable(runable);
+        }
+
+        @Override
+        public void setSize(float width, float height) {
+            super.setSize(width, height);
+            makeTexture();
+        }
+
+        @Override
+        public void draw(Batch batch, float arg1) {
+            super.draw(batch, arg1);
+            if (this.isChecked() && clicked_texture != null)
+                batch.draw(clicked_texture, this.getX(), this.getY());
+        }
+    }
+
     private Actor makeImageButton (JsonValue json, Updater updater){
         String nameImage = json.getString("image");
         Texture textureImage = (Texture) AssetManager.getInstance().get(nameImage);
         Image image = new Image(textureImage);
 
-        final ImageButton imageButton = new ImageButton(image.getDrawable()) {
-
-            Texture clicked_texture = null;
-            {
-                final Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
-                p.setColor(Color.RED);
-                p.drawRectangle(0, 0, (int)this.getWidth(),(int)this.getHeight());
-                p.drawRectangle(1, 1, (int)this.getWidth()-2,(int)this.getHeight()-2);
-
-                // run on UI thread
-                Runnable runable = new Runnable() {
-                    @Override
-                    public void run() {
-                        clicked_texture = new Texture(p);
-                    }
-                };
-
-                Gdx.app.postRunnable(runable);
-            }
-
-            @Override
-            public void draw(Batch batch, float arg1) {
-                super.draw(batch, arg1);
-                if (this.isChecked() && clicked_texture != null)
-                    batch.draw(clicked_texture, this.getX(), this.getY());
-            }
-        };
+        final ImageButton imageButton = new ClickableImageButton(image.getDrawable());
 
 
         if (json.has("height") && json.has("width"))

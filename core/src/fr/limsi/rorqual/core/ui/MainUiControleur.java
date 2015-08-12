@@ -123,6 +123,8 @@ public class MainUiControleur implements EventListener {
                         case CHAUFFAGE:
                             addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
                             break;
+                        case MENUISERIE:
+                            addTb(ModelLibrary.getInstance().getTabWindow("Menuiserie"));
                         default:
                             System.out.println(lastValue);
                     }

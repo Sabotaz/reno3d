@@ -14,6 +14,6 @@ public enum ButtonValue {
     CHAUFFAGE,
     ECS,
     ELECTROMENAGER,
-
+    MENUISERIE,
     ;
 }
