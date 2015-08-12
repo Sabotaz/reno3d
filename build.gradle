@@ -77,7 +77,7 @@ project(":core") {
     task convert {
 
         // copy textures
-        FileTree textures = fileTree(dir: '../android/assets/data/models/blend/', exclude: '**/*.blend')
+        FileTree textures = fileTree(dir: '../android/assets/data/models/blend/', exclude: '**/*.blend*')
 
         task copyTextures {
 
@@ -85,13 +85,7 @@ project(":core") {
             outputs.dir file('../android/assets/data/models/g3db/')
 
             textures.each { File file ->
-                File target_fbx = new File(file.getPath().replaceAll('blend', 'fbx'))
                 File target_g3db = new File(file.getPath().replaceAll('blend', 'g3db'))
-
-                copy {
-                    from file
-                    into target_fbx.getParent()
-                }
 
                 copy {
                     from file
