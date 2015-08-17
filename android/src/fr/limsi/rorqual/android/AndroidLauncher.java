@@ -1,5 +1,7 @@
 package fr.limsi.rorqual.android;
 
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -11,15 +13,16 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import fr.limsi.rorqual.android.sensors.GyroscopeListener;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 public class AndroidLauncher extends AndroidApplication {
-    IfcModel ifcModel = new IfcModel();
-    IfcHelper ifcHelper = new IfcHelper();
-	@Override
+    private SensorManager sensorManager;
+    private GyroscopeListener gyroscopeListener;
+    @Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -28,5 +31,41 @@ public class AndroidLauncher extends AndroidApplication {
 
         initialize(application, config);
 
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        gyroscopeListener = new GyroscopeListener();
+
 	}
+
+    //when this Activity starts
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        /*register the sensor listener to listen to the gyroscope sensor, use the
+        callbacks defined in this class, and gather the sensor information as quick
+        as possible*/
+
+        sensorManager.registerListener(gyroscopeListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_FASTEST);
+
+        sensorManager.registerListener(gyroscopeListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                SensorManager.SENSOR_DELAY_FASTEST);
+
+        sensorManager.registerListener(gyroscopeListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
+                SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    //When this Activity isn't visible anymore
+    @Override
+    protected void onStop()
+    {
+        //unregister the sensor listener
+        sensorManager.unregisterListener(gyroscopeListener);
+        super.onStop();
+    }
+
+
 }
