@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 
 import fr.limsi.rorqual.core.view.CameraUpdater;
+import fr.limsi.rorqual.core.view.GyrometerCameraUpdater;
 import fr.limsi.rorqual.core.view.OrthographicCameraUpdater;
 import fr.limsi.rorqual.core.view.PerspectiveCameraUpdater;
 
@@ -20,6 +21,7 @@ public class CameraEngine implements InputProcessor {
     private enum Cameras {
         PERSPECTIVE,
         ORTHOGRAPHIC,
+        GYROMETER,
         ;
 
         private CameraUpdater updater;
@@ -27,6 +29,7 @@ public class CameraEngine implements InputProcessor {
         static {
             ORTHOGRAPHIC.updater = new OrthographicCameraUpdater();
             PERSPECTIVE.updater = new PerspectiveCameraUpdater();
+            GYROMETER.updater = new GyrometerCameraUpdater();
         }
 
         public CameraUpdater getCameraUpdater() {
@@ -57,6 +60,9 @@ public class CameraEngine implements InputProcessor {
                 curent_camera = Cameras.ORTHOGRAPHIC;
                 break;
             case ORTHOGRAPHIC:
+                curent_camera = Cameras.GYROMETER;
+                break;
+            case GYROMETER:
                 curent_camera = Cameras.PERSPECTIVE;
                 break;
         }

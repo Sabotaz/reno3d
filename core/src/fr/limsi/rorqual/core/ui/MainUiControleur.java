@@ -17,6 +17,7 @@ import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.model.ModelHolder;
 
 /**
  * Created by christophe on 28/07/15.
@@ -92,6 +93,7 @@ public class MainUiControleur implements EventListener {
                             break;
                         case SWITCH_2D_3D:
                             CameraEngine.getInstance().switchCamera();
+                            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case MUR:
                             if (((Button) items.get("button")).isChecked())

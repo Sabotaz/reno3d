@@ -221,10 +221,11 @@ public class ModelContainer extends ActableModel {
         float radius = dimensions.len() / 2f;
 
         //local_transform.getTranslation(position).cpy().add(center);
+
         final float len = ray.direction.dot(center.x-ray.origin.x, center.y-ray.origin.y, center.z-ray.origin.z);
         //final float dist2cam = position.dst(ray.origin);
-        if (len < 0f)
-            return -1f;
+        /*if (len < 0f)
+            return -1f;*/
         float dist2 = center.dst2(ray.origin.x + ray.direction.x * len, ray.origin.y + ray.direction.y * len, ray.origin.z + ray.direction.z * len);
         //return (dist2 <= radius * radius) ? dist2cam : -1f;
         return (dist2 <= radius * radius) ? intersectsMesh(ray, boundBox) : -1f;
