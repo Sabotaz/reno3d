@@ -1,5 +1,7 @@
 package fr.limsi.rorqual.core.utils;
 
+import com.badlogic.gdx.math.Matrix4;
+
 /**
  * Created by christophe on 17/08/15.
  */
@@ -17,34 +19,20 @@ public class GyroscopeValues {
     public static synchronized GyroscopeValues getInstance() {
         return GyroscopeValuesHolder.INSTANCE;
     }
-
-    private float x = 0;
-    private float y = 0;
-    private float z = 0;
-    private long timestamp = 0;
     private boolean hasGyro = false;
-    private static final float NS2S = 1.0f / 1000000000.0f;
+    private Matrix4 matrix = new Matrix4();
 
-    public float getX() {
-        return x;
+    public Matrix4 getMatrix() {
+        return matrix;
     }
 
-    public void update(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getZ() {
-        return z;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
+    public void update(float[] mx) {
+        matrix.set(new float[]{
+                mx[0], mx[1], mx[2], 0,
+                mx[3], mx[4], mx[5], 0,
+                mx[6], mx[7], mx[8], 0,
+                0, 0, 0, 1
+        });
     }
 
     public boolean hasGyro() {

@@ -55,6 +55,12 @@ public class GyroscopeListener implements SensorEventListener {
 
     }
 
+    public void copyCoordinates(float[] in, float[] out) {
+        out[0] = in[0];
+        out[1] = in[1];
+        out[2] = in[2];
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
@@ -104,7 +110,7 @@ public class GyroscopeListener implements SensorEventListener {
         float[] deltaVector = new float[4];
         if(timestamp != 0) {
             final float dT = (sensorEvent.timestamp - timestamp) * NS2S;
-            System.arraycopy(sensorEvent.values, 0, gyro, 0, 3);
+            copyCoordinates(sensorEvent.values, gyro);
             getRotationVectorFromGyro(gyro, deltaVector, dT / 2.0f);
         }
 
@@ -117,16 +123,13 @@ public class GyroscopeListener implements SensorEventListener {
 
         // apply the new rotation interval on the gyroscope based rotation matrix
         gyroMatrix = matrixMultiplication(gyroMatrix, deltaMatrix);
-        SensorManager.remapCoordinateSystem(gyroMatrix,SensorManager.AXIS_Y, SensorManager.AXIS_Z, gyroMatrix);
 
         // get the gyroscope based orientation from the rotation matrix
         SensorManager.getOrientation(gyroMatrix, gyroOrientation);
 
-        float x = gyroOrientation[0];
-        float y = gyroOrientation[1];
-        float z = gyroOrientation[2];
-
-        gyroscopeValues.update(x, y, z);
+        //float[] finalMatrix = new float[9];
+        //SensorManager.remapCoordinateSystem(gyroMatrix, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, finalMatrix);
+        gyroscopeValues.update(gyroMatrix);
     }
 
     @Override

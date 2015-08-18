@@ -1,5 +1,8 @@
 package fr.limsi.rorqual.core.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,33 +15,73 @@ import fr.limsi.rorqual.core.utils.GyroscopeValues;
  */
 public class GyrometerCameraUpdater extends PerspectiveCameraUpdater {
 
-    private boolean haveCapabilities;
     private GyroscopeValues gyroscopeValues;
 
     public GyrometerCameraUpdater() {
         super();
+    }
+
+    protected void init() {
         gyroscopeValues = GyroscopeValues.getInstance();
     }
 
-    public void act() {
+    protected void setCamera() {
         if (gyroscopeValues.hasGyro()) {
-            Matrix4 mx = new Matrix4();
-            float x = (float)Math.toDegrees(gyroscopeValues.getX());
-            float y = (float)Math.toDegrees(gyroscopeValues.getY());
-            float z = (float)Math.toDegrees(gyroscopeValues.getZ());
-            // x = -z
-            // z = x
-            // y = -y
-            mx.setFromEulerAngles(x, -z, -y);
-            Vector3 dir = Vector3.Y.cpy().mul(mx);
-            Vector3 up = Vector3.Z.cpy().mul(mx);
+            PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
+                @Override
+                public void update(boolean updateFrustum) {
+                    float aspect = viewportWidth / viewportHeight;
+                    projection.setToProjection(Math.abs(near), Math.abs(far), fieldOfView, aspect);
+                    // DON'T update the view !!
+                    //view.setToLookAt(position, tmp.set(position).add(direction), up);
+                    combined.set(projection);
+                    Matrix4.mul(combined.val, view.val);
 
-            camera.direction.set(dir);
-            camera.up.set(up);
-            camera.update();
+                    if (updateFrustum) {
+                        invProjectionView.set(combined);
+                        Matrix4.inv(invProjectionView.val);
+                        frustum.update(invProjectionView);
+                    }
+                }
+            };
+            perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
+            perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
+            perspectiveCamera.position.set(0, -20, 1.65f);
+            perspectiveCamera.near = .1f;
+            perspectiveCamera.far = 10000f;
+            //perspectiveCamera.lookAt(0, 0, 0);
+            perspectiveCamera.direction.set(0, 1, 0);
+            perspectiveCamera.up.set(0, 0, 1);
+            // update view here
+            perspectiveCamera.view.setToLookAt(perspectiveCamera.position, new Vector3().set(perspectiveCamera.position).add(perspectiveCamera.direction), perspectiveCamera.up);
+            perspectiveCamera.update();
+
+            camera = perspectiveCamera;
         }
-        else
-            super.act();
+        else super.setCamera();
+    }
+
+    protected void update() {
+        if (gyroscopeValues.hasGyro()) {
+            Matrix4 remap = new Matrix4();
+            remap.rotate(0, 0, 1, 90);
+            Matrix4 translation = new Matrix4().translate(new Vector3().sub(pos));
+            Matrix4 rotation = gyroscopeValues.getMatrix();
+            Matrix4 mx = new Matrix4();
+            mx.mul(remap);
+            mx.mul(rotation);
+            mx.mul(user_rotation);
+            mx.mul(translation);
+
+            camera.view.set(mx);
+            camera.update();
+        } else {
+            super.update();
+        }
+    }
+
+    public void act() {
+        update();
     }
 
 }

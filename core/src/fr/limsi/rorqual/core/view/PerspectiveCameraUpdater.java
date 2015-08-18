@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -15,7 +16,12 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     PerspectiveCamera camera;
 
     public PerspectiveCameraUpdater() {
+        this.init();
+        this.setCamera();
+    }
+    protected void init() {};
 
+    protected void setCamera() {
         PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
         perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
@@ -150,6 +156,9 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     }
 
 
+    Vector3 pos = new Vector3(0, 0, 1.65f); /// why ???
+    Matrix4 user_rotation = new Matrix4();
+
     public void act() {
         Vector3 dir = camera.direction.cpy();
 
@@ -229,6 +238,9 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         camera.up.set(up);
         camera.rotateAround(center, up, angle);
         camera.update();
+    }
+
+    protected void update() {
     }
 
 }
