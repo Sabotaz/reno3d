@@ -34,13 +34,13 @@ public class AndroidLauncher extends AndroidApplication {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         gyroscopeListener = new GyroscopeListener();
 
+        initListeners();
+
+        //gyroscopeListener.startTask();
+
 	}
 
-    //when this Activity starts
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
+    private void initListeners() {
         /*register the sensor listener to listen to the gyroscope sensor, use the
         callbacks defined in this class, and gather the sensor information as quick
         as possible*/
@@ -56,6 +56,14 @@ public class AndroidLauncher extends AndroidApplication {
         sensorManager.registerListener(gyroscopeListener,
                 sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
                 SensorManager.SENSOR_DELAY_FASTEST);
+
+    }
+
+    //when this Activity starts
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 
     //When this Activity isn't visible anymore

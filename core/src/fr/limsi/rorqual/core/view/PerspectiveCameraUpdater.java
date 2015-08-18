@@ -16,13 +16,24 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     PerspectiveCamera camera;
 
     public PerspectiveCameraUpdater() {
-        this.init();
-        this.setCamera();
-    }
-    protected void init() {};
 
-    protected void setCamera() {
-        PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
+            @Override
+            public void update (boolean updateFrustum) {
+                float aspect = viewportWidth / viewportHeight;
+                projection.setToProjection(Math.abs(near), Math.abs(far), fieldOfView, aspect);
+                // DON'T update the view !!
+                //view.setToLookAt(position, tmp.set(position).add(direction), up);
+                combined.set(projection);
+                Matrix4.mul(combined.val, view.val);
+
+                if (updateFrustum) {
+                    invProjectionView.set(combined);
+                    Matrix4.inv(invProjectionView.val);
+                    frustum.update(invProjectionView);
+                }
+            }
+        };
         perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
         perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
         perspectiveCamera.position.set(0, -20, 1.65f);
@@ -35,6 +46,8 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
         camera = perspectiveCamera;
     }
+
+    protected void setCamera() {}
 
     private enum Sense {
         GAUCHE,
@@ -131,11 +144,10 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         int diffX = screenX - last_screenX;
         int diffY = screenY - last_screenY;
 
-        Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY,1)).sub(camera.position).nor();
-        Vector3 after = camera.unproject(new Vector3(screenX, screenY,1)).sub(camera.position).nor();
+        Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY,1)).sub(pos).nor();
+        Vector3 after = camera.unproject(new Vector3(screenX, screenY,1)).sub(pos).nor();
         if (!before.isCollinear(after))
-            camera.rotate(after.cpy().crs(before), (float)(Math.acos(after.dot(before)) * 180. / Math.PI));
-        camera.up.set(0,0,1);
+            user_rotation.rotate(after.cpy().crs(before), -(float)(Math.acos(after.dot(before)) * 180. / Math.PI));
 
         last_screenX = screenX;
         last_screenY = screenY;
@@ -155,92 +167,21 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         return true;
     }
 
-
-    Vector3 pos = new Vector3(0, 0, 1.65f); /// why ???
-    Matrix4 user_rotation = new Matrix4();
+    protected Vector3 pos = new Vector3(0,0,1.65f);
+    protected Matrix4 user_rotation = new Matrix4();
 
     public void act() {
-        Vector3 dir = camera.direction.cpy();
-
-        Vector3 xy_dir = camera.direction.cpy();
-        xy_dir.z = 0;
-        xy_dir.nor();
-
-        Vector3 pos = camera.position.cpy();
-        Vector3 up = Vector3.Z.cpy();
-        Vector3 y_dir = xy_dir.cpy().crs(up);
-
-        float height = pos.z;
-
-        Vector3 disp = new Vector3();
-        Vector3 center = new Vector3();
-
-        float angle = 0;
-
-        boolean deported = ctrl;
-
-
-        if (deported)
-            switch (camera_mov) {
-                case DROITE:
-                    center = pos.cpy().add(xy_dir.cpy().scl(20));
-                    angle = 2;
-                    break;
-                case GAUCHE:
-                    center = pos.cpy().add(xy_dir.cpy().scl(20));
-                    angle = -2;
-                    break;
-                case HAUT:
-                    disp = up.cpy().scl(.1f);
-                    break;
-                case BAS:
-                    if (pos.z > 1)
-                        disp = up.cpy().scl(-.1f);
-                    break;
-                case AVANCER:
-                    disp = xy_dir.cpy().scl(.2f);
-                    break;
-                case RECULER:
-                    disp = xy_dir.cpy().scl(-.2f);
-                    break;
-            }
-        else
-            switch (camera_mov) {
-                case DROITE:
-                    center = pos.cpy();
-                    angle = -1.5f;
-                    //disp = y_dir.cpy().scl(.2f);
-                    break;
-                case GAUCHE:
-                    center = pos.cpy();
-                    angle = 1.5f;
-                    //disp = y_dir.cpy().scl(-.2f);
-                    break;
-                case HAUT:
-                    disp = up.cpy().scl(.1f);
-                    break;
-                case BAS:
-                    if (pos.z > 1)
-                        disp = up.cpy().scl(-.1f);
-                    break;
-                case AVANCER:
-                    disp = xy_dir.cpy().scl(.2f);
-                    break;
-                case RECULER:
-                    disp = xy_dir.cpy().scl(-.2f);
-                    break;
-            }
-
-        pos.add(disp);
-
-        camera.direction.set(dir);
-        camera.position.set(pos);
-        camera.up.set(up);
-        camera.rotateAround(center, up, angle);
-        camera.update();
+        update();
     }
 
     protected void update() {
+        Matrix4 translation = new Matrix4().translate(new Vector3().sub(pos));
+        Matrix4 mx = new Matrix4();
+        mx.mul(user_rotation);
+        mx.mul(translation);
+
+        camera.view.set(mx);
+        camera.update();
     }
 
 }

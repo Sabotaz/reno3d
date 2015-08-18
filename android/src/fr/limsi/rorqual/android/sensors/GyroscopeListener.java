@@ -5,11 +5,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import fr.limsi.rorqual.core.utils.GyroscopeValues;
 
 /**
  * Created by christophe on 17/08/15.
  */
+
+// from http://www.codeproject.com/Articles/729759/Android-Sensor-Fusion-Tutorial
 public class GyroscopeListener implements SensorEventListener {
 
     private GyroscopeValues gyroscopeValues;
@@ -40,6 +45,15 @@ public class GyroscopeListener implements SensorEventListener {
 
     private boolean initState = true;
 
+    public static final float FILTER_COEFFICIENT = 0.98f;
+
+    public static final int TIME_CONSTANT = 30;
+
+    private Timer fuseTimer = new Timer();
+
+    // final orientation angles from sensor fusion
+    private float[] fusedOrientation = new float[3];
+
     public GyroscopeListener() {
         gyroscopeValues = GyroscopeValues.getInstance();
         gyroscopeValues.hasGyro(true);
@@ -55,10 +69,8 @@ public class GyroscopeListener implements SensorEventListener {
 
     }
 
-    public void copyCoordinates(float[] in, float[] out) {
-        out[0] = in[0];
-        out[1] = in[1];
-        out[2] = in[2];
+    public void startTask() {
+        fuseTimer.scheduleAtFixedRate(new calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
     }
 
     @Override
@@ -110,7 +122,7 @@ public class GyroscopeListener implements SensorEventListener {
         float[] deltaVector = new float[4];
         if(timestamp != 0) {
             final float dT = (sensorEvent.timestamp - timestamp) * NS2S;
-            copyCoordinates(sensorEvent.values, gyro);
+            System.arraycopy(sensorEvent.values, 0, gyro, 0, 3);
             getRotationVectorFromGyro(gyro, deltaVector, dT / 2.0f);
         }
 
@@ -219,4 +231,27 @@ public class GyroscopeListener implements SensorEventListener {
         resultMatrix = matrixMultiplication(zM, resultMatrix);
         return resultMatrix;
     }
+
+    class calculateFusedOrientationTask extends TimerTask {
+        public void run() {
+            float oneMinusCoeff = 1.0f - FILTER_COEFFICIENT;
+            fusedOrientation[0] =
+                    FILTER_COEFFICIENT * gyroOrientation[0]
+                            + oneMinusCoeff * accMagOrientation[0];
+
+            fusedOrientation[1] =
+                    FILTER_COEFFICIENT * gyroOrientation[1]
+                            + oneMinusCoeff * accMagOrientation[1];
+
+            fusedOrientation[2] =
+                    FILTER_COEFFICIENT * gyroOrientation[2]
+                            + oneMinusCoeff * accMagOrientation[2];
+
+            // overwrite gyro matrix and orientation with fused orientation
+            // to compensate gyro drift
+            gyroMatrix = getRotationMatrixFromOrientation(fusedOrientation);
+            System.arraycopy(fusedOrientation, 0, gyroOrientation, 0, 3);
+        }
+    }
+
 }

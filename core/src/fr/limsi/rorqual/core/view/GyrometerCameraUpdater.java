@@ -15,53 +15,10 @@ import fr.limsi.rorqual.core.utils.GyroscopeValues;
  */
 public class GyrometerCameraUpdater extends PerspectiveCameraUpdater {
 
-    private GyroscopeValues gyroscopeValues;
-
-    public GyrometerCameraUpdater() {
-        super();
-    }
-
-    protected void init() {
-        gyroscopeValues = GyroscopeValues.getInstance();
-    }
-
-    protected void setCamera() {
-        if (gyroscopeValues.hasGyro()) {
-            PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
-                @Override
-                public void update(boolean updateFrustum) {
-                    float aspect = viewportWidth / viewportHeight;
-                    projection.setToProjection(Math.abs(near), Math.abs(far), fieldOfView, aspect);
-                    // DON'T update the view !!
-                    //view.setToLookAt(position, tmp.set(position).add(direction), up);
-                    combined.set(projection);
-                    Matrix4.mul(combined.val, view.val);
-
-                    if (updateFrustum) {
-                        invProjectionView.set(combined);
-                        Matrix4.inv(invProjectionView.val);
-                        frustum.update(invProjectionView);
-                    }
-                }
-            };
-            perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
-            perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
-            perspectiveCamera.position.set(0, -20, 1.65f);
-            perspectiveCamera.near = .1f;
-            perspectiveCamera.far = 10000f;
-            //perspectiveCamera.lookAt(0, 0, 0);
-            perspectiveCamera.direction.set(0, 1, 0);
-            perspectiveCamera.up.set(0, 0, 1);
-            // update view here
-            perspectiveCamera.view.setToLookAt(perspectiveCamera.position, new Vector3().set(perspectiveCamera.position).add(perspectiveCamera.direction), perspectiveCamera.up);
-            perspectiveCamera.update();
-
-            camera = perspectiveCamera;
-        }
-        else super.setCamera();
-    }
 
     protected void update() {
+        GyroscopeValues gyroscopeValues = GyroscopeValues.getInstance();
+
         if (gyroscopeValues.hasGyro()) {
             Matrix4 remap = new Matrix4();
             remap.rotate(0, 0, 1, 90);
