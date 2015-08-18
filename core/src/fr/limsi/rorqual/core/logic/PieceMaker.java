@@ -59,6 +59,9 @@ public class PieceMaker extends ModelMaker {
 
             ArrayList<Vector3> coins = new ArrayList<Vector3>();
             slab = new Slab(null);
+            for (Mur mur : murs) {
+                mur.setSlab1(slab);
+            }
             slab.setSelectable(false);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(slab);
 

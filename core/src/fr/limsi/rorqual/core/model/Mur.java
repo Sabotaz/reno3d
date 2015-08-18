@@ -52,6 +52,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
     private DateIsolationMurEnum dateIsolationMur = DateIsolationMurEnum.JAMAIS;
     private OrientationMurEnum orientationMur = OrientationMurEnum.INCONNUE;
+    private Slab slab1 = null;
+    private Slab slab2 = null;
 
     private ArrayList<MaterialTypeEnum> materialLayersMaterials = new ArrayList<MaterialTypeEnum>();
 
@@ -367,5 +369,25 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             intersection = getIntersection(ray, global_transform.cpy().mul(model_transform));
             return intersection == null ? -1 : intersection.dst(ray.origin);
         }
+    }
+
+    public Slab getSlab1() {
+        return slab1;
+    }
+
+    public void setSlab1(Slab slab1) {
+        this.slab1 = slab1;
+    }
+
+    public Slab getSlab2() {
+        return slab2;
+    }
+
+    public void setSlab2(Slab slab2) {
+        this.slab2 = slab2;
+    }
+
+    public boolean isInterieur() {
+        return (slab1 != null && slab2 != null);
     }
 }
