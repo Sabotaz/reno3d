@@ -28,22 +28,14 @@ public class Floor {
 
     public static void makeModel() {
 
-        Texture diffuse = (Texture)AssetManager.getInstance().get("grass3_DIFFUSE");
-        //Texture bump = (Texture)AssetManager.getInstance().get("grass_DISP");
-        Texture normal = (Texture)AssetManager.getInstance().get("grass3_NORMAL");
+        Texture diffuse = (Texture)AssetManager.getInstance().get("grid");
 
         diffuse.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        //bump.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        normal.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         TextureAttribute tad = TextureAttribute.createDiffuse(diffuse);
-        //TextureAttribute tab = TextureAttribute.createBump(bump);
-        TextureAttribute tan = TextureAttribute.createNormal(normal);
 
         Material material = new Material();
         material.set(tad);
-        //material.set(tab);
-        material.set(tan);
 
         ModelBuilder modelBuilder = new ModelBuilder();
 

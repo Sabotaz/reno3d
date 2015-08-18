@@ -49,23 +49,26 @@ public class ModelLibrary {
             this.path = path;
             fields = json.get("properties");
             clazz = json.getString("class");
-
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    UBJsonReader jsonReader = new UBJsonReader();
-                    G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-                    model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + json.getString("file") + ".g3db", Files.FileType.Internal));
-                }
-            };
-
-            Gdx.app.postRunnable(runnable);
-
         }
 
         public ModelContainer getInstance() {
-            ModelContainer container = newInstance();
-            container.setModel(model);
+            final ModelContainer container = newInstance();
+            if (model == null) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        UBJsonReader jsonReader = new UBJsonReader();
+                        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+                        model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + json.getString("file") + ".g3db", Files.FileType.Internal));
+                        container.setModel(model);
+                    }
+                };
+
+                Gdx.app.postRunnable(runnable);
+            }
+            else {
+                container.setModel(model);
+            }
             return container;
         }
 
@@ -127,7 +130,7 @@ public class ModelLibrary {
 
         private Image image = null;
 
-        public synchronized Image getImage() {
+        public Image getImage() {
             if (image == null) {
                 final Runnable runnable = new Runnable() {
                     @Override
@@ -138,8 +141,9 @@ public class ModelLibrary {
                 };
                 Gdx.app.postRunnable(runnable);
                 try {
-                    while (image == null)
+                    while (image == null) {
                         Thread.sleep(15L);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

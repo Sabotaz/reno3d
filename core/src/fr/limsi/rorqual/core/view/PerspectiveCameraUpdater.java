@@ -167,7 +167,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         return true;
     }
 
-    protected Vector3 pos = new Vector3(0,0,1.65f);
+    protected Vector3 pos = new Vector3(0,0,10f);
     protected Matrix4 user_rotation = new Matrix4();
 
     public void act() {

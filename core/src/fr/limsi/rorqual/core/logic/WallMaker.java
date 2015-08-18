@@ -41,9 +41,11 @@ public class WallMaker extends ModelMaker {
 
             if (a != null) {
                 start = new Vector3(a.getPt());
+                start.z = 0;
                 anchor = a;
             } else {
                 start = new Vector3(intersection);
+                start.z = 0;
                 anchor = null;
             }
 
@@ -76,7 +78,9 @@ public class WallMaker extends ModelMaker {
             Anchor a = calculateAnchor(intersection);
 
             if (a != null) {
-                mur.setB(a.getPt());
+                Vector3 end = a.getPt();
+                end.z = 0;
+                mur.setB(end);
                 if (anchor != null) {
                     anchor.setPt(a.getPt());
                     anchor.setA(a.getA());

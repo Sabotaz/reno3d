@@ -188,6 +188,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         a.setDebug(true);
         a.setPosition(300, Gdx.graphics.getHeight() - 300);
         stageMenu.addActor(a);*/
+        ModelLibrary.getInstance();
 	}
 
     public void act() {
