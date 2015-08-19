@@ -2171,15 +2171,15 @@ public class Dpe implements EventListener {
                         Mur mur = (Mur)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            OrientationMurEnum orientationMur = (OrientationMurEnum) items.get("lastValue");
+                            OrientationEnum orientationMur = (OrientationEnum) items.get("lastValue");
                             if (!walls_properties.containsKey(mur))
                                 walls_properties.put(mur, new HashMap<EventType, Object>());
                             walls_properties.get(mur).put(event, orientationMur);
                         } else if (eventRequest == EventRequest.GET_STATE) {
-                            OrientationMurEnum type = null;
+                            OrientationEnum type = null;
                             if (walls_properties.containsKey(mur))
                                 if (walls_properties.get(mur).containsKey(DpeEvent.ORIENTATION_MUR))
-                                    type = (OrientationMurEnum) walls_properties.get(mur).get(DpeEvent.ORIENTATION_MUR);
+                                    type = (OrientationEnum) walls_properties.get(mur).get(DpeEvent.ORIENTATION_MUR);
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);

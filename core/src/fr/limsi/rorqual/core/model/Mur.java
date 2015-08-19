@@ -19,7 +19,7 @@ import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Vector3d;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum;
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 
@@ -51,7 +51,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private TypeMurEnum typeMurEnum = TypeMurEnum.INCONNUE;
     private TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
     private DateIsolationMurEnum dateIsolationMur = DateIsolationMurEnum.JAMAIS;
-    private OrientationMurEnum orientationMur = OrientationMurEnum.INCONNUE;
+    private OrientationEnum orientationMur = OrientationEnum.INCONNUE;
     private Slab slab1 = null;
     private Slab slab2 = null;
 
@@ -192,12 +192,22 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.dateIsolationMur = dateIsolationMurEnum;
     }
 
-    public OrientationMurEnum getOrientationMur() {
+    public OrientationEnum getOrientationMur() {
         return orientationMur;
     }
 
-    public void setOrientationMur(OrientationMurEnum orientationMur) {
+    public void setOrientationMur(OrientationEnum orientationMur) {
         this.orientationMur = orientationMur;
+        float dx = B.x - A.x;
+        float dy = B.y - A.y;
+        // What is the orientation of X ?
+        this.etage.getBatiment().setOrientation(orientationMur.wrapX(dx,dy));
+    }
+
+    public void setGlobalOrientation(OrientationEnum orientationMur) {
+        float dx = B.x - A.x;
+        float dy = B.y - A.y;
+        this.orientationMur = orientationMur.unwrapX(dx,dy);
     }
 
     public ArrayList<Vector3> getAnchors(Vector3 pt, float depth) {

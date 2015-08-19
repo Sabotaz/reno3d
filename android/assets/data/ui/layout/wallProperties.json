@@ -71,25 +71,25 @@
                   "type": "ImageButton",
                   "image": "textureOrientationNord",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.NORD"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum.NORD"
                 },
                 {
                   "type": "ImageButton",
                   "image": "textureOrientationEst",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.EST"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum.EST"
                 },
                 {
                   "type": "ImageButton",
                   "image": "textureOrientationSud",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.SUD"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum.SUD"
                 },
                 {
                   "type": "ImageButton",
                   "image": "textureOrientationOuest",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum.OUEST"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum.OUEST"
                 }
               ]
             }

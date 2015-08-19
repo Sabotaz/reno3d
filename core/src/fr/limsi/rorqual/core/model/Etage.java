@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
@@ -15,6 +16,7 @@ public class Etage {
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
     private HashMap<Object, ModelContainer> containerHashMap = new HashMap<Object, ModelContainer>();
     private int number;
+    private Batiment batiment;
     private ModelGraph modelGraph = new ModelGraph();
 
     {
@@ -63,4 +65,16 @@ public class Etage {
         return modelGraph;
     }
 
+    public Batiment getBatiment() {
+        return batiment;
+    }
+
+    public void setBatiment(Batiment batiment) {
+        this.batiment = batiment;
+    }
+
+    public void setOrientation(OrientationEnum orientation) {
+        for (Mur m : murs)
+            m.setGlobalOrientation(orientation);
+    }
 }

@@ -23,7 +23,7 @@ import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Vector3d;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationMurEnum;
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;

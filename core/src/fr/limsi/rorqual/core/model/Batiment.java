@@ -2,6 +2,8 @@ package fr.limsi.rorqual.core.model;
 
 import java.util.ArrayList;
 
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
+
 /**
  * Created by christophe on 22/07/15.
  */
@@ -17,6 +19,7 @@ public class Batiment {
 
     public void addEtage(Etage e) {
         etages.add(e);
+        e.setBatiment(this);
     }
 
     public void setCurrentEtage(Etage e) {
@@ -27,6 +30,11 @@ public class Batiment {
 
     public Etage getCurrentEtage() {
         return current;
+    }
+
+    public void setOrientation(OrientationEnum orientation) {
+        for (Etage e : etages)
+            e.setOrientation(orientation);
     }
 
 }
