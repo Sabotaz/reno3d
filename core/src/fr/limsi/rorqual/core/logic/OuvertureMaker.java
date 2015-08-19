@@ -42,8 +42,8 @@ public class OuvertureMaker extends ModelMaker {
             Mur mur = (Mur) modelContainer;
             Vector3 intersection = mur.getIntersection();
             // intersection in world space, not in wall space
-            Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
-            Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
+            Vector2 v1 = new MyVector2(mur.getB().getPosition().cpy().sub(mur.getA().getPosition())).nor();
+            Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA().getPosition()));
             float x = v2.dot(v1);
             ModelContainer container = ModelLibrary.getInstance().getModelFromId(modelId);
             if (container instanceof Ouverture) {
@@ -71,8 +71,8 @@ public class OuvertureMaker extends ModelMaker {
             Mur mur = (Mur) modelContainer;
             Vector3 intersection = mur.getIntersection();
             // intersection in world space, not in wall space
-            Vector2 v1 = new MyVector2(mur.getB().cpy().sub(mur.getA())).nor();
-            Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA()));
+            Vector2 v1 = new MyVector2(mur.getB().getPosition().cpy().sub(mur.getA().getPosition())).nor();
+            Vector2 v2 = new MyVector2(intersection.cpy().sub(mur.getA().getPosition()));
             float x = v2.dot(v1);
             ouverture.setX(v2.dot(v1));
             ouverture.setMur(mur);

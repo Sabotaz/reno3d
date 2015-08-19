@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
@@ -19,7 +20,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public class WallMaker extends ModelMaker {
 
-    Vector3 start = new Vector3();
+    Coin start;
     boolean making_wall = false;
     Mur mur;
     Cote cote;
@@ -40,12 +41,12 @@ public class WallMaker extends ModelMaker {
             Anchor a = calculateAnchor(intersection);
 
             if (a != null) {
-                start = new Vector3(a.getPt());
-                start.z = 0;
+                start = a.getPt();
+                start.getPosition().z = 0;
                 anchor = a;
             } else {
-                start = new Vector3(intersection);
-                start.z = 0;
+                start = Coin.getCoin(intersection);
+                start.getPosition().z = 0;
                 anchor = null;
             }
 
@@ -78,8 +79,8 @@ public class WallMaker extends ModelMaker {
             Anchor a = calculateAnchor(intersection);
 
             if (a != null) {
-                Vector3 end = a.getPt();
-                end.z = 0;
+                Coin end = a.getPt();
+                end.getPosition().z = 0;
                 mur.setB(end);
                 if (anchor != null) {
                     anchor.setPt(a.getPt());
@@ -92,7 +93,7 @@ public class WallMaker extends ModelMaker {
             } else {
                 Vector3 pos = intersection.cpy();
                 pos.z = 0;
-                mur.setB(pos);
+                mur.setB(Coin.getCoin(pos));
                 if (anchor != null) {
                     ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
                     anchor = null;
@@ -147,7 +148,7 @@ public class WallMaker extends ModelMaker {
 
         for (Mur mur : murs) {
             if (mur != this.mur)
-                for (Vector3 v : mur.getAnchors(intersection, Mur.DEFAULT_DEPTH))
+                for (Coin v : mur.getAnchors(intersection, Mur.DEFAULT_DEPTH))
                     anchors.add(new Anchor(v));
         }
 
@@ -157,7 +158,7 @@ public class WallMaker extends ModelMaker {
             if (intersection.dst(a.getPt()) <= anchor_length)
                 project = false;
         }*/
-
+/*
         if (project) {
             ArrayList<Anchor> alignments = new ArrayList<Anchor>();
             for (Anchor a : anchors) {
@@ -198,11 +199,11 @@ public class WallMaker extends ModelMaker {
             anchors.add(new Anchor(projy, start));
         }
 
-
+*/
         Anchor anchor = null;
         float dist = -1;
         for (Anchor a : anchors) {
-            float d = intersection.dst(a.getPt());
+            float d = intersection.dst(a.getPt().getPosition());
             if (d < anchor_length && (d < dist || dist == -1)) {
                 dist = d;
                 anchor = a;

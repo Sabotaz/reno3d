@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -27,60 +28,51 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
  */
 public class Anchor extends ModelContainer {
 
-    Vector3 pt = null;
-    Vector3 A = null;
-    Vector3 B = null;
+    Coin pt = null;
+    Coin A = null;
+    Coin B = null;
 
-    public Anchor(Vector3 pt) {
+    public Anchor(Coin pt) {
         this(pt, null, null);
     }
 
-    public Anchor(Vector3 pt, Vector3 A) {
+    public Anchor(Coin pt, Coin A) {
         this(pt, A, null);
     }
 
-    public Anchor(Vector3 pt, Vector3 A, Vector3 B) {
-        Vector3 offset = Vector3.Z.cpy().setLength(0.01f);
-        this.pt = new Vector3(pt).add(offset);
-        if (A != null)
-            this.A = new Vector3(A).add(offset);
-        if (B != null)
-            this.B = new Vector3(B).add(offset);
+    public Anchor(Coin pt, Coin A, Coin B) {
+        this.pt = pt;
+        this.A = A;
+        this.B = B;
         this.setSelectable(false);
     }
 
     boolean dirty = true;
 
-    public Vector3 getPt () {
+    public Coin getPt() {
         return pt;
     }
 
-    public Vector3 getA () {
+    public Coin getA () {
         return A;
     }
 
-    public Vector3 getB () {
+    public Coin getB () {
         return B;
     }
 
-    public void setPt(Vector3 pt) {
-        this.pt = pt.cpy();
+    public void setPt(Coin pt) {
+        this.pt = pt;
         dirty = true;
     }
 
-    public void setA(Vector3 A) {
-        if (A != null)
-            this.A = A.cpy();
-        else
-            this.A = null;
+    public void setA(Coin A) {
+        this.A = A;
         dirty = true;
     }
 
-    public void setB(Vector3 B) {
-        if (B != null)
-            this.B = B.cpy();
-        else
-            this.B = null;
+    public void setB(Coin B) {
+        this.B = B;
         dirty = true;
     }
 
@@ -101,15 +93,15 @@ public class Anchor extends ModelContainer {
 
             meshBuilder = modelBuilder.part("part1", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.RED)));
 
-            Vector3 dir = A.cpy().sub(pt).setLength(100);
-            Vector3 p1 = pt.cpy().sub(dir);
-            Vector3 p2 = A.cpy().add(dir);
+            Vector3 dir = A.getPosition().cpy().sub(pt.getPosition()).setLength(100);
+            Vector3 p1 = pt.getPosition().cpy().sub(dir);
+            Vector3 p2 = A.getPosition().cpy().add(dir);
             meshBuilder.line(p1, p2);
 
             if (B != null) {
-                dir = B.cpy().sub(pt).setLength(100);
-                p1 = pt.cpy().sub(dir);
-                p2 = B.cpy().add(dir);
+                dir = B.getPosition().cpy().sub(pt.getPosition()).setLength(100);
+                p1 = pt.getPosition().cpy().sub(dir);
+                p2 = B.getPosition().cpy().add(dir);
                 meshBuilder.line(p1, p2);
             }
         }
@@ -118,9 +110,9 @@ public class Anchor extends ModelContainer {
 
         //meshBuilder.circle(0.05f, 30, pt, Vector3.Z.cpy().scl(1));
         if (A != null)
-            meshBuilder.circle(0.05f, 30, A, Vector3.Z.cpy().scl(1));
+            meshBuilder.circle(0.05f, 30, A.getPosition(), Vector3.Z.cpy().scl(1));
         if (B != null)
-            meshBuilder.circle(0.05f, 30, B, Vector3.Z.cpy().scl(1));
+            meshBuilder.circle(0.05f, 30, B.getPosition(), Vector3.Z.cpy().scl(1));
 
 
         Model model = modelBuilder.end();

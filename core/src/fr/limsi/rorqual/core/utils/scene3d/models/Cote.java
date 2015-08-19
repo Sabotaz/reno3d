@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -33,8 +34,8 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 public class Cote extends ModelContainer {
 
     public interface Cotable {
-        public Vector3 getA();
-        public Vector3 getB();
+        public Coin getA();
+        public Coin getB();
     }
 
     private Cotable cotable;
@@ -52,14 +53,16 @@ public class Cote extends ModelContainer {
 
     private float len = 0.0f;
 
+    Texture textTexture;
+
     private void makeMesh() {
         Vector3 p1 = Vector3.Zero.cpy();
-        Vector3 p2 = Vector3.X.cpy().setLength(cotable.getA().dst(cotable.getB()));
+        Vector3 p2 = Vector3.X.cpy().setLength(cotable.getA().getPosition().dst(cotable.getB().getPosition()));
         p1.add(Vector3.Z.cpy().setLength(0.01f));
         p2.add(Vector3.Z.cpy().setLength(0.01f));
 
         Vector3 x_dir = p2.cpy().sub(p1);
-        len = cotable.getA().dst(cotable.getB());
+        len = cotable.getA().getPosition().dst(cotable.getB().getPosition());
 
         Vector3 mid = p1.cpy().add(x_dir.cpy().scl(0.5f));
 
@@ -128,13 +131,11 @@ public class Cote extends ModelContainer {
 
         }
         Pixmap resizedPixmap = new Pixmap(cursor,100, Pixmap.Format.RGBA8888);
-        resizedPixmap.drawPixmap(textPixmap,0,0,0,0,cursor,100);
-
+        resizedPixmap.drawPixmap(textPixmap, 0, 0, 0, 0, cursor, 100);
         float half = (cursor / 100.0f) / 2;
 
-        Texture textTexture = new Texture(resizedPixmap);
-
-        meshBuilder = modelBuilder.part("part3", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, new Material(TextureAttribute.createDiffuse(textTexture)));
+        Texture texture = new Texture(resizedPixmap);
+        meshBuilder = modelBuilder.part("part3", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, new Material(TextureAttribute.createDiffuse(texture)));
 
         meshBuilder.setUVRange(0, 0, 1, 1);
         meshBuilder.rect(
@@ -155,6 +156,12 @@ public class Cote extends ModelContainer {
 
         Model model = modelBuilder.end();
         this.setModel(model);
+
+        textPixmap.dispose();
+        resizedPixmap.dispose();
+        if (textTexture != null)
+            textTexture.dispose();
+        textTexture = texture;
     }
 
     @Override

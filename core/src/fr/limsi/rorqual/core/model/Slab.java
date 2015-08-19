@@ -44,14 +44,14 @@ public class Slab extends ModelContainer {
 
     private boolean changed = true;
 
-    private ArrayList<Vector3> coins;
+    private List<Coin> coins;
     private float height;
 
-    public Slab(ArrayList<Vector3> coins) {
+    public Slab(List<Coin> coins) {
         this(coins, DEFAULT_HEIGHT);
     }
 
-    public Slab(ArrayList<Vector3> coins, float h) {
+    public Slab(List<Coin> coins, float h) {
         super();
         this.coins = coins;
         this.height = h;
@@ -70,7 +70,7 @@ public class Slab extends ModelContainer {
         setChanged();
     }
 
-    public void setCoins(ArrayList<Vector3> coins) {
+    public void setCoins(List<Coin> coins) {
         this.coins = coins;
         setChanged();
     }
@@ -84,8 +84,9 @@ public class Slab extends ModelContainer {
         Vector3d z = CSGUtils.castVector(z_shape);
 
         List<Vector3d> face = new ArrayList<Vector3d>();
-        for (Vector3 v : coins)
-            face.add(CSGUtils.castVector(v));
+        for (Coin c : coins) {
+            face.add(CSGUtils.castVector(c.getPosition()));
+        }
 
         CSG csg = Extrude.points(z, face);
 
