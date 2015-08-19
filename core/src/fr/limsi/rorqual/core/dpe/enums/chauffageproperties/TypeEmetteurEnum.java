@@ -6,6 +6,6 @@ package fr.limsi.rorqual.core.dpe.enums.chauffageproperties;
 public enum TypeEmetteurEnum {
     RADIATEUR,
     PLANCHER_CHAUFFANT,
-    SYSTEME_DE_SOUFFLAGE,
+    BOUCHE_DE_SOUFFLAGE,
     SOLUTION_MIXTE;
 }

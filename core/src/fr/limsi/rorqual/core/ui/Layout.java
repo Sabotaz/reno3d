@@ -597,17 +597,25 @@ public class Layout {
         Object[] tabObject=null;
         final Updater last_updater = updater;
         final Object[] valuesEnum = getClass(json, "enum");
+        int sizeMaxEnum=0;
         if (json.has("indexMin") && json.has("indexMax")){
-            int size = json.getInt("indexMax")-json.getInt("indexMin");
+            int indexMax=json.getInt("indexMax");
+            int indexMin=json.getInt("indexMin");
+            int size = indexMax-indexMin;
             tabObject = new Object[size];
+            for(int i=0;i<size;i++) {
+                tabObject[i] = valuesEnum[i+indexMin];
+                if (valuesEnum[i+indexMin].toString().length()>sizeMaxEnum){
+                    sizeMaxEnum = valuesEnum[i+indexMin].toString().length();
+                }
+            }
         }else{
             tabObject = new Object[valuesEnum.length];
-        }
-        int sizeMaxEnum=0;
-        for(int i=json.getInt("indexMin",0);i<json.getInt("indexMax",valuesEnum.length);i++) {
-            tabObject[i-json.getInt("indexMin",0)] = valuesEnum[i].toString();
-            if (valuesEnum[i].toString().length()>sizeMaxEnum){
-                sizeMaxEnum = valuesEnum[i].toString().length();
+            for(int i=0;i<valuesEnum.length;i++) {
+                tabObject[i] = valuesEnum[i];
+                if (valuesEnum[i].toString().length()>sizeMaxEnum){
+                    sizeMaxEnum = valuesEnum[i].toString().length();
+                }
             }
         }
 
@@ -632,11 +640,10 @@ public class Layout {
         list.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                int index = list.getSelectedIndex();
                 HashMap<String,Object> items = new HashMap<String, Object>();
                 items.put("userObject",userObject);
                 items.put("eventRequest",EventRequest.UPDATE_STATE);
-                items.put("lastValue",valuesEnum[index]);
+                items.put("lastValue",list.getSelected());
                 items.put("layout", Layout.this);
                 last_updater.trigger(items);
             }

@@ -6,7 +6,7 @@
   "content": [
     {
       "type": "Table",
-      "name": "Installation",
+      "name": "Installation chauffage",
       "id": "source_chauffage",
       "content": [
         {
@@ -24,31 +24,31 @@
                   "type": "CheckBox",
                   "label": "Générateur unique (ex: une chaudière seule, pompe à chaleur seule)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeDeSourceEnum.CHAUFFAGE_UNIQUE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.InstallationChauffageEnum.CHAUFFAGE_UNIQUE"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffage + insert/poil bois",
+                  "label": "Chauffage + insert/poêle bois",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeDeSourceEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chaudière gaz/fioul + chaudière bois",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeDeSourceEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chaudière + pompe à chaleur",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeDeSourceEnum.CHAUDIERE_AVEC_PAC"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.InstallationChauffageEnum.CHAUDIERE_AVEC_PAC"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chaudière + pompe à chaleur + insert/poil bois",
+                  "label": "Chaudière + pompe à chaleur + insert/poêle bois",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.TypeDeSourceEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS"
                 }
               ]
             }
@@ -77,45 +77,6 @@
                   "label": "Non",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.ProgrammationSystemeEnum.IMPOSSIBLE"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Installation gérant l'eau chaude sanitaire : ",
-          "labelPad": 5,
-          "labelWidth": 273,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_EQUIPEMENT_ECS",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Chaudière mixte gaz, fioul ou bois",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUDIERE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Ballon électrique",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Chauffe-eau",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Accumulateur",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR"
                 }
               ]
             }
@@ -159,6 +120,7 @@
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_EMETTEUR_DE_CHALEUR",
+              "maxChecked": 3,
               "content": [
                 {
                   "type": "CheckBox",
@@ -174,13 +136,13 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Système de soufflage",
+                  "label": "Bouche de soufflage",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.SYSTEME_DE_SOUFFLAGE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.BOUCHE_DE_SOUFFLAGE"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Solution mixte (ex: radiateur + plancher chauffant)",
+                  "label": "Solution mixte (ex: radiateur+plancher chauffant)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.SOLUTION_MIXTE"
                 }
@@ -197,7 +159,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Une seule source de chauffage : ",
+          "label": "Source unique de chauffage : ",
           "labelPad": 5,
           "labelWidth": 213,
           "content": [
@@ -325,7 +287,7 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUDIERE_GAZ_FIOUL",
               "align": "left",
               "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
-              "indexMin":4,
+              "indexMin":1,
               "indexMax":17
             }
           ]
@@ -559,14 +521,53 @@
     },
     {
       "type": "Table",
-      "name": "Équipement ECS",
-      "id": "type_ballon_electrique",
+      "name": "Installation eau chaude sanitaire",
+      "id": "installation_ECS_avec_chaudiere",
       "content": [
+        {
+          "type": "Table",
+          "label": "Installation gérant l'eau chaude sanitaire : ",
+          "labelPad": 5,
+          "labelWidth": 273,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_EQUIPEMENT_ECS",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Chaudière mixte gérant également le chauffage",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUDIERE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique individuel",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Chauffe-eau individuel",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Accumulateur individuel",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR"
+                }
+              ]
+            }
+          ]
+        },
         {
           "type": "Table",
           "label": "Type de ballon électrique : ",
           "labelPad": 5,
-          "labelWidth": 176,
+          "labelWidth": 273,
           "content": [
             {
               "type": "ButtonGroup",
@@ -600,19 +601,12 @@
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Équipement ECS",
-      "id": "type_chauffe_eau",
-      "content": [
+        },
         {
           "type": "Table",
           "label": "Type de chauffe-eau : ",
           "labelPad": 5,
-          "labelWidth": 150,
+          "labelWidth": 273,
           "content": [
             {
               "type": "ButtonGroup",
@@ -652,19 +646,175 @@
               ]
             }
           ]
+        },
+        {
+          "type": "Table",
+          "label": "Type d'accumulateur : ",
+          "labelPad": 5,
+          "labelWidth": 273,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ACCUMULATEUR",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Accumulateur gaz classique (date < 1990)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1990"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Accumulateur gaz classique (date entre 1990 et 2000)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1990_2000"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Accumulateur gaz classique (date > 2000)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2000"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Accumulateur gaz condensation",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CONDENSATION"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
     {
       "type": "Table",
-      "name": "Équipement ECS",
-      "id": "type_accumulateur",
+      "name": "Installation eau chaude sanitaire",
+      "id": "installation_ECS_sans_chaudiere",
       "content": [
+        {
+          "type": "Table",
+          "label": "Installation gérant l'eau chaude sanitaire : ",
+          "labelPad": 5,
+          "labelWidth": 273,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_EQUIPEMENT_ECS",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique individuel",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Chauffe-eau individuel",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Accumulateur individuel",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Type de ballon électrique : ",
+          "labelPad": 5,
+          "labelWidth": 273,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_BALLON_ELECTRIQUE",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique horizontal (age < 15ans)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique horizontal (age > 15ans)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique vertical (age < 15ans)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique vertical (age > 15ans)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Type de chauffe-eau : ",
+          "labelPad": 5,
+          "labelWidth": 273,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFE_EAU",
+              "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Chauffe-eau thermodynamique sur air extrait",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Chauffe-eau thermodynamique sur air extérieur",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Chauffe-eau gaz (date < 1991)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_INF_1991"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Chauffe-eau gaz (date entre 1991 et 2002)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Chauffe-eau gaz (date > 2003)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_SUP_2003"
+                }
+              ]
+            }
+          ]
+        },
         {
           "type": "Table",
           "label": "Type d'accumulateur : ",
           "labelPad": 5,
-          "labelWidth": 152,
+          "labelWidth": 273,
           "content": [
             {
               "type": "ButtonGroup",
