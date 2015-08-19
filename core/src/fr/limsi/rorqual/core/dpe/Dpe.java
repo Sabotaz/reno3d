@@ -459,8 +459,8 @@ public class Dpe implements EventListener {
     }
 
     // 6.Rendement de génération des chaudières
-    private int tabTauxDeCharge[] = new int[9];
-    private double tabCoeffPondX[] = new double[9];
+    private int tabTauxDeCharge[] = new int[10];
+    private double tabCoeffPondX[] = new double[10];
     public void actualiseRendementGeneration(Chauffage chauffage){
         double tInt=23; // Cas défavorable
         double tExtBase=-15; // Cas défavorable
@@ -473,8 +473,8 @@ public class Dpe implements EventListener {
         double re=chauffage.getRe();
         double rg;
         double cdimRef;
-        double tabTchxFinal[] = new double [9];
-        double tabQpx[] = new double [9];
+        double tabTchxFinal[] = new double [10];
+        double tabQpx[] = new double [10];
         double tfonc100 = this.getTfonc100();
         double tfonc30;
         double qp0,qp15,qp30,qp50,qp100;
@@ -667,7 +667,7 @@ public class Dpe implements EventListener {
         }
         rg = pmfou/(pmcons+0.3*0.15*qp0+pveil);
         chauffage.setRg(rg);
-    }
+    } //TODO -> Utiliser cela !
     public double getTfonc100(){
         double tFonc100 = 80;
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
