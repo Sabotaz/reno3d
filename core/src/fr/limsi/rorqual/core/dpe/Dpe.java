@@ -238,7 +238,11 @@ public class Dpe implements EventListener {
     }
     public void actualisePrs2(){
         if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-            if(ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU)){ // Chauffe-eau
+            if(ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT) // Chauffe-eau
+                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR)
+                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_INF_1991)
+                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002)
+                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_SUP_2003)){
                 prs2=2.1;
                 this.actualisePr();
             }else if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)){ // Chaudière
@@ -465,7 +469,7 @@ public class Dpe implements EventListener {
         double tInt=23; // Cas défavorable
         double tExtBase=-15; // Cas défavorable
         double pch;
-        double pecs=2.844923077;
+        double pecs=2.844923077; // Cas défavorable
         double pDim;
         double pn=0;
         double rr=chauffage.getRr();
@@ -482,7 +486,7 @@ public class Dpe implements EventListener {
         double pmcons=0;
         boolean haveRegulation=false;
 
-        if (general_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR).equals(PresenceThermostatEnum.PRESENCE_THERMOSTAT_OU_SONDE)){
+        if (general_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR)==PresenceThermostatEnum.PRESENCE_THERMOSTAT_OU_SONDE){
             haveRegulation=true;
         }
 
@@ -669,7 +673,7 @@ public class Dpe implements EventListener {
         chauffage.setRg(rg);
     } //TODO -> Utiliser cela !
     public double getTfonc100(){
-        double tFonc100 = 80;
+        double tFonc100 = 80; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -695,7 +699,7 @@ public class Dpe implements EventListener {
         return tFonc100;
     }
     public double getTfonc30ChaudiereCondensation(){
-        double tFonc30 = 38;
+        double tFonc30 = 38; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -721,7 +725,7 @@ public class Dpe implements EventListener {
         return tFonc30;
     }
     public double getTfonc30ChaudiereBasseTemperature(){
-        double tFonc30 = 48.5;
+        double tFonc30 = 48.5; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -747,7 +751,7 @@ public class Dpe implements EventListener {
         return tFonc30;
     }
     public double getTfonc30ChaudiereStandardAvant1990(){
-        double tFonc30 = 59;
+        double tFonc30 = 59; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -773,7 +777,7 @@ public class Dpe implements EventListener {
         return tFonc30;
     }
     public double getTfonc30ChaudiereStandardApres1991(){
-        double tFonc30 = 55.5;
+        double tFonc30 = 55.5; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -801,14 +805,196 @@ public class Dpe implements EventListener {
 
     // 7.Expression du besoin de la consommation d'ECS
     private double bEcs;
+    private double becs;
     private double nbJoursAbsenceParAn;
     private double nbHabitant;
     private double cEcs;
     private double iEcs;
     private double fEcs;
+    private double tfr=14.5;
+    public void actualiseBecs(){     // TODO-> prendre en compte les dépendances
+        bEcs=(1.1627*(365-nbJoursAbsenceParAn)*nbHabitant*becs*(50-tfr))/1000;
+    }
+    public void actualiseTfr(){
+        if(general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
+            int zone = ((DepartementBatimentEnum)general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT)).getZoneHiver();
+            switch (zone){
+                case 1:
+                    tfr=10.5;
+                    break;
+                case 2:
+                    tfr=12;
+                    break;
+                case 3:
+                    tfr=14.5;
+                    break;
+            }
+        }
+    }  // TODO-> prendre en compte les dépendances
+    public void actualisebecs(UsageEauChaudeEnum usageEcs){
+        switch (usageEcs){
+            case DOUCHES:
+                becs=40;
+                break;
+            case BAINS:
+                becs=55;
+                break;
+        }
+    } // TODO-> prendre en compte les dépendances
+    public void actualiseCecs(){     // TODO-> prendre en compte les dépendances
+        cEcs=bEcs*iEcs;
+    }
 
     // 8.Rendements de l'installation d'ECS
+    private double vs=300;
+    private double cef=1.1;
+    public void actualiseRendementEcs(TypeEquipementEcsEnum equipementEcs){ // TODO-> prendre en compte les dépendances
+        double cr,qgw,rs,rd,rendement,rpn,qp0,pveil,cop,pecs;
+        switch (equipementEcs){
+            case BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS:
+                rd=getRdBallonElectrique();
+                cr=(939+10.4*vs)/(45*vs);
+                qgw=0.344*vs*cr*(55-13);
+                rendement = 1.08/(1+(qgw*rd/bEcs));
+                iEcs=1/rendement;
+                break;
 
+            case BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS:
+                rd=getRdBallonElectrique();
+                cr=(939+10.4*vs)/(45*vs);
+                qgw=0.344*vs*cr*(55-13);
+                rendement = 1/(1+(qgw*rd/bEcs));
+                iEcs=1/rendement;
+                break;
+
+            case BALLON_ELECTRIQUE_VERTICAL_INF_15ANS:
+                rd=getRdBallonElectrique();
+                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
+                qgw=0.344*vs*cr*(55-13);
+                rendement = 1.08/(1+(qgw*rd/bEcs));
+                iEcs=1/rendement;
+                break;
+
+            case BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS:
+                rd=getRdBallonElectrique();
+                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
+                qgw=0.344*vs*cr*(55-13);
+                rendement = 1/(1+(qgw*rd/bEcs));
+                iEcs=1/rendement;
+                break;
+
+            case CHAUFFE_EAU_GAZ_INF_1991:
+                iEcs=(1/73)+1720*(3/bEcs)+6536*(130/bEcs);
+                break;
+            case CHAUFFE_EAU_GAZ_ENTRE_1991_2002:
+                iEcs=(1/84)+1720*(1/bEcs)+6536*(100/bEcs);
+                break;
+            case CHAUFFE_EAU_GAZ_SUP_2003:
+                iEcs=(1/84)+1720*(1/bEcs)+6536;
+                break;
+
+            case CHAUDIERE:
+                if(ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
+                    Chauffage chaudiere = (Chauffage)ecs_properties.get(DpeEvent.CHAUDIERE_ECS);
+                    qp0=chaudiere.getQp0();
+                    rpn=chaudiere.getRpn();
+                    pveil=chaudiere.getPuissanceVeilleuse();
+                    iEcs = (1/rpn)+1720*(qp0/bEcs)+6536*(0.5*pveil/bEcs);
+                }
+                break;
+
+            case ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991 :
+                qgw=11*Math.pow(vs,2/3)+0.015*10;
+                iEcs=(1/83)+((8256*0.12+qgw)/bEcs)+(6536*150/bEcs);
+                break;
+            case ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1991_2002 :
+                qgw=11*Math.pow(vs,2/3)+0.015*10;
+                iEcs=(1/83)+((8256*0.1+qgw)/bEcs)+(6536*150/bEcs);
+                break;
+            case ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2003 :
+                qgw=11*Math.pow(vs,2/3)+0.015*10;
+                iEcs=(1/83)+((8256*0.12+qgw)/bEcs);
+                break;
+            case ACCUMULATEUR_GAZ_CONDENSATION :
+                qgw=11*Math.pow(vs,2/3)+0.015*10;
+                iEcs=(1/98)+((8256*0.12+qgw)/bEcs);
+                break;
+
+            case CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT:
+                cop=2.4;
+                rd=getRdBallonThermodynamique();
+                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
+                if(vs<=150){
+                    pecs = 5-1.751*(vs-20)/65;
+                }else{
+                    pecs = (7.14*vs+428)/1000;
+                }
+                iEcs=(3/(1+2*cop))+rd*(11.9*cr*vs*(cef-0.0576*(bEcs/(pecs*1000*cop*rd))))/bEcs;
+                break;
+            case CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR:
+                cop=2.1;
+                rd=getRdBallonThermodynamique();
+                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
+                if(vs<=150){
+                    pecs = 5-1.751*(vs-20)/65;
+                }else{
+                    pecs = (7.14*vs+428)/1000;
+                }
+                iEcs=(3/(1+2*cop))+rd*(11.9*cr*vs*(cef-0.0576*(bEcs/(pecs*1000*cop*rd))))/bEcs;
+                break;
+
+        }
+    }
+    public double getRdBallonElectrique(){
+        if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS)==LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
+            return 0.85;
+        }else{
+            return 0.8;
+        }
+    }
+    public double getRdBallonThermodynamique(){
+        if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS)==LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
+            return 0.9;
+        }else{
+            return 0.85;
+        }
+    }
+    public void actualiseVs(){
+        if(general_properties.containsKey(DpeEvent.CATEGORIE_BATIMENT)){
+            switch ((CategorieLogementEnum)general_properties.get(DpeEvent.CATEGORIE_BATIMENT)){
+                case T1_F1:
+                    vs=100;
+                    break;
+                case T2_F2:
+                    vs=150;
+                    break;
+                case T3_F3:
+                    vs=200;
+                    break;
+                case T4_F4:
+                    vs=250;
+                    break;
+                default:
+                    vs=300;
+                    break;
+            }
+        }
+    }
+    public void actualiseCef(){
+        if(general_properties.get(DpeEvent.ABONNEMENT_ELECTRIQUE).equals(TypeAbonnementElectriqueEnum.DOUBLE_TARIF)){
+            if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS).equals(LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE)){
+                cef=0.6;
+            }else{ //LNC ou pas d'info
+                cef=0.75;
+            }
+        }else{ //Simple ou tarif ou pas d'info
+            if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS).equals(LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE)){
+                cef=0.9;
+            }else{ //LNC ou pas d'info
+                cef=1.1;
+            }
+        }
+    }
 
     // 9.Consommation de climatisation
     private double cClimatisation=700; // Cas le plus défavorable (7*100)
@@ -1925,69 +2111,6 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_EQUIPEMENT_ECS, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
-                        }
-                        break;
-                    }
-
-                    case TYPE_BALLON_ELECTRIQUE:{
-                        HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeBallonElectriqueEnum typeBallonElectrique= (TypeBallonElectriqueEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.TYPE_BALLON_ELECTRIQUE, typeBallonElectrique);
-                        }
-                        else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeBallonElectriqueEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.TYPE_BALLON_ELECTRIQUE)){
-                                type = (TypeBallonElectriqueEnum) ecs_properties.get(DpeEvent.TYPE_BALLON_ELECTRIQUE);
-                            }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            Event e2 = new Event(DpeEvent.TYPE_BALLON_ELECTRIQUE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
-                        }
-                        break;
-                    }
-
-                    case TYPE_CHAUFFE_EAU:{
-                        HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeChauffeEauEnum typeChauffeEau= (TypeChauffeEauEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.TYPE_CHAUFFE_EAU, typeChauffeEau);
-                        }
-                        else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeChauffeEauEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.TYPE_CHAUFFE_EAU)){
-                                type = (TypeChauffeEauEnum) ecs_properties.get(DpeEvent.TYPE_CHAUFFE_EAU);
-                            }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            Event e2 = new Event(DpeEvent.TYPE_CHAUFFE_EAU, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
-                        }
-                        break;
-                    }
-
-                    case TYPE_ACCUMULATEUR:{
-                        HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeAccumulateurEnum typeAccumulateur= (TypeAccumulateurEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.TYPE_ACCUMULATEUR, typeAccumulateur);
-                        }
-                        else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeAccumulateurEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.TYPE_ACCUMULATEUR)){
-                                type = (TypeAccumulateurEnum) ecs_properties.get(DpeEvent.TYPE_ACCUMULATEUR);
-                            }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            Event e2 = new Event(DpeEvent.TYPE_ACCUMULATEUR, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;

@@ -120,7 +120,6 @@
               "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_EMETTEUR_DE_CHALEUR",
-              "maxChecked": 3,
               "content": [
                 {
                   "type": "CheckBox",
@@ -543,144 +542,81 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique individuel",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Chauffe-eau individuel",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Accumulateur individuel",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Type de ballon électrique : ",
-          "labelPad": 5,
-          "labelWidth": 273,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_BALLON_ELECTRIQUE",
-              "content": [
-                {
-                  "type": "CheckBox",
                   "label": "Ballon électrique horizontal (age < 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age > 15ans)",
+                  "label": "Ballon électrique horizontal (age >= 15 ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Ballon électrique vertical (age < 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique vertical (age > 15ans)",
+                  "label": "Ballon électrique horizontal (age >= 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Type de chauffe-eau : ",
-          "labelPad": 5,
-          "labelWidth": 273,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFE_EAU",
-              "content": [
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
+                },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau thermodynamique sur air extrait",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau thermodynamique sur air extérieur",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau gaz (date < 1991)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_INF_1991"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date entre 1991 et 2002)",
+                  "label": "Chauffe-eau gaz (date comprise entre 1991 et 2002)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau gaz (date > 2003)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_SUP_2003"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Type d'accumulateur : ",
-          "labelPad": 5,
-          "labelWidth": 273,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ACCUMULATEUR",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date < 1990)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1990"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_SUP_2003"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date entre 1990 et 2000)",
+                  "label": "Accumulateur gaz classique (date < 1991)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1990_2000"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date > 2000)",
+                  "label": "Accumulateur gaz classique (date comprise entre 1991 et 2002)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2000"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1991_2002"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Accumulateur gaz classique (date > 2003)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2003"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Accumulateur gaz condensation",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CONDENSATION"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CONDENSATION"
                 }
               ]
             }
@@ -706,147 +642,85 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique individuel",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Chauffe-eau individuel",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Accumulateur individuel",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Type de ballon électrique : ",
-          "labelPad": 5,
-          "labelWidth": 273,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_BALLON_ELECTRIQUE",
-              "content": [
-                {
-                  "type": "CheckBox",
                   "label": "Ballon électrique horizontal (age < 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age > 15ans)",
+                  "label": "Ballon électrique horizontal (age >= 15 ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Ballon électrique vertical (age < 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique vertical (age > 15ans)",
+                  "label": "Ballon électrique horizontal (age >= 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeBallonElectriqueEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Type de chauffe-eau : ",
-          "labelPad": 5,
-          "labelWidth": 273,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_CHAUFFE_EAU",
-              "content": [
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
+                },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau thermodynamique sur air extrait",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau thermodynamique sur air extérieur",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau gaz (date < 1991)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_INF_1991"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date entre 1991 et 2002)",
+                  "label": "Chauffe-eau gaz (date comprise entre 1991 et 2002)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Chauffe-eau gaz (date > 2003)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeChauffeEauEnum.CHAUFFE_EAU_GAZ_SUP_2003"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Type d'accumulateur : ",
-          "labelPad": 5,
-          "labelWidth": 273,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ACCUMULATEUR",
-              "content": [
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_SUP_2003"
+                },
                 {
                   "type": "CheckBox",
                   "label": "Accumulateur gaz classique (date < 1990)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1990"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1990"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date entre 1990 et 2000)",
+                  "label": "Accumulateur gaz classique (date comprise entre 1990 et 2000)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1990_2000"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1990_2000"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Accumulateur gaz classique (date > 2000)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2000"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2000"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Accumulateur gaz condensation",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeAccumulateurEnum.ACCUMULATEUR_GAZ_CONDENSATION"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CONDENSATION"
                 }
               ]
             }
+
           ]
         }
       ]

@@ -102,12 +102,12 @@ public class Chauffage {
 
     public Chauffage(Generateur generateur) {
         this.generateur=generateur;
+        this.emission = Emission.RADIATEUR;
         this.actualiseType();
         this.actualiseRd();
         this.actualiseRr();
         this.actualiseRe();
         this.actualiseRg();
-        this.emission = Emission.RADIATEUR;
         this.prs1=0;
         this.pn=0;
         this.generateurDansVolumeChauffe=false;
