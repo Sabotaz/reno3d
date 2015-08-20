@@ -17,9 +17,11 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import fr.limsi.rorqual.core.model.utils.Coin;
+import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -93,15 +95,15 @@ public class Anchor extends ModelContainer {
 
             meshBuilder = modelBuilder.part("part1", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.RED)));
 
-            Vector3 dir = A.getPosition().cpy().sub(pt.getPosition()).setLength(100);
-            Vector3 p1 = pt.getPosition().cpy().sub(dir);
-            Vector3 p2 = A.getPosition().cpy().add(dir);
+            Vector3 dir = new MyVector3(A.getPosition().cpy().sub(pt.getPosition()).setLength(100));
+            Vector3 p1 = new Vector3(pt.getPosition(), 0.1f).sub(dir);
+            Vector3 p2 = new Vector3(A.getPosition(), 0.1f).add(dir);
             meshBuilder.line(p1, p2);
 
             if (B != null) {
-                dir = B.getPosition().cpy().sub(pt.getPosition()).setLength(100);
-                p1 = pt.getPosition().cpy().sub(dir);
-                p2 = B.getPosition().cpy().add(dir);
+                dir = new MyVector3(B.getPosition().cpy().sub(pt.getPosition()).setLength(100));
+                p1 = new Vector3(pt.getPosition(), 0.1f).sub(dir);
+                p2 = new Vector3(B.getPosition(), 0.1f).add(dir);
                 meshBuilder.line(p1, p2);
             }
         }
@@ -110,9 +112,9 @@ public class Anchor extends ModelContainer {
 
         //meshBuilder.circle(0.05f, 30, pt, Vector3.Z.cpy().scl(1));
         if (A != null)
-            meshBuilder.circle(0.05f, 30, A.getPosition(), Vector3.Z.cpy().scl(1));
+            meshBuilder.circle(0.05f, 30, new MyVector3(A.getPosition()), Vector3.Z.cpy().scl(1));
         if (B != null)
-            meshBuilder.circle(0.05f, 30, B.getPosition(), Vector3.Z.cpy().scl(1));
+            meshBuilder.circle(0.05f, 30, new MyVector3(B.getPosition()), Vector3.Z.cpy().scl(1));
 
 
         Model model = modelBuilder.end();

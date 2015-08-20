@@ -73,7 +73,6 @@ public class OuvertureMaker extends ModelMaker {
             // intersection in world space, not in wall space
             Vector2 v1 = mur.getB().getPosition().cpy().sub(mur.getA().getPosition()).nor();
             Vector2 v2 = intersection.cpy().sub(mur.getA().getPosition());
-            float x = v2.dot(v1);
             ouverture.setX(v2.dot(v1));
             ouverture.setMur(mur);
         }

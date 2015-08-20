@@ -287,58 +287,71 @@ public class PieceMaker extends ModelMaker {
         float anchor_length = 1f;
         ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
         List<Mur> forbidden = Arrays.asList(this.murs);
-        ArrayList<Anchor> anchors = new ArrayList<Anchor>();
+        ArrayList<Anchor> coins = new ArrayList<Anchor>();
+
+        ArrayList<Coin> c = new ArrayList<Coin>();
 
         for (Mur mur : murs) {
             if (!forbidden.contains(mur)) {
-                anchors.add(new Anchor(mur.getA()));
-                anchors.add(new Anchor(mur.getB()));
+                if (!c.contains(mur.getA()))
+                    c.add(mur.getA());
+                if (!c.contains(mur.getB()))
+                    c.add(mur.getB());
             }
+        }
+        for (Coin coin : c) {
+            coins.add(new Anchor(coin));
         }
 
         // anchor-aligned drawing
-        ArrayList<Anchor> alignments = new ArrayList<Anchor>();
-        for (Anchor a : anchors) {
+        ArrayList<Anchor> coins_align = new ArrayList<Anchor>();
+        for (Coin coin : c) {
             Vector2 projx = intersection.cpy();
-            projx.x = a.getPt().getPosition().x;
-            alignments.add(new Anchor(Coin.getCoin(projx)));
+            projx.x = coin.getPosition().x;
+            coins_align.add(new Anchor(Coin.getCoin(projx)));
             // add the projection on Y
             Vector2 projy = intersection.cpy();
-            projy.y = a.getPt().getPosition().y;
-            alignments.add(new Anchor(Coin.getCoin(projy)));
+            projy.y = coin.getPosition().y;
+            coins_align.add(new Anchor(Coin.getCoin(projy)));
         }
 
+        ArrayList<Anchor> double_coins_align = new ArrayList<Anchor>();
         // double-anchor-aligned drawing
-        for (Anchor a : anchors) {
-            for (Anchor b : anchors) {
-                if (!a.equals(b)) {
-                    if (Math.abs(a.getPt().getPosition().x - b.getPt().getPosition().x) < EPSILON
-                            && Math.abs(a.getPt().getPosition().y - b.getPt().getPosition().y) < EPSILON) { // s'ils ne sont pas sur la meme ligne / colone
+        for (Coin c1 : c) {
+            for (Coin c2 : c) {
+                if (!c1.equals(c2)) {
+                    if (Math.abs(c1.getPosition().x - c2.getPosition().x) > EPSILON
+                            && Math.abs(c1.getPosition().y - c2.getPosition().y) > EPSILON) { // s'ils ne sont pas sur la meme ligne / colone
 
                         Vector2 projxy = intersection.cpy();
-                        projxy.x = a.getPt().getPosition().x;
-                        projxy.y = b.getPt().getPosition().y;
-                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+                        projxy.x = c1.getPosition().x;
+                        projxy.y = c2.getPosition().y;
+                        double_coins_align.add(new Anchor(Coin.getCoin(projxy)));
 
                         Vector2 projyx = intersection.cpy();
-                        projxy.y = a.getPt().getPosition().y;
-                        projxy.x = b.getPt().getPosition().x;
-                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+                        projyx.y = c1.getPosition().y;
+                        projyx.x = c2.getPosition().x;
+                        double_coins_align.add(new Anchor(Coin.getCoin(projyx)));
                     }
                 }
             }
         }
-
-        anchors.addAll(alignments);
+        
+        // last is higher priority
+        Object prior_anchors[] =  new Object[]{coins_align, double_coins_align, coins} ;
 
         // return best one
         Anchor anchor = null;
-        float dist = -1;
-        for (Anchor a : anchors) {
-            float d = intersection.dst(a.getPt().getPosition());
-            if (d < anchor_length && (d <= dist || dist == -1)) {
-                dist = d;
-                anchor = a;
+
+        for (Object obj : prior_anchors) {
+            float dist = -1;
+            ArrayList<Anchor> anchors = (ArrayList<Anchor>) obj;
+            for (Anchor a : anchors) {
+                float d = intersection.dst(a.getPt().getPosition());
+                if (d < anchor_length && (d <= dist || dist == -1)) {
+                    dist = d;
+                    anchor = a;
+                }
             }
         }
         return anchor;
