@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
@@ -56,6 +58,7 @@ import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
+import ifc2x3javatoolbox.ifc2x3tc1.DOUBLE;
 
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
@@ -83,6 +86,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ModelContainer pin;
     private Vector3 decal_pos;
     private MainUiControleur mainUiControleur;
+    private Label labelScore;
+    private Label lettreScore;
 
     @Override
 	public void create () {
@@ -150,15 +155,24 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         mainUiControleur.setStage(stageMenu);
 
         stageMenu.getRoot().addCaptureListener(
-            new InputListener() {
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (!(event.getTarget() instanceof TextField))
-                        stageMenu.setKeyboardFocus(null);
-                    return false;
-                }
-            });
+                new InputListener() {
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        if (!(event.getTarget() instanceof TextField))
+                            stageMenu.setKeyboardFocus(null);
+                        return false;
+                    }
+                });
 
         stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
+
+
+
+        double scoreDpe=dpe.getScoreDpe();
+        labelScore= new Label("("+Double.toString(scoreDpe)+")",skin);
+        stageMenu.addActor(labelScore);
+        lettreScore=new Label("F",skin);
+        labelScore.setPosition(20,0);
+        stageMenu.addActor(lettreScore);
 
 
         /*** test affichage fenetre ***/
@@ -200,8 +214,25 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light_dir = sun.local_transform.getTranslation(light_dir).scl(-1).nor();
         light.direction.set(light_dir);
 
-        stageMenu.act();
+        double score=dpe.getScoreDpe();
+        labelScore.setText("("+Double.toString(score)+")");
+        if(score<=50){
+            lettreScore.setText("A");
+        }else if (score <=90){
+            lettreScore.setText("B");
+        }else if (score <=150){
+            lettreScore.setText("C");
+        }else if (score <=230){
+            lettreScore.setText("D");
+        }else if (score <=330){
+            lettreScore.setText("E");
+        }else if (score <=450){
+            lettreScore.setText("F");
+        }else if (score > 450){
+            lettreScore.setText("G");
+        }
 
+        stageMenu.act();
         modelGraph.act();
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().act();
     }

@@ -30,7 +30,7 @@ public class Dpe implements EventListener {
 
     // 0.Variables générales
     private double sh = 50;
-    private double consommationTotaleAnnuel=0;
+    private double scoreDpe = 700;
     private double NIV;
     private double MIT;
     private double MIT2;
@@ -296,6 +296,7 @@ public class Dpe implements EventListener {
             double ichPoele = poele.getIch();
             this.cch=(1-k)*(0.8*bch*ichPac)+(1-k)*(0.2*bch*ichChaudiere)+k*bch*ichPoele;
         }
+        this.actualiseScoreDpe();
         System.out.println("Consommation de chauffage = "+cch);
     }
     public void tryActualiseCch(){ // On s'assure qu'il y ait au moins les systèmes de présent
@@ -905,6 +906,7 @@ public class Dpe implements EventListener {
     }
     public void actualiseCecs(){
         cEcs=bEcs*iEcs;
+        this.actualiseScoreDpe();
         System.out.println("Consommation eau chaude sanitaire = "+cEcs);
     }
 
@@ -1113,7 +1115,7 @@ public class Dpe implements EventListener {
         }else{
             cClimatisation=700;
         }
-        this.actualiseConsommationTotaleAnnuel();
+        this.actualiseScoreDpe();
         System.out.println("cClimatisation = " + cClimatisation + " rClimatisation = " + rClimatisation + " sClimatisation = " + sClimatisation);
     }
 
@@ -1133,6 +1135,7 @@ public class Dpe implements EventListener {
     }
     public void actualiseConsommationEclairage(){
         cEclairage=cEclairageSurfacique * sh;
+        this.actualiseScoreDpe();
         System.out.println("cEclairage = " + cEclairage + " cEclairageSurfacique = " + cEclairageSurfacique + " sh = " + sh);
     }
     public void actualiseConsommationElectromenager(){
@@ -1143,6 +1146,7 @@ public class Dpe implements EventListener {
                 cElectromenager+=actualEquipement.getConsommation();
             }
         }
+        this.actualiseScoreDpe();
         System.out.println("cElectromenager = " + cElectromenager);
     }
     public void actualiseConsommationCuisson(){
@@ -1152,7 +1156,7 @@ public class Dpe implements EventListener {
         }else{
             cCuisson=1660;
         }
-        this.actualiseConsommationTotaleAnnuel();
+        this.actualiseScoreDpe();
         System.out.println("cCuisson = " + cCuisson);
     }
 
@@ -1178,9 +1182,12 @@ public class Dpe implements EventListener {
 
     /*---------------------------------Calculateur DPE-------------------------------------------*/
 
-    public void actualiseConsommationTotaleAnnuel(){
-        consommationTotaleAnnuel = cElectromenager+cEclairage+cCuisson+cClimatisation;
-//        System.out.println("consommationTotaleAnnuel = "+consommationTotaleAnnuel+" cElectromenager = "+cElectromenager+" cEclairage = "+cEclairage+" cCuisson = "+cCuisson+" cClimatisation = "+cClimatisation);
+    public void actualiseScoreDpe(){
+        scoreDpe = (cElectromenager+cEclairage+cCuisson+cClimatisation+cEcs+cch)/sh;
+    }
+
+    public double getScoreDpe(){
+        return Math.round(this.scoreDpe);
     }
 
 
@@ -1266,6 +1273,7 @@ public class Dpe implements EventListener {
                             this.actualiseG();
                             this.actualisePr();
                             this.tryActualiseIch();
+                            this.actualiseScoreDpe();
 
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
