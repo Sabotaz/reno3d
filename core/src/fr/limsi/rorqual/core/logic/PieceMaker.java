@@ -33,7 +33,7 @@ public class PieceMaker extends ModelMaker {
 
     public void begin(int screenX, int screenY) {
 
-        Vector3 intersection;
+        Vector2 intersection;
 
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
 
@@ -41,7 +41,7 @@ public class PieceMaker extends ModelMaker {
             making_piece = false;
             return;
         } else {
-            intersection = obj.getIntersection();
+            intersection = new MyVector2(obj.getIntersection());
 
             Anchor a = calculateAnchor(intersection);
 
@@ -91,7 +91,7 @@ public class PieceMaker extends ModelMaker {
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
 
         if (obj != null) {
-            Vector3 intersection = obj.getIntersection();
+            Vector2 intersection = new MyVector2(obj.getIntersection());
 
             Anchor a = calculateAnchor(intersection);
 
@@ -107,7 +107,6 @@ public class PieceMaker extends ModelMaker {
                 }
             } else {
                 end = Coin.getCoin(intersection.cpy());
-                end.getPosition().z = 0;
                 if (anchor != null) {
                     ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
                     anchor = null;
@@ -116,9 +115,9 @@ public class PieceMaker extends ModelMaker {
 
             Coin[] coins = new Coin[4];
             coins[0] = start;
-            coins[1] = Coin.getCoin(new Vector3(start.getPosition().x, end.getPosition().y, 0));
+            coins[1] = Coin.getCoin(new Vector2(start.getPosition().x, end.getPosition().y));
             coins[2] = end;
-            coins[3] = Coin.getCoin(new Vector3(end.getPosition().x, start.getPosition().y, 0));;
+            coins[3] = Coin.getCoin(new Vector2(end.getPosition().x, start.getPosition().y));;
 
             for (int i = 0; i < 4; i++) {
                 murs[i].setA(coins[i]);
@@ -201,8 +200,6 @@ public class PieceMaker extends ModelMaker {
     ArrayList<Mur> extraWalls = new ArrayList<Mur>();
 
     private void fixConflicts(Mur mur, ArrayList<Mur> murs) {
-        Vector2 c = new MyVector2(mur.getA().getPosition());
-        Vector2 d = new MyVector2(mur.getB().getPosition());
         Iterator<Mur> it = murs.listIterator();
         while(it.hasNext()) {
             Mur m = it.next();
@@ -212,12 +209,13 @@ public class PieceMaker extends ModelMaker {
         }
     }
 
+    float EPSILON = 0.000_001f;
+
     private void fixConflicts(Mur m1, Mur m2) {
-        float EPSILON = 0.000_001f;
-        Vector2 a1 = new MyVector2(m1.getA().getPosition());
-        Vector2 b1 = new MyVector2(m1.getB().getPosition());
-        Vector2 a2 = new MyVector2(m2.getA().getPosition());
-        Vector2 b2 = new MyVector2(m2.getB().getPosition());
+        Vector2 a1 = m1.getA().getPosition();
+        Vector2 b1 = m1.getB().getPosition();
+        Vector2 a2 = m2.getA().getPosition();
+        Vector2 b2 = m2.getB().getPosition();
         if (m1.getA() != m2.getA() && m1.getB() != m2.getA() && Intersector.distanceSegmentPoint(a1, b1, a2) < EPSILON) {
             // m2.A est entre m1.A et m1.B
             Coin A = m1.getA();
@@ -284,7 +282,7 @@ public class PieceMaker extends ModelMaker {
     }
 
 
-    private Anchor calculateAnchor(Vector3 intersection) {
+    private Anchor calculateAnchor(Vector2 intersection) {
         // anchor
         float anchor_length = 1f;
         ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
@@ -301,11 +299,34 @@ public class PieceMaker extends ModelMaker {
         // anchor-aligned drawing
         ArrayList<Anchor> alignments = new ArrayList<Anchor>();
         for (Anchor a : anchors) {
-            Vector3 projx = intersection.cpy();
+            Vector2 projx = intersection.cpy();
             projx.x = a.getPt().getPosition().x;
+            alignments.add(new Anchor(Coin.getCoin(projx)));
             // add the projection on Y
-            Vector3 projy = intersection.cpy();
+            Vector2 projy = intersection.cpy();
             projy.y = a.getPt().getPosition().y;
+            alignments.add(new Anchor(Coin.getCoin(projy)));
+        }
+
+        // double-anchor-aligned drawing
+        for (Anchor a : anchors) {
+            for (Anchor b : anchors) {
+                if (!a.equals(b)) {
+                    if (Math.abs(a.getPt().getPosition().x - b.getPt().getPosition().x) < EPSILON
+                            && Math.abs(a.getPt().getPosition().y - b.getPt().getPosition().y) < EPSILON) { // s'ils ne sont pas sur la meme ligne / colone
+
+                        Vector2 projxy = intersection.cpy();
+                        projxy.x = a.getPt().getPosition().x;
+                        projxy.y = b.getPt().getPosition().y;
+                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+
+                        Vector2 projyx = intersection.cpy();
+                        projxy.y = a.getPt().getPosition().y;
+                        projxy.x = b.getPt().getPosition().x;
+                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+                    }
+                }
+            }
         }
 
         anchors.addAll(alignments);
@@ -315,7 +336,7 @@ public class PieceMaker extends ModelMaker {
         float dist = -1;
         for (Anchor a : anchors) {
             float d = intersection.dst(a.getPt().getPosition());
-            if (d < anchor_length && (d < dist || dist == -1)) {
+            if (d < anchor_length && (d <= dist || dist == -1)) {
                 dist = d;
                 anchor = a;
             }

@@ -2,14 +2,18 @@ package fr.limsi.rorqual.core.logic;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Plane;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.utils.Coin;
+import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
@@ -28,7 +32,7 @@ public class WallMaker extends ModelMaker {
 
     public void begin(int screenX, int screenY) {
 
-        Vector3 intersection;
+        Vector2 intersection;
 
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
 
@@ -36,17 +40,15 @@ public class WallMaker extends ModelMaker {
             making_wall = false;
             return;
         } else {
-            intersection = obj.getIntersection();
+            intersection = new MyVector2(obj.getIntersection());
 
             Anchor a = calculateAnchor(intersection);
 
             if (a != null) {
                 start = a.getPt();
-                start.getPosition().z = 0;
                 anchor = a;
             } else {
                 start = Coin.getCoin(intersection);
-                start.getPosition().z = 0;
                 anchor = null;
             }
 
@@ -74,13 +76,12 @@ public class WallMaker extends ModelMaker {
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
 
         if (obj != null) {
-            Vector3 intersection = obj.getIntersection();
+            Vector2 intersection = new MyVector2(obj.getIntersection());
 
             Anchor a = calculateAnchor(intersection);
 
             if (a != null) {
                 Coin end = a.getPt();
-                end.getPosition().z = 0;
                 mur.setB(end);
                 if (anchor != null) {
                     anchor.setPt(a.getPt());
@@ -91,8 +92,7 @@ public class WallMaker extends ModelMaker {
                     ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(anchor);
                 }
             } else {
-                Vector3 pos = intersection.cpy();
-                pos.z = 0;
+                Vector2 pos = intersection.cpy();
                 mur.setB(Coin.getCoin(pos));
                 if (anchor != null) {
                     ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
@@ -138,73 +138,62 @@ public class WallMaker extends ModelMaker {
 
     }
 
+    float EPSILON = 0.000_001f;
 
-    private Anchor calculateAnchor(Vector3 intersection) {
+    private Anchor calculateAnchor(Vector2 intersection) {
         // anchor
-        float anchor_length = 0.5f;
+        float anchor_length = 1f;
         ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
-
         ArrayList<Anchor> anchors = new ArrayList<Anchor>();
 
         for (Mur mur : murs) {
-            if (mur != this.mur)
-                for (Coin v : mur.getAnchors(intersection, Mur.DEFAULT_DEPTH))
-                    anchors.add(new Anchor(v));
+            if (mur != this.mur) {
+                anchors.add(new Anchor(mur.getA()));
+                anchors.add(new Anchor(mur.getB()));
+            }
         }
 
         // anchor-aligned drawing
-        boolean project = true;
-        /*for (Anchor a : anchors) { // don't project if too close to an anchor
-            if (intersection.dst(a.getPt()) <= anchor_length)
-                project = false;
-        }*/
-/*
-        if (project) {
-            ArrayList<Anchor> alignments = new ArrayList<Anchor>();
-            for (Anchor a : anchors) {
-                Vector3 projx = intersection.cpy();
-                projx.x = a.getPt().x;
-                // add the projection on Y
-                Vector3 projy = intersection.cpy();
-                projy.y = a.getPt().y;
+        ArrayList<Anchor> alignments = new ArrayList<Anchor>();
+        for (Anchor a : anchors) {
+            Vector2 projx = intersection.cpy();
+            projx.x = a.getPt().getPosition().x;
+            alignments.add(new Anchor(Coin.getCoin(projx)));
+            // add the projection on Y
+            Vector2 projy = intersection.cpy();
+            projy.y = a.getPt().getPosition().y;
+            alignments.add(new Anchor(Coin.getCoin(projy)));
+        }
 
-                if (start != null) { // y or x align each x or y  aligned anchor to the start
-                    Vector3 projyx = projx.cpy();
-                    projyx.y = start.y;
-                    if (projyx.dst(projx) > anchor_length)
-                        alignments.add(new Anchor(projx, a.getPt()));
-                    alignments.add(new Anchor(projyx, a.getPt(), start));
+        // double-anchor-aligned drawing
+        for (Anchor a : anchors) {
+            for (Anchor b : anchors) {
+                if (!a.equals(b)) {
+                    if (Math.abs(a.getPt().getPosition().x - b.getPt().getPosition().x) < EPSILON
+                            && Math.abs(a.getPt().getPosition().y - b.getPt().getPosition().y) < EPSILON) { // s'ils ne sont pas sur la meme ligne / colone
 
-                    Vector3 projxy = projy.cpy();
-                    projxy.x = start.x;
-                    if (projxy.dst(projy) > anchor_length)
-                        alignments.add(new Anchor(projy, a.getPt()));
-                    alignments.add(new Anchor(projxy, a.getPt(), start));
+                        Vector2 projxy = intersection.cpy();
+                        projxy.x = a.getPt().getPosition().x;
+                        projxy.y = b.getPt().getPosition().y;
+                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+
+                        Vector2 projyx = intersection.cpy();
+                        projxy.y = a.getPt().getPosition().y;
+                        projxy.x = b.getPt().getPosition().x;
+                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+                    }
                 }
             }
-
-            anchors.addAll(alignments);
-
         }
 
+        anchors.addAll(alignments);
 
-        if (start != null) { // axe-aligned drawing
-            // add the projection on X
-            Vector3 projx = intersection.cpy();
-            projx.x = start.x;
-            anchors.add(new Anchor(projx, start));
-            // add the projection on Y
-            Vector3 projy = intersection.cpy();
-            projy.y = start.y;
-            anchors.add(new Anchor(projy, start));
-        }
-
-*/
+        // return best one
         Anchor anchor = null;
         float dist = -1;
         for (Anchor a : anchors) {
             float d = intersection.dst(a.getPt().getPosition());
-            if (d < anchor_length && (d < dist || dist == -1)) {
+            if (d < anchor_length && (d <= dist || dist == -1)) {
                 dist = d;
                 anchor = a;
             }

@@ -30,6 +30,7 @@ import java.util.List;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
+import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
@@ -268,9 +269,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.setModel(model);
 
         Matrix4 mx = new Matrix4();
-        Vector3 dir = B.getPosition().cpy().sub(A.getPosition());
-        final float angle = Vector2.X.angle(new Vector2(dir.x, dir.y));
-        mx.translate(A.getPosition()).rotate(Vector3.Z, angle);
+        Vector2 dir = B.getPosition().cpy().sub(A.getPosition());
+        final float angle = Vector2.X.angle(dir);
+        mx.translate(new MyVector3(A.getPosition())).rotate(Vector3.Z, angle);
         local_transform.idt();
         local_transform.mul(mx);
     }

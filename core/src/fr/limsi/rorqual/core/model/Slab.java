@@ -29,6 +29,7 @@ import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
+import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
@@ -85,7 +86,7 @@ public class Slab extends ModelContainer {
 
         List<Vector3d> face = new ArrayList<Vector3d>();
         for (Coin c : coins) {
-            face.add(CSGUtils.castVector(c.getPosition()));
+            face.add(CSGUtils.castVector(new MyVector3(c.getPosition())));
         }
 
         CSG csg = Extrude.points(z, face);
