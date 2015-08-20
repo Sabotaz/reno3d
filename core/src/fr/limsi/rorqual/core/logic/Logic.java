@@ -120,7 +120,7 @@ public class Logic implements InputProcessor {
                 public void run() {
                     modelMaker.end(screenX, screenY);
                 }
-            }, 20L // 20ms ?
+            }, 100L // 20ms ?
             );
             return true;
         }

@@ -36,15 +36,13 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         };
         perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
         perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
-        perspectiveCamera.position.set(0, -20, 1.65f);
         perspectiveCamera.near = 1f;
         perspectiveCamera.far = 10000f;
-        //perspectiveCamera.lookAt(0, 0, 0);
-        perspectiveCamera.direction.set(0,1,0);
-        perspectiveCamera.up.set(0, 0, 1);
-        perspectiveCamera.update();
+        pos.set(0, 0, 30f);
 
         camera = perspectiveCamera;
+
+        update();
     }
 
     protected void setCamera() {}
@@ -167,7 +165,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         return true;
     }
 
-    protected Vector3 pos = new Vector3(0,0,10f);
+    protected Vector3 pos = new Vector3();
     protected Matrix4 user_rotation = new Matrix4();
 
     public void act() {
