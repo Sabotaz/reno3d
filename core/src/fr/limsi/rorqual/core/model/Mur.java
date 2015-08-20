@@ -158,8 +158,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setA(Coin a) {
         A.removeMur(this);
         A = a;
-        a.addMur(this);
-        this.width = B.getPosition().cpy().sub(A.getPosition()).len();
+        if (a != null) {
+            a.addMur(this);
+            this.width = B.getPosition().cpy().sub(A.getPosition()).len();
+        };
         setChanged();
     }
 
@@ -170,8 +172,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setB(Coin b) {
         B.removeMur(this);
         B = b;
-        b.addMur(this);
-        this.width = B.getPosition().cpy().sub(A.getPosition()).len();
+        if (b != null) {
+            b.addMur(this);
+            this.width = B.getPosition().cpy().sub(A.getPosition()).len();
+        }
         setChanged();
     }
 
@@ -214,7 +218,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setGlobalOrientation(OrientationEnum orientationMur) {
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
-        this.orientationMur = orientationMur.unwrapX(dx,dy);
+        this.orientationMur = orientationMur.wrapX(dx, dy);
     }
 
     public ArrayList<Coin> getAnchors(Vector3 pt, float depth) {
@@ -230,7 +234,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     Material backMaterial = new Material();
 
     private void makeMesh() {
-        if (B.getPosition().equals(A.getPosition()))
+        if (A == null || B == null || B.getPosition().equals(A.getPosition()))
             return;
         Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
         Vector3 positive_offset = Vector3.X.cpy().setLength(this.depth / 2);

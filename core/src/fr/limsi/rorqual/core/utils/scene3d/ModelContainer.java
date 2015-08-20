@@ -76,9 +76,11 @@ public class ModelContainer extends ActableModel {
     }
 
     public void add(ModelContainer child) {
-        child.remove();
-        children.add(child);
-        child.setParent(this);
+        synchronized (this.root) {
+            child.remove();
+            children.add(child);
+            child.setParent(this);
+        }
     }
 
     public ModelContainer getParent() {
@@ -95,23 +97,24 @@ public class ModelContainer extends ActableModel {
     }
 
     public void remove(ModelContainer child) {
-        if (children.contains(child))
-            children.remove(child);
-        child.parent = null;
-        child.root = null;
+        synchronized (this.root) {
+            if (children.contains(child))
+                children.remove(child);
+            child.parent = null;
+            child.root = null;
 
-        if (root != null) {
-            // remove root datas
-            Deque<ModelContainer> removed = new ArrayDeque<ModelContainer>();
-            removed.add(child);
-            do {
-                ModelContainer current = removed.remove();
-                root.remove(current);
-                for (ModelContainer c : current.getChildren())
-                    removed.add(c);
-            } while (!removed.isEmpty());
+            if (root != null) {
+                // remove root datas
+                Deque<ModelContainer> removed = new ArrayDeque<ModelContainer>();
+                removed.add(child);
+                do {
+                    ModelContainer current = removed.remove();
+                    root.remove(current);
+                    for (ModelContainer c : current.getChildren())
+                        removed.add(c);
+                } while (!removed.isEmpty());
+            }
         }
-
     }
 
     private void setParent(ModelContainer p) {

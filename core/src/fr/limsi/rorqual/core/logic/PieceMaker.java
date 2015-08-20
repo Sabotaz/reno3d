@@ -188,12 +188,17 @@ public class PieceMaker extends ModelMaker {
         for (Mur m : etage.getMurs()) {
             for (Mur n : etage.getMurs()) {
                 if (!m.equals(n))
-                    if (!removed.contains(n) && areDouble(m, n))
+                    if (!removed.contains(m) && !removed.contains(n) && areDouble(m, n))
                         removed.add(n);
 
             }
         }
-        etage.getMurs().removeAll(removed);
+
+        for (Mur m : removed) {
+            etage.removeMur(m);
+            m.setA(null);
+            m.setB(null);
+        }
 
     }
 

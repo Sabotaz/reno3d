@@ -33,6 +33,7 @@ public class Etage {
     public void addMur(Mur mur) {
         this.murs.add(mur);
         mur.setEtage(this);
+
         this.modelGraph.getRoot().add(mur);
     }
 

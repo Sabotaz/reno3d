@@ -33,18 +33,4 @@ public enum OrientationEnum {
                 return this.next.next.next;
         }
     }
-
-    public OrientationEnum unwrapX(float dx, float dy) {
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0)
-                return this.next.next;
-            else
-                return this;
-        } else {
-            if (dy > 0)
-                return this.next.next.next;
-            else
-                return this.next;
-        }
-    }
 }

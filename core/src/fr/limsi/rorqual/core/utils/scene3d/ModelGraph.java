@@ -32,7 +32,9 @@ public class ModelGraph {
     }
 
     public void draw(ModelBatch modelBatch, Environment environment){
-        root.draw(modelBatch, environment);
+        synchronized (this) {
+            root.draw(modelBatch, environment);
+        }
     }
 
     public ModelContainer getObject(int screenX, int screenY) {
@@ -79,7 +81,9 @@ public class ModelGraph {
     }
 
     public void act() {
-        root.act();
+        synchronized (this) {
+            root.act();
+        }
     }
 
 }
