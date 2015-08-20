@@ -161,6 +161,8 @@ public class PieceMaker extends ModelMaker {
 
         fixConflicts();
 
+        murs[0] = murs[1] = murs[2] = murs[3] = null;
+
     }
 
     private void fixConflicts() {
@@ -281,7 +283,7 @@ public class PieceMaker extends ModelMaker {
         for (Mur mur: murs)
             ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(slab);
-
+        murs[0] = murs[1] = murs[2] = murs[3] = null;
         making_piece = false;
 
     }
@@ -289,9 +291,11 @@ public class PieceMaker extends ModelMaker {
 
     private Anchor calculateAnchor(Vector2 intersection) {
         // anchor
-        float anchor_length = 1f;
         ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
-        List<Mur> forbidden = Arrays.asList(this.murs);
+        ArrayList<Mur> forbidden = new ArrayList<Mur>();
+        for (Mur m : this.murs)
+            if (m != null)
+                forbidden.add(m);
         ArrayList<Anchor> coins = new ArrayList<Anchor>();
 
         ArrayList<Coin> c = new ArrayList<Coin>();
@@ -341,16 +345,79 @@ public class PieceMaker extends ModelMaker {
                 }
             }
         }
-        
+
+        ArrayList<Anchor> grid_align = new ArrayList<Anchor>();
+
+        Vector2 p0 = intersection.cpy();
+        Vector2 p1 = intersection.cpy();
+        Vector2 p2 = intersection.cpy();
+        Vector2 p3 = intersection.cpy();
+
+        float scale = 10;
+        p0.x = (float) Math.ceil(p0.x   *scale)/scale;
+        p0.y = (float) Math.ceil(p0.y   *scale)/scale;
+
+        p1.x = (float) Math.ceil(p1.x   *scale)/scale;
+        p1.y = (float) Math.floor(p1.y  *scale)/scale;
+
+        p2.x = (float) Math.floor(p2.x  *scale)/scale;
+        p2.y = (float) Math.ceil(p2.y   *scale)/scale;
+
+        p3.x = (float) Math.floor(p3.x  *scale)/scale;
+        p3.y = (float) Math.floor(p3.y  *scale)/scale;
+
+        grid_align.add(new Anchor(Coin.getCoin(p0)));
+        grid_align.add(new Anchor(Coin.getCoin(p1)));
+        grid_align.add(new Anchor(Coin.getCoin(p2)));
+        grid_align.add(new Anchor(Coin.getCoin(p3)));
+
+        ArrayList<Anchor> grid_align2 = new ArrayList<Anchor>();
+
+        p0 = intersection.cpy();
+        p1 = intersection.cpy();
+        p2 = intersection.cpy();
+        p3 = intersection.cpy();
+
+        scale = 1;
+        p0.x = (float) Math.ceil(p0.x   *scale)/scale;
+        p0.y = (float) Math.ceil(p0.y   *scale)/scale;
+
+        p1.x = (float) Math.ceil(p1.x   *scale)/scale;
+        p1.y = (float) Math.floor(p1.y  *scale)/scale;
+
+        p2.x = (float) Math.floor(p2.x  *scale)/scale;
+        p2.y = (float) Math.ceil(p2.y   *scale)/scale;
+
+        p3.x = (float) Math.floor(p3.x  *scale)/scale;
+        p3.y = (float) Math.floor(p3.y  *scale)/scale;
+
+        grid_align2.add(new Anchor(Coin.getCoin(p0)));
+        grid_align2.add(new Anchor(Coin.getCoin(p1)));
+        grid_align2.add(new Anchor(Coin.getCoin(p2)));
+        grid_align2.add(new Anchor(Coin.getCoin(p3)));
+
         // last is higher priority
-        Object prior_anchors[] =  new Object[]{coins_align, double_coins_align, coins} ;
+        final float GRID_ANCHOR_LENGTH = .1f;
+        final float GRID2_ANCHOR_LENGTH = .2f;
+        final float ALIGN_ANCHOR_LENGTH = .5f;
+        final float DOUBLE_ALIGN_ANCHOR_LENGTH = 1f;
+        final float COINS_ANCHOR_LENGTH = 1f;
+        Object prior_anchors[][] =  new Object[][]{
+                {grid_align,            GRID_ANCHOR_LENGTH},
+                {grid_align2,           GRID2_ANCHOR_LENGTH},
+                {coins_align,           ALIGN_ANCHOR_LENGTH},
+                {double_coins_align,    DOUBLE_ALIGN_ANCHOR_LENGTH},
+                {coins,                 COINS_ANCHOR_LENGTH}
+        } ;
 
         // return best one
         Anchor anchor = null;
 
-        for (Object obj : prior_anchors) {
+        for (Object obj[] : prior_anchors) {
             float dist = -1;
-            ArrayList<Anchor> anchors = (ArrayList<Anchor>) obj;
+            ArrayList<Anchor> anchors = (ArrayList<Anchor>) obj[0];
+            float anchor_length = (float) obj[1];
+
             for (Anchor a : anchors) {
                 float d = intersection.dst(a.getPt().getPosition());
                 if (d < anchor_length && (d <= dist || dist == -1)) {

@@ -115,6 +115,7 @@ public class Logic implements InputProcessor {
     @Override
     public boolean touchUp(final int screenX, final int screenY, int pointer, int button) {
         if (modelMaker != null) {
+            timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {

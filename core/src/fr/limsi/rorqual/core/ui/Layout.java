@@ -277,11 +277,11 @@ public class Layout {
                     Cell c = table.add(child);
                     c.expandX().fillX().left();
 
+                    c.pad(json_child.getFloat("pad", 1));
                     c.padTop(json_child.getFloat("padTop", 1));
                     c.padBottom(json_child.getFloat("padBottom", 1));
                     c.padLeft(json_child.getFloat("padLeft", 1));
                     c.padRight(json_child.getFloat("padRight", 1));
-                    c.pad(json_child.getFloat("pad", 1));
 
                     if (row)
                         c.left().row();
@@ -356,11 +356,11 @@ public class Layout {
 
                     c.size(child.getWidth(), child.getHeight());
 
+                        c.pad(json_child.getFloat("pad", 1));
                         c.padTop(json_child.getFloat("padTop", 1));
                         c.padBottom(json_child.getFloat("padBottom", 1));
                         c.padLeft(json_child.getFloat("padLeft", 1));
                         c.padRight(json_child.getFloat("padRight", 1));
-                        c.pad(json_child.getFloat("pad", 1));
 
                     if (row)
                         c.left().row();
