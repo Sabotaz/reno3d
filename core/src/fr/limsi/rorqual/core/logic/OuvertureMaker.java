@@ -32,6 +32,11 @@ public class OuvertureMaker extends ModelMaker {
     Ouverture ouverture;
     boolean making_ouverture = false;
 
+    @Override
+    public boolean isStarted() {
+        return this.making_ouverture;
+    }
+
     public void begin(int screenX, int screenY) {
 
         ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();

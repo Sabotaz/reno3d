@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
@@ -90,16 +93,35 @@ public class Logic implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (modelMaker != null) {
-            modelMaker.begin(screenX, screenY);
+            if (modelMaker.isStarted())
+                timer.cancel();
+            else
+                modelMaker.begin(screenX, screenY);
             return true;
         }
         return false;
     }
 
+    TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+
+        }
+    };
+
+
+    Timer timer = new Timer();
+
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    public boolean touchUp(final int screenX, final int screenY, int pointer, int button) {
         if (modelMaker != null) {
-            modelMaker.end(screenX, screenY);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    modelMaker.end(screenX, screenY);
+                }
+            }, 20L // 20ms ?
+            );
             return true;
         }
         return false;

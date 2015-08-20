@@ -18,4 +18,6 @@ public abstract class ModelMaker {
 
     public abstract void abort();
 
+    public abstract boolean isStarted();
+
 }

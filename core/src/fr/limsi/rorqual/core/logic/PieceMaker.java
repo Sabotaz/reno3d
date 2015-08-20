@@ -357,5 +357,8 @@ public class PieceMaker extends ModelMaker {
         return anchor;
     }
 
-
+    @Override
+    public boolean isStarted() {
+        return this.making_piece;
+    }
 }

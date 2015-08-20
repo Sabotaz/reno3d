@@ -30,6 +30,11 @@ public class WallMaker extends ModelMaker {
     Cote cote;
     Anchor anchor = null;
 
+    @Override
+    public boolean isStarted() {
+        return this.making_wall;
+    }
+
     public void begin(int screenX, int screenY) {
 
         Vector2 intersection;
