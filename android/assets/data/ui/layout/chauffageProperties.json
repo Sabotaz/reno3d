@@ -696,21 +696,21 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date < 1990)",
+                  "label": "Accumulateur gaz classique (date < 1991)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1990"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date comprise entre 1990 et 2000)",
+                  "label": "Accumulateur gaz classique (date comprise entre 1991 et 2002)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1990_2000"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1991_2002"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date > 2000)",
+                  "label": "Accumulateur gaz classique (date > 2003)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2000"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2003"
                 },
                 {
                   "type": "CheckBox",

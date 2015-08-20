@@ -103,6 +103,8 @@ public class Chauffage {
     public Chauffage(Generateur generateur) {
         this.generateur=generateur;
         this.emission = Emission.RADIATEUR;
+        this.generateurDansVolumeChauffe=false;
+        this.presenceRobinetThermostatique=false;
         this.actualiseType();
         this.actualiseRd();
         this.actualiseRr();
@@ -110,8 +112,6 @@ public class Chauffage {
         this.actualiseRg();
         this.prs1=0;
         this.pn=0;
-        this.generateurDansVolumeChauffe=false;
-        this.presenceRobinetThermostatique=false;
         this.pn=0;
         this.rpint=0;
         this.qp0=0;
@@ -280,25 +280,25 @@ public class Chauffage {
                 this.rpn=79+2*Math.log(pn);
                 this.rpint=73+3*Math.log(pn);
                 this.qp0=0.04*pn;
-                this.puissanceVeilleuse=240;
+                this.puissanceVeilleuse=0.24;
                 break;
             case CHAUDIERE_GAZ_CLASSIQUE_ENTRE_1981_ET_1986:
                 this.rpn=82+2*Math.log(pn);
                 this.rpint=76+3*Math.log(pn);
                 this.qp0=0.02*pn;
-                this.puissanceVeilleuse=150;
+                this.puissanceVeilleuse=0.15;
                 break;
             case CHAUDIERE_GAZ_CLASSIQUE_ENTRE_1986_ET_1991:
                 this.rpn=83+2*Math.log(pn);
                 this.rpint=79+3*Math.log(pn);
                 this.qp0=0.015*pn;
-                this.puissanceVeilleuse=150;
+                this.puissanceVeilleuse=0.15;
                 break;
             case CHAUDIERE_GAZ_STANDARD_ENTRE_1991_ET_2001:
                 this.rpn=84+2*Math.log(pn);
                 this.rpint=80+3*Math.log(pn);
                 this.qp0=0.012*pn;
-                this.puissanceVeilleuse=120;
+                this.puissanceVeilleuse=0.12;
                 break;
             case CHAUDIERE_GAZ_STANDARD_APRES_2001:
                 this.rpn=84+2*Math.log(pn);
@@ -310,7 +310,7 @@ public class Chauffage {
                 this.rpn=87.5+1.5*Math.log(pn);
                 this.rpint=87.5+1.5*Math.log(pn);
                 this.qp0=0.012*pn;
-                this.puissanceVeilleuse=120;
+                this.puissanceVeilleuse=0.12;
                 break;
             case CHAUDIERE_GAZ_BASSE_TEMPERATURE_APRES_2001:
                 this.rpn=87.5+1.5*Math.log(pn);
@@ -322,13 +322,13 @@ public class Chauffage {
                 this.rpn=91+1*Math.log(pn);
                 this.rpint=97+1*Math.log(pn);
                 this.qp0=0.01*pn;
-                this.puissanceVeilleuse=150;
+                this.puissanceVeilleuse=0.15;
                 break;
             case CHAUDIERE_GAZ_CONDENSATION_ENTRE_1986_ET_2001:
                 this.rpn=91+1*Math.log(pn);
                 this.rpint=97+1*Math.log(pn);
                 this.qp0=0.01*pn;
-                this.puissanceVeilleuse=120;
+                this.puissanceVeilleuse=0.12;
                 break;
             case CHAUDIERE_GAZ_CONDENSATION_APRES_2001:
                 this.rpn=91+1*Math.log(pn);

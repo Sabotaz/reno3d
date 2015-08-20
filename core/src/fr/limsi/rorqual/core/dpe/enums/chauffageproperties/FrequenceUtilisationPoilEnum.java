@@ -13,4 +13,5 @@ public enum FrequenceUtilisationPoilEnum {
     FrequenceUtilisationPoilEnum(double k){
         this.k=k;
     }
+    public double getFrequence(){ return this.k; }
 }
