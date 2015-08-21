@@ -55,8 +55,10 @@ public class ModelContainer extends ActableModel {
     }
 
     public void act() {
-        for (ModelContainer c : children) {
-            c.act();
+        synchronized (this) {
+            for (ModelContainer c : children) {
+                c.act();
+            }
         }
     }
 
@@ -76,7 +78,7 @@ public class ModelContainer extends ActableModel {
     }
 
     public void add(ModelContainer child) {
-        synchronized (this.root) {
+        synchronized (this) {
             child.remove();
             children.add(child);
             child.setParent(this);
@@ -97,7 +99,7 @@ public class ModelContainer extends ActableModel {
     }
 
     public void remove(ModelContainer child) {
-        synchronized (this.root) {
+        synchronized (this) {
             if (children.contains(child))
                 children.remove(child);
             child.parent = null;
@@ -136,7 +138,9 @@ public class ModelContainer extends ActableModel {
     }
 
     public void draw(ModelBatch modelBatch, Environment environment){
-        draw(modelBatch, environment, new Matrix4());
+        synchronized (this) {
+            draw(modelBatch, environment, new Matrix4());
+        }
     }
 
     public Matrix4 getFullTransform() {

@@ -13,6 +13,7 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
  */
 public class Etage {
     private ArrayList<Mur> murs = new ArrayList<Mur>();
+    private ArrayList<Slab> slabs = new ArrayList<Slab>();
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
     private HashMap<Object, ModelContainer> containerHashMap = new HashMap<Object, ModelContainer>();
     private int number;
@@ -41,6 +42,21 @@ public class Etage {
         this.murs.remove(mur);
         this.modelGraph.getRoot().remove(mur);
         mur.setEtage(null);
+    }
+
+    public void addSlab(Slab slab) {
+        this.slabs.add(slab);
+
+        this.modelGraph.getRoot().add(slab);
+    }
+
+    public void removeSlab(Slab slab) {
+        this.slabs.remove(slab);
+        this.modelGraph.getRoot().remove(slab);
+    }
+
+    public ArrayList<Slab> getSlabs() {
+        return slabs;
     }
 
     public void addOuverture(Ouverture ouverture) {
