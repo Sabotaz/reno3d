@@ -52,7 +52,9 @@ public class MainUiControleur implements EventListener {
 
     public void removeTb() {
         if (tb != null)
-            tb.remove();
+            synchronized (stage) {
+                tb.remove();
+            }
     }
 
     public void addTb(Actor actor) {
@@ -87,6 +89,7 @@ public class MainUiControleur implements EventListener {
 
                 } else if (items.get("eventRequest") == EventRequest.UPDATE_STATE) {
                     ButtonValue lastValue = (ButtonValue) items.get("lastValue");
+                    Button button = (Button) items.get("button");
                     switch (lastValue) {
                         case EXIT:
                             Gdx.app.exit();
@@ -96,37 +99,55 @@ public class MainUiControleur implements EventListener {
                             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case MUR:
-                            if (((Button) items.get("button")).isChecked())
+                            if (button.isChecked()) {
                                 Logic.getInstance().startWall();
+                                removeTb();
+                            }
                             else
                                 Logic.getInstance().stop();
                             break;
                         case PIECE:
-                            if (((Button) items.get("button")).isChecked())
+                            if (button.isChecked()) {
                                 Logic.getInstance().startPiece();
+                                removeTb();
+                            }
                             else
                                 Logic.getInstance().stop();
                             break;
                         case FENETRE:
-                            if (((Button) items.get("button")).isChecked())
+                            if (button.isChecked()) {
                                 Logic.getInstance().startFenetre();
+                                removeTb();
+                            }
                             else
                                 Logic.getInstance().stop();
                             break;
                         case PORTE:
-                            if (((Button) items.get("button")).isChecked())
+                            if (button.isChecked()) {
+                                removeTb();
                                 Logic.getInstance().startPorte();
+                            }
                             else
                                 Logic.getInstance().stop();
                             break;
                         case DPE:
-                            addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES));
+                            if (button.isChecked())
+                                addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES));
+                            else
+                                removeTb();
                             break;
                         case CHAUFFAGE:
-                            addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
+                            if (button.isChecked())
+                                addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
+                            else
+                                Logic.getInstance().stop();
                             break;
                         case MENUISERIE:
-                            addTb(ModelLibrary.getInstance().getTabWindow("Menuiserie"));
+                            if (button.isChecked())
+                                addTb(ModelLibrary.getInstance().getTabWindow("Menuiserie"));
+                            else
+                                Logic.getInstance().stop();
+                            break;
                         default:
                             System.out.println(lastValue);
                     }

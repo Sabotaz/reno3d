@@ -350,9 +350,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
         if (!dragged) {
-
             mainUiControleur.removeTb();
             if (selected != null) {
                 selected.removeColor();
@@ -374,19 +372,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         return false;
     }
 
+    int DRAG_EPSILON = 5;
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        dragged = true;
-        int diffX = screenX - last_screenX;
-        int diffY = screenY - last_screenY;
-        Camera camera = CameraEngine.getInstance().getCurrentCamera();
-        if (camera instanceof OrthographicCamera) {
-            OrthographicCamera oc = (OrthographicCamera) camera;
-            oc.translate(-diffX * oc.zoom, diffY * oc.zoom, 0);
-            last_screenX = screenX;
-            last_screenY = screenY;
-            return true;
-        }
+        if (Math.abs(screenX - last_screenX) > DRAG_EPSILON || Math.abs(screenY - last_screenY) > DRAG_EPSILON )
+            dragged = true;
         return false;
     }
 
