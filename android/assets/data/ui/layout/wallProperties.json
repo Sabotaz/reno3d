@@ -49,6 +49,12 @@
                   "label": "Une véranda non chauffée",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Un mur interieur",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_INTERIEUR"
                 }
               ]
             }

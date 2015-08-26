@@ -47,10 +47,12 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private float height;
     private float width;
     private float depth;
-    private TypeMurEnum typeMurEnum = TypeMurEnum.INCONNUE;
-    private TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
-    private DateIsolationMurEnum dateIsolationMur = DateIsolationMurEnum.JAMAIS;
-    private OrientationEnum orientationMur = OrientationEnum.INCONNUE;
+    private double surface;
+    private TypeMurEnum typeMur;
+    private TypeIsolationMurEnum typeIsolationMur;
+    private DateIsolationMurEnum dateIsolationMur;
+    private OrientationEnum orientationMur;
+    private double coeffTransmissionThermique;
     private Slab slabGauche = null;
     private Slab slabDroit = null;
 
@@ -81,6 +83,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.height = h;
         this.depth = d;
         this.width = b.getPosition().cpy().sub(a.getPosition()).len();
+        this.surface=this.height*this.width;
+        this.typeMur=TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
+        this.typeIsolationMur=TypeIsolationMurEnum.NON_ISOLE;
+        this.dateIsolationMur=DateIsolationMurEnum.JAMAIS;
+        this.orientationMur=OrientationEnum.NORD;
         materialLayersMaterials.add(MaterialTypeEnum.BRIQUE);
         materialLayersMaterials.add(MaterialTypeEnum.PIERRE);
     }
@@ -180,12 +187,12 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         setChanged();
     }
 
-    public TypeMurEnum getTypeMurEnum() {
-        return typeMurEnum;
+    public TypeMurEnum getTypeMur() {
+        return typeMur;
     }
 
-    public void setTypeMurEnum(TypeMurEnum typeMurEnum) {
-        this.typeMurEnum = typeMurEnum;
+    public void setTypeMur(TypeMurEnum typeMur) {
+        this.typeMur = typeMur;
     }
 
     public TypeIsolationMurEnum getTypeIsolationMurEnum() {
@@ -208,6 +215,14 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         return orientationMur;
     }
 
+    public double getCoeffTransmissionThermique() {
+        return coeffTransmissionThermique;
+    }
+
+    public void setCoeffTransmissionThermique(double newCoeff) {
+        this.coeffTransmissionThermique=newCoeff;
+    }
+
     public void setOrientationMur(OrientationEnum orientationMur) {
         this.orientationMur = orientationMur;
         float dx = B.getPosition().x - A.getPosition().x;
@@ -220,6 +235,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
         this.orientationMur = orientationMur.wrapX(dx, dy);
+    }
+
+    public double getSurface(){
+        return this.surface;
     }
 
     public ArrayList<Coin> getAnchors(Vector3 pt, float depth) {
@@ -378,9 +397,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.slabGauche = slab_gauche;
 
         if (isInterieur())
-            this.typeMurEnum = TypeMurEnum.MUR_INTERIEUR;
-        else if (this.typeMurEnum == TypeMurEnum.MUR_INTERIEUR)
-            this.typeMurEnum = TypeMurEnum.INCONNUE;
+            this.typeMur = TypeMurEnum.MUR_INTERIEUR;
+        else if (this.typeMur == TypeMurEnum.MUR_INTERIEUR)
+            this.typeMur = TypeMurEnum.INCONNUE;
     }
 
     public Slab getSlabDroit() {
@@ -391,9 +410,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.slabDroit = slab_droit;
 
         if (isInterieur())
-            this.typeMurEnum = TypeMurEnum.MUR_INTERIEUR;
-        else if (this.typeMurEnum == TypeMurEnum.MUR_INTERIEUR)
-            this.typeMurEnum = TypeMurEnum.INCONNUE;
+            this.typeMur = TypeMurEnum.MUR_INTERIEUR;
+        else if (this.typeMur == TypeMurEnum.MUR_INTERIEUR)
+            this.typeMur = TypeMurEnum.INCONNUE;
     }
 
     public boolean isInterieur() {

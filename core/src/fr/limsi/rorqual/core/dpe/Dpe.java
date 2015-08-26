@@ -54,6 +54,72 @@ public class Dpe implements EventListener {
     private double renouvellementAir;
     private double tInt;
     private double sDep;
+    public void actualiseDeperditionMur(Mur mur){
+        if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
+
+        }else{
+            mur.setCoeffTransmissionThermique(2);
+        }
+        switch (mur.getTypeMur()){
+            case INCONNUE:
+            case MUR_DONNANT_SUR_EXTERIEUR:
+                this.dpMur += mur.getSurface()*mur.getCoeffTransmissionThermique();
+                break;
+            case MUR_DONNANT_SUR_UNE_AUTRE_HABITATION:
+                this.dpMur += 0.2*mur.getSurface()*mur.getCoeffTransmissionThermique();
+                break;
+            case MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE:
+                switch (mur.getOrientationMur()){
+                    case INCONNUE:
+                    case NORD:
+                        switch(mur.getDateIsolationMurEnum()){
+                            case INCONNUE:
+                            case JAMAIS:
+                                // Non isolé
+                                this.dpMur += 0.95*mur.getSurface()*mur.getCoeffTransmissionThermique();
+                                break;
+                            default:
+                                // isolé
+                                this.dpMur += 0.85*mur.getSurface()*mur.getCoeffTransmissionThermique();
+                                break;
+                        }
+                        break;
+                    case EST:
+                    case OUEST:
+                        switch(mur.getDateIsolationMurEnum()){
+                            case INCONNUE:
+                            case JAMAIS:
+                                // Non isolé
+                                this.dpMur += 0.63*mur.getSurface()*mur.getCoeffTransmissionThermique();
+                                break;
+                            default:
+                                // isolé
+                                this.dpMur += 0.6*mur.getSurface()*mur.getCoeffTransmissionThermique();
+                                break;
+                        }
+                        break;
+                    case SUD:
+                        switch(mur.getDateIsolationMurEnum()){
+                            case INCONNUE:
+                            case JAMAIS:
+                                // Non isolé
+                                this.dpMur += 0.6*mur.getSurface()*mur.getCoeffTransmissionThermique();
+                                break;
+                            default:
+                                // isolé
+                                this.dpMur += 0.55*mur.getSurface()*mur.getCoeffTransmissionThermique();
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE:
+                break;
+            default:
+                // On ne fait rien (mur intérieur ou mur donnant sur une véranda chauffée
+                break;
+        }
+    }
 
     // 2.6.Calcul de f : on cherche à minimiser x donc à minimiser aS et aI et à maximiser GV et DHcor
     private double x=0.017; //TODO : trouver le x défavorable en faisant plusieurs simulations ...
@@ -1200,7 +1266,6 @@ public class Dpe implements EventListener {
                 Object o = e.getUserObject();
                 switch (event) {
                     case TYPE_BATIMENT: {
-
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         Layout layout = (Layout) items.get("layout");
@@ -2342,10 +2407,7 @@ public class Dpe implements EventListener {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
                             }
                         } else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeMurEnum type = null;
-                            if (walls_properties.containsKey(mur))
-                                if (walls_properties.get(mur).containsKey(DpeEvent.TYPE_MUR))
-                                    type = (TypeMurEnum) walls_properties.get(mur).get(DpeEvent.TYPE_MUR);
+                            TypeMurEnum type = mur.getTypeMur();
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2420,10 +2482,7 @@ public class Dpe implements EventListener {
                                 walls_properties.put(mur, new HashMap<EventType, Object>());
                             walls_properties.get(mur).put(event, orientationMur);
                         } else if (eventRequest == EventRequest.GET_STATE) {
-                            OrientationEnum type = null;
-                            if (walls_properties.containsKey(mur))
-                                if (walls_properties.get(mur).containsKey(DpeEvent.ORIENTATION_MUR))
-                                    type = (OrientationEnum) walls_properties.get(mur).get(DpeEvent.ORIENTATION_MUR);
+                            OrientationEnum type = mur.getOrientationMur();
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2531,7 +2590,6 @@ public class Dpe implements EventListener {
                                 Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
-
                         }
                         else if (items.get("userObject") instanceof Porte){
                             Porte porte = (Porte)items.get("userObject");
@@ -2629,7 +2687,6 @@ public class Dpe implements EventListener {
                                 Event e2 = new Event(DpeEvent.MASQUE_PROCHE_MENUISERIE, currentItems);
                                 EventManager.getInstance().put(Channel.DPE, e2);
                             }
-
                         }
                         else if (items.get("userObject") instanceof Porte){
                             Porte porte = (Porte)items.get("userObject");

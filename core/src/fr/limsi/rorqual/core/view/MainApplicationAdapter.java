@@ -240,9 +240,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     @Override
 	public void render () {
         act();
-
         modelBatch.begin(CameraEngine.getInstance().getCurrentCamera());
-
         Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
