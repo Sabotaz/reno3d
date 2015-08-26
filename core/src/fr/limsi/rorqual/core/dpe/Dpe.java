@@ -2478,6 +2478,7 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             OrientationEnum orientationMur = (OrientationEnum) items.get("lastValue");
+                            mur.setOrientationMur(orientationMur);
                             if (!walls_properties.containsKey(mur))
                                 walls_properties.put(mur, new HashMap<EventType, Object>());
                             walls_properties.get(mur).put(event, orientationMur);
