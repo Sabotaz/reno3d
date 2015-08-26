@@ -25,7 +25,7 @@ public class Batiment {
     public void setCurrentEtage(Etage e) {
         current = e;
         if (!etages.contains(e))
-            etages.add(e);
+            addEtage(e);
     }
 
     public Etage getCurrentEtage() {
