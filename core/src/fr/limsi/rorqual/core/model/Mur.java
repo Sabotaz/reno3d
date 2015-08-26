@@ -370,6 +370,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setSlabGauche(Slab slab_gauche) {
         this.slabGauche = slab_gauche;
+
+        if (isInterieur())
+            this.typeMurEnum = TypeMurEnum.MUR_INTERIEUR;
+        else if (this.typeMurEnum == TypeMurEnum.MUR_INTERIEUR)
+            this.typeMurEnum = TypeMurEnum.INCONNUE;
     }
 
     public Slab getSlabDroit() {
@@ -378,6 +383,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setSlabDroit(Slab slab_droit) {
         this.slabDroit = slab_droit;
+
+        if (isInterieur())
+            this.typeMurEnum = TypeMurEnum.MUR_INTERIEUR;
+        else if (this.typeMurEnum == TypeMurEnum.MUR_INTERIEUR)
+            this.typeMurEnum = TypeMurEnum.INCONNUE;
     }
 
     public boolean isInterieur() {
