@@ -95,7 +95,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     boolean areMaterialSet = false;
 
     private void makeMaterials() {
-
         if (materialLayersMaterials.size() > 0) {
             Texture texture1_diff = materialLayersMaterials.get(0).getDiffuse();
             Texture texture1_norm = materialLayersMaterials.get(0).getNormal();
@@ -302,11 +301,12 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void act() {
         super.act();
+
+        if (!areMaterialSet)
+            makeMaterials();
+
         if (!changed)
             return;
-
-        if (areMaterialSet)
-            makeMaterials();
 
         makeMesh();
         changed = false;
