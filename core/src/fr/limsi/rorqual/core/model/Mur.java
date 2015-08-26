@@ -83,8 +83,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.width = b.getPosition().cpy().sub(a.getPosition()).len();
         materialLayersMaterials.add(MaterialTypeEnum.BRIQUE);
         materialLayersMaterials.add(MaterialTypeEnum.PIERRE);
-        makeMaterials();
     }
+
+    boolean areMaterialSet = false;
 
     private void makeMaterials() {
 
@@ -117,6 +118,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             frontMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
             backMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
         }
+
+        areMaterialSet = true;
     }
 
     public void setEtage(Etage e) {
@@ -265,6 +268,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         for (Ouverture o : ouvertures) {
             csg = csg.difference(o.getCSG());
         }
+
+        if (areMaterialSet)
+            makeMaterials();
 
         Model model = CSGUtils.toModel(csg, frontMaterial, backMaterial);
 
