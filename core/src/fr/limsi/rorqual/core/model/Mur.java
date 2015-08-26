@@ -29,10 +29,8 @@ import java.util.List;
 
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
-import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.CSGUtils;
-import fr.limsi.rorqual.core.utils.scene3d.ActableModel;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 
@@ -53,8 +51,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private TypeIsolationMurEnum typeIsolationMur = TypeIsolationMurEnum.NON_ISOLE;
     private DateIsolationMurEnum dateIsolationMur = DateIsolationMurEnum.JAMAIS;
     private OrientationEnum orientationMur = OrientationEnum.INCONNUE;
-    private Slab slab1 = null;
-    private Slab slab2 = null;
+    private Slab slabGauche = null;
+    private Slab slabDroit = null;
 
     private ArrayList<MaterialTypeEnum> materialLayersMaterials = new ArrayList<MaterialTypeEnum>();
 
@@ -366,23 +364,23 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         }
     }
 
-    public Slab getSlab1() {
-        return slab1;
+    public Slab getSlabGauche() {
+        return slabGauche;
     }
 
-    public void setSlab1(Slab slab1) {
-        this.slab1 = slab1;
+    public void setSlabGauche(Slab slab_gauche) {
+        this.slabGauche = slab_gauche;
     }
 
-    public Slab getSlab2() {
-        return slab2;
+    public Slab getSlabDroit() {
+        return slabDroit;
     }
 
-    public void setSlab2(Slab slab2) {
-        this.slab2 = slab2;
+    public void setSlabDroit(Slab slab_droit) {
+        this.slabDroit = slab_droit;
     }
 
     public boolean isInterieur() {
-        return (slab1 != null && slab2 != null);
+        return (slabGauche != null && slabDroit != null);
     }
 }

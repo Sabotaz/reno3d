@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
@@ -68,7 +67,7 @@ public class PieceMaker extends ModelMaker {
             ArrayList<Vector3> coins = new ArrayList<Vector3>();
             slab = new Slab(null);
             for (Mur mur : murs) {
-                mur.setSlab1(slab);
+                mur.setSlabGauche(slab);
             }
             slab.setSelectable(false);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(slab);
@@ -190,8 +189,10 @@ public class PieceMaker extends ModelMaker {
         for (Mur m : etage.getMurs()) {
             for (Mur n : etage.getMurs()) {
                 if (!m.equals(n))
-                    if (!removed.contains(m) && !removed.contains(n) && areDouble(m, n))
+                    if (!removed.contains(m) && !removed.contains(n) && areDouble(m, n)) {
+                        fixSlabs(m, n);
                         removed.add(n);
+                    }
 
             }
         }
@@ -202,6 +203,23 @@ public class PieceMaker extends ModelMaker {
             m.setB(null);
         }
 
+    }
+
+    private void fixSlabs(Mur restant, Mur removed) {
+        Slab slabGauche = removed.getSlabGauche();
+        Slab slabDroit = removed.getSlabDroit();
+
+        if (restant.getA() == removed.getA() && restant.getB() == removed.getB()) { // meme sense
+            if (slabGauche != null)
+                restant.setSlabGauche(slabGauche);
+            if (slabDroit != null)
+                restant.setSlabDroit(slabDroit);
+        } else { // sens inverse
+            if (slabDroit != null)
+                restant.setSlabGauche(slabDroit);
+            if (slabGauche != null)
+                restant.setSlabDroit(slabGauche);
+        }
     }
 
     ArrayList<Mur> extraWalls = new ArrayList<Mur>();
@@ -223,13 +241,16 @@ public class PieceMaker extends ModelMaker {
         Vector2 b1 = m1.getB().getPosition();
         Vector2 a2 = m2.getA().getPosition();
         Vector2 b2 = m2.getB().getPosition();
+        Mur extra;
         if (m1.getA() != m2.getA() && m1.getB() != m2.getA() && Intersector.distanceSegmentPoint(a1, b1, a2) < EPSILON) {
             // m2.A est entre m1.A et m1.B
             Coin A = m1.getA();
             Coin B = m1.getB();
             Coin C = m2.getA();
             m1.setB(C); // AC
-            Mur extra = new Mur(C, B); // CB
+            extra = new Mur(C, B); // CB
+            extra.setSlabGauche(m1.getSlabGauche());
+            extra.setSlabDroit(m1.getSlabDroit());
             extraWalls.add(extra);
         } else
         if (m1.getA() != m2.getB() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a1, b1, b2) < EPSILON) {
@@ -238,7 +259,9 @@ public class PieceMaker extends ModelMaker {
             Coin B = m1.getB();
             Coin C = m2.getB();
             m1.setB(C); // AC
-            Mur extra = new Mur(C, B); // CB
+            extra = new Mur(C, B); // CB
+            extra.setSlabGauche(m1.getSlabGauche());
+            extra.setSlabDroit(m1.getSlabDroit());
             extraWalls.add(extra);
         } else
         if (m1.getA() != m2.getA() && m1.getA() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, a1) < EPSILON) {
@@ -247,16 +270,20 @@ public class PieceMaker extends ModelMaker {
             Coin B = m2.getB();
             Coin C = m1.getA();
             m2.setB(C); // AC
-            Mur extra = new Mur(C, B); // CB
+            extra = new Mur(C, B); // CB
+            extra.setSlabGauche(m2.getSlabGauche());
+            extra.setSlabDroit(m2.getSlabDroit());
             extraWalls.add(extra);
-        }
+        } else
         if (m1.getB() != m2.getA() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, b1) < EPSILON) {
             // m1.B est entre m2.A et m2.B
             Coin A = m2.getA();
             Coin B = m2.getB();
             Coin C = m1.getB();
             m2.setB(C); // AC
-            Mur extra = new Mur(C, B); // CB
+            extra = new Mur(C, B); // CB
+            extra.setSlabGauche(m2.getSlabGauche());
+            extra.setSlabDroit(m2.getSlabDroit());
             extraWalls.add(extra);
         }
 
