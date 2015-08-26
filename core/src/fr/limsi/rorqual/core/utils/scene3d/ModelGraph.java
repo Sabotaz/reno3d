@@ -31,9 +31,9 @@ public class ModelGraph {
         root.root = this;
     }
 
-    public void draw(ModelBatch modelBatch, Environment environment){
+    public void draw(ModelBatch modelBatch, Environment environment, ModelContainer.Type type){
         synchronized (this) {
-            root.draw(modelBatch, environment);
+            root.draw(modelBatch, environment, type);
         }
     }
 

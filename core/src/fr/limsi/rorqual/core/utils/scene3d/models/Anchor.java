@@ -122,9 +122,9 @@ public class Anchor extends ModelContainer {
     }
 
     @Override
-    protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
+    protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
         Gdx.gl.glLineWidth(2);
-        super.draw(modelBatch, environment, global_transform);
+        super.draw(modelBatch, environment, type, global_transform);
     }
 
 }

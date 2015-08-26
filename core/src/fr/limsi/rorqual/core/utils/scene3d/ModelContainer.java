@@ -31,6 +31,13 @@ public class ModelContainer extends ActableModel {
     private Object userData;
     private HashMap<String,Object> modelData = new HashMap<String, Object>();
 
+    private Type type = Type.OPAQUE;
+
+    public enum Type {
+        OPAQUE,
+        TRANSPARENT;
+    }
+
     public ModelContainer() {
     }
 
@@ -60,6 +67,10 @@ public class ModelContainer extends ActableModel {
                 c.act();
             }
         }
+    }
+
+    public void setType(Type t) {
+        type = t;
     }
 
     public void setShaderProgram(Shader s) {
@@ -137,9 +148,9 @@ public class ModelContainer extends ActableModel {
         }
     }
 
-    public void draw(ModelBatch modelBatch, Environment environment){
+    public void draw(ModelBatch modelBatch, Environment environment, Type type){
         synchronized (this) {
-            draw(modelBatch, environment, new Matrix4());
+            draw(modelBatch, environment, type, new Matrix4());
         }
     }
 
@@ -165,7 +176,7 @@ public class ModelContainer extends ActableModel {
         return visible;
     }
 
-    protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
+    protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
         if (isVisible()) {
             // update mx
             Matrix4 updated_global_transform = global_transform.cpy().mul(local_transform);
@@ -173,15 +184,16 @@ public class ModelContainer extends ActableModel {
             // update model mx
             world_transform = updated_global_transform.cpy().mul(model_transform);
             // draw
-            modelBatch.render(this, environment);
+            if (this.type == type)
+                modelBatch.render(this, environment);
 
-            drawChildren(modelBatch, environment, updated_global_transform);
+            drawChildren(modelBatch, environment, type, updated_global_transform);
         }
     }
 
-    protected void drawChildren(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
+    protected void drawChildren(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
         for (ModelContainer child : children) {
-            child.draw(modelBatch, environment, global_transform);
+            child.draw(modelBatch, environment, type, global_transform);
         }
     }
 

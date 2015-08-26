@@ -23,7 +23,10 @@ public class Floor {
     public static ModelContainer getModel() {
         if (model == null)
             makeModel();
-        return new ModelContainer(model);
+        ModelContainer container = new ModelContainer(model);
+        container.setType(ModelContainer.Type.TRANSPARENT);
+
+        return container;
     }
 
     public static void makeModel() {
@@ -46,7 +49,7 @@ public class Floor {
 
         MeshPartBuilder meshBuilder = modelBuilder.part("part1", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, material);
         meshBuilder.setUVRange(-10,-10,10,10);
-        meshBuilder.rect(-100, -100, 0, 100, -100, 0, 100,100,0, -100,100, 0,0,0,1);
+        meshBuilder.rect(-100, -100, 0.01f, 100, -100, 0.01f, 100,100,0.01f, -100,100, 0.01f,0,0,1);
 
         model = modelBuilder.end();
     }

@@ -299,7 +299,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void addOuverture(Ouverture o) {
         ouvertures.add(o);
         this.add(o);
-        etage.addOuverture(o);
+        if (etage != null)
+            etage.addOuverture(o);
         setChanged();
     }
 

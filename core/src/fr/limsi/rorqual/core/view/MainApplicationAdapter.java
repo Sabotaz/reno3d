@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
@@ -43,7 +42,6 @@ import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
-import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
@@ -54,11 +52,9 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
 import fr.limsi.rorqual.core.model.IfcHolder;
-import fr.limsi.rorqual.core.utils.SceneGraphMaker;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
-import ifc2x3javatoolbox.ifc2x3tc1.DOUBLE;
 
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
@@ -76,7 +72,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private DpeUi dpeui;
     private DpeStateUpdater state;
     private Model model;
-    private ModelBatch modelBatch;
+    private ModelBatch modelBatchOpaque;
+    private ModelBatch modelBatchTransparent;
     private ModelInstance modelInstance;
     private AssetManager assets;
     private Viewport viewport;
@@ -117,7 +114,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         modelGraph = new ModelGraph();
         modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
 
-        modelBatch = new ModelBatch(shaderProvider);
+        modelBatchOpaque = new ModelBatch(shaderProvider);
+        modelBatchTransparent = new ModelBatch(shaderProvider);
 
         stageMenu = new Stage();
 //        stageMenu.setDebugAll(true);
@@ -177,7 +175,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** test affichage fenetre ***/
         // A ModelBatch is like a SpriteBatch, just for models.  Use it to batch up geometry for OpenGL
-        //modelBatch = new ModelBatch();
+        //modelBatchOpaque = new ModelBatch();
         // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
         // Create a model loader passing in our json reader
@@ -240,25 +238,39 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     @Override
 	public void render () {
         act();
-        modelBatch.begin(CameraEngine.getInstance().getCurrentCamera());
+        modelBatchOpaque.begin(CameraEngine.getInstance().getCurrentCamera());
         Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
+
+        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
+        Gdx.gl.glDepthMask(true);
+
+        //modelGraph.draw(modelBatchOpaque, environnement);
+        ModelHolder.getInstance().getBatiment().draw(modelBatchOpaque, environnement, ModelContainer.Type.OPAQUE);
+
+        modelBatchOpaque.end();
+
+        modelBatchTransparent.begin(CameraEngine.getInstance().getCurrentCamera());
+
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
+
+        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
+        Gdx.gl.glDepthMask(false);
+
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
 
-        //modelGraph.draw(modelBatch, environnement);
-        ModelHolder.getInstance().getBatiment().draw(modelBatch, environnement);
+        ModelHolder.getInstance().getBatiment().draw(modelBatchTransparent, environnement, ModelContainer.Type.TRANSPARENT);
 
-        modelBatch.end();
+        modelBatchTransparent.end();
 
         //Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
         synchronized (stageMenu) {
             stageMenu.draw();
         }
-
-        Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
     }
 
     @Override

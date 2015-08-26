@@ -116,18 +116,19 @@ public class Batiment {
         heightChanged();
     }
 
-    public void draw(ModelBatch modelBatch, Environment environnement) {
+    public void draw(ModelBatch modelBatch, Environment environnement, ModelContainer.Type type) {
         for (int i = etages.getMin(); i <= current; i++) {
             Etage etage = etages.get(i);
-            etage.getModelGraph().draw(modelBatch, environnement);
+            etage.getModelGraph().draw(modelBatch, environnement, type);
         }
     }
 
-    public void drawAll(ModelBatch modelBatch, Environment environnement) {
+    public void drawAll(ModelBatch modelBatch, Environment environnement, ModelContainer.Type type) {
         for (Etage etage : etages.list()) {
-            etage.getModelGraph().draw(modelBatch, environnement);
+            etage.getModelGraph().draw(modelBatch, environnement, type);
         }
     }
+
     public void heightChanged() {
         float height = 0;
         for (int i = 0; i <= etages.getMax(); i++) { // up

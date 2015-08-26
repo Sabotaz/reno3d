@@ -44,6 +44,7 @@ public class Cote extends ModelContainer {
         super();
         cotable = c;
         this.setSelectable(false);
+        this.setType(Type.TRANSPARENT);
     }
 
     public void act() {
@@ -165,8 +166,8 @@ public class Cote extends ModelContainer {
     }
 
     @Override
-    protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform){
+    protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
         Gdx.gl.glLineWidth(5);
-        super.draw(modelBatch, environment, global_transform);
+        super.draw(modelBatch, environment, type, global_transform);
     }
 }

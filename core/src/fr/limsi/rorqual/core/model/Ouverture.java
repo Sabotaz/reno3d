@@ -40,6 +40,7 @@ public abstract class Ouverture extends ModelContainer {
         this.width=width;
         this.height=height;
         this.surface=width*height;
+        this.setType(Type.TRANSPARENT);
     }
 
     // Getter & Setter
@@ -157,8 +158,8 @@ public abstract class Ouverture extends ModelContainer {
     }
 
     @Override
-    protected void draw(ModelBatch modelBatch, Environment environment, Matrix4 global_transform) {
-        super.draw(modelBatch, environment, global_transform);
+    protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform) {
+        super.draw(modelBatch, environment, type, global_transform);
 
     }
 
