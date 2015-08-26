@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import java.util.HashMap;
 
@@ -17,6 +18,7 @@ import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.ModelHolder;
 
 /**
@@ -90,6 +92,7 @@ public class MainUiControleur implements EventListener {
                 } else if (items.get("eventRequest") == EventRequest.UPDATE_STATE) {
                     ButtonValue lastValue = (ButtonValue) items.get("lastValue");
                     Button button = (Button) items.get("button");
+                    Layout layout = (Layout) items.get("layout");
                     switch (lastValue) {
                         case EXIT:
                             Gdx.app.exit();
@@ -147,6 +150,14 @@ public class MainUiControleur implements EventListener {
                                 addTb(ModelLibrary.getInstance().getTabWindow("Menuiserie"));
                             else
                                 Logic.getInstance().stop();
+                            break;
+                        case ETAGE_PLUS:
+                            ModelHolder.getInstance().getBatiment().etageSuperieur();
+                            ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
+                            break;
+                        case ETAGE_MINUS:
+                            ModelHolder.getInstance().getBatiment().etageInferieur();
+                            ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                             break;
                         default:
                             System.out.println(lastValue);

@@ -40,11 +40,9 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 public class Mur extends ModelContainer implements Cote.Cotable {
 
     public final static float DEFAULT_DEPTH = 0.2f;
-    public final static float DEFAULT_HEIGHT = 2.8f;
 
     private Coin A;
     private Coin B;
-    private float height;
     private float width;
     private float depth;
     private double surface;
@@ -67,23 +65,18 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private boolean changed = true;
 
     public Mur(Coin a, Coin b) {
-        this(a, b, DEFAULT_DEPTH, DEFAULT_HEIGHT);
+        this(a, b, DEFAULT_DEPTH);
     }
 
     public Mur(Coin a, Coin b, float d) {
-        this(a, b, d, DEFAULT_HEIGHT);
-    }
-
-    public Mur(Coin a, Coin b, float d, float h) {
         super();
         this.A = a;
         this.B = b;
         A.addMur(this);
         B.addMur(this);
-        this.height = h;
         this.depth = d;
         this.width = b.getPosition().cpy().sub(a.getPosition()).len();
-        this.surface=this.height*this.width;
+        this.surface = Etage.DEFAULT_HEIGHT * this.width;
         this.typeMur=TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
         this.typeIsolationMur=TypeIsolationMurEnum.NON_ISOLE;
         this.dateIsolationMur=DateIsolationMurEnum.JAMAIS;
@@ -130,15 +123,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setEtage(Etage e) {
         etage = e;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
-        setChanged();
     }
 
     public float getWidth() {
@@ -227,7 +211,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
         // What is the orientation of X ?
-        this.etage.getBatiment().setOrientation(orientationMur.wrapX(dx,dy));
+        this.etage.getBatiment().setOrientation(orientationMur.wrapX(dx, dy));
     }
 
     public void setGlobalOrientation(OrientationEnum orientationMur) {
@@ -255,7 +239,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private void makeMesh() {
         if (A == null || B == null || B.getPosition().equals(A.getPosition()))
             return;
-        Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
+        Vector3 z_shape = Vector3.Z.cpy().scl(etage != null ? etage.getHeight() : Etage.DEFAULT_HEIGHT);
         Vector3 positive_offset = Vector3.X.cpy().setLength(this.depth / 2);
         Vector3 negative_offset = Vector3.X.cpy().setLength(this.depth / 2).scl(-1);
         Vector3 p1 = Vector3.Zero.cpy();
@@ -317,6 +301,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.add(o);
         etage.addOuverture(o);
         setChanged();
+    }
+
+    public ArrayList<Ouverture> getOuvertures() {
+        return ouvertures;
     }
 
     public void removeOuverture(Ouverture o) {

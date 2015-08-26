@@ -40,6 +40,7 @@ public class WallMaker extends ModelMaker {
         Vector2 intersection;
 
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj == null) {
             making_wall = false;
@@ -47,13 +48,13 @@ public class WallMaker extends ModelMaker {
         } else {
             intersection = new MyVector2(obj.getIntersection());
 
-            Anchor a = calculateAnchor(intersection);
+            Anchor a = calculateAnchor(etage, intersection);
 
             if (a != null) {
                 start = a.getPt();
                 anchor = a;
             } else {
-                start = Coin.getCoin(intersection);
+                start = Coin.getCoin(etage, intersection);
                 anchor = null;
             }
 
@@ -79,11 +80,12 @@ public class WallMaker extends ModelMaker {
             return;
 
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj != null) {
             Vector2 intersection = new MyVector2(obj.getIntersection());
 
-            Anchor a = calculateAnchor(intersection);
+            Anchor a = calculateAnchor(etage, intersection);
 
             if (a != null) {
                 Coin end = a.getPt();
@@ -98,7 +100,7 @@ public class WallMaker extends ModelMaker {
                 }
             } else {
                 Vector2 pos = intersection.cpy();
-                mur.setB(Coin.getCoin(pos));
+                mur.setB(Coin.getCoin(etage, pos));
                 if (anchor != null) {
                     ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
                     anchor = null;
@@ -145,7 +147,7 @@ public class WallMaker extends ModelMaker {
 
     float EPSILON = 0.000_001f;
 
-    private Anchor calculateAnchor(Vector2 intersection) {
+    private Anchor calculateAnchor(int etage, Vector2 intersection) {
         // anchor
         float anchor_length = 1f;
         ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
@@ -163,11 +165,11 @@ public class WallMaker extends ModelMaker {
         for (Anchor a : anchors) {
             Vector2 projx = intersection.cpy();
             projx.x = a.getPt().getPosition().x;
-            alignments.add(new Anchor(Coin.getCoin(projx)));
+            alignments.add(new Anchor(Coin.getCoin(etage, projx)));
             // add the projection on Y
             Vector2 projy = intersection.cpy();
             projy.y = a.getPt().getPosition().y;
-            alignments.add(new Anchor(Coin.getCoin(projy)));
+            alignments.add(new Anchor(Coin.getCoin(etage, projy)));
         }
 
         // double-anchor-aligned drawing
@@ -180,12 +182,12 @@ public class WallMaker extends ModelMaker {
                         Vector2 projxy = intersection.cpy();
                         projxy.x = a.getPt().getPosition().x;
                         projxy.y = b.getPt().getPosition().y;
-                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+                        alignments.add(new Anchor(Coin.getCoin(etage, projxy)));
 
                         Vector2 projyx = intersection.cpy();
                         projxy.y = a.getPt().getPosition().y;
                         projxy.x = b.getPt().getPosition().x;
-                        alignments.add(new Anchor(Coin.getCoin(projxy)));
+                        alignments.add(new Anchor(Coin.getCoin(etage, projxy)));
                     }
                 }
             }
@@ -203,6 +205,11 @@ public class WallMaker extends ModelMaker {
                 anchor = a;
             }
         }
+
+        if (anchor != null && anchor.getPt().getEtage() != etage) { // anchoring in a wrong stage
+            anchor = new Anchor(Coin.getCoin(etage, anchor.getPt().getPosition()));
+        }
+
         return anchor;
     }
 

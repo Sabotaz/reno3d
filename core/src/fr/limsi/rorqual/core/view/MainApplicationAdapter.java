@@ -105,7 +105,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
 
         ModelHolder.getInstance().setBatiment(new Batiment());
-        ModelHolder.getInstance().getBatiment().setCurrentEtage(new Etage());
+        //ModelHolder.getInstance().getBatiment().setCurrentEtage(new Etage());
 
         //viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera1);
 
@@ -139,8 +139,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //modelGraph.getRoot().add(popup);
 
         //modelGraph.getRoot().add(popup);
-        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
-        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
+        //ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
+        ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
 
         //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
@@ -249,8 +249,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
 
         //modelGraph.draw(modelBatch, environnement);
-
-        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().draw(modelBatch, environnement);
+        ModelHolder.getInstance().getBatiment().draw(modelBatch, environnement);
 
         modelBatch.end();
 
@@ -296,7 +295,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             case Input.Keys.C:
                 ncam++;
                 modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
-                ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
+                ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                 return true;
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();

@@ -15,5 +15,5 @@ public enum ButtonValue {
     ECS,
     ELECTROMENAGER,
     MENUISERIE,
-    ;
+    ETAGE_PLUS, ETAGE_MINUS;
 }

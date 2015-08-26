@@ -11,6 +11,7 @@ import java.util.Iterator;
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
@@ -31,10 +32,10 @@ public class PieceMaker extends ModelMaker {
     Anchor anchor = null;
 
     public void begin(int screenX, int screenY) {
-
         Vector2 intersection;
 
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj == null) {
             making_piece = false;
@@ -42,13 +43,13 @@ public class PieceMaker extends ModelMaker {
         } else {
             intersection = new MyVector2(obj.getIntersection());
 
-            Anchor a = calculateAnchor(intersection);
+            Anchor a = calculateAnchor(etage, intersection);
 
             if (a != null) {
                 start = a.getPt();
                 anchor = a;
             } else {
-                start = Coin.getCoin(intersection);
+                start = Coin.getCoin(etage, intersection);
                 anchor = null;
             }
 
@@ -88,11 +89,12 @@ public class PieceMaker extends ModelMaker {
             return;
 
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj != null) {
             Vector2 intersection = new MyVector2(obj.getIntersection());
 
-            Anchor a = calculateAnchor(intersection);
+            Anchor a = calculateAnchor(etage, intersection);
 
             if (a != null) {
                 end = a.getPt();
@@ -105,7 +107,7 @@ public class PieceMaker extends ModelMaker {
                     ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(anchor);
                 }
             } else {
-                end = Coin.getCoin(intersection.cpy());
+                end = Coin.getCoin(etage, intersection.cpy());
                 if (anchor != null) {
                     ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
                     anchor = null;
@@ -114,9 +116,9 @@ public class PieceMaker extends ModelMaker {
 
             Coin[] coins = new Coin[4];
             coins[0] = start;
-            coins[1] = Coin.getCoin(new Vector2(start.getPosition().x, end.getPosition().y));
+            coins[1] = Coin.getCoin(etage, new Vector2(start.getPosition().x, end.getPosition().y));
             coins[2] = end;
-            coins[3] = Coin.getCoin(new Vector2(end.getPosition().x, start.getPosition().y));;
+            coins[3] = Coin.getCoin(etage, new Vector2(end.getPosition().x, start.getPosition().y));;
 
             for (int i = 0; i < 4; i++) {
                 murs[i].setA(coins[i]);
@@ -190,7 +192,7 @@ public class PieceMaker extends ModelMaker {
             for (Mur n : etage.getMurs()) {
                 if (!m.equals(n))
                     if (!removed.contains(m) && !removed.contains(n) && areDouble(m, n)) {
-                        fixSlabs(m, n);
+                        fixDoubleWalls(m, n);
                         removed.add(n);
                     }
 
@@ -205,7 +207,7 @@ public class PieceMaker extends ModelMaker {
 
     }
 
-    private void fixSlabs(Mur restant, Mur removed) {
+    private void fixDoubleWalls(Mur restant, Mur removed) {
         Slab slabGauche = removed.getSlabGauche();
         Slab slabDroit = removed.getSlabDroit();
 
@@ -219,6 +221,16 @@ public class PieceMaker extends ModelMaker {
                 restant.setSlabGauche(slabDroit);
             if (slabGauche != null)
                 restant.setSlabDroit(slabGauche);
+        }
+
+        for (Ouverture o : removed.getOuvertures()) {
+            removed.removeOuverture(o);
+            if (restant.getA() == removed.getA() && restant.getB() == removed.getB()) { // meme sense
+                // nothing to do
+            } else {
+                o.getPosition().x = restant.getWidth()-o.getPosition().x;
+            }
+            restant.addOuverture(o);
         }
     }
 
@@ -236,6 +248,17 @@ public class PieceMaker extends ModelMaker {
 
     float EPSILON = 0.000_001f;
 
+    private void fixOuvertures (Mur m1, Mur extra) {
+        assert m1.getB().equals(extra.getA());
+        for (Ouverture o : m1.getOuvertures()) {
+            if (o.getPosition().x > m1.getWidth()) {
+                m1.removeOuverture(o);
+                o.getPosition().x = o.getPosition().x - m1.getWidth();
+                extra.addOuverture(o);
+            }
+        }
+    }
+
     private void fixConflicts(Mur m1, Mur m2) {
         Vector2 a1 = m1.getA().getPosition();
         Vector2 b1 = m1.getB().getPosition();
@@ -252,6 +275,8 @@ public class PieceMaker extends ModelMaker {
             extra.setSlabGauche(m1.getSlabGauche());
             extra.setSlabDroit(m1.getSlabDroit());
             extraWalls.add(extra);
+            fixOuvertures(m1, extra);
+
         } else
         if (m1.getA() != m2.getB() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a1, b1, b2) < EPSILON) {
             // m2.B est entre m1.A et m1.B
@@ -263,6 +288,7 @@ public class PieceMaker extends ModelMaker {
             extra.setSlabGauche(m1.getSlabGauche());
             extra.setSlabDroit(m1.getSlabDroit());
             extraWalls.add(extra);
+            fixOuvertures(m1, extra);
         } else
         if (m1.getA() != m2.getA() && m1.getA() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, a1) < EPSILON) {
             // m1.A est entre m2.A et m2.B
@@ -274,6 +300,7 @@ public class PieceMaker extends ModelMaker {
             extra.setSlabGauche(m2.getSlabGauche());
             extra.setSlabDroit(m2.getSlabDroit());
             extraWalls.add(extra);
+            fixOuvertures(m2, extra);
         } else
         if (m1.getB() != m2.getA() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, b1) < EPSILON) {
             // m1.B est entre m2.A et m2.B
@@ -285,6 +312,7 @@ public class PieceMaker extends ModelMaker {
             extra.setSlabGauche(m2.getSlabGauche());
             extra.setSlabDroit(m2.getSlabDroit());
             extraWalls.add(extra);
+            fixOuvertures(m2, extra);
         }
 
     }
@@ -316,9 +344,10 @@ public class PieceMaker extends ModelMaker {
     }
 
 
-    private Anchor calculateAnchor(Vector2 intersection) {
+    private Anchor calculateAnchor(int etage, Vector2 intersection) {
         // anchor
-        ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
+        ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getMurs();
+
         ArrayList<Mur> forbidden = new ArrayList<Mur>();
         for (Mur m : this.murs)
             if (m != null)
@@ -344,11 +373,11 @@ public class PieceMaker extends ModelMaker {
         for (Coin coin : c) {
             Vector2 projx = intersection.cpy();
             projx.x = coin.getPosition().x;
-            coins_align.add(new Anchor(Coin.getCoin(projx)));
+            coins_align.add(new Anchor(Coin.getCoin(etage, projx)));
             // add the projection on Y
             Vector2 projy = intersection.cpy();
             projy.y = coin.getPosition().y;
-            coins_align.add(new Anchor(Coin.getCoin(projy)));
+            coins_align.add(new Anchor(Coin.getCoin(etage, projy)));
         }
 
         ArrayList<Anchor> double_coins_align = new ArrayList<Anchor>();
@@ -362,12 +391,12 @@ public class PieceMaker extends ModelMaker {
                         Vector2 projxy = intersection.cpy();
                         projxy.x = c1.getPosition().x;
                         projxy.y = c2.getPosition().y;
-                        double_coins_align.add(new Anchor(Coin.getCoin(projxy)));
+                        double_coins_align.add(new Anchor(Coin.getCoin(etage, projxy)));
 
                         Vector2 projyx = intersection.cpy();
                         projyx.y = c1.getPosition().y;
                         projyx.x = c2.getPosition().x;
-                        double_coins_align.add(new Anchor(Coin.getCoin(projyx)));
+                        double_coins_align.add(new Anchor(Coin.getCoin(etage, projyx)));
                     }
                 }
             }
@@ -393,10 +422,10 @@ public class PieceMaker extends ModelMaker {
         p3.x = (float) Math.floor(p3.x  *scale)/scale;
         p3.y = (float) Math.floor(p3.y  *scale)/scale;
 
-        grid_align.add(new Anchor(Coin.getCoin(p0)));
-        grid_align.add(new Anchor(Coin.getCoin(p1)));
-        grid_align.add(new Anchor(Coin.getCoin(p2)));
-        grid_align.add(new Anchor(Coin.getCoin(p3)));
+        grid_align.add(new Anchor(Coin.getCoin(etage, p0)));
+        grid_align.add(new Anchor(Coin.getCoin(etage, p1)));
+        grid_align.add(new Anchor(Coin.getCoin(etage, p2)));
+        grid_align.add(new Anchor(Coin.getCoin(etage, p3)));
 
         ArrayList<Anchor> grid_align2 = new ArrayList<Anchor>();
 
@@ -418,10 +447,10 @@ public class PieceMaker extends ModelMaker {
         p3.x = (float) Math.floor(p3.x  *scale)/scale;
         p3.y = (float) Math.floor(p3.y  *scale)/scale;
 
-        grid_align2.add(new Anchor(Coin.getCoin(p0)));
-        grid_align2.add(new Anchor(Coin.getCoin(p1)));
-        grid_align2.add(new Anchor(Coin.getCoin(p2)));
-        grid_align2.add(new Anchor(Coin.getCoin(p3)));
+        grid_align2.add(new Anchor(Coin.getCoin(etage, p0)));
+        grid_align2.add(new Anchor(Coin.getCoin(etage, p1)));
+        grid_align2.add(new Anchor(Coin.getCoin(etage, p2)));
+        grid_align2.add(new Anchor(Coin.getCoin(etage, p3)));
 
         // last is higher priority
         final float GRID_ANCHOR_LENGTH = .1f;
@@ -453,6 +482,11 @@ public class PieceMaker extends ModelMaker {
                 }
             }
         }
+
+        if (anchor != null && anchor.getPt().getEtage() != etage) { // anchoring in a wrong stage
+            anchor = new Anchor(Coin.getCoin(etage, anchor.getPt().getPosition()));
+        }
+
         return anchor;
     }
 

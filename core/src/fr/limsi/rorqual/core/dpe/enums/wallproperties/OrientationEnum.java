@@ -13,10 +13,10 @@ public enum OrientationEnum {
     private OrientationEnum next;
 
     static {
-        NORD.next = EST;
-        EST.next = SUD;
-        SUD.next = OUEST;
-        OUEST.next = NORD;
+        NORD.next = OUEST;
+        OUEST.next = SUD;
+        SUD.next = EST;
+        EST.next = NORD;
         INCONNUE.next = INCONNUE;
     }
 

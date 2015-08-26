@@ -15,26 +15,35 @@ public class Etage {
     private ArrayList<Mur> murs = new ArrayList<Mur>();
     private ArrayList<Slab> slabs = new ArrayList<Slab>();
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
-    private HashMap<Object, ModelContainer> containerHashMap = new HashMap<Object, ModelContainer>();
     private int number;
     private Batiment batiment;
     private ModelGraph modelGraph = new ModelGraph();
 
-    {
-        ModelContainer floor = Floor.getModel();
-        containerHashMap.put(Floor.getModel(), floor);
-        //floor.setSelectable(false);
-        modelGraph.getRoot().add(floor);
-    }
+    public final static float DEFAULT_HEIGHT = 2.8f;
+
+    private float height = DEFAULT_HEIGHT;
 
     public ArrayList<Mur> getMurs() {
         return murs;
     }
 
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float h) {
+        height = h;
+        if (batiment != null)
+            batiment.heightChanged();
+        for (Mur m : murs) {
+            m.setChanged();
+        }
+    }
+
     public void addMur(Mur mur) {
         this.murs.add(mur);
         mur.setEtage(this);
-
+        mur.setGlobalOrientation(globalOrientation);
         this.modelGraph.getRoot().add(mur);
     }
 
@@ -90,7 +99,10 @@ public class Etage {
         this.batiment = batiment;
     }
 
+    private OrientationEnum globalOrientation = OrientationEnum.INCONNUE;
+
     public void setOrientation(OrientationEnum orientation) {
+        globalOrientation = orientation;
         for (Mur m : murs)
             m.setGlobalOrientation(orientation);
     }

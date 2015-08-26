@@ -29,6 +29,57 @@
     },
     {
       "type": "ButtonGroup",
+      "layout": "column",
+      "content": [
+        {
+          "type": "TextButton",
+          "text": "-",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_MINUS",
+          "height": 40,
+          "width": 40,
+          "padTop": 10,
+          "padRight": 0,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            null,
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "0",
+          "id": "currentEtage",
+          "height": 40,
+          "width": 40,
+          "padTop": 10,
+          "padRight": 0,
+          "style": [
+            "skin:uiskin.json:default-round",
+            null,
+            null,
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "+",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_PLUS",
+          "height": 40,
+          "width": 40,
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            null,
+            "default.fnt"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ButtonGroup",
       "content": [
         {
           "type": "TextButton",
