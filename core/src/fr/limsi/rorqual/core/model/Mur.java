@@ -288,9 +288,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             csg = csg.difference(o.getCSG());
         }
 
-        if (areMaterialSet)
-            makeMaterials();
-
         Model model = CSGUtils.toModel(csg, frontMaterial, backMaterial);
 
         this.setModel(model);
@@ -307,6 +304,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         super.act();
         if (!changed)
             return;
+
+        if (areMaterialSet)
+            makeMaterials();
+
         makeMesh();
         changed = false;
     }
