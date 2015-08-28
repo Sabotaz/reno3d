@@ -22,7 +22,9 @@ public class AssetManager {
     private AssetManager assetManager = null;
     private DefaultMutableTreeNode spatialStructureTreeNode = new DefaultMutableTreeNode("no model loaded");
 
-    private AssetManager() {}
+    private AssetManager() {
+
+    }
 
     /** Holder */
     private static class AssetManagerHolder
@@ -204,6 +206,19 @@ public class AssetManager {
         assets.put("default.fnt", font);
         assets.put("default.fnt.generator", generator);
 
+    }
+
+    public void dispose() {
+        for (Map.Entry<String, Object> entry : assets.entrySet()) {
+            if (entry.getValue() instanceof Texture)
+                ((Texture)entry.getValue()).dispose();
+            else if (entry.getValue() instanceof BitmapFont)
+                ((BitmapFont)entry.getValue()).dispose();
+            else if (entry.getValue() instanceof FreeTypeFontGenerator)
+                ((FreeTypeFontGenerator)entry.getValue()).dispose();
+            else if (entry.getValue() instanceof TextureAtlas)
+                ((TextureAtlas)entry.getValue()).dispose();
+        }
     }
 
     public Object get(String s) {

@@ -13,13 +13,21 @@ public class EventManager {
     private HashMap<Channel,BlockingQueue<Event>> eventQueues = new HashMap<Channel, BlockingQueue<Event>>();
     private HashMap<Channel,List<EventListener>> eventListeners = new HashMap<Channel,List<EventListener>>();
 
-    private boolean running = true;
+    private boolean running = false;
 
     public EventManager() {
         for (Channel c : Channel.values()) {
             eventQueues.put(c, new LinkedBlockingQueue<Event>());
             eventListeners.put(c, new ArrayList<EventListener>());
-            start(c);
+        }
+    }
+
+    public void start() {
+        if(!running) {
+            running = true;
+            for (Channel c : Channel.values()) {
+                start(c);
+            }
         }
     }
 
@@ -65,6 +73,7 @@ public class EventManager {
 
                     }
                 }
+                eventQueue.clear();
             }
         };
         t.start();

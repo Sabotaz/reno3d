@@ -26,14 +26,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -101,6 +105,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Thread t = new Thread() {
             public void run() {
                 load();
+
+                try {
+                    Thread.sleep(1_000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 loading_finished = true;
             }
         };
@@ -114,33 +125,53 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         stageMenu = new Stage();
         loadingStage = new Stage();
 
+        Stack stack = new Stack();
+        Container container = new Container();
+
         Image image = new Image(new Texture(Gdx.files.internal("data/img/loading.jpg")));
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("data/font/black.fnt")), Color.BLACK);
-        loadingLabel = new Label("loading", labelStyle);
-        loadingStage.addActor(image);
+        loadingLabel = new Label("loading...", labelStyle);
+        float img_ratio = image.getWidth() / image.getImageHeight();
+        float height = Gdx.graphics.getHeight();
+        float width = Gdx.graphics.getWidth();
+
+        image.setSize(height * img_ratio, height);
+        stack.setSize(width, height);
+
+        container.setActor(loadingLabel);
+        container.padTop(height/3);
+
+        stack.add(image);
+        stack.add(container);
+        loadingStage.addActor(stack);
+        //loadingStage.addActor(loadingLabel);
 
     }
 
+    private void setLoadingMessage(String msg) {
+        synchronized (loadingStage) {
+            loadingLabel.setText(msg);
+        }
+    }
+
     private void load() {
-
         long start = System.currentTimeMillis();
-        System.out.println("start init " + ((System.currentTimeMillis()-start)*0.001f));
+        System.out.println("start init " + ((System.currentTimeMillis() - start) * 0.001f));
 
-        AssetManager.getInstance().init();
-        System.out.println("assets ok " + ((System.currentTimeMillis()-start)*0.001f));
+        setLoadingMessage("Starting event manager...");
+        EventManager.getInstance().start();
+        System.out.println("event manager ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
-        /*** ??? ***/
-        DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
+        setLoadingMessage("Loading assets...");
+        assets = AssetManager.getInstance();
+        assets.init();
+        System.out.println("assets ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
+        setLoadingMessage("Loading building...");
         ModelHolder.getInstance().setBatiment(new Batiment());
-        System.out.println("batiment ok " + ((System.currentTimeMillis()-start)*0.001f));
-        //ModelHolder.getInstance().getBatiment().setCurrentEtage(new Etage());
+        System.out.println("batiment ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
-        //viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera1);
-
-        /*** Création d'un tableau de caméras ***/
-
-        /*** Chargement des shaders ***/
+        setLoadingMessage("Loading shader engine...");
         shaderProvider = new ShaderChooser();
         System.out.println("shaders ok " + ((System.currentTimeMillis()-start)*0.001f));
 
@@ -150,6 +181,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //System.out.println(stageMenu.getWidth());
 
         /*** Création des lumières ***/
+        setLoadingMessage("Loading environment...");
         environnement = new Environment();
         environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         light = new DirectionalLight();
@@ -161,17 +193,16 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         sun.setSelectable(false);
         sun.local_transform.setToTranslation(new Vector3(-200, 0, 0));
 
+        setLoadingMessage("Loading cameras...");
         ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
         System.out.println("current camera ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
-        state = new DpeStateUpdater(modelGraph);
-
-        dpe = new Dpe();
-
+        setLoadingMessage("Loading UI controler...");
         mainUiControleur = MainUiControleur.getInstance();
         mainUiControleur.setStage(stageMenu);
         System.out.println("main ui controleur ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
+        setLoadingMessage("Loading menu...");
         stageMenu.getRoot().addCaptureListener(
                 new InputListener() {
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -181,8 +212,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     }
                 });
 
+        System.out.println("stage menu ok " + ((System.currentTimeMillis() - start) * 0.001f));
         stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
-        System.out.println("stage menu ok " + ((System.currentTimeMillis()-start)*0.001f));
+        System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
+
+        setLoadingMessage("Initializing EE...");
+
+        state = new DpeStateUpdater(modelGraph);
+
+        dpe = new Dpe();
 
         double scoreDpe=dpe.getScoreDpe();
         skin = (Skin)AssetManager.getInstance().get("uiskin");
@@ -191,15 +229,20 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         lettreScore=new Label("F",skin);
         labelScore.setPosition(20, 0);
         stageMenu.addActor(lettreScore);
+        System.out.println("dpe ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
-        this.assets = AssetManager.getInstance();
+        setLoadingMessage("Loading models library...");
 
         ModelLibrary.getInstance();
-        System.out.println("models library ok " + ((System.currentTimeMillis()-start)*0.001f));
+        System.out.println("models library ok " + ((System.currentTimeMillis() - start) * 0.001f));
+
+        setLoadingMessage("Setting input processor...");
 
         /*** On autorise les inputs en entrée ***/
         Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
-        System.out.println("input processor ok " + ((System.currentTimeMillis()-start)*0.001f));
+        System.out.println("input processor ok " + ((System.currentTimeMillis() - start) * 0.001f));
+
+        setLoadingMessage("Done !");
     }
 
     public void act() {
@@ -235,7 +278,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     private void renderStartScreen() {
-        loadingStage.draw();
+        synchronized (loadingStage) {
+            loadingStage.draw();
+        }
     }
 
     @Override
@@ -290,6 +335,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     @Override
     public void dispose() {
         EventManager.getInstance().stop();
+        AssetManager.getInstance().dispose();
     }
 
     @Override
@@ -300,12 +346,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
