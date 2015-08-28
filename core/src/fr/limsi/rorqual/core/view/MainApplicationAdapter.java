@@ -5,10 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -62,6 +65,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private ShapeRenderer shape;
     private static ModelGraph modelGraph;
     private Stage stageMenu;
+    private Stage loadingStage;
     private Skin skin;
     private Button buttonDPE, buttonExit;
     private BitmapFont fontBlack;
@@ -87,22 +91,49 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private Label labelScore;
     private Label lettreScore;
 
+    private boolean loading_finished = false;
+
     @Override
 	public void create () {
-        shape = new ShapeRenderer();
 
-        /*** Chargement des boutons et des polices d'écriture ***/
-        fontBlack = new BitmapFont(Gdx.files.internal("data/font/black.fnt"));
-        fontWhite = new BitmapFont(Gdx.files.internal("data/font/white.fnt"));
-        skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle(skin.getDrawable("default-round"),skin.getDrawable("default-round-down"),null,fontBlack);
+        createLoadingStage();
+
+        Thread t = new Thread() {
+            public void run() {
+                load();
+                loading_finished = true;
+            }
+        };
+        t.start();
+
+	}
+
+    Label loadingLabel;
+    private void createLoadingStage() {
+
+        stageMenu = new Stage();
+        loadingStage = new Stage();
+
+        Image image = new Image(new Texture(Gdx.files.internal("data/img/loading.jpg")));
+        Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("data/font/black.fnt")), Color.BLACK);
+        loadingLabel = new Label("loading", labelStyle);
+        loadingStage.addActor(image);
+
+    }
+
+    private void load() {
+
+        long start = System.currentTimeMillis();
+        System.out.println("start init " + ((System.currentTimeMillis()-start)*0.001f));
 
         AssetManager.getInstance().init();
+        System.out.println("assets ok " + ((System.currentTimeMillis()-start)*0.001f));
 
         /*** ??? ***/
         DefaultMutableTreeNode spatialStructureTreeNode = IfcHolder.getInstance().getSpatialStructureTreeNode();
 
         ModelHolder.getInstance().setBatiment(new Batiment());
+        System.out.println("batiment ok " + ((System.currentTimeMillis()-start)*0.001f));
         //ModelHolder.getInstance().getBatiment().setCurrentEtage(new Etage());
 
         //viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera1);
@@ -111,14 +142,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** Chargement des shaders ***/
         shaderProvider = new ShaderChooser();
+        System.out.println("shaders ok " + ((System.currentTimeMillis()-start)*0.001f));
 
         modelGraph = new ModelGraph();
         modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
-
-        modelBatchOpaque = new ModelBatch(shaderProvider);
-        modelBatchTransparent = new ModelBatch(shaderProvider);
-
-        stageMenu = new Stage();
 //        stageMenu.setDebugAll(true);
         //System.out.println(stageMenu.getWidth());
 
@@ -128,23 +155,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light = new DirectionalLight();
         light.set(1f, 1f, 1f, 0f, 0f, 0f);
         environnement.add(light);
+        System.out.println("environnement ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         sun = new ModelContainer();
         sun.setSelectable(false);
         sun.local_transform.setToTranslation(new Vector3(-200, 0, 0));
 
-        //pin.local_transform.translate(5, 0, 5);
-
-        //modelGraph.getRoot().add(popup);
-
-        //modelGraph.getRoot().add(popup);
-        //ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
         ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
-
-        //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
-
-        /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
+        System.out.println("current camera ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         state = new DpeStateUpdater(modelGraph);
 
@@ -152,6 +170,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         mainUiControleur = MainUiControleur.getInstance();
         mainUiControleur.setStage(stageMenu);
+        System.out.println("main ui controleur ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         stageMenu.getRoot().addCaptureListener(
                 new InputListener() {
@@ -163,46 +182,25 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 });
 
         stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
-
-
+        System.out.println("stage menu ok " + ((System.currentTimeMillis()-start)*0.001f));
 
         double scoreDpe=dpe.getScoreDpe();
+        skin = (Skin)AssetManager.getInstance().get("uiskin");
         labelScore= new Label("("+Double.toString(scoreDpe)+")",skin);
         stageMenu.addActor(labelScore);
         lettreScore=new Label("F",skin);
-        labelScore.setPosition(20,0);
+        labelScore.setPosition(20, 0);
         stageMenu.addActor(lettreScore);
 
-
-        /*** test affichage fenetre ***/
-        // A ModelBatch is like a SpriteBatch, just for models.  Use it to batch up geometry for OpenGL
-        //modelBatchOpaque = new ModelBatch();
-        // Model loader needs a binary json reader to decode
-        UBJsonReader jsonReader = new UBJsonReader();
-        // Create a model loader passing in our json reader
-        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        // Now load the model by name
-        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         this.assets = AssetManager.getInstance();
- //       model = (Model)assets.get("modelWindowTest");
-        // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
- //       modelInstance = new ModelInstance(model);
-        //fbx-conv is supposed to perform this rotation for you... it doesnt seem to
-        //modelInstance.local_transform.rotate(1, 0, 0, -90);
-        //move the model down a bit on the screen ( in a z-up world, down is -z ).
- //       modelInstance.transform.translate(0, 0, 4);
-//        modelInstance.local_transform.scale(0.5f, 0.5f, 0.5f);
 
-        //shader = new BillboardShader();
-        //shader.init();
-        //program = shader.program;
-        //popup = new Popup(0,0,800,800);
-        /*Actor a = LayoutReader.readLayout("data/ui/layout/wallProperties.json");
-        a.setDebug(true);
-        a.setPosition(300, Gdx.graphics.getHeight() - 300);
-        stageMenu.addActor(a);*/
         ModelLibrary.getInstance();
-	}
+        System.out.println("models library ok " + ((System.currentTimeMillis()-start)*0.001f));
+
+        /*** On autorise les inputs en entrée ***/
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
+        System.out.println("input processor ok " + ((System.currentTimeMillis()-start)*0.001f));
+    }
 
     public void act() {
         update_cam();
@@ -236,9 +234,24 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().act();
     }
 
+    private void renderStartScreen() {
+        loadingStage.draw();
+    }
+
     @Override
 	public void render () {
+        if (!loading_finished) {
+            renderStartScreen();
+            return;
+        }
+
         act();
+
+        if (modelBatchOpaque == null)
+            modelBatchOpaque = new ModelBatch(shaderProvider);
+        if (modelBatchTransparent == null)
+            modelBatchTransparent = new ModelBatch(shaderProvider);
+
         modelBatchOpaque.begin(CameraEngine.getInstance().getCurrentCamera());
         Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -276,8 +289,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     @Override
     public void dispose() {
-        fontBlack.dispose();
-        fontWhite.dispose();
         EventManager.getInstance().stop();
     }
 

@@ -1,16 +1,21 @@
 package fr.limsi.rorqual.core.utils.scene3d.models;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.utils.Holder;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
@@ -31,26 +36,38 @@ public class Floor {
 
     public static void makeModel() {
 
-        Texture diffuse = (Texture)AssetManager.getInstance().get("grid");
+        final Holder holder = new Holder();
 
-        diffuse.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
 
-        TextureAttribute tad = TextureAttribute.createDiffuse(diffuse);
+                Texture diffuse = (Texture)AssetManager.getInstance().get("grid");
 
-        Material material = new Material();
-        material.set(tad);
+                diffuse.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
-        ModelBuilder modelBuilder = new ModelBuilder();
+                TextureAttribute tad = TextureAttribute.createDiffuse(diffuse);
 
-        modelBuilder.begin();
+                Material material = new Material();
+                material.set(tad);
 
-        Node node = modelBuilder.node();
-        node.id = "node1";
+                ModelBuilder modelBuilder = new ModelBuilder();
 
-        MeshPartBuilder meshBuilder = modelBuilder.part("part1", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, material);
-        meshBuilder.setUVRange(-10,-10,10,10);
-        meshBuilder.rect(-100, -100, 0.01f, 100, -100, 0.01f, 100,100,0.01f, -100,100, 0.01f,0,0,1);
+                modelBuilder.begin();
 
-        model = modelBuilder.end();
+                Node node = modelBuilder.node();
+                node.id = "node1";
+
+                MeshPartBuilder meshBuilder = modelBuilder.part("part1", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, material);
+                meshBuilder.setUVRange(-10,-10,10,10);
+                meshBuilder.rect(-100, -100, 0.01f, 100, -100, 0.01f, 100,100,0.01f, -100,100, 0.01f,0,0,1);
+
+                holder.set(modelBuilder.end());
+
+            }
+        };
+        Gdx.app.postRunnable(runnable);
+
+        model = (Model)holder.get();
     }
 }

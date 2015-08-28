@@ -1,6 +1,5 @@
 package fr.limsi.rorqual.core.utils;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,13 +7,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.UBJsonReader;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by christophe on 23/06/15.
@@ -40,54 +37,144 @@ public class AssetManager {
 
     HashMap<String, Object> assets = new HashMap<String, Object>();
 
+    private Object loadOnUi(String name, Class type) {
+        return loadOnUi(Gdx.files.internal(name), type);
+    }
+
+    private Object loadOnUi(HashMap<String, String> names, Class type) {
+        HashMap<String, FileHandle> files = new HashMap<String, FileHandle>();
+        for (Map.Entry<String, String> entry : names.entrySet()) {
+            files.put(entry.getKey(), Gdx.files.internal(entry.getValue()));
+        }
+        return loadFilesOnUi(files, type);
+    }
+
+    private Object loadFilesOnUi(final HashMap<String, FileHandle> files, final Class type) {
+        final Holder holder = new Holder();
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (type == Texture.class) {
+                    HashMap<String, Texture> map = new HashMap<String, Texture>();
+                    for (Map.Entry<String, FileHandle> entry : files.entrySet()) {
+                        map.put(entry.getKey(), new Texture(entry.getValue()));
+                    }
+                    holder.set(map);
+                }
+                else if (type == TextureAtlas.class) {
+                    HashMap<String, TextureAtlas> map = new HashMap<String, TextureAtlas>();
+                    for (Map.Entry<String, FileHandle> entry : files.entrySet()) {
+                        map.put(entry.getKey(), new TextureAtlas(entry.getValue()));
+                    }
+                    holder.set(map);
+                }
+                else if (type == Skin.class) {
+                    HashMap<String, Skin> map = new HashMap<String, Skin>();
+                    for (Map.Entry<String, FileHandle> entry : files.entrySet()) {
+                        map.put(entry.getKey(), new Skin(entry.getValue()));
+                    }
+                    holder.set(map);
+                }
+                else if (type == BitmapFont.class) {
+                    HashMap<String, BitmapFont> map = new HashMap<String, BitmapFont>();
+                    for (Map.Entry<String, FileHandle> entry : files.entrySet()) {
+                        map.put(entry.getKey(), new BitmapFont(entry.getValue()));
+                    }
+                    holder.set(map);
+                }
+            }
+        };
+
+        Gdx.app.postRunnable(runnable);
+
+        return holder.get();
+    }
+
+    private Object loadOnUi(final FileHandle file, final Class type) {
+        final Holder holder = new Holder();
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (type == Texture.class)
+                    holder.set(new Texture(file));
+                else if (type == TextureAtlas.class)
+                    holder.set(new TextureAtlas(file));
+                else if (type == Skin.class)
+                    holder.set(new Skin(file));
+                else if (type == BitmapFont.class)
+                    holder.set(new BitmapFont(file));
+            }
+        };
+        Gdx.app.postRunnable(runnable);
+
+        return holder.get();
+    }
+
+    private Object loadOnUi(final FreeTypeFontGenerator generator, final FreeTypeFontGenerator.FreeTypeFontParameter parameter) {
+
+        final Holder holder = new Holder();
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                holder.set(generator.generateFont(parameter));
+            }
+        };
+        Gdx.app.postRunnable(runnable);
+
+        return holder.get();
+    }
+
     public void init() {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/ui/ui_001.atlas"));
+        TextureAtlas atlas = (TextureAtlas)loadOnUi("data/ui/ui_001.atlas", TextureAtlas.class);
         assets.put("ui_001.atlas", atlas);
         TextureAtlas.AtlasRegion region = atlas.findRegion("ask");
-        System.out.println(atlas.getRegions().size);
-        System.out.println(atlas.getTextures().size);
         TextureRegionDrawable drawable = new TextureRegionDrawable(region);
 
         NinePatch patch = atlas.createPatch("ask");
         assets.put("ask", patch);
         assets.put("ask_texture", region.getTexture());
 
-        assets.put("bulle", new Texture(Gdx.files.internal("data/ui/bulle.png")));
+        assets.put("bulle", loadOnUi("data/ui/bulle.png", Texture.class));
 
-        assets.put("black.fnt", new BitmapFont(Gdx.files.internal("data/font/black.fnt")));
+        assets.put("black.fnt", loadOnUi("data/font/black.fnt", BitmapFont.class));
 
-        assets.put("uiskin", new Skin(Gdx.files.internal("data/ui/uiskin.json")));
-        assets.put("uiskin.json", new Skin(Gdx.files.internal("data/ui/uiskin.json")));
+        assets.put("uiskin", loadOnUi("data/ui/uiskin.json", Skin.class));
+        assets.put("uiskin.json", loadOnUi("data/ui/uiskin.json", Skin.class));
 
-        assets.put("textureStartDpe", new Texture(Gdx.files.internal("data/img/dpe/StartDpe.png")));
-        assets.put("textureTypeBatiment1", new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/maison.png")));
-        assets.put("textureTypeBatiment2", new Texture(Gdx.files.internal("data/img/dpe/TypeBatiment/appt.png")));
-        assets.put("textureNbNiveau1", new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/plainPied.png")));
-        assets.put("textureNbNiveau2", new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/plainPiedCa.png")));
-        assets.put("textureNbNiveau3", new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/r+1.png")));
-        assets.put("textureNbNiveau4", new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/r+1Ca.png")));
-        assets.put("textureNbNiveau5", new Texture(Gdx.files.internal("data/img/dpe/NbNiveaux/r+2.png")));
-        assets.put("textureForme1", new Texture(Gdx.files.internal("data/img/dpe/FormeMaison/carre.png")));
-        assets.put("textureForme2", new Texture(Gdx.files.internal("data/img/dpe/FormeMaison/allongee.png")));
-        assets.put("textureForme3", new Texture(Gdx.files.internal("data/img/dpe/FormeMaison/developpee.png")));
-        assets.put("textureMit1", new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/independante.png")));
-        assets.put("textureMit2", new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleePetitCote.png")));
-        assets.put("textureMit3", new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleeUnGrandOuDeuxPetits.png")));
-        assets.put("textureMit4", new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleeUnGrandEtUnPetit.png")));
-        assets.put("textureMit5", new Texture(Gdx.files.internal("data/img/dpe/Mitoyennete/accoleeDeuxGrandsCotes.png")));
-        assets.put("texturePosAppt1", new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/1erEtage.png")));
-        assets.put("texturePosAppt2", new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/etageInt.png")));
-        assets.put("texturePosAppt3", new Texture(Gdx.files.internal("data/img/dpe/PositionAppartement/dernierEtage.png")));
-        assets.put("textureWindowMateriauBois", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Materiaux/bois.png")));
-        assets.put("textureWindowMateriauMetallique", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Materiaux/metallique.png")));
-        assets.put("textureWindowMateriauPvc", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Materiaux/pvc.png")));
-        assets.put("textureWindowTypeBattante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/battante.png")));
-        assets.put("textureWindowTypeCoulissante", new Texture(Gdx.files.internal("data/img/dpe/Fenetre/Type/coulissante.png")));
-        assets.put("textureBoutonChauffage", new Texture(Gdx.files.internal("data/img/menuPrincipal/chauffage.jpeg")));
-        assets.put("textureOrientationNord", new Texture(Gdx.files.internal("data/img/dpe/Orientation/nord.png")));
-        assets.put("textureOrientationEst", new Texture(Gdx.files.internal("data/img/dpe/Orientation/est.png")));
-        assets.put("textureOrientationSud", new Texture(Gdx.files.internal("data/img/dpe/Orientation/sud.png")));
-        assets.put("textureOrientationOuest", new Texture(Gdx.files.internal("data/img/dpe/Orientation/ouest.png")));
+        HashMap<String, String> textures = new HashMap<String, String>();
+
+        textures.put("textureStartDpe", "data/img/dpe/StartDpe.png");
+        textures.put("textureTypeBatiment1", "data/img/dpe/TypeBatiment/maison.png");
+        textures.put("textureTypeBatiment2", "data/img/dpe/TypeBatiment/appt.png");
+        textures.put("textureNbNiveau1", "data/img/dpe/NbNiveaux/plainPied.png");
+        textures.put("textureNbNiveau2", "data/img/dpe/NbNiveaux/plainPiedCa.png");
+        textures.put("textureNbNiveau3", "data/img/dpe/NbNiveaux/r+1.png");
+        textures.put("textureNbNiveau4", "data/img/dpe/NbNiveaux/r+1Ca.png");
+        textures.put("textureNbNiveau5", "data/img/dpe/NbNiveaux/r+2.png");
+        textures.put("textureForme1", "data/img/dpe/FormeMaison/carre.png");
+        textures.put("textureForme2", "data/img/dpe/FormeMaison/allongee.png");
+        textures.put("textureForme3", "data/img/dpe/FormeMaison/developpee.png");
+        textures.put("textureMit1", "data/img/dpe/Mitoyennete/independante.png");
+        textures.put("textureMit2", "data/img/dpe/Mitoyennete/accoleePetitCote.png");
+        textures.put("textureMit3", "data/img/dpe/Mitoyennete/accoleeUnGrandOuDeuxPetits.png");
+        textures.put("textureMit4", "data/img/dpe/Mitoyennete/accoleeUnGrandEtUnPetit.png");
+        textures.put("textureMit5", "data/img/dpe/Mitoyennete/accoleeDeuxGrandsCotes.png");
+        textures.put("texturePosAppt1", "data/img/dpe/PositionAppartement/1erEtage.png");
+        textures.put("texturePosAppt2", "data/img/dpe/PositionAppartement/etageInt.png");
+        textures.put("texturePosAppt3", "data/img/dpe/PositionAppartement/dernierEtage.png");
+        textures.put("textureWindowMateriauBois", "data/img/dpe/Fenetre/Materiaux/bois.png");
+        textures.put("textureWindowMateriauMetallique", "data/img/dpe/Fenetre/Materiaux/metallique.png");
+        textures.put("textureWindowMateriauPvc", "data/img/dpe/Fenetre/Materiaux/pvc.png");
+        textures.put("textureWindowTypeBattante", "data/img/dpe/Fenetre/Type/battante.png");
+        textures.put("textureWindowTypeCoulissante", "data/img/dpe/Fenetre/Type/coulissante.png");
+        textures.put("textureBoutonChauffage", "data/img/menuPrincipal/chauffage.jpeg");
+        textures.put("textureOrientationNord", "data/img/dpe/Orientation/nord.png");
+        textures.put("textureOrientationEst", "data/img/dpe/Orientation/est.png");
+        textures.put("textureOrientationSud", "data/img/dpe/Orientation/sud.png");
+        textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
@@ -99,15 +186,20 @@ public class AssetManager {
         FileHandle file = Gdx.files.internal("data/textures/");
         if (file.isDirectory())
             for (FileHandle f : file.list()) {
-                assets.put(f.nameWithoutExtension(), new Texture(f));
+                textures.put(f.nameWithoutExtension(), f.path());
             }
+
+        assets.putAll((Map<String, Texture>)loadOnUi(textures, Texture.class));
 
         // fonts
         BitmapFont font;
+
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/FreeSans.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 14;
-        font = generator.generateFont(parameter); // font size 24*d pixels
+
+        font = (BitmapFont) loadOnUi(generator, parameter);
+
         //generator.dispose(); // don't forget to dispose to avoid memory leaks!
         assets.put("default.fnt", font);
         assets.put("default.fnt.generator", generator);
