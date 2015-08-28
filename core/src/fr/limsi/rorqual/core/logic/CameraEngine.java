@@ -5,6 +5,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 
 import fr.limsi.rorqual.core.view.CameraUpdater;
 import fr.limsi.rorqual.core.view.GyrometerCameraUpdater;
@@ -14,7 +16,7 @@ import fr.limsi.rorqual.core.view.PerspectiveCameraUpdater;
 /**
  * Created by christophe on 06/08/15.
  */
-public class CameraEngine implements InputProcessor {
+public class CameraEngine implements GestureDetector.GestureListener {
 
     private Cameras curent_camera = Cameras.PERSPECTIVE;
 
@@ -78,49 +80,48 @@ public class CameraEngine implements InputProcessor {
 
     public void updateViewport(int height, int width) {
         for (Cameras c : Cameras.values()) {
-            c.getCamera().viewportHeight = height;
-            c.getCamera().viewportWidth = width;
+            c.getCameraUpdater().updateViewport(height, width);
         }
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        return getCurrentCameraUpdater().keyDown(keycode);
+    public boolean touchDown(float x, float y, int pointer, int button) {
+        return getCurrentCameraUpdater().touchDown(x, y, pointer, button);
     }
 
     @Override
-    public boolean keyUp(int keycode) {
-        return getCurrentCameraUpdater().keyUp(keycode);
+    public boolean tap(float x, float y, int count, int button) {
+        return getCurrentCameraUpdater().tap(x, y, count, button);
     }
 
     @Override
-    public boolean keyTyped(char character) {
-        return getCurrentCameraUpdater().keyTyped(character);
+    public boolean longPress(float x, float y) {
+        return getCurrentCameraUpdater().longPress(x, y);
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return getCurrentCameraUpdater().touchDown(screenX, screenY, pointer, button);
+    public boolean fling(float velocityX, float velocityY, int button) {
+        return getCurrentCameraUpdater().fling(velocityX, velocityY, button);
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return getCurrentCameraUpdater().touchUp(screenX, screenY, pointer, button);
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
+        return getCurrentCameraUpdater().pan(x, y, deltaX, deltaY);
     }
 
     @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return getCurrentCameraUpdater().touchDragged(screenX, screenY, pointer);
+    public boolean panStop(float x, float y, int pointer, int button) {
+        return getCurrentCameraUpdater().panStop(x, y, pointer, button);
     }
 
     @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return getCurrentCameraUpdater().mouseMoved(screenX, screenY);
+    public boolean zoom(float initialDistance, float distance) {
+        return getCurrentCameraUpdater().zoom(initialDistance, distance);
     }
 
     @Override
-    public boolean scrolled(int amount) {
-        return getCurrentCameraUpdater().scrolled(amount);
+    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+        return getCurrentCameraUpdater().pinch(initialPointer1, initialPointer2, pointer1, pointer2);
     }
 
 }

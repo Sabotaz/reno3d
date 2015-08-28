@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -47,123 +49,18 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     protected void setCamera() {}
 
-    private enum Sense {
-        GAUCHE,
-        DROITE,
-        HAUT,
-        BAS,
-        AVANCER,
-        RECULER,
-        NONE;
-    }
-
-    private Sense camera_mov = Sense.NONE;
-
-    private boolean ctrl = false;
-
     public Camera getCamera() {
         return camera;
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.LEFT:
-                camera_mov = Sense.GAUCHE;
-                return true;
-            case Input.Keys.RIGHT:
-                camera_mov = Sense.DROITE;
-                return true;
-            case Input.Keys.UP:
-                camera_mov = Sense.AVANCER;
-                return true;
-            case Input.Keys.DOWN:
-                camera_mov = Sense.RECULER;
-                return true;
-            case Input.Keys.PLUS:
-                camera_mov = Sense.HAUT;
-                return true;
-            case Input.Keys.MINUS:
-                camera_mov = Sense.BAS;
-                return true;
-            case Input.Keys.CONTROL_LEFT:
-            case Input.Keys.CONTROL_RIGHT:
-                ctrl = true;
-                return true;
-        }
-        return false;
+    public void updateViewport(int height, int width) {
+        camera.viewportHeight = height;
+        camera.viewportWidth = width;
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        switch (keycode) {
-            //NinePatch patch = atlas.createPatch("wall");
-            case Input.Keys.LEFT:
-            case Input.Keys.RIGHT:
-            case Input.Keys.UP:
-            case Input.Keys.DOWN:
-            case Input.Keys.PLUS:
-            case Input.Keys.MINUS:
-                camera_mov = Sense.NONE;
-                return true;
-            case Input.Keys.CONTROL_LEFT:
-            case Input.Keys.CONTROL_RIGHT:
-                ctrl = false;
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    boolean dragged = false;
-    int last_screenX;
-    int last_screenY;
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        last_screenX = screenX;
-        last_screenY = screenY;
-        dragged = false;
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        dragged = true;
-        int diffX = screenX - last_screenX;
-        int diffY = screenY - last_screenY;
-
-        Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY,1)).sub(pos).nor();
-        Vector3 after = camera.unproject(new Vector3(screenX, screenY,1)).sub(pos).nor();
-        if (!before.isCollinear(after))
-            user_rotation.rotate(after.cpy().crs(before), -(float)(Math.acos(after.dot(before)) * 180. / Math.PI));
-
-        last_screenX = screenX;
-        last_screenY = screenY;
-        return true;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        camera.position.scl(1+amount/10f);
-        camera.update();
-        //pc.fieldOfView = pc.fieldOfView * (1+amount/10f);
-        return true;
-    }
+    int last_screenX = -1;
+    int last_screenY = -1;
 
     protected Vector3 pos = new Vector3();
     protected Matrix4 user_rotation = new Matrix4();
@@ -180,6 +77,92 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
         camera.view.set(mx);
         camera.update();
+    }
+
+    @Override
+    public boolean touchDown(float x, float y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean tap(float x, float y, int count, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean longPress(float x, float y) {
+        return false;
+    }
+
+    @Override
+    public boolean fling(float velocityX, float velocityY, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
+        if (last_screenX == -1 || last_screenY == -1) {
+            last_screenX = (int) x;
+            last_screenY = (int) y;
+        }
+
+        Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY, 1)).sub(pos).nor();
+        Vector3 after = camera.unproject(new Vector3(x, y, 1)).sub(pos).nor();
+        if (!before.isCollinear(after))
+            user_rotation.rotate(after.cpy().crs(before), -(float) (Math.acos(after.dot(before)) * 180. / Math.PI));
+
+        last_screenX = (int) x;
+        last_screenY = (int) y;
+        return true;
+
+    }
+
+    @Override
+    public boolean panStop(float x, float y, int pointer, int button) {
+        last_screenX = -1;
+        last_screenY = -1;
+        return true;
+    }
+
+    float zoomStart = 0;
+    float zoomLast = 0;
+
+    @Override
+    public boolean zoom(float initialDistance, float distance) {
+        if (zoomStart != initialDistance) { // new zoom !
+            zoomStart = initialDistance;
+            zoomLast = zoomStart;
+        }
+        // diff
+        float diff = distance - zoomLast;
+
+        avancer(diff);
+
+        // update last
+        zoomLast = distance;
+
+        return true;
+    }
+
+    @Override
+    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+        return false;
+    }
+
+    float ZOOM_RATIO = 0.05f;
+
+    private void avancer(float amount) {
+
+        Quaternion q = camera.view.cpy().inv().getRotation(new Quaternion());
+
+        Vector3 dir = Vector3.Z.cpy().mul(q);
+
+        dir.nor();
+        System.out.println(dir);
+        dir.scl(amount * ZOOM_RATIO);
+
+        pos.add(dir);
+
     }
 
 }

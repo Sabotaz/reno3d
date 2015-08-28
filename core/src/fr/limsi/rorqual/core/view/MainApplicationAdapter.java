@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -143,7 +144,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, CameraEngine.getInstance()));
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
 
         state = new DpeStateUpdater(modelGraph);
 
