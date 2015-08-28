@@ -86,8 +86,6 @@ public class OrthographicCameraUpdater extends CameraUpdater {
 
         camera.update();
 
-        System.out.println(camera.position);
-
         last_screenX = (int) x;
         last_screenY = (int) y;
         return true;
