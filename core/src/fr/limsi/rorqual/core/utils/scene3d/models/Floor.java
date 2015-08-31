@@ -23,18 +23,15 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
  */
 public class Floor {
 
-    private static Model model = null;
-
     public static ModelContainer getModel() {
-        if (model == null)
-            makeModel();
+        Model model = makeModel();
         ModelContainer container = new ModelContainer(model);
         container.setType(ModelContainer.Type.TRANSPARENT);
 
         return container;
     }
 
-    public static void makeModel() {
+    public static Model makeModel() {
 
         final Holder holder = new Holder();
 
@@ -68,6 +65,6 @@ public class Floor {
         };
         Gdx.app.postRunnable(runnable);
 
-        model = (Model)holder.get();
+        return (Model)holder.get();
     }
 }
