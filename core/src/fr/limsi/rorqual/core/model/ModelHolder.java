@@ -49,7 +49,7 @@ public class ModelHolder {
         }else if (object instanceof Slab){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
             currentItems.put("userObject", (Slab)object);
-            Event e = new Event(DpeEvent.SLAB_AJOUTEE, currentItems);
+            Event e = new Event(DpeEvent.SLAB_AJOUTE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }else if (object instanceof Porte){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -59,12 +59,12 @@ public class ModelHolder {
         }else if (object instanceof Fenetre){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
             currentItems.put("userObject", (Fenetre)object);
-            Event e = new Event(DpeEvent.FENETRE_AJOUTE, currentItems);
+            Event e = new Event(DpeEvent.FENETRE_AJOUTEE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }else if (object instanceof PorteFenetre){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
             currentItems.put("userObject", (PorteFenetre)object);
-            Event e = new Event(DpeEvent.PORTE_FENETRE_AJOUTE, currentItems);
+            Event e = new Event(DpeEvent.PORTE_FENETRE_AJOUTEE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }
     }
