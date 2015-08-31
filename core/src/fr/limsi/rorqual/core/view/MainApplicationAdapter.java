@@ -232,6 +232,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         state = new DpeStateUpdater(modelGraph);
 
+        dpe=Dpe.getInstance();
         double scoreDpe=dpe.getScoreDpe();
         skin = (Skin)AssetManager.getInstance().get("uiskin");
         labelScore= new Label("("+Double.toString(scoreDpe)+")",skin);

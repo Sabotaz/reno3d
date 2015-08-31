@@ -3216,6 +3216,22 @@ public class Dpe implements EventListener {
                         }
                         break;
                     }
+                    case MUR_AJOUTE:
+                        break;
+                    case SLAB_AJOUTE:
+                        break;
+                    case FENETRE_AJOUTEE:
+                        break;
+                    case PORTE_FENETRE_AJOUTEE:
+                        break;
+                    case PORTE_AJOUTE:
+                        break;
+                    case MITOYENNETE_MUR_CHANGEE:
+                        System.out.println("Mitoyenneté changée !!!");
+                        break;
+                    case ORIENTATION_MUR_CHANGEE:
+                        System.out.println("Orientation changée !!!");
+                        break;
                 }
             }
         }
