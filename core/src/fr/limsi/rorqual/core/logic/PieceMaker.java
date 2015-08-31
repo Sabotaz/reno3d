@@ -71,7 +71,7 @@ public class PieceMaker extends ModelMaker {
                 mur.setSlabGauche(slab);
             }
             slab.setSelectable(false);
-            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(slab);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().addSlab(slab);
 
             if (anchor != null)
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(anchor);
@@ -155,7 +155,7 @@ public class PieceMaker extends ModelMaker {
         if (murs[0].getWidth() == 0 || murs[1].getWidth() == 0) {
             for (Mur mur : murs)
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);
-            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(slab);
+            ModelHolder.getInstance().getBatiment().getCurrentEtage().removeSlab(slab);
         }else{
             for (Mur mur: murs){
                 mur.setSelectable(true);
@@ -338,7 +338,7 @@ public class PieceMaker extends ModelMaker {
 
         for (Mur mur: murs)
             ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);
-        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(slab);
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().removeSlab(slab);
         murs[0] = murs[1] = murs[2] = murs[3] = null;
         making_piece = false;
 

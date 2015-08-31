@@ -206,7 +206,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, CameraEngine.getInstance()));
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
 
         state = new DpeStateUpdater(modelGraph);
 
