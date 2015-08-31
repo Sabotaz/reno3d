@@ -43,27 +43,27 @@ public class ModelHolder {
     public static void notify(Object object){
         if (object instanceof Mur){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
-            currentItems.put("userObject", (Mur)object);
+            currentItems.put("userObject", object);
             Event e = new Event(DpeEvent.MUR_AJOUTE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }else if (object instanceof Slab){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
-            currentItems.put("userObject", (Slab)object);
+            currentItems.put("userObject", object);
             Event e = new Event(DpeEvent.SLAB_AJOUTE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }else if (object instanceof Porte){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
-            currentItems.put("userObject", (Porte)object);
+            currentItems.put("userObject", object);
             Event e = new Event(DpeEvent.PORTE_AJOUTE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }else if (object instanceof Fenetre){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
-            currentItems.put("userObject", (Fenetre)object);
+            currentItems.put("userObject", object);
             Event e = new Event(DpeEvent.FENETRE_AJOUTEE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }else if (object instanceof PorteFenetre){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();
-            currentItems.put("userObject", (PorteFenetre)object);
+            currentItems.put("userObject", object);
             Event e = new Event(DpeEvent.PORTE_FENETRE_AJOUTEE, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
         }
