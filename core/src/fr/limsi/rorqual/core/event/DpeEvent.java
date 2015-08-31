@@ -80,5 +80,10 @@ public enum DpeEvent implements EventType {
     DPE_REQUEST,
     DPE_STATE_NO_MORE_WALL_UNKNOWN,
     DPE_STATE_NO_MORE_UNKNOWN,
+
+    IS_NO_MORE_FIRST_FLOOR,
+    IS_NO_MORE_LAST_FLOOR,
+    IS_NOW_FIRST_FLOOR,
+    IS_NOW_LAST_FLOOR,
     ;
 }

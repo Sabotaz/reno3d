@@ -1,13 +1,10 @@
 package fr.limsi.rorqual.core.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
-import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
-import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 
 /**
  * Created by christophe on 20/07/15.
@@ -41,28 +38,42 @@ public class Etage {
         }
     }
 
+    public boolean isEmpty() {
+        return murs.isEmpty() && slabs.isEmpty();
+    }
+
     public void addMur(Mur mur) {
+        boolean wasEmpty = isEmpty();
         this.murs.add(mur);
         mur.setEtage(this);
         mur.setGlobalOrientation(globalOrientation);
         this.modelGraph.getRoot().add(mur);
+        if (wasEmpty)
+            batiment.emptinessChanged(this);
     }
 
     public void removeMur(Mur mur) {
         this.murs.remove(mur);
         this.modelGraph.getRoot().remove(mur);
         mur.setEtage(null);
+        if (isEmpty())
+            batiment.emptinessChanged(this);
     }
 
     public void addSlab(Slab slab) {
+        boolean wasEmpty = isEmpty();
         this.slabs.add(slab);
 
         this.modelGraph.getRoot().add(slab);
+        if (wasEmpty)
+            batiment.emptinessChanged(this);
     }
 
     public void removeSlab(Slab slab) {
         this.slabs.remove(slab);
         this.modelGraph.getRoot().remove(slab);
+        if (isEmpty())
+            batiment.emptinessChanged(this);
     }
 
     public ArrayList<Slab> getSlabs() {

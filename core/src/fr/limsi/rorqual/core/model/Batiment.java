@@ -6,8 +6,13 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 
@@ -163,6 +168,70 @@ public class Batiment {
         for (Etage etage : etages.list())
             all.addAll(etage.getMurs());
         return all;
+    }
+
+    private Etage first;
+    private Etage last;
+
+    public void emptinessChanged(Etage etage) {
+        if (etage.isEmpty()) { // c'est qu'on a enlevé des trucs
+            if (first == null || etage.getNumber() == first.getNumber()) { // ça n'est plus le first
+                changeFirst(etage, searchNewFirst());
+            }
+            if (last == null || etage.getNumber() == last.getNumber()) { // ça n'est plus le last
+                changeLast(etage, searchNewLast());
+            }
+        } else { // c'est qu'il etait vide avant
+            if (first == null || etage.getNumber() < first.getNumber()) { // c'est le nouveau first
+                changeFirst(first, etage);
+            }
+            if (last == null || etage.getNumber() > last.getNumber()) { // c'est le nouveau last
+                changeLast(first, etage);
+            }
+        }
+    }
+
+    private void changeFirst(Etage previousFirst, Etage newFirst) {
+        if (previousFirst != null) {
+            HashMap<String, Object> currentItems = new HashMap<String, Object>();
+            currentItems.put("userObject", previousFirst);
+            Event e = new Event(DpeEvent.IS_NO_MORE_FIRST_FLOOR, currentItems);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
+        if (newFirst != null) {
+            HashMap<String, Object> currentItems = new HashMap<String, Object>();
+            currentItems.put("userObject", newFirst);
+            Event e = new Event(DpeEvent.IS_NOW_FIRST_FLOOR, currentItems);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
+    }
+
+    private void changeLast(Etage previousLast, Etage newLast) {
+        if (previousLast != null) {
+            HashMap<String, Object> currentItems = new HashMap<String, Object>();
+            currentItems.put("userObject", previousLast);
+            Event e = new Event(DpeEvent.IS_NO_MORE_LAST_FLOOR, currentItems);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
+        if (newLast != null) {
+            HashMap<String, Object> currentItems = new HashMap<String, Object>();
+            currentItems.put("userObject", newLast);
+            Event e = new Event(DpeEvent.IS_NOW_LAST_FLOOR, currentItems);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
+    }
+
+    private Etage searchNewFirst() {
+        for (int i = etages.getMin(); i <= etages.getMax(); i++)
+            if (!etages.get(i).isEmpty())
+                return etages.get(i);
+        return null;
+    }
+    private Etage searchNewLast() {
+        for (int i = etages.getMax(); i >= etages.getMin(); i--)
+            if (!etages.get(i).isEmpty())
+                return etages.get(i);
+        return null;
     }
 
 }
