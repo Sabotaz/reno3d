@@ -24,13 +24,13 @@
                   "type": "CheckBox",
                   "label": "Battante",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum.BATTANTE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre.FENETRE_DOUBLE_VENTAIL_BATTANTE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Coulissante",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum.COULISSANTE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre.FENETRE_DOUBLE_VENTAIL_COULISSANTE"
                 }
               ]
             }

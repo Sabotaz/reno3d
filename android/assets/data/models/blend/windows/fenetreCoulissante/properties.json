@@ -6,7 +6,7 @@
   "id":2,
   "class":"fr.limsi.rorqual.core.model.Fenetre",
   "properties": {
-    "typeFenetre": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetreEnum.COULISSANTE",
-    "typeMateriauMenuiserie":"fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS"
+    "typeFenetre": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre.FENETRE_DOUBLE_VENTAIL_COULISSANTE",
+    "typeMateriau": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS"
   }
 }

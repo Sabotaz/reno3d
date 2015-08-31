@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Vector3d;
+import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
@@ -25,8 +26,14 @@ import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
@@ -176,6 +183,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setTypeMur(TypeMurEnum typeMur) {
         this.typeMur = typeMur;
+        this.mitoyenneteChanged();
     }
 
     public TypeIsolationMurEnum getTypeIsolationMurEnum() {
@@ -208,6 +216,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setOrientationMur(OrientationEnum orientationMur) {
         this.orientationMur = orientationMur;
+        this.orientationChanged();
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
         // What is the orientation of X ?
@@ -218,6 +227,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
         this.orientationMur = orientationMur.wrapX(dx, dy);
+        this.orientationChanged();
     }
 
     public double getSurface(){
@@ -386,10 +396,14 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setSlabGauche(Slab slab_gauche) {
         this.slabGauche = slab_gauche;
 
-        if (isInterieur())
+        if (isInterieur()) {
             this.typeMur = TypeMurEnum.MUR_INTERIEUR;
-        else if (this.typeMur == TypeMurEnum.MUR_INTERIEUR)
-            this.typeMur = TypeMurEnum.INCONNUE;
+            this.mitoyenneteChanged();
+        }
+        else if (this.typeMur == TypeMurEnum.MUR_INTERIEUR){
+            this.typeMur = TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
+            this.mitoyenneteChanged();
+        }
     }
 
     public Slab getSlabDroit() {
@@ -398,14 +412,31 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setSlabDroit(Slab slab_droit) {
         this.slabDroit = slab_droit;
-
-        if (isInterieur())
+        if (isInterieur()) {
             this.typeMur = TypeMurEnum.MUR_INTERIEUR;
-        else if (this.typeMur == TypeMurEnum.MUR_INTERIEUR)
-            this.typeMur = TypeMurEnum.INCONNUE;
+            this.mitoyenneteChanged();
+        }
+        else if (this.typeMur == TypeMurEnum.MUR_INTERIEUR){
+            this.typeMur = TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
+            this.mitoyenneteChanged();
+        }
     }
 
     public boolean isInterieur() {
         return (slabGauche != null && slabDroit != null);
+    }
+
+    public void mitoyenneteChanged(){
+        HashMap<String,Object> currentItems = new HashMap<String,Object>();
+        currentItems.put("userObject", this);
+        Event e = new Event(DpeEvent.MITOYENNETE_MUR_CHANGEE, currentItems);
+        EventManager.getInstance().put(Channel.DPE, e);
+    }
+
+    public void orientationChanged(){
+        HashMap<String,Object> currentItems = new HashMap<String,Object>();
+        currentItems.put("userObject", this);
+        Event e = new Event(DpeEvent.ORIENTATION_MUR_CHANGEE, currentItems);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
 }

@@ -1,17 +1,10 @@
 package fr.limsi.rorqual.core.logic;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Type;
-
-import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Ouverture;
-import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
@@ -89,6 +82,7 @@ public class OuvertureMaker extends ModelMaker {
             return;
 
         ouverture.setSelectable(true);
+        ModelHolder.notify(ouverture);
 
         making_ouverture = false;
     }

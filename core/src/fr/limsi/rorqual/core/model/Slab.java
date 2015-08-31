@@ -22,6 +22,10 @@ import java.util.List;
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Vector3d;
+import fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab;
+import fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlafond;
+import fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlancher;
+import fr.limsi.rorqual.core.dpe.enums.slabproperties.TypeIsolationSlab;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
@@ -40,7 +44,14 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 public class Slab extends ModelContainer {
 
     public final static float DEFAULT_HEIGHT = 0.2f;
-
+    private MitoyennetePlafond mitoyennetePlafond;
+    private MitoyennetePlancher mitoyennetePlancher;
+    private double uPlafond;
+    private double uPlancher;
+    private DateIsolationSlab dateIsolationPlafond;
+    private DateIsolationSlab dateIsolationPlancher;
+    private TypeIsolationSlab typeIsolationPlancher;
+    private double surface;
     private Etage etage = null;
 
     private boolean changed = true;
@@ -56,6 +67,14 @@ public class Slab extends ModelContainer {
         super();
         this.coins = coins;
         this.height = h;
+        this.mitoyennetePlafond=MitoyennetePlafond.TERRASSE;
+        this.mitoyennetePlancher=MitoyennetePlancher.TERRE_PLEIN;
+        this.uPlafond=2;
+        this.uPlancher=2;
+        this.dateIsolationPlafond=DateIsolationSlab.JAMAIS;
+        this.dateIsolationPlancher=DateIsolationSlab.JAMAIS;
+        this.typeIsolationPlancher=TypeIsolationSlab.NON_ISOLE;
+        // TODO : calcul surface
     }
 
     public void setEtage(Etage e) {
@@ -166,4 +185,69 @@ public class Slab extends ModelContainer {
             return intersection == null ? -1 : intersection.dst(ray.origin);
         }
     }
+
+    public MitoyennetePlancher getMitoyennetePlancher() {
+        return mitoyennetePlancher;
+    }
+
+    public void setMitoyennetePlancher(MitoyennetePlancher mitoyennetePlancher) {
+        this.mitoyennetePlancher = mitoyennetePlancher;
+    }
+
+    public MitoyennetePlafond getMitoyennetePlafond() {
+        return mitoyennetePlafond;
+    }
+
+    public void setMitoyennetePlafond(MitoyennetePlafond mitoyennetePlafond) {
+        this.mitoyennetePlafond = mitoyennetePlafond;
+    }
+
+    public double getuPlafond() {
+        return uPlafond;
+    }
+
+    public void setuPlafond(double uPlafond) {
+        this.uPlafond = uPlafond;
+    }
+
+    public double getuPlancher() {
+        return uPlancher;
+    }
+
+    public void setuPlancher(double uPlancher) {
+        this.uPlancher = uPlancher;
+    }
+
+    public double getSurface() {
+        return surface;
+    }
+
+    public void setSurface(double surface) {
+        this.surface = surface;
+    }
+
+    public DateIsolationSlab getDateIsolationPlancher() {
+        return dateIsolationPlancher;
+    }
+
+    public void setDateIsolationPlancher(DateIsolationSlab dateIsolationPlancher) {
+        this.dateIsolationPlancher = dateIsolationPlancher;
+    }
+
+    public TypeIsolationSlab getTypeIsolationPlancher() {
+        return typeIsolationPlancher;
+    }
+
+    public void setTypeIsolationPlancher(TypeIsolationSlab typeIsolationPlancher) {
+        this.typeIsolationPlancher = typeIsolationPlancher;
+    }
+
+    public DateIsolationSlab getDateIsolationPlafond() {
+        return dateIsolationPlafond;
+    }
+
+    public void setDateIsolationPlafond(DateIsolationSlab dateIsolationPlafond) {
+        this.dateIsolationPlafond = dateIsolationPlafond;
+    }
+
 }

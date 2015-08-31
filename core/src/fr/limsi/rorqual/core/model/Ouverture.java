@@ -12,8 +12,6 @@ import java.util.List;
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Vector3d;
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum;
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -28,10 +26,6 @@ public abstract class Ouverture extends ModelContainer {
     protected float width;
     protected float height;
     protected float surface;
-    public TypeMateriauMenuiserieEnum typeMateriauMenuiserie = TypeMateriauMenuiserieEnum.INCONNUE;
-    public TypeVitrageEnum typeVitrage = TypeVitrageEnum.INCONNUE;
-    public float coefficientDeTransmissionThermique = 2;
-    protected float deperdition = surface*coefficientDeTransmissionThermique;
 
     // Constructeur
     public Ouverture(Mur mur, Vector2 position, float width, float height){
@@ -91,30 +85,6 @@ public abstract class Ouverture extends ModelContainer {
     }
     public void setSurface(float surface) {
         this.surface = surface;
-    }
-    public TypeMateriauMenuiserieEnum getTypeMateriauMenuiserie() {
-        return typeMateriauMenuiserie;
-    }
-    public void setTypeMateriauMenuiserie(TypeMateriauMenuiserieEnum typeMateriauMenuiserie) {
-        this.typeMateriauMenuiserie = typeMateriauMenuiserie;
-    }
-    public TypeVitrageEnum getTypeVitrage() {
-        return typeVitrage;
-    }
-    public void setTypeVitrage(TypeVitrageEnum typeVitrage) {
-        this.typeVitrage = typeVitrage;
-    }
-    public float getCoefficientDeTransmissionThermique() {
-        return coefficientDeTransmissionThermique;
-    }
-    public void setCoefficientDeTransmissionThermique(float coefficientDeTransmissionThermique) {
-        this.coefficientDeTransmissionThermique = coefficientDeTransmissionThermique;
-    }
-    public float getDeperdition() {
-        return deperdition;
-    }
-    public void setDeperdition(float deperdition) {
-        this.deperdition = deperdition;
     }
 
     public CSG getCSG() {

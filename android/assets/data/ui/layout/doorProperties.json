@@ -24,259 +24,37 @@
                   "type": "CheckBox",
                   "label": "Porte opaque pleine",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_OPAQUE_PLEINE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_OPAQUE_PLEINE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Porte avec simple vitrage (< 30%)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Porte avec simple vitrage (entre 30% et 60%)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Porte avec double vitrage",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_AVEC_DOUBLE_VITRAGE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_AVEC_DOUBLE_VITRAGE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Porte opaque pleine isolée",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_OPAQUE_PLEINE_ISOLEE"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_OPAQUE_PLEINE_ISOLEE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Porte précédée d'un SAS",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_PRECEDE_DUN_SAS"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Porte-fenêtre battante",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_FENETRE_BATTANTE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Porte-fenêtre coulissante",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum.PORTE_FENETRE_COULISSANTE"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Matériau : ",
-          "labelPad": 5,
-          "labelWidth": 77,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MATERIAU_MENUISERIE",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Bois",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Métal",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.METALLIQUE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "PVC",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.PVC"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Vitrage / Fermeture / Masque",
-      "id": "vitrage_et_fermeture",
-      "content": [
-        {
-          "type": "Table",
-          "label": "Type de vitre : ",
-          "labelPad": 5,
-          "labelWidth": 219,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VITRAGE_MENUISERIE",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Simple vitrage",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.SIMPLE_VITRAGE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Survitrage",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.SURVITRAGE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Double vitrage avant 1990",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Double vitrage entre 1990 et 2001",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Double vitrage apres 2001",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Triple vitrage",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.TRIPLE_VITRAGE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Inconnue",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.INCONNUE"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Fermeture : ",
-          "labelPad": 5,
-          "labelWidth": 219,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FERMETURE_MENUISERIE",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Jalousie accordéon",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.JALOUSIE_ACCORDEON"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Volet battant avec ajoures fixes",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_BATTANT_AVEC_AJOURES_FIXES"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Volet roulant en métal",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_ROULANT_EN_METAL"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Fermeture sans ajoures",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.FERMETURE_SANS_AJOURES"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Volet battant bois",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_BATTANT_BOIS"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Volet roulant PVC",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_ROULANT_PVC"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Présence d'un masque proche\nobstruant le soleil (ex : balcon\ndu voisin d'au-dessus, auvent) : ",
-          "labelPad": 5,
-          "labelWidth": 219,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.MASQUE_PROCHE_MENUISERIE",
-              "layout": "column",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Oui",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.PRESENCE_MASQUE_PROCHE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Non",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.ABSENCE_MASQUE_PROCHE"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Présence d'un obstacle masquant\nle soleil en hiver (ex : arbre,\nautre construction) : ",
-          "labelPad": 5,
-          "labelWidth": 219,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.MASQUE_LOINTAIN_MENUISERIE",
-              "layout": "column",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Totalement",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.PRESENCE_MASQUE_LOINTAIN_TOTAL"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Partiellement",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.PRESENCE_MASQUE_LOINTAIN_PARTIEL"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Pas du tout",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_PRECEDE_DUN_SAS"
                 }
               ]
             }

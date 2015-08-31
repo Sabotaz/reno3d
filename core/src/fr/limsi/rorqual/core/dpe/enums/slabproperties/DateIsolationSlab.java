@@ -3,7 +3,7 @@ package fr.limsi.rorqual.core.dpe.enums.slabproperties;
 /**
  * Created by ricordeau on 10/08/15.
  */
-public enum DateIsolationSlabEnum {
+public enum DateIsolationSlab {
     EN_RENOVATION_AVANT_1983,
     EN_RENOVATION_ENTRE_1983_ET_1988,
     EN_RENOVATION_ENTRE_1989_ET_2000,

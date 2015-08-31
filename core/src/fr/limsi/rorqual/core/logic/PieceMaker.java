@@ -156,14 +156,15 @@ public class PieceMaker extends ModelMaker {
             for (Mur mur : murs)
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(slab);
+        }else{
+            for (Mur mur: murs){
+                mur.setSelectable(true);
+                ModelHolder.notify(mur);
+            }
+            ModelHolder.notify(slab);
+            fixConflicts();
         }
-        for (Mur mur: murs)
-            mur.setSelectable(true);
-
-        fixConflicts();
-
         murs[0] = murs[1] = murs[2] = murs[3] = null;
-
     }
 
     private void fixConflicts() {

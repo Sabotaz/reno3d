@@ -65,9 +65,9 @@ public class MainUiControleur implements EventListener {
         if (tb != null) {
             synchronized (stage) {
                 if (tb instanceof TabWindow){
-                    tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 20 - ((TabWindow) tb).getPrefHeight()/2);
+                    tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) tb).getPrefHeight()/2);
                 }else{
-                    tb.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 100);
+                    tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - 100);
                 }
                 stage.addActor(tb);
             }

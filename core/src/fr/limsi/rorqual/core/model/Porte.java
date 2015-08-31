@@ -9,7 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.UBJsonReader;
 
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeDoorEnum;
+import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte;
+import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 import fr.limsi.rorqual.core.utils.AssetManager;
 
 /**
@@ -20,10 +21,11 @@ public class Porte extends Ouverture{
     static float DEFAULT_Y = 0.0f;
     static float DEFAULT_WIDTH = 1.0f;
     static float DEFAULT_HEIGHT = 2.15f;
+    private double coefficientDeTransmissionThermique;
+    private double deperdition;
+    public TypePorte typePorte;
 
     // Attributs
-    public TypeDoorEnum typePorte;
-
     public Porte() {
         this(null, DEFAULT_WIDTH);
     }
@@ -39,13 +41,61 @@ public class Porte extends Ouverture{
     }
 
     // Getter & Setter
-    public TypeDoorEnum getTypePorte() {
-        return typePorte;
+    public double getCoefficientDeTransmissionThermique() {
+        return coefficientDeTransmissionThermique;
     }
-    public void setTypePorte(TypeDoorEnum typePorte) {
-        this.typePorte = typePorte;
+    public void setCoefficientDeTransmissionThermique(double coefficientDeTransmissionThermique) {
+        this.coefficientDeTransmissionThermique = coefficientDeTransmissionThermique;
+    }
+    public double getDeperdition() {
+        return deperdition;
+    }
+    public void setDeperdition(double deperdition) {
+        this.deperdition = deperdition;
     }
 
+    public TypePorte getTypePorte(){
+        return this.typePorte;
+    }
+
+    public void actualiseDeperditionPorte() {
+        double u=4.5;
+        double deperdition=0;
+        if (this.getMur().getTypeMur().equals(TypeMurEnum.MUR_INTERIEUR)){
+            this.deperdition=0;
+            return;
+        }else{
+            switch (this.typePorte) {
+                case PORTE_OPAQUE_PLEINE:
+                    u=3.5;
+                    deperdition = 3.5*this.surface;
+                    break;
+                case PORTE_AVEC_MOINS_DE_30_POURCENT_DE_SIMPLE_VITRAGE:
+                    u=4;
+                    deperdition = 4*this.surface;
+                    break;
+                case PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE:
+                    u=4.5;
+                    deperdition = 4.5*this.surface;
+                    break;
+                case PORTE_AVEC_DOUBLE_VITRAGE:
+                    u=3.3;
+                    deperdition = 3.3*this.surface;
+                    break;
+                case PORTE_OPAQUE_PLEINE_ISOLEE:
+                    u=2;
+                    deperdition = 2*this.surface;
+                    break;
+                case PORTE_PRECEDEE_D_UN_SAS:
+                    u=1.5;
+                    deperdition = 1.5*this.surface;
+                    break;
+            }
+            this.coefficientDeTransmissionThermique=u;
+            this.deperdition=deperdition;
+        }
+    }
+    
     @Override
     protected void makeModel() {
         BoundingBox b = new BoundingBox();

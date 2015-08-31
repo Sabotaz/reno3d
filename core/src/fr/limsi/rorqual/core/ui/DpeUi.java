@@ -1,7 +1,6 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.HashMap;
 
@@ -10,8 +9,7 @@ import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Porte;
-import fr.limsi.rorqual.core.model.Slab;
-import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.model.PorteFenetre;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
@@ -42,7 +40,7 @@ public class DpeUi  {
             Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
             return a;
         }
-        if (o instanceof Fenetre) {
+        if (o instanceof Fenetre || o instanceof PorteFenetre) {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
             return a;
         }

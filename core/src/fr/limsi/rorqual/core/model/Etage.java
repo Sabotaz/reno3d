@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
@@ -103,7 +104,8 @@ public class Etage {
 
     public void setOrientation(OrientationEnum orientation) {
         globalOrientation = orientation;
-        for (Mur m : murs)
+        for (Mur m : murs){
             m.setGlobalOrientation(orientation);
+        }
     }
 }

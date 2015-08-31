@@ -1,23 +1,11 @@
 package fr.limsi.rorqual.core.logic;
 
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import fr.limsi.rorqual.core.model.Ouverture;
-import fr.limsi.rorqual.core.model.Porte;
-import fr.limsi.rorqual.core.model.utils.MyVector2;
-import fr.limsi.rorqual.core.model.Fenetre;
-import fr.limsi.rorqual.core.model.ModelHolder;
-import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
-import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
-import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 /**
  * Created by christophe on 20/03/15.

@@ -197,7 +197,19 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
         System.out.println("current camera ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
-        setLoadingMessage("Loading UI controler...");
+        //modelGraph.getRoot().add(popup);
+
+        //modelGraph.getRoot().add(popup);
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
+        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
+
+        //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
+
+        /*** On autorise les inputs en entrée ***/
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, CameraEngine.getInstance()));
+
+        state = new DpeStateUpdater(modelGraph);
+
         mainUiControleur = MainUiControleur.getInstance();
         mainUiControleur.setStage(stageMenu);
         System.out.println("main ui controleur ok " + ((System.currentTimeMillis() - start) * 0.001f));
@@ -219,8 +231,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         setLoadingMessage("Initializing EE...");
 
         state = new DpeStateUpdater(modelGraph);
-
-        dpe = new Dpe();
 
         double scoreDpe=dpe.getScoreDpe();
         skin = (Skin)AssetManager.getInstance().get("uiskin");

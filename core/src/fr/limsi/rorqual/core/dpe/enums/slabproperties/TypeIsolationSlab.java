@@ -3,7 +3,7 @@ package fr.limsi.rorqual.core.dpe.enums.slabproperties;
 /**
  * Created by ricordeau on 10/08/15.
  */
-public enum TypeIsolationSlabEnum {
+public enum TypeIsolationSlab {
     NON_ISOLE,
     ITI,
     ITE,

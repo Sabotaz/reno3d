@@ -6,8 +6,5 @@ package fr.limsi.rorqual.core.dpe.enums.menuiserieproperties;
 public enum TypeMateriauMenuiserieEnum {
     BOIS,
     METALLIQUE,
-    METALLIQUE_AVANT_2001,
-    METALLIQUE_APRES_2001,
-    PVC,
-    INCONNUE;
+    PVC;
 }
