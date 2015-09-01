@@ -26,7 +26,6 @@ public class Floor {
     public static ModelContainer getModel() {
         Model model = makeModel();
         ModelContainer container = new ModelContainer(model);
-        container.setType(ModelContainer.Type.TRANSPARENT);
 
         return container;
     }

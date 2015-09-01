@@ -34,7 +34,6 @@ public abstract class Ouverture extends ModelContainer {
         this.width=width;
         this.height=height;
         this.surface=width*height;
-        this.setType(Type.TRANSPARENT);
     }
 
     // Getter & Setter

@@ -44,7 +44,6 @@ public class Cote extends ModelContainer {
         super();
         cotable = c;
         this.setSelectable(false);
-        this.setType(Type.TRANSPARENT);
     }
 
     public void act() {

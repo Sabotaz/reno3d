@@ -1,9 +1,13 @@
 package fr.limsi.rorqual.core.utils.scene3d;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.math.Matrix4;
@@ -20,6 +24,8 @@ public abstract class ActableModel extends Model implements RenderableProvider {
     protected Matrix4 world_transform = new Matrix4().idt();
 
     public Object userData = null;
+
+    boolean renderTransparent = false;
 
     public abstract void act();
     /** Traverses the Node hierarchy and collects {@link Renderable} instances for every node with a graphical representation.
@@ -59,7 +65,22 @@ public abstract class ActableModel extends Model implements RenderableProvider {
     protected void getRenderables (Node node, Array<Renderable> renderables, Pool<Renderable> pool) {
         if (node.parts.size > 0) {
             for (NodePart nodePart : node.parts) {
-                if (nodePart.enabled) renderables.add(getRenderable(pool.obtain(), node, nodePart));
+
+                boolean isBlended = false;
+
+                if(nodePart.material.get(BlendingAttribute.Type) != null)
+                    isBlended = ((BlendingAttribute) nodePart.material.get(BlendingAttribute.Type)).blended;
+
+                if(nodePart.material.get(TextureAttribute.Diffuse) != null) {
+                    Pixmap.Format format = ((TextureAttribute) nodePart.material.get(TextureAttribute.Diffuse)).textureDescription.texture.getTextureData().getFormat();
+                    isBlended = (format == Pixmap.Format.RGBA4444
+                            || format == Pixmap.Format.RGBA8888
+                            || format == Pixmap.Format.LuminanceAlpha
+                            || format == Pixmap.Format.Alpha
+                            || format == Pixmap.Format.Intensity);
+                }
+
+                if (nodePart.enabled && (isBlended == renderTransparent)) renderables.add(getRenderable(pool.obtain(), node, nodePart));
             }
         }
 

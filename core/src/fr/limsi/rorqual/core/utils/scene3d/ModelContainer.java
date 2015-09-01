@@ -31,8 +31,6 @@ public class ModelContainer extends ActableModel {
     private Object userData;
     private HashMap<String,Object> modelData = new HashMap<String, Object>();
 
-    private Type type = Type.OPAQUE;
-
     public enum Type {
         OPAQUE,
         TRANSPARENT;
@@ -67,10 +65,6 @@ public class ModelContainer extends ActableModel {
                 c.act();
             }
         }
-    }
-
-    public void setType(Type t) {
-        type = t;
     }
 
     public void setShaderProgram(Shader s) {
@@ -178,14 +172,14 @@ public class ModelContainer extends ActableModel {
 
     protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
         if (isVisible()) {
+            renderTransparent = type == Type.TRANSPARENT;
             // update mx
             Matrix4 updated_global_transform = global_transform.cpy().mul(local_transform);
 
             // update model mx
             world_transform = updated_global_transform.cpy().mul(model_transform);
             // draw
-            if (this.type == type)
-                modelBatch.render(this, environment);
+            modelBatch.render(this, environment);
 
             drawChildren(modelBatch, environment, type, updated_global_transform);
         }
