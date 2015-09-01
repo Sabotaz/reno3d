@@ -45,6 +45,7 @@ import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.ui.CircularJauge;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
@@ -87,6 +88,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private MainUiControleur mainUiControleur;
     private Label labelScore;
     private Label lettreScore;
+
+    private CircularJauge score;
 
     private boolean loading_finished = false;
 
@@ -219,6 +222,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         System.out.println("stage menu ok " + ((System.currentTimeMillis() - start) * 0.001f));
         stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
+        score = new CircularJauge((Texture)assets.get("roulette_arriere"), (Texture)assets.get("roulette"), (Skin)assets.get("uiskin"));
+        score.setSize(100,100);
+        stageMenu.addActor(score);
         System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         setLoadingMessage("Initializing EE...");
@@ -227,6 +233,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         dpe=Dpe.getInstance();
         double scoreDpe=dpe.getScoreDpe();
+        score.setValue((float)dpe.getScoreDpe());
         skin = (Skin)AssetManager.getInstance().get("uiskin");
         labelScore= new Label("("+Double.toString(scoreDpe)+")",skin);
         stageMenu.addActor(labelScore);
@@ -258,7 +265,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light_dir = sun.local_transform.getTranslation(light_dir).scl(-1).nor();
         light.direction.set(light_dir);
 
-        double score=dpe.getScoreDpe();
+        score.setValue((float) dpe.getScoreDpe());
+
+        double score = dpe.getScoreDpe();
         labelScore.setText("("+Double.toString(score)+")");
         if(score<=50){
             lettreScore.setText("A");

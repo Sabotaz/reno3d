@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.limsi.rorqual.core.view.shaders.ProgressBarShader;
+
 /**
  * Created by christophe on 23/06/15.
  */
@@ -177,6 +179,8 @@ public class AssetManager {
         textures.put("textureOrientationEst", "data/img/dpe/Orientation/est.png");
         textures.put("textureOrientationSud", "data/img/dpe/Orientation/sud.png");
         textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
+        textures.put("roulette", "data/ui/roulette.png");
+        textures.put("roulette_arriere", "data/ui/roulette_arriere.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
