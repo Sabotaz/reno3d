@@ -18,7 +18,6 @@ import com.badlogic.gdx.math.collision.Ray;
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Vector3d;
-import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
@@ -33,7 +32,6 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
-import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
@@ -219,7 +217,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
         // What is the orientation of X ?
-        this.etage.getBatiment().setOrientation(orientationMur.wrapX(dx, dy));
+        this.etage.getBatiment().setGlobalOrientation(orientationMur.wrapX(dx, dy));
     }
 
     public void setGlobalOrientation(OrientationEnum orientationMur) {

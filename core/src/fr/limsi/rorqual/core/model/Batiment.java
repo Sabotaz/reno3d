@@ -83,10 +83,14 @@ public class Batiment {
 
     OrientationEnum globalOrientation = OrientationEnum.SUD;
 
-    public void setOrientation(OrientationEnum orientation) {
+    public void setGlobalOrientation(OrientationEnum orientation) {
         globalOrientation = orientation;
+        updateOrientations();
+    }
+
+    public void updateOrientations() {
         for (Etage e : etages.list())
-            e.setOrientation(orientation);
+            e.setOrientation(globalOrientation);
 
         EventManager.getInstance().put(Channel.DPE, new Event(DpeEvent.ORIENTATION_GLOBALE_CHANGEE));
     }
