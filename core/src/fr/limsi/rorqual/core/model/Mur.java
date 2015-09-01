@@ -438,6 +438,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         return (slabGauche != null && slabDroit != null);
     }
 
+    public double getDeperdition(){
+        return this.deperdition;
+    }
+
     public void mitoyenneteChanged(){
         HashMap<String,Object> currentItems = new HashMap<String,Object>();
         currentItems.put("userObject", this);
@@ -516,5 +520,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                 this.deperdition=0;
                 break;
         }
+    }
+
+    @Override
+    public String toString(){
+        return "Mur   ->    u="+coeffTransmissionThermique+" s="+surface+" dp="+deperdition;
     }
 }

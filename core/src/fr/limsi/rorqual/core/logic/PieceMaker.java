@@ -6,8 +6,13 @@ import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
@@ -169,12 +174,6 @@ public class PieceMaker extends ModelMaker {
 
     private void fixConflicts() {
         Etage etage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
-        for (Mur m : murs) {
-            fixConflicts(m, etage.getMurs());
-        }
-
-        for (Mur m : extraWalls)
-            etage.addMur(m);
 
         do {
             extraWalls.clear();
@@ -183,8 +182,10 @@ public class PieceMaker extends ModelMaker {
                 fixConflicts(m, etage.getMurs());
             }
 
-            for (Mur m : extraWalls)
+            for (Mur m : extraWalls){
                 etage.addMur(m);
+                ModelHolder.notify(m);
+            }
 
         } while (extraWalls.size() > 0);
 
@@ -275,6 +276,7 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
+            this.createEventSizeChanged(m1);
 
         } else
         if (m1.getA() != m2.getB() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a1, b1, b2) < EPSILON) {
@@ -286,6 +288,7 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
+            this.createEventSizeChanged(m1);
         } else
         if (m1.getA() != m2.getA() && m1.getA() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, a1) < EPSILON) {
             // m1.A est entre m2.A et m2.B
@@ -296,6 +299,7 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
+            this.createEventSizeChanged(m2);
         } else
         if (m1.getB() != m2.getA() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, b1) < EPSILON) {
             // m1.B est entre m2.A et m2.B
@@ -306,8 +310,16 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
+            this.createEventSizeChanged(m2);
         }
 
+    }
+
+    private void createEventSizeChanged(Mur mur){
+        HashMap<String,Object> currentItems = new HashMap<String,Object>();
+        currentItems.put("userObject", mur);
+        Event e = new Event(DpeEvent.SIZE_MUR_CHANGED, currentItems);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
 
     private boolean areDouble(Mur m1, Mur m2) {

@@ -3065,7 +3065,6 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
                                 fenetre.setTypeVitrage(typeVitrage);
-                                System.out.println("coucou");
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeVitrageEnum type = fenetre.getTypeVitrage();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -3232,7 +3231,6 @@ public class Dpe implements EventListener {
                         Mur mur = (Mur) items.get("userObject");
                         murList.add(mur);
                         this.actualiseCoeffDeperditionThermique(mur);
-                        System.out.println("coucou");
                         break;
                     }
                     case SLAB_AJOUTE: {
@@ -3259,6 +3257,10 @@ public class Dpe implements EventListener {
                         break;
                     }
                     case PORTE_AJOUTE: {
+                        System.out.println(murList.size());
+                        for(Mur m : murList){
+                            System.out.println(m.toString());
+                        }
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Porte porte = (Porte) items.get("userObject");
                         porteList.add(porte);
@@ -3303,6 +3305,18 @@ public class Dpe implements EventListener {
                             }
                         }
                         break;
+                    }
+                    case SIZE_MUR_CHANGED:{
+                        HashMap<String, Object> items = (HashMap<String, Object>) o;
+                        Mur mur = (Mur) items.get("userObject");
+                        mur.actualiseDeperdition();
+                    }
+                    case MUR_REMOVED:{
+                        HashMap<String, Object> items = (HashMap<String, Object>) o;
+                        Mur mur = (Mur) items.get("userObject");
+                        if (murList.contains(mur)){
+                            murList.remove(mur);
+                        }
                     }
                 }
             }

@@ -68,6 +68,8 @@ public enum DpeEvent implements EventType {
     MASQUE_LOINTAIN_MENUISERIE,
 
     MUR_AJOUTE,
+    MUR_REMOVED,
+    SIZE_MUR_CHANGED,
     SLAB_AJOUTE,
     FENETRE_AJOUTEE,
     PORTE_FENETRE_AJOUTEE,
