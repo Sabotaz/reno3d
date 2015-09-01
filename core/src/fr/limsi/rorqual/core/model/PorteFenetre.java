@@ -89,56 +89,8 @@ public class PorteFenetre extends Ouverture {
         this.typeFermeture = typeFermeture;
     }
 
-    public double getFts() {
-        return fts;
-    }
-
-    public void setFts(double fts) {
-        this.fts = fts;
-    }
-
-    public double getFe1() {
-        return fe1;
-    }
-
-    public void setFe1(double fe1) {
-        this.fe1 = fe1;
-    }
-
-    public double getFe2() {
-        return fe2;
-    }
-
-    public void setFe2(double fe2) {
-        this.fe2 = fe2;
-    }
-
-    public double getC1() {
-        return c1;
-    }
-
-    public void setC1(double c1) {
-        this.c1 = c1;
-    }
-
-    public double getBas() {
-        return bas;
-    }
-
-    public void setBas(double bas) {
-        this.bas = bas;
-    }
-
-    public TypeMasqueEnum getMasqueProche() {
-        return masqueProche;
-    }
-
     public void setMasqueProche(TypeMasqueEnum masqueProche) {
         this.masqueProche = masqueProche;
-    }
-
-    public TypeMasqueEnum getMasqueLointain() {
-        return masqueLointain;
     }
 
     public void setMasqueLointain(TypeMasqueEnum masqueLointain) {
@@ -546,6 +498,7 @@ public class PorteFenetre extends Ouverture {
                     break;
             }
         }
+        this.actualiseSse();
     }
     public void actualiseC1(){
         switch (this.getMur().getOrientationMur()){
@@ -562,6 +515,7 @@ public class PorteFenetre extends Ouverture {
                 this.c1=0.2;
                 break;
         }
+        this.actualiseSse();
     }
     public void actualiseFts(){
         switch (this.typeMateriau){
@@ -676,6 +630,7 @@ public class PorteFenetre extends Ouverture {
                 }
                 break;
         }
+        this.actualiseSse();
     }
     public void actualiseFe1(){
         if (this.masqueProche.equals(TypeMasqueEnum.ABSENCE_MASQUE_PROCHE)){
@@ -683,6 +638,7 @@ public class PorteFenetre extends Ouverture {
         }else if(this.masqueProche.equals(TypeMasqueEnum.PRESENCE_MASQUE_PROCHE)){
             this.fe1=0.55;
         }
+        this.actualiseSse();
     }
     public void actualiseFe2(){
         if (this.masqueLointain.equals(TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN)){
@@ -714,6 +670,7 @@ public class PorteFenetre extends Ouverture {
                     break;
             }
         }
+        this.actualiseSse();
     }
     public void actualiseSse(){
         sse=surface*fts*fe1*fe2*c1*bas;

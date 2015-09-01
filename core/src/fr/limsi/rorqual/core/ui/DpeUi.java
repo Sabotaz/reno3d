@@ -23,23 +23,10 @@ public class DpeUi  {
     private static HashMap<DpePropertiesEnum,Layout> sauvegarde_layout = new HashMap<DpePropertiesEnum,Layout>();
 
     public static Actor getPropertyWindow(Object o) {
-        if (o instanceof IfcWallStandardCase) {
-            Actor a = Layout.fromJson("data/ui/layout/wallProperties.json", o).getRoot();
-            return a;
-        }
-        if (o instanceof IfcWindow) {
-            Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
-            return a;
-        }
-        if (o instanceof IfcDoor) {
-            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
-            return a;
-        }
-
-        if (o instanceof Porte) {
-            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
-            return a;
-        }
+//        if (o instanceof Porte) {
+//            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
+//            return a;
+//        }
         if (o instanceof Fenetre || o instanceof PorteFenetre) {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
             return a;

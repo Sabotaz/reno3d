@@ -4,76 +4,76 @@
   "width": 574,
   "id": "tab_window",
   "content": [
+//    {
+//      "type": "Table",
+//      "name": "Type / Matériau",
+//      "id": "type_et_materiau",
+//      "content": [
+//        {
+//          "type": "Table",
+//          "label": "Type : ",
+//          "labelPad": 5,
+//          "labelWidth": 77,
+//          "content": [
+//            {
+//              "type": "ButtonGroup",
+//              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+//              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FENETRE",
+//              "content": [
+//                {
+//                  "type": "CheckBox",
+//                  "label": "Battante",
+//                  "pad": 5,
+//                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre.FENETRE_DOUBLE_VENTAIL_BATTANTE"
+//                },
+//                {
+//                  "type": "CheckBox",
+//                  "label": "Coulissante",
+//                  "pad": 5,
+//                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre.FENETRE_DOUBLE_VENTAIL_COULISSANTE"
+//                }
+//              ]
+//            }
+//          ]
+//        },
+//        {
+//          "type": "Table",
+//          "label": "Matériau : ",
+//          "labelPad": 5,
+//          "labelWidth": 77,
+//          "content": [
+//            {
+//              "type": "ButtonGroup",
+//              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
+//              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MATERIAU_MENUISERIE",
+//              "content": [
+//                {
+//                  "type": "CheckBox",
+//                  "label": "Bois",
+//                  "pad": 5,
+//                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS"
+//                },
+//                {
+//                  "type": "CheckBox",
+//                  "label": "Métal",
+//                  "pad": 5,
+//                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.METALLIQUE"
+//                },
+//                {
+//                  "type": "CheckBox",
+//                  "label": "PVC",
+//                  "pad": 5,
+//                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.PVC"
+//                }
+//              ]
+//            }
+//          ]
+//        }
+//      ]
+//    },
     {
       "type": "Table",
-      "name": "Type / Matériau",
-      "id": "type_et_materiau",
-      "content": [
-        {
-          "type": "Table",
-          "label": "Type : ",
-          "labelPad": 5,
-          "labelWidth": 77,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FENETRE",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Battante",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre.FENETRE_DOUBLE_VENTAIL_BATTANTE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Coulissante",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre.FENETRE_DOUBLE_VENTAIL_COULISSANTE"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Table",
-          "label": "Matériau : ",
-          "labelPad": 5,
-          "labelWidth": 77,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_MATERIAU_MENUISERIE",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Bois",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.BOIS"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Métal",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.METALLIQUE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "PVC",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum.PVC"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "Table",
-      "name": "Vitrage / Fermeture / Masque",
+      "name": "Propriétés de la fenêtre",
       "id": "vitrage_et_fermeture",
       "content": [
         {
@@ -144,6 +144,12 @@
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FERMETURE_MENUISERIE",
               "content": [
+                {
+                  "type": "CheckBox",
+                  "label": "Sans Fermeture",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.SANS_FERMETURE"
+                },
                 {
                   "type": "CheckBox",
                   "label": "Jalousie accordéon",

@@ -56,6 +56,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private DateIsolationMurEnum dateIsolationMur;
     private OrientationEnum orientationMur;
     private double coeffTransmissionThermique;
+    private double deperdition;
     private Slab slabGauche = null;
     private Slab slabDroit = null;
 
@@ -83,7 +84,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.width = b.getPosition().cpy().sub(a.getPosition()).len();
         this.surface = Etage.DEFAULT_HEIGHT * this.width;
         this.typeMur=TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
-        this.typeIsolationMur=TypeIsolationMurEnum.NON_ISOLE;
+        this.typeIsolationMur=TypeIsolationMurEnum.INCONNUE;
         this.dateIsolationMur=DateIsolationMurEnum.JAMAIS;
         this.orientationMur=OrientationEnum.NORD;
         materialLayersMaterials.add(MaterialTypeEnum.BRIQUE);
@@ -157,6 +158,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         if (a != null) {
             a.addMur(this);
             this.width = B.getPosition().cpy().sub(A.getPosition()).len();
+            this.surface = Etage.DEFAULT_HEIGHT * this.width;
         };
         setChanged();
     }
@@ -171,6 +173,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         if (b != null) {
             b.addMur(this);
             this.width = B.getPosition().cpy().sub(A.getPosition()).len();
+            this.surface = Etage.DEFAULT_HEIGHT * this.width;
         }
         setChanged();
     }
@@ -326,7 +329,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         changed = true;
         for (Ouverture o : ouvertures)
             o.setChanged();
-        etage.updateOrientation(this);
+        if (etage!=null)
+            etage.updateOrientation(this);
     }
 
     private Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
@@ -429,5 +433,78 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         currentItems.put("userObject", this);
         Event e = new Event(DpeEvent.MITOYENNETE_MUR_CHANGEE, currentItems);
         EventManager.getInstance().put(Channel.DPE, e);
+    }
+
+    public void actualiseDeperdition(){
+        switch (this.typeMur){
+            case MUR_DONNANT_SUR_EXTERIEUR:
+                this.deperdition = this.surface*this.coeffTransmissionThermique;
+                break;
+            case MUR_DONNANT_SUR_UNE_AUTRE_HABITATION:
+                this.deperdition += 0.2*this.surface*this.coeffTransmissionThermique;
+                break;
+            case MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE:
+                switch (this.orientationMur){
+                    case INCONNUE:
+                    case NORD:
+                        switch(this.dateIsolationMur){
+                            case INCONNUE:
+                            case JAMAIS:
+                                // Non isolé
+                                this.deperdition=0.95*this.surface*this.coeffTransmissionThermique;
+                                break;
+                            default:
+                                // isolé
+                                this.deperdition=0.85*this.surface*this.coeffTransmissionThermique;
+                                break;
+                        }
+                        break;
+                    case EST:
+                    case OUEST:
+                        switch(this.dateIsolationMur){
+                            case INCONNUE:
+                            case JAMAIS:
+                                // Non isolé
+                                this.deperdition= 0.63*this.surface*this.coeffTransmissionThermique;
+                                break;
+                            default:
+                                // isolé
+                                this.deperdition= 0.6*this.surface*this.coeffTransmissionThermique;
+                                break;
+                        }
+                        break;
+                    case SUD:
+                        switch(this.dateIsolationMur){
+                            case INCONNUE:
+                            case JAMAIS:
+                                // Non isolé
+                                this.deperdition= 0.6*this.surface*this.coeffTransmissionThermique;
+                                break;
+                            default:
+                                // isolé
+                                this.deperdition= 0.55*this.surface*this.coeffTransmissionThermique;
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE:
+                switch (this.dateIsolationMur){
+                    case INCONNUE:
+                    case JAMAIS:
+                        // Non isolé
+                        this.deperdition= 0.95*this.surface*this.coeffTransmissionThermique;
+                        break;
+                    default:
+                        // isolé
+                        this.deperdition= 0.85*this.surface*this.coeffTransmissionThermique;
+                        break;
+                }
+                break;
+            case MUR_INTERIEUR:
+            case MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE:
+                this.deperdition=0;
+                break;
+        }
     }
 }

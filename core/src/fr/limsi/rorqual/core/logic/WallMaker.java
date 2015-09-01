@@ -127,6 +127,7 @@ public class WallMaker extends ModelMaker {
             ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);
 
         mur.setSelectable(true);
+        ModelHolder.notify(mur);
 
     }
 

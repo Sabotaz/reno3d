@@ -79,6 +79,8 @@ public class Fenetre extends Ouverture {
 
     public void setTypeVitrage(TypeVitrageEnum typeVitrage) {
         this.typeVitrage = typeVitrage;
+        this.actualiseCoeffTransmissionThermiqueFenetre();
+        this.actualiseFts();
     }
 
     public TypeFermetureEnum getTypeFermeture() {
@@ -87,6 +89,17 @@ public class Fenetre extends Ouverture {
 
     public void setTypeFermeture(TypeFermetureEnum typeFermeture) {
         this.typeFermeture = typeFermeture;
+        this.actualiseCoeffTransmissionThermiqueFenetre();
+    }
+
+    public void setMasqueProche(TypeMasqueEnum masqueProche) {
+        this.masqueProche = masqueProche;
+        this.actualiseFe1();
+    }
+
+    public void setMasqueLointain(TypeMasqueEnum masqueLointain) {
+        this.masqueLointain = masqueLointain;
+        this.actualiseFe2();
     }
 
     public void actualiseDeperdition(){

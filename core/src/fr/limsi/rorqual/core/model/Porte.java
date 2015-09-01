@@ -58,7 +58,7 @@ public class Porte extends Ouverture{
         return this.typePorte;
     }
 
-    public void actualiseDeperditionPorte() {
+    public void actualiseCoefficientDeTransmissionThermique() {
         double u=4.5;
         double deperdition=0;
         if (this.getMur().getTypeMur().equals(TypeMurEnum.MUR_INTERIEUR)){
@@ -92,8 +92,82 @@ public class Porte extends Ouverture{
                     break;
             }
             this.coefficientDeTransmissionThermique=u;
-            this.deperdition=deperdition;
+            this.actualiseDeperdition();
         }
+    }
+    public void actualiseDeperdition(){
+        double u=this.coefficientDeTransmissionThermique;
+        double deperdition=0;
+        if (!this.getMur().getTypeMur().equals(TypeMurEnum.MUR_INTERIEUR)){
+            switch (this.getMur().getTypeMur()){
+                case MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE:
+                    switch (this.getMur().getOrientationMur()){
+                        case INCONNUE:
+                        case NORD:
+                            switch(this.getMur().getDateIsolationMurEnum()){
+                                case INCONNUE:
+                                case JAMAIS:
+                                    // Non isolé
+                                    deperdition=0.95*this.surface*u;
+                                    break;
+                                default:
+                                    // isolé
+                                    deperdition=0.85*this.surface*u;
+                                    break;
+                            }
+                            break;
+                        case EST:
+                        case OUEST:
+                            switch(this.getMur().getDateIsolationMurEnum()){
+                                case INCONNUE:
+                                case JAMAIS:
+                                    // Non isolé
+                                    deperdition= 0.63*this.surface*u;
+                                    break;
+                                default:
+                                    // isolé
+                                    deperdition= 0.6*this.surface*u;
+                                    break;
+                            }
+                            break;
+                        case SUD:
+                            switch(this.getMur().getDateIsolationMurEnum()){
+                                case INCONNUE:
+                                case JAMAIS:
+                                    // Non isolé
+                                    deperdition= 0.6*this.surface*u;
+                                    break;
+                                default:
+                                    // isolé
+                                    deperdition= 0.55*this.surface*u;
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE:
+                    switch (this.getMur().getDateIsolationMurEnum()) {
+                        case INCONNUE:
+                        case JAMAIS:
+                            // Non isolé
+                            deperdition= 0.95*this.surface*u;
+                            break;
+                        default:
+                            // isolé
+                            deperdition= 0.85*this.surface*u;
+                            break;
+                    }
+                    break;
+                case MUR_DONNANT_SUR_UNE_AUTRE_HABITATION:
+                case MUR_DONNANT_SUR_EXTERIEUR:
+                    deperdition= this.surface*u;
+                    break;
+                case MUR_INTERIEUR:
+                case MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE:
+                    break;
+            }
+        }
+        this.deperdition=deperdition;
     }
     
     @Override
