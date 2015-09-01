@@ -70,6 +70,16 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     private boolean changed = true;
 
+    public Mur(Coin a, Coin b, Mur model) {
+        this(a, b, model.depth);
+        typeMur = model.typeMur;
+        typeIsolationMur = model.typeIsolationMur;
+        dateIsolationMur = model.dateIsolationMur;
+        slabGauche = model.slabGauche;
+        slabDroit = model.slabDroit;
+        coeffTransmissionThermique = model.coeffTransmissionThermique;
+    }
+
     public Mur(Coin a, Coin b) {
         this(a, b, DEFAULT_DEPTH);
     }

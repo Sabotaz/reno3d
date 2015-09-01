@@ -272,9 +272,7 @@ public class PieceMaker extends ModelMaker {
             Coin B = m1.getB();
             Coin C = m2.getA();
             m1.setB(C); // AC
-            extra = new Mur(C, B); // CB
-            extra.setSlabGauche(m1.getSlabGauche());
-            extra.setSlabDroit(m1.getSlabDroit());
+            extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
 
@@ -285,9 +283,7 @@ public class PieceMaker extends ModelMaker {
             Coin B = m1.getB();
             Coin C = m2.getB();
             m1.setB(C); // AC
-            extra = new Mur(C, B); // CB
-            extra.setSlabGauche(m1.getSlabGauche());
-            extra.setSlabDroit(m1.getSlabDroit());
+            extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
         } else
@@ -297,9 +293,7 @@ public class PieceMaker extends ModelMaker {
             Coin B = m2.getB();
             Coin C = m1.getA();
             m2.setB(C); // AC
-            extra = new Mur(C, B); // CB
-            extra.setSlabGauche(m2.getSlabGauche());
-            extra.setSlabDroit(m2.getSlabDroit());
+            extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
         } else
@@ -309,9 +303,7 @@ public class PieceMaker extends ModelMaker {
             Coin B = m2.getB();
             Coin C = m1.getB();
             m2.setB(C); // AC
-            extra = new Mur(C, B); // CB
-            extra.setSlabGauche(m2.getSlabGauche());
-            extra.setSlabDroit(m2.getSlabDroit());
+            extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
         }
