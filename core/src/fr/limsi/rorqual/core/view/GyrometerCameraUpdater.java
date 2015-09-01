@@ -31,6 +31,7 @@ public class GyrometerCameraUpdater extends PerspectiveCameraUpdater {
             mx.mul(translation);
 
             camera.view.set(mx);
+            camera.position.set(pos);
             camera.update();
         } else {
             super.update();

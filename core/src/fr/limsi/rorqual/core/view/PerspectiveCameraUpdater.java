@@ -40,6 +40,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
         perspectiveCamera.near = 1f;
         perspectiveCamera.far = 10000f;
+        perspectiveCamera.position.set(pos);
         pos.set(0, 0, 30f);
 
         camera = perspectiveCamera;
@@ -76,6 +77,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         mx.mul(translation);
 
         camera.view.set(mx);
+        camera.position.set(pos);
         camera.update();
     }
 
