@@ -87,6 +87,8 @@ public class Batiment {
         globalOrientation = orientation;
         for (Etage e : etages.list())
             e.setOrientation(orientation);
+
+        EventManager.getInstance().put(Channel.DPE, new Event(DpeEvent.ORIENTATION_GLOBALE_CHANGEE));
     }
 
     public void etageSuperieur() {

@@ -216,7 +216,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setOrientationMur(OrientationEnum orientationMur) {
         this.orientationMur = orientationMur;
-        this.orientationChanged();
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
         // What is the orientation of X ?
@@ -228,9 +227,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         float dy = B.getPosition().y - A.getPosition().y;
         OrientationEnum lastOrientation = this.orientationMur;
         this.orientationMur = orientationMur.wrapX(dx, dy);
-        if (lastOrientation!=this.orientationMur) {
-            this.orientationChanged();
-        }
     }
 
     public double getSurface(){
@@ -434,13 +430,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         HashMap<String,Object> currentItems = new HashMap<String,Object>();
         currentItems.put("userObject", this);
         Event e = new Event(DpeEvent.MITOYENNETE_MUR_CHANGEE, currentItems);
-        EventManager.getInstance().put(Channel.DPE, e);
-    }
-
-    public void orientationChanged(){
-        HashMap<String,Object> currentItems = new HashMap<String,Object>();
-        currentItems.put("userObject", this);
-        Event e = new Event(DpeEvent.ORIENTATION_MUR_CHANGEE, currentItems);
         EventManager.getInstance().put(Channel.DPE, e);
     }
 }

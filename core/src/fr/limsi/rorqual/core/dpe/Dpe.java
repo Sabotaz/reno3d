@@ -3236,7 +3236,7 @@ public class Dpe implements EventListener {
                     case MITOYENNETE_MUR_CHANGEE:
                         System.out.println("Mitoyenneté changée !!!");
                         break;
-                    case ORIENTATION_MUR_CHANGEE:
+                    case ORIENTATION_GLOBALE_CHANGEE:
                         System.out.println("Orientation changée !!!"+comptteur);
                         comptteur++;
                         break;
