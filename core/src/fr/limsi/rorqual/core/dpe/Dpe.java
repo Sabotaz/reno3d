@@ -3221,6 +3221,13 @@ public class Dpe implements EventListener {
                     case SLAB_AJOUTE:
                         break;
                     case FENETRE_AJOUTEE:
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        Fenetre fenetre = (Fenetre)items.get("userObject");
+                        fenetre.actualiseCoeffTransmissionThermiqueFenetre();
+                        fenetre.actualiseBas();
+                        fenetre.actualiseC1();
+                        fenetre.actualiseFts();
+                        System.out.println("Fenêtre ajoutée !!!");
                         break;
                     case PORTE_FENETRE_AJOUTEE:
                         break;
@@ -3230,10 +3237,12 @@ public class Dpe implements EventListener {
                         System.out.println("Mitoyenneté changée !!!");
                         break;
                     case ORIENTATION_MUR_CHANGEE:
-                        System.out.println("Orientation changée !!!");
+                        System.out.println("Orientation changée !!!"+comptteur);
+                        comptteur++;
                         break;
                 }
             }
         }
     }
+    private static int comptteur=1;
 }

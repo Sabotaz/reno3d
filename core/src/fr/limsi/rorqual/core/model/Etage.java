@@ -111,12 +111,15 @@ public class Etage {
         this.batiment = batiment;
     }
 
-    private OrientationEnum globalOrientation = OrientationEnum.INCONNUE;
+    private OrientationEnum globalOrientation = OrientationEnum.SUD;
 
     public void setOrientation(OrientationEnum orientation) {
         globalOrientation = orientation;
         for (Mur m : murs){
             m.setGlobalOrientation(orientation);
         }
+    }
+    public void updateOrientation(Mur mur){
+        mur.setGlobalOrientation(globalOrientation);
     }
 }

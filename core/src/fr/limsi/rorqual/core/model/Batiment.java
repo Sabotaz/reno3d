@@ -81,7 +81,7 @@ public class Batiment {
         return etages.get(current);
     }
 
-    OrientationEnum globalOrientation = OrientationEnum.INCONNUE;
+    OrientationEnum globalOrientation = OrientationEnum.SUD;
 
     public void setOrientation(OrientationEnum orientation) {
         globalOrientation = orientation;

@@ -10,6 +10,6 @@ public enum TypeFermetureEnum {
     FERMETURE_SANS_AJOURES,
     VOLET_BATTANT_BOIS,
     VOLET_ROULANT_PVC,
-    SANS_FEMETURE;
+    SANS_FERMETURE;
 }
 

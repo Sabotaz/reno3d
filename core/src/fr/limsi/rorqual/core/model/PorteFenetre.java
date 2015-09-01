@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
-import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFenetre;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiserieEnum;
@@ -40,7 +39,7 @@ public class PorteFenetre extends Ouverture {
     public PorteFenetre(Mur mur, float x, float y, float width, float height) {
         super(mur, new Vector2(x, y), width, height);
         this.typeVitrage=TypeVitrageEnum.SIMPLE_VITRAGE;
-        this.typeFermeture=TypeFermetureEnum.SANS_FEMETURE;
+        this.typeFermeture=TypeFermetureEnum.SANS_FERMETURE;
         this.masqueProche=TypeMasqueEnum.ABSENCE_MASQUE_PROCHE;
         this.masqueLointain=TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
     }
@@ -525,7 +524,7 @@ public class PorteFenetre extends Ouverture {
                 else if (uDevantEtreActualise<6.2){nouveauU=4.4;}
                 else if (uDevantEtreActualise>=6.2){nouveauU=4.5;}
                 break;
-            case SANS_FEMETURE:
+            case SANS_FERMETURE:
                 break;
         }
         return nouveauU;

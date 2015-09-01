@@ -39,7 +39,7 @@ public class Fenetre extends Ouverture {
     public Fenetre(Mur mur, float x, float y, float width, float height) {
         super(mur, new Vector2(x, y), width, height);
         this.typeVitrage=TypeVitrageEnum.SIMPLE_VITRAGE;
-        this.typeFermeture=TypeFermetureEnum.SANS_FEMETURE;
+        this.typeFermeture=TypeFermetureEnum.SANS_FERMETURE;
         this.masqueProche=TypeMasqueEnum.ABSENCE_MASQUE_PROCHE;
         this.masqueLointain=TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
     }
@@ -437,6 +437,7 @@ public class Fenetre extends Ouverture {
                 }
                 break;
         }
+        this.coefficientDeTransmissionThermique=u;
         this.actualiseDeperdition();
     }
     public double actualiseCoeffTransmissionThermiqueAvecFermeture(double uDevantEtreActualise){
@@ -556,7 +557,7 @@ public class Fenetre extends Ouverture {
                 else if (uDevantEtreActualise<6.2){nouveauU=4.4;}
                 else if (uDevantEtreActualise>=6.2){nouveauU=4.5;}
                 break;
-            case SANS_FEMETURE:
+            case SANS_FERMETURE:
                 break;
         }
         return nouveauU;

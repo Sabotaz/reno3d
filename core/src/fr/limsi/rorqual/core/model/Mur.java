@@ -226,8 +226,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setGlobalOrientation(OrientationEnum orientationMur) {
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
+        OrientationEnum lastOrientation = this.orientationMur;
         this.orientationMur = orientationMur.wrapX(dx, dy);
-        this.orientationChanged();
+        if (lastOrientation!=this.orientationMur) {
+            this.orientationChanged();
+        }
     }
 
     public double getSurface(){
@@ -329,6 +332,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         changed = true;
         for (Ouverture o : ouvertures)
             o.setChanged();
+        etage.updateOrientation(this);
     }
 
     private Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
