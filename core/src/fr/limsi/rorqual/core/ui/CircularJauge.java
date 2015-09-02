@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -18,7 +20,7 @@ import fr.limsi.rorqual.core.view.shaders.ProgressBarShader;
 /**
  * Created by christophe on 01/09/15.
  */
-public class CircularJauge extends ProgressBar {
+public class CircularJauge extends Widget {
 
 
     private enum Score {
@@ -71,57 +73,38 @@ public class CircularJauge extends ProgressBar {
     Texture foreground;
     ProgressBarShader shader;
 
-    public CircularJauge(Texture background, Texture foreground, Skin skin) {
-        super(0, 1, 20, true, skin);
+    public CircularJauge(Texture background, Texture foreground) {
         this.background = background;
         this.foreground = foreground;
         shader = new ProgressBarShader(false);
     }
 
-    private CircularJauge(float min, float max, float stepSize, boolean vertical, ProgressBar.ProgressBarStyle style) {
-        super(min, max, stepSize, vertical, style);
+    float current_value = 0;
+    float consign_value = 0;
+    int frames_for_consign = 30;
+    int current_frame = 0;
+
+    public void setCurrentValue (float value) {
+        current_value = consign_value = value;
     }
 
-    private CircularJauge(float min, float max, float stepSize, boolean vertical, Skin skin) {
-        this(min, max, stepSize, vertical, skin.get("default-vertical", ProgressBarStyle.class));
-    }
-
-    private CircularJauge(float min, float max, float stepSize, boolean vertical, Skin skin, java.lang.String styleName) {
-        this(min, max, stepSize, vertical, skin.get(styleName, ProgressBarStyle.class));
-    }
-
-    float position;
-    Score currentScore = Score.G;
-    @Override
-    public boolean setValue (float value) {
-        Score score = Score.getScore((int)value);
-        if (currentScore != score) {
-            float min = score.min;
-            float max = score.max;
-            currentScore = score;
-            this.setRange(min, max);
-        }
-        return super.setValue(value);
+    public void setConsignValue (float value) {
+        if (consign_value == value) return;
+        consign_value = value;
+        current_frame = 0;
     }
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
 
-        Color color = getColor();
         float x = getX();
         float y = getY();
         float width = getWidth();
         float height = getHeight();
 
-        Score score = Score.getScore((int)this.getVisualValue());
+        Score score = Score.getScore((int)current_value);
 
-        float min = score.min;
-        float max = score.max;
-        this.setRange(min, max);
-
-        float percent = getVisualPercent();
-
-        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        float percent = (MathUtils.clamp(current_value, score.min, score.max) - score.min) / (score.max - score.min);
 
         // generate drawables
 
@@ -134,5 +117,22 @@ public class CircularJauge extends ProgressBar {
         batch.setShader(null);
         batch.draw(foreground, x, y, width, height);
 
+    }
+
+    @Override
+    public void act(float delta) {
+        if (!MathUtils.isEqual(current_value, consign_value)) {
+            int frames_restantes = frames_for_consign - current_frame;
+
+            if (frames_restantes <= 1) {
+                current_value = consign_value;
+            } else {
+                float diff = consign_value - current_value;
+                float step = diff / frames_restantes;
+                current_value += step;
+                current_frame++;
+
+            }
+        }
     }
 }

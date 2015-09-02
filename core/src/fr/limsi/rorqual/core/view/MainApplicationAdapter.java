@@ -222,7 +222,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         System.out.println("stage menu ok " + ((System.currentTimeMillis() - start) * 0.001f));
         stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
-        score = new CircularJauge((Texture)assets.get("roulette_arriere"), (Texture)assets.get("roulette"), (Skin)assets.get("uiskin"));
+        score = new CircularJauge((Texture)assets.get("roulette_arriere"), (Texture)assets.get("roulette"));
         score.setSize(100,100);
         stageMenu.addActor(score);
         System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
@@ -233,7 +233,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         dpe=Dpe.getInstance();
         double scoreDpe=dpe.getScoreDpe();
-        score.setValue((float)dpe.getScoreDpe());
+        score.setCurrentValue((float)dpe.getScoreDpe());
         skin = (Skin)AssetManager.getInstance().get("uiskin");
         labelScore= new Label("("+Double.toString(scoreDpe)+")",skin);
         stageMenu.addActor(labelScore);
@@ -265,7 +265,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light_dir = sun.local_transform.getTranslation(light_dir).scl(-1).nor();
         light.direction.set(light_dir);
 
-        score.setValue((float) dpe.getScoreDpe());
+        score.setConsignValue((float) dpe.getScoreDpe());
 
         double score = dpe.getScoreDpe();
         labelScore.setText("("+Double.toString(score)+")");
