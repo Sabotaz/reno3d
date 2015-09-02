@@ -25,13 +25,13 @@ public class CircularJauge extends Widget {
 
     private enum Score {
         // 0 --A-- 50 --B-- 90 --C-- 150 --D-- 230 --E-- 330 --F-- 450 --G--
-        A(1,50,Color.BLACK),
-        B(51, 90,Color.BLUE),
-        C(91,150,Color.CLEAR),
-        D(151,230,Color.CYAN),
-        E(231,330,Color.DARK_GRAY),
-        F(331,450,Color.GRAY),
-        G(451,700, Color.GREEN),
+        A(1,50,Color.valueOf("810f7c")),
+        B(51, 90,Color.valueOf("8856a7")),
+        C(91,150,Color.valueOf("8c96c6")),
+        D(151,230,Color.valueOf("b3cde3")),
+        E(231,330,Color.valueOf("edf8fb")),
+        F(331,450,Color.BLACK),
+        G(451,700,Color.BLACK),
         ;
 
         Color color;
@@ -45,7 +45,7 @@ public class CircularJauge extends Widget {
             D.background = E.color;
             E.background = F.color;
             F.background = G.color;
-            G.background = Color.WHITE;
+            G.background = Color.BLACK;
         }
 
         Score(int min, int max, Color color) {
@@ -131,7 +131,6 @@ public class CircularJauge extends Widget {
                 float step = diff / frames_restantes;
                 current_value += step;
                 current_frame++;
-
             }
         }
     }

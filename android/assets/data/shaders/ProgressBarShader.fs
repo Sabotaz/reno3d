@@ -9,10 +9,14 @@ uniform float u_ratio;
 void main() {
         vec4 tex = texture2D(u_texture, v_texCoords);
         float intensity = (tex.r + tex.g + tex.b) / 3.0;
-        if (intensity >= u_ratio) {
+        float threshold = 1./256.;
+        if (intensity < u_ratio - threshold) {
                 gl_FragColor = vec4(u_firstColor.rgb, tex.a);
         }
-        else {
+        else if (intensity > u_ratio + threshold) {
                 gl_FragColor = vec4(u_secondColor.rgb, tex.a);
+        }
+        else {
+                gl_FragColor = vec4(0,0,0, tex.a);
         }
 }
