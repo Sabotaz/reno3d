@@ -202,7 +202,7 @@ public class AssetManager {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/FreeSans.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 14;
+        parameter.size = (int) (20 * Gdx.graphics.getDensity());
 
         font = (BitmapFont) loadOnUi(generator, parameter);
 

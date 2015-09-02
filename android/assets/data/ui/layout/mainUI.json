@@ -14,8 +14,8 @@
           "type": "TextButton",
           "text": "EXIT",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.EXIT",
-          "height": 40,
-          "width": 120,
+          "height": "10%",
+          "width": "18%",
           "padTop": 10,
           "padRight": 10,
           "style": [

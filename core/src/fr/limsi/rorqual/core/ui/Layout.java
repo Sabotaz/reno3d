@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -127,7 +128,7 @@ public class Layout {
     private Actor readLayout(String name) {
         FileHandle handle = Gdx.files.internal(name);
         JsonValue json = new JsonReader().parse(handle.readString());
-        Actor root = getActor(json, null);
+        Actor root = getActor(json, null, null);
         return root;
     }
 
@@ -166,7 +167,7 @@ public class Layout {
         }
     }
 
-    private Actor getActor(JsonValue json, Updater parent_updater) {
+    private Actor getActor(JsonValue json, Updater parent_updater, Actor parent) {
         Actor actor;
         Updater updater = parent_updater;
         if (json.has("event") && json.has("channel")) {
@@ -180,31 +181,31 @@ public class Layout {
 
         switch(json.getString("type", "")) {
             case "TabWindow":
-                actor = makeTabWindow(json, updater);
+                actor = makeTabWindow(json, updater, parent);
                 break;
             case "Table":
-                actor = makeTable(json, updater);
+                actor = makeTable(json, updater, parent);
                 break;
             case "ButtonGroup":
-                actor = makeButtonGroup(json, updater);
+                actor = makeButtonGroup(json, updater, parent);
                 break;
             case "TextButton":
-                actor = makeTextButton(json, updater);
+                actor = makeTextButton(json, updater, parent);
                 break;
             case "Button":
-                actor = makeButton(json, updater);
+                actor = makeButton(json, updater, parent);
                 break;
             case "ImageButton":
-                actor = makeImageButton(json, updater);
+                actor = makeImageButton(json, updater, parent);
                 break;
             case "CheckBox":
-                actor = makeCheckBox(json, updater);
+                actor = makeCheckBox(json, updater, parent);
                 break;
             case "ScrollPaneElement":
-                actor = makeScrollPane(json, updater);
+                actor = makeScrollPane(json, updater, parent);
                 break;
             case "TextField":
-                actor = makeTextField(json, updater);
+                actor = makeTextField(json, updater, parent);
                 break;
             default:
                 return null;
@@ -216,16 +217,36 @@ public class Layout {
         return actor;
     }
 
-    private Actor makeTabWindow(JsonValue json, Updater updater) {
+    private Value getValue(JsonValue json, String name, Actor parent) {
+        return getValue(json, name, 0, parent);
+    }
 
-        TabWindow tabWindow= new TabWindow(json.getFloat("width",900));
+    private Value getValue(JsonValue json, String name, float sub, Actor parent) {
+        String val = json.getString(name, String.valueOf(sub));
+        if (val.endsWith("%")) {
+            if (parent == null)  {
+                float f = Float.parseFloat(val.substring(0, val.length() - 1)) * 0.01f;
+                return new Value.Fixed(Gdx.graphics.getHeight() * f);
+            } else {
+                float f = Float.parseFloat(val.substring(0, val.length() - 1)) * 0.01f;
+                return Value.percentHeight(f, parent);
+            }
+        } else {
+            float f = Float.parseFloat(val.substring(0, val.length()));
+            return new Value.Fixed(f);
+        }
+    }
+
+    private Actor makeTabWindow(JsonValue json, Updater updater, Actor parent) {
+
+        TabWindow tabWindow= new TabWindow(getValue(json, "width", 900, null));
         tabWindow.setTitle(json.getString("name", ""));
         if (json.get("content") != null) {
             JsonValue json_tab;
             Actor tab;
             int i = 0;
             while ((json_tab = json.get("content").get(i)) != null) {
-                if ((tab = getActor(json_tab, updater)) != null)
+                if ((tab = getActor(json_tab, updater, tabWindow)) != null)
                     tabWindow.addTable(tab);
                 i++;
             }
@@ -233,7 +254,7 @@ public class Layout {
         return tabWindow;
     }
 
-    private Actor makeTable(JsonValue json, Updater updater) {
+    private Actor makeTable(JsonValue json, Updater updater, Actor parent) {
 
         Table table = new Table();
         table.setName(json.getString("name", ""));
@@ -262,9 +283,9 @@ public class Layout {
             lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
             lbs.fontColor = Color.DARK_GRAY;
             Label label = new Label(json.getString("label"),lbs);
-            table.add(label).top().width(json.getFloat("labelWidth",516)).pad(json.getFloat("labelPad",1));
+            table.add(label).top().width(getValue(json, "labelWidth", 516, null)).pad(getValue(json, "labelPad", 1, null));
 
-//            table.add(label).top().pad(json.getFloat("labelPad",1));
+//            table.add(label).top().pad(getValue(json,"labelPad",1));
 //            System.out.println("prefWidth"+table.getPrefWidth());
         }
 
@@ -273,7 +294,7 @@ public class Layout {
             Actor child;
             int i = 0;
             while ((json_child = json.get("content").get(i)) != null) {
-                if ((child = getActor(json_child, updater)) != null) {
+                if ((child = getActor(json_child, updater, table)) != null) {
                     Cell c = table.add(child);
                     c.expandX().fillX().left();
 
@@ -322,7 +343,7 @@ public class Layout {
         return table;
     }
 
-    private Actor makeButtonGroup(JsonValue json, Updater updater) {
+    private Actor makeButtonGroup(JsonValue json, Updater updater, Actor parent) {
 
         ButtonGroup<Button> buttons= new ButtonGroup<Button>();
         buttons.setMinCheckCount(0);
@@ -350,7 +371,7 @@ public class Layout {
             Actor child;
             int i = 0;
             while ((json_child = json.get("content").get(i)) != null) {
-                if ((child = getActor(json_child, updater)) != null) {
+                if ((child = getActor(json_child, updater, table)) != null) {
 
                     Cell c = table.add(child);
 
@@ -377,7 +398,7 @@ public class Layout {
         return table;
     }
 
-    private Actor makeButton(JsonValue json, Updater updater) {
+    private Actor makeButton(JsonValue json, Updater updater, Actor parent) {
 
         final Button button;
 
@@ -390,7 +411,7 @@ public class Layout {
         }
 
         if (json.has("height") && json.has("width"))
-            button.setSize(json.getFloat("width"), json.getFloat("height"));
+            button.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -419,7 +440,7 @@ public class Layout {
         return button;
     }
 
-    private Actor makeTextButton(JsonValue json, Updater updater) {
+    private Actor makeTextButton(JsonValue json, Updater updater, Actor parent) {
         final TextButton textButton;
         TextButton.TextButtonStyle tbs;
 
@@ -435,7 +456,7 @@ public class Layout {
         textButton = new TextButton(json.getString("text", ""), tbs);
 
         if (json.has("height") && json.has("width"))
-            textButton.setSize(json.getFloat("width"), json.getFloat("height"));
+            textButton.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -506,7 +527,7 @@ public class Layout {
         }
     }
 
-    private Actor makeImageButton (JsonValue json, Updater updater){
+    private Actor makeImageButton (JsonValue json, Updater updater, Actor parent){
         String nameImage = json.getString("image");
         Texture textureImage = (Texture) AssetManager.getInstance().get(nameImage);
         Image image = new Image(textureImage);
@@ -515,7 +536,7 @@ public class Layout {
 
 
         if (json.has("height") && json.has("width"))
-            imageButton.setSize(json.getFloat("width"), json.getFloat("height"));
+            imageButton.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -544,7 +565,7 @@ public class Layout {
         return imageButton;
     }
 
-    private Actor makeCheckBox (JsonValue json, Updater updater){
+    private Actor makeCheckBox (JsonValue json, Updater updater, Actor parent){
         String text = " " + json.getString("label");
         CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
         cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
@@ -577,7 +598,7 @@ public class Layout {
         return checkBox;
     }
 
-    private Actor makeScrollPane(JsonValue json, Updater updater) {
+    private Actor makeScrollPane(JsonValue json, Updater updater, Actor parent) {
 
         Table table = new Table();
 
@@ -653,7 +674,7 @@ public class Layout {
         return table;
     }
 
-    private Actor makeTextField(JsonValue json, Updater updater) {
+    private Actor makeTextField(JsonValue json, Updater updater, Actor parent) {
 
         Table table = new Table();
 
