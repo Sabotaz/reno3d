@@ -793,6 +793,18 @@ public class Fenetre extends Ouverture {
         sse=surface*fts*fe1*fe2*c1*bas;
     }
 
+    public double getSurfaceSudEquivalente(){
+        return this.sse;
+    }
+
+    public TypeMasqueEnum getMasqueProche(){
+        return this.masqueProche;
+    }
+
+    public TypeMasqueEnum getMasqueLointain(){
+        return this.masqueLointain;
+    }
+
     @Override
     protected void makeModel() {
         BoundingBox b = new BoundingBox();
@@ -802,5 +814,9 @@ public class Fenetre extends Ouverture {
         float d = this.getHeight() / b.getDepth();
         Vector3 dmin = b.getMin(new Vector3()).scl(-1);
         model_transform.idt().scale(w, h, d).translate(dmin);
+    }
+    @Override
+    public String toString(){
+        return "Fenetre ->  s="+surface+" u="+coefficientDeTransmissionThermique+ " dp="+deperdition;
     }
 }

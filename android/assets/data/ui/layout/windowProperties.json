@@ -122,12 +122,6 @@
                   "label": "Triple vitrage",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.TRIPLE_VITRAGE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Inconnue",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.INCONNUE"
                 }
               ]
             }

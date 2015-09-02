@@ -27,11 +27,20 @@ public class Dpe implements EventListener {
     /*** Attributs liés au calcul du DPE ***/
 
     // 0.Variables générales
-    private double sh = 50;
+    private double sh = 0;
     private double per;
     private double scoreDpe = 700;
     private DateConstructionBatimentEnum dateConstructionBatiment = DateConstructionBatimentEnum.AVANT_1975; // Initialisation défavorable
     private TypeEnergieConstructionEnum typeEnergieConstruction = TypeEnergieConstructionEnum.AUTRE; // Initialisation défavorable
+    private DepartementBatimentEnum departementBatiment = DepartementBatimentEnum.AIN; // Choix par défaut
+    public void actualiseSH(){
+        double tampon=0;
+        for (Slab s:slabList){
+            tampon+=s.getSurface();
+        }
+        this.sh=tampon;
+//        System.out.println("SH= "+sh);
+    }
 
     // 1.Expression du besoin de chauffage
     private double bv=100;
@@ -59,7 +68,7 @@ public class Dpe implements EventListener {
             case INCONNUE:
                 u=this.getUmurFoncAnneeConstruction(mur);
                 break;
-            case EN_RENOVATION_DATE_INCONNUE:
+            case A_LA_CONSTRUCTION:
                 if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
                     u=0.8;
                     mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
@@ -362,6 +371,7 @@ public class Dpe implements EventListener {
         return uPlafond;
     }
     ///*** Planchers ***///
+    private List<Slab> slabList=new ArrayList<Slab>();
     public void actualiseDeperditionPlancher(Slab slab){
         double val=0;
         double u=2.5;
@@ -647,9 +657,8 @@ public class Dpe implements EventListener {
     private double dhRef=71000;
     private double kdh=2;
     private double nRef=5800;
-    private double e=340;
     private double aI=1209399000;
-    private double aS=680000;
+    private double aS=0;
     private double sse=0; // Il n'y a aucune baie, la sse est nulle initialement
     public void actualiseF(){
         double a=x-Math.pow(x,3.6);
@@ -668,9 +677,6 @@ public class Dpe implements EventListener {
     public void actualiseNref(DepartementBatimentEnum departement){
         nRef=departement.getNref();
     }
-    public void actualiseE(DepartementBatimentEnum departement){
-        e=departement.getE();
-    }
     public void actualiseKdh(){
         switch(tInt){
             case ENTRE_16_ET_17:
@@ -688,10 +694,21 @@ public class Dpe implements EventListener {
         }
     }
     public void actualiseAs(){
-        aS=1000*e*sse;
+        aS=1000*departementBatiment.getE()*sse;
     }
 
     // 2.7.Détermination de la surface sud équivalente
+    public void actualiseSse(){
+        double tampon = 0;
+        for (Fenetre f:fenetreList){
+            tampon += f.getSurfaceSudEquivalente();
+        }
+        for (PorteFenetre pf:porteFenetreList){
+            tampon += pf.getSurfaceSudEquivalente();
+        }
+        this.sse=tampon;
+        this.actualiseAs();
+    }
 
     // 3.Traitement de l'intermittence
     private double intermittence = 1;
@@ -1931,17 +1948,14 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            DepartementBatimentEnum departement = (DepartementBatimentEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.DEPARTEMENT_BATIMENT, departement);
+                            departementBatiment = (DepartementBatimentEnum) items.get("lastValue");
+                            this.actualiseAs();
                             this.actualiseResistanceClim();
                             this.tryActualiseIch();
                             this.actualiseTfr();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            DepartementBatimentEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
-                                type = (DepartementBatimentEnum) general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT);
-                            }
+                            DepartementBatimentEnum type = this.departementBatiment;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -1976,15 +1990,15 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            DateConstructionBatimentEnum dateConstructionBatiment = (DateConstructionBatimentEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.ANNEE_CONSTRUCTION, dateConstructionBatiment);
+                            dateConstructionBatiment = (DateConstructionBatimentEnum) items.get("lastValue");
+                            // Actualisation des murs
+                            for(Mur m:murList){
+                                actualiseCoeffDeperditionThermique(m);
+                            }
                             this.tryActualiseIch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            DateConstructionBatimentEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
-                                type = (DateConstructionBatimentEnum) general_properties.get(DpeEvent.ANNEE_CONSTRUCTION);
-                            }
+                            DateConstructionBatimentEnum type = this.dateConstructionBatiment;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -1998,11 +2012,14 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeEnergieConstructionEnum typeEnergieConstruction = (TypeEnergieConstructionEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.ENERGIE_CONSTRUCTION, typeEnergieConstruction);
+                            typeEnergieConstruction = (TypeEnergieConstructionEnum) items.get("lastValue");
+                            // Actualisation des murs
+                            for(Mur m:murList){
+                                actualiseCoeffDeperditionThermique(m);
+                            }
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeEnergieConstructionEnum type = null;
+                            TypeEnergieConstructionEnum type = TypeEnergieConstructionEnum.AUTRE;
                             if (general_properties.containsKey(DpeEvent.ENERGIE_CONSTRUCTION)){
                                 type = (TypeEnergieConstructionEnum) general_properties.get(DpeEvent.ENERGIE_CONSTRUCTION);
                             }
@@ -2951,7 +2968,7 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum)items.get("lastValue");
                             mur.setDateIsolationMurEnum(dateIsolationMur);
-//                            actualiseCoeffDeperditionThermique(mur);
+                            actualiseCoeffDeperditionThermique(mur);
                             ArrayList<Ouverture> ouverturesMur = mur.getOuvertures();
                             if (!ouverturesMur.isEmpty()){
                                 for(Ouverture actualOuverture : ouverturesMur){
@@ -2963,12 +2980,6 @@ public class Dpe implements EventListener {
                                         ((Porte) actualOuverture).actualiseDeperdition();
                                     }
                                 }
-                            }
-                            Layout layout = (Layout) items.get("layout");
-                            if (dateIsolationMur.equals(DateIsolationMurEnum.JAMAIS) || dateIsolationMur.equals(DateIsolationMurEnum.INCONNUE)) {
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
-                            } else {
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
                             }
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             DateIsolationMurEnum type = mur.getDateIsolationMurEnum();
@@ -3065,6 +3076,7 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
                                 fenetre.setTypeVitrage(typeVitrage);
+                                this.actualiseSse();
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeVitrageEnum type = fenetre.getTypeVitrage();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -3079,6 +3091,7 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
                                 porteFenetre.setTypeVitrage(typeVitrage);
+                                this.actualiseSse();
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeVitrageEnum type = porteFenetre.getTypeVitrage();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -3101,7 +3114,7 @@ public class Dpe implements EventListener {
                                 TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
                                 fenetre.setTypeFermeture(typeFermeture);
                             } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeFermetureEnum type = TypeFermetureEnum.SANS_FERMETURE;
+                                TypeFermetureEnum type = fenetre.getTypeFermeture();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -3115,7 +3128,7 @@ public class Dpe implements EventListener {
                                 TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
                                 porteFenetre.setTypeFermeture(typeFermeture);
                             } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeFermetureEnum type = TypeFermetureEnum.SANS_FERMETURE;
+                                TypeFermetureEnum type = porteFenetre.getTypeFermeture();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -3135,8 +3148,9 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
                                 fenetre.setMasqueProche(masque);
+                                this.actualiseSse();
                             } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeMasqueEnum type = TypeMasqueEnum.ABSENCE_MASQUE_PROCHE;
+                                TypeMasqueEnum type = fenetre.getMasqueProche();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -3149,8 +3163,9 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
                                 porteFenetre.setMasqueProche(masque);
+                                this.actualiseSse();
                             } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeMasqueEnum type = TypeMasqueEnum.ABSENCE_MASQUE_PROCHE;
+                                TypeMasqueEnum type = porteFenetre.getMasqueProche();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -3170,8 +3185,9 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
                                 fenetre.setMasqueLointain(masque);
+                                this.actualiseSse();
                             } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeMasqueEnum type = TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
+                                TypeMasqueEnum type = fenetre.getMasqueLointain();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -3184,8 +3200,9 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeMasqueEnum masque = (TypeMasqueEnum)items.get("lastValue");
                                 porteFenetre.setMasqueLointain(masque);
+                                this.actualiseSse();
                             } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeMasqueEnum type = TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
+                                TypeMasqueEnum type = porteFenetre.getMasqueLointain();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
                                 currentItems.put("lastValue",type);
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -3229,11 +3246,19 @@ public class Dpe implements EventListener {
                     case MUR_AJOUTE: {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Mur mur = (Mur) items.get("userObject");
-                        murList.add(mur);
-                        this.actualiseCoeffDeperditionThermique(mur);
+                        if (!murList.contains(mur)){
+                            murList.add(mur);
+                            this.actualiseCoeffDeperditionThermique(mur);
+                        }
                         break;
                     }
                     case SLAB_AJOUTE: {
+                        HashMap<String, Object> items = (HashMap<String, Object>) o;
+                        Slab plancher = (Slab) items.get("userObject");
+                        plancher.actualiseSurface();
+                        slabList.add(plancher);
+                        System.out.println("surface slab = "+plancher.getSurface());
+                        this.actualiseSH();
                         break;
                     }
                     case FENETRE_AJOUTEE: {
@@ -3244,6 +3269,8 @@ public class Dpe implements EventListener {
                         fenetre.actualiseBas();
                         fenetre.actualiseC1();
                         fenetre.actualiseFts();
+                        fenetre.getMur().actualiseSurface();
+                        this.actualiseSse();
                         break;
                     }
                     case PORTE_FENETRE_AJOUTEE: {
@@ -3254,6 +3281,8 @@ public class Dpe implements EventListener {
                         porteFenetre.actualiseBas();
                         porteFenetre.actualiseC1();
                         porteFenetre.actualiseFts();
+                        porteFenetre.getMur().actualiseSurface();
+                        this.actualiseSse();
                         break;
                     }
                     case PORTE_AJOUTE: {
@@ -3265,9 +3294,11 @@ public class Dpe implements EventListener {
                         Porte porte = (Porte) items.get("userObject");
                         porteList.add(porte);
                         porte.actualiseCoefficientDeTransmissionThermique();
+                        porte.getMur().actualiseSurface();
                         break;
                     }
                     case MITOYENNETE_MUR_CHANGEE: {
+                        System.out.println("coucou");
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Mur mur = (Mur) items.get("userObject");
                         this.actualiseCoeffDeperditionThermique(mur);
@@ -3304,6 +3335,7 @@ public class Dpe implements EventListener {
                                 actualPorteFenetre.actualiseFe2();
                             }
                         }
+                        this.actualiseSse();
                         break;
                     }
                     case SIZE_MUR_CHANGED:{

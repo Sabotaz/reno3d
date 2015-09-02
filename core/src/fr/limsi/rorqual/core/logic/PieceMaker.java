@@ -196,6 +196,7 @@ public class PieceMaker extends ModelMaker {
                     if (!removed.contains(m) && !removed.contains(n) && areDouble(m, n)) {
                         fixDoubleWalls(m, n);
                         removed.add(n);
+                        ModelHolder.notify(m);
                     }
 
             }
@@ -203,10 +204,10 @@ public class PieceMaker extends ModelMaker {
 
         for (Mur m : removed) {
             etage.removeMur(m);
+            dpeEventMurRemoved(m);
             m.setA(null);
             m.setB(null);
         }
-
     }
 
     private void fixDoubleWalls(Mur restant, Mur removed) {
@@ -276,7 +277,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
-            this.createEventSizeChanged(m1);
+            this.dpeEventSizeChanged(m1);
+            ModelHolder.notify(m1);
 
         } else
         if (m1.getA() != m2.getB() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a1, b1, b2) < EPSILON) {
@@ -288,7 +290,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
-            this.createEventSizeChanged(m1);
+            this.dpeEventSizeChanged(m1);
+            ModelHolder.notify(m1);
         } else
         if (m1.getA() != m2.getA() && m1.getA() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, a1) < EPSILON) {
             // m1.A est entre m2.A et m2.B
@@ -299,7 +302,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
-            this.createEventSizeChanged(m2);
+            this.dpeEventSizeChanged(m2);
+            ModelHolder.notify(m2);
         } else
         if (m1.getB() != m2.getA() && m1.getB() != m2.getB() && Intersector.distanceSegmentPoint(a2, b2, b1) < EPSILON) {
             // m1.B est entre m2.A et m2.B
@@ -310,15 +314,23 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
-            this.createEventSizeChanged(m2);
+            this.dpeEventSizeChanged(m2);
+            ModelHolder.notify(m2);
         }
 
     }
 
-    private void createEventSizeChanged(Mur mur){
+    private void dpeEventSizeChanged(Mur mur){
         HashMap<String,Object> currentItems = new HashMap<String,Object>();
         currentItems.put("userObject", mur);
         Event e = new Event(DpeEvent.SIZE_MUR_CHANGED, currentItems);
+        EventManager.getInstance().put(Channel.DPE, e);
+    }
+
+    private void dpeEventMurRemoved(Mur mur){
+        HashMap<String,Object> currentItems = new HashMap<String,Object>();
+        currentItems.put("userObject", mur);
+        Event e = new Event(DpeEvent.MUR_REMOVED, currentItems);
         EventManager.getInstance().put(Channel.DPE, e);
     }
 

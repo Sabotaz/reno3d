@@ -27,14 +27,12 @@ public class DpeUi  {
 //            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
 //            return a;
 //        }
+        System.out.println("\n"+o.toString()+"\n");
         if (o instanceof Fenetre || o instanceof PorteFenetre) {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
             return a;
         }
         if (o instanceof Mur) {
-            System.out.println("s="+((Mur) o).getSurface());
-            System.out.println("u="+((Mur) o).getCoeffTransmissionThermique());
-            System.out.println("dp="+((Mur) o).getDeperdition());
             Actor a = Layout.fromJson("data/ui/layout/wallProperties.json", o).getRoot();
             return a;
         }

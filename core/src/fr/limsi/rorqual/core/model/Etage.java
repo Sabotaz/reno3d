@@ -45,7 +45,6 @@ public class Etage {
     public void addMur(Mur mur) {
         boolean wasEmpty = isEmpty();
         this.murs.add(mur);
-
         mur.setEtage(this);
         mur.setGlobalOrientation(globalOrientation);
         this.modelGraph.getRoot().add(mur);

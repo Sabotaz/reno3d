@@ -37,6 +37,9 @@ import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
+import ifc2x3javatoolbox.ifc2x3tc1.IfcPolyline;
+import ifc2x3javatoolbox.ifc2x3tc1.LIST;
 
 /**
  * Created by ricordeau on 20/07/15.
@@ -74,7 +77,23 @@ public class Slab extends ModelContainer {
         this.dateIsolationPlafond=DateIsolationSlab.JAMAIS;
         this.dateIsolationPlancher=DateIsolationSlab.JAMAIS;
         this.typeIsolationPlancher=TypeIsolationSlab.NON_ISOLE;
-        // TODO : calcul surface
+    }
+
+    public void actualiseSurface(){
+        ArrayList<Coin> listCoin = new ArrayList<Coin>();
+        listCoin.addAll(coins);
+        listCoin.add(listCoin.get(0));
+        double xActuel=0,xSuivant=0,yActuel=0,ySuivant=0,totX=0,totY=0, airePolygone=0;
+        for (int i=0; i<listCoin.size()-1;i++){
+            xActuel = listCoin.get(i).getPosition().x;
+            xSuivant = listCoin.get(i + 1).getPosition().x;
+            yActuel = listCoin.get(i).getPosition().y;
+            ySuivant = listCoin.get(i+1).getPosition().y;
+            totX += (xActuel*ySuivant);
+            totY += (yActuel*xSuivant);
+        }
+        airePolygone=(totX-totY)/2;
+        this.surface = Math.abs(airePolygone);
     }
 
     public void setEtage(Etage e) {
@@ -249,5 +268,4 @@ public class Slab extends ModelContainer {
     public void setDateIsolationPlafond(DateIsolationSlab dateIsolationPlafond) {
         this.dateIsolationPlafond = dateIsolationPlafond;
     }
-
 }

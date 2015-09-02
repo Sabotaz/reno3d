@@ -413,7 +413,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         deselect();
         selected = modelGraph.getFromUserObject(o);
         if (selected != null) {
-            //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
+//            EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
             selected.setColor(Color.YELLOW);
         }
     }
@@ -423,7 +423,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             selected.removeColor();
         }
         selected = null;
-        //EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
+//        EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
     }
 
     @Override

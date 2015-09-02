@@ -180,4 +180,8 @@ public class Porte extends Ouverture{
         Vector3 dmin = b.getMin(new Vector3()).scl(-1);
         model_transform.idt().scale(w, h, d).translate(dmin);
     }
+    @Override
+    public String toString(){
+        return "Porte ->  s="+surface+" u="+coefficientDeTransmissionThermique+ " dp="+deperdition;
+    }
 }
