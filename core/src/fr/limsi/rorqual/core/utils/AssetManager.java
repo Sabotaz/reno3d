@@ -132,7 +132,28 @@ public class AssetManager {
     }
 
     public void init() {
-        TextureAtlas atlas = (TextureAtlas)loadOnUi("data/ui/ui_001.atlas", TextureAtlas.class);
+        float density = Gdx.graphics.getDensity();
+        int dpi = (int)(160 * density);
+        TextureAtlas atlas;
+        System.out.println(density);
+        if (dpi < 140) { // ldpi ~ 0.6x
+            assets.put("uiskin", loadOnUi("data/ui/ldpi/uiskin.json", Skin.class));
+            assets.put("uiskin.json", loadOnUi("data/ui/ldpi/uiskin.json", Skin.class));
+            atlas = (TextureAtlas)loadOnUi("data/ui/ldpi/ui_001.atlas", TextureAtlas.class);
+        } else if (dpi < 200) { // mdpi ~ 1x
+            assets.put("uiskin", loadOnUi("data/ui/mdpi/uiskin.json", Skin.class));
+            assets.put("uiskin.json", loadOnUi("data/ui/mdpi/uiskin.json", Skin.class));
+            atlas = (TextureAtlas)loadOnUi("data/ui/mdpi/ui_001.atlas", TextureAtlas.class);
+        } else if (dpi < 380) { // hdpi ~ 1.5x
+            assets.put("uiskin", loadOnUi("data/ui/hdpi/uiskin.json", Skin.class));
+            assets.put("uiskin.json", loadOnUi("data/ui/hdpi/uiskin.json", Skin.class));
+            atlas = (TextureAtlas)loadOnUi("data/ui/hdpi/ui_001.atlas", TextureAtlas.class);
+        } else { //xhdpi ~ 2x
+            assets.put("uiskin", loadOnUi("data/ui/xhdpi/uiskin.json", Skin.class));
+            assets.put("uiskin.json", loadOnUi("data/ui/xhdpi/uiskin.json", Skin.class));
+            atlas = (TextureAtlas)loadOnUi("data/ui/xhdpi/ui_001.atlas", TextureAtlas.class);
+        }
+
         assets.put("ui_001.atlas", atlas);
         TextureAtlas.AtlasRegion region = atlas.findRegion("ask");
         TextureRegionDrawable drawable = new TextureRegionDrawable(region);
@@ -144,9 +165,6 @@ public class AssetManager {
         assets.put("bulle", loadOnUi("data/ui/bulle.png", Texture.class));
 
         assets.put("black.fnt", loadOnUi("data/font/black.fnt", BitmapFont.class));
-
-        assets.put("uiskin", loadOnUi("data/ui/uiskin.json", Skin.class));
-        assets.put("uiskin.json", loadOnUi("data/ui/uiskin.json", Skin.class));
 
         HashMap<String, String> textures = new HashMap<String, String>();
 
