@@ -50,14 +50,14 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private Coin B;
     private float width;
     private float depth;
-    private double surfaceInitiale;
-    private double surface;
+    private float surfaceInitiale;
+    private float surface;
     private TypeMurEnum typeMur;
     private TypeIsolationMurEnum typeIsolationMur;
     private DateIsolationMurEnum dateIsolationMur;
     private OrientationEnum orientationMur;
-    private double coeffTransmissionThermique;
-    private double deperdition;
+    private float coeffTransmissionThermique;
+    private float deperdition;
     private Slab slabGauche = null;
     private Slab slabDroit = null;
 
@@ -221,11 +221,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         return orientationMur;
     }
 
-    public double getCoeffTransmissionThermique() {
+    public float getCoeffTransmissionThermique() {
         return coeffTransmissionThermique;
     }
 
-    public void setCoeffTransmissionThermique(double newCoeff) {
+    public void setCoeffTransmissionThermique(float newCoeff) {
         this.coeffTransmissionThermique=newCoeff;
     }
 
@@ -244,7 +244,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.orientationMur = orientationMur.wrapX(dx, dy);
     }
 
-    public double getSurface(){
+    public float getSurface(){
         return this.surface;
     }
 
@@ -442,7 +442,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         return (slabGauche != null && slabDroit != null);
     }
 
-    public double getDeperdition(){
+    public float getDeperdition(){
         return this.deperdition;
     }
 
@@ -459,7 +459,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                 this.deperdition = this.surface*this.coeffTransmissionThermique;
                 break;
             case MUR_DONNANT_SUR_UNE_AUTRE_HABITATION:
-                this.deperdition = 0.2*this.surface*this.coeffTransmissionThermique;
+                this.deperdition = 0.2f*this.surface*this.coeffTransmissionThermique;
                 break;
             case MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE:
                 switch (this.orientationMur){
@@ -469,11 +469,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                             case INCONNUE:
                             case JAMAIS:
                                 // Non isolé
-                                this.deperdition=0.95*this.surface*this.coeffTransmissionThermique;
+                                this.deperdition=0.95f*this.surface*this.coeffTransmissionThermique;
                                 break;
                             default:
                                 // isolé
-                                this.deperdition=0.85*this.surface*this.coeffTransmissionThermique;
+                                this.deperdition=0.85f*this.surface*this.coeffTransmissionThermique;
                                 break;
                         }
                         break;
@@ -483,11 +483,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                             case INCONNUE:
                             case JAMAIS:
                                 // Non isolé
-                                this.deperdition = 0.63*this.surface*this.coeffTransmissionThermique;
+                                this.deperdition = 0.63f*this.surface*this.coeffTransmissionThermique;
                                 break;
                             default:
                                 // isolé
-                                this.deperdition = 0.6*this.surface*this.coeffTransmissionThermique;
+                                this.deperdition = 0.6f*this.surface*this.coeffTransmissionThermique;
                                 break;
                         }
                         break;
@@ -496,11 +496,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                             case INCONNUE:
                             case JAMAIS:
                                 // Non isolé
-                                this.deperdition = 0.6*this.surface*this.coeffTransmissionThermique;
+                                this.deperdition = 0.6f*this.surface*this.coeffTransmissionThermique;
                                 break;
                             default:
                                 // isolé
-                                this.deperdition = 0.55*this.surface*this.coeffTransmissionThermique;
+                                this.deperdition = 0.55f*this.surface*this.coeffTransmissionThermique;
                                 break;
                         }
                         break;
@@ -511,11 +511,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                     case INCONNUE:
                     case JAMAIS:
                         // Non isolé
-                        this.deperdition = 0.95*this.surface*this.coeffTransmissionThermique;
+                        this.deperdition = 0.95f*this.surface*this.coeffTransmissionThermique;
                         break;
                     default:
                         // isolé
-                        this.deperdition = 0.85*this.surface*this.coeffTransmissionThermique;
+                        this.deperdition = 0.85f*this.surface*this.coeffTransmissionThermique;
                         break;
                 }
                 break;
@@ -528,7 +528,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void actualiseSurface(){
         if (!this.getOuvertures().isEmpty()){
-            double tampon = this.surfaceInitiale;
+            float tampon = this.surfaceInitiale;
             for (Ouverture o:this.getOuvertures()){
                 tampon -= o.getSurface();
             }

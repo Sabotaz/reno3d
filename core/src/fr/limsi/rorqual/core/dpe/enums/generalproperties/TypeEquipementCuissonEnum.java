@@ -10,11 +10,11 @@ public enum TypeEquipementCuissonEnum {
     FEUX_GAZ_ET_FOUR_ELECTRIQUE(1520),
     FEUX_GAZ_ET_FOUR_GAZ(1660);
 
-    private double consommation;
-    TypeEquipementCuissonEnum(double conso){
+    private int consommation;
+    TypeEquipementCuissonEnum(int conso){
         this.consommation = conso;
     }
-    public double getConsommation(){
+    public int getConsommation(){
         return this.consommation;
     }
 }

@@ -49,12 +49,12 @@ public class Slab extends ModelContainer {
     public final static float DEFAULT_HEIGHT = 0.2f;
     private MitoyennetePlafond mitoyennetePlafond;
     private MitoyennetePlancher mitoyennetePlancher;
-    private double uPlafond;
-    private double uPlancher;
+    private float uPlafond;
+    private float uPlancher;
     private DateIsolationSlab dateIsolationPlafond;
     private DateIsolationSlab dateIsolationPlancher;
     private TypeIsolationSlab typeIsolationPlancher;
-    private double surface;
+    private float surface;
     private Etage etage = null;
 
     private boolean changed = true;
@@ -83,7 +83,7 @@ public class Slab extends ModelContainer {
         ArrayList<Coin> listCoin = new ArrayList<Coin>();
         listCoin.addAll(coins);
         listCoin.add(listCoin.get(0));
-        double xActuel=0,xSuivant=0,yActuel=0,ySuivant=0,totX=0,totY=0, airePolygone=0;
+        float xActuel=0,xSuivant=0,yActuel=0,ySuivant=0,totX=0,totY=0, airePolygone=0;
         for (int i=0; i<listCoin.size()-1;i++){
             xActuel = listCoin.get(i).getPosition().x;
             xSuivant = listCoin.get(i + 1).getPosition().x;
@@ -221,27 +221,27 @@ public class Slab extends ModelContainer {
         this.mitoyennetePlafond = mitoyennetePlafond;
     }
 
-    public double getuPlafond() {
+    public float getuPlafond() {
         return uPlafond;
     }
 
-    public void setuPlafond(double uPlafond) {
+    public void setuPlafond(float uPlafond) {
         this.uPlafond = uPlafond;
     }
 
-    public double getuPlancher() {
+    public float getuPlancher() {
         return uPlancher;
     }
 
-    public void setuPlancher(double uPlancher) {
+    public void setuPlancher(float uPlancher) {
         this.uPlancher = uPlancher;
     }
 
-    public double getSurface() {
+    public float getSurface() {
         return surface;
     }
 
-    public void setSurface(double surface) {
+    public void setSurface(float surface) {
         this.surface = surface;
     }
 

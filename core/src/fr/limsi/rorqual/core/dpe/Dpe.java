@@ -27,14 +27,14 @@ public class Dpe implements EventListener {
     /*** Attributs liés au calcul du DPE ***/
 
     // 0.Variables générales
-    private double sh = 0;
-    private double per;
-    private double scoreDpe = 700;
+    private float sh = 0;
+    private float per;
+    private float scoreDpe = 700;
     private DateConstructionBatimentEnum dateConstructionBatiment = DateConstructionBatimentEnum.AVANT_1975; // Initialisation défavorable
     private TypeEnergieConstructionEnum typeEnergieConstruction = TypeEnergieConstructionEnum.AUTRE; // Initialisation défavorable
     private DepartementBatimentEnum departementBatiment = DepartementBatimentEnum.AIN; // Choix par défaut
     public void actualiseSH(){
-        double tampon=0;
+        float tampon=0;
         for (Slab s:slabList){
             tampon+=s.getSurface();
         }
@@ -43,24 +43,24 @@ public class Dpe implements EventListener {
     }
 
     // 1.Expression du besoin de chauffage
-    private double bv=100;
-    private double gv=200; //TODO : trouver le GV défavorable en faisant plusieurs simulations ...
+    private float bv=100;
+    private float gv=200; //TODO : trouver le GV défavorable en faisant plusieurs simulations ...
 
     // 2.Calcul des déperditions de l'enveloppe GV
-    private double dpMur;
-    private double dpToit;
-    private double dpPlancher;
-    private double dpPorte;
-    private double dpFenetre;
-    private double pontThermique;
-    public void actualiseGV(double val){
+    private float dpMur;
+    private float dpToit;
+    private float dpPlancher;
+    private float dpPorte;
+    private float dpFenetre;
+    private float pontThermique;
+    public void actualiseGV(float val){
         this.gv += val;
     } // TODO : mettre en place les changements qui découlent de cette actualisation ...
     ///*** Murs ***///
     private List<Mur> murList=new ArrayList<Mur>();
     private HashMap<Mur,HashMap<DpeChange,Boolean>> murChangeSaveList = new HashMap<Mur,HashMap<DpeChange,Boolean>>();
     public void actualiseCoeffDeperditionThermique(Mur mur){
-        double u=0;
+        float u=0;
         switch (mur.getDateIsolationMurEnum()){
             case JAMAIS:
                 u=2;
@@ -70,42 +70,42 @@ public class Dpe implements EventListener {
                 break;
             case A_LA_CONSTRUCTION:
                 if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
-                    u=0.8;
+                    u=0.8f;
                     mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 }else{
                     u=this.getUmurFoncAnneeConstruction(mur);
                 }
                 break;
             case EN_RENOVATION_AVANT_1983:
-                u=0.82;
+                u=0.82f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case EN_RENOVATION_ENTRE_1983_ET_1988:
-                u=0.75;
+                u=0.75f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case EN_RENOVATION_ENTRE_1989_ET_2000:
-                u=0.48;
+                u=0.48f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case EN_RENOVATION_ENTRE_2001_ET_2005:
-                u=0.42;
+                u=0.42f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case EN_RENOVATION_ENTRE_2006_ET_2012:
-                u=0.36;
+                u=0.36f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case EN_RENOVATION_APRES_2012:
-                u=0.24;
+                u=0.24f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
         }
         mur.setCoeffTransmissionThermique(u);
         mur.actualiseDeperdition();
     }
-    public double getUmurFoncAnneeConstruction(Mur mur){
-        double uMur=2.5;
+    public float getUmurFoncAnneeConstruction(Mur mur){
+        float uMur=2.5f;
         switch (dateConstructionBatiment){
             case AVANT_1975:
                 uMur=2;
@@ -116,7 +116,7 @@ public class Dpe implements EventListener {
                 break;
             case ENTRE_1978_ET_1982:
                 if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                    uMur=0.8;
+                    uMur=0.8f;
                 }else if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.AUTRE)){
                     uMur=1;
                 }
@@ -124,30 +124,30 @@ public class Dpe implements EventListener {
                 break;
             case ENTRE_1983_ET_1988:
                 if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                    uMur=0.7;
+                    uMur=0.7f;
                 }else if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.AUTRE)){
-                    uMur=0.8;
+                    uMur=0.8f;
                 }
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case ENTRE_1989_ET_2000:
                 if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                    uMur=0.45;
+                    uMur=0.45f;
                 }else if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.AUTRE)){
-                    uMur=0.5;
+                    uMur=0.5f;
                 }
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case ENTRE_2001_ET_2005:
-                uMur=0.4;
+                uMur=0.4f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITI);
                 break;
             case ENTRE_2006_ET_2012:
-                uMur=0.35;
+                uMur=0.35f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITE);
                 break;
             case APRES_2012:
-                uMur=0.2;
+                uMur=0.2f;
                 mur.setTypeIsolationMurEnum(TypeIsolationMurEnum.ITE);
                 break;
         }
@@ -155,8 +155,8 @@ public class Dpe implements EventListener {
     }
     ///*** Plafonds ***///
     public void actualiseDeperditionPlafond(Slab slab){
-        double val=0;
-        double u=2.5;
+        float val=0;
+        float u=2.5f;
         switch (slab.getDateIsolationPlafond()){
             case JAMAIS:
                 u=2;
@@ -166,7 +166,7 @@ public class Dpe implements EventListener {
                 break;
             case EN_RENOVATION_DATE_INCONNUE:
                 if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
-                    u=0.5;
+                    u=0.5f;
                 }else{
                     u=this.getUplafondFoncAnneeConstruction(slab);
                 }
@@ -174,13 +174,13 @@ public class Dpe implements EventListener {
             case EN_RENOVATION_AVANT_1983:
                 switch (slab.getMitoyennetePlafond()){
                     case COMBLE_PERDU:
-                        u=0.4;
+                        u=0.4f;
                         break;
                     case COMBLE_AMMENAGEE:
-                        u=0.61;
+                        u=0.61f;
                         break;
                     case TERRASSE:
-                        u=0.7;
+                        u=0.7f;
                         break;
                     case AUTRE_HABITATION:
                         u=0;
@@ -190,13 +190,13 @@ public class Dpe implements EventListener {
             case EN_RENOVATION_ENTRE_1983_ET_1988:
                 switch (slab.getMitoyennetePlafond()){
                     case COMBLE_PERDU:
-                        u=0.3;
+                        u=0.3f;
                         break;
                     case COMBLE_AMMENAGEE:
-                        u=0.4;
+                        u=0.4f;
                         break;
                     case TERRASSE:
-                        u=0.55;
+                        u=0.55f;
                         break;
                     case AUTRE_HABITATION:
                         u=0;
@@ -206,13 +206,13 @@ public class Dpe implements EventListener {
             case EN_RENOVATION_ENTRE_1989_ET_2000:
                 switch (slab.getMitoyennetePlafond()){
                     case COMBLE_PERDU:
-                        u=0.25;
+                        u=0.25f;
                         break;
                     case COMBLE_AMMENAGEE:
-                        u=0.3;
+                        u=0.3f;
                         break;
                     case TERRASSE:
-                        u=0.4;
+                        u=0.4f;
                         break;
                     case AUTRE_HABITATION:
                         u=0;
@@ -222,13 +222,13 @@ public class Dpe implements EventListener {
             case EN_RENOVATION_ENTRE_2001_ET_2005:
                 switch (slab.getMitoyennetePlafond()){
                     case COMBLE_PERDU:
-                        u=0.23;
+                        u=0.23f;
                         break;
                     case COMBLE_AMMENAGEE:
-                        u=0.25;
+                        u=0.25f;
                         break;
                     case TERRASSE:
-                        u=0.3;
+                        u=0.3f;
                         break;
                     case AUTRE_HABITATION:
                         u=0;
@@ -238,13 +238,13 @@ public class Dpe implements EventListener {
             case EN_RENOVATION_ENTRE_2006_ET_2012:
                 switch (slab.getMitoyennetePlafond()){
                     case COMBLE_PERDU:
-                        u=0.2;
+                        u=0.2f;
                         break;
                     case COMBLE_AMMENAGEE:
-                        u=0.2;
+                        u=0.2f;
                         break;
                     case TERRASSE:
-                        u=0.27;
+                        u=0.27f;
                         break;
                     case AUTRE_HABITATION:
                         u=0;
@@ -254,13 +254,13 @@ public class Dpe implements EventListener {
             case EN_RENOVATION_APRES_2012:
                 switch (slab.getMitoyennetePlafond()){
                     case COMBLE_PERDU:
-                        u=0.12;
+                        u=0.12f;
                         break;
                     case COMBLE_AMMENAGEE:
-                        u=0.18;
+                        u=0.18f;
                         break;
                     case TERRASSE:
-                        u=0.15;
+                        u=0.15f;
                         break;
                     case AUTRE_HABITATION:
                         u=0;
@@ -275,11 +275,11 @@ public class Dpe implements EventListener {
                     case INCONNUE:
                     case JAMAIS:
                         // Non isolé
-                        val= 0.95*slab.getSurface()*u;
+                        val= 0.95f*slab.getSurface()*u;
                         break;
                     default:
                         // isolé
-                        val= 0.9*slab.getSurface()*u;
+                        val= 0.9f*slab.getSurface()*u;
                         break;
                 }
                 break;
@@ -294,8 +294,8 @@ public class Dpe implements EventListener {
         this.dpToit += val;
         this.actualiseGV(val);
     }
-    public double getUplafondFoncAnneeConstruction(Slab slab){
-        double uPlafond=2.5;
+    public float getUplafondFoncAnneeConstruction(Slab slab){
+        float uPlafond=2.5f;
         boolean isComble;
         if (slab.getMitoyennetePlafond().equals(MitoyennetePlafond.TERRASSE)){
             isComble=false;
@@ -308,64 +308,64 @@ public class Dpe implements EventListener {
                 break;
             case ENTRE_1975_ET_1977:
                 if(isComble){
-                    uPlafond=0.5;
+                    uPlafond=0.5f;
                 }else{
-                    uPlafond=0.75;
+                    uPlafond=0.75f;
                 }
                 break;
             case ENTRE_1978_ET_1982:
                 if(isComble){
                     if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                        uPlafond=0.4;
+                        uPlafond=0.4f;
                     }else if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.AUTRE)){
-                        uPlafond=0.5;
+                        uPlafond=0.5f;
                     }
                 }else{
                     if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                        uPlafond=0.7;
+                        uPlafond=0.7f;
                     }else if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.AUTRE)){
-                        uPlafond=0.75;
+                        uPlafond=0.75f;
                     }
                 }
                 break;
             case ENTRE_1983_ET_1988:
                 if(isComble){
-                    uPlafond=0.3;
+                    uPlafond=0.3f;
                 }else{
                     if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                        uPlafond=0.4;
+                        uPlafond=0.4f;
                     }else if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.AUTRE)){
-                        uPlafond=0.55;
+                        uPlafond=0.55f;
                     }
                 }
                 break;
             case ENTRE_1989_ET_2000:
                 if(isComble){
-                    uPlafond=0.25;
+                    uPlafond=0.25f;
                 }else{
                     if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                        uPlafond=0.35;
+                        uPlafond=0.35f;
                     }else if (typeEnergieConstruction.equals(TypeEnergieConstructionEnum.AUTRE)){
-                        uPlafond=0.4;
+                        uPlafond=0.4f;
                     }
                 }
                 break;
             case ENTRE_2001_ET_2005:
                 if(isComble){
-                    uPlafond=0.23;
+                    uPlafond=0.23f;
                 }else{
-                    uPlafond=0.3;
+                    uPlafond=0.3f;
                 }
                 break;
             case ENTRE_2006_ET_2012:
                 if(isComble){
-                    uPlafond=0.2;
+                    uPlafond=0.2f;
                 }else{
-                    uPlafond=0.27;
+                    uPlafond=0.27f;
                 }
                 break;
             case APRES_2012:
-                uPlafond=0.12;
+                uPlafond=0.12f;
                 break;
         }
         return uPlafond;
@@ -373,8 +373,8 @@ public class Dpe implements EventListener {
     ///*** Planchers ***///
     private List<Slab> slabList=new ArrayList<Slab>();
     public void actualiseDeperditionPlancher(Slab slab){
-        double val=0;
-        double u=2.5;
+        float val=0;
+        float u=2.5f;
         if (!slab.getMitoyennetePlancher().equals(MitoyennetePlancher.TERRE_PLEIN)){
             switch (slab.getDateIsolationPlancher()){
                 case JAMAIS:
@@ -385,97 +385,97 @@ public class Dpe implements EventListener {
                     break;
                 case EN_RENOVATION_DATE_INCONNUE:
                     if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
-                        u=0.8;
+                        u=0.8f;
                     }else{
                         u=this.getUplancherFoncAnneeConstruction(slab);
                     }
                     break;
                 case EN_RENOVATION_AVANT_1983:
-                    u=0.85;
+                    u=0.85f;
                     slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
                     break;
                 case EN_RENOVATION_ENTRE_1983_ET_1988:
-                    u=0.6;
+                    u=0.6f;
                     slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
                     break;
                 case EN_RENOVATION_ENTRE_1989_ET_2000:
-                    u=0.55;
+                    u=0.55f;
                     slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
                     break;
                 case EN_RENOVATION_ENTRE_2001_ET_2005:
-                    u=0.3;
+                    u=0.3f;
                     slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
                     break;
                 case EN_RENOVATION_ENTRE_2006_ET_2012:
-                    u=0.27;
+                    u=0.27f;
                     slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
                     break;
                 case EN_RENOVATION_APRES_2012:
-                    u=0.24;
+                    u=0.24f;
                     slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
                     break;
             }
         }else{
             int tampon = (int)Math.round(2 * slab.getSurface() / per);
             if (tampon<3){
-                u=0.25;
+                u=0.25f;
             }else if (tampon>20){
-                u=0.1;
+                u=0.1f;
             }else{
                 switch (tampon){
                     case 3:
-                        u=0.25;
+                        u=0.25f;
                         break;
                     case 4:
-                        u=0.23;
+                        u=0.23f;
                         break;
                     case 5:
-                        u=0.21;
+                        u=0.21f;
                         break;
                     case 6:
-                        u=0.19;
+                        u=0.19f;
                         break;
                     case 7:
-                        u=0.18;
+                        u=0.18f;
                         break;
                     case 8:
-                        u=0.17;
+                        u=0.17f;
                         break;
                     case 9:
-                        u=0.16;
+                        u=0.16f;
                         break;
                     case 10:
-                        u=0.15;
+                        u=0.15f;
                         break;
                     case 11:
-                        u=0.15;
+                        u=0.15f;
                         break;
                     case 12:
-                        u=0.14;
+                        u=0.14f;
                         break;
                     case 13:
-                        u=0.13;
+                        u=0.13f;
                         break;
                     case 14:
-                        u=0.12;
+                        u=0.12f;
                         break;
                     case 15:
-                        u=0.12;
+                        u=0.12f;
                         break;
                     case 16:
-                        u=0.11;
+                        u=0.11f;
                         break;
                     case 17:
-                        u=0.11;
+                        u=0.11f;
                         break;
                     case 18:
-                        u=0.11;
+                        u=0.11f;
                         break;
                     case 19:
-                        u=0.1;
+                        u=0.1f;
                         break;
                     case 20:
-                        u=0.1;
+                        u=0.1f;
                         break;
                 }
             }
@@ -483,7 +483,7 @@ public class Dpe implements EventListener {
         slab.setuPlancher(u);
         switch (slab.getMitoyennetePlancher()){
             case VIDE_SANITAIRE:
-                val = 0.8*slab.getSurface()*u;
+                val = 0.8f*slab.getSurface()*u;
                 break;
             case TERRE_PLEIN:
                 val = slab.getSurface()*u;
@@ -493,65 +493,65 @@ public class Dpe implements EventListener {
                     case INCONNUE:
                     case JAMAIS:
                         // Non isolé
-                        val= 0.95*slab.getSurface()*u;
+                        val= 0.95f*slab.getSurface()*u;
                         break;
                     default:
                         // isolé
-                        val= 0.85*slab.getSurface()*u;
+                        val= 0.85f*slab.getSurface()*u;
                         break;
                 }
                 break;
             case AUTRE_HABITATION:
-                val = 0.2*slab.getSurface()*u;
+                val = 0.2f*slab.getSurface()*u;
                 break;
         }
         this.dpToit += val;
         this.actualiseGV(val);
     }
-    public double getUplancherFoncAnneeConstruction(Slab slab){
-        double uPlancher=2.5;
+    public float getUplancherFoncAnneeConstruction(Slab slab){
+        float uPlancher=2.5f;
         switch (dateConstructionBatiment){
             case AVANT_1975:
                 uPlancher=2;
                 slab.setTypeIsolationPlancher(TypeIsolationSlab.NON_ISOLE);
                 break;
             case ENTRE_1975_ET_1977:
-                uPlancher=0.9;
+                uPlancher=0.9f;
                 break;
             case ENTRE_1978_ET_1982:
                 if(typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                    uPlancher=0.8;
+                    uPlancher=0.8f;
                 }else{
-                    uPlancher=0.9;
+                    uPlancher=0.9f;
                 }
                 slab.setTypeIsolationPlancher(TypeIsolationSlab.ITI);
                 break;
             case ENTRE_1983_ET_1988:
                 if(typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                    uPlancher=0.55;
+                    uPlancher=0.55f;
                 }else{
-                    uPlancher=0.7;
+                    uPlancher=0.7f;
                 }
                 slab.setTypeIsolationPlancher(TypeIsolationSlab.ITI);
                 break;
             case ENTRE_1989_ET_2000:
                 if(typeEnergieConstruction.equals(TypeEnergieConstructionEnum.ELECTRIQUE)){
-                    uPlancher=0.55;
+                    uPlancher=0.55f;
                 }else{
-                    uPlancher=0.6;
+                    uPlancher=0.6f;
                 }
                 slab.setTypeIsolationPlancher(TypeIsolationSlab.ITI);
                 break;
             case ENTRE_2001_ET_2005:
-                uPlancher=0.3;
+                uPlancher=0.3f;
                 slab.setTypeIsolationPlancher(TypeIsolationSlab.ITI);
                 break;
             case ENTRE_2006_ET_2012:
-                uPlancher=0.27;
+                uPlancher=0.27f;
                 slab.setTypeIsolationPlancher(TypeIsolationSlab.ITI);
                 break;
             case APRES_2012:
-                uPlancher=0.22;
+                uPlancher=0.22f;
                 slab.setTypeIsolationPlancher(TypeIsolationSlab.ITI);
                 break;
         }
@@ -572,33 +572,33 @@ public class Dpe implements EventListener {
     // 2.4. Calcul des ponts thermiques
 
     // 2.5. Calcul des déperditions par renouvellement d'air
-    private double renouvellementAir, hVent,hPerm,qVarep=2.145,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,sDep,nbFenetreSV,nbFenetreDV;
+    private float renouvellementAir, hVent,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,sDep,nbFenetreSV,nbFenetreDV;
     private TypeVentilationEnum typeVentilation=TypeVentilationEnum.INCONNUE; // Initialisation logique
     private TemperatureInterieurEnum tInt=TemperatureInterieurEnum.ENTRE_22_ET_23; // Initialisation défavorable
     public void actualiseRenouvellementAir(){
         renouvellementAir=hVent+hPerm;
     }
     public void actualiseHvent(){
-        hVent=0.34*qVarep;
+        hVent=0.34f*qVarep;
     }
     public void actualiseHperm(){
-        hPerm=0.34*qVinf;
+        hPerm=0.34f*qVinf;
     }
     public void actualiseqVinf(){
-        double val = 0.7*(tInt.getTemperatureInterieure()-6.58);
-        qVinf=0.0146*q4pa*Math.pow(val,0.667);
+        float val = 0.7f*(tInt.getTemperatureInterieure()-6.58f);
+        qVinf=0.0146f*q4pa*(float)Math.pow(val,0.667);
     }
     public void actualiseQ4pa(){
-        q4pa=q4paEnv+0.45*smea*sh;
+        q4pa=q4paEnv+0.45f*smea*sh;
     }
     public void actualiseQ4paEnv(){
         q4paEnv=q4paConv*sDep;
     }
     public void actualiseQ4paConv(){
         if(nbFenetreSV>=nbFenetreDV){
-            q4paConv=2.0;
+            q4paConv=2.0f;
         }else{
-            q4paConv=1.7;
+            q4paConv=1.7f;
         }
     }
     public void actualiseSmeaAndQvarep(){
@@ -607,62 +607,62 @@ public class Dpe implements EventListener {
                 switch(dateConstructionBatiment){
                     case AVANT_1975:
                         smea=4;
-                        qVarep=2.145;
+                        qVarep=2.145f;
                         break;
                     case ENTRE_1975_ET_1977:
                     case ENTRE_1978_ET_1982:
                         smea=2;
-                        qVarep=1.8975;
+                        qVarep=1.8975f;
                         break;
                     case ENTRE_1983_ET_1988:
                     case ENTRE_1989_ET_2000:
                     case ENTRE_2001_ET_2005:
                         smea=2;
-                        qVarep=1.65;
+                        qVarep=1.65f;
                         break;
                     case ENTRE_2006_ET_2012:
                     case APRES_2012:
-                        smea=1.5;
-                        qVarep=1.0725;
+                        smea=1.5f;
+                        qVarep=1.0725f;
                         break;
                 }
                 break;
             case NATURELLE:
                 smea=4;
-                qVarep=2.145;
+                qVarep=2.145f;
                 break;
             case VMC_AUTO_REGLABLE_AVANT_1982:
                 smea=2;
-                qVarep=1.8975;
+                qVarep=1.8975f;
                 break;
             case VMC_AUTO_REGLABLE_APRES_1982:
                 smea=2;
-                qVarep=1.65;
+                qVarep=1.65f;
                 break;
             case VMC_HYGRO:
-                smea=1.5;
-                qVarep=1.0725;
+                smea=1.5f;
+                qVarep=1.0725f;
                 break;
             case VMC_DOUBLE_FLUX:
                 smea=0;
-                qVarep=1.65;
+                qVarep=1.65f;
                 break;
         }
     }
 
     // 2.6.Calcul de f : on cherche à minimiser x donc à minimiser aS et aI et à maximiser GV et DHcor
-    private double f;
-    private double x=0.017; //TODO : trouver le x défavorable en faisant plusieurs simulations ...
-    private double dhCor=71000;
-    private double dhRef=71000;
-    private double kdh=2;
-    private double nRef=5800;
-    private double aI=1209399000;
-    private double aS=0;
-    private double sse=0; // Il n'y a aucune baie, la sse est nulle initialement
+    private float f;
+    private float x=0.017f; //TODO : trouver le x défavorable en faisant plusieurs simulations ...
+    private float dhCor=71000;
+    private float dhRef=71000;
+    private float kdh=2;
+    private float nRef=5800;
+    private float aI=1209399000;
+    private float aS=0;
+    private float sse=0; // Il n'y a aucune baie, la sse est nulle initialement
     public void actualiseF(){
-        double a=x-Math.pow(x,3.6);
-        double b=1-Math.pow(x,3.6);
+        float a=x-(float)Math.pow(x,3.6);
+        float b=1-(float)Math.pow(x,3.6);
         f=a/b;
     }
     public void actualiseX(){
@@ -672,7 +672,7 @@ public class Dpe implements EventListener {
         dhCor=dhRef+kdh*nRef;
     }
     public void actualiseAi(){
-        aI=4.17*sh*nRef;
+        aI=4.17f*sh*nRef;
     }
     public void actualiseNref(DepartementBatimentEnum departement){
         nRef=departement.getNref();
@@ -699,7 +699,7 @@ public class Dpe implements EventListener {
 
     // 2.7.Détermination de la surface sud équivalente
     public void actualiseSse(){
-        double tampon = 0;
+        float tampon = 0;
         for (Fenetre f:fenetreList){
             tampon += f.getSurfaceSudEquivalente();
         }
@@ -711,48 +711,48 @@ public class Dpe implements EventListener {
     }
 
     // 3.Traitement de l'intermittence
-    private double intermittence = 1;
-    private double i0 = 1; // Cas le plus défavorable (cf partie 3)
-    private double g = 72; // (9000/2.5*50)
+    private float intermittence = 1;
+    private float i0 = 1; // Cas le plus défavorable (cf partie 3)
+    private float g = 72; // (9000/2.5*50)
     public void actualiseIntermittence(){
-        intermittence=i0/(1+0.1*(g-1));
+        intermittence=i0/(1+0.1f*(g-1));
         this.actualiseBch();
     }
     public void actualiseG(){
-        g=gv/(2.5* sh);
+        g=gv/(2.5f* sh);
         this.actualiseIntermittence();
     } // TODO : prendre en compte le changement sur gv
     public void actualiseI0(Chauffage chauffagePrincipal){ // On besoin du chauffage en paramètre afin de déterminer le type (divisé ou central)
         if (general_properties.get(DpeEvent.TYPE_BATIMENT).equals(TypeBatimentEnum.MAISON)){ // Maison
             if(chauffagePrincipal.getType().equals(Chauffage.Type.DIVISE)){ // le chauffage est de type divisé
                 if (chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)){ // Systeme programmable
-                    i0=0.84;
+                    i0=0.84f;
                 }else{ // Systeme non programmable
-                    i0 = 0.86;
+                    i0 = 0.86f;
                 }
             }else{ // le chauffage est de type central
                 if (chauffage_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR).equals(PresenceThermostatEnum.AUCUN_DES_DEUX)){ // Sans régulation par pièce
                     if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
-                        i0 = 0.9;
+                        i0 = 0.9f;
                     }else{ // Systeme non programmable
                         if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                            i0 = 0.91;
+                            i0 = 0.91f;
                         }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                            i0 = 0.93;
+                            i0 = 0.93f;
                         }else{ // Plancher chauffant ou système mixte
-                            i0 = 0.94;
+                            i0 = 0.94f;
                         }
                     }
                 }else{ // Avec régulation pièce par pièce
                     if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
-                        i0 = 0.87;
+                        i0 = 0.87f;
                     }else{ // Systeme non programmable
                         if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                            i0 = 0.88;
+                            i0 = 0.88f;
                         }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                            i0 = 0.9;
+                            i0 = 0.9f;
                         }else{ // Plancher chauffant ou système mixte
-                            i0 = 0.92;
+                            i0 = 0.92f;
                         }
                     }
                 }
@@ -761,56 +761,56 @@ public class Dpe implements EventListener {
             if(chauffagePrincipal.getType().equals(Chauffage.Type.DIVISE)){ // le chauffage est de type divisé
                 if (chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)){ // Systeme programmable
                     if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                        i0 = 0.88;
+                        i0 = 0.88f;
                     }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                        i0 = 0.88;
+                        i0 = 0.88f;
                     }else{ // Plancher chauffant ou système mixte
-                        i0 = 0.93;
+                        i0 = 0.93f;
                     }
                 }else{ // Systeme non programmable
                     if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                        i0 = 0.9;
+                        i0 = 0.9f;
                     }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                        i0 = 0.9;
+                        i0 = 0.9f;
                     }else{ // Plancher chauffant ou système mixte
-                        i0 = 0.95;
+                        i0 = 0.95f;
                     }
                 }
             }else{ // le chauffage est de type central
                 if (chauffage_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR).equals(PresenceThermostatEnum.AUCUN_DES_DEUX)){ // Sans régulation par pièce
                     if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
                         if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                            i0 = 0.93;
+                            i0 = 0.93f;
                         }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                            i0 = 0.94;
+                            i0 = 0.94f;
                         }else{ // Plancher chauffant ou système mixte
-                            i0 = 0.95;
+                            i0 = 0.95f;
                         }
                     }else{ // Systeme non programmable
                         if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                            i0 = 0.91;
+                            i0 = 0.91f;
                         }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                            i0 = 0.93;
+                            i0 = 0.93f;
                         }else{ // Plancher chauffant ou système mixte
-                            i0 = 0.95;
+                            i0 = 0.95f;
                         }
                     }
                 }else{ // Avec régulation pièce par pièce
                     if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
                         if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                            i0 = 0.89;
+                            i0 = 0.89f;
                         }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                            i0 = 0.91;
+                            i0 = 0.91f;
                         }else{ // Plancher chauffant ou système mixte
-                            i0 = 0.93;
+                            i0 = 0.93f;
                         }
                     }else{ // Systeme non programmable
                         if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
-                            i0 = 0.95;
+                            i0 = 0.95f;
                         }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
-                            i0 = 0.96;
+                            i0 = 0.96f;
                         }else{ // Plancher chauffant ou système mixte
-                            i0 = 0.97;
+                            i0 = 0.97f;
                         }
                     }
                 }
@@ -848,12 +848,12 @@ public class Dpe implements EventListener {
     }
 
     // 4.Calcul du besoin et des consommations
-    private double cch;
-    private double bch;
-    private double pr=0;
-    private double prs1=0; // Cas défavorable
-    private double prs2=1.05; // Cas défavorable
-    private double rrp;
+    private float cch;
+    private float bch;
+    private float pr=0;
+    private float prs1=0; // Cas défavorable
+    private float prs2=1.05f; // Cas défavorable
+    private float rrp;
     public void actualiseBch(){
         bch=((bv*dhCor/1000)-pr*rrp)*intermittence; // TODO : prendre en compte le changement sur bv,dhcor
         tryActualiseCch();
@@ -863,7 +863,7 @@ public class Dpe implements EventListener {
         this.actualiseBch();
     }
     public void actualiseRrp(){
-        rrp=(1-3.6*Math.pow(x,2.6)+2.6*Math.pow(x,1.6))/Math.pow((1-Math.pow(x,3.6)),2); // TODO : prendre en compte le changement sur x
+        rrp=(1-3.6f*(float)Math.pow(x,2.6f)+2.6f*(float)Math.pow(x,1.6))/(float)Math.pow((1-(float)Math.pow(x,3.6)),2); // TODO : prendre en compte le changement sur x
         this.actualiseBch();
     }
     public void actualisePrs1(){
@@ -887,18 +887,18 @@ public class Dpe implements EventListener {
                     || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_INF_1991)
                     || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002)
                     || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_SUP_2003)){
-                prs2=2.1;
+                prs2=2.1f;
                 this.actualisePr();
             }else if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)){ // Chaudière
-                prs2=1.05;
+                prs2=1.05f;
                 this.actualisePr();
             }
             else { // Accumulateur ou ballon électrique
                 if (ecs_properties.containsKey(DpeEvent.LOCAL_EQUIPEMENT_ECS)){
                     if (ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS).equals(LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE)){
-                        prs2=3.7;
+                        prs2=3.7f;
                     }else{
-                        prs2=1.05;
+                        prs2=1.05f;
                     }
                     this.actualisePr();
                 }
@@ -908,36 +908,36 @@ public class Dpe implements EventListener {
     public void actualiseCch(){
         if(chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_UNIQUE)){
             Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE);
-            double ich=chauffage.getIch();
+            float ich=chauffage.getIch();
             this.cch=this.bch*ich;
         }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS)){
             Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL);
             Chauffage poele = (Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE);
-            double k = ((FrequenceUtilisationPoilEnum)chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE)).getFrequence();
-            double ichChauffage = chauffage.getIch();
-            double ichPoele = poele.getIch();
+            float k = ((FrequenceUtilisationPoilEnum)chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE)).getFrequence();
+            float ichChauffage = chauffage.getIch();
+            float ichPoele = poele.getIch();
             this.cch=k*bch*ichPoele+(1-k)*bch*ichChauffage;
         }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS)){
             Chauffage chaudiereGazFioul = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL);
             Chauffage chaudiereBois = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_BOIS);
-            double ichChaudiereGazFioul = chaudiereGazFioul.getIch();
-            double ichChaudiereBois = chaudiereBois.getIch();
-            this.cch=0.75*bch*ichChaudiereBois+0.25*bch*ichChaudiereGazFioul;
+            float ichChaudiereGazFioul = chaudiereGazFioul.getIch();
+            float ichChaudiereBois = chaudiereBois.getIch();
+            this.cch=0.75f*bch*ichChaudiereBois+0.25f*bch*ichChaudiereGazFioul;
         }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC)){
             Chauffage chaudiere = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC);
             Chauffage pac = (Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE);
-            double ichChaudiere = chaudiere.getIch();
-            double ichPac = pac.getIch();
-            this.cch=0.8*bch*ichPac+0.2*bch*ichChaudiere;
+            float ichChaudiere = chaudiere.getIch();
+            float ichPac = pac.getIch();
+            this.cch=0.8f*bch*ichPac+0.2f*bch*ichChaudiere;
         }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS)){
             Chauffage chaudiere = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE);
             Chauffage pac = (Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE);
             Chauffage poele = (Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC);
-            double k = (double)chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC);
-            double ichChaudiere = chaudiere.getIch();
-            double ichPac = pac.getIch();
-            double ichPoele = poele.getIch();
-            this.cch=(1-k)*(0.8*bch*ichPac)+(1-k)*(0.2*bch*ichChaudiere)+k*bch*ichPoele;
+            float k = (float)chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC);
+            float ichChaudiere = chaudiere.getIch();
+            float ichPac = pac.getIch();
+            float ichPoele = poele.getIch();
+            this.cch=(1-k)*(0.8f*bch*ichPac)+(1-k)*(0.2f*bch*ichChaudiere)+k*bch*ichPoele;
         }
         this.actualiseScoreDpe();
         System.out.println("Consommation de chauffage = "+cch);
@@ -1110,7 +1110,7 @@ public class Dpe implements EventListener {
 
     // 6.Rendement de génération des chaudières
     private int tabTauxDeCharge[] = new int[10];
-    private double tabCoeffPondX[] = new double[10];
+    private float tabCoeffPondX[] = new float[10];
     public void tryActualiseIch(){
         boolean actualisationCch = false;
         if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)){
@@ -1162,24 +1162,24 @@ public class Dpe implements EventListener {
         }
     } // TODO : prendre en compte les changements sur GV
     public void actualiseRendementGeneration(Chauffage chauffage){
-        double tInt=23; // Cas défavorable
-        double tExtBase=-15; // Cas défavorable
-        double pch;
-        double pecs=2.844923077; // Cas défavorable
-        double pDim;
-        double pn=0;
-        double rr=chauffage.getRr();
-        double rd=chauffage.getRd();
-        double re=chauffage.getRe();
-        double rg;
-        double cdimRef;
-        double tabTchxFinal[] = new double [10];
-        double tabQpx[] = new double [10];
-        double tfonc100 = this.getTfonc100();
-        double tfonc30;
-        double qp0,qp15,qp30,qp50,qp100;
-        double pmfou=0;
-        double pmcons=0;
+        float tInt=23; // Cas défavorable
+        float tExtBase=-15; // Cas défavorable
+        float pch;
+        float pecs=2.844923077f; // Cas défavorable
+        float pDim;
+        float pn=0;
+        float rr=chauffage.getRr();
+        float rd=chauffage.getRd();
+        float re=chauffage.getRe();
+        float rg;
+        float cdimRef;
+        float tabTchxFinal[] = new float [10];
+        float tabQpx[] = new float [10];
+        float tfonc100 = this.getTfonc100();
+        float tfonc30;
+        float qp0,qp15,qp30,qp50,qp100;
+        float pmfou=0;
+        float pmcons=0;
         boolean haveRegulation=false;
 
         if (general_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR)==PresenceThermostatEnum.PRESENCE_THERMOSTAT_OU_SONDE){
@@ -1192,7 +1192,7 @@ public class Dpe implements EventListener {
         if(chauffage_properties.containsKey(DpeEvent.TEMPERATURE_INTERIEUR)){
             tInt=((TemperatureInterieurEnum)chauffage_properties.get(DpeEvent.TEMPERATURE_INTERIEUR)).getTemperatureInterieure();
         }
-        pch=1.2*gv*(tInt-tExtBase)/(1000*rr*rd*re);
+        pch=1.2f*gv*(tInt-tExtBase)/(1000*rr*rd*re);
         pDim=pch;
 
         if (chauffage.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_AVANT_2006)
@@ -1249,9 +1249,9 @@ public class Dpe implements EventListener {
             pmfou += pn*tabTchxFinal[i]*tabCoeffPondX[i];
         }
 
-        double rpint = chauffage.getRpint();
-        double rpn = chauffage.getRpn();
-        double pveil = chauffage.getPuissanceVeilleuse();
+        float rpint = chauffage.getRpint();
+        float rpn = chauffage.getRpn();
+        float pveil = chauffage.getPuissanceVeilleuse();
         qp0=chauffage.getQp0();
 
         switch(chauffage.getGenerateur()){
@@ -1260,19 +1260,19 @@ public class Dpe implements EventListener {
             case CHAUDIERE_FIOUL_BASSE_TEMPERATURE:
                 tfonc30=this.getTfonc30ChaudiereBasseTemperature();
                 if(haveRegulation){
-                    qp30=(0.3*pn*(100-(rpint+0.1*(40-tfonc30))))/(rpint+0.1*(40-tfonc30));
+                    qp30=(0.3f*pn*(100-(rpint+0.1f*(40-tfonc30))))/(rpint+0.1f*(40-tfonc30));
                 }else{
-                    qp30=(0.3*pn*(100-(rpint+0.1*(40-tfonc100))))/(rpint+0.1*(40-tfonc100));
+                    qp30=(0.3f*pn*(100-(rpint+0.1f*(40-tfonc100))))/(rpint+0.1f*(40-tfonc100));
                 }
                 qp15=qp30/2;
-                qp100=(pn*(100-(rpn+0.1*(70-tfonc100))))/(rpn+0.1*(70-tfonc100));
+                qp100=(pn*(100-(rpn+0.1f*(70-tfonc100))))/(rpn+0.1f*(70-tfonc100));
                 for (int i=0;i<9;i++){
                     if(i<2){ // Entre 0 et 15% de charge
-                        tabQpx[i] = ((qp15-0.15*qp0)*tabTchxFinal[i]/0.15)+0.15*qp0;
+                        tabQpx[i] = ((qp15-0.15f*qp0)*tabTchxFinal[i]/0.15f)+0.15f*qp0;
                     }else if (i==2){ // Entre 15 et 30% de charge
-                        tabQpx[i] = ((qp30-qp15)/0.15)*tabTchxFinal[i]+qp15-((qp30-qp15)/0.15)*0.15;
+                        tabQpx[i] = ((qp30-qp15)/0.15f)*tabTchxFinal[i]+qp15-((qp30-qp15)/0.15f)*0.15f;
                     }else if (i>2){ // Entre 30 et 100% de charge
-                        tabQpx[i] = ((qp100-qp30)/0.7)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7)*0.3;
+                        tabQpx[i] = ((qp100-qp30)/0.7f)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7f)*0.3f;
                     }
                 }
                 break;
@@ -1283,19 +1283,19 @@ public class Dpe implements EventListener {
             case CHAUDIERE_FIOUL_CONDENSATION:
                 tfonc30=this.getTfonc30ChaudiereCondensation();
                 if(haveRegulation){
-                    qp30=(0.3*pn*(100-(rpint+0.2*(33-tfonc30))))/(rpint+0.2*(33-tfonc30));
+                    qp30=(0.3f*pn*(100-(rpint+0.2f*(33-tfonc30))))/(rpint+0.2f*(33-tfonc30));
                 }else{
-                    qp30=(0.3*pn*(100-(rpint+0.2*(33-tfonc100))))/(rpint+0.2*(33-tfonc100));
+                    qp30=(0.3f*pn*(100-(rpint+0.2f*(33-tfonc100))))/(rpint+0.2f*(33-tfonc100));
                 }
                 qp15=qp30/2;
-                qp100=(pn*(100-(rpn+0.1*(70-tfonc100))))/(rpn+0.1*(70-tfonc100));
+                qp100=(pn*(100-(rpn+0.1f*(70-tfonc100))))/(rpn+0.1f*(70-tfonc100));
                 for (int i=0;i<9;i++){
                     if(i<2){ // Entre 0 et 15% de charge
-                        tabQpx[i] = ((qp15-0.15*qp0)*tabTchxFinal[i]/0.15)+0.15*qp0;
+                        tabQpx[i] = ((qp15-0.15f*qp0)*tabTchxFinal[i]/0.15f)+0.15f*qp0;
                     }else if (i==2){ // Entre 15 et 30% de charge
-                        tabQpx[i] = ((qp30-qp15)/0.15)*tabTchxFinal[i]+qp15-((qp30-qp15)/0.15)*0.15;
+                        tabQpx[i] = ((qp30-qp15)/0.15f)*tabTchxFinal[i]+qp15-((qp30-qp15)/0.15f)*0.15f;
                     }else if (i>2){ // Entre 30 et 100% de charge
-                        tabQpx[i] = ((qp100-qp30)/0.7)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7)*0.3;
+                        tabQpx[i] = ((qp100-qp30)/0.7f)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7f)*0.3f;
                     }
                 }
                 break;
@@ -1309,16 +1309,16 @@ public class Dpe implements EventListener {
             case CHAUDIERE_FIOUL_CLASSIQUE_ENTRE_1981_ET_1991:
                 tfonc30=this.getTfonc30ChaudiereStandardAvant1990();
                 if(haveRegulation){
-                    qp30=(0.3*pn*(100-(rpint+0.1*(50-tfonc30))))/(rpint+0.1*(50-tfonc30));
+                    qp30=(0.3f*pn*(100-(rpint+0.1f*(50-tfonc30))))/(rpint+0.1f*(50-tfonc30));
                 }else{
-                    qp30=(0.3*pn*(100-(rpint+0.1*(50-tfonc100))))/(rpint+0.1*(50-tfonc100));
+                    qp30=(0.3f*pn*(100-(rpint+0.1f*(50-tfonc100))))/(rpint+0.1f*(50-tfonc100));
                 }
-                qp100=(pn*(100-(rpn+0.1*(70-tfonc100))))/(rpn+0.1*(70-tfonc100));
+                qp100=(pn*(100-(rpn+0.1f*(70-tfonc100))))/(rpn+0.1f*(70-tfonc100));
                 for (int i=0;i<9;i++){
                     if(i<=2){ // Entre 0 et 30% de charge
-                        tabQpx[i] = ((qp30-0.15*qp0)*tabTchxFinal[i]/0.3)+0.15*qp0;
+                        tabQpx[i] = ((qp30-0.15f*qp0)*tabTchxFinal[i]/0.3f)+0.15f*qp0;
                     }else if (i>2){ // Entre 30 et 100% de charge
-                        tabQpx[i] = ((qp100-qp30)/0.7)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7)*0.3;
+                        tabQpx[i] = ((qp100-qp30)/0.7f)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7f)*0.3f;
                     }
                 }
                 break;
@@ -1328,29 +1328,29 @@ public class Dpe implements EventListener {
             case CHAUDIERE_FIOUL_STANDARD_APRES_1991:
                 tfonc30=this.getTfonc30ChaudiereStandardApres1991();
                 if(haveRegulation){
-                    qp30=(0.3*pn*(100-(rpint+0.1*(50-tfonc30))))/(rpint+0.1*(50-tfonc30));
+                    qp30=(0.3f*pn*(100-(rpint+0.1f*(50-tfonc30))))/(rpint+0.1f*(50-tfonc30));
                 }else{
-                    qp30=(0.3*pn*(100-(rpint+0.1*(50-tfonc100))))/(rpint+0.1*(50-tfonc100));
+                    qp30=(0.3f*pn*(100-(rpint+0.1f*(50-tfonc100))))/(rpint+0.1f*(50-tfonc100));
                 }
-                qp100=(pn*(100-(rpn+0.1*(70-tfonc100))))/(rpn+0.1*(70-tfonc100));
+                qp100=(pn*(100-(rpn+0.1f*(70-tfonc100))))/(rpn+0.1f*(70-tfonc100));
                 for (int i=0;i<9;i++){
                     if(i<=2){ // Entre 0 et 30% de charge
-                        tabQpx[i] = ((qp30-0.15*qp0)*tabTchxFinal[i]/0.3)+0.15*qp0;
+                        tabQpx[i] = ((qp30-0.15f*qp0)*tabTchxFinal[i]/0.3f)+0.15f*qp0;
                     }else if (i>2){ // Entre 30 et 100% de charge
-                        tabQpx[i] = ((qp100-qp30)/0.7)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7)*0.3;
+                        tabQpx[i] = ((qp100-qp30)/0.7f)*tabTchxFinal[i]+qp30-((qp100-qp30)/0.7f)*0.3f;
                     }
                 }
                 break;
 
             case CHAUDIERE_BOIS_PLUS_DE_15_ANS:
             case CHAUDIERE_BOIS_MOINS_DE_15_ANS:
-                qp50=0.5*pn*(100-rpint)/rpint;
+                qp50=0.5f*pn*(100-rpint)/rpint;
                 qp100=pn*(100-rpn)/rpn;
                 for (int i=0;i<9;i++){
                     if(i<=4){ // Entre 0 et 50% de charge
-                        tabQpx[i] = ((qp50-qp0)/0.5)*tabTchxFinal[i]+qp0;
+                        tabQpx[i] = ((qp50-qp0)/0.5f)*tabTchxFinal[i]+qp0;
                     }else if (i>4){ // Entre 50 et 100% de charge
-                        tabQpx[i] = ((qp100-qp50)/0.5)*tabTchxFinal[i]+2*qp50-qp100;
+                        tabQpx[i] = ((qp100-qp50)/0.5f)*tabTchxFinal[i]+2*qp50-qp100;
                     }
                 }
                 break;
@@ -1365,11 +1365,11 @@ public class Dpe implements EventListener {
         for (int i=0;i<9;i++){
             pmcons += pn*tabTchxFinal[i]*tabCoeffPondX[i]*((pn*tabTchxFinal[i]+tabQpx[i])/(pn*tabTchxFinal[i]));
         }
-        rg = pmfou/(pmcons+0.3*0.15*qp0+pveil);
+        rg = pmfou/(pmcons+0.3f*0.15f*qp0+pveil);
         chauffage.setRg(rg);
     }
-    public double getTfonc100(){
-        double tFonc100 = 80; // Cas défavorable
+    public float getTfonc100(){
+        float tFonc100 = 80; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -1394,8 +1394,8 @@ public class Dpe implements EventListener {
         }
         return tFonc100;
     }
-    public double getTfonc30ChaudiereCondensation(){
-        double tFonc30 = 38; // Cas défavorable
+    public float getTfonc30ChaudiereCondensation(){
+        float tFonc30 = 38; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -1410,7 +1410,7 @@ public class Dpe implements EventListener {
                         break;
                     default:
                         if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 24.5;
+                            tFonc30 = 24.5f;
                         }else{
                             tFonc30 = 34;
                         }
@@ -1420,8 +1420,8 @@ public class Dpe implements EventListener {
         }
         return tFonc30;
     }
-    public double getTfonc30ChaudiereBasseTemperature(){
-        double tFonc30 = 48.5; // Cas défavorable
+    public float getTfonc30ChaudiereBasseTemperature(){
+        float tFonc30 = 48.5f; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -1429,9 +1429,9 @@ public class Dpe implements EventListener {
                     case ENTRE_1975_ET_1977:
                     case ENTRE_1978_ET_1982:
                         if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 42.5;
+                            tFonc30 = 42.5f;
                         }else{
-                            tFonc30 = 48.5;
+                            tFonc30 = 48.5f;
                         }
                         break;
                     default:
@@ -1446,8 +1446,8 @@ public class Dpe implements EventListener {
         }
         return tFonc30;
     }
-    public double getTfonc30ChaudiereStandardAvant1990(){
-        double tFonc30 = 59; // Cas défavorable
+    public float getTfonc30ChaudiereStandardAvant1990(){
+        float tFonc30 = 59; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -1464,7 +1464,7 @@ public class Dpe implements EventListener {
                         if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
                             tFonc30 = 50;
                         }else{
-                            tFonc30 = 54.5;
+                            tFonc30 = 54.5f;
                         }
                         break;
                 }
@@ -1472,8 +1472,8 @@ public class Dpe implements EventListener {
         }
         return tFonc30;
     }
-    public double getTfonc30ChaudiereStandardApres1991(){
-        double tFonc30 = 55.5; // Cas défavorable
+    public float getTfonc30ChaudiereStandardApres1991(){
+        float tFonc30 = 55.5f; // Cas défavorable
         if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
             if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
                 switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
@@ -1481,16 +1481,16 @@ public class Dpe implements EventListener {
                     case ENTRE_1975_ET_1977:
                     case ENTRE_1978_ET_1982:
                         if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 49.5;
+                            tFonc30 = 49.5f;
                         }else{
-                            tFonc30 = 55.5;
+                            tFonc30 = 55.5f;
                         }
                         break;
                     default:
                         if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
                             tFonc30 = 45;
                         }else{
-                            tFonc30 = 51.5;
+                            tFonc30 = 51.5f;
                         }
                         break;
                 }
@@ -1500,16 +1500,16 @@ public class Dpe implements EventListener {
     }
 
     // 7.Expression du besoin de la consommation d'ECS
-    private double bEcs=3688;
-    private double becs=55;
-    private double nbJoursAbsenceParAn=0;
-    private double nbHabitant=4;
-    private double cEcs=5000;
-    private double iEcs=5.45;
-    private double fEcs; // TODO : prendre en compte les installations solaires
-    private double tfr=10.5;
+    private float bEcs=3688;
+    private float becs=55;
+    private float nbJoursAbsenceParAn=0;
+    private float nbHabitant=4;
+    private float cEcs=5000;
+    private float iEcs=5.45f;
+    private float fEcs; // TODO : prendre en compte les installations solaires
+    private float tfr=10.5f;
     public void actualiseBecs(){
-        bEcs=(1.1627*(365-nbJoursAbsenceParAn)*nbHabitant*becs*(50-tfr))/1000;
+        bEcs=(1.1627f*(365-nbJoursAbsenceParAn)*nbHabitant*becs*(50-tfr))/1000;
         this.tryActualiseRendementEquipementEcs();
         this.actualiseCecs();
     }
@@ -1518,16 +1518,16 @@ public class Dpe implements EventListener {
             int zone = ((DepartementBatimentEnum)general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT)).getZoneHiver();
             switch (zone){
                 case 1:
-                    tfr=10.5;
+                    tfr=10.5f;
                     break;
                 case 2:
                     tfr=12;
                     break;
                 case 3:
-                    tfr=14.5;
+                    tfr=14.5f;
                     break;
                 default:
-                    tfr=10.5;
+                    tfr=10.5f;
                     break;
             }
         }
@@ -1563,47 +1563,47 @@ public class Dpe implements EventListener {
         }
     }
     public void actualiseRendementEcs(TypeEquipementEcsEnum equipementEcs){ // TODO-> prendre en compte les dépendances
-        double cr,qgw,rs,rd,rendement,rpn,qp0,pveil,cop,pecs,vs,cef;
+        float cr,qgw,rs,rd,rendement,rpn,qp0,pveil,cop,pecs,vs,cef;
         vs = this.getVs();
         cef = this.getCef();
         switch (equipementEcs){
             case BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS:
                 rd=getRdBallonElectrique();
-                cr=(939+10.4*vs)/(45*vs);
-                qgw=0.344*vs*cr*(55-13);
-                rendement = 1.08/(1+(qgw*rd/bEcs));
+                cr=(939+10.4f*vs)/(45*vs);
+                qgw=0.344f*vs*cr*(55-13);
+                rendement = 1.08f/(1+(qgw*rd/bEcs));
                 iEcs=1/rendement;
                 break;
 
             case BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS:
                 rd=getRdBallonElectrique();
-                cr=(939+10.4*vs)/(45*vs);
-                qgw=0.344*vs*cr*(55-13);
+                cr=(939+10.4f*vs)/(45*vs);
+                qgw=0.344f*vs*cr*(55-13);
                 rendement = 1/(1+(qgw*rd/bEcs));
                 iEcs=1/rendement;
                 break;
 
             case BALLON_ELECTRIQUE_VERTICAL_INF_15ANS:
                 rd=getRdBallonElectrique();
-                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
-                qgw=0.344*vs*cr*(55-13);
-                rendement = 1.08/(1+(qgw*rd/bEcs));
+                cr=(224+66.3f*(float)Math.pow(vs,2/3))/(45*vs);
+                qgw=0.344f*vs*cr*(55-13);
+                rendement = 1.08f/(1+(qgw*rd/bEcs));
                 iEcs=1/rendement;
                 break;
 
             case BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS:
                 rd=getRdBallonElectrique();
-                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
-                qgw=0.344*vs*cr*(55-13);
+                cr=(224+66.3f*(float)Math.pow(vs,2/3))/(45*vs);
+                qgw=0.344f*vs*cr*(55-13);
                 rendement = 1/(1+(qgw*rd/bEcs));
                 iEcs=1/rendement;
                 break;
 
             case CHAUFFE_EAU_GAZ_INF_1991:
-                iEcs=(1/73)+1720*(3/bEcs)+6536*(0.13/bEcs);
+                iEcs=(1/73)+1720*(3/bEcs)+6536*(0.13f/bEcs);
                 break;
             case CHAUFFE_EAU_GAZ_ENTRE_1991_2002:
-                iEcs=(1/84)+1720*(1/bEcs)+6536*(0.1/bEcs);
+                iEcs=(1/84)+1720*(1/bEcs)+6536*(0.1f/bEcs);
                 break;
             case CHAUFFE_EAU_GAZ_SUP_2003:
                 iEcs=(1/84)+1720*(1/bEcs);
@@ -1615,70 +1615,70 @@ public class Dpe implements EventListener {
                     qp0=chaudiere.getQp0();
                     rpn=chaudiere.getRpn();
                     pveil=chaudiere.getPuissanceVeilleuse();
-                    iEcs = (1/rpn)+1720*(qp0/bEcs)+6536*(0.5*pveil/bEcs);
+                    iEcs = (1/rpn)+1720*(qp0/bEcs)+6536*(0.5f*pveil/bEcs);
                 }
                 break;
 
             case ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991 :
-                qgw=11*Math.pow(vs,2/3)+0.015*10;
-                iEcs=(1/83)+((8256*0.12+qgw)/bEcs)+(6536*0.15/bEcs);
+                qgw=11*(float)Math.pow(vs,2/3)+0.015f*10;
+                iEcs=(1/83)+((8256*0.12f+qgw)/bEcs)+(6536*0.15f/bEcs);
                 break;
             case ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1991_2002 :
-                qgw=11*Math.pow(vs,2/3)+0.015*10;
-                iEcs=(1/83)+((8256*0.1+qgw)/bEcs)+(6536*0.15/bEcs);
+                qgw=11*(float)Math.pow(vs,2/3)+0.015f*10;
+                iEcs=(1/83)+((8256*0.1f+qgw)/bEcs)+(6536*0.15f/bEcs);
                 break;
             case ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2003 :
-                qgw=11*Math.pow(vs,2/3)+0.015*10;
-                iEcs=(1/83)+((8256*0.12+qgw)/bEcs);
+                qgw=11*(float)Math.pow(vs,2/3)+0.015f*10;
+                iEcs=(1/83)+((8256*0.12f+qgw)/bEcs);
                 break;
             case ACCUMULATEUR_GAZ_CONDENSATION :
-                qgw=11*Math.pow(vs,2/3)+0.015*10;
-                iEcs=(1/98)+((8256*0.12+qgw)/bEcs);
+                qgw=11*(float)Math.pow(vs,2/3)+0.015f*10;
+                iEcs=(1/98)+((8256*0.12f+qgw)/bEcs);
                 break;
 
             case CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT:
-                cop=2.4;
+                cop=2.4f;
                 rd=getRdBallonThermodynamique();
-                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
+                cr=(224+66.3f*(float)Math.pow(vs,2/3))/(45*vs);
                 if(vs<=150){
-                    pecs = 5-1.751*(vs-20)/65;
+                    pecs = 5-1.751f*(vs-20)/65;
                 }else{
-                    pecs = (7.14*vs+428)/1000;
+                    pecs = (7.14f*vs+428)/1000;
                 }
-                iEcs=(3/(1+2*cop))+rd*(11.9*cr*vs*(cef-0.0576*(bEcs/(pecs*1000*cop*rd))))/bEcs;
+                iEcs=(3/(1+2*cop))+rd*(11.9f*cr*vs*(cef-0.0576f*(bEcs/(pecs*1000*cop*rd))))/bEcs;
                 break;
             case CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR:
-                cop=2.1;
+                cop=2.1f;
                 rd=getRdBallonThermodynamique();
-                cr=(224+66.3*Math.pow(vs,2/3))/(45*vs);
+                cr=(224+66.3f*(float)Math.pow(vs,2/3))/(45*vs);
                 if(vs<=150){
-                    pecs = 5-1.751*(vs-20)/65;
+                    pecs = 5-1.751f*(vs-20)/65;
                 }else{
-                    pecs = (7.14*vs+428)/1000;
+                    pecs = (7.14f*vs+428)/1000;
                 }
-                iEcs=(3/(1+2*cop))+rd*(11.9*cr*vs*(cef-0.0576*(bEcs/(pecs*1000*cop*rd))))/bEcs;
+                iEcs=(3/(1+2*cop))+rd*(11.9f*cr*vs*(cef-0.0576f*(bEcs/(pecs*1000*cop*rd))))/bEcs;
                 break;
 
         }
 //        System.out.println("Iecs = "+iEcs);
         this.actualiseCecs();
     }
-    public double getRdBallonElectrique(){
+    public float getRdBallonElectrique(){
         if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS)==LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
-            return 0.85;
+            return 0.85f;
         }else{
-            return 0.8;
+            return 0.8f;
         }
     }
-    public double getRdBallonThermodynamique(){
+    public float getRdBallonThermodynamique(){
         if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS)==LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
-            return 0.9;
+            return 0.9f;
         }else{
-            return 0.85;
+            return 0.85f;
         }
     }
-    public double getVs(){
-        double vs=300;
+    public float getVs(){
+        float vs=300;
         if(general_properties.containsKey(DpeEvent.CATEGORIE_BATIMENT)){
             switch ((CategorieLogementEnum)general_properties.get(DpeEvent.CATEGORIE_BATIMENT)){
                 case T1_F1:
@@ -1700,28 +1700,28 @@ public class Dpe implements EventListener {
         }
         return vs;
     }
-    public double getCef(){
-        double cef=1.1;
+    public float getCef(){
+        float cef=1.1f;
         if(general_properties.get(DpeEvent.ABONNEMENT_ELECTRIQUE) == TypeAbonnementElectriqueEnum.DOUBLE_TARIF){
             if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS) == LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
-                cef=0.6;
+                cef=0.6f;
             }else{ //LNC ou pas d'info
-                cef=0.75;
+                cef=0.75f;
             }
         }else{ //Simple ou tarif ou pas d'info
             if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS) == LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
-                cef=0.9;
+                cef=0.9f;
             }else{ //LNC ou pas d'info
-                cef=1.1;
+                cef=1.1f;
             }
         }
         return cef;
     }
 
     // 9.Consommation de climatisation
-    private double cClimatisation=700; // Cas le plus défavorable (7*100)
-    private double rClimatisation=7; // Cas le plus défavorable (voir 9)
-    private double sClimatisation=100; // On considère que l'on climatise une grande surface
+    private float cClimatisation=700; // Cas le plus défavorable (7*100)
+    private float rClimatisation=7; // Cas le plus défavorable (voir 9)
+    private float sClimatisation=100; // On considère que l'on climatise une grande surface
     public void actualiseResistanceClim(){
         if (general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
             DepartementBatimentEnum.ZoneEte zoneEte = ((DepartementBatimentEnum) general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT)).getZoneEte();
@@ -1763,16 +1763,16 @@ public class Dpe implements EventListener {
     }
 
     // 10.Concommation des usages spécifiques
-    private double cElectromenager=1906; // Comme si on possède tous les éléments électroménager (voir 10.3)
-    private double cEclairageSurfacique = 3.7; // Consommation max annuel des lampes (voir 10.2)
-    private double cEclairage = 185; // sh max * cEclairageSurfacique max = 50*3.7
-    private double cCuisson = 1660; // Conso cuisson max (cf 10.1)
+    private float cElectromenager=1906; // Comme si on possède tous les éléments électroménager (voir 10.3)
+    private float cEclairageSurfacique = 3.7f; // Consommation max annuel des lampes (voir 10.2)
+    private float cEclairage = 185; // sh max * cEclairageSurfacique max = 50*3.7
+    private float cCuisson = 1660; // Conso cuisson max (cf 10.1)
     public void actualiseConsommationEclairageSurfacique() {
         if (general_properties.containsKey(DpeEvent.EQUIPEMENT_ECLAIRAGE)){
             TypeEquipementEclairageEnum equipementEclairage = (TypeEquipementEclairageEnum)general_properties.get(DpeEvent.EQUIPEMENT_ECLAIRAGE);
             cEclairageSurfacique=equipementEclairage.getConsommationEclairage();
         }else{
-            cEclairageSurfacique=3.7;
+            cEclairageSurfacique=3.7f;
         }
         this.actualiseConsommationEclairage();
     }
@@ -1815,15 +1815,15 @@ public class Dpe implements EventListener {
     }
     private Dpe () {
         EventManager.getInstance().addListener(Channel.DPE, this);
-        tabCoeffPondX[0]=0.1;
-        tabCoeffPondX[1]=0.25;
-        tabCoeffPondX[2]=0.2;
-        tabCoeffPondX[3]=0.15;
-        tabCoeffPondX[4]=0.1;
-        tabCoeffPondX[5]=0.1;
-        tabCoeffPondX[6]=0.05;
-        tabCoeffPondX[7]=0.025;
-        tabCoeffPondX[8]=0.025;
+        tabCoeffPondX[0]=0.1f;
+        tabCoeffPondX[1]=0.25f;
+        tabCoeffPondX[2]=0.2f;
+        tabCoeffPondX[3]=0.15f;
+        tabCoeffPondX[4]=0.1f;
+        tabCoeffPondX[5]=0.1f;
+        tabCoeffPondX[6]=0.05f;
+        tabCoeffPondX[7]=0.025f;
+        tabCoeffPondX[8]=0.025f;
         tabCoeffPondX[9]=0;
         int tampon=-5;
         for(int i=0;i<tabTauxDeCharge.length;i++){
@@ -1838,7 +1838,7 @@ public class Dpe implements EventListener {
         scoreDpe = (cElectromenager+cEclairage+cCuisson+cClimatisation+cEcs+cch)/sh;
     }
 
-    public double getScoreDpe(){
+    public float getScoreDpe(){
         return Math.round(this.scoreDpe);
     }
 
@@ -2080,7 +2080,7 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            this.sClimatisation = (double) items.get("lastValue");
+                            this.sClimatisation = (float) items.get("lastValue");
                             general_properties.put(DpeEvent.SURFACE_CLIMATISATION, sClimatisation);
                             this.actualiseResistanceClim();
                         }
@@ -2200,7 +2200,7 @@ public class Dpe implements EventListener {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            nbHabitant = (double) items.get("lastValue");
+                            nbHabitant = (float) items.get("lastValue");
                             this.actualiseBecs();
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             HashMap<String, Object> currentItems = new HashMap<String, Object>();
@@ -2216,7 +2216,7 @@ public class Dpe implements EventListener {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            nbJoursAbsenceParAn = (double) items.get("lastValue");
+                            nbJoursAbsenceParAn = (float) items.get("lastValue");
                             this.actualiseBecs();
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             HashMap<String, Object> currentItems = new HashMap<String, Object>();

@@ -12,21 +12,21 @@ import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 
 /**
- * Created by ricordeau on 20/07/15.
+ * Created by ricordeau on 20/07/15
  */
 public class PorteFenetre extends Ouverture {
 
     static float DEFAULT_Y = 1.f;
     static float DEFAULT_WIDTH = 0.6f;
     static float DEFAULT_HEIGHT = 0.75f;
-    private double coefficientDeTransmissionThermique;
-    private double deperdition;
+    private float coefficientDeTransmissionThermique;
+    private float deperdition;
     public TypePorteFenetre typePorteFenetre;
     public TypeMateriauMenuiserieEnum typeMateriau;
     private TypeVitrageEnum typeVitrage;
     private TypeFermetureEnum typeFermeture;
     private TypeMasqueEnum masqueProche, masqueLointain;
-    private double fts=0.64,fe1=1,fe2=1,c1=1.2,bas=1,sse;
+    private float fts=0.64f,fe1=1,fe2=1,c1=1.2f,bas=1,sse;
 
     // Constructeur
     public PorteFenetre() {
@@ -44,13 +44,13 @@ public class PorteFenetre extends Ouverture {
         this.masqueLointain=TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
     }
 
-    public double getCoefficientDeTransmissionThermique() {
+    public float getCoefficientDeTransmissionThermique() {
         return coefficientDeTransmissionThermique;
     }
-    public void setCoefficientDeTransmissionThermique(double coefficientDeTransmissionThermique) {
+    public void setCoefficientDeTransmissionThermique(float coefficientDeTransmissionThermique) {
         this.coefficientDeTransmissionThermique = coefficientDeTransmissionThermique;
     }
-    public double getDeperdition() {
+    public float getDeperdition() {
         return deperdition;
     }
     public TypePorteFenetre getTypePorteFenetre() {
@@ -69,7 +69,7 @@ public class PorteFenetre extends Ouverture {
         this.typeMateriau = typeMateriau;
     }
 
-    public void setDeperdition(double deperdition) {
+    public void setDeperdition(float deperdition) {
         this.deperdition = deperdition;
     }
 
@@ -98,8 +98,8 @@ public class PorteFenetre extends Ouverture {
     }
 
     public void actualiseDeperdition(){
-        double u=this.coefficientDeTransmissionThermique;
-        double deperdition=0;
+        float u=this.coefficientDeTransmissionThermique;
+        float deperdition=0;
         switch (this.getMur().getTypeMur()){
             case MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE:
                 switch (this.getMur().getOrientationMur()){
@@ -109,11 +109,11 @@ public class PorteFenetre extends Ouverture {
                             case INCONNUE:
                             case JAMAIS:
                                 // Non isolé
-                                deperdition=0.95*this.surface*u;
+                                deperdition=0.95f*this.surface*u;
                                 break;
                             default:
                                 // isolé
-                                deperdition=0.85*this.surface*u;
+                                deperdition=0.85f*this.surface*u;
                                 break;
                         }
                         break;
@@ -123,11 +123,11 @@ public class PorteFenetre extends Ouverture {
                             case INCONNUE:
                             case JAMAIS:
                                 // Non isolé
-                                deperdition= 0.63*this.surface*u;
+                                deperdition= 0.63f*this.surface*u;
                                 break;
                             default:
                                 // isolé
-                                deperdition= 0.6*this.surface*u;
+                                deperdition= 0.6f*this.surface*u;
                                 break;
                         }
                         break;
@@ -136,11 +136,11 @@ public class PorteFenetre extends Ouverture {
                             case INCONNUE:
                             case JAMAIS:
                                 // Non isolé
-                                deperdition= 0.6*this.surface*u;
+                                deperdition= 0.6f*this.surface*u;
                                 break;
                             default:
                                 // isolé
-                                deperdition= 0.55*this.surface*u;
+                                deperdition= 0.55f*this.surface*u;
                                 break;
                         }
                         break;
@@ -151,11 +151,11 @@ public class PorteFenetre extends Ouverture {
                     case INCONNUE:
                     case JAMAIS:
                         // Non isolé
-                        deperdition= 0.95*this.surface*u;
+                        deperdition= 0.95f*this.surface*u;
                         break;
                     default:
                         // isolé
-                        deperdition= 0.85*this.surface*u;
+                        deperdition= 0.85f*this.surface*u;
                         break;
                 }
                 break;
@@ -170,7 +170,7 @@ public class PorteFenetre extends Ouverture {
         this.deperdition=deperdition;
     }
     public void actualiseCoeffTransmissionThermique(){
-        double u=5;
+        float u=5;
         switch(this.getTypeMateriau()){
             case METALLIQUE:
                 switch (typePorteFenetre){
@@ -178,27 +178,27 @@ public class PorteFenetre extends Ouverture {
                     case PORTE_FENETRE_DOUBLE_VENTAIL_BATTANTE:
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
-                                u=4.87;
+                                u=4.87f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
-                                u=3.62;
+                                u=3.62f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
-                                u=3.54;
+                                u=3.54f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
-                                u=3.44;
+                                u=3.44f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
-                                u=2.18;
+                                u=2.18f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
-                                u=1.73;
+                                u=1.73f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
@@ -206,27 +206,27 @@ public class PorteFenetre extends Ouverture {
                     case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
-                                u=4.79;
+                                u=4.79f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
-                                u=3.31;
+                                u=3.31f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
-                                u=3.31;
+                                u=3.31f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
-                                u=3.12;
+                                u=3.12f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
-                                u=2.10;
+                                u=2.10f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
-                                u=1.58;
+                                u=1.58f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
@@ -239,27 +239,27 @@ public class PorteFenetre extends Ouverture {
                     case PORTE_FENETRE_DOUBLE_VENTAIL_BATTANTE:
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
-                                u=3.99;
+                                u=3.99f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
-                                u=2.83;
+                                u=2.83f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
-                                u=2.45;
+                                u=2.45f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
-                                u=2.35;
+                                u=2.35f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
-                                u=1.70;
+                                u=1.70f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
-                                u=1.24;
+                                u=1.24f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
@@ -267,27 +267,27 @@ public class PorteFenetre extends Ouverture {
                     case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
-                                u=4.34;
+                                u=4.34f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
-                                u=3.00;
+                                u=3.00f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
-                                u=2.7;
+                                u=2.7f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
-                                u=2.61;
+                                u=2.61f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
-                                u=1.85;
+                                u=1.85f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
-                                u=1.31;
+                                u=1.31f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
@@ -300,27 +300,27 @@ public class PorteFenetre extends Ouverture {
                     case PORTE_FENETRE_DOUBLE_VENTAIL_BATTANTE:
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
-                                u=4.29;
+                                u=4.29f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
-                                u=2.98;
+                                u=2.98f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
-                                u=2.7;
+                                u=2.7f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
-                                u=2.55;
+                                u=2.55f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
-                                u=1.75;
+                                u=1.75f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
-                                u=1.17;
+                                u=1.17f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
@@ -328,27 +328,27 @@ public class PorteFenetre extends Ouverture {
                     case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
-                                u=4.29;
+                                u=4.29f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
-                                u=2.98;
+                                u=2.98f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
-                                u=2.7;
+                                u=2.7f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
-                                u=2.55;
+                                u=2.55f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
-                                u=1.75;
+                                u=1.75f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
-                                u=1.17;
+                                u=1.17f;
                                 u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
@@ -359,122 +359,122 @@ public class PorteFenetre extends Ouverture {
         this.coefficientDeTransmissionThermique=u;
         this.actualiseDeperdition();
     }
-    public double actualiseCoeffTransmissionThermiqueAvecFermeture(double uDevantEtreActualise){
-        double nouveauU=uDevantEtreActualise;
+    public float actualiseCoeffTransmissionThermiqueAvecFermeture(float uDevantEtreActualise){
+        float nouveauU=uDevantEtreActualise;
         switch(typeFermeture){
             case JALOUSIE_ACCORDEON:
             case VOLET_BATTANT_AVEC_AJOURES_FIXES:
-                if (uDevantEtreActualise<1.3){nouveauU=1.1;}
-                else if (uDevantEtreActualise<1.4){nouveauU=1.2;}
-                else if (uDevantEtreActualise<1.5){nouveauU=1.3;}
-                else if (uDevantEtreActualise<1.6){nouveauU=1.4;}
-                else if (uDevantEtreActualise<1.7){nouveauU=1.5;}
-                else if (uDevantEtreActualise<1.8){nouveauU=1.6;}
-                else if (uDevantEtreActualise<1.9){nouveauU=1.7;}
-                else if (uDevantEtreActualise<2.0){nouveauU=1.8;}
-                else if (uDevantEtreActualise<2.1){nouveauU=1.9;}
-                else if (uDevantEtreActualise<2.2){nouveauU=1.9;}
-                else if (uDevantEtreActualise<2.3){nouveauU=2.0;}
-                else if (uDevantEtreActualise<2.4){nouveauU=2.1;}
-                else if (uDevantEtreActualise<2.5){nouveauU=2.2;}
-                else if (uDevantEtreActualise<2.6){nouveauU=2.3;}
-                else if (uDevantEtreActualise<2.7){nouveauU=2.4;}
-                else if (uDevantEtreActualise<2.8){nouveauU=2.5;}
-                else if (uDevantEtreActualise<2.9){nouveauU=2.5;}
-                else if (uDevantEtreActualise<3.0){nouveauU=2.6;}
-                else if (uDevantEtreActualise<3.2){nouveauU=2.7;}
-                else if (uDevantEtreActualise<3.4){nouveauU=2.9;}
-                else if (uDevantEtreActualise<3.6){nouveauU=3.0;}
-                else if (uDevantEtreActualise<3.8){nouveauU=3.2;}
-                else if (uDevantEtreActualise<4.0){nouveauU=3.4;}
-                else if (uDevantEtreActualise<4.2){nouveauU=3.5;}
-                else if (uDevantEtreActualise<4.4){nouveauU=3.7;}
-                else if (uDevantEtreActualise<4.6){nouveauU=3.8;}
-                else if (uDevantEtreActualise<4.8){nouveauU=4.0;}
-                else if (uDevantEtreActualise<5.0){nouveauU=4.1;}
-                else if (uDevantEtreActualise<5.2){nouveauU=4.3;}
-                else if (uDevantEtreActualise<5.4){nouveauU=4.4;}
-                else if (uDevantEtreActualise<5.6){nouveauU=4.6;}
-                else if (uDevantEtreActualise<5.8){nouveauU=4.7;}
-                else if (uDevantEtreActualise<6.0){nouveauU=4.9;}
-                else if (uDevantEtreActualise<6.2){nouveauU=5.0;}
-                else if (uDevantEtreActualise>=6.2){nouveauU=5.2;}
+                if (uDevantEtreActualise<1.3f){nouveauU=1.1f;}
+                else if (uDevantEtreActualise<1.4f){nouveauU=1.2f;}
+                else if (uDevantEtreActualise<1.5f){nouveauU=1.3f;}
+                else if (uDevantEtreActualise<1.6f){nouveauU=1.4f;}
+                else if (uDevantEtreActualise<1.7f){nouveauU=1.5f;}
+                else if (uDevantEtreActualise<1.8f){nouveauU=1.6f;}
+                else if (uDevantEtreActualise<1.9f){nouveauU=1.7f;}
+                else if (uDevantEtreActualise<2.0f){nouveauU=1.8f;}
+                else if (uDevantEtreActualise<2.1f){nouveauU=1.9f;}
+                else if (uDevantEtreActualise<2.2f){nouveauU=1.9f;}
+                else if (uDevantEtreActualise<2.3f){nouveauU=2.0f;}
+                else if (uDevantEtreActualise<2.4f){nouveauU=2.1f;}
+                else if (uDevantEtreActualise<2.5f){nouveauU=2.2f;}
+                else if (uDevantEtreActualise<2.6f){nouveauU=2.3f;}
+                else if (uDevantEtreActualise<2.7f){nouveauU=2.4f;}
+                else if (uDevantEtreActualise<2.8f){nouveauU=2.5f;}
+                else if (uDevantEtreActualise<2.9f){nouveauU=2.5f;}
+                else if (uDevantEtreActualise<3.0f){nouveauU=2.6f;}
+                else if (uDevantEtreActualise<3.2f){nouveauU=2.7f;}
+                else if (uDevantEtreActualise<3.4f){nouveauU=2.9f;}
+                else if (uDevantEtreActualise<3.6f){nouveauU=3.0f;}
+                else if (uDevantEtreActualise<3.8f){nouveauU=3.2f;}
+                else if (uDevantEtreActualise<4.0f){nouveauU=3.4f;}
+                else if (uDevantEtreActualise<4.2f){nouveauU=3.5f;}
+                else if (uDevantEtreActualise<4.4f){nouveauU=3.7f;}
+                else if (uDevantEtreActualise<4.6f){nouveauU=3.8f;}
+                else if (uDevantEtreActualise<4.8f){nouveauU=4.0f;}
+                else if (uDevantEtreActualise<5.0f){nouveauU=4.1f;}
+                else if (uDevantEtreActualise<5.2f){nouveauU=4.3f;}
+                else if (uDevantEtreActualise<5.4f){nouveauU=4.4f;}
+                else if (uDevantEtreActualise<5.6f){nouveauU=4.6f;}
+                else if (uDevantEtreActualise<5.8f){nouveauU=4.7f;}
+                else if (uDevantEtreActualise<6.0f){nouveauU=4.9f;}
+                else if (uDevantEtreActualise<6.2f){nouveauU=5.0f;}
+                else if (uDevantEtreActualise>=6.2f){nouveauU=5.2f;}
                 break;
             case VOLET_ROULANT_EN_METAL:
             case FERMETURE_SANS_AJOURES:
-                if (uDevantEtreActualise<1.3){nouveauU=1.1;}
-                else if (uDevantEtreActualise<1.4){nouveauU=1.2;}
-                else if (uDevantEtreActualise<1.5){nouveauU=1.3;}
-                else if (uDevantEtreActualise<1.6){nouveauU=1.4;}
-                else if (uDevantEtreActualise<1.7){nouveauU=1.5;}
-                else if (uDevantEtreActualise<1.8){nouveauU=1.5;}
-                else if (uDevantEtreActualise<1.9){nouveauU=1.6;}
-                else if (uDevantEtreActualise<2.0){nouveauU=1.7;}
-                else if (uDevantEtreActualise<2.1){nouveauU=1.8;}
-                else if (uDevantEtreActualise<2.2){nouveauU=1.9;}
-                else if (uDevantEtreActualise<2.3){nouveauU=1.9;}
-                else if (uDevantEtreActualise<2.4){nouveauU=2.0;}
-                else if (uDevantEtreActualise<2.5){nouveauU=2.1;}
-                else if (uDevantEtreActualise<2.6){nouveauU=2.2;}
-                else if (uDevantEtreActualise<2.7){nouveauU=2.3;}
-                else if (uDevantEtreActualise<2.8){nouveauU=2.3;}
-                else if (uDevantEtreActualise<2.9){nouveauU=2.4;}
-                else if (uDevantEtreActualise<3.0){nouveauU=2.5;}
-                else if (uDevantEtreActualise<3.2){nouveauU=2.6;}
-                else if (uDevantEtreActualise<3.4){nouveauU=2.7;}
-                else if (uDevantEtreActualise<3.6){nouveauU=2.9;}
-                else if (uDevantEtreActualise<3.8){nouveauU=3.0;}
-                else if (uDevantEtreActualise<4.0){nouveauU=3.1;}
-                else if (uDevantEtreActualise<4.2){nouveauU=3.3;}
-                else if (uDevantEtreActualise<4.4){nouveauU=3.4;}
-                else if (uDevantEtreActualise<4.6){nouveauU=3.6;}
-                else if (uDevantEtreActualise<4.8){nouveauU=3.7;}
-                else if (uDevantEtreActualise<5.0){nouveauU=3.8;}
-                else if (uDevantEtreActualise<5.2){nouveauU=4.0;}
-                else if (uDevantEtreActualise<5.4){nouveauU=4.1;}
-                else if (uDevantEtreActualise<5.6){nouveauU=4.2;}
-                else if (uDevantEtreActualise<5.8){nouveauU=4.4;}
-                else if (uDevantEtreActualise<6.0){nouveauU=4.5;}
-                else if (uDevantEtreActualise<6.2){nouveauU=4.6;}
-                else if (uDevantEtreActualise>=6.2){nouveauU=4.8;}
+                if (uDevantEtreActualise<1.3f){nouveauU=1.1f;}
+                else if (uDevantEtreActualise<1.4f){nouveauU=1.2f;}
+                else if (uDevantEtreActualise<1.5f){nouveauU=1.3f;}
+                else if (uDevantEtreActualise<1.6f){nouveauU=1.4f;}
+                else if (uDevantEtreActualise<1.7f){nouveauU=1.5f;}
+                else if (uDevantEtreActualise<1.8f){nouveauU=1.5f;}
+                else if (uDevantEtreActualise<1.9f){nouveauU=1.6f;}
+                else if (uDevantEtreActualise<2.0f){nouveauU=1.7f;}
+                else if (uDevantEtreActualise<2.1f){nouveauU=1.8f;}
+                else if (uDevantEtreActualise<2.2f){nouveauU=1.9f;}
+                else if (uDevantEtreActualise<2.3f){nouveauU=1.9f;}
+                else if (uDevantEtreActualise<2.4f){nouveauU=2.0f;}
+                else if (uDevantEtreActualise<2.5f){nouveauU=2.1f;}
+                else if (uDevantEtreActualise<2.6f){nouveauU=2.2f;}
+                else if (uDevantEtreActualise<2.7f){nouveauU=2.3f;}
+                else if (uDevantEtreActualise<2.8f){nouveauU=2.3f;}
+                else if (uDevantEtreActualise<2.9f){nouveauU=2.4f;}
+                else if (uDevantEtreActualise<3.0f){nouveauU=2.5f;}
+                else if (uDevantEtreActualise<3.2f){nouveauU=2.6f;}
+                else if (uDevantEtreActualise<3.4f){nouveauU=2.7f;}
+                else if (uDevantEtreActualise<3.6f){nouveauU=2.9f;}
+                else if (uDevantEtreActualise<3.8f){nouveauU=3.0f;}
+                else if (uDevantEtreActualise<4.0f){nouveauU=3.1f;}
+                else if (uDevantEtreActualise<4.2f){nouveauU=3.3f;}
+                else if (uDevantEtreActualise<4.4f){nouveauU=3.4f;}
+                else if (uDevantEtreActualise<4.6f){nouveauU=3.6f;}
+                else if (uDevantEtreActualise<4.8f){nouveauU=3.7f;}
+                else if (uDevantEtreActualise<5.0f){nouveauU=3.8f;}
+                else if (uDevantEtreActualise<5.2f){nouveauU=4.0f;}
+                else if (uDevantEtreActualise<5.4f){nouveauU=4.1f;}
+                else if (uDevantEtreActualise<5.6f){nouveauU=4.2f;}
+                else if (uDevantEtreActualise<5.8f){nouveauU=4.4f;}
+                else if (uDevantEtreActualise<6.0f){nouveauU=4.5f;}
+                else if (uDevantEtreActualise<6.2f){nouveauU=4.6f;}
+                else if (uDevantEtreActualise>=6.2f){nouveauU=4.8f;}
                 break;
             case VOLET_BATTANT_BOIS:
             case VOLET_ROULANT_PVC:
-                if (uDevantEtreActualise<1.3){nouveauU=1.1;}
-                else if (uDevantEtreActualise<1.4){nouveauU=1.2;}
-                else if (uDevantEtreActualise<1.5){nouveauU=1.3;}
-                else if (uDevantEtreActualise<1.6){nouveauU=1.3;}
-                else if (uDevantEtreActualise<1.7){nouveauU=1.4;}
-                else if (uDevantEtreActualise<1.8){nouveauU=1.5;}
-                else if (uDevantEtreActualise<1.9){nouveauU=1.6;}
-                else if (uDevantEtreActualise<2.0){nouveauU=1.6;}
-                else if (uDevantEtreActualise<2.1){nouveauU=1.7;}
-                else if (uDevantEtreActualise<2.2){nouveauU=1.8;}
-                else if (uDevantEtreActualise<2.3){nouveauU=1.9;}
-                else if (uDevantEtreActualise<2.4){nouveauU=2.0;}
-                else if (uDevantEtreActualise<2.5){nouveauU=2.0;}
-                else if (uDevantEtreActualise<2.6){nouveauU=2.1;}
-                else if (uDevantEtreActualise<2.7){nouveauU=2.2;}
-                else if (uDevantEtreActualise<2.8){nouveauU=2.2;}
-                else if (uDevantEtreActualise<2.9){nouveauU=2.3;}
-                else if (uDevantEtreActualise<3.0){nouveauU=2.4;}
-                else if (uDevantEtreActualise<3.2){nouveauU=2.5;}
-                else if (uDevantEtreActualise<3.4){nouveauU=2.6;}
-                else if (uDevantEtreActualise<3.6){nouveauU=2.7;}
-                else if (uDevantEtreActualise<3.8){nouveauU=2.9;}
-                else if (uDevantEtreActualise<4.0){nouveauU=3.0;}
-                else if (uDevantEtreActualise<4.2){nouveauU=3.1;}
-                else if (uDevantEtreActualise<4.4){nouveauU=3.3;}
-                else if (uDevantEtreActualise<4.6){nouveauU=3.4;}
-                else if (uDevantEtreActualise<4.8){nouveauU=3.5;}
-                else if (uDevantEtreActualise<5.0){nouveauU=3.7;}
-                else if (uDevantEtreActualise<5.2){nouveauU=3.8;}
-                else if (uDevantEtreActualise<5.4){nouveauU=3.9;}
-                else if (uDevantEtreActualise<5.6){nouveauU=4.0;}
-                else if (uDevantEtreActualise<5.8){nouveauU=4.2;}
-                else if (uDevantEtreActualise<6.0){nouveauU=4.3;}
-                else if (uDevantEtreActualise<6.2){nouveauU=4.4;}
-                else if (uDevantEtreActualise>=6.2){nouveauU=4.5;}
+                if (uDevantEtreActualise<1.3f){nouveauU=1.1f;}
+                else if (uDevantEtreActualise<1.4f){nouveauU=1.2f;}
+                else if (uDevantEtreActualise<1.5f){nouveauU=1.3f;}
+                else if (uDevantEtreActualise<1.6f){nouveauU=1.3f;}
+                else if (uDevantEtreActualise<1.7f){nouveauU=1.4f;}
+                else if (uDevantEtreActualise<1.8f){nouveauU=1.5f;}
+                else if (uDevantEtreActualise<1.9f){nouveauU=1.6f;}
+                else if (uDevantEtreActualise<2.0f){nouveauU=1.6f;}
+                else if (uDevantEtreActualise<2.1f){nouveauU=1.7f;}
+                else if (uDevantEtreActualise<2.2f){nouveauU=1.8f;}
+                else if (uDevantEtreActualise<2.3f){nouveauU=1.9f;}
+                else if (uDevantEtreActualise<2.4f){nouveauU=2.0f;}
+                else if (uDevantEtreActualise<2.5f){nouveauU=2.0f;}
+                else if (uDevantEtreActualise<2.6f){nouveauU=2.1f;}
+                else if (uDevantEtreActualise<2.7f){nouveauU=2.2f;}
+                else if (uDevantEtreActualise<2.8f){nouveauU=2.2f;}
+                else if (uDevantEtreActualise<2.9f){nouveauU=2.3f;}
+                else if (uDevantEtreActualise<3.0f){nouveauU=2.4f;}
+                else if (uDevantEtreActualise<3.2f){nouveauU=2.5f;}
+                else if (uDevantEtreActualise<3.4f){nouveauU=2.6f;}
+                else if (uDevantEtreActualise<3.6f){nouveauU=2.7f;}
+                else if (uDevantEtreActualise<3.8f){nouveauU=2.9f;}
+                else if (uDevantEtreActualise<4.0f){nouveauU=3.0f;}
+                else if (uDevantEtreActualise<4.2f){nouveauU=3.1f;}
+                else if (uDevantEtreActualise<4.4f){nouveauU=3.3f;}
+                else if (uDevantEtreActualise<4.6f){nouveauU=3.4f;}
+                else if (uDevantEtreActualise<4.8f){nouveauU=3.5f;}
+                else if (uDevantEtreActualise<5.0f){nouveauU=3.7f;}
+                else if (uDevantEtreActualise<5.2f){nouveauU=3.8f;}
+                else if (uDevantEtreActualise<5.4f){nouveauU=3.9f;}
+                else if (uDevantEtreActualise<5.6f){nouveauU=4.0f;}
+                else if (uDevantEtreActualise<5.8f){nouveauU=4.2f;}
+                else if (uDevantEtreActualise<6.0f){nouveauU=4.3f;}
+                else if (uDevantEtreActualise<6.2f){nouveauU=4.4f;}
+                else if (uDevantEtreActualise>=6.2f){nouveauU=4.5f;}
                 break;
             case SANS_FERMETURE:
                 break;
@@ -490,11 +490,11 @@ public class PorteFenetre extends Ouverture {
                     this.bas=1;
                     break;
                 case SUD:
-                    this.bas=0.22;
+                    this.bas=0.22f;
                     break;
                 case EST:
                 case OUEST:
-                    this.bas=0.31;
+                    this.bas=0.31f;
                     break;
             }
         }
@@ -503,16 +503,16 @@ public class PorteFenetre extends Ouverture {
     public void actualiseC1(){
         switch (this.getMur().getOrientationMur()){
             case SUD:
-                this.c1=1.1;
+                this.c1=1.1f;
                 break;
             case OUEST:
-                this.c1=0.57;
+                this.c1=0.57f;
                 break;
             case EST:
-                this.c1=0.57;
+                this.c1=0.57f;
                 break;
             case NORD:
-                this.c1=0.2;
+                this.c1=0.2f;
                 break;
         }
         this.actualiseSse();
@@ -523,17 +523,17 @@ public class PorteFenetre extends Ouverture {
                 switch(this.typeVitrage){
                     case SIMPLE_VITRAGE:
                     case SURVITRAGE:
-                        this.fts = 0.56;
+                        this.fts = 0.56f;
                         break;
                     case DOUBLE_VITRAGE_INF_1990:
                     case DOUBLE_VITRAGE_SUP_1990_INF_2001:
-                        this.fts = 0.5;
+                        this.fts = 0.5f;
                         break;
                     case DOUBLE_VITRAGE_SUP_2001:
-                        this.fts = 0.43;
+                        this.fts = 0.43f;
                         break;
                     case TRIPLE_VITRAGE:
-                        this.fts = 0.44;
+                        this.fts = 0.44f;
                         break;
                 }
                 break;
@@ -543,10 +543,10 @@ public class PorteFenetre extends Ouverture {
                     case SURVITRAGE:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.57;
+                                this.fts = 0.57f;
                                 break;
                             default:
-                                this.fts = 0.51;
+                                this.fts = 0.51f;
                                 break;
                         }
                         break;
@@ -554,30 +554,30 @@ public class PorteFenetre extends Ouverture {
                     case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.51;
+                                this.fts = 0.51f;
                                 break;
                             default:
-                                this.fts = 0.46;
+                                this.fts = 0.46f;
                                 break;
                         }
                         break;
                     case DOUBLE_VITRAGE_SUP_2001:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.44;
+                                this.fts = 0.44f;
                                 break;
                             default:
-                                this.fts = 0.39;
+                                this.fts = 0.39f;
                                 break;
                         }
                         break;
                     case TRIPLE_VITRAGE:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.45;
+                                this.fts = 0.45f;
                                 break;
                             default:
-                                this.fts = 0.4;
+                                this.fts = 0.4f;
                                 break;
                         }
                         break;
@@ -589,10 +589,10 @@ public class PorteFenetre extends Ouverture {
                     case SURVITRAGE:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.635;
+                                this.fts = 0.635f;
                                 break;
                             default:
-                                this.fts = 0.57;
+                                this.fts = 0.57f;
                                 break;
                         }
                         break;
@@ -600,30 +600,30 @@ public class PorteFenetre extends Ouverture {
                     case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.565;
+                                this.fts = 0.565f;
                                 break;
                             default:
-                                this.fts = 0.515;
+                                this.fts = 0.515f;
                                 break;
                         }
                         break;
                     case DOUBLE_VITRAGE_SUP_2001:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.485;
+                                this.fts = 0.485f;
                                 break;
                             default:
-                                this.fts = 0.445;
+                                this.fts = 0.445f;
                                 break;
                         }
                         break;
                     case TRIPLE_VITRAGE:
                         switch (this.typePorteFenetre){
                             case PORTE_FENETRE_DOUBLE_VENTAIL_COULISSANTE:
-                                this.fts = 0.505;
+                                this.fts = 0.505f;
                                 break;
                             default:
-                                this.fts = 0.455;
+                                this.fts = 0.455f;
                                 break;
                         }
                         break;
@@ -636,7 +636,7 @@ public class PorteFenetre extends Ouverture {
         if (this.masqueProche.equals(TypeMasqueEnum.ABSENCE_MASQUE_PROCHE)){
             this.fe1=1;
         }else if(this.masqueProche.equals(TypeMasqueEnum.PRESENCE_MASQUE_PROCHE)){
-            this.fe1=0.55;
+            this.fe1=0.55f;
         }
         this.actualiseSse();
     }
@@ -646,11 +646,11 @@ public class PorteFenetre extends Ouverture {
         }else if(this.masqueLointain.equals(TypeMasqueEnum.PRESENCE_MASQUE_LOINTAIN_PARTIEL)){
             switch(this.getMur().getOrientationMur()){
                 case SUD:
-                    this.fe2=0.3;
+                    this.fe2=0.3f;
                     break;
                 case EST:
                 case OUEST:
-                    this.fe2=0.4;
+                    this.fe2=0.4f;
                     break;
                 case NORD:
                     this.fe2=1;
@@ -659,11 +659,11 @@ public class PorteFenetre extends Ouverture {
         }else if(this.masqueLointain.equals(TypeMasqueEnum.PRESENCE_MASQUE_LOINTAIN_TOTAL)){
             switch(this.getMur().getOrientationMur()){
                 case SUD:
-                    this.fe2=0.1;
+                    this.fe2=0.1f;
                     break;
                 case EST:
                 case OUEST:
-                    this.fe2=0.2;
+                    this.fe2=0.2f;
                     break;
                 case NORD:
                     this.fe2=1;
@@ -676,7 +676,7 @@ public class PorteFenetre extends Ouverture {
         sse=surface*fts*fe1*fe2*c1*bas;
     }
 
-    public double getSurfaceSudEquivalente(){
+    public float getSurfaceSudEquivalente(){
         return this.sse;
     }
 
