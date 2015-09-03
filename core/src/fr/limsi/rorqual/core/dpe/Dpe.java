@@ -7,6 +7,7 @@ import java.util.List;
 import fr.limsi.rorqual.core.dpe.enums.DpeChange;
 import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
+import fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlafond;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlancher;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.TypeIsolationSlab;
@@ -39,12 +40,12 @@ public class Dpe implements EventListener {
             tampon+=s.getSurface();
         }
         this.sh=tampon;
-//        System.out.println("SH= "+sh);
+        this.actualiseAi();
     }
 
     // 1.Expression du besoin de chauffage
     private float bv=100;
-    private float gv=200; //TODO : trouver le GV défavorable en faisant plusieurs simulations ...
+    private float gv; //TODO : trouver le GV défavorable en faisant plusieurs simulations ...
 
     // 2.Calcul des déperditions de l'enveloppe GV
     private float dpMur;
@@ -52,7 +53,6 @@ public class Dpe implements EventListener {
     private float dpPlancher;
     private float dpPorte;
     private float dpFenetre;
-    private float pontThermique;
     public void actualiseGV(float val){
         this.gv += val;
     } // TODO : mettre en place les changements qui découlent de cette actualisation ...
@@ -153,146 +153,235 @@ public class Dpe implements EventListener {
         }
         return uMur;
     }
-    ///*** Plafonds ***///
-    public void actualiseDeperditionPlafond(Slab slab){
-        float val=0;
-        float u=2.5f;
-        switch (slab.getDateIsolationPlafond()){
-            case JAMAIS:
-                u=2;
-                break;
-            case INCONNUE:
-                u=this.getUplafondFoncAnneeConstruction(slab);
-                break;
-            case EN_RENOVATION_DATE_INCONNUE:
-                if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
-                    u=0.5f;
-                }else{
-                    u=this.getUplafondFoncAnneeConstruction(slab);
-                }
-                break;
-            case EN_RENOVATION_AVANT_1983:
-                switch (slab.getMitoyennetePlafond()){
-                    case COMBLE_PERDU:
-                        u=0.4f;
-                        break;
-                    case COMBLE_AMMENAGEE:
-                        u=0.61f;
-                        break;
-                    case TERRASSE:
-                        u=0.7f;
-                        break;
-                    case AUTRE_HABITATION:
-                        u=0;
-                        break;
-                }
-                break;
-            case EN_RENOVATION_ENTRE_1983_ET_1988:
-                switch (slab.getMitoyennetePlafond()){
-                    case COMBLE_PERDU:
-                        u=0.3f;
-                        break;
-                    case COMBLE_AMMENAGEE:
-                        u=0.4f;
-                        break;
-                    case TERRASSE:
-                        u=0.55f;
-                        break;
-                    case AUTRE_HABITATION:
-                        u=0;
-                        break;
-                }
-                break;
-            case EN_RENOVATION_ENTRE_1989_ET_2000:
-                switch (slab.getMitoyennetePlafond()){
-                    case COMBLE_PERDU:
-                        u=0.25f;
-                        break;
-                    case COMBLE_AMMENAGEE:
-                        u=0.3f;
-                        break;
-                    case TERRASSE:
-                        u=0.4f;
-                        break;
-                    case AUTRE_HABITATION:
-                        u=0;
-                        break;
-                }
-                break;
-            case EN_RENOVATION_ENTRE_2001_ET_2005:
-                switch (slab.getMitoyennetePlafond()){
-                    case COMBLE_PERDU:
-                        u=0.23f;
-                        break;
-                    case COMBLE_AMMENAGEE:
-                        u=0.25f;
-                        break;
-                    case TERRASSE:
-                        u=0.3f;
-                        break;
-                    case AUTRE_HABITATION:
-                        u=0;
-                        break;
-                }
-                break;
-            case EN_RENOVATION_ENTRE_2006_ET_2012:
-                switch (slab.getMitoyennetePlafond()){
-                    case COMBLE_PERDU:
-                        u=0.2f;
-                        break;
-                    case COMBLE_AMMENAGEE:
-                        u=0.2f;
-                        break;
-                    case TERRASSE:
-                        u=0.27f;
-                        break;
-                    case AUTRE_HABITATION:
-                        u=0;
-                        break;
-                }
-                break;
-            case EN_RENOVATION_APRES_2012:
-                switch (slab.getMitoyennetePlafond()){
-                    case COMBLE_PERDU:
-                        u=0.12f;
-                        break;
-                    case COMBLE_AMMENAGEE:
-                        u=0.18f;
-                        break;
-                    case TERRASSE:
-                        u=0.15f;
-                        break;
-                    case AUTRE_HABITATION:
-                        u=0;
-                        break;
-                }
-                break;
-        }
-        slab.setuPlafond(u);
-        switch (slab.getMitoyennetePlafond()){
-            case COMBLE_PERDU:
-                switch(slab.getDateIsolationPlafond()){
-                    case INCONNUE:
+    ///*** Slabs ***///
+    private List<Slab> slabList=new ArrayList<Slab>();
+    public void actualiseCoeffDeperditionThermique(Slab slab,boolean actualisePlafond,boolean actualisePlancher){
+        if(actualisePlancher){
+            float uPlancher=2.5f;
+            if (!slab.getMitoyennetePlancher().equals(MitoyennetePlancher.TERRE_PLEIN)){
+                switch (slab.getDateIsolationPlancher()){
                     case JAMAIS:
-                        // Non isolé
-                        val= 0.95f*slab.getSurface()*u;
+                        uPlancher=2;
                         break;
-                    default:
-                        // isolé
-                        val= 0.9f*slab.getSurface()*u;
+                    case INCONNUE:
+                        uPlancher=this.getUplancherFoncAnneeConstruction(slab);
+                        break;
+                    case A_LA_CONSTRUCTION:
+                        if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
+                            uPlancher=0.8f;
+                        }else{
+                            uPlancher=this.getUplancherFoncAnneeConstruction(slab);
+                        }
+                        break;
+                    case EN_RENOVATION_AVANT_1983:
+                        uPlancher=0.85f;
+                        slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
+                        break;
+                    case EN_RENOVATION_ENTRE_1983_ET_1988:
+                        uPlancher=0.6f;
+                        slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
+                        break;
+                    case EN_RENOVATION_ENTRE_1989_ET_2000:
+                        uPlancher=0.55f;
+                        slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
+                        break;
+                    case EN_RENOVATION_ENTRE_2001_ET_2005:
+                        uPlancher=0.3f;
+                        slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
+                        break;
+                    case EN_RENOVATION_ENTRE_2006_ET_2012:
+                        uPlancher=0.27f;
+                        slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
+                        break;
+                    case EN_RENOVATION_APRES_2012:
+                        uPlancher=0.24f;
+                        slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
                         break;
                 }
-                break;
-            case COMBLE_AMMENAGEE:
-            case TERRASSE:
-                val += slab.getSurface()*u;
-                break;
-            case AUTRE_HABITATION:
-                val=0;
-                break;
+            }else{
+                int tampon = (int)Math.round(2 * slab.getSurface() / per);
+                if (tampon<3){
+                    uPlancher=0.25f;
+                }else if (tampon>20){
+                    uPlancher=0.1f;
+                }else{
+                    switch (tampon){
+                        case 3:
+                            uPlancher=0.25f;
+                            break;
+                        case 4:
+                            uPlancher=0.23f;
+                            break;
+                        case 5:
+                            uPlancher=0.21f;
+                            break;
+                        case 6:
+                            uPlancher=0.19f;
+                            break;
+                        case 7:
+                            uPlancher=0.18f;
+                            break;
+                        case 8:
+                            uPlancher=0.17f;
+                            break;
+                        case 9:
+                            uPlancher=0.16f;
+                            break;
+                        case 10:
+                            uPlancher=0.15f;
+                            break;
+                        case 11:
+                            uPlancher=0.15f;
+                            break;
+                        case 12:
+                            uPlancher=0.14f;
+                            break;
+                        case 13:
+                            uPlancher=0.13f;
+                            break;
+                        case 14:
+                            uPlancher=0.12f;
+                            break;
+                        case 15:
+                            uPlancher=0.12f;
+                            break;
+                        case 16:
+                            uPlancher=0.11f;
+                            break;
+                        case 17:
+                            uPlancher=0.11f;
+                            break;
+                        case 18:
+                            uPlancher=0.11f;
+                            break;
+                        case 19:
+                            uPlancher=0.1f;
+                            break;
+                        case 20:
+                            uPlancher=0.1f;
+                            break;
+                    }
+                }
+            }
+            slab.setuPlancher(uPlancher);
+            slab.actualiseDeperditionPlancher();
         }
-        this.dpToit += val;
-        this.actualiseGV(val);
+        if(actualisePlafond){
+            float uPlafond=2.5f;
+            switch (slab.getDateIsolationPlafond()){
+                case JAMAIS:
+                    uPlafond=2;
+                    break;
+                case INCONNUE:
+                    uPlafond=this.getUplafondFoncAnneeConstruction(slab);
+                    break;
+                case A_LA_CONSTRUCTION:
+                    if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
+                        uPlafond=0.5f;
+                    }else{
+                        uPlafond=this.getUplafondFoncAnneeConstruction(slab);
+                    }
+                    break;
+                case EN_RENOVATION_AVANT_1983:
+                    switch (slab.getMitoyennetePlafond()){
+                        case COMBLE_PERDU:
+                            uPlafond=0.4f;
+                            break;
+                        case COMBLE_AMMENAGEE:
+                            uPlafond=0.61f;
+                            break;
+                        case TERRASSE:
+                            uPlafond=0.7f;
+                            break;
+                        case AUTRE_HABITATION:
+                            uPlafond=0;
+                            break;
+                    }
+                    break;
+                case EN_RENOVATION_ENTRE_1983_ET_1988:
+                    switch (slab.getMitoyennetePlafond()){
+                        case COMBLE_PERDU:
+                            uPlafond=0.3f;
+                            break;
+                        case COMBLE_AMMENAGEE:
+                            uPlafond=0.4f;
+                            break;
+                        case TERRASSE:
+                            uPlafond=0.55f;
+                            break;
+                        case AUTRE_HABITATION:
+                            uPlafond=0;
+                            break;
+                    }
+                    break;
+                case EN_RENOVATION_ENTRE_1989_ET_2000:
+                    switch (slab.getMitoyennetePlafond()){
+                        case COMBLE_PERDU:
+                            uPlafond=0.25f;
+                            break;
+                        case COMBLE_AMMENAGEE:
+                            uPlafond=0.3f;
+                            break;
+                        case TERRASSE:
+                            uPlafond=0.4f;
+                            break;
+                        case AUTRE_HABITATION:
+                            uPlafond=0;
+                            break;
+                    }
+                    break;
+                case EN_RENOVATION_ENTRE_2001_ET_2005:
+                    switch (slab.getMitoyennetePlafond()){
+                        case COMBLE_PERDU:
+                            uPlafond=0.23f;
+                            break;
+                        case COMBLE_AMMENAGEE:
+                            uPlafond=0.25f;
+                            break;
+                        case TERRASSE:
+                            uPlafond=0.3f;
+                            break;
+                        case AUTRE_HABITATION:
+                            uPlafond=0;
+                            break;
+                    }
+                    break;
+                case EN_RENOVATION_ENTRE_2006_ET_2012:
+                    switch (slab.getMitoyennetePlafond()){
+                        case COMBLE_PERDU:
+                            uPlafond=0.2f;
+                            break;
+                        case COMBLE_AMMENAGEE:
+                            uPlafond=0.2f;
+                            break;
+                        case TERRASSE:
+                            uPlafond=0.27f;
+                            break;
+                        case AUTRE_HABITATION:
+                            uPlafond=0;
+                            break;
+                    }
+                    break;
+                case EN_RENOVATION_APRES_2012:
+                    switch (slab.getMitoyennetePlafond()){
+                        case COMBLE_PERDU:
+                            uPlafond=0.12f;
+                            break;
+                        case COMBLE_AMMENAGEE:
+                            uPlafond=0.18f;
+                            break;
+                        case TERRASSE:
+                            uPlafond=0.15f;
+                            break;
+                        case AUTRE_HABITATION:
+                            uPlafond=0;
+                            break;
+                    }
+                    break;
+            }
+            slab.setuPlafond(uPlafond);
+            slab.actualiseDeperditionPlafond();
+        }
     }
     public float getUplafondFoncAnneeConstruction(Slab slab){
         float uPlafond=2.5f;
@@ -370,144 +459,6 @@ public class Dpe implements EventListener {
         }
         return uPlafond;
     }
-    ///*** Planchers ***///
-    private List<Slab> slabList=new ArrayList<Slab>();
-    public void actualiseDeperditionPlancher(Slab slab){
-        float val=0;
-        float u=2.5f;
-        if (!slab.getMitoyennetePlancher().equals(MitoyennetePlancher.TERRE_PLEIN)){
-            switch (slab.getDateIsolationPlancher()){
-                case JAMAIS:
-                    u=2;
-                    break;
-                case INCONNUE:
-                    u=this.getUplancherFoncAnneeConstruction(slab);
-                    break;
-                case EN_RENOVATION_DATE_INCONNUE:
-                    if(dateConstructionBatiment.equals(DateConstructionBatimentEnum.AVANT_1975)){
-                        u=0.8f;
-                    }else{
-                        u=this.getUplancherFoncAnneeConstruction(slab);
-                    }
-                    break;
-                case EN_RENOVATION_AVANT_1983:
-                    u=0.85f;
-                    slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
-                    break;
-                case EN_RENOVATION_ENTRE_1983_ET_1988:
-                    u=0.6f;
-                    slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
-                    break;
-                case EN_RENOVATION_ENTRE_1989_ET_2000:
-                    u=0.55f;
-                    slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
-                    break;
-                case EN_RENOVATION_ENTRE_2001_ET_2005:
-                    u=0.3f;
-                    slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
-                    break;
-                case EN_RENOVATION_ENTRE_2006_ET_2012:
-                    u=0.27f;
-                    slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
-                    break;
-                case EN_RENOVATION_APRES_2012:
-                    u=0.24f;
-                    slab.setTypeIsolationPlancher(TypeIsolationSlab.ITE);
-                    break;
-            }
-        }else{
-            int tampon = (int)Math.round(2 * slab.getSurface() / per);
-            if (tampon<3){
-                u=0.25f;
-            }else if (tampon>20){
-                u=0.1f;
-            }else{
-                switch (tampon){
-                    case 3:
-                        u=0.25f;
-                        break;
-                    case 4:
-                        u=0.23f;
-                        break;
-                    case 5:
-                        u=0.21f;
-                        break;
-                    case 6:
-                        u=0.19f;
-                        break;
-                    case 7:
-                        u=0.18f;
-                        break;
-                    case 8:
-                        u=0.17f;
-                        break;
-                    case 9:
-                        u=0.16f;
-                        break;
-                    case 10:
-                        u=0.15f;
-                        break;
-                    case 11:
-                        u=0.15f;
-                        break;
-                    case 12:
-                        u=0.14f;
-                        break;
-                    case 13:
-                        u=0.13f;
-                        break;
-                    case 14:
-                        u=0.12f;
-                        break;
-                    case 15:
-                        u=0.12f;
-                        break;
-                    case 16:
-                        u=0.11f;
-                        break;
-                    case 17:
-                        u=0.11f;
-                        break;
-                    case 18:
-                        u=0.11f;
-                        break;
-                    case 19:
-                        u=0.1f;
-                        break;
-                    case 20:
-                        u=0.1f;
-                        break;
-                }
-            }
-        }
-        slab.setuPlancher(u);
-        switch (slab.getMitoyennetePlancher()){
-            case VIDE_SANITAIRE:
-                val = 0.8f*slab.getSurface()*u;
-                break;
-            case TERRE_PLEIN:
-                val = slab.getSurface()*u;
-                break;
-            case SOUS_SOL:
-                switch (slab.getDateIsolationPlancher()){
-                    case INCONNUE:
-                    case JAMAIS:
-                        // Non isolé
-                        val= 0.95f*slab.getSurface()*u;
-                        break;
-                    default:
-                        // isolé
-                        val= 0.85f*slab.getSurface()*u;
-                        break;
-                }
-                break;
-            case AUTRE_HABITATION:
-                val = 0.2f*slab.getSurface()*u;
-                break;
-        }
-        this.dpToit += val;
-        this.actualiseGV(val);
-    }
     public float getUplancherFoncAnneeConstruction(Slab slab){
         float uPlancher=2.5f;
         switch (dateConstructionBatiment){
@@ -566,8 +517,6 @@ public class Dpe implements EventListener {
     ///*** Portes ***///
     private List<Porte> porteList=new ArrayList<Porte>();
     private HashMap<Porte,HashMap<DpeChange,Boolean>> porteChangeSaveList = new HashMap<Porte,HashMap<DpeChange,Boolean>>();
-
-
 
     // 2.4. Calcul des ponts thermiques
 
@@ -652,12 +601,9 @@ public class Dpe implements EventListener {
 
     // 2.6.Calcul de f : on cherche à minimiser x donc à minimiser aS et aI et à maximiser GV et DHcor
     private float f;
-    private float x=0.017f; //TODO : trouver le x défavorable en faisant plusieurs simulations ...
-    private float dhCor=71000;
-    private float dhRef=71000;
-    private float kdh=2;
-    private float nRef=5800;
-    private float aI=1209399000;
+    private float x;
+    private float dhCor=64800;
+    private float aI=0;
     private float aS=0;
     private float sse=0; // Il n'y a aucune baie, la sse est nulle initialement
     public void actualiseF(){
@@ -669,29 +615,23 @@ public class Dpe implements EventListener {
         x=(aI+aS)/(gv*dhCor);
     }
     public void actualisedhCor(){
-        dhCor=dhRef+kdh*nRef;
+        dhCor=departementBatiment.getDhref()+getKdh()*departementBatiment.getNref();
     }
     public void actualiseAi(){
-        aI=4.17f*sh*nRef;
+        aI=4.17f*sh*departementBatiment.getNref();
     }
-    public void actualiseNref(DepartementBatimentEnum departement){
-        nRef=departement.getNref();
-    }
-    public void actualiseKdh(){
+    public int getKdh(){
         switch(tInt){
             case ENTRE_16_ET_17:
-                kdh=-1;
-                break;
+                return -1;
             case ENTRE_18_ET_19:
-                kdh=0;
-                break;
+                return 0;
             case ENTRE_20_ET_21:
-                kdh=1;
-                break;
+                return 1;
             case ENTRE_22_ET_23:
-                kdh=2;
-                break;
+                return 2;
         }
+        return -555;
     }
     public void actualiseAs(){
         aS=1000*departementBatiment.getE()*sse;
@@ -701,10 +641,12 @@ public class Dpe implements EventListener {
     public void actualiseSse(){
         float tampon = 0;
         for (Fenetre f:fenetreList){
-            tampon += f.getSurfaceSudEquivalente();
+            if (f.getMur().getTypeMur().equals(TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR))
+                tampon += f.getSurfaceSudEquivalente();
         }
         for (PorteFenetre pf:porteFenetreList){
-            tampon += pf.getSurfaceSudEquivalente();
+            if (pf.getMur().getTypeMur().equals(TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR))
+                tampon += pf.getSurfaceSudEquivalente();
         }
         this.sse=tampon;
         this.actualiseAs();
@@ -940,7 +882,6 @@ public class Dpe implements EventListener {
             this.cch=(1-k)*(0.8f*bch*ichPac)+(1-k)*(0.2f*bch*ichChaudiere)+k*bch*ichPoele;
         }
         this.actualiseScoreDpe();
-        System.out.println("Consommation de chauffage = "+cch);
     }
     public void tryActualiseCch(){ // On s'assure qu'il y ait au moins les systèmes de présent
         if(chauffage_properties.containsKey(DpeEvent.INSTALLATION_CHAUFFAGE)){
@@ -1550,7 +1491,6 @@ public class Dpe implements EventListener {
     public void actualiseCecs(){
         cEcs=bEcs*iEcs;
         this.actualiseScoreDpe();
-        System.out.println("Consommation eau chaude sanitaire = "+cEcs);
     }
 
     // 8.Rendements de l'installation d'ECS
@@ -1660,7 +1600,6 @@ public class Dpe implements EventListener {
                 break;
 
         }
-//        System.out.println("Iecs = "+iEcs);
         this.actualiseCecs();
     }
     public float getRdBallonElectrique(){
@@ -1759,7 +1698,6 @@ public class Dpe implements EventListener {
             cClimatisation=700;
         }
         this.actualiseScoreDpe();
-        System.out.println("cClimatisation = " + cClimatisation + " rClimatisation = " + rClimatisation + " sClimatisation = " + sClimatisation);
     }
 
     // 10.Concommation des usages spécifiques
@@ -1779,7 +1717,6 @@ public class Dpe implements EventListener {
     public void actualiseConsommationEclairage(){
         cEclairage=cEclairageSurfacique * sh;
         this.actualiseScoreDpe();
-        System.out.println("cEclairage = " + cEclairage + " cEclairageSurfacique = " + cEclairageSurfacique + " sh = " + sh);
     }
     public void actualiseConsommationElectromenager(){
         if(general_properties.containsKey(DpeEvent.EQUIPEMENT_ELECTROMENAGER)){
@@ -1790,7 +1727,6 @@ public class Dpe implements EventListener {
             }
         }
         this.actualiseScoreDpe();
-        System.out.println("cElectromenager = " + cElectromenager);
     }
     public void actualiseConsommationCuisson(){
         if (general_properties.containsKey(DpeEvent.EQUIPEMENT_CUISSON)){
@@ -1800,7 +1736,6 @@ public class Dpe implements EventListener {
             cCuisson=1660;
         }
         this.actualiseScoreDpe();
-        System.out.println("cCuisson = " + cCuisson);
     }
 
     /*** Constructeur en singleton ***/
@@ -1950,6 +1885,8 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             departementBatiment = (DepartementBatimentEnum) items.get("lastValue");
                             this.actualiseAs();
+                            this.actualiseAi();
+                            this.actualisedhCor();
                             this.actualiseResistanceClim();
                             this.tryActualiseIch();
                             this.actualiseTfr();
@@ -2675,12 +2612,12 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TemperatureInterieurEnum temperatureInterieur = (TemperatureInterieurEnum) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.TEMPERATURE_INTERIEUR, temperatureInterieur);
+                            tInt = (TemperatureInterieurEnum) items.get("lastValue");
+                            this.actualisedhCor();
                             this.tryActualiseIch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TemperatureInterieurEnum type = null;
+                            TemperatureInterieurEnum type = tInt;
                             if (chauffage_properties.containsKey(DpeEvent.TEMPERATURE_INTERIEUR)){
                                 type = (TemperatureInterieurEnum) chauffage_properties.get(DpeEvent.TEMPERATURE_INTERIEUR);
                             }
@@ -2940,15 +2877,6 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeMurEnum typeMur = (TypeMurEnum)items.get("lastValue");
                             mur.setTypeMur(typeMur);
-//                            this.actualiseCoeffDeperditionThermique(mur);
-                            Layout layout = (Layout)items.get("layout");
-                            if (!typeMur.equals(TypeMurEnum.MUR_INTERIEUR)) {
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("date_isolation"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), true);
-                            } else {
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("date_isolation"), false);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_isolation"), false);
-                            }
                         } else if (eventRequest == EventRequest.GET_STATE) {
                             TypeMurEnum type = mur.getTypeMur();
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -3026,6 +2954,84 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.ORIENTATION_MUR, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case MITOYENNETE_PLANCHER: {
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        Slab plancher = (Slab)items.get("userObject");
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            MitoyennetePlancher mitoyennetePlancher = (MitoyennetePlancher)items.get("lastValue");
+                            plancher.setMitoyennetePlancher(mitoyennetePlancher);
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            MitoyennetePlancher type = plancher.getMitoyennetePlancher();
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            currentItems.put("userObject", plancher);
+                            Event e2 = new Event(DpeEvent.MITOYENNETE_PLANCHER, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case MITOYENNETE_PLAFOND: {
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        Slab plafond = (Slab)items.get("userObject");
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            MitoyennetePlafond mitoyennetePlafond = (MitoyennetePlafond)items.get("lastValue");
+                            plafond.setMitoyennetePlafond(mitoyennetePlafond);
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            MitoyennetePlafond type = plafond.getMitoyennetePlafond();
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            currentItems.put("userObject", plafond);
+                            Event e2 = new Event(DpeEvent.MITOYENNETE_PLAFOND, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case DATE_ISOLATION_PLANCHER: {
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        Slab plancher = (Slab)items.get("userObject");
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            DateIsolationSlab dateIsolationPlancher = (DateIsolationSlab)items.get("lastValue");
+                            plancher.setDateIsolationPlancher(dateIsolationPlancher);
+                            actualiseCoeffDeperditionThermique(plancher,false,true);
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            DateIsolationSlab type = plancher.getDateIsolationPlancher();
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            currentItems.put("userObject", plancher);
+                            Event e2 = new Event(DpeEvent.DATE_ISOLATION_PLANCHER, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
+                    case DATE_ISOLATION_PLAFOND: {
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        Slab plancher = (Slab)items.get("userObject");
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            DateIsolationSlab dateIsolationPlafond = (DateIsolationSlab)items.get("lastValue");
+                            plancher.setDateIsolationPlafond(dateIsolationPlafond);
+                            actualiseCoeffDeperditionThermique(plancher,false,true);
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            DateIsolationSlab type = plancher.getDateIsolationPlafond();
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            currentItems.put("userObject", plancher);
+                            Event e2 = new Event(DpeEvent.DATE_ISOLATION_PLANCHER, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
@@ -3257,7 +3263,6 @@ public class Dpe implements EventListener {
                         Slab plancher = (Slab) items.get("userObject");
                         plancher.actualiseSurface();
                         slabList.add(plancher);
-                        System.out.println("surface slab = "+plancher.getSurface());
                         this.actualiseSH();
                         break;
                     }
@@ -3298,7 +3303,6 @@ public class Dpe implements EventListener {
                         break;
                     }
                     case MITOYENNETE_MUR_CHANGEE: {
-                        System.out.println("coucou");
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Mur mur = (Mur) items.get("userObject");
                         this.actualiseCoeffDeperditionThermique(mur);

@@ -7,5 +7,7 @@ public enum MitoyennetePlafond {
     TERRASSE,
     COMBLE_PERDU,
     COMBLE_AMMENAGEE,
+    LOCAL_NON_CHAUFFE,
+    AUTRE_ETAGE_DU_LOGEMENT,
     AUTRE_HABITATION;
 }

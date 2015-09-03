@@ -10,6 +10,7 @@ import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.PorteFenetre;
+import fr.limsi.rorqual.core.model.Slab;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
@@ -27,13 +28,17 @@ public class DpeUi  {
 //            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
 //            return a;
 //        }
-        System.out.println("\n"+o.toString()+"\n");
+//        System.out.println("\n"+o.toString()+"\n");
         if (o instanceof Fenetre || o instanceof PorteFenetre) {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
             return a;
         }
         if (o instanceof Mur) {
             Actor a = Layout.fromJson("data/ui/layout/wallProperties.json", o).getRoot();
+            return a;
+        }
+        if (o instanceof Slab) {
+            Actor a = Layout.fromJson("data/ui/layout/slabProperties.json", o).getRoot();
             return a;
         }
 

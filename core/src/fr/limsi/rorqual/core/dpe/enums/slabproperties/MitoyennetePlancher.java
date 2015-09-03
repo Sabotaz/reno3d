@@ -7,5 +7,7 @@ public enum MitoyennetePlancher {
     VIDE_SANITAIRE,
     TERRE_PLEIN,
     SOUS_SOL,
+    LOCAL_NON_CHAUFFE,
+    AUTRE_ETAGE_DU_LOGEMENT,
     AUTRE_HABITATION;
 }

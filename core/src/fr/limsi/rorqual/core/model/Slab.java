@@ -51,6 +51,8 @@ public class Slab extends ModelContainer {
     private MitoyennetePlancher mitoyennetePlancher;
     private float uPlafond;
     private float uPlancher;
+    private float deperditionPlafond;
+    private float deperditionPlancher;
     private DateIsolationSlab dateIsolationPlafond;
     private DateIsolationSlab dateIsolationPlancher;
     private TypeIsolationSlab typeIsolationPlancher;
@@ -267,5 +269,65 @@ public class Slab extends ModelContainer {
 
     public void setDateIsolationPlafond(DateIsolationSlab dateIsolationPlafond) {
         this.dateIsolationPlafond = dateIsolationPlafond;
+    }
+
+    public void actualiseDeperditionPlancher(){
+        switch (this.mitoyennetePlancher){
+            case VIDE_SANITAIRE:
+                this.deperditionPlancher = 0.8f*this.surface*this.uPlancher;
+                break;
+            case TERRE_PLEIN:
+                this.deperditionPlancher = this.surface*this.uPlancher;
+                break;
+            case SOUS_SOL:
+            case LOCAL_NON_CHAUFFE:
+                switch (this.dateIsolationPlancher){
+                    case INCONNUE:
+                    case JAMAIS:
+                        // Non isolé
+                        this.deperditionPlancher= 0.95f*this.surface*this.uPlancher;
+                        break;
+                    default:
+                        // isolé
+                        this.deperditionPlancher= 0.85f*this.surface*this.uPlancher;
+                        break;
+                }
+                break;
+            case AUTRE_HABITATION:
+                this.deperditionPlancher = 0.2f*this.surface*this.uPlancher;
+                break;
+            case AUTRE_ETAGE_DU_LOGEMENT:
+                this.deperditionPlancher = 0;
+                break;
+        }
+    }
+
+    public void actualiseDeperditionPlafond(){
+        switch (this.mitoyennetePlafond){
+            case COMBLE_PERDU:
+            case LOCAL_NON_CHAUFFE:
+                switch(this.dateIsolationPlafond){
+                    case INCONNUE:
+                    case JAMAIS:
+                        // Non isolé
+                        this.deperditionPlafond= 0.95f*this.surface*this.uPlafond;
+                        break;
+                    default:
+                        // isolé
+                        this.deperditionPlafond= 0.9f*this.surface*this.uPlafond;
+                        break;
+                }
+                break;
+            case COMBLE_AMMENAGEE:
+            case TERRASSE:
+                this.deperditionPlafond = this.surface*this.uPlafond;
+                break;
+            case AUTRE_HABITATION:
+                this.deperditionPlafond = 0.2f*this.surface*this.uPlafond;
+                break;
+            case AUTRE_ETAGE_DU_LOGEMENT:
+                this.deperditionPlafond = 0;
+                break;
+        }
     }
 }

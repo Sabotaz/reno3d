@@ -223,7 +223,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         System.out.println("stage menu ok " + ((System.currentTimeMillis() - start) * 0.001f));
         stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
         score = new CircularJauge((Texture)assets.get("roulette_arriere"), (Texture)assets.get("roulette"));
-        score.setSize(100,100);
+        score.setSize(100, 100);
         stageMenu.addActor(score);
         System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
@@ -439,7 +439,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             //System.out.println("TOUCH: " + selected);
             if (selected != null) {
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
-                //System.out.println("TOUCH: " + selected.getUserData());
+//                System.out.println("TOUCH: " + selected.getUserData());
+//                System.out.println(selected);
                 selected.setColor(Color.YELLOW);
                 mainUiControleur.addTb(dpeui.getPropertyWindow(selected));
                 //selected.add(pin);
