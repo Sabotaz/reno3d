@@ -29,7 +29,8 @@ public class Dpe implements EventListener {
 
     // 0.Variables générales
     private float sh = 0;
-    private float per;
+    private float sdep;
+    private float perimetreBatiment;
     private float scoreDpe = 700;
     private DateConstructionBatimentEnum dateConstructionBatiment = DateConstructionBatimentEnum.AVANT_1975; // Initialisation défavorable
     private TypeEnergieConstructionEnum typeEnergieConstruction = TypeEnergieConstructionEnum.AUTRE; // Initialisation défavorable
@@ -41,11 +42,36 @@ public class Dpe implements EventListener {
         }
         this.sh=tampon;
         this.actualiseAi();
+        this.actualiseG();
+    }
+    public void actualisePerimetreBatiment(){
+        float tampon=0;
+        for (Mur m:murList){
+            if (m.getEtage().getNumber()==0 && m.getTypeMur() != TypeMurEnum.MUR_INTERIEUR){
+                tampon+=m.getWidth();
+            }
+        }
+        perimetreBatiment=tampon;
+    }
+    public void actualiseSdep(){
+
     }
 
     // 1.Expression du besoin de chauffage
-    private float bv=100;
-    private float gv; //TODO : trouver le GV défavorable en faisant plusieurs simulations ...
+    private float bv;
+    private float gv;
+    private float lastGv;
+    public void actualiseBV(){
+        bv=gv*(1-f);
+    } // TODO : prendre en compte l'actualisation de f
+    public void actualiseGV(){
+        gv=dpMur+dpToit+dpPlancher+dpFenetre+dpPorte+dpPorteFenetre;
+        if (gv != lastGv){
+            this.actualiseBV();
+            this.actualiseG();
+        }
+        lastGv=gv;
+    }
 
     // 2.Calcul des déperditions de l'enveloppe GV
     private float dpMur;
@@ -53,9 +79,55 @@ public class Dpe implements EventListener {
     private float dpPlancher;
     private float dpPorte;
     private float dpFenetre;
-    public void actualiseGV(float val){
-        this.gv += val;
-    } // TODO : mettre en place les changements qui découlent de cette actualisation ...
+    private float dpPorteFenetre;
+    public void actualiseDpMur(){
+        float tampon=0;
+        for (Mur m : murList) {
+            tampon += m.getDeperdition();
+        }
+        dpMur=tampon;
+        this.actualiseGV();
+    }
+    public void actualiseDpToit(){
+        float tampon=0;
+        for (Slab s : slabList) {
+            tampon += s.getDeperditionPlafond();
+        }
+        dpToit=tampon;
+        this.actualiseGV();
+    }
+    public void actualiseDpPlancher(){
+        float tampon=0;
+        for (Slab s : slabList) {
+            tampon += s.getDeperditionPlancher();
+        }
+        dpPlancher=tampon;
+        this.actualiseGV();
+    }
+    public void actualiseDpPorte(){
+        float tampon=0;
+        for (Porte p : porteList) {
+            tampon += p.getDeperdition();
+        }
+        dpPorte=tampon;
+        this.actualiseGV();
+    }
+    public void actualiseDpFenetre(){
+        float tampon=0;
+        for (Fenetre f : fenetreList) {
+            tampon += f.getDeperdition();
+        }
+        dpFenetre=tampon;
+        this.actualiseGV();
+    }
+    public void actualiseDpPorteFenetre(){
+        float tampon=0;
+        for (PorteFenetre pf : porteFenetreList) {
+            tampon += pf.getDeperdition();
+        }
+        dpPorteFenetre=tampon;
+        this.actualiseGV();
+    }
     ///*** Murs ***///
     private List<Mur> murList=new ArrayList<Mur>();
     private HashMap<Mur,HashMap<DpeChange,Boolean>> murChangeSaveList = new HashMap<Mur,HashMap<DpeChange,Boolean>>();
@@ -153,7 +225,7 @@ public class Dpe implements EventListener {
         }
         return uMur;
     }
-    ///*** Slabs ***///
+    ///*** Slabs ***/// TODO : tester les slabs
     private List<Slab> slabList=new ArrayList<Slab>();
     public void actualiseCoeffDeperditionThermique(Slab slab,boolean actualisePlafond,boolean actualisePlancher){
         if(actualisePlancher){
@@ -199,7 +271,7 @@ public class Dpe implements EventListener {
                         break;
                 }
             }else{
-                int tampon = (int)Math.round(2 * slab.getSurface() / per);
+                int tampon = (int)Math.round(2 * slab.getSurface() / perimetreBatiment);
                 if (tampon<3){
                     uPlancher=0.25f;
                 }else if (tampon>20){
@@ -518,9 +590,9 @@ public class Dpe implements EventListener {
     private List<Porte> porteList=new ArrayList<Porte>();
     private HashMap<Porte,HashMap<DpeChange,Boolean>> porteChangeSaveList = new HashMap<Porte,HashMap<DpeChange,Boolean>>();
 
-    // 2.4. Calcul des ponts thermiques
+    // 2.4. Calcul des ponts thermiques TODO : implémenter cette partie
 
-    // 2.5. Calcul des déperditions par renouvellement d'air
+    // 2.5. Calcul des déperditions par renouvellement d'air TODO : implémenter cette partie
     private float renouvellementAir, hVent,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,sDep,nbFenetreSV,nbFenetreDV;
     private TypeVentilationEnum typeVentilation=TypeVentilationEnum.INCONNUE; // Initialisation logique
     private TemperatureInterieurEnum tInt=TemperatureInterieurEnum.ENTRE_22_ET_23; // Initialisation défavorable
@@ -610,7 +682,7 @@ public class Dpe implements EventListener {
         float a=x-(float)Math.pow(x,3.6);
         float b=1-(float)Math.pow(x,3.6);
         f=a/b;
-    }
+    } // TODO : finir ça !
     public void actualiseX(){
         x=(aI+aS)/(gv*dhCor);
     }
@@ -655,15 +727,15 @@ public class Dpe implements EventListener {
     // 3.Traitement de l'intermittence
     private float intermittence = 1;
     private float i0 = 1; // Cas le plus défavorable (cf partie 3)
-    private float g = 72; // (9000/2.5*50)
+    private float g;
     public void actualiseIntermittence(){
         intermittence=i0/(1+0.1f*(g-1));
         this.actualiseBch();
     }
     public void actualiseG(){
-        g=gv/(2.5f* sh);
+        g=gv/(2.5f*sh);
         this.actualiseIntermittence();
-    } // TODO : prendre en compte le changement sur gv
+    }
     public void actualiseI0(Chauffage chauffagePrincipal){ // On besoin du chauffage en paramètre afin de déterminer le type (divisé ou central)
         if (general_properties.get(DpeEvent.TYPE_BATIMENT).equals(TypeBatimentEnum.MAISON)){ // Maison
             if(chauffagePrincipal.getType().equals(Chauffage.Type.DIVISE)){ // le chauffage est de type divisé
@@ -1776,7 +1848,6 @@ public class Dpe implements EventListener {
     public float getScoreDpe(){
         return Math.round(this.scoreDpe);
     }
-
 
     public void notify(Channel c, Event e) throws InterruptedException {
 
@@ -3214,7 +3285,7 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", porteFenetre);
                                 Event e2 = new Event(DpeEvent.MASQUE_LOINTAIN_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                EventManager.getInstance().put (Channel.DPE, e2);
                             }
                         }
                         break;
@@ -3354,6 +3425,26 @@ public class Dpe implements EventListener {
                             murList.remove(mur);
                         }
                     }
+
+                    case DEPERDITION_MURS_CHANGED : {
+                        this.actualiseDpMur();
+                    }
+                    case DEPERDITION_TOITS_CHANGED : {
+                        this.actualiseDpToit();
+                    }
+                    case DEPERDITION_PLANCHERS_CHANGED : {
+                        this.actualiseDpPlancher();
+                    }
+                    case DEPERDITION_FENETRES_CHANGED : {
+                        this.actualiseDpFenetre();
+                    }
+                    case DEPERDITION_PORTES_CHANGED : {
+                        this.actualiseDpPorte();
+                    }
+                    case DEPERDITION_PORTES_FENETRES_CHANGED : {
+                        this.actualiseDpPorteFenetre();
+                    }
+
                 }
             }
         }

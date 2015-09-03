@@ -18,6 +18,8 @@ import com.badlogic.gdx.math.collision.Ray;
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
 import eu.mihosoft.vrl.v3d.Vector3d;
+import fr.limsi.rorqual.core.dpe.Dpe;
+import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
@@ -32,6 +34,7 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
@@ -141,6 +144,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public void setEtage(Etage e) {
         etage = e;
+    }
+
+    public Etage getEtage() {
+        return etage;
     }
 
     public float getWidth() {
@@ -524,6 +531,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                 this.deperdition=0;
                 break;
         }
+        Event e = new Event(DpeEvent.DEPERDITION_MURS_CHANGED, null);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
 
     public void actualiseSurface(){

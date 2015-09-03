@@ -10,6 +10,10 @@ import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMateriauMenuiser
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorteFenetre;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 
 /**
  * Created by ricordeau on 20/07/15
@@ -168,6 +172,8 @@ public class PorteFenetre extends Ouverture {
                 break;
         }
         this.deperdition=deperdition;
+        Event e = new Event(DpeEvent.DEPERDITION_PORTES_FENETRES_CHANGED, null);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
     public void actualiseCoeffTransmissionThermique(){
         float u=5;

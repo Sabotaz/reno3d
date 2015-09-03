@@ -11,6 +11,10 @@ import com.badlogic.gdx.utils.UBJsonReader;
 
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.utils.AssetManager;
 
 /**
@@ -168,6 +172,8 @@ public class Porte extends Ouverture{
             }
         }
         this.deperdition=deperdition;
+        Event e = new Event(DpeEvent.DEPERDITION_PORTES_CHANGED, null);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
     
     @Override

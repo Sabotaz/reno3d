@@ -30,6 +30,10 @@ import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
@@ -300,6 +304,8 @@ public class Slab extends ModelContainer {
                 this.deperditionPlancher = 0;
                 break;
         }
+        Event e = new Event(DpeEvent.DEPERDITION_PLANCHERS_CHANGED, null);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
 
     public void actualiseDeperditionPlafond(){
@@ -329,5 +335,16 @@ public class Slab extends ModelContainer {
                 this.deperditionPlafond = 0;
                 break;
         }
+        Event e = new Event(DpeEvent.DEPERDITION_TOITS_CHANGED, null);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
+
+    public float getDeperditionPlafond() {
+        return deperditionPlafond;
+    }
+
+    public float getDeperditionPlancher() {
+        return deperditionPlancher;
+    }
+
 }

@@ -28,7 +28,7 @@ public class DpeUi  {
 //            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
 //            return a;
 //        }
-//        System.out.println("\n"+o.toString()+"\n");
+        System.out.println(o.toString()+"\n");
         if (o instanceof Fenetre || o instanceof PorteFenetre) {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
             return a;
