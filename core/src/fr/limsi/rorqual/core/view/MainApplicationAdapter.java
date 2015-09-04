@@ -221,10 +221,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 });
 
         System.out.println("stage menu ok " + ((System.currentTimeMillis() - start) * 0.001f));
-        stageMenu.addActor(Layout.fromJson("data/ui/layout/mainUI.json", null).getRoot());
-        score = new CircularJauge((Texture)assets.get("roulette_arriere"), (Texture)assets.get("roulette"));
-        score.setSize(100, 100);
-        stageMenu.addActor(score);
+        Layout layout = Layout.fromJson("data/ui/layout/mainUI.json", null);
+        stageMenu.addActor(layout.getRoot());
+        score = (CircularJauge)layout.getFromId("dpe_jauge");
         System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         setLoadingMessage("Initializing EE...");

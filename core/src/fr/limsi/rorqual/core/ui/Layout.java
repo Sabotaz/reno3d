@@ -207,6 +207,9 @@ public class Layout {
             case "TextField":
                 actor = makeTextField(json, updater, parent);
                 break;
+            case "CircularJauge":
+                actor = makeCircularJauge(json, updater, parent);
+                break;
             default:
                 return null;
         }
@@ -756,6 +759,21 @@ public class Layout {
 
         table.add(textField).pad(5);
         return table;
+    }
+
+    private Actor makeCircularJauge(JsonValue json, Updater updater, Actor parent) {
+        CircularJauge circularJauge;
+        if (json.has("style")) {
+            JsonValue style_list = json.get("style");
+            CircularJauge.CircularJaugeStyle style = StyleFactory.getCircularJaugeStyle(style_list.asStringArray());
+            circularJauge = new CircularJauge(style);
+        } else {
+            throw new RuntimeException("No default skin");
+        }
+        if (json.has("height") && json.has("width"))
+            circularJauge.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
+
+        return circularJauge;
     }
 
 }

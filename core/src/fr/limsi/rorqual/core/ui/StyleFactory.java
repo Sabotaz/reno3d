@@ -2,6 +2,7 @@ package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,16 +20,16 @@ public class StyleFactory {
     public static TextButton.TextButtonStyle getTextButtonStyle(String ... params) {
         assert params.length == 4;
 
-        Drawable up = getDrawable(params[0]);
-        Drawable down = getDrawable(params[1]);
-        Drawable checked = getDrawable(params[2]);
+        Drawable up = (Drawable)getDrawable(params[0]);
+        Drawable down = (Drawable)getDrawable(params[1]);
+        Drawable checked = (Drawable)getDrawable(params[2]);
         BitmapFont font = getFont(params[3]);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(up, down, checked, font);
         return style;
     }
 
-    private static Drawable getDrawable(String id) {
+    private static Object getDrawable(String id) {
 
         if (id == null)
             return null;
@@ -37,7 +38,7 @@ public class StyleFactory {
         // skin:uiskin.json:default-round-down
 
         String[] tokens = id.split(":");
-        Drawable drawable = null;
+        Object drawable = null;
         switch (tokens[0]) {
             case "atlas":
                 TextureAtlas atlas = (TextureAtlas) AssetManager.getInstance().get(tokens[1]);
@@ -51,6 +52,9 @@ public class StyleFactory {
                 Skin skin = (Skin) AssetManager.getInstance().get(tokens[1]);
                 drawable = skin.getDrawable(tokens[2]);
                 break;
+            case "texture":
+                Texture texture = (Texture)AssetManager.getInstance().get(tokens[1]);
+                drawable = texture;
         }
 
         return drawable;
@@ -58,5 +62,15 @@ public class StyleFactory {
 
     private static BitmapFont getFont(String id) {
         return (BitmapFont)AssetManager.getInstance().get(id);
+    }
+
+    public static CircularJauge.CircularJaugeStyle getCircularJaugeStyle(String ... params) {
+        assert params.length == 2;
+
+        Texture foreground = (Texture)getDrawable(params[0]);
+        Texture background = (Texture)getDrawable(params[1]);
+
+        CircularJauge.CircularJaugeStyle style = new CircularJauge.CircularJaugeStyle(foreground, background);
+        return style;
     }
 }

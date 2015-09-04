@@ -73,6 +73,21 @@ public class CircularJauge extends Widget {
     Texture foreground;
     ProgressBarShader shader;
 
+    public static class CircularJaugeStyle {
+        public Texture background;
+        public Texture foreground;
+        public CircularJaugeStyle(Texture foreground, Texture background) {
+            this.background = background;
+            this.foreground = foreground;
+        }
+    }
+
+    public CircularJauge(CircularJaugeStyle style) {
+        this.background = style.background;
+        this.foreground = style.foreground;
+        shader = new ProgressBarShader(false);
+    }
+
     public CircularJauge(Texture background, Texture foreground) {
         this.background = background;
         this.foreground = foreground;
