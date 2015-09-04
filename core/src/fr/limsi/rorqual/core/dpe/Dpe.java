@@ -3102,7 +3102,7 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", plancher);
-                            Event e2 = new Event(DpeEvent.DATE_ISOLATION_PLANCHER, currentItems);
+                            Event e2 = new Event(DpeEvent.DATE_ISOLATION_PLAFOND, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
