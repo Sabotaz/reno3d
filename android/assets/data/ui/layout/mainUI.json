@@ -14,8 +14,8 @@
           "type": "TextButton",
           "text": "EXIT",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.EXIT",
-          "height": "6%",
-          "width": "15%",
+          "height": "5%",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -36,7 +36,7 @@
           "text": "-",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_MINUS",
           "height": "5%",
-          "width": "5%",
+          "width": "auto",
           "padTop": 10,
           "padRight": -2,
           "style": [
@@ -51,7 +51,7 @@
           "text": "0",
           "id": "currentEtage",
           "height": "5%",
-          "width": "5%",
+          "width": "auto",
           "padTop": 10,
           "padRight": -2,
           "style": [
@@ -66,7 +66,7 @@
           "text": "+",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_PLUS",
           "height": "5%",
-          "width": "5%",
+          "width": "auto",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -85,8 +85,8 @@
           "type": "TextButton",
           "text": "2D/3D",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
-          "height": "6%",
-          "width": "15%",
+          "height": "5%",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -106,8 +106,8 @@
           "type": "TextButton",
           "text": "MUR",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
-          "height": "6%",
-          "width": "15%",
+          "height": "5%",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -121,8 +121,8 @@
           "type": "TextButton",
           "text": "PIECE",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.PIECE",
-          "height": "6%",
-          "width": "15%",
+          "height": "5%",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -136,8 +136,8 @@
           "type": "TextButton",
           "text": "MENUISERIE",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
-          "height": "6%",
-          "width": "15%",
+          "height": "5%",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -156,8 +156,8 @@
           "type": "Button",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.DPE",
           "name": "dpe",
-          "height": "15%",
-          "width": "15%",
+          "height": "auto",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -171,8 +171,8 @@
           "type": "Button",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.CHAUFFAGE",
           "name": "chauffage",
-          "height": "15%",
-          "width": "15%",
+          "height": "auto",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
@@ -185,8 +185,8 @@
         {
           "type": "CircularJauge",
           "id": "dpe_jauge",
-          "height": "15%",
-          "width": "15%",
+          "height": "auto",
+          "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [

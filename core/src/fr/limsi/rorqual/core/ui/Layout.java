@@ -55,6 +55,18 @@ public class Layout {
     private boolean initialised = false;
     public boolean isInitialised(){return this.initialised;}
 
+    public class Auto extends Value {
+        @Override
+        public float get(Actor context) {
+            return 0;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Auto;
+        }
+    }
+
     private class Updater implements EventListener {
         private Channel channel;
         private EventType eventType;
@@ -226,13 +238,24 @@ public class Layout {
 
     private Value getValue(JsonValue json, String name, float sub, Actor parent) {
         String val = json.getString(name, String.valueOf(sub));
+        if (val.equals("auto")) {
+            return new Auto();
+        }
         if (val.endsWith("%")) {
             if (parent == null)  {
                 float f = Float.parseFloat(val.substring(0, val.length() - 1)) * 0.01f;
-                return new Value.Fixed(Gdx.graphics.getHeight() * f);
+                if (name.contains("width") || name.contains("Width") || name.contains("x")) {
+                    return new Value.Fixed(Gdx.graphics.getWidth() * f);
+                } else {
+                    return new Value.Fixed(Gdx.graphics.getHeight() * f);
+                }
             } else {
                 float f = Float.parseFloat(val.substring(0, val.length() - 1)) * 0.01f;
-                return Value.percentHeight(f, parent);
+                if (name.contains("width") || name.contains("Width") || name.contains("x")) {
+                    return Value.percentWidth(f, parent);
+                } else {
+                    return Value.percentHeight(f, parent);
+                }
             }
         } else {
             float f = Float.parseFloat(val.substring(0, val.length()));
@@ -413,8 +436,15 @@ public class Layout {
             button = new Button();
         }
 
-        if (json.has("height") && json.has("width"))
-            button.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
+        if (json.has("height") && json.has("width")) {
+            Value width = getValue(json, "width", null);
+            Value height = getValue(json, "height", null);
+            if (width instanceof Auto)
+                width = height;
+            if (height instanceof Auto)
+                height = width;
+            button.setSize(width.get(null),height.get(null));
+        }
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -458,8 +488,15 @@ public class Layout {
 
         textButton = new TextButton(json.getString("text", ""), tbs);
 
-        if (json.has("height") && json.has("width"))
-            textButton.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
+        if (json.has("height") && json.has("width")) {
+            Value width = getValue(json, "width", null);
+            Value height = getValue(json, "height", null);
+            if (width instanceof Auto)
+                width = height;
+            if (height instanceof Auto)
+                height = width;
+            textButton.setSize(width.get(null),height.get(null));
+        }
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -538,8 +575,15 @@ public class Layout {
         final ImageButton imageButton = new ClickableImageButton(image.getDrawable());
 
 
-        if (json.has("height") && json.has("width"))
-            imageButton.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
+        if (json.has("height") && json.has("width")) {
+            Value width = getValue(json, "width", null);
+            Value height = getValue(json, "height", null);
+            if (width instanceof Auto)
+                width = height;
+            if (height instanceof Auto)
+                height = width;
+            imageButton.setSize(width.get(null),height.get(null));
+        }
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
@@ -770,8 +814,15 @@ public class Layout {
         } else {
             throw new RuntimeException("No default skin");
         }
-        if (json.has("height") && json.has("width"))
-            circularJauge.setSize(getValue(json, "width", null).get(null), getValue(json, "height", null).get(null));
+        if (json.has("height") && json.has("width")) {
+            Value width = getValue(json, "width", null);
+            Value height = getValue(json, "height", null);
+            if (width instanceof Auto)
+                width = height;
+            if (height instanceof Auto)
+                height = width;
+            circularJauge.setSize(width.get(null), height.get(null));
+        }
 
         return circularJauge;
     }
