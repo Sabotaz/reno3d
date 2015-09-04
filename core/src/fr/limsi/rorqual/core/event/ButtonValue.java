@@ -10,10 +10,14 @@ public enum ButtonValue {
     PIECE,
     FENETRE,
     PORTE,
+    MOVE,
+    DELETE,
     DPE,
     CHAUFFAGE,
     ECS,
     ELECTROMENAGER,
     MENUISERIE,
-    ETAGE_PLUS, ETAGE_MINUS;
+    ETAGE_PLUS,
+    ETAGE_MINUS,
+    ;
 }

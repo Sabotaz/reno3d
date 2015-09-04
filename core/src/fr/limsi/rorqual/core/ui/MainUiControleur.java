@@ -101,6 +101,20 @@ public class MainUiControleur implements EventListener {
                             CameraEngine.getInstance().switchCamera();
                             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
+                        case MOVE:
+                            if (button.isChecked()) {
+                                Logic.getInstance().move();
+                            }
+                            else
+                                Logic.getInstance().stop();
+                            break;
+                        case DELETE:
+                            if (button.isChecked()) {
+                                Logic.getInstance().delete();
+                            }
+                            else
+                                Logic.getInstance().stop();
+                            break;
                         case MUR:
                             if (button.isChecked()) {
                                 Logic.getInstance().startWall();

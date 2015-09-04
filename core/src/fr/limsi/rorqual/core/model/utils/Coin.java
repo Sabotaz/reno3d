@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Slab;
 
 /**
  * Created by christophe on 20/07/15.
@@ -15,6 +16,7 @@ import fr.limsi.rorqual.core.model.Mur;
 public class Coin {
 
     private ArrayList<Mur> murs = new ArrayList<Mur>();
+    private ArrayList<Slab> slabs = new ArrayList<Slab>();
 
     private Vector2 position = new Vector2();
     private int etage = 0;
@@ -50,7 +52,7 @@ public class Coin {
     }
 
     public void addMur(Mur mur) {
-        if (murs.size() == 0)
+        if (slabs.size() == 0 && murs.size() == 0)
             coins.get(etage).add(this);
         if (!murs.contains(mur))
             murs.add(mur);
@@ -66,8 +68,35 @@ public class Coin {
             m.setChanged();
         mur.setChanged();
 
-        if (murs.size() == 0)
+        if (slabs.size() == 0 && murs.size() == 0)
             coins.get(etage).remove(this);
+    }
+
+    public void addSlab(Slab slab) {
+        if (slabs.size() == 0 && murs.size() == 0)
+            coins.get(etage).add(this);
+        if (!slabs.contains(slab))
+            slabs.add(slab);
+    }
+
+    public ArrayList<Slab> getSlabs() {
+        return slabs;
+    }
+
+    public void removeSlab(Slab slab) {
+        slabs.remove(slab);
+        for (Slab m : slabs)
+            m.setChanged();
+        slab.setChanged();
+
+        if (slabs.size() == 0 && murs.size() == 0)
+            coins.get(etage).remove(this);
+    }
+
+    public void clear() {
+        slabs.clear();
+        murs.clear();
+        coins.get(etage).remove(this);
     }
 
     public boolean isFirst(Mur mur) {

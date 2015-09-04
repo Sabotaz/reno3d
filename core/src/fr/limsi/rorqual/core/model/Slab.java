@@ -116,8 +116,18 @@ public class Slab extends ModelContainer {
     }
 
     public void setCoins(List<Coin> coins) {
+        if (this.coins != null)
+            for (Coin coin : this.coins)
+                coin.removeSlab(this);
         this.coins = coins;
+        if (this.coins != null)
+            for (Coin coin : this.coins)
+                coin.addSlab(this);
         setChanged();
+    }
+
+    public List<Coin> getCoins() {
+        return coins;
     }
 
     private void makeMesh() {
@@ -345,6 +355,15 @@ public class Slab extends ModelContainer {
 
     public float getDeperditionPlancher() {
         return deperditionPlancher;
+    }
+
+    public void remplaceCoin(Coin last, Coin next) {
+        int i = coins.indexOf(last);
+        if (i == -1) return;
+        coins.set(i, next);
+        last.removeSlab(this);
+        next.addSlab(this);
+        this.setChanged();
     }
 
 }

@@ -45,6 +45,18 @@ public class Logic implements InputProcessor {
         modelMaker = new OuvertureMaker(2);
     }
 
+    public void move() {
+        stop();
+
+        modelMaker = new Mover();
+    }
+
+    public void delete() {
+        stop();
+
+        modelMaker = new Deleter();
+    }
+
     public void startModel() {
         stop();
         modelMaker = new OuvertureMaker(ModelLibrary.getInstance().getCurrentModelId());

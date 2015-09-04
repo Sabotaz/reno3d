@@ -550,4 +550,12 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public String toString(){
         return "Mur ->  s="+surface+" u="+coeffTransmissionThermique+ " dp="+deperdition;
     }
+
+    public void remplaceCoin(Coin last, Coin next) {
+        if (A.equals(last)) {
+            this.setA(next);
+        } else if (B.equals(last)) {
+            this.setB(next);
+        }
+    }
 }

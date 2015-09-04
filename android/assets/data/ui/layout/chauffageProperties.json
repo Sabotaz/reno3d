@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Informations relatives au chauffage",
-  "width": 773,
+  "width": "30%",
   "id": "tab_window",
   "content": [
     {

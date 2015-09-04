@@ -146,6 +146,36 @@
             "skin:uiskin.json:default-round-down",
             "default.fnt"
           ]
+        },
+        {
+          "type": "TextButton",
+          "text": "Modifier",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
+          "height": "5%",
+          "width": "8%",
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            "skin:uiskin.json:default-round-down",
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "Supprimer",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.DELETE",
+          "height": "5%",
+          "width": "8%",
+          "padTop": 10,
+          "padRight": 10,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            "skin:uiskin.json:default-round-down",
+            "default.fnt"
+          ]
         }
       ]
     },
