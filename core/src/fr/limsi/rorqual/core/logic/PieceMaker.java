@@ -166,6 +166,7 @@ public class PieceMaker extends ModelMaker {
                 mur.setSelectable(true);
                 ModelHolder.notify(mur);
             }
+            slab.setSelectable(true);
             ModelHolder.notify(slab);
             fixConflicts();
         }
