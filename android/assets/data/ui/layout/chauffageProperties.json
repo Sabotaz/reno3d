@@ -536,33 +536,27 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Chaudière mixte gérant également le chauffage",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUDIERE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age < 15ans)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age >= 15 ans)",
+                  "label": "Ballon électrique horizontal ancien (age >= 15 ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique vertical (age < 15ans)",
+                  "label": "Ballon électrique horizontal récent (age < 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age >= 15ans)",
+                  "label": "Ballon électrique vertical ancien (age >= 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique vertical récent (age < 15ans)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
@@ -617,6 +611,12 @@
                   "label": "Accumulateur gaz condensation",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CONDENSATION"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Chaudière mixte gérant également le chauffage",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUDIERE"
                 }
               ]
             }
@@ -642,27 +642,27 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age < 15ans)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age >= 15 ans)",
+                  "label": "Ballon électrique horizontal ancien (age >= 15 ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique vertical (age < 15ans)",
+                  "label": "Ballon électrique horizontal récent (age < 15ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal (age >= 15ans)",
+                  "label": "Ballon électrique horizontal ancien (age >= 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Ballon électrique vertical récent A(age < 15ans)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",

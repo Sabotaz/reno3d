@@ -755,9 +755,9 @@ public class Layout {
             public void keyTyped(TextField textField, char key) {
                 if ((key == '\r' || key == '\n')) {
                     String textSaisie = textField.getText();
-                    double result = 0;
+                    float result = 0;
                     try {
-                        result = Double.parseDouble(textSaisie);
+                        result = Float.parseFloat(textSaisie);
                     }catch (NumberFormatException e){
 
                     }
@@ -785,9 +785,9 @@ public class Layout {
             public void keyboardFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
                 if (!focused) {
                     String textSaisie = textField.getText();
-                    double result = 0;
+                    float result = 0;
                     try {
-                        result = Double.parseDouble(textSaisie);
+                        result = Float.parseFloat(textSaisie);
                     }catch (NumberFormatException e){
 
                     }

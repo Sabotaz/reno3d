@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.dpe.enums.chauffageproperties;
 import java.util.ArrayList;
 
 import fr.limsi.rorqual.core.dpe.enums.ecsproperties.DeclenchementChaudiereEnum;
+import fr.limsi.rorqual.core.dpe.enums.ecsproperties.LocalEquipementEcsEnum;
 
 /**
  * Created by ricordeau on 21/07/15.
@@ -98,25 +99,27 @@ public class Chauffage {
     private float puissanceVeilleuse;
     private boolean generateurDansVolumeChauffe;
     private boolean presenceRobinetThermostatique;
-    private boolean genereEgalementEcs;
 
-    public Chauffage(Generateur generateur) {
+    public Chauffage(){
+
+    }
+
+    public Chauffage(Generateur generateur,boolean generateurDansVolumeChauffe,boolean presenceRobinetThermostatique,Emission typeEmission) {
         this.generateur=generateur;
-        this.emission = Emission.RADIATEUR;
-        this.generateurDansVolumeChauffe=false;
-        this.presenceRobinetThermostatique=false;
+        this.emission = typeEmission;
+        this.generateurDansVolumeChauffe=generateurDansVolumeChauffe;
+        this.presenceRobinetThermostatique=presenceRobinetThermostatique;
+        this.actualisePrs1();
         this.actualiseType();
         this.actualiseRd();
         this.actualiseRr();
         this.actualiseRe();
         this.actualiseRg();
-        this.prs1=0;
         this.pn=0;
         this.pn=0;
         this.rpint=0;
         this.qp0=0;
         this.puissanceVeilleuse=0;
-        this.genereEgalementEcs=false; // Par défaut, on considère que le chauffage ne sert qu'à chauffer le logement (et non l'eau chaude sanitaire)
     }
 
     // Refresh values
@@ -211,6 +214,7 @@ public class Chauffage {
                         this.rr=0.9f;
                     }
                 }
+                break;
         }
         actualiseIch();
     }
@@ -219,24 +223,34 @@ public class Chauffage {
             case CHAUFFAGE_ELECTRIQUE_DIRECT_ANCIEN:
             case CHAUFFAGE_ELECTRIQUE_DIRECT_RECENT:
                 this.rg=1;
+                break;
             case CHAUDIERE_ELECTRIQUE:
                 this.rg=0.77f;
+                break;
             case POMPE_A_CHALEUR_AIR_AIR:
                 this.rg=2.2f;
+                break;
             case POMPE_A_CHALEUR_AIR_EAU:
                 this.rg=2;
+                break;
             case POMPE_A_CHALEUR_SUR_NAPPE:
                 this.rg=3.2f;
+                break;
             case POMPE_A_CHALEUR_GEOTHERMIQUE:
                 this.rg=4;
+                break;
             case POIL_OU_INSERT_BOIS_AVANT_2001:
                 this.rg=0.66f;
+                break;
             case POIL_OU_INSERT_BOIS_APRES_2001:
                 this.rg=0.78f;
+                break;
             case POIL_FIOUL_OU_GPL:
                 this.rg=0.72f;
+                break;
             default:
                 this.rg=0.66f;
+                break;
         }
         actualiseIch();
     }
@@ -257,7 +271,6 @@ public class Chauffage {
     public float getPn() {return pn;}
     public float getIch() {return ich;}
     public float getPuissanceVeilleuse() {return puissanceVeilleuse;}
-    public boolean getGenereEgalementEcs(){ return this.genereEgalementEcs; }
 
     // Setter
     public void setEmission(Emission emission){
@@ -402,11 +415,10 @@ public class Chauffage {
         this.rg=rg;
         this.actualiseIch();
     }
-    public void setGenereEgalementEcs(boolean bool){this.genereEgalementEcs = bool;}
 
     @Override
     public String toString(){
-        return "||Générateur = "+this.generateur.toString()+"||GenereEcs = "+this.genereEgalementEcs;
+        return "||Générateur = "+this.generateur.toString()+" ||ich = " + ich+" ||rg = " + rg+" ||rr = " + rr+" ||re = " + re+" ||rd = " + rd+" ||pn = " + pn+" ||rpn = " + rpn+" ||rpint = " + rpint+" ||qp0 = " + qp0+" ||puissanceVeilleuse = " + puissanceVeilleuse;
     }
 
 }

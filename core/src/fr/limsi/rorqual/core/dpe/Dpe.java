@@ -28,13 +28,16 @@ public class Dpe implements EventListener {
     /*** Attributs liés au calcul du DPE ***/
 
     // 0.Variables générales
-    private float sh = 0;
+    private float sh;
     private float sdep;
     private float perimetreBatiment;
     private float scoreDpe = 700;
     private DateConstructionBatimentEnum dateConstructionBatiment = DateConstructionBatimentEnum.AVANT_1975; // Initialisation défavorable
     private TypeEnergieConstructionEnum typeEnergieConstruction = TypeEnergieConstructionEnum.AUTRE; // Initialisation défavorable
     private DepartementBatimentEnum departementBatiment = DepartementBatimentEnum.AIN; // Choix par défaut
+    private TypeBatimentEnum typeBatiment = TypeBatimentEnum.MAISON;
+    private CategorieLogementEnum categorieLogement = CategorieLogementEnum.T1_F1;
+    private TypeAbonnementElectriqueEnum typeAbonnementElectrique = TypeAbonnementElectriqueEnum.AUTRE;
     public void actualiseSH(){
         float tampon=0;
         for (Slab s:slabList){
@@ -43,6 +46,10 @@ public class Dpe implements EventListener {
         this.sh=tampon;
         this.actualiseAi();
         this.actualiseG();
+        this.actualisePr();
+        this.actualiseRendementGenerationAllChauffages();
+        this.actualiseConsommationEclairage();
+        this.actualiseScoreDpe();
     }
     public void actualisePerimetreBatiment(){
         float tampon=0;
@@ -63,12 +70,15 @@ public class Dpe implements EventListener {
     private float lastGv;
     public void actualiseBV(){
         bv=gv*(1-f);
+        this.actualiseBch();
     } // TODO : prendre en compte l'actualisation de f
     public void actualiseGV(){
         gv=dpMur+dpToit+dpPlancher+dpFenetre+dpPorte+dpPorteFenetre;
         if (gv != lastGv){
             this.actualiseBV();
             this.actualiseG();
+            this.actualiseRendementGenerationAllChauffages();
+            this.actualiseX();
         }
         lastGv=gv;
     }
@@ -590,9 +600,9 @@ public class Dpe implements EventListener {
     private List<Porte> porteList=new ArrayList<Porte>();
     private HashMap<Porte,HashMap<DpeChange,Boolean>> porteChangeSaveList = new HashMap<Porte,HashMap<DpeChange,Boolean>>();
 
-    // 2.4. Calcul des ponts thermiques TODO : implémenter cette partie
+    // 2.4. Calcul des ponts thermiques TODO : finir ça !
 
-    // 2.5. Calcul des déperditions par renouvellement d'air TODO : implémenter cette partie
+    // 2.5. Calcul des déperditions par renouvellement d'air TODO : finir ça !
     private float renouvellementAir, hVent,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,sDep,nbFenetreSV,nbFenetreDV;
     private TypeVentilationEnum typeVentilation=TypeVentilationEnum.INCONNUE; // Initialisation logique
     private TemperatureInterieurEnum tInt=TemperatureInterieurEnum.ENTRE_22_ET_23; // Initialisation défavorable
@@ -682,15 +692,19 @@ public class Dpe implements EventListener {
         float a=x-(float)Math.pow(x,3.6);
         float b=1-(float)Math.pow(x,3.6);
         f=a/b;
-    } // TODO : finir ça !
+    }   // TODO : finir ça !
     public void actualiseX(){
         x=(aI+aS)/(gv*dhCor);
+        this.actualiseRrp();
     }
     public void actualisedhCor(){
         dhCor=departementBatiment.getDhref()+getKdh()*departementBatiment.getNref();
+        this.actualiseBch();
+        this.actualiseX();
     }
     public void actualiseAi(){
         aI=4.17f*sh*departementBatiment.getNref();
+        this.actualiseX();
     }
     public int getKdh(){
         switch(tInt){
@@ -707,6 +721,7 @@ public class Dpe implements EventListener {
     }
     public void actualiseAs(){
         aS=1000*departementBatiment.getE()*sse;
+        this.actualiseX();
     }
 
     // 2.7.Détermination de la surface sud équivalente
@@ -726,7 +741,7 @@ public class Dpe implements EventListener {
 
     // 3.Traitement de l'intermittence
     private float intermittence = 1;
-    private float i0 = 1; // Cas le plus défavorable (cf partie 3)
+    private float i0 = 0.93f;
     private float g;
     public void actualiseIntermittence(){
         intermittence=i0/(1+0.1f*(g-1));
@@ -736,34 +751,52 @@ public class Dpe implements EventListener {
         g=gv/(2.5f*sh);
         this.actualiseIntermittence();
     }
-    public void actualiseI0(Chauffage chauffagePrincipal){ // On besoin du chauffage en paramètre afin de déterminer le type (divisé ou central)
-        if (general_properties.get(DpeEvent.TYPE_BATIMENT).equals(TypeBatimentEnum.MAISON)){ // Maison
+    public void actualiseI0(){
+        Chauffage chauffagePrincipal = new Chauffage();
+        switch (installationChauffage){
+            case CHAUFFAGE_UNIQUE :
+                chauffagePrincipal= chauffageUnique;
+                break;
+            case CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS:
+                chauffagePrincipal= chauffageAvecPoil;
+                break;
+            case CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS:
+                chauffagePrincipal= chaudiereGaz;
+                break;
+            case CHAUDIERE_AVEC_PAC:
+                chauffagePrincipal= chaudiereAvecPac;
+                break;
+            case CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS:
+                chauffagePrincipal= chaudiereAvecPacEtPoil;
+                break;
+        }
+        if (typeBatiment.equals(TypeBatimentEnum.MAISON)){ // Maison
             if(chauffagePrincipal.getType().equals(Chauffage.Type.DIVISE)){ // le chauffage est de type divisé
-                if (chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)){ // Systeme programmable
+                if (programmationSysteme.equals(ProgrammationSystemeEnum.POSSIBLE)){ // Systeme programmable
                     i0=0.84f;
                 }else{ // Systeme non programmable
                     i0 = 0.86f;
                 }
             }else{ // le chauffage est de type central
-                if (chauffage_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR).equals(PresenceThermostatEnum.AUCUN_DES_DEUX)){ // Sans régulation par pièce
-                    if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
+                if (presenceThermostat.equals(PresenceThermostatEnum.AUCUN_DES_DEUX)){ // Sans régulation par pièce
+                    if(programmationSysteme.equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
                         i0 = 0.9f;
                     }else{ // Systeme non programmable
-                        if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                        if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                             i0 = 0.91f;
-                        }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                        }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                             i0 = 0.93f;
                         }else{ // Plancher chauffant ou système mixte
                             i0 = 0.94f;
                         }
                     }
                 }else{ // Avec régulation pièce par pièce
-                    if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
+                    if(programmationSysteme.equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
                         i0 = 0.87f;
                     }else{ // Systeme non programmable
-                        if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                        if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                             i0 = 0.88f;
-                        }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                        }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                             i0 = 0.9f;
                         }else{ // Plancher chauffant ou système mixte
                             i0 = 0.92f;
@@ -773,55 +806,55 @@ public class Dpe implements EventListener {
             }
         }else{ //Appartement
             if(chauffagePrincipal.getType().equals(Chauffage.Type.DIVISE)){ // le chauffage est de type divisé
-                if (chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)){ // Systeme programmable
-                    if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                if (programmationSysteme.equals(ProgrammationSystemeEnum.POSSIBLE)){ // Systeme programmable
+                    if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                         i0 = 0.88f;
-                    }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                    }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                         i0 = 0.88f;
                     }else{ // Plancher chauffant ou système mixte
                         i0 = 0.93f;
                     }
                 }else{ // Systeme non programmable
-                    if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                    if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                         i0 = 0.9f;
-                    }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                    }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                         i0 = 0.9f;
                     }else{ // Plancher chauffant ou système mixte
                         i0 = 0.95f;
                     }
                 }
             }else{ // le chauffage est de type central
-                if (chauffage_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR).equals(PresenceThermostatEnum.AUCUN_DES_DEUX)){ // Sans régulation par pièce
-                    if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
-                        if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                if (presenceThermostat.equals(PresenceThermostatEnum.AUCUN_DES_DEUX)){ // Sans régulation par pièce
+                    if(programmationSysteme.equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
+                        if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                             i0 = 0.93f;
-                        }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                        }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                             i0 = 0.94f;
                         }else{ // Plancher chauffant ou système mixte
                             i0 = 0.95f;
                         }
                     }else{ // Systeme non programmable
-                        if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                        if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                             i0 = 0.91f;
-                        }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                        }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                             i0 = 0.93f;
                         }else{ // Plancher chauffant ou système mixte
                             i0 = 0.95f;
                         }
                     }
                 }else{ // Avec régulation pièce par pièce
-                    if(chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE).equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
-                        if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                    if(programmationSysteme.equals(ProgrammationSystemeEnum.POSSIBLE)) { // Systeme programmable
+                        if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                             i0 = 0.89f;
-                        }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                        }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                             i0 = 0.91f;
                         }else{ // Plancher chauffant ou système mixte
                             i0 = 0.93f;
                         }
                     }else{ // Systeme non programmable
-                        if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
+                        if (typeEmetteurDeChaleur.equals(Chauffage.Emission.BOUCHE_DE_SOUFFLAGE)){ // Air soufflé
                             i0 = 0.95f;
-                        }else if (chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.RADIATEUR)){ // Radiateur
+                        }else if (typeEmetteurDeChaleur.equals(Chauffage.Emission.RADIATEUR)){ // Radiateur
                             i0 = 0.96f;
                         }else{ // Plancher chauffant ou système mixte
                             i0 = 0.97f;
@@ -832,351 +865,235 @@ public class Dpe implements EventListener {
         }
         this.actualiseIntermittence();
     }
-    public void tryActualiseI0(){
-        if (chauffage_properties.containsKey(DpeEvent.INSTALLATION_CHAUFFAGE)) {
-            if (general_properties.containsKey(DpeEvent.TYPE_BATIMENT)) {
-                if (chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)) {
-                    if (chauffage_properties.containsKey(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR)) {
-                        if (chauffage_properties.containsKey(DpeEvent.SYSTEME_PROGRAMMABLE)) {
-                            if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_UNIQUE)
-                                    && chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)) {
-                                this.actualiseI0((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE));
-                            } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS)
-                                    && chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL)) {
-                                this.actualiseI0((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL));
-                            } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS)
-                                    && chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL)) {
-                                this.actualiseI0((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL));
-                            } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC)
-                                    && chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC)){
-                                this.actualiseI0((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE));
-                            } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS)
-                                    && chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)){
-                                this.actualiseI0((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     // 4.Calcul du besoin et des consommations
+    private InstallationChauffageEnum installationChauffage = InstallationChauffageEnum.CHAUFFAGE_UNIQUE;
+    private FrequenceUtilisationPoilEnum frequenceUtilisationPoeleAvecChauffage = FrequenceUtilisationPoilEnum.TRES_PEU;
+    private FrequenceUtilisationPoilEnum frequenceUtilisationPoeleAvecChauffageEtPac = FrequenceUtilisationPoilEnum.TRES_PEU;
+    private PresenceInstallationSolaireEnum presenceInstallationSolaire = PresenceInstallationSolaireEnum.INSTALLATION_SOLAIRE_ABSENTE;
     private float cch;
     private float bch;
     private float pr=0;
-    private float prs1=0; // Cas défavorable
-    private float prs2=1.05f; // Cas défavorable
+    private float prs1=3.6f;
+    private float prs2=3.7f;
     private float rrp;
     public void actualiseBch(){
-        bch=((bv*dhCor/1000)-pr*rrp)*intermittence; // TODO : prendre en compte le changement sur bv,dhcor
-        tryActualiseCch();
+        bch=((bv*dhCor/1000)-pr*rrp)*intermittence;
+        this.actualiseCch();
     }
     public void actualisePr(){
         pr = sh*(prs1+prs2);
         this.actualiseBch();
     }
     public void actualiseRrp(){
-        rrp=(1-3.6f*(float)Math.pow(x,2.6f)+2.6f*(float)Math.pow(x,1.6))/(float)Math.pow((1-(float)Math.pow(x,3.6)),2); // TODO : prendre en compte le changement sur x
+        rrp=(1-3.6f*(float)Math.pow(x,2.6f)+2.6f*(float)Math.pow(x,1.6))/(float)Math.pow((1-(float)Math.pow(x,3.6)),2);
         this.actualiseBch();
     }
     public void actualisePrs1(){
-        if (ecs_properties.containsKey(DpeEvent.LOCAL_EQUIPEMENT_ECS)){
-            if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-                if ((ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)  // L'équipement est une chaudière mixte et le dictionnaire comporte une chaudière mixte
-                        && ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS))){
-                    Chauffage chaudiereMixte = (Chauffage)ecs_properties.get(DpeEvent.CHAUDIERE_ECS);
-                    prs1=chaudiereMixte.getPrs1();
-                }else{ // L'équipement n'est pas une chaudière
-                    prs1=0;
-                }
-                this.actualisePr();
-            }
+        switch (installationChauffage){
+            case CHAUFFAGE_UNIQUE:
+                prs1=chauffageUnique.getPrs1();
+                break;
+            case CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS:
+                prs1=chauffageAvecPoil.getPrs1();
+                break;
+            case CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS:
+                prs1=chaudiereGaz.getPrs1();
+                break;
+            case CHAUDIERE_AVEC_PAC:
+                prs1=chaudiereAvecPac.getPrs1();
+                break;
+            case CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS:
+                prs1=chaudiereAvecPacEtPoil.getPrs1();
+                break;
         }
+        this.actualisePr();
     }
     public void actualisePrs2(){
-        if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-            if(ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT) // Chauffe-eau
-                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR)
-                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_INF_1991)
-                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002)
-                    || ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_SUP_2003)){
-                prs2=2.1f;
-                this.actualisePr();
-            }else if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)){ // Chaudière
-                prs2=1.05f;
-                this.actualisePr();
-            }
-            else { // Accumulateur ou ballon électrique
-                if (ecs_properties.containsKey(DpeEvent.LOCAL_EQUIPEMENT_ECS)){
-                    if (ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS).equals(LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE)){
-                        prs2=3.7f;
-                    }else{
-                        prs2=1.05f;
-                    }
-                    this.actualisePr();
+        switch (installationEcs){
+            case CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTRAIT:
+            case CHAUFFE_EAU_THERMODYNAMIQUE_SUR_AIR_EXTERIEUR:
+            case CHAUFFE_EAU_GAZ_INF_1991:
+            case CHAUFFE_EAU_GAZ_ENTRE_1991_2002:
+            case CHAUFFE_EAU_GAZ_SUP_2003:
+                this.prs2=2.1f;
+                break;
+            case CHAUDIERE:
+                this.prs2=1.05f;
+                break;
+            case BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS:
+            case BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS:
+            case BALLON_ELECTRIQUE_VERTICAL_INF_15ANS:
+            case BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS:
+            case ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991:
+            case ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1991_2002:
+            case ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2003:
+            case ACCUMULATEUR_GAZ_CONDENSATION:
+                if (localEquipementEcs.getBoolean()){
+                    this.prs2=3.7f;
+                }else{
+                    this.prs2=1.05f;
                 }
-            }
+                break;
         }
+        this.actualisePr();
     }
     public void actualiseCch(){
-        if(chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_UNIQUE)){
-            Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE);
-            float ich=chauffage.getIch();
-            this.cch=this.bch*ich;
-        }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS)){
-            Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL);
-            Chauffage poele = (Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE);
-            float k = ((FrequenceUtilisationPoilEnum)chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE)).getFrequence();
-            float ichChauffage = chauffage.getIch();
-            float ichPoele = poele.getIch();
-            this.cch=k*bch*ichPoele+(1-k)*bch*ichChauffage;
-        }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS)){
-            Chauffage chaudiereGazFioul = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL);
-            Chauffage chaudiereBois = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_BOIS);
-            float ichChaudiereGazFioul = chaudiereGazFioul.getIch();
-            float ichChaudiereBois = chaudiereBois.getIch();
-            this.cch=0.75f*bch*ichChaudiereBois+0.25f*bch*ichChaudiereGazFioul;
-        }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC)){
-            Chauffage chaudiere = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC);
-            Chauffage pac = (Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE);
-            float ichChaudiere = chaudiere.getIch();
-            float ichPac = pac.getIch();
-            this.cch=0.8f*bch*ichPac+0.2f*bch*ichChaudiere;
-        }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS)){
-            Chauffage chaudiere = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE);
-            Chauffage pac = (Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE);
-            Chauffage poele = (Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC);
-            float k = (float)chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC);
-            float ichChaudiere = chaudiere.getIch();
-            float ichPac = pac.getIch();
-            float ichPoele = poele.getIch();
-            this.cch=(1-k)*(0.8f*bch*ichPac)+(1-k)*(0.2f*bch*ichChaudiere)+k*bch*ichPoele;
+        switch(this.installationChauffage){
+            case CHAUFFAGE_UNIQUE:
+                float ich=chauffageUnique.getIch();
+                this.cch=this.bch*ich;
+                break;
+            case CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS:
+                float k1 = frequenceUtilisationPoeleAvecChauffage.getFrequence();
+                float ichChauffage = chauffageAvecPoil.getIch();
+                float ichPoele = poeleAvecChauffage.getIch();
+                this.cch=k1*bch*ichPoele+(1-k1)*bch*ichChauffage;
+                break;
+            case CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS:
+                float ichChaudiereGazFioul = chaudiereGaz.getIch();
+                float ichChaudiereBois = chaudiereBois.getIch();
+                this.cch=0.75f*bch*ichChaudiereBois+0.25f*bch*ichChaudiereGazFioul;
+                break;
+            case CHAUDIERE_AVEC_PAC:
+                float ichChaudiere = chaudiereAvecPac.getIch();
+                float ichPac = pacAvecChaudiere.getIch();
+                this.cch=0.8f*bch*ichPac+0.2f*bch*ichChaudiere;
+                break;
+            case CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS:
+                float k2 = frequenceUtilisationPoeleAvecChauffageEtPac.getFrequence();
+                float ichChaudiere2 = chaudiereAvecPacEtPoil.getIch();
+                float ichPac2 = pacAvecChaudiereEtPoele.getIch();
+                float ichPoele2 = poeleAvecChaudiereEtPac.getIch();
+                this.cch=(1-k2)*(0.8f*bch*ichPac2)+(1-k2)*(0.2f*bch*ichChaudiere2)+k2*bch*ichPoele2;
+                break;
         }
         this.actualiseScoreDpe();
     }
-    public void tryActualiseCch(){ // On s'assure qu'il y ait au moins les systèmes de présent
-        if(chauffage_properties.containsKey(DpeEvent.INSTALLATION_CHAUFFAGE)){
-            if(chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_UNIQUE)){
-                if(chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)){
-                    this.actualiseCch();
-                }
-            }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS)){
-                if(chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL) && chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)
-                        && chauffage_properties.containsKey(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE) ){
-                    this.actualiseCch();
-                }
-            }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS)){
-                if(chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL) && chauffage_properties.containsKey(DpeEvent.CHAUDIERE_BOIS)){
-                    this.actualiseCch();
-                }
-            }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC)){
-                if(chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC) && chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)){
-                    this.actualiseCch();
-                }
-            }else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS)){
-                if(chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE) && chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)
-                        && chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC) && chauffage_properties.containsKey(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)){
-                    this.actualiseCch();
-                }
-            }
-        }
-    }
 
     // 5.Rendements des installations
-    public void actualiseEmetteurAllGenerateurs(Chauffage.Emission typeEmission){
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_BOIS)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_BOIS)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)).setEmission(typeEmission);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)).setEmission(typeEmission);
-        }
-        if (ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_ECS)).setEmission(typeEmission);
-        }
+    private Chauffage.Generateur generateurChauffageUnique = Chauffage.Generateur.CHAUDIERE_ELECTRIQUE;
+    private Chauffage.Generateur generateurChauffageAvecPoil = Chauffage.Generateur.CHAUDIERE_ELECTRIQUE;
+    private Chauffage.Generateur generateurChaudiereAvecPac = Chauffage.Generateur.CHAUDIERE_ELECTRIQUE;
+    private Chauffage.Generateur generateurChaudiereAvecPacEtPoil = Chauffage.Generateur.CHAUDIERE_ELECTRIQUE;
+    private Chauffage.Generateur generateurChaudiereGaz = Chauffage.Generateur.CHAUDIERE_GAZ_CLASSIQUE_AVANT_1981;
+    private Chauffage.Generateur generateurChaudiereBois = Chauffage.Generateur.CHAUDIERE_BOIS_PLUS_DE_15_ANS;
+    private Chauffage.Generateur generateurPacAvecChaudiere = Chauffage.Generateur.POMPE_A_CHALEUR_AIR_AIR;
+    private Chauffage.Generateur generateurPacAvecChaudiereEtPoele = Chauffage.Generateur.POMPE_A_CHALEUR_AIR_AIR;
+    private Chauffage.Generateur generateurPoeleAvecChauffage = Chauffage.Generateur.POIL_OU_INSERT_BOIS_AVANT_2001;
+    private Chauffage.Generateur generateurPoeleAvecChaudiereEtPac = Chauffage.Generateur.POIL_OU_INSERT_BOIS_AVANT_2001;
+    private Chauffage chauffageUnique = new Chauffage(generateurChauffageUnique,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage chauffageAvecPoil = new Chauffage(generateurChauffageAvecPoil,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage chaudiereAvecPac = new Chauffage(generateurChaudiereAvecPac,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage chaudiereAvecPacEtPoil = new Chauffage(generateurChaudiereAvecPacEtPoil,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage chaudiereGaz = new Chauffage(generateurChaudiereGaz,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage chaudiereBois = new Chauffage(generateurChaudiereBois,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage pacAvecChaudiere = new Chauffage(generateurPacAvecChaudiere,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage pacAvecChaudiereEtPoele = new Chauffage(generateurPacAvecChaudiereEtPoele,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage poeleAvecChauffage = new Chauffage(generateurPoeleAvecChauffage,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage poeleAvecChaudiereEtPac = new Chauffage(generateurPoeleAvecChaudiereEtPac,true,false,Chauffage.Emission.RADIATEUR);
+    private Chauffage.Emission typeEmetteurDeChaleur = Chauffage.Emission.RADIATEUR;
+    public void actualiseEmetteurAllGenerateurs(){
+        chauffageUnique.setEmission(typeEmetteurDeChaleur);
+        chauffageAvecPoil.setEmission(typeEmetteurDeChaleur);
+        poeleAvecChauffage.setEmission(typeEmetteurDeChaleur);
+        chaudiereAvecPac.setEmission(typeEmetteurDeChaleur);
+        pacAvecChaudiere.setEmission(typeEmetteurDeChaleur);
+        chaudiereGaz.setEmission(typeEmetteurDeChaleur);
+        chaudiereBois.setEmission(typeEmetteurDeChaleur);
+        chaudiereAvecPacEtPoil.setEmission(typeEmetteurDeChaleur);
+        pacAvecChaudiereEtPoele.setEmission(typeEmetteurDeChaleur);
+        poeleAvecChaudiereEtPac.setEmission(typeEmetteurDeChaleur);
+        chaudiereEcs.setEmission(typeEmetteurDeChaleur);
     }
-    public void actualiseLocalAllGenerateurs(LocalEquipementEcsEnum localEquipementEcs){
+    public void actualiseLocalAllGenerateurs(){
         boolean tampon;
         if (localEquipementEcs.equals(LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE)){
             tampon=true;
         }else{
             tampon=false;
         }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_BOIS)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_BOIS)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)).setGenerateurDansVolumeChauffe(tampon);
-        }
-        if (ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
-            ((Chauffage)ecs_properties.get(DpeEvent.CHAUDIERE_ECS)).setGenerateurDansVolumeChauffe(tampon);
-        }
+        chauffageUnique.setGenerateurDansVolumeChauffe(tampon);
+        chauffageAvecPoil.setGenerateurDansVolumeChauffe(tampon);
+        poeleAvecChauffage.setGenerateurDansVolumeChauffe(tampon);
+        chaudiereAvecPac.setGenerateurDansVolumeChauffe(tampon);
+        pacAvecChaudiere.setGenerateurDansVolumeChauffe(tampon);
+        chaudiereGaz.setGenerateurDansVolumeChauffe(tampon);
+        chaudiereBois.setGenerateurDansVolumeChauffe(tampon);
+        chaudiereAvecPacEtPoil.setGenerateurDansVolumeChauffe(tampon);
+        pacAvecChaudiereEtPoele.setGenerateurDansVolumeChauffe(tampon);
+        poeleAvecChaudiereEtPac.setGenerateurDansVolumeChauffe(tampon);
+        chaudiereEcs.setGenerateurDansVolumeChauffe(tampon);
+        this.actualisePrs1();
     }
-    public void actualiseRobinetAllGenerateurs(PresenceRobinetEnum presenceRobinet){
+    public void actualiseRobinetAllGenerateurs(){
         boolean presence=true;
-        if (presenceRobinet.equals(PresenceRobinetEnum.ABSENCE_ROBINET_THERMOSTATIQUE)){
+        if (presenceRobinetThermostatique.equals(PresenceRobinetEnum.ABSENCE_ROBINET_THERMOSTATIQUE)){
             presence=false;
         }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_BOIS)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_BOIS)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)).setPresenceRobinetThermostatique(presence);
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)){
-            ((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)).setPresenceRobinetThermostatique(presence);
-        }
-        if (ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
-            ((Chauffage)ecs_properties.get(DpeEvent.CHAUDIERE_ECS)).setPresenceRobinetThermostatique(presence);
-        }
+        chauffageUnique.setPresenceRobinetThermostatique(presence);
+        chauffageAvecPoil.setPresenceRobinetThermostatique(presence);
+        poeleAvecChauffage.setPresenceRobinetThermostatique(presence);
+        chaudiereAvecPac.setPresenceRobinetThermostatique(presence);
+        pacAvecChaudiere.setPresenceRobinetThermostatique(presence);
+        chaudiereGaz.setPresenceRobinetThermostatique(presence);
+        chaudiereBois.setPresenceRobinetThermostatique(presence);
+        chaudiereAvecPacEtPoil.setPresenceRobinetThermostatique(presence);
+        pacAvecChaudiereEtPoele.setPresenceRobinetThermostatique(presence);
+        poeleAvecChaudiereEtPac.setPresenceRobinetThermostatique(presence);
+        chaudiereEcs.setPresenceRobinetThermostatique(presence);
     }
     public void actualiseRendementsChauffage(Chauffage chauffage){
-        boolean situeDansLocalChauffe=false; // Initialisation défavorable
-        Chauffage.Emission typeEmission = Chauffage.Emission.RADIATEUR; // Initialisation défavorable
-        boolean presenceRobinetThermostatique=true; // Initialisation défavorable
-        if (ecs_properties.containsKey(DpeEvent.LOCAL_EQUIPEMENT_ECS)){
-            if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS).equals(LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE)) {
-                situeDansLocalChauffe = true;
-            }
+        boolean situeDansLocalChauffe,presenceRobinet;
+        if (localEquipementEcs.equals(LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE)){
+            situeDansLocalChauffe=true;
+        }else{
+            situeDansLocalChauffe=false;
         }
-        if (ecs_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-            typeEmission=(Chauffage.Emission)ecs_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR);
+        if (presenceRobinetThermostatique.equals(PresenceRobinetEnum.PRESENCE_ROBINET_THERMOSTATIQUE)){
+            presenceRobinet=true;
+        }else{
+            presenceRobinet=false;
         }
-        if (ecs_properties.containsKey(DpeEvent.PRESENCE_ROBINET_THERMOSTATIQUE)){
-            if (ecs_properties.get(DpeEvent.PRESENCE_ROBINET_THERMOSTATIQUE).equals(PresenceRobinetEnum.ABSENCE_ROBINET_THERMOSTATIQUE)){
-                presenceRobinetThermostatique=false;
-            }
-        }
-        chauffage.setEmission(typeEmission);
+        chauffage.setEmission(typeEmetteurDeChaleur);
         chauffage.setGenerateurDansVolumeChauffe(situeDansLocalChauffe);
-        chauffage.setPresenceRobinetThermostatique(presenceRobinetThermostatique);
+        chauffage.setPresenceRobinetThermostatique(presenceRobinet);
     }
 
     // 6.Rendement de génération des chaudières
+    private PresenceThermostatEnum presenceThermostat = PresenceThermostatEnum.AUCUN_DES_DEUX;
+    private PresenceRobinetEnum presenceRobinetThermostatique = PresenceRobinetEnum.ABSENCE_ROBINET_THERMOSTATIQUE;
+    private ProgrammationSystemeEnum programmationSysteme = ProgrammationSystemeEnum.IMPOSSIBLE;
+    private boolean chaudiereAssureChauffageEtEcs=false;
     private int tabTauxDeCharge[] = new int[10];
     private float tabCoeffPondX[] = new float[10];
-    public void tryActualiseIch(){
-        boolean actualisationCch = false;
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)){
-            this.actualiseRendementGeneration((Chauffage) chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE));
-            actualisationCch=true;
+    public void actualiseRendementGenerationAllChauffages(){
+        if (chauffageUnique.getGenerateur().toString().startsWith("Chaudière")
+                && chauffageUnique.getGenerateur()!=Chauffage.Generateur.CHAUDIERE_ELECTRIQUE
+                || chauffageUnique.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_AVANT_2006)
+                || chauffageUnique.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_APRES_2006)) {
+            this.actualiseRendementGenerationChauffage(chauffageUnique);
         }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL));
-            actualisationCch=true;
+
+        if (chauffageAvecPoil.getGenerateur().toString().startsWith("Chaudière")
+                && chauffageAvecPoil.getGenerateur()!=Chauffage.Generateur.CHAUDIERE_ELECTRIQUE
+                || chauffageAvecPoil.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_AVANT_2006)
+                || chauffageAvecPoil.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_APRES_2006)) {
+            this.actualiseRendementGenerationChauffage(chauffageAvecPoil);
         }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE));
-            actualisationCch=true;
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL));
-            actualisationCch=true;
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_BOIS)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_BOIS));
-            actualisationCch=true;
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC));
-            actualisationCch=true;
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE));
-            actualisationCch=true;
-        }
-        if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE));
-            actualisationCch=true;
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE));
-            actualisationCch=true;
-        }
-        if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)){
-            this.actualiseRendementGeneration((Chauffage)chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC));
-            actualisationCch=true;
-        }
-        if (ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
-            this.actualiseRendementGeneration((Chauffage)ecs_properties.get(DpeEvent.CHAUDIERE_ECS));
-            actualisationCch=true;
-        }
-        if(actualisationCch){
-            this.tryActualiseCch();
-        }
-    } // TODO : prendre en compte les changements sur GV
-    public void actualiseRendementGeneration(Chauffage chauffage){
-        float tInt=23; // Cas défavorable
-        float tExtBase=-15; // Cas défavorable
+
+        if(chaudiereAvecPac.getGenerateur() != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE)
+            this.actualiseRendementGenerationChauffage(chaudiereAvecPac);
+
+        if(chaudiereAvecPacEtPoil.getGenerateur() != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE)
+            this.actualiseRendementGenerationChauffage(chaudiereAvecPacEtPoil);
+
+//        this.actualiseRendementGenerationChauffage(chaudiereGaz);
+//        this.actualiseRendementGenerationChauffage(chaudiereBois);
+    }
+    public void actualiseRendementGenerationChauffage(Chauffage chauffage){
+        float tInt=this.tInt.getTemperatureInterieure();
+        float tExtBase=departementBatiment.getTempExtBase();
         float pch;
         float pecs=2.844923077f; // Cas défavorable
         float pDim;
@@ -1193,18 +1110,8 @@ public class Dpe implements EventListener {
         float qp0,qp15,qp30,qp50,qp100;
         float pmfou=0;
         float pmcons=0;
-        boolean haveRegulation=false;
+        boolean haveRegulation=presenceThermostat.getBoolean();
 
-        if (general_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR)==PresenceThermostatEnum.PRESENCE_THERMOSTAT_OU_SONDE){
-            haveRegulation=true;
-        }
-
-        if (general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
-            tExtBase=((DepartementBatimentEnum)general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT)).getTempExtBase();
-        }
-        if(chauffage_properties.containsKey(DpeEvent.TEMPERATURE_INTERIEUR)){
-            tInt=((TemperatureInterieurEnum)chauffage_properties.get(DpeEvent.TEMPERATURE_INTERIEUR)).getTemperatureInterieure();
-        }
         pch=1.2f*gv*(tInt-tExtBase)/(1000*rr*rd*re);
         pDim=pch;
 
@@ -1214,12 +1121,10 @@ public class Dpe implements EventListener {
             pn=pDim/n;
             chauffage.setPn(pn);
         }else{
-            if(chauffage.getGenereEgalementEcs()){
-                if(ecs_properties.containsKey(DpeEvent.DECLENCHEMENT_CHAUDIERE_ROBINET)){
-                    if(ecs_properties.get(DpeEvent.DECLENCHEMENT_CHAUDIERE_ROBINET).equals(DeclenchementChaudiereEnum.DECLENCHEMENT_OUVERTURE_ROBINET_EAU_CHAUDE)){
-                        pecs=21;
-                    }
-                }
+            if(chaudiereAssureChauffageEtEcs){
+                if(declenchementChaudiere.getBoolean())
+                    pecs=21;
+
                 pDim=Math.max(pch,pecs);
             }
             if (pDim<=5){
@@ -1380,139 +1285,126 @@ public class Dpe implements EventListener {
         }
         rg = pmfou/(pmcons+0.3f*0.15f*qp0+pveil);
         chauffage.setRg(rg);
+        this.actualiseCch();
     }
     public float getTfonc100(){
         float tFonc100 = 80; // Cas défavorable
-        if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
-            if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-                switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
-                    case AVANT_1975:
-                    case ENTRE_1975_ET_1977:
-                    case ENTRE_1978_ET_1982:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc100 = 60;
-                        }else{
-                            tFonc100 = 80;
-                        }
-                        break;
-                    default:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc100 = 35;
-                        }else{
-                            tFonc100 = 65;
-                        }
-                        break;
+        switch(dateConstructionBatiment){
+            case AVANT_1975:
+            case ENTRE_1975_ET_1977:
+            case ENTRE_1978_ET_1982:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc100 = 60;
+                }else{
+                    tFonc100 = 80;
                 }
-            }
+                break;
+            default:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc100 = 35;
+                }else{
+                    tFonc100 = 65;
+                }
+                break;
         }
         return tFonc100;
     }
     public float getTfonc30ChaudiereCondensation(){
         float tFonc30 = 38; // Cas défavorable
-        if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
-            if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-                switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
-                    case AVANT_1975:
-                    case ENTRE_1975_ET_1977:
-                    case ENTRE_1978_ET_1982:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 32;
-                        }else{
-                            tFonc30 = 38;
-                        }
-                        break;
-                    default:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 24.5f;
-                        }else{
-                            tFonc30 = 34;
-                        }
-                        break;
+        switch(dateConstructionBatiment){
+            case AVANT_1975:
+            case ENTRE_1975_ET_1977:
+            case ENTRE_1978_ET_1982:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 32;
+                }else{
+                    tFonc30 = 38;
                 }
-            }
+                break;
+            default:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 24.5f;
+                }else{
+                    tFonc30 = 34;
+                }
+                break;
         }
-        return tFonc30;
+    return tFonc30;
     }
     public float getTfonc30ChaudiereBasseTemperature(){
         float tFonc30 = 48.5f; // Cas défavorable
-        if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
-            if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-                switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
-                    case AVANT_1975:
-                    case ENTRE_1975_ET_1977:
-                    case ENTRE_1978_ET_1982:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 42.5f;
-                        }else{
-                            tFonc30 = 48.5f;
-                        }
-                        break;
-                    default:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 35;
-                        }else{
-                            tFonc30 = 44;
-                        }
-                        break;
+
+        switch(dateConstructionBatiment){
+            case AVANT_1975:
+            case ENTRE_1975_ET_1977:
+            case ENTRE_1978_ET_1982:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 42.5f;
+                }else{
+                    tFonc30 = 48.5f;
                 }
-            }
+                break;
+            default:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 35;
+                }else{
+                    tFonc30 = 44;
+                }
+                break;
         }
         return tFonc30;
     }
     public float getTfonc30ChaudiereStandardAvant1990(){
         float tFonc30 = 59; // Cas défavorable
-        if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
-            if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-                switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
-                    case AVANT_1975:
-                    case ENTRE_1975_ET_1977:
-                    case ENTRE_1978_ET_1982:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 53;
-                        }else{
-                            tFonc30 = 59;
-                        }
-                        break;
-                    default:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 50;
-                        }else{
-                            tFonc30 = 54.5f;
-                        }
-                        break;
+        switch(dateConstructionBatiment){
+            case AVANT_1975:
+            case ENTRE_1975_ET_1977:
+            case ENTRE_1978_ET_1982:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 53;
+                }else{
+                    tFonc30 = 59;
                 }
-            }
+                break;
+            default:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 50;
+                }else{
+                    tFonc30 = 54.5f;
+                }
+                break;
         }
         return tFonc30;
     }
     public float getTfonc30ChaudiereStandardApres1991(){
         float tFonc30 = 55.5f; // Cas défavorable
-        if (general_properties.containsKey(DpeEvent.ANNEE_CONSTRUCTION)){
-            if(chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-                switch((DateConstructionBatimentEnum)general_properties.get(DpeEvent.ANNEE_CONSTRUCTION)){
-                    case AVANT_1975:
-                    case ENTRE_1975_ET_1977:
-                    case ENTRE_1978_ET_1982:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 49.5f;
-                        }else{
-                            tFonc30 = 55.5f;
-                        }
-                        break;
-                    default:
-                        if(chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR).equals(TypeEmetteurEnum.PLANCHER_CHAUFFANT)){
-                            tFonc30 = 45;
-                        }else{
-                            tFonc30 = 51.5f;
-                        }
-                        break;
+        switch(dateConstructionBatiment){
+            case AVANT_1975:
+            case ENTRE_1975_ET_1977:
+            case ENTRE_1978_ET_1982:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 49.5f;
+                }else{
+                    tFonc30 = 55.5f;
                 }
-            }
+                break;
+            default:
+                if(typeEmetteurDeChaleur.equals(Chauffage.Emission.PLANCHER_CHAUFFANT)){
+                    tFonc30 = 45;
+                }else{
+                    tFonc30 = 51.5f;
+                }
+                break;
         }
         return tFonc30;
     }
 
     // 7.Expression du besoin de la consommation d'ECS
+    private TypeEquipementEcsEnum installationEcs = TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
+    private Chauffage chaudiereEcs = new Chauffage(Chauffage.Generateur.CHAUDIERE_ELECTRIQUE,true,false,Chauffage.Emission.RADIATEUR);
+    private LocalEquipementEcsEnum localEquipementEcs = LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE;
+    private DeclenchementChaudiereEnum declenchementChaudiere = DeclenchementChaudiereEnum.NON_DECLENCHEMENT_OUVERTURE_ROBINET_EAU_CHAUDE;
+    private UsageEauChaudeEnum usageEauChaude = UsageEauChaudeEnum.DOUCHES;
     private float bEcs=3688;
     private float becs=55;
     private float nbJoursAbsenceParAn=0;
@@ -1523,31 +1415,28 @@ public class Dpe implements EventListener {
     private float tfr=10.5f;
     public void actualiseBecs(){
         bEcs=(1.1627f*(365-nbJoursAbsenceParAn)*nbHabitant*becs*(50-tfr))/1000;
-        this.tryActualiseRendementEquipementEcs();
+        this.actualiseRendementEcs();
         this.actualiseCecs();
     }
     public void actualiseTfr(){
-        if(general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
-            int zone = ((DepartementBatimentEnum)general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT)).getZoneHiver();
-            switch (zone){
-                case 1:
-                    tfr=10.5f;
-                    break;
-                case 2:
-                    tfr=12;
-                    break;
-                case 3:
-                    tfr=14.5f;
-                    break;
-                default:
-                    tfr=10.5f;
-                    break;
-            }
+        switch (departementBatiment.getZoneHiver()){
+            case 1:
+                tfr=10.5f;
+                break;
+            case 2:
+                tfr=12;
+                break;
+            case 3:
+                tfr=14.5f;
+                break;
+            default:
+                tfr=10.5f;
+                break;
         }
         this.actualiseBecs();
     }
-    public void actualisebecs(UsageEauChaudeEnum usageEcs){
-        switch (usageEcs){
+    public void actualisebecs(){
+        switch (usageEauChaude){
             case DOUCHES:
                 becs=40;
                 break;
@@ -1566,19 +1455,11 @@ public class Dpe implements EventListener {
     }
 
     // 8.Rendements de l'installation d'ECS
-    public void tryActualiseRendementEquipementEcs(){
-        TypeEquipementEcsEnum vieilEquipementEcs = TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002; // On prend un vieil équipement de base
-        if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-            this.actualiseRendementEcs((TypeEquipementEcsEnum)ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS));
-        }else{
-            this.actualiseRendementEcs(vieilEquipementEcs);
-        }
-    }
-    public void actualiseRendementEcs(TypeEquipementEcsEnum equipementEcs){ // TODO-> prendre en compte les dépendances
+    public void actualiseRendementEcs(){
         float cr,qgw,rs,rd,rendement,rpn,qp0,pveil,cop,pecs,vs,cef;
         vs = this.getVs();
         cef = this.getCef();
-        switch (equipementEcs){
+        switch (installationEcs){
             case BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS:
                 rd=getRdBallonElectrique();
                 cr=(939+10.4f*vs)/(45*vs);
@@ -1622,13 +1503,10 @@ public class Dpe implements EventListener {
                 break;
 
             case CHAUDIERE:
-                if(ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
-                    Chauffage chaudiere = (Chauffage)ecs_properties.get(DpeEvent.CHAUDIERE_ECS);
-                    qp0=chaudiere.getQp0();
-                    rpn=chaudiere.getRpn();
-                    pveil=chaudiere.getPuissanceVeilleuse();
-                    iEcs = (1/rpn)+1720*(qp0/bEcs)+6536*(0.5f*pveil/bEcs);
-                }
+                qp0=chaudiereEcs.getQp0();
+                rpn=chaudiereEcs.getRpn();
+                pveil=chaudiereEcs.getPuissanceVeilleuse();
+                iEcs = (1/rpn)+1720*(qp0/bEcs)+6536*(0.5f*pveil/bEcs);
                 break;
 
             case ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991 :
@@ -1675,14 +1553,14 @@ public class Dpe implements EventListener {
         this.actualiseCecs();
     }
     public float getRdBallonElectrique(){
-        if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS)==LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
+        if(localEquipementEcs.getBoolean()){
             return 0.85f;
         }else{
             return 0.8f;
         }
     }
     public float getRdBallonThermodynamique(){
-        if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS)==LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
+        if(localEquipementEcs.getBoolean()){
             return 0.9f;
         }else{
             return 0.85f;
@@ -1690,37 +1568,35 @@ public class Dpe implements EventListener {
     }
     public float getVs(){
         float vs=300;
-        if(general_properties.containsKey(DpeEvent.CATEGORIE_BATIMENT)){
-            switch ((CategorieLogementEnum)general_properties.get(DpeEvent.CATEGORIE_BATIMENT)){
-                case T1_F1:
-                    vs=100;
-                    break;
-                case T2_F2:
-                    vs=150;
-                    break;
-                case T3_F3:
-                    vs=200;
-                    break;
-                case T4_F4:
-                    vs=250;
-                    break;
-                default:
-                    vs=300;
-                    break;
-            }
+        switch (categorieLogement){
+            case T1_F1:
+                vs=100;
+                break;
+            case T2_F2:
+                vs=150;
+                break;
+            case T3_F3:
+                vs=200;
+                break;
+            case T4_F4:
+                vs=250;
+                break;
+            default:
+                vs=300;
+                break;
         }
         return vs;
     }
     public float getCef(){
         float cef=1.1f;
-        if(general_properties.get(DpeEvent.ABONNEMENT_ELECTRIQUE) == TypeAbonnementElectriqueEnum.DOUBLE_TARIF){
-            if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS) == LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
+        if(typeAbonnementElectrique == TypeAbonnementElectriqueEnum.DOUBLE_TARIF){
+            if(localEquipementEcs == LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
                 cef=0.6f;
             }else{ //LNC ou pas d'info
                 cef=0.75f;
             }
         }else{ //Simple ou tarif ou pas d'info
-            if(ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS) == LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
+            if(localEquipementEcs == LocalEquipementEcsEnum.SITUE_DANS_LOCAL_CHAUFFE){
                 cef=0.9f;
             }else{ //LNC ou pas d'info
                 cef=1.1f;
@@ -1730,83 +1606,59 @@ public class Dpe implements EventListener {
     }
 
     // 9.Consommation de climatisation
-    private float cClimatisation=700; // Cas le plus défavorable (7*100)
-    private float rClimatisation=7; // Cas le plus défavorable (voir 9)
-    private float sClimatisation=100; // On considère que l'on climatise une grande surface
-    public void actualiseResistanceClim(){
-        if (general_properties.containsKey(DpeEvent.DEPARTEMENT_BATIMENT)){
-            DepartementBatimentEnum.ZoneEte zoneEte = ((DepartementBatimentEnum) general_properties.get(DpeEvent.DEPARTEMENT_BATIMENT)).getZoneEte();
-            switch(zoneEte){
-                case Ea:
-                    if (sClimatisation<150){rClimatisation=2;}
-                    else{rClimatisation=4;}
-                    break;
-                case Eb:
-                    if (sClimatisation<150){rClimatisation=3;}
-                    else{rClimatisation=5;}
-                    break;
-                case Ec:
-                    if (sClimatisation<150){rClimatisation=4;}
-                    else{rClimatisation=6;}
-                    break;
-                case Ed:
-                    if (sClimatisation<150){rClimatisation=5;}
-                    else{rClimatisation=7;}
-                    break;
-            }
-        }else{
-            rClimatisation=7;
-        }
-        actualiseConsommationClimatisation();
-    }
+    private PresenceClimatisationLogementEnum presenceClimatisation = PresenceClimatisationLogementEnum.NON;
+    private float cClimatisation;
+    private float rClimatisation=4;
+    private float sClimatisation; // Pas de climatisation au départ
     public void actualiseConsommationClimatisation(){
-        if (general_properties.containsKey(DpeEvent.CLIMATISATION_LOGEMENT)){
-            if ((general_properties.get(DpeEvent.CLIMATISATION_LOGEMENT)).equals(PresenceClimatisationLogementEnum.NON)){
-                cClimatisation=0;
-            }else{
-                cClimatisation = rClimatisation * sClimatisation;
-            }
+        switch(departementBatiment.getZoneEte()){
+            case Ea:
+                if (sClimatisation<150){rClimatisation=2;}
+                else{rClimatisation=4;}
+                break;
+            case Eb:
+                if (sClimatisation<150){rClimatisation=3;}
+                else{rClimatisation=5;}
+                break;
+            case Ec:
+                if (sClimatisation<150){rClimatisation=4;}
+                else{rClimatisation=6;}
+                break;
+            case Ed:
+                if (sClimatisation<150){rClimatisation=5;}
+                else{rClimatisation=7;}
+                break;
+        }
+        if (presenceClimatisation.equals(PresenceClimatisationLogementEnum.NON)){
+            cClimatisation=0;
         }else{
-            cClimatisation=700;
+            cClimatisation = rClimatisation * sClimatisation;
         }
         this.actualiseScoreDpe();
     }
 
     // 10.Concommation des usages spécifiques
-    private float cElectromenager=1906; // Comme si on possède tous les éléments électroménager (voir 10.3)
-    private float cEclairageSurfacique = 3.7f; // Consommation max annuel des lampes (voir 10.2)
-    private float cEclairage = 185; // sh max * cEclairageSurfacique max = 50*3.7
-    private float cCuisson = 1660; // Conso cuisson max (cf 10.1)
-    public void actualiseConsommationEclairageSurfacique() {
-        if (general_properties.containsKey(DpeEvent.EQUIPEMENT_ECLAIRAGE)){
-            TypeEquipementEclairageEnum equipementEclairage = (TypeEquipementEclairageEnum)general_properties.get(DpeEvent.EQUIPEMENT_ECLAIRAGE);
-            cEclairageSurfacique=equipementEclairage.getConsommationEclairage();
-        }else{
-            cEclairageSurfacique=3.7f;
-        }
-        this.actualiseConsommationEclairage();
-    }
+    private TypeEquipementEclairageEnum equipementEclairage = TypeEquipementEclairageEnum.MAJORITAIREMENT_AMPOULE_A_INCANDESCENCE;
+    private TypeEquipementCuissonEnum equipementCuisson = TypeEquipementCuissonEnum.FEUX_GAZ_ET_FOUR_GAZ;
+    private ArrayList<TypeEquipementElectromenagerEnum> listEquipementElectromenager = new ArrayList<TypeEquipementElectromenagerEnum>();
+    private float cElectromenager;
+    private float cEclairageSurfacique;
+    private float cEclairage;
+    private float cCuisson;
     public void actualiseConsommationEclairage(){
+        cEclairageSurfacique=equipementEclairage.getConsommationEclairage();
         cEclairage=cEclairageSurfacique * sh;
         this.actualiseScoreDpe();
     }
     public void actualiseConsommationElectromenager(){
-        if(general_properties.containsKey(DpeEvent.EQUIPEMENT_ELECTROMENAGER)){
-            cElectromenager=0;
-            ArrayList<TypeEquipementElectromenagerEnum> listEquipement = (ArrayList<TypeEquipementElectromenagerEnum>)general_properties.get(DpeEvent.EQUIPEMENT_ELECTROMENAGER);
-            for (TypeEquipementElectromenagerEnum actualEquipement : listEquipement){
-                cElectromenager+=actualEquipement.getConsommation();
-            }
+        cElectromenager=0;
+        for (TypeEquipementElectromenagerEnum actualEquipement : listEquipementElectromenager){
+            cElectromenager+=actualEquipement.getConsommation();
         }
         this.actualiseScoreDpe();
     }
     public void actualiseConsommationCuisson(){
-        if (general_properties.containsKey(DpeEvent.EQUIPEMENT_CUISSON)){
-            TypeEquipementCuissonEnum equipementCuisson = (TypeEquipementCuissonEnum)general_properties.get(DpeEvent.EQUIPEMENT_CUISSON);
-            cCuisson = equipementCuisson.getConsommation();
-        }else{
-            cCuisson=1660;
-        }
+        cCuisson = equipementCuisson.getConsommation();
         this.actualiseScoreDpe();
     }
 
@@ -1843,8 +1695,16 @@ public class Dpe implements EventListener {
 
     public void actualiseScoreDpe(){
         scoreDpe = (cElectromenager+cEclairage+cCuisson+cClimatisation+cEcs+cch)/sh;
+        System.out.println("scoreDpe = " + scoreDpe);
+        System.out.println("cElectromenager = " + cElectromenager);
+        System.out.println("cEclairage = " + cEclairage);
+        System.out.println("cCuisson = " + cCuisson);
+        System.out.println("cClims = " + cClimatisation);
+        System.out.println("cEcs = " + cEcs);
+        System.out.println("cch = " + cch);
+        System.out.println("sh = " + sh);
+        System.out.println();
     }
-
     public float getScoreDpe(){
         return Math.round(this.scoreDpe);
     }
@@ -1862,12 +1722,11 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         Layout layout = (Layout) items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeBatimentEnum typeBatiment = (TypeBatimentEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.TYPE_BATIMENT, typeBatiment);
-                            this.tryActualiseI0();
+                            typeBatiment = (TypeBatimentEnum) items.get("lastValue");
+                            this.actualiseI0();
 
                         } else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeBatimentEnum type = (TypeBatimentEnum) general_properties.get(DpeEvent.TYPE_BATIMENT);
+                            TypeBatimentEnum type = typeBatiment;
                             HashMap<String, Object> currentItems = new HashMap<String, Object>();
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
@@ -1882,15 +1741,11 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest) items.get("eventRequest");
                         Layout layout = (Layout) items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            CategorieLogementEnum categorieLogement = (CategorieLogementEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.CATEGORIE_BATIMENT, categorieLogement);
-                            this.tryActualiseRendementEquipementEcs();
+                            categorieLogement = (CategorieLogementEnum) items.get("lastValue");
+                            this.actualiseRendementEcs();
 
                         } else if (eventRequest == EventRequest.GET_STATE) {
-                            CategorieLogementEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.CATEGORIE_BATIMENT)){
-                                type = (CategorieLogementEnum) general_properties.get(DpeEvent.CATEGORIE_BATIMENT);
-                            }
+                            CategorieLogementEnum type = categorieLogement;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
@@ -1958,8 +1813,8 @@ public class Dpe implements EventListener {
                             this.actualiseAs();
                             this.actualiseAi();
                             this.actualisedhCor();
-                            this.actualiseResistanceClim();
-                            this.tryActualiseIch();
+                            this.actualiseConsommationClimatisation();
+                            this.actualiseRendementGenerationAllChauffages();
                             this.actualiseTfr();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
@@ -1968,27 +1823,6 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.DEPARTEMENT_BATIMENT, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
-                        }
-                        break;
-                    }
-
-                    case POSITION_APPARTEMENT:{
-                        HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        if (eventRequest == EventRequest.UPDATE_STATE) {
-                            PositionAppartementEnum positionAppartement = (PositionAppartementEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.POSITION_APPARTEMENT, positionAppartement);
-                        }
-                        else if (eventRequest == EventRequest.GET_STATE) {
-                            PositionAppartementEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.POSITION_APPARTEMENT)){
-                                type = (PositionAppartementEnum) general_properties.get(DpeEvent.POSITION_APPARTEMENT);
-                            }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            Event e2 = new Event(DpeEvent.POSITION_APPARTEMENT, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
@@ -2003,7 +1837,7 @@ public class Dpe implements EventListener {
                             for(Mur m:murList){
                                 actualiseCoeffDeperditionThermique(m);
                             }
-                            this.tryActualiseIch();
+                            this.actualiseRendementGenerationAllChauffages();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             DateConstructionBatimentEnum type = this.dateConstructionBatiment;
@@ -2044,15 +1878,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeAbonnementElectriqueEnum typeAbonnementElectrique = (TypeAbonnementElectriqueEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.ABONNEMENT_ELECTRIQUE, typeAbonnementElectrique);
-                            this.tryActualiseRendementEquipementEcs();
+                            typeAbonnementElectrique = (TypeAbonnementElectriqueEnum) items.get("lastValue");
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeAbonnementElectriqueEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.ABONNEMENT_ELECTRIQUE)){
-                                type = (TypeAbonnementElectriqueEnum) general_properties.get(DpeEvent.ABONNEMENT_ELECTRIQUE);
-                            }
+                            TypeAbonnementElectriqueEnum type = typeAbonnementElectrique;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2066,15 +1896,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            PresenceClimatisationLogementEnum presenceClimatisationLogement = (PresenceClimatisationLogementEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.CLIMATISATION_LOGEMENT, presenceClimatisationLogement);
+                            presenceClimatisation = (PresenceClimatisationLogementEnum) items.get("lastValue");
                             this.actualiseConsommationClimatisation();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            PresenceClimatisationLogementEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.CLIMATISATION_LOGEMENT)){
-                                type = (PresenceClimatisationLogementEnum) general_properties.get(DpeEvent.CLIMATISATION_LOGEMENT);
-                            }
+                            PresenceClimatisationLogementEnum type = presenceClimatisation;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2090,7 +1916,7 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             this.sClimatisation = (float) items.get("lastValue");
                             general_properties.put(DpeEvent.SURFACE_CLIMATISATION, sClimatisation);
-                            this.actualiseResistanceClim();
+                            this.actualiseConsommationClimatisation();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             PresenceClimatisationLogementEnum type = null;
@@ -2110,15 +1936,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeEquipementEclairageEnum equipementEclairage = (TypeEquipementEclairageEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.EQUIPEMENT_ECLAIRAGE, equipementEclairage);
-                            this.actualiseConsommationEclairageSurfacique();
+                            equipementEclairage = (TypeEquipementEclairageEnum) items.get("lastValue");
+                            this.actualiseConsommationEclairage();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeEquipementEclairageEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.EQUIPEMENT_ECLAIRAGE)){
-                                type = (TypeEquipementEclairageEnum) general_properties.get(DpeEvent.EQUIPEMENT_ECLAIRAGE);
-                            }
+                            TypeEquipementEclairageEnum type = equipementEclairage;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2131,27 +1953,17 @@ public class Dpe implements EventListener {
                     case EQUIPEMENT_ELECTROMENAGER: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        ArrayList<TypeEquipementElectromenagerEnum> listAppareils = new ArrayList<TypeEquipementElectromenagerEnum>();
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeEquipementElectromenagerEnum equipementElectromenager = (TypeEquipementElectromenagerEnum) items.get("lastValue");
-                            if (general_properties.containsKey(DpeEvent.EQUIPEMENT_ELECTROMENAGER)){
-                                listAppareils = (ArrayList) general_properties.get(DpeEvent.EQUIPEMENT_ELECTROMENAGER);
-                                if (!listAppareils.contains(equipementElectromenager)){
-                                    listAppareils.add(equipementElectromenager);
-                                }else{
-                                    listAppareils.remove(equipementElectromenager);
-                                }
+                            if (listEquipementElectromenager.contains(equipementElectromenager)){
+                                listEquipementElectromenager.remove(equipementElectromenager);
                             }else{
-                                listAppareils.add(equipementElectromenager);
+                                listEquipementElectromenager.add(equipementElectromenager);
                             }
-                            general_properties.put(DpeEvent.EQUIPEMENT_ELECTROMENAGER, listAppareils);
                             this.actualiseConsommationElectromenager();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TypeEquipementElectromenagerEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.EQUIPEMENT_ELECTROMENAGER)){
-                                type = (TypeEquipementElectromenagerEnum) general_properties.get(DpeEvent.EQUIPEMENT_ELECTROMENAGER);
-                            }
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2165,15 +1977,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeEquipementCuissonEnum equipementCuisson = (TypeEquipementCuissonEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.EQUIPEMENT_CUISSON, equipementCuisson);
+                            equipementCuisson = (TypeEquipementCuissonEnum) items.get("lastValue");
                             this.actualiseConsommationCuisson();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeEquipementCuissonEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.EQUIPEMENT_CUISSON)){
-                                type = (TypeEquipementCuissonEnum) general_properties.get(DpeEvent.EQUIPEMENT_CUISSON);
-                            }
+                            TypeEquipementCuissonEnum type = equipementCuisson;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2187,14 +1995,10 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeVentilationEnum typeVentilation = (TypeVentilationEnum) items.get("lastValue");
-                            general_properties.put(DpeEvent.TYPE_VENTILATION, typeVentilation);
+                            typeVentilation = (TypeVentilationEnum) items.get("lastValue");
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            TypeVentilationEnum type = null;
-                            if (general_properties.containsKey(DpeEvent.TYPE_VENTILATION)){
-                                type = (TypeVentilationEnum) general_properties.get(DpeEvent.TYPE_VENTILATION);
-                            }
+                            TypeVentilationEnum type = typeVentilation;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2241,20 +2045,20 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         Layout layout = (Layout) items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            InstallationChauffageEnum typeSource = (InstallationChauffageEnum) items.get("lastValue");
-                            if (typeSource == InstallationChauffageEnum.CHAUFFAGE_UNIQUE) {
+                            installationChauffage = (InstallationChauffageEnum) items.get("lastValue");
+                            if (installationChauffage == InstallationChauffageEnum.CHAUFFAGE_UNIQUE) {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_chauffage"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chauffage_et_insert"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_gaz_et_chaudiere_bois"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_et_PAC"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_et_PAC_insert"), false);
-                            } else if (typeSource == InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS){
+                            } else if (installationChauffage == InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS){
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_chauffage"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chauffage_et_insert"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_gaz_et_chaudiere_bois"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_et_PAC"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_et_PAC_insert"), false);
-                            } else if (typeSource == InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS){
+                            } else if (installationChauffage == InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS){
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_chauffage"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chauffage_et_insert"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_gaz_et_chaudiere_bois"), true);
@@ -2262,7 +2066,7 @@ public class Dpe implements EventListener {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_et_PAC_insert"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
-                            } else if (typeSource == InstallationChauffageEnum.CHAUDIERE_AVEC_PAC){
+                            } else if (installationChauffage == InstallationChauffageEnum.CHAUDIERE_AVEC_PAC){
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_chauffage"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chauffage_et_insert"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_gaz_et_chaudiere_bois"), false);
@@ -2270,7 +2074,7 @@ public class Dpe implements EventListener {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_et_PAC_insert"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
-                            } else if (typeSource == InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS){
+                            } else if (installationChauffage == InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS){
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("type_chauffage"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chauffage_et_insert"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_gaz_et_chaudiere_bois"), false);
@@ -2279,13 +2083,13 @@ public class Dpe implements EventListener {
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
                             }
-                            chauffage_properties.put(DpeEvent.INSTALLATION_CHAUFFAGE, typeSource);
-                            this.tryActualiseI0();
-                            this.tryActualiseCch();
+                            this.actualisePrs1();
+                            this.actualiseI0();
+                            this.actualiseCch();
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            InstallationChauffageEnum type = (InstallationChauffageEnum) chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE);
-
+                            InstallationChauffageEnum type = installationChauffage;
                             HashMap<String, Object> currentItems = new HashMap<String, Object>();
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
@@ -2317,42 +2121,57 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         Layout layout = (Layout) items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage chauffage = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.CHAUFFAGE_UNIQUE, chauffage);
+                            generateurChauffageUnique = (Chauffage.Generateur) items.get("lastValue");
+                            chauffageUnique=new Chauffage(generateurChauffageUnique,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
 
-                            String nameGenerateur = chauffage.getGenerateur().toString();
+                            String nameGenerateur = chauffageUnique.getGenerateur().toString();
                             if (nameGenerateur.startsWith("Chaudière")){ // Si le générateur est une chaudière
-                                this.actualiseRendementGeneration(chauffage);
-                                if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-                                    if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)) {
-                                        chauffage.setGenereEgalementEcs(true);
-                                        ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chauffage);
-                                        this.actualisePrs1();
-                                    }else{
-                                        chauffage.setGenereEgalementEcs(false);
-                                    }
+                                if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageUnique != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=true;
+                                    chaudiereEcs=chauffageUnique;
+                                    this.actualiseRendementGenerationChauffage(chauffageUnique);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                                }else if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageUnique == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=false;
+                                    installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
+                                }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageUnique != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=true;
+                                    chaudiereEcs=chauffageUnique;
+                                    this.actualiseRendementGenerationChauffage(chauffageUnique);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                                }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageUnique == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=false;
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
                                 }
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
                             }else{
-                                if (ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
-                                    ecs_properties.remove(DpeEvent.CHAUDIERE_ECS);
-                                }
+                                chaudiereAssureChauffageEtEcs=false;
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
+                                if(installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)){
+                                    installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
+                                }
                             }
-                            if(chauffage.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_AVANT_2006) || chauffage.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_APRES_2006)){
-                                this.actualiseRendementGeneration(chauffage);
+                            if(chauffageUnique.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_AVANT_2006) || chauffageUnique.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_APRES_2006)){
+                                this.actualiseRendementGenerationChauffage(chauffageUnique);
                             }
-                            this.actualiseRendementsChauffage(chauffage);
-                            this.tryActualiseI0();
-                            this.tryActualiseCch();
+                            this.actualisePrs1();
+                            this.actualiseRendementsChauffage(chauffageUnique);
+                            this.actualiseI0();
+                            this.actualiseCch();
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE);
-                            }
+                            Chauffage.Generateur type = generateurChauffageUnique;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2367,42 +2186,56 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         Layout layout = (Layout) items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage chauffage = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.CHAUFFAGE_SANS_POIL, chauffage);
+                            generateurChauffageAvecPoil = (Chauffage.Generateur) items.get("lastValue");
+                            chauffageAvecPoil = new Chauffage(generateurChauffageAvecPoil,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
 
-                            String nameGenerateur = chauffage.getGenerateur().toString();
+                            String nameGenerateur = chauffageAvecPoil.getGenerateur().toString();
                             if (nameGenerateur.startsWith("Chaudière")){ // Si le générateur est une chaudière
-                                this.actualiseRendementGeneration(chauffage);
-                                if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-                                    if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)){
-                                        chauffage.setGenereEgalementEcs(true);
-                                        ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chauffage);
-                                        this.actualisePrs1();
-                                    }else{
-                                        chauffage.setGenereEgalementEcs(false);
-                                    }
+                                if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageAvecPoil != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=true;
+                                    chaudiereEcs=chauffageAvecPoil;
+                                    this.actualiseRendementGenerationChauffage(chauffageAvecPoil);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                                }else if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageAvecPoil == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=false;
+                                    installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
+                                }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageAvecPoil != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=true;
+                                    chaudiereEcs=chauffageAvecPoil;
+                                    this.actualiseRendementGenerationChauffage(chauffageAvecPoil);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                                }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                        && generateurChauffageAvecPoil == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                    chaudiereAssureChauffageEtEcs=false;
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
                                 }
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
                             }else{
-                                if (ecs_properties.containsKey(DpeEvent.CHAUDIERE_ECS)){
-                                    ecs_properties.remove(DpeEvent.CHAUDIERE_ECS);
-                                }
+                                chaudiereAssureChauffageEtEcs=false;
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
                                 ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
+                                if(installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)){
+                                    installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
+                                }
                             }
-                            if(chauffage.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_AVANT_2006) || chauffage.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_APRES_2006)){
-                                this.actualiseRendementGeneration(chauffage);
+                            if(chauffageAvecPoil.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_AVANT_2006) || chauffageAvecPoil.getGenerateur().equals(Chauffage.Generateur.RADIATEUR_GAZ_APRES_2006)){
+                                this.actualiseRendementGenerationChauffage(chauffageAvecPoil);
                             }
-                            this.tryActualiseI0();
-                            this.tryActualiseIch();
-                            this.tryActualiseCch();
+                            this.actualisePrs1();
+                            this.actualiseI0();
+                            this.actualiseCch();
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL);
-                            }
+                            Chauffage.Generateur type = generateurChauffageAvecPoil;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2416,16 +2249,14 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage chauffage = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE, chauffage);
-                            this.actualiseRendementsChauffage(chauffage);
-                            this.tryActualiseCch();
+                            generateurPoeleAvecChauffage = (Chauffage.Generateur) items.get("lastValue");
+                            poeleAvecChauffage = new Chauffage(generateurPoeleAvecChauffage,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
+                            this.actualiseRendementsChauffage(poeleAvecChauffage);
+                            this.actualiseCch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE);
-                            }
+                            Chauffage.Generateur type = generateurPoeleAvecChauffage;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2439,15 +2270,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            FrequenceUtilisationPoilEnum frequenceUtilisationPoil = (FrequenceUtilisationPoilEnum) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE, frequenceUtilisationPoil);
-                            this.tryActualiseCch();
+                            frequenceUtilisationPoeleAvecChauffage = (FrequenceUtilisationPoilEnum) items.get("lastValue");
+                            this.actualiseCch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            FrequenceUtilisationPoilEnum type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE)){
-                                type = (FrequenceUtilisationPoilEnum) chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE);
-                            }
+                            FrequenceUtilisationPoilEnum type = frequenceUtilisationPoeleAvecChauffage;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2457,33 +2284,47 @@ public class Dpe implements EventListener {
                         break;
                     }
 
+                    case FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC:{
+                        HashMap<String,Object> items = (HashMap<String,Object>) o;
+                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            frequenceUtilisationPoeleAvecChauffageEtPac = (FrequenceUtilisationPoilEnum) items.get("lastValue");
+                            this.actualiseCch();
+                        }
+                        else if (eventRequest == EventRequest.GET_STATE) {
+                            FrequenceUtilisationPoilEnum type = frequenceUtilisationPoeleAvecChauffageEtPac;
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC, currentItems);
+                            EventManager.getInstance().put(Channel.DPE, e2);
+                        }
+                        break;
+                    }
+
                     case CHAUDIERE_GAZ_FIOUL:{
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage chaudiere = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.CHAUDIERE_GAZ_FIOUL, chaudiere);
+                            generateurChaudiereGaz = (Chauffage.Generateur) items.get("lastValue");
+                            chaudiereGaz = new Chauffage(generateurChaudiereGaz,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
 
-                            if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-                                if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)){
-                                    chaudiere.setGenereEgalementEcs(true);
-                                    ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chaudiere);
-                                    this.actualisePrs1();
-                                }else{
-                                    chaudiere.setGenereEgalementEcs(false);
-                                }
+                            if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)){
+                                chaudiereAssureChauffageEtEcs=true;
+                                chaudiereEcs=chaudiereGaz;
+                            }else{
+                                chaudiereAssureChauffageEtEcs=false;
                             }
-
-                            this.actualiseRendementsChauffage(chaudiere);
-                            this.actualiseRendementGeneration(chaudiere);
-                            this.tryActualiseI0();
-                            this.tryActualiseCch();
+                            this.actualisePrs1();
+                            this.actualiseRendementsChauffage(chaudiereGaz);
+                            this.actualiseRendementGenerationChauffage(chaudiereGaz);
+                            this.actualiseI0();
+                            this.actualiseCch();
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL);
-                            }
+                            Chauffage.Generateur type = generateurChaudiereGaz;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2497,18 +2338,15 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage chaudiere = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.CHAUDIERE_BOIS, chaudiere);
-                            this.actualiseRendementsChauffage(chaudiere);
-                            this.actualiseRendementGeneration(chaudiere);
-                            this.tryActualiseCch();
-
+                            generateurChaudiereBois = (Chauffage.Generateur) items.get("lastValue");
+                            chaudiereBois = new Chauffage(generateurChaudiereBois,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
+                            this.actualiseRendementsChauffage(chaudiereBois);
+                            this.actualiseRendementGenerationChauffage(chaudiereBois);
+                            this.actualiseCch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_BOIS)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.CHAUDIERE_BOIS);
-                            }
+                            Chauffage.Generateur type = generateurChaudiereBois;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2521,29 +2359,47 @@ public class Dpe implements EventListener {
                     case CHAUDIERE_AVEC_PAC:{
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        Layout layout = (Layout)items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage chaudiere = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.CHAUDIERE_AVEC_PAC, chaudiere);
-                            this.actualiseRendementsChauffage(chaudiere);
-                            this.actualiseRendementGeneration(chaudiere);
-                            this.tryActualiseI0();
-                            this.tryActualiseCch();
+                            generateurChaudiereAvecPac = (Chauffage.Generateur) items.get("lastValue");
+                            chaudiereAvecPac = new Chauffage(generateurChaudiereAvecPac,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
 
-                            if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-                                if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)){
-                                    chaudiere.setGenereEgalementEcs(true);
-                                    ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chaudiere);
-                                    this.actualisePrs1();
-                                }else{
-                                    chaudiere.setGenereEgalementEcs(false);
-                                }
+                            if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPac != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=true;
+                                chaudiereEcs=chaudiereAvecPac;
+                                this.actualiseRendementGenerationChauffage(chaudiereAvecPac);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                            }else if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPac == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=false;
+                                installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
+                            }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPac != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=true;
+                                chaudiereEcs=chaudiereAvecPac;
+                                this.actualiseRendementGenerationChauffage(chaudiereAvecPac);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                            }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPac == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=false;
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
                             }
+                            this.actualisePrs1();
+                            this.actualiseRendementsChauffage(chaudiereAvecPac);
+                            this.actualiseRendementGenerationChauffage(chaudiereAvecPac);
+                            this.actualiseI0();
+                            this.actualiseCch();
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC);
-                            }
+                            Chauffage.Generateur type = generateurChaudiereAvecPac;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2557,16 +2413,14 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage pac = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE, pac);
-                            this.actualiseRendementsChauffage(pac);
-                            this.tryActualiseCch();
+                            generateurPacAvecChaudiere = (Chauffage.Generateur) items.get("lastValue");
+                            pacAvecChaudiere = new Chauffage(generateurPacAvecChaudiere,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
+                            this.actualiseRendementsChauffage(pacAvecChaudiere);
+                            this.actualiseCch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE);
-                            }
+                            Chauffage.Generateur type = generateurPacAvecChaudiere;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2579,29 +2433,47 @@ public class Dpe implements EventListener {
                     case CHAUDIERE_AVEC_PAC_ET_POELE:{
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                        Layout layout = (Layout)items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage chaudiere = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE, chaudiere);
+                            generateurChaudiereAvecPacEtPoil = (Chauffage.Generateur) items.get("lastValue");
+                            chaudiereAvecPacEtPoil = new Chauffage(generateurChaudiereAvecPacEtPoil,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
 
-                            if (ecs_properties.containsKey(DpeEvent.TYPE_EQUIPEMENT_ECS)){
-                                if (ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS).equals(TypeEquipementEcsEnum.CHAUDIERE)){
-                                    chaudiere.setGenereEgalementEcs(true);
-                                    ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chaudiere);
-                                    this.actualisePrs1();
-                                }else{
-                                    chaudiere.setGenereEgalementEcs(false);
-                                }
+                            if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPacEtPoil != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=true;
+                                chaudiereEcs=chaudiereAvecPacEtPoil;
+                                this.actualiseRendementGenerationChauffage(chaudiereAvecPacEtPoil);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                            }else if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPacEtPoil == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=false;
+                                installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
+                            }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPacEtPoil != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=true;
+                                chaudiereEcs=chaudiereAvecPacEtPoil;
+                                this.actualiseRendementGenerationChauffage(chaudiereAvecPacEtPoil);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
+                            }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
+                                    && generateurChaudiereAvecPacEtPoil == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
+                                chaudiereAssureChauffageEtEcs=false;
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
+                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
                             }
-                            this.actualiseRendementsChauffage(chaudiere);
-                            this.actualiseRendementGeneration(chaudiere);
-                            this.tryActualiseI0();
-                            this.tryActualiseCch();
+                            this.actualisePrs1();
+                            this.actualiseRendementsChauffage(chaudiereAvecPacEtPoil);
+                            this.actualiseRendementGenerationChauffage(chaudiereAvecPacEtPoil);
+                            this.actualiseI0();
+                            this.actualiseCch();
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE);
-                            }
+                            Chauffage.Generateur type = generateurChaudiereAvecPacEtPoil;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2615,16 +2487,14 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage pac = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE, pac);
-                            this.actualiseRendementsChauffage(pac);
-                            this.tryActualiseCch();
+                            generateurPacAvecChaudiereEtPoele = (Chauffage.Generateur) items.get("lastValue");
+                            pacAvecChaudiereEtPoele = new Chauffage(generateurPacAvecChaudiereEtPoele,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
+                            this.actualiseRendementsChauffage(pacAvecChaudiereEtPoele);
+                            this.actualiseCch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE);
-                            }
+                            Chauffage.Generateur type = generateurPacAvecChaudiereEtPoele;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2638,42 +2508,18 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage poele = new Chauffage((Chauffage.Generateur) items.get("lastValue"));
-                            chauffage_properties.put(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC, poele);
-                            this.actualiseRendementsChauffage(poele);
-                            this.tryActualiseCch();
+                            generateurPoeleAvecChaudiereEtPac = (Chauffage.Generateur) items.get("lastValue");
+                            poeleAvecChaudiereEtPac = new Chauffage(generateurPoeleAvecChaudiereEtPac,localEquipementEcs.getBoolean(),
+                                    presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
+                            this.actualiseRendementsChauffage(poeleAvecChaudiereEtPac);
+                            this.actualiseCch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)){
-                                type = (Chauffage) chauffage_properties.get(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC);
-                            }
+                            Chauffage.Generateur type = generateurPoeleAvecChaudiereEtPac;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
-                        }
-                        break;
-                    }
-
-                    case FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC:{
-                        HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        if (eventRequest == EventRequest.UPDATE_STATE) {
-                            FrequenceUtilisationPoilEnum frequenceUtilisationPoil = (FrequenceUtilisationPoilEnum) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC, frequenceUtilisationPoil);
-                            this.tryActualiseCch();
-                        }
-                        else if (eventRequest == EventRequest.GET_STATE) {
-                            FrequenceUtilisationPoilEnum type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC)){
-                                type = (FrequenceUtilisationPoilEnum) chauffage_properties.get(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC);
-                            }
-                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                            currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            Event e2 = new Event(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC, currentItems);
                             EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
@@ -2685,7 +2531,7 @@ public class Dpe implements EventListener {
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             tInt = (TemperatureInterieurEnum) items.get("lastValue");
                             this.actualisedhCor();
-                            this.tryActualiseIch();
+                            this.actualiseRendementGenerationAllChauffages();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TemperatureInterieurEnum type = tInt;
@@ -2705,17 +2551,13 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            Chauffage.Emission typeEmission = (Chauffage.Emission) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR, typeEmission);
-                            this.actualiseEmetteurAllGenerateurs(typeEmission);
-                            this.tryActualiseI0();
-                            this.tryActualiseIch();
+                            typeEmetteurDeChaleur = (Chauffage.Emission) items.get("lastValue");
+                            this.actualiseEmetteurAllGenerateurs();
+                            this.actualiseI0();
+                            this.actualiseRendementGenerationAllChauffages();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            Chauffage.Emission type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR)){
-                                type = (Chauffage.Emission) chauffage_properties.get(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR);
-                            }
+                            Chauffage.Emission type = typeEmetteurDeChaleur;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2729,16 +2571,12 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            PresenceThermostatEnum presenceThermostat = (PresenceThermostatEnum) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR, presenceThermostat);
-                            this.tryActualiseI0();
-                            this.tryActualiseIch();
+                            presenceThermostat = (PresenceThermostatEnum) items.get("lastValue");
+                            this.actualiseI0();
+                            this.actualiseRendementGenerationAllChauffages();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            PresenceThermostatEnum type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR)){
-                                type = (PresenceThermostatEnum) chauffage_properties.get(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR);
-                            }
+                            PresenceThermostatEnum type = presenceThermostat;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2752,15 +2590,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            PresenceRobinetEnum presenceRobinet = (PresenceRobinetEnum) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.PRESENCE_ROBINET_THERMOSTATIQUE, presenceRobinet);
-                            this.actualiseRobinetAllGenerateurs(presenceRobinet);
+                            presenceRobinetThermostatique = (PresenceRobinetEnum) items.get("lastValue");
+                            this.actualiseRobinetAllGenerateurs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            PresenceRobinetEnum type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.PRESENCE_ROBINET_THERMOSTATIQUE)){
-                                type = (PresenceRobinetEnum) chauffage_properties.get(DpeEvent.PRESENCE_ROBINET_THERMOSTATIQUE);
-                            }
+                            PresenceRobinetEnum type = presenceRobinetThermostatique;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2774,15 +2608,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            ProgrammationSystemeEnum programmationSysteme = (ProgrammationSystemeEnum) items.get("lastValue");
-                            chauffage_properties.put(DpeEvent.SYSTEME_PROGRAMMABLE, programmationSysteme);
-                            this.tryActualiseI0();
+                            programmationSysteme = (ProgrammationSystemeEnum) items.get("lastValue");
+                            this.actualiseI0();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            ProgrammationSystemeEnum type = null;
-                            if (chauffage_properties.containsKey(DpeEvent.SYSTEME_PROGRAMMABLE)){
-                                type = (ProgrammationSystemeEnum) chauffage_properties.get(DpeEvent.SYSTEME_PROGRAMMABLE);
-                            }
+                            ProgrammationSystemeEnum type = programmationSysteme;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2795,53 +2625,35 @@ public class Dpe implements EventListener {
                     case TYPE_EQUIPEMENT_ECS:{
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        Layout layout = (Layout) items.get("layout");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            TypeEquipementEcsEnum typeEquipementEcs = (TypeEquipementEcsEnum) items.get("lastValue");
-                            if (typeEquipementEcs == TypeEquipementEcsEnum.CHAUDIERE) {
-                                if (chauffage_properties.containsKey(DpeEvent.INSTALLATION_CHAUFFAGE)) {
-                                    if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_UNIQUE)
-                                            && chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_UNIQUE)) {
-                                        Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_UNIQUE);
-                                        chauffage.setGenereEgalementEcs(true);
-                                        ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chauffage);
-                                        this.actualiseRendementsChauffage(chauffage);
-                                    } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS)
-                                            && chauffage_properties.containsKey(DpeEvent.CHAUFFAGE_SANS_POIL)) {
-                                        Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUFFAGE_SANS_POIL);
-                                        chauffage.setGenereEgalementEcs(true);
-                                        ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chauffage);
-                                        this.actualiseRendementsChauffage(chauffage);
-                                    } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS)
-                                            && chauffage_properties.containsKey(DpeEvent.CHAUDIERE_GAZ_FIOUL)) {
-                                        Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_GAZ_FIOUL);
-                                        chauffage.setGenereEgalementEcs(true);
-                                        ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chauffage);
-                                        this.actualiseRendementsChauffage(chauffage);
-                                    } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC)
-                                            && chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC)){
-                                        Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC);
-                                        chauffage.setGenereEgalementEcs(true);
-                                        ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chauffage);
-                                        this.actualiseRendementsChauffage(chauffage);
-                                    } else if (chauffage_properties.get(DpeEvent.INSTALLATION_CHAUFFAGE).equals(InstallationChauffageEnum.CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS)
-                                            && chauffage_properties.containsKey(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE)){
-                                        Chauffage chauffage = (Chauffage)chauffage_properties.get(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE);
-                                        chauffage.setGenereEgalementEcs(true);
-                                        ecs_properties.put(DpeEvent.CHAUDIERE_ECS, chauffage);
-                                        this.actualiseRendementsChauffage(chauffage);
-                                    }
+                            installationEcs = (TypeEquipementEcsEnum) items.get("lastValue");
+                            if(installationEcs == TypeEquipementEcsEnum.CHAUDIERE){
+                                chaudiereAssureChauffageEtEcs=true;
+                                switch(installationChauffage){
+                                    case CHAUFFAGE_UNIQUE:
+                                        chaudiereEcs=chauffageUnique;
+                                        break;
+                                    case CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS:
+                                        chaudiereEcs=chauffageAvecPoil;
+                                        break;
+                                    case CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS:
+                                        chaudiereEcs=chaudiereGaz;
+                                        break;
+                                    case CHAUDIERE_AVEC_PAC:
+                                        chaudiereEcs=chaudiereAvecPac;
+                                        break;
+                                    case CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS:
+                                        chaudiereEcs=chaudiereAvecPacEtPoil;
+                                        break;
                                 }
+                            }else{
+                                chaudiereAssureChauffageEtEcs=false;
                             }
-                            ecs_properties.put(DpeEvent.TYPE_EQUIPEMENT_ECS, typeEquipementEcs);
-                            this.actualisePrs1();
                             this.actualisePrs2();
-                            this.actualiseRendementEcs(typeEquipementEcs);
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-
-                            TypeEquipementEcsEnum type = (TypeEquipementEcsEnum) ecs_properties.get(DpeEvent.TYPE_EQUIPEMENT_ECS);
-
+                            TypeEquipementEcsEnum type = installationEcs;
                             HashMap<String, Object> currentItems = new HashMap<String, Object>();
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
@@ -2855,14 +2667,10 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            PresenceInstallationSolaireEnum isPresent= (PresenceInstallationSolaireEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.PRESENCE_INSTALLATION_SOLAIRE, isPresent);
+                            presenceInstallationSolaire = (PresenceInstallationSolaireEnum) items.get("lastValue");
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            PresenceInstallationSolaireEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT)){
-                                type = (PresenceInstallationSolaireEnum) ecs_properties.get(DpeEvent.PRESENCE_INSTALLATION_SOLAIRE);
-                            }
+                            PresenceInstallationSolaireEnum type = presenceInstallationSolaire;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2876,18 +2684,13 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            LocalEquipementEcsEnum localEquipementEcs= (LocalEquipementEcsEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.LOCAL_EQUIPEMENT_ECS, localEquipementEcs);
-                            this.actualiseLocalAllGenerateurs(localEquipementEcs);
-                            this.actualisePrs1();
+                            localEquipementEcs= (LocalEquipementEcsEnum) items.get("lastValue");
+                            this.actualiseLocalAllGenerateurs();
                             this.actualisePrs2();
-                            this.tryActualiseRendementEquipementEcs();
+                            this.actualiseRendementEcs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            LocalEquipementEcsEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.LOCAL_EQUIPEMENT_ECS)){
-                                type = (LocalEquipementEcsEnum) ecs_properties.get(DpeEvent.LOCAL_EQUIPEMENT_ECS);
-                            }
+                            LocalEquipementEcsEnum type = localEquipementEcs;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2901,15 +2704,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            UsageEauChaudeEnum usageEauChaude= (UsageEauChaudeEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.USAGE_EAU_CHAUDE, usageEauChaude);
-                            this.actualisebecs(usageEauChaude);
+                            usageEauChaude = (UsageEauChaudeEnum) items.get("lastValue");
+                            this.actualisebecs();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            UsageEauChaudeEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.USAGE_EAU_CHAUDE)){
-                                type = (UsageEauChaudeEnum) ecs_properties.get(DpeEvent.USAGE_EAU_CHAUDE);
-                            }
+                            UsageEauChaudeEnum type = usageEauChaude;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -2923,15 +2722,11 @@ public class Dpe implements EventListener {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
-                            DeclenchementChaudiereEnum declenchementChaudiere= (DeclenchementChaudiereEnum) items.get("lastValue");
-                            ecs_properties.put(DpeEvent.DECLENCHEMENT_CHAUDIERE_ROBINET, declenchementChaudiere);
-                            this.tryActualiseIch();
+                            declenchementChaudiere= (DeclenchementChaudiereEnum) items.get("lastValue");
+                            this.actualiseRendementGenerationAllChauffages();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
-                            DeclenchementChaudiereEnum type = null;
-                            if (ecs_properties.containsKey(DpeEvent.DECLENCHEMENT_CHAUDIERE_ROBINET)){
-                                type = (DeclenchementChaudiereEnum) ecs_properties.get(DpeEvent.DECLENCHEMENT_CHAUDIERE_ROBINET);
-                            }
+                            DeclenchementChaudiereEnum type = declenchementChaudiere;
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
@@ -3362,10 +3157,6 @@ public class Dpe implements EventListener {
                         break;
                     }
                     case PORTE_AJOUTE: {
-                        System.out.println(murList.size());
-                        for(Mur m : murList){
-                            System.out.println(m.toString());
-                        }
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Porte porte = (Porte) items.get("userObject");
                         porteList.add(porte);
