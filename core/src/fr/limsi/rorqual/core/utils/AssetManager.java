@@ -136,15 +136,15 @@ public class AssetManager {
         int dpi = (int)(160 * density);
         TextureAtlas atlas;
         System.out.println(density);
-        if (dpi < 140) { // ldpi ~ 0.6x
+        if (dpi <= 140) { // ldpi ~ 0.6x
             assets.put("uiskin", loadOnUi("data/ui/ldpi/uiskin.json", Skin.class));
             assets.put("uiskin.json", loadOnUi("data/ui/ldpi/uiskin.json", Skin.class));
             atlas = (TextureAtlas)loadOnUi("data/ui/ldpi/ui_001.atlas", TextureAtlas.class);
-        } else if (dpi < 200) { // mdpi ~ 1x
+        } else if (dpi <= 200) { // mdpi ~ 1x
             assets.put("uiskin", loadOnUi("data/ui/mdpi/uiskin.json", Skin.class));
             assets.put("uiskin.json", loadOnUi("data/ui/mdpi/uiskin.json", Skin.class));
             atlas = (TextureAtlas)loadOnUi("data/ui/mdpi/ui_001.atlas", TextureAtlas.class);
-        } else if (dpi < 380) { // hdpi ~ 1.5x
+        } else if (dpi <= 380) { // hdpi ~ 1.5x
             assets.put("uiskin", loadOnUi("data/ui/hdpi/uiskin.json", Skin.class));
             assets.put("uiskin.json", loadOnUi("data/ui/hdpi/uiskin.json", Skin.class));
             atlas = (TextureAtlas)loadOnUi("data/ui/hdpi/ui_001.atlas", TextureAtlas.class);
