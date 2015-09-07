@@ -1,5 +1,5 @@
 # usage:
-# blender foobar.blend --background --python convert_blend_to_fbx.py -- foobar.fbx
+# blender foobar.blend --background --python fbxexporter.py -- foobar.fbx
 
 import bpy
 import sys
