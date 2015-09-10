@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.UBJsonReader;
@@ -23,7 +24,9 @@ import com.badlogic.gdx.utils.UBJsonReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 import fr.limsi.rorqual.core.event.EventRequest;
@@ -39,16 +42,32 @@ public class ModelLibrary {
     private class ModelLoader {
 
         private Model model;
-        private JsonValue json;
+        private String modelFile;
+        private String iconFile;
         private String path;
-        private JsonValue fields;
+        private String fields;
         private String clazz;
 
-        public ModelLoader(final JsonValue json, final String path) {
-            this.json = json;
+        public ModelLoader(String path, I18NBundle i18n, int n) {
             this.path = path;
-            fields = json.get("properties");
-            clazz = json.getString("class");
+            fields = i18n.get("fields#"+n);
+            clazz = i18n.get("class#" + n);
+            if (clazz.startsWith("?"))
+                clazz = "fr.limsi.rorqual.core.model.Objet";
+            System.out.println(clazz);
+            String name = i18n.get("name#"+n);
+            String tags = i18n.get("tags#"+n);
+            String creationDate = i18n.get("creationDate#"+n);
+            String category = i18n.get("category#"+n);
+            iconFile = i18n.get("icon#"+n);
+            modelFile = i18n.get("model#"+n);
+            String multiPartModel = i18n.get("multiPartModel#"+n);
+            String width = i18n.get("width#"+n);
+            String depth = i18n.get("depth#"+n);
+            String height = i18n.get("height#"+n);
+            String dropOnTopElevation = i18n.get("dropOnTopElevation#"+n);
+            String doorOrWindow = i18n.get("doorOrWindow#" + n);
+            String creator = i18n.get("creator#"+n);
         }
 
         public ModelContainer getInstance() {
@@ -59,7 +78,7 @@ public class ModelLibrary {
                     public void run() {
                         UBJsonReader jsonReader = new UBJsonReader();
                         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-                        model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + json.getString("file") + ".g3db", Files.FileType.Internal));
+                        model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj","g3db"), Files.FileType.Internal));
                         container.setModel(model);
                     }
                 };
@@ -78,7 +97,7 @@ public class ModelLibrary {
                 if (obj instanceof ModelContainer) {
                     ModelContainer modelContainer = (ModelContainer) obj;
 
-                    setFields(obj);
+                    //setFields(obj);
 
                     return modelContainer;
                 }
@@ -92,7 +111,7 @@ public class ModelLibrary {
             }
             return null;
         }
-
+/*
         private void setFields(Object obj) {
             JsonValue.JsonIterator iterator = fields.iterator();
             while(iterator.hasNext()) {
@@ -126,7 +145,7 @@ public class ModelLibrary {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
 
         private Image image = null;
 
@@ -135,7 +154,7 @@ public class ModelLibrary {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        Texture t = new Texture(Gdx.files.internal(path + "/" + json.getString("file") + ".jpg"));
+                        Texture t = new Texture(Gdx.files.internal(path + "/" + iconFile));
                         image = new Image(t);
                     }
                 };
@@ -153,9 +172,9 @@ public class ModelLibrary {
 
     }
 
-    private int currentModel = 0;
+    private String currentModel = "";
 
-    public int getCurrentModelId() {
+    public String getCurrentModelId() {
         return currentModel;
     }
 
@@ -174,8 +193,8 @@ public class ModelLibrary {
         return ModelLibraryHolder.INSTANCE;
     }
 
-    static HashMap<String, HashMap<String, HashMap<Integer, ModelLoader>>> categories = new HashMap<String, HashMap<String, HashMap<Integer, ModelLoader>>>();
-    static HashMap<Integer, ModelLoader> models = new HashMap<Integer, ModelLoader>();
+    static HashMap<String, HashMap<String, ModelLoader>> categories = new HashMap<String, HashMap<String, ModelLoader>>();
+    static HashMap<String, ModelLoader> models = new HashMap<String, ModelLoader>();
 
     private void makeLibrary() {
         ArrayList<FileHandle> files = listFiles();
@@ -183,60 +202,95 @@ public class ModelLibrary {
     }
 
     private ArrayList<FileHandle> listFiles() {
-        FileHandle base = Gdx.files.getFileHandle("data/models/g3db/", Files.FileType.Internal);
-        return collectJsons(base);
-    }
-
-    private ArrayList<FileHandle> collectJsons(FileHandle directory) {
+        String[] folders = {
+                "3DModels-BlendSwap-CC-0-1.5.1/BlendSwap-CC-0.sh3f_FILES",
+                "3DModels-BlendSwap-CC-BY-1.5.1/BlendSwap-CC-BY.sh3f_FILES",
+                "3DModels-Contributions-1.5.1/Contributions.sh3f_FILES",
+                "3DModels-KatorLegaz-1.5.1/KatorLegaz.sh3f_FILES",
+                "3DModels-LucaPresidente-1.5.1/LucaPresidente.sh3f_FILES",
+                "3DModels-Scopia-1.5.1/Scopia.sh3f_FILES"
+        };
         ArrayList<FileHandle> files = new ArrayList<FileHandle>();
-        for (FileHandle file : directory.list()) {
-            if (file.isDirectory())
-                files.addAll(collectJsons(file));
-            else if (file.extension().equals("json"))
-                files.add(file);
+        for (String folder : folders) {
+            files.add(Gdx.files.getFileHandle("data/models/g3db/" + folder + "/PluginFurnitureCatalog", Files.FileType.Internal));
         }
         return files;
-
     }
 
     private void makeCategories(ArrayList<FileHandle> files) {
         for (FileHandle file: files) {
-            JsonValue json = new JsonReader().parse(file.readString());
-            String category = json.getString("category");
-            String subcategory = json.getString("subcategory");
-            Integer id = json.getInt("id");
-            if (!categories.containsKey(category))
-                categories.put(category, new HashMap<String, HashMap<Integer, ModelLoader>>());
-            if (!categories.get(category).containsKey(subcategory))
-                categories.get(category).put(subcategory, new HashMap<Integer, ModelLoader>());
-            ModelLoader model = new ModelLoader(json, file.parent().path());
-            categories.get(category).get(subcategory).put(id, model);
-            models.put(id, model);
+            I18NBundle i18n = I18NBundle.createBundle(file, Locale.FRENCH);
+
+            int n = 1;
+            do {
+                try {
+                    /*
+                    id#1=Blend Swap CC-0#armchair
+                    name#1=Armchair
+                    tags#1=Blend Swap, Seat
+                    creationDate#1=2013-09-05
+                    category#1=Office
+                    icon#1=/blendswap-cc-0/armchair.png
+                    model#1=/blendswap-cc-0/armchair/armchair.obj
+                    multiPartModel#1=true
+                    width#1=65.1
+                    depth#1=68.7
+                    height#1=115.0
+                    dropOnTopElevation#1=51.3
+                    movable#1=true
+                    doorOrWindow#1=false
+                    creator#1=Absfrm
+                     */
+                    i18n.setExceptionOnMissingKey(true);
+                    String id = i18n.get("id#"+n);
+                    i18n.setExceptionOnMissingKey(false);
+                    String category = i18n.get("category#"+n);
+
+                    if (!categories.containsKey(category))
+                        categories.put(category, new HashMap<String, ModelLoader>());
+
+                    if (Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n).replace("obj","g3db"), Files.FileType.Internal).exists()
+                            && Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).exists()
+                            ) {
+
+                        ModelLoader modelLoader = new ModelLoader(file.parent().path(), i18n, n);
+                        categories.get(category).put(id, modelLoader);
+                        models.put(id, modelLoader);
+
+                    }
+
+                    // end
+                    n++;
+
+                } catch (MissingResourceException mre) {
+                    break;
+                }
+            } while (true);
         }
     }
 
-    private HashMap<String, TabWindow> tabWindows = new HashMap<String, TabWindow>();
+    private TabWindow tabWindow = null;
 
-    public TabWindow getTabWindow(String category) {
-        if (!tabWindows.containsKey(category))
-            makeTabWindow(category);
-        return tabWindows.get(category);
+    public TabWindow getTabWindow() {
+        if (tabWindow ==null)
+            makeTabWindow();
+        return tabWindow;
     }
 
     public Set<String> getCategories() {
         return categories.keySet();
     }
 
-    private void makeTabWindow(String category) {
-        HashMap<String, HashMap<Integer, ModelLoader>> subcategories = categories.get(category);
+    private void makeTabWindow() {
         TabWindow tw = new TabWindow(400);
-        tw.setTitle(category);
-        for (Map.Entry<String, HashMap<Integer, ModelLoader>> entry : subcategories.entrySet())
-            makeNewTab(tw, entry.getKey(), entry.getValue());
-        tabWindows.put(category, tw);
+        tw.setTitle("Bibliothèque");
+        for (Map.Entry<String, HashMap<String, ModelLoader>> entry : categories.entrySet())
+            if (!entry.getValue().isEmpty())
+                makeNewTab(tw, entry.getKey(), entry.getValue());
+        tabWindow = tw;
     }
 
-    private void makeNewTab(TabWindow tw, String subcategory, HashMap<Integer, ModelLoader> models) {
+    private void makeNewTab(TabWindow tw, String category, HashMap<String, ModelLoader> models) {
 
         Table content = new Table();
         content.setSize(400,400);
@@ -245,8 +299,8 @@ public class ModelLibrary {
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
-        for (Map.Entry<Integer, ModelLoader> entry : models.entrySet()) {
-            final int id = entry.getKey();
+        for (Map.Entry<String, ModelLoader> entry : models.entrySet()) {
+            final String id = entry.getKey();
             ModelLoader modelLoader = entry.getValue();
 
             Image image = modelLoader.getImage();
@@ -281,13 +335,14 @@ public class ModelLibrary {
 
         Table t = new Table();
         t.add(scrollPane).size(400,400).top().left();
-        t.setName(subcategory);
+        t.setName(category);
 
         tw.addTable(t);
+        tw.setDebug(true, true);
 
     }
 
-    public ModelContainer getModelFromId(int id) {
+    public ModelContainer getModelFromId(String id) {
         return models.get(id).getInstance();
     }
 }

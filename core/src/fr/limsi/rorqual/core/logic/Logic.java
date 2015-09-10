@@ -42,7 +42,7 @@ public class Logic implements InputProcessor {
     public void startFenetre() {
         stop();
 
-        modelMaker = new OuvertureMaker(2);
+        //modelMaker = new OuvertureMaker(2);
     }
 
     public void move() {
@@ -65,7 +65,7 @@ public class Logic implements InputProcessor {
     public void startPorte() {
         stop();
 
-        modelMaker = new OuvertureMaker(1);
+        //modelMaker = new OuvertureMaker(1);
 
     }
 

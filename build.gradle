@@ -77,15 +77,15 @@ project(":core") {
     task convert {
 
         // copy textures
-        FileTree textures = fileTree(dir: '../android/assets/data/models/blend/', exclude: '**/*.blend*')
+        FileTree textures = fileTree(dir: '../android/assets/data/models/obj/', exclude: ['**/*.obj*','**/*.mtl*'])
 
         task copyTextures {
 
-            inputs.dir file('../android/assets/data/models/blend/')
+            inputs.dir file('../android/assets/data/models/obj/')
             outputs.dir file('../android/assets/data/models/g3db/')
 
             textures.each { File file ->
-                File target_g3db = new File(file.getPath().replaceAll('blend', 'g3db'))
+                File target_g3db = new File(file.getPath().replaceAll('obj', 'g3db'))
 
                 copy {
                     from file
@@ -101,24 +101,24 @@ project(":core") {
         properties.load(project.rootProject.file('build.properties').newDataInputStream())
         def blender = properties.getProperty('blender')
 
-        FileTree tree = fileTree(dir: '../android/assets/data/models/blend/', include: '**/*.blend')
+        FileTree tree = fileTree(dir: '../android/assets/data/models/obj/', include: '**/*.obj')
 
         tree.each { File file ->
             task "makeFBX${file.path}"(type: Exec) {
 
                 // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
-                File target = new File(file.getPath().replaceAll('blend', 'fbx'))
+                File target = new File(file.getPath().replaceAll('obj', 'fbx'))
 
                 inputs.file file
-                outputs.file target
+                outputs.dir target.getParent()
 
                 doFirst {
                     target.getParentFile().mkdirs()
                 }
 
                 //linux
-                // blender foobar.blend --background --python fbxexporter.py -- foobar.fbx
-                commandLine blender, '-b', file, '--python', "$projectDir/../android/assets/data/models/scripts/fbxexporter.py", '--', target
+                // blender --background --python objtofbx.py -- foobar.obj foobar.fbx
+                commandLine blender, '--background', '--python', "$projectDir/../android/assets/data/models/scripts/objtofbx.py", '--', file, target
 
                 standardOutput = new ByteArrayOutputStream()
 
@@ -129,51 +129,14 @@ project(":core") {
 
             convert.dependsOn "makeFBX${file.path}"
 
-            task "makeMiniature${file.path}"(type: Exec, dependsOn:"makeFBX${file.path}") {
-
-                // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
-                File target = new File(file.getPath().replaceAll('blend', 'g3db'))
-
-                doFirst {
-                    target.getParentFile().mkdirs()
-                }
-
-                // remove extension
-                String output = target.path.lastIndexOf('.').with {
-                    it != -1 ? target.path[0..<it] : target.path
-                }
-
-                inputs.file file
-                outputs.dir target
-
-                //linux
-                // blender -b file.blend -o //file -F JPEG -x 1 -f 1
-
-                commandLine blender, '-b', file, '-o', output + '#', '-F', 'JPEG', '-x', '1', '-f', '1'
-
-                standardOutput = new ByteArrayOutputStream()
-
-                ext.output = {
-                    return standardOutput.toString()
-                }
-
-                doLast {
-                    // remove trailing frame number
-                    new File(output + '1.jpg').renameTo(new File(output + '.jpg'))
-                }
-
-            }
-
-            convert.dependsOn "makeMiniature${file.path}"
-
             task "makeG3DB${file.path}"(type: Exec, dependsOn:"makeFBX${file.path}") {
 
                 // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
-                File input = new File(file.getPath().replaceAll('blend', 'fbx'))
-                File target = new File(file.getPath().replaceAll('blend', 'g3db'))
+                File input = new File(file.getPath().replaceAll('obj', 'fbx'))
+                File target = new File(file.getPath().replaceAll('obj', 'g3db'))
 
                 inputs.file file
-                outputs.dir target
+                outputs.dir target.getParent()
 
                 workingDir '../android/assets/data/models/fbx-conv/'
                 environment('LD_LIBRARY_PATH', '.')

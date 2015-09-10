@@ -16,9 +16,9 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 public class OuvertureMaker extends ModelMaker {
 
-    int modelId;
+    String modelId;
 
-    public OuvertureMaker(int modelId) {
+    public OuvertureMaker(String modelId) {
         this.modelId = modelId;
     }
 

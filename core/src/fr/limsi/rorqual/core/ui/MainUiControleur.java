@@ -161,7 +161,7 @@ public class MainUiControleur implements EventListener {
                             break;
                         case MENUISERIE:
                             if (button.isChecked())
-                                addTb(ModelLibrary.getInstance().getTabWindow("Menuiserie"));
+                                addTb(ModelLibrary.getInstance().getTabWindow());
                             else
                                 Logic.getInstance().stop();
                             break;
