@@ -6,6 +6,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -31,6 +33,7 @@ import java.util.Set;
 
 import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -47,6 +50,11 @@ public class ModelLibrary {
         private String path;
         private String fields;
         private String clazz;
+        private float width = 0;
+        private float depth = 0;
+        private float height = 0;
+        private float dropOnTopElevation = 0;
+        private float elevation = 0;
 
         public ModelLoader(String path, I18NBundle i18n, int n) {
             this.path = path;
@@ -54,7 +62,6 @@ public class ModelLibrary {
             clazz = i18n.get("class#" + n);
             if (clazz.startsWith("?"))
                 clazz = "fr.limsi.rorqual.core.model.Objet";
-            System.out.println(clazz);
             String name = i18n.get("name#"+n);
             String tags = i18n.get("tags#"+n);
             String creationDate = i18n.get("creationDate#"+n);
@@ -62,10 +69,12 @@ public class ModelLibrary {
             iconFile = i18n.get("icon#"+n);
             modelFile = i18n.get("model#"+n);
             String multiPartModel = i18n.get("multiPartModel#"+n);
-            String width = i18n.get("width#"+n);
-            String depth = i18n.get("depth#"+n);
-            String height = i18n.get("height#"+n);
-            String dropOnTopElevation = i18n.get("dropOnTopElevation#"+n);
+
+            width = i18n.get("width#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("width#"+n));
+            depth = i18n.get("depth#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("depth#" + n));
+            height = i18n.get("height#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("height#" + n));
+            dropOnTopElevation = i18n.get("dropOnTopElevation#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("dropOnTopElevation#" + n));
+            elevation = i18n.get("elevation#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("elevation#" + n));
             String doorOrWindow = i18n.get("doorOrWindow#" + n);
             String creator = i18n.get("creator#"+n);
         }
@@ -80,6 +89,8 @@ public class ModelLibrary {
                         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
                         model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj","g3db"), Files.FileType.Internal));
                         container.setModel(model);
+
+                        toScale(container);
                     }
                 };
 
@@ -87,8 +98,24 @@ public class ModelLibrary {
             }
             else {
                 container.setModel(model);
+                toScale(container);
             }
             return container;
+        }
+
+        private void toScale(ModelContainer container) {
+
+            BoundingBox b = new BoundingBox();
+            container.calculateBoundingBox(b);
+            //container.model_transform.idt().scale(1 / 10000f, 1 / 10000f, 1 / 10000f);
+            Vector3 min = new Vector3();
+            b.getMin(min);
+            container.model_transform // TODO: is it X or Y ?
+                    .translate(0, 0, Slab.DEFAULT_HEIGHT - min.y * 0.01f * height / b.getHeight() + 0.01f * elevation)
+                    .scale(0.01f * width / b.getWidth(), 0.01f * height / b.getHeight(), 0.01f * depth / b.getDepth())
+                    .rotate(1, 0, 0, 90)
+                    ;
+
         }
 
         private ModelContainer newInstance() {

@@ -46,6 +46,8 @@ public class Objet extends ModelContainer {
     public Objet() {
     }
 
+    private Slab slab = null;
+
     private Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
         float min_dist = -1;
         Vector3 intersection = null;
@@ -102,5 +104,13 @@ public class Objet extends ModelContainer {
             intersection = getIntersection(ray, global_transform.cpy().mul(model_transform));
             return intersection == null ? -1 : intersection.dst(ray.origin);
         }
+    }
+
+    public void setSlab(Slab s) {
+        if (slab != null)
+            slab.remove(this);
+        if (s != null)
+            s.add(this);
+        slab = s;
     }
 }

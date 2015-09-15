@@ -5,7 +5,10 @@ import com.badlogic.gdx.InputProcessor;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import fr.limsi.rorqual.core.model.Objet;
+import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
  * Created by christophe on 20/03/15.
@@ -59,7 +62,12 @@ public class Logic implements InputProcessor {
 
     public void startModel() {
         stop();
-        modelMaker = new OuvertureMaker(ModelLibrary.getInstance().getCurrentModelId());
+        String id = ModelLibrary.getInstance().getCurrentModelId();
+        ModelContainer model = ModelLibrary.getInstance().getModelFromId(id);
+        if (model instanceof Ouverture)
+            modelMaker = new OuvertureMaker(id);
+        else if (model instanceof Objet)
+            modelMaker = new ObjetMaker(id);
     }
 
     public void startPorte() {
