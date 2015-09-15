@@ -461,120 +461,55 @@ public class Fenetre extends Ouverture {
     }
     public float actualiseCoeffTransmissionThermiqueAvecFermeture(float uDevantEtreActualise){
         float nouveauU=uDevantEtreActualise;
+        float uMapping[][] = {
+                {1.3f, 1.1f, 1.1f, 1.1f},
+                {1.4f, 1.2f, 1.2f, 1.2f},
+                {1.5f, 1.3f, 1.3f, 1.3f},
+                {1.6f, 1.4f, 1.4f, 1.3f},
+                {1.7f, 1.5f, 1.5f, 1.4f},
+                {1.8f, 1.6f, 1.5f, 1.5f},
+                {1.9f, 1.7f, 1.6f, 1.6f},
+                {2.0f, 1.8f, 1.7f, 1.6f},
+                {2.1f, 1.9f, 1.8f, 1.7f},
+                {2.2f, 1.9f, 1.9f, 1.8f},
+                {2.3f, 2.0f, 1.9f, 1.9f},
+                {2.4f, 2.1f, 2.0f, 2.0f},
+                {2.5f, 2.2f, 2.1f, 2.0f},
+                {2.6f, 2.3f, 2.2f, 2.1f},
+                {2.7f, 2.4f, 2.3f, 2.2f},
+                {2.8f, 2.5f, 2.3f, 2.2f},
+                {2.9f, 2.5f, 2.4f, 2.3f},
+                {3.0f, 2.6f, 2.5f, 2.4f},
+                {3.2f, 2.7f, 2.6f, 2.5f},
+                {3.4f, 2.9f, 2.7f, 2.6f},
+                {3.6f, 3.0f, 2.9f, 2.7f},
+                {3.8f, 3.2f, 3.0f, 2.9f},
+                {4.0f, 3.4f, 3.1f, 3.0f},
+                {4.2f, 3.5f, 3.3f, 3.1f},
+                {4.4f, 3.7f, 3.4f, 3.3f},
+                {4.6f, 3.8f, 3.6f, 3.4f},
+                {4.8f, 4.0f, 3.7f, 3.5f},
+                {5.0f, 4.1f, 3.8f, 3.7f},
+                {5.2f, 4.3f, 4.0f, 3.8f},
+                {5.4f, 4.4f, 4.1f, 3.9f},
+                {5.6f, 4.6f, 4.2f, 4.0f},
+                {5.8f, 4.7f, 4.4f, 4.2f},
+                {6.0f, 4.9f, 4.5f, 4.3f},
+                {6.2f, 5.0f, 4.6f, 4.4f},
+                {Float.MAX_VALUE, 5.2f, 4.8f, 4.5f}
+        };
         switch(typeFermeture){
             case JALOUSIE_ACCORDEON:
             case VOLET_BATTANT_AVEC_AJOURES_FIXES:
-                if (uDevantEtreActualise<1.3){nouveauU=1.1f;}
-                else if (uDevantEtreActualise<1.4){nouveauU=1.2f;}
-                else if (uDevantEtreActualise<1.5){nouveauU=1.3f;}
-                else if (uDevantEtreActualise<1.6){nouveauU=1.4f;}
-                else if (uDevantEtreActualise<1.7){nouveauU=1.5f;}
-                else if (uDevantEtreActualise<1.8){nouveauU=1.6f;}
-                else if (uDevantEtreActualise<1.9){nouveauU=1.7f;}
-                else if (uDevantEtreActualise<2.0){nouveauU=1.8f;}
-                else if (uDevantEtreActualise<2.1){nouveauU=1.9f;}
-                else if (uDevantEtreActualise<2.2){nouveauU=1.9f;}
-                else if (uDevantEtreActualise<2.3){nouveauU=2.0f;}
-                else if (uDevantEtreActualise<2.4){nouveauU=2.1f;}
-                else if (uDevantEtreActualise<2.5){nouveauU=2.2f;}
-                else if (uDevantEtreActualise<2.6){nouveauU=2.3f;}
-                else if (uDevantEtreActualise<2.7){nouveauU=2.4f;}
-                else if (uDevantEtreActualise<2.8){nouveauU=2.5f;}
-                else if (uDevantEtreActualise<2.9){nouveauU=2.5f;}
-                else if (uDevantEtreActualise<3.0){nouveauU=2.6f;}
-                else if (uDevantEtreActualise<3.2){nouveauU=2.7f;}
-                else if (uDevantEtreActualise<3.4){nouveauU=2.9f;}
-                else if (uDevantEtreActualise<3.6){nouveauU=3.0f;}
-                else if (uDevantEtreActualise<3.8){nouveauU=3.2f;}
-                else if (uDevantEtreActualise<4.0){nouveauU=3.4f;}
-                else if (uDevantEtreActualise<4.2){nouveauU=3.5f;}
-                else if (uDevantEtreActualise<4.4){nouveauU=3.7f;}
-                else if (uDevantEtreActualise<4.6){nouveauU=3.8f;}
-                else if (uDevantEtreActualise<4.8){nouveauU=4.0f;}
-                else if (uDevantEtreActualise<5.0){nouveauU=4.1f;}
-                else if (uDevantEtreActualise<5.2){nouveauU=4.3f;}
-                else if (uDevantEtreActualise<5.4){nouveauU=4.4f;}
-                else if (uDevantEtreActualise<5.6){nouveauU=4.6f;}
-                else if (uDevantEtreActualise<5.8){nouveauU=4.7f;}
-                else if (uDevantEtreActualise<6.0){nouveauU=4.9f;}
-                else if (uDevantEtreActualise<6.2){nouveauU=5.0f;}
-                else if (uDevantEtreActualise>=6.2){nouveauU=5.2f;}
+                for (float[] us : uMapping) nouveauU = uDevantEtreActualise < us[0] ? us[1] : nouveauU;
                 break;
             case VOLET_ROULANT_EN_METAL:
             case FERMETURE_SANS_AJOURES:
-                if (uDevantEtreActualise<1.3f){nouveauU=1.1f;}
-                else if (uDevantEtreActualise<1.4){nouveauU=1.2f;}
-                else if (uDevantEtreActualise<1.5){nouveauU=1.3f;}
-                else if (uDevantEtreActualise<1.6){nouveauU=1.4f;}
-                else if (uDevantEtreActualise<1.7){nouveauU=1.5f;}
-                else if (uDevantEtreActualise<1.8){nouveauU=1.5f;}
-                else if (uDevantEtreActualise<1.9){nouveauU=1.6f;}
-                else if (uDevantEtreActualise<2.0){nouveauU=1.7f;}
-                else if (uDevantEtreActualise<2.1){nouveauU=1.8f;}
-                else if (uDevantEtreActualise<2.2){nouveauU=1.9f;}
-                else if (uDevantEtreActualise<2.3){nouveauU=1.9f;}
-                else if (uDevantEtreActualise<2.4){nouveauU=2.0f;}
-                else if (uDevantEtreActualise<2.5){nouveauU=2.1f;}
-                else if (uDevantEtreActualise<2.6){nouveauU=2.2f;}
-                else if (uDevantEtreActualise<2.7){nouveauU=2.3f;}
-                else if (uDevantEtreActualise<2.8){nouveauU=2.3f;}
-                else if (uDevantEtreActualise<2.9){nouveauU=2.4f;}
-                else if (uDevantEtreActualise<3.0){nouveauU=2.5f;}
-                else if (uDevantEtreActualise<3.2){nouveauU=2.6f;}
-                else if (uDevantEtreActualise<3.4){nouveauU=2.7f;}
-                else if (uDevantEtreActualise<3.6){nouveauU=2.9f;}
-                else if (uDevantEtreActualise<3.8){nouveauU=3.0f;}
-                else if (uDevantEtreActualise<4.0){nouveauU=3.1f;}
-                else if (uDevantEtreActualise<4.2){nouveauU=3.3f;}
-                else if (uDevantEtreActualise<4.4){nouveauU=3.4f;}
-                else if (uDevantEtreActualise<4.6){nouveauU=3.6f;}
-                else if (uDevantEtreActualise<4.8){nouveauU=3.7f;}
-                else if (uDevantEtreActualise<5.0){nouveauU=3.8f;}
-                else if (uDevantEtreActualise<5.2){nouveauU=4.0f;}
-                else if (uDevantEtreActualise<5.4){nouveauU=4.1f;}
-                else if (uDevantEtreActualise<5.6){nouveauU=4.2f;}
-                else if (uDevantEtreActualise<5.8){nouveauU=4.4f;}
-                else if (uDevantEtreActualise<6.0){nouveauU=4.5f;}
-                else if (uDevantEtreActualise<6.2){nouveauU=4.6f;}
-                else if (uDevantEtreActualise>=6.2){nouveauU=4.8f;}
+                for (float[] us : uMapping) nouveauU = uDevantEtreActualise < us[0] ? us[2] : nouveauU;
                 break;
             case VOLET_BATTANT_BOIS:
             case VOLET_ROULANT_PVC:
-                if (uDevantEtreActualise<1.3){nouveauU=1.1f;}
-                else if (uDevantEtreActualise<1.4){nouveauU=1.2f;}
-                else if (uDevantEtreActualise<1.5){nouveauU=1.3f;}
-                else if (uDevantEtreActualise<1.6){nouveauU=1.3f;}
-                else if (uDevantEtreActualise<1.7){nouveauU=1.4f;}
-                else if (uDevantEtreActualise<1.8){nouveauU=1.5f;}
-                else if (uDevantEtreActualise<1.9){nouveauU=1.6f;}
-                else if (uDevantEtreActualise<2.0){nouveauU=1.6f;}
-                else if (uDevantEtreActualise<2.1){nouveauU=1.7f;}
-                else if (uDevantEtreActualise<2.2){nouveauU=1.8f;}
-                else if (uDevantEtreActualise<2.3){nouveauU=1.9f;}
-                else if (uDevantEtreActualise<2.4){nouveauU=2.0f;}
-                else if (uDevantEtreActualise<2.5){nouveauU=2.0f;}
-                else if (uDevantEtreActualise<2.6){nouveauU=2.1f;}
-                else if (uDevantEtreActualise<2.7){nouveauU=2.2f;}
-                else if (uDevantEtreActualise<2.8){nouveauU=2.2f;}
-                else if (uDevantEtreActualise<2.9){nouveauU=2.3f;}
-                else if (uDevantEtreActualise<3.0){nouveauU=2.4f;}
-                else if (uDevantEtreActualise<3.2){nouveauU=2.5f;}
-                else if (uDevantEtreActualise<3.4){nouveauU=2.6f;}
-                else if (uDevantEtreActualise<3.6){nouveauU=2.7f;}
-                else if (uDevantEtreActualise<3.8){nouveauU=2.9f;}
-                else if (uDevantEtreActualise<4.0){nouveauU=3.0f;}
-                else if (uDevantEtreActualise<4.2){nouveauU=3.1f;}
-                else if (uDevantEtreActualise<4.4){nouveauU=3.3f;}
-                else if (uDevantEtreActualise<4.6){nouveauU=3.4f;}
-                else if (uDevantEtreActualise<4.8){nouveauU=3.5f;}
-                else if (uDevantEtreActualise<5.0){nouveauU=3.7f;}
-                else if (uDevantEtreActualise<5.2){nouveauU=3.8f;}
-                else if (uDevantEtreActualise<5.4){nouveauU=3.9f;}
-                else if (uDevantEtreActualise<5.6){nouveauU=4.0f;}
-                else if (uDevantEtreActualise<5.8){nouveauU=4.2f;}
-                else if (uDevantEtreActualise<6.0){nouveauU=4.3f;}
-                else if (uDevantEtreActualise<6.2){nouveauU=4.4f;}
-                else if (uDevantEtreActualise>=6.2){nouveauU=4.5f;}
+                for (float[] us : uMapping) nouveauU = uDevantEtreActualise < us[0] ? us[3] : nouveauU;
                 break;
             case SANS_FERMETURE:
                 break;
