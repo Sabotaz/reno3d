@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -20,9 +21,16 @@ public class StyleFactory {
     public static TextButton.TextButtonStyle getTextButtonStyle(String ... params) {
         assert params.length == 4;
 
-        Drawable up = (Drawable)getDrawable(params[0]);
-        Drawable down = (Drawable)getDrawable(params[1]);
-        Drawable checked = (Drawable)getDrawable(params[2]);
+        Object[] drawables = {
+                getDrawable(params[0]),
+                getDrawable(params[1]),
+                getDrawable(params[2]),
+                getFont(params[3])
+        };
+
+        Drawable up = drawables[0] instanceof Texture ? new TextureRegionDrawable(new TextureRegion((Texture)drawables[0])) : (Drawable) drawables[0];
+        Drawable down = drawables[1] instanceof Texture ? new TextureRegionDrawable(new TextureRegion((Texture)drawables[1])) : (Drawable) drawables[1];
+        Drawable checked = drawables[2] instanceof Texture ? new TextureRegionDrawable(new TextureRegion((Texture)drawables[2])) : (Drawable) drawables[2];
         BitmapFont font = getFont(params[3]);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(up, down, checked, font);

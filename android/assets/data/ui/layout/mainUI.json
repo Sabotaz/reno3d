@@ -11,16 +11,16 @@
       "type": "ButtonGroup",
       "content": [
         {
-          "type": "TextButton",
+          "type": "Button",
           "text": "EXIT",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.EXIT",
-          "height": "5%",
+          "height": "auto",
           "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
+            "texture:close",
+            "texture:close:tint:CCCCCC",
             null,
             "default.fnt"
           ]
@@ -82,16 +82,16 @@
       "type": "ButtonGroup",
       "content": [
         {
-          "type": "TextButton",
+          "type": "Button",
           "text": "2D/3D",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
-          "height": "5%",
+          "height": "auto",
           "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
+            "texture:camera",
+            "texture:camera:tint:CCCCCC",
             null,
             "default.fnt"
           ]
@@ -103,77 +103,77 @@
       "minChecked": 0,
       "content": [
         {
-          "type": "TextButton",
+          "type": "Button",
           "text": "MUR",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
-          "height": "5%",
+          "height": "auto",
           "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
-            "skin:uiskin.json:default-round-down",
+            "texture:wall",
+            "texture:wall:tint:CCCCCC",
+            "texture:wall:tint:CCCCCC",
             "default.fnt"
           ]
         },
         {
-          "type": "TextButton",
+          "type": "Button",
           "text": "PIECE",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.PIECE",
-          "height": "5%",
+          "height": "auto",
           "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
-            "skin:uiskin.json:default-round-down",
+            "texture:room",
+            "texture:room:tint:CCCCCC",
+            "texture:room:tint:CCCCCC",
             "default.fnt"
           ]
         },
         {
-          "type": "TextButton",
+          "type": "Button",
           "text": "MENUISERIE",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
-          "height": "5%",
+          "height": "auto",
           "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
-            "skin:uiskin.json:default-round-down",
+            "texture:mobilier",
+            "texture:mobilier:tint:CCCCCC",
+            "texture:mobilier:tint:CCCCCC",
             "default.fnt"
           ]
         },
         {
-          "type": "TextButton",
+          "type": "Button",
           "text": "Modifier",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
-          "height": "5%",
+          "height": "auto",
           "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
-            "skin:uiskin.json:default-round-down",
+            "texture:move",
+            "texture:move:tint:CCCCCC",
+            "texture:move:tint:CCCCCC",
             "default.fnt"
           ]
         },
         {
-          "type": "TextButton",
+          "type": "Button",
           "text": "Supprimer",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.DELETE",
-          "height": "5%",
+          "height": "auto",
           "width": "8%",
           "padTop": 10,
           "padRight": 10,
           "style": [
-            "skin:uiskin.json:default-round",
-            "skin:uiskin.json:default-round-down",
-            "skin:uiskin.json:default-round-down",
+            "texture:delete",
+            "texture:delete:tint:CCCCCC",
+            "texture:delete:tint:CCCCCC",
             "default.fnt"
           ]
         }

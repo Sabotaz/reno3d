@@ -199,6 +199,13 @@ public class AssetManager {
         textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
         textures.put("roulette", "data/ui/roulette.png");
         textures.put("roulette_arriere", "data/ui/roulette_arriere.png");
+        textures.put("camera", "data/ui/camera.png");
+        textures.put("close", "data/ui/close.png");
+        textures.put("delete", "data/ui/delete.png");
+        textures.put("mobilier", "data/ui/mobilier.jpg");
+        textures.put("move", "data/ui/move.png");
+        textures.put("room", "data/ui/room.png");
+        textures.put("wall", "data/ui/wall.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
