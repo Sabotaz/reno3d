@@ -6,27 +6,9 @@
   "event": "fr.limsi.rorqual.core.event.UiEvent.BUTTON_CLICKED",
   "position": "top-right",
   "align": "right",
+  "layout": "column",
+  "expand":false,
   "content": [
-    {
-      "type": "ButtonGroup",
-      "content": [
-        {
-          "type": "Button",
-          "text": "EXIT",
-          "value": "fr.limsi.rorqual.core.event.ButtonValue.EXIT",
-          "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
-          "style": [
-            "texture:close",
-            "texture:close:tint:CCCCCC",
-            null,
-            "default.fnt"
-          ]
-        }
-      ]
-    },
     {
       "type": "ButtonGroup",
       "layout": "column",
@@ -80,15 +62,15 @@
     },
     {
       "type": "ButtonGroup",
+      "layout": "column",
+      "align": "right",
       "content": [
         {
           "type": "Button",
           "text": "2D/3D",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "texture:camera",
             "texture:camera:tint:CCCCCC",
@@ -100,6 +82,7 @@
     },
     {
       "type": "ButtonGroup",
+      "layout": "column",
       "minChecked": 0,
       "content": [
         {
@@ -107,9 +90,7 @@
           "text": "MUR",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "texture:wall",
             "texture:wall:tint:CCCCCC",
@@ -122,9 +103,7 @@
           "text": "PIECE",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.PIECE",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "texture:room",
             "texture:room:tint:CCCCCC",
@@ -137,9 +116,7 @@
           "text": "MENUISERIE",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "texture:mobilier",
             "texture:mobilier:tint:CCCCCC",
@@ -152,9 +129,7 @@
           "text": "Modifier",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "texture:move",
             "texture:move:tint:CCCCCC",
@@ -167,9 +142,7 @@
           "text": "Supprimer",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.DELETE",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "texture:delete",
             "texture:delete:tint:CCCCCC",
@@ -181,15 +154,14 @@
     },
     {
       "type": "ButtonGroup",
+      "layout": "column",
       "content": [
         {
           "type": "Button",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.DPE",
           "name": "dpe",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "atlas:ui_001.atlas:dpe",
             "atlas:ui_001.atlas:dpe:tint:CCCCCC",
@@ -202,9 +174,7 @@
           "value": "fr.limsi.rorqual.core.event.ButtonValue.CHAUFFAGE",
           "name": "chauffage",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "atlas:ui_001.atlas:chauffage",
             "atlas:ui_001.atlas:chauffage:tint:CCCCCC",
@@ -216,9 +186,7 @@
           "type": "CircularJauge",
           "id": "dpe_jauge",
           "height": "auto",
-          "width": "8%",
-          "padTop": 10,
-          "padRight": 10,
+          "width": "5%",
           "style": [
             "texture:roulette",
             "texture:roulette_arriere"

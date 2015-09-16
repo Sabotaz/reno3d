@@ -322,7 +322,8 @@ public class Layout {
             while ((json_child = json.get("content").get(i)) != null) {
                 if ((child = getActor(json_child, updater, table)) != null) {
                     Cell c = table.add(child);
-                    c.expandX().fillX().left();
+                    if (json.getBoolean("expand", true))
+                        c.expandX().fillX();
 
                     c.pad(json_child.getFloat("pad", 1));
                     c.padTop(json_child.getFloat("padTop", 1));
@@ -330,8 +331,20 @@ public class Layout {
                     c.padLeft(json_child.getFloat("padLeft", 1));
                     c.padRight(json_child.getFloat("padRight", 1));
 
-                    if (row)
-                        c.left().row();
+                    switch (align) {
+                        case "left":
+                            c.left();
+                            break;
+                        case "right":
+                            c.right();
+                            break;
+                        case "center":
+                            c.center();
+                            break;
+                    }
+
+                    if (row || json_child.getBoolean("row",false))
+                        c.row();
                 }
                 i++;
             }
@@ -358,7 +371,7 @@ public class Layout {
                     table.setX(0);
                     break;
                 case "right":
-                    table.setX(Gdx.graphics.getWidth() - table.getPrefWidth());
+                    table.setX(Gdx.graphics.getWidth() - (align.equals("right") ? 0 : table.getPrefWidth()));
                     break;
                 case "center":
                     table.setX(Gdx.graphics.getWidth()/2);
@@ -403,14 +416,25 @@ public class Layout {
 
                     c.size(child.getWidth(), child.getHeight());
 
-                        c.pad(json_child.getFloat("pad", 1));
-                        c.padTop(json_child.getFloat("padTop", 1));
-                        c.padBottom(json_child.getFloat("padBottom", 1));
-                        c.padLeft(json_child.getFloat("padLeft", 1));
-                        c.padRight(json_child.getFloat("padRight", 1));
+                    c.pad(json_child.getFloat("pad", 1));
+                    c.padTop(json_child.getFloat("padTop", 1));
+                    c.padBottom(json_child.getFloat("padBottom", 1));
+                    c.padLeft(json_child.getFloat("padLeft", 1));
+                    c.padRight(json_child.getFloat("padRight", 1));
+                    switch (align) {
+                        case "left":
+                            c.left();
+                            break;
+                        case "right":
+                            c.right();
+                            break;
+                        case "center":
+                            c.center();
+                            break;
+                    }
 
                     if (row)
-                        c.left().row();
+                        c.row();
 
                     if (child instanceof Button) {
                         buttons.add((Button)child);
