@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.ui;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
@@ -226,6 +227,7 @@ public class ModelLibrary {
     private void makeLibrary() {
         ArrayList<FileHandle> files = listFiles();
         makeCategories(files);
+        makeTabWindow();
     }
 
     private ArrayList<FileHandle> listFiles() {
@@ -251,23 +253,6 @@ public class ModelLibrary {
             int n = 1;
             do {
                 try {
-                    /*
-                    id#1=Blend Swap CC-0#armchair
-                    name#1=Armchair
-                    tags#1=Blend Swap, Seat
-                    creationDate#1=2013-09-05
-                    category#1=Office
-                    icon#1=/blendswap-cc-0/armchair.png
-                    model#1=/blendswap-cc-0/armchair/armchair.obj
-                    multiPartModel#1=true
-                    width#1=65.1
-                    depth#1=68.7
-                    height#1=115.0
-                    dropOnTopElevation#1=51.3
-                    movable#1=true
-                    doorOrWindow#1=false
-                    creator#1=Absfrm
-                     */
                     i18n.setExceptionOnMissingKey(true);
                     String id = i18n.get("id#"+n);
                     i18n.setExceptionOnMissingKey(false);
@@ -299,8 +284,6 @@ public class ModelLibrary {
     private TabWindow tabWindow = null;
 
     public TabWindow getTabWindow() {
-        if (tabWindow ==null)
-            makeTabWindow();
         return tabWindow;
     }
 
@@ -361,11 +344,10 @@ public class ModelLibrary {
         scrollPane.updateVisualScroll();
 
         Table t = new Table();
-        t.add(scrollPane).size(400,400).top().left();
+        t.add(scrollPane).size(400+scrollPane.getScrollBarWidth(),400).top().left();
         t.setName(category);
 
         tw.addTable(t);
-        tw.setDebug(true, true);
 
     }
 
