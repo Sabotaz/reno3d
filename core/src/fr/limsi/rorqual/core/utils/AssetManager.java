@@ -202,7 +202,7 @@ public class AssetManager {
         textures.put("camera", "data/ui/camera.png");
         textures.put("close", "data/ui/close.png");
         textures.put("delete", "data/ui/delete.png");
-        textures.put("mobilier", "data/ui/mobilier.jpg");
+        textures.put("mobilier", "data/ui/mobilier.png");
         textures.put("move", "data/ui/move.png");
         textures.put("room", "data/ui/room.png");
         textures.put("wall", "data/ui/wall.png");
