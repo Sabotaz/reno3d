@@ -104,35 +104,11 @@ project(":core") {
         FileTree tree = fileTree(dir: '../android/assets/data/models/obj/', include: '**/*.obj')
 
         tree.each { File file ->
-            task "makeFBX${file.path}"(type: Exec) {
+
+            task "makeG3DB${file.path}"(type: Exec) {
 
                 // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
-                File target = new File(file.getPath().replaceAll('obj', 'fbx'))
-
-                inputs.file file
-                outputs.dir target.getParent()
-
-                doFirst {
-                    target.getParentFile().mkdirs()
-                }
-
-                //linux
-                // blender --background --python objtofbx.py -- foobar.obj foobar.fbx
-                commandLine blender, '--background', '--python', "$projectDir/../android/assets/data/models/scripts/objtofbx.py", '--', file, target
-
-                standardOutput = new ByteArrayOutputStream()
-
-                ext.output = {
-                    return standardOutput.toString()
-                }
-            }
-
-            convert.dependsOn "makeFBX${file.path}"
-
-            task "makeG3DB${file.path}"(type: Exec, dependsOn:"makeFBX${file.path}") {
-
-                // .../fbx/.../.*.fbx -> .../g3db/.../.*.g3db
-                File input = new File(file.getPath().replaceAll('obj', 'fbx'))
+                File input = file
                 File target = new File(file.getPath().replaceAll('obj', 'g3db'))
 
                 inputs.file file
