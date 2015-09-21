@@ -16,6 +16,7 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
 /**
  * Created by christophe on 04/09/15.
  */
+// modification de la position de modèles
 public class Mover extends ModelMaker {
 
     Coin initialCoin;
@@ -108,7 +109,7 @@ public class Mover extends ModelMaker {
 
     @Override
     public void abort() {
-
+        // TODO
     }
 
     @Override

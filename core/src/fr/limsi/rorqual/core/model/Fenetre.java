@@ -18,6 +18,7 @@ import fr.limsi.rorqual.core.event.EventManager;
 /**
  * Created by ricordeau on 20/07/15.
  */
+// Classe modélisant une fenêtre (thermique)
 public class Fenetre extends Ouverture {
 
     static float DEFAULT_Y = 1.f;

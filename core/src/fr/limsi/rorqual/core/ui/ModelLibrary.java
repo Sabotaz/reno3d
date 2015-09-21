@@ -41,6 +41,7 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 /**
  * Created by christophe on 10/08/15.
  */
+// chargement de la bibliothèque de modèles d'objets
 public class ModelLibrary {
 
     private class ModelLoader {
@@ -49,17 +50,16 @@ public class ModelLibrary {
         private String modelFile;
         private String iconFile;
         private String path;
-        private String fields;
         private String clazz;
         private float width = 0;
         private float depth = 0;
         private float height = 0;
         private float dropOnTopElevation = 0;
         private float elevation = 0;
+        private HashMap<String, String> fields = new HashMap<String, String>();
 
         public ModelLoader(String path, I18NBundle i18n, int n) {
             this.path = path;
-            fields = i18n.get("fields#"+n);
             clazz = i18n.get("class#" + n);
             if (clazz.startsWith("?"))
                 clazz = "fr.limsi.rorqual.core.model.Objet";
@@ -78,6 +78,22 @@ public class ModelLibrary {
             elevation = i18n.get("elevation#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("elevation#" + n));
             String doorOrWindow = i18n.get("doorOrWindow#" + n);
             String creator = i18n.get("creator#"+n);
+
+            int f = 1;
+            do {
+                try {
+                    i18n.setExceptionOnMissingKey(true);
+                    String field_name = i18n.get("field#"+n+"name#"+f);
+                    String field_value = i18n.get("field#"+n+"value#"+f);
+                    i18n.setExceptionOnMissingKey(false);
+                    fields.put(field_name, field_value);
+
+                    f++;
+
+                } catch (MissingResourceException mre) {
+                    break;
+                }
+            } while (true);
         }
 
         public ModelContainer getInstance() {
@@ -125,7 +141,7 @@ public class ModelLibrary {
                 if (obj instanceof ModelContainer) {
                     ModelContainer modelContainer = (ModelContainer) obj;
 
-                    //setFields(obj);
+                    setFields(obj);
 
                     return modelContainer;
                 }
@@ -139,18 +155,17 @@ public class ModelLibrary {
             }
             return null;
         }
-/*
+
         private void setFields(Object obj) {
-            JsonValue.JsonIterator iterator = fields.iterator();
-            while(iterator.hasNext()) {
-                JsonValue field_value = iterator.next();
+            for (Map.Entry<String, String> entry : fields.entrySet()) {
                 try {
-                    Field field = obj.getClass().getField(field_value.name);
+                Field field = obj.getClass().getField(entry.getKey());
+
                     Object value = null;
                     try {
-                        value = field_value.asFloat();
+                        value = Float.parseFloat(entry.getValue());
                     } catch (NumberFormatException e) { // cannot parse
-                        String str = field_value.asString();
+                        String str = entry.getValue();
 
                         int last_point = str.lastIndexOf(".");
                         String enum_name = str.substring(0, last_point);
@@ -161,9 +176,9 @@ public class ModelLibrary {
                             if (o.toString().equals(enum_value))
                                 value = o;
                         }
-
-                        field.set(obj, value);
                     }
+
+                    field.set(obj, value);
 
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
@@ -173,7 +188,7 @@ public class ModelLibrary {
                     e.printStackTrace();
                 }
             }
-        }*/
+        }
 
         private Image image = null;
 

@@ -13,6 +13,7 @@ import fr.limsi.rorqual.core.model.Slab;
 /**
  * Created by christophe on 20/07/15.
  */
+// Classe modélisant un coin de pièce, pour la modélisation des planchers et murs
 public class Coin {
 
     private ArrayList<Mur> murs = new ArrayList<Mur>();

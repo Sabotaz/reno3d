@@ -16,6 +16,7 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 /**
  * Created by christophe on 28/07/15.
  */
+// conversion d'une référence vers un atlas, skin, texture... en Atlas, Skin ou Texture
 public class StyleFactory {
 
     public static TextButton.TextButtonStyle getTextButtonStyle(String ... params) {

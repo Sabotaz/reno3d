@@ -58,6 +58,7 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
 
+// MAIN
 public class MainApplicationAdapter extends InputAdapter implements ApplicationListener {
 
     private ShapeRenderer shape;

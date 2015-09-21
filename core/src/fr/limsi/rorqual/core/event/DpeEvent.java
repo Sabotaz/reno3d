@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.event;
 /**
  * Created by christophe on 03/06/15.
  */
+// events possibles pour la mise à jour du DPE
 public enum DpeEvent implements EventType {
     INFOS_GENERALES,
     INFOS_CHAUFFAGE,

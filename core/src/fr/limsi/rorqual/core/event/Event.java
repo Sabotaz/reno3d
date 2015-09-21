@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.event;
 /**
  * Created by christophe on 03/06/15.
  */
+// evenements envoyés au manager
 public class Event {
 
     private EventType event;

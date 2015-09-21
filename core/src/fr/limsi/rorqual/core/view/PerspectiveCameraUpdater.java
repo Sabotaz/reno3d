@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Created by christophe on 15/07/15.
  */
+// caméra utilisant une projection perspective, et utilisant les gestures
 public class PerspectiveCameraUpdater extends CameraUpdater {
 
     PerspectiveCamera camera;

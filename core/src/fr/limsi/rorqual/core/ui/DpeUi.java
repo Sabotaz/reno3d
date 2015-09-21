@@ -18,7 +18,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
 /**
  * Created by christophe on 03/06/15.
  */
-
+// Classe permetant le chargement des fenètres pour le DPE, suivant l'élément
 public class DpeUi  {
 
     private static HashMap<DpePropertiesEnum,Layout> sauvegarde_layout = new HashMap<DpePropertiesEnum,Layout>();

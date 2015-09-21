@@ -32,6 +32,7 @@ import eu.mihosoft.vrl.v3d.ext.org.poly2tri.TriangulationPoint;
 /**
  * Created by christophe on 14/04/15.
  */
+// Classe utilitaire pour la conversion de/en CSG
 public class CSGUtils {
 
     public static Vertex toVertex(Vector3 v) {

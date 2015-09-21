@@ -18,6 +18,7 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 /**
  * Created by ricordeau on 20/07/15.
  */
+// Classe servant de base aux portes et fenètres (modèle)
 public abstract class Ouverture extends ModelContainer {
 
     // Attributs

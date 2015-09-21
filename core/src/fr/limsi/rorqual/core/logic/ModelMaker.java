@@ -15,6 +15,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 /**
  * Created by christophe on 05/08/15.
  */
+
+// Classe servant de base à l'édition de modèles
+// contient notamment le calcul des ancres
 public abstract class ModelMaker {
 
     public abstract void begin(int screenX, int screenY);
@@ -37,6 +40,7 @@ public abstract class ModelMaker {
 
         ArrayList<Coin> c = new ArrayList<Coin>();
 
+        // les coins sont des ancres
         for (Mur mur : murs) {
             if (!forbidden.contains(mur)) {
                 if (!c.contains(mur.getA()))
@@ -83,6 +87,7 @@ public abstract class ModelMaker {
             }
         }
 
+        // la grille est une ancre
         ArrayList<Anchor> grid_align = new ArrayList<Anchor>();
 
         Vector2 p0 = intersection.cpy();

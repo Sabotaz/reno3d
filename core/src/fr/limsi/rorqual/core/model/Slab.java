@@ -48,6 +48,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.LIST;
 /**
  * Created by ricordeau on 20/07/15.
  */
+// classe modélisant un plancher (modèle + thermique)
 public class Slab extends ModelContainer {
 
     public final static float DEFAULT_HEIGHT = 0.2f;

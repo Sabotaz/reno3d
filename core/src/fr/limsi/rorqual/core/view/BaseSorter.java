@@ -12,7 +12,8 @@ import java.util.Comparator;
 /**
  * Created by christophe on 01/09/15.
  */
-
+// Classe permétant de trier les renderables suivant la distance à la caméra
+// utile pour ordonner les renderables transparents
 public class BaseSorter implements RenderableSorter, Comparator<Renderable> {
     private Camera camera;
     private final Vector3 tmpV1 = new Vector3();

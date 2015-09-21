@@ -22,6 +22,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 /**
  * Created by christophe on 05/08/15.
  */
+// Classe permetant l'ajout de murs simples
 public class WallMaker extends ModelMaker {
 
     Coin start;

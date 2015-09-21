@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.utils;
 /**
  * Created by christophe on 28/08/15.
  */
+// Classe utilitaire permétant d'attendre une variable
 public class Holder {
 
     public Object o = null;

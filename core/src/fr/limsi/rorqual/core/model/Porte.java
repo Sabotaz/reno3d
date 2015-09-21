@@ -20,6 +20,7 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 /**
  * Created by ricordeau on 20/07/15.
  */
+// classe modélisant une porte (thermique)
 public class Porte extends Ouverture{
 
     static float DEFAULT_Y = 0.0f;

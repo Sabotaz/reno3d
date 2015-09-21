@@ -15,6 +15,7 @@ import ifc2x3javatoolbox.ifcmodel.IfcModel;
 /**
  * Created by christophe on 20/03/15.
  */
+// Holder pour le batiment actuel
 public class ModelHolder {
 
     private Batiment batiment = null;

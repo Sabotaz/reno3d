@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Created by christophe on 15/07/15.
  */
+// Caméra utilisant une projection ortho, et utilisant les gestures
 public class OrthographicCameraUpdater extends CameraUpdater {
 
     OrthographicCamera camera;

@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Matrix4;
 /**
  * Created by christophe on 17/08/15.
  */
+// Singleton
+// Classe mise à jour par la partie Android et contenant les valeurs du gyro
 public class GyroscopeValues {
 
     private GyroscopeValues() {}

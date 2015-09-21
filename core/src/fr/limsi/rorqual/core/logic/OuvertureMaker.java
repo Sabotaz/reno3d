@@ -13,7 +13,7 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 /**
  * Created by christophe on 05/08/15.
  */
-
+// classe permetant l'ajout d'ouvertures (Fenetres, Portes)
 public class OuvertureMaker extends ModelMaker {
 
     String modelId;

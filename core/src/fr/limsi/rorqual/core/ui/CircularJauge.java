@@ -20,6 +20,9 @@ import fr.limsi.rorqual.core.view.shaders.ProgressBarShader;
 /**
  * Created by christophe on 01/09/15.
  */
+// Jauge circulaire, utilisant le shader ProgressBarShader pour l'affichage
+// Les scores suivent ceux du DPE
+// TODO: couleurs, affichage texte ?
 public class CircularJauge extends Widget {
 
 

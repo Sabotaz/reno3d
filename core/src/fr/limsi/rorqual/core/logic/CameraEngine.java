@@ -16,6 +16,8 @@ import fr.limsi.rorqual.core.view.PerspectiveCameraUpdater;
 /**
  * Created by christophe on 06/08/15.
  */
+// Singleton
+// Moteur de gestion des différentes caméras
 public class CameraEngine implements GestureDetector.GestureListener {
 
     private Cameras curent_camera = Cameras.PERSPECTIVE;
@@ -23,12 +25,12 @@ public class CameraEngine implements GestureDetector.GestureListener {
     private enum Cameras {
         PERSPECTIVE,
         ORTHOGRAPHIC,
-        GYROMETER,
+        GYROMETER, // use of Android Gyro
         ;
 
-        private CameraUpdater updater;
+        private CameraUpdater updater; // the current one
 
-        static {
+        static { // the different updaters
             ORTHOGRAPHIC.updater = new OrthographicCameraUpdater();
             PERSPECTIVE.updater = new PerspectiveCameraUpdater();
             GYROMETER.updater = new GyrometerCameraUpdater();
@@ -83,6 +85,8 @@ public class CameraEngine implements GestureDetector.GestureListener {
             c.getCameraUpdater().updateViewport(height, width);
         }
     }
+
+    // GESTURES
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {

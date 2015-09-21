@@ -44,6 +44,7 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 /**
  * Created by christophe on 08/07/15.
  */
+// Classe permetant la création d'un Actor décrit dans un fichier .json
 public class Layout {
 
     Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
@@ -55,6 +56,7 @@ public class Layout {
     private boolean initialised = false;
     public boolean isInitialised(){return this.initialised;}
 
+    // Value devant être calculée automatiquement par rapport à un autre champ
     public class Auto extends Value {
         @Override
         public float get(Actor context) {
@@ -67,6 +69,7 @@ public class Layout {
         }
     }
 
+    // updater pour connaitre les valeurs par défaut des champs, et modifier leurs valeurs
     private class Updater implements EventListener {
         private Channel channel;
         private EventType eventType;

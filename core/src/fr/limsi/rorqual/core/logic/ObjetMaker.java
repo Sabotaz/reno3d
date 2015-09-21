@@ -15,6 +15,7 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 /**
  * Created by christophe on 15/09/15.
  */
+// Classe permetant l'ajout d'objets (mobilier...)
 public class ObjetMaker extends ModelMaker {
 
     String modelId;

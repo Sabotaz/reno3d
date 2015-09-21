@@ -41,6 +41,7 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 /**
  * Created by ricordeau on 20/07/15.
  */
+// Objet (mobilier...) (modèle)
 public class Objet extends ModelContainer {
 
     public Objet() {

@@ -19,6 +19,11 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 /**
  * Created by christophe on 22/07/15.
  */
+// Un batiment contient plusieurs étages
+//  * etage courant
+//  * etage min/max
+//  * draw
+//  * orientation globale du batiment
 public class Batiment {
 
     ModelContainer floor = Floor.getModel();

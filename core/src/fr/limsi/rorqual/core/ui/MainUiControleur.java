@@ -24,6 +24,7 @@ import fr.limsi.rorqual.core.model.ModelHolder;
 /**
  * Created by christophe on 28/07/15.
  */
+// Controleur pour l'UI de l'écran principal (boutons + gestion de l'affichage des fenêtres)
 public class MainUiControleur implements EventListener {
 
     Actor tb = null;

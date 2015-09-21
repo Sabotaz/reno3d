@@ -18,6 +18,8 @@ import fr.limsi.rorqual.core.view.shaders.ProgressBarShader;
 /**
  * Created by christophe on 23/06/15.
  */
+// Singleton
+// Classe permetant le chargement et la centralisation des assets
 public class AssetManager {
 
 

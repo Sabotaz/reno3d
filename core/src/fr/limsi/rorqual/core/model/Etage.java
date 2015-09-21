@@ -9,6 +9,8 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 /**
  * Created by christophe on 20/07/15.
  */
+// un étage d'un batiment
+//  * contient des murs, slabs, ouvertures
 public class Etage {
     private ArrayList<Mur> murs = new ArrayList<Mur>();
     private ArrayList<Slab> slabs = new ArrayList<Slab>();

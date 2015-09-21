@@ -31,6 +31,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.BOOLEAN;
 /**
  * Created by christophe on 08/07/15.
  */
+// Fenêtre contenant des tab
 public class TabWindow extends Table {
     HashMap<Button, Actor> tabs = new HashMap<Button, Actor>();
     HashMap<Actor, Button> reversed_tabs = new HashMap<Actor, Button>();

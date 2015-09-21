@@ -13,6 +13,7 @@ import fr.limsi.rorqual.core.utils.GyroscopeValues;
 /**
  * Created by christophe on 15/07/15.
  */
+// Caméra utilisant le gyromètre, basée sur la caméra perspective (réagissant donc aux gestures)
 public class GyrometerCameraUpdater extends PerspectiveCameraUpdater {
 
 

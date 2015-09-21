@@ -13,6 +13,8 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 /**
  * Created by christophe on 20/03/15.
  */
+// Singleton
+// Moteur logique pour l'édition de la scene
 public class Logic implements InputProcessor {
 
     private Logic() {}
@@ -82,6 +84,8 @@ public class Logic implements InputProcessor {
             modelMaker.abort();
         modelMaker = null;
     }
+
+    // INPUTS
 
     @Override
     public boolean keyDown(int keycode) {

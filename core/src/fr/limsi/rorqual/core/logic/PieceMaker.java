@@ -27,6 +27,8 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 /**
  * Created by christophe on 05/08/15.
  */
+// Classe permetant l'ajout d'une pièce (4 murs + un sol + 1 plafond)
+// TODO: ajouter les plafonds
 public class PieceMaker extends ModelMaker {
 
     Coin start;

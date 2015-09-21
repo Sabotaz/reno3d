@@ -8,6 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+// Singleton
+// Gestionnaire d'événements
 public class EventManager {
 
     private HashMap<Channel,BlockingQueue<Event>> eventQueues = new HashMap<Channel, BlockingQueue<Event>>();
@@ -16,12 +18,14 @@ public class EventManager {
     private boolean running = false;
 
     public EventManager() {
+        // création des canaux
         for (Channel c : Channel.values()) {
             eventQueues.put(c, new LinkedBlockingQueue<Event>());
             eventListeners.put(c, new ArrayList<EventListener>());
         }
     }
 
+    // demarrage des différents canaux
     public void start() {
         if(!running) {
             running = true;
@@ -59,7 +63,7 @@ public class EventManager {
                 BlockingQueue<Event> eventQueue = eventQueues.get(c);
                 List<EventListener> listeners = eventListeners.get(c);
 
-                while (running) {
+                while (running) { // s'il y a des événements, on notifie les listeners
                     try {
                         Event e = eventQueue.poll(100, TimeUnit.MILLISECONDS);
                         if (e != null) {
@@ -79,6 +83,7 @@ public class EventManager {
         t.start();
     }
 
+    // notification d'un listener dans un thread séparé
     private void makeNotificationThread(final EventListener l, final Channel c, final Event e) {
         Thread t = new Thread() {
             public void run() {
@@ -92,6 +97,7 @@ public class EventManager {
         t.start();
     }
 
+    // arret du manager
     public void stop() {
         running = false;
     }
