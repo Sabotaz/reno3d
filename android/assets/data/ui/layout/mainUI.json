@@ -72,8 +72,8 @@
           "height": "auto",
           "width": "5%",
           "style": [
-            "texture:camera",
-            "texture:camera:tint:CCCCCC",
+            "drawable:camera",
+            "drawable:camera:tint:CCCCCC",
             null,
             "default.fnt"
           ]
@@ -92,9 +92,9 @@
           "height": "auto",
           "width": "5%",
           "style": [
-            "texture:wall",
-            "texture:wall:tint:CCCCCC",
-            "texture:wall:tint:CCCCCC",
+            "drawable:wall",
+            "drawable:wall:tint:CCCCCC",
+            "drawable:wall:tint:CCCCCC",
             "default.fnt"
           ]
         },
@@ -105,9 +105,9 @@
           "height": "auto",
           "width": "5%",
           "style": [
-            "texture:room",
-            "texture:room:tint:CCCCCC",
-            "texture:room:tint:CCCCCC",
+            "drawable:room",
+            "drawable:room:tint:CCCCCC",
+            "drawable:room:tint:CCCCCC",
             "default.fnt"
           ]
         },
@@ -118,9 +118,9 @@
           "height": "auto",
           "width": "5%",
           "style": [
-            "texture:mobilier",
-            "texture:mobilier:tint:CCCCCC",
-            "texture:mobilier:tint:CCCCCC",
+            "drawable:mobilier",
+            "drawable:mobilier:tint:CCCCCC",
+            "drawable:mobilier:tint:CCCCCC",
             "default.fnt"
           ]
         },
@@ -131,9 +131,9 @@
           "height": "auto",
           "width": "5%",
           "style": [
-            "texture:move",
-            "texture:move:tint:CCCCCC",
-            "texture:move:tint:CCCCCC",
+            "drawable:move",
+            "drawable:move:tint:CCCCCC",
+            "drawable:move:tint:CCCCCC",
             "default.fnt"
           ]
         },
@@ -144,9 +144,9 @@
           "height": "auto",
           "width": "5%",
           "style": [
-            "texture:delete",
-            "texture:delete:tint:CCCCCC",
-            "texture:delete:tint:CCCCCC",
+            "drawable:delete",
+            "drawable:delete:tint:CCCCCC",
+            "drawable:delete:tint:CCCCCC",
             "default.fnt"
           ]
         }

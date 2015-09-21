@@ -21,16 +21,9 @@ public class StyleFactory {
     public static TextButton.TextButtonStyle getTextButtonStyle(String ... params) {
         assert params.length == 4;
 
-        Object[] drawables = {
-                getDrawable(params[0]),
-                getDrawable(params[1]),
-                getDrawable(params[2]),
-                getFont(params[3])
-        };
-
-        Drawable up = drawables[0] instanceof Texture ? new TextureRegionDrawable(new TextureRegion((Texture)drawables[0])) : (Drawable) drawables[0];
-        Drawable down = drawables[1] instanceof Texture ? new TextureRegionDrawable(new TextureRegion((Texture)drawables[1])) : (Drawable) drawables[1];
-        Drawable checked = drawables[2] instanceof Texture ? new TextureRegionDrawable(new TextureRegion((Texture)drawables[2])) : (Drawable) drawables[2];
+        Drawable up = (Drawable)getDrawable(params[0]);
+        Drawable down = (Drawable)getDrawable(params[1]);
+        Drawable checked = (Drawable)getDrawable(params[2]);
         BitmapFont font = getFont(params[3]);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(up, down, checked, font);
@@ -63,6 +56,13 @@ public class StyleFactory {
             case "texture":
                 Texture texture = (Texture)AssetManager.getInstance().get(tokens[1]);
                 drawable = texture;
+                break;
+            case "drawable":
+                TextureRegionDrawable textureDrawable = new TextureRegionDrawable(new TextureRegion((Texture)AssetManager.getInstance().get(tokens[1])));
+                drawable = textureDrawable;
+                if (tokens.length > 3 && tokens[2].equals("tint"))
+                    drawable = textureDrawable.tint(Color.valueOf(tokens[3]));
+                break;
         }
 
         return drawable;
