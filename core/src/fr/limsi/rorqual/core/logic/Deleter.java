@@ -79,7 +79,6 @@ public class Deleter extends ModelMaker {
         m.setB(null);
 
         if (m.getSlabGauche() != null) {
-            System.out.println("m = " + m.getSlabGauche());
             m.getSlabGauche().removeMur(m);
             if (m.getSlabGauche().getMurs().isEmpty())
                 deleteSlab((m.getSlabGauche()));
@@ -87,7 +86,6 @@ public class Deleter extends ModelMaker {
         }
 
         if (m.getSlabDroit() != null) {
-            System.out.println("m = " + m.getSlabDroit());
             m.getSlabDroit().removeMur(m);
             if (m.getSlabDroit().getMurs().isEmpty())
                 deleteSlab((m.getSlabDroit()));
@@ -105,9 +103,6 @@ public class Deleter extends ModelMaker {
         s.setEtage(null);
         s.setCoins(null);
         for (Mur m : s.getMurs()) {
-            System.out.println("slab = " + s);
-            System.out.println("m.getSlabGauche() = " + m.getSlabGauche());
-            System.out.println("m.getSlabDroit() = " + m.getSlabDroit());
             if (s.equals(m.getSlabGauche()))
                 m.setSlabGauche(null);
             if (s.equals(m.getSlabDroit()))
@@ -126,6 +121,6 @@ public class Deleter extends ModelMaker {
     }
 
     private void deleteObjet(Objet o) {
-        currentEtage.getModelGraph().getRoot().remove(o);
+        o.setSlab(null); // TODO; getSlab then remove ?
     }
 }
