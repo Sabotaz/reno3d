@@ -880,8 +880,10 @@ public class Dpe implements EventListener {
     private float prs1=3.6f;
     private float prs2=3.7f;
     private float rrp;
+    private float fCh=1;
     public void actualiseBch(){
         bch=((bv*dhCor/1000)-pr*rrp)*intermittence;
+        System.out.println("bch = " + bch);
         this.actualiseCch();
     }
     public void actualisePr(){
@@ -945,33 +947,44 @@ public class Dpe implements EventListener {
         switch(this.installationChauffage){
             case CHAUFFAGE_UNIQUE:
                 float ich=chauffageUnique.getIch();
-                this.cch=this.bch*ich;
+                this.cch=this.bch*ich*fCh;
                 break;
             case CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS:
                 float k1 = frequenceUtilisationPoeleAvecChauffage.getFrequence();
                 float ichChauffage = chauffageAvecPoil.getIch();
                 float ichPoele = poeleAvecChauffage.getIch();
-                this.cch=k1*bch*ichPoele+(1-k1)*bch*ichChauffage;
+                this.cch=(k1*bch*ichPoele+(1-k1)*bch*ichChauffage)*fCh;
                 break;
             case CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS:
                 float ichChaudiereGazFioul = chaudiereGaz.getIch();
                 float ichChaudiereBois = chaudiereBois.getIch();
-                this.cch=0.75f*bch*ichChaudiereBois+0.25f*bch*ichChaudiereGazFioul;
+                this.cch=(0.75f*bch*ichChaudiereBois+0.25f*bch*ichChaudiereGazFioul)*fCh;
                 break;
             case CHAUDIERE_AVEC_PAC:
                 float ichChaudiere = chaudiereAvecPac.getIch();
                 float ichPac = pacAvecChaudiere.getIch();
-                this.cch=0.8f*bch*ichPac+0.2f*bch*ichChaudiere;
+                this.cch=(0.8f*bch*ichPac+0.2f*bch*ichChaudiere)*fCh;
                 break;
             case CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS:
                 float k2 = frequenceUtilisationPoeleAvecChauffageEtPac.getFrequence();
                 float ichChaudiere2 = chaudiereAvecPacEtPoil.getIch();
                 float ichPac2 = pacAvecChaudiereEtPoele.getIch();
                 float ichPoele2 = poeleAvecChaudiereEtPac.getIch();
-                this.cch=(1-k2)*(0.8f*bch*ichPac2)+(1-k2)*(0.2f*bch*ichChaudiere2)+k2*bch*ichPoele2;
+                this.cch=((1-k2)*(0.8f*bch*ichPac2)+(1-k2)*(0.2f*bch*ichChaudiere2)+k2*bch*ichPoele2)*fCh;
                 break;
         }
         this.actualiseScoreDpe();
+    }
+    public void actualiseFacteurSolaire(){
+        if(presenceInstallationSolaire==PresenceInstallationSolaireEnum.INSTALLATION_SOLAIRE_PRESENTE){
+            fCh=departementBatiment.getFch();
+            fEcs=departementBatiment.getfEcs();
+        }else{
+            fCh=1;
+            fEcs=0;
+        }
+        this.actualiseCch();
+        this.actualiseCecs();
     }
 
     // 5.Rendements des installations
@@ -1414,7 +1427,7 @@ public class Dpe implements EventListener {
     private float nbHabitant=4;
     private float cEcs=5000;
     private float iEcs=5.45f;
-    private float fEcs; // TODO : prendre en compte les installations solaires
+    private float fEcs=0;
     private float tfr=10.5f;
     public void actualiseBecs(){
         bEcs=(1.1627f*(365-nbJoursAbsenceParAn)*nbHabitant*becs*(50-tfr))/1000;
@@ -1453,7 +1466,7 @@ public class Dpe implements EventListener {
         this.actualiseBecs();
     }
     public void actualiseCecs(){
-        cEcs=bEcs*iEcs;
+        cEcs=bEcs*iEcs*(1-fEcs);
         this.actualiseScoreDpe();
     }
 
@@ -1698,14 +1711,14 @@ public class Dpe implements EventListener {
 
     public void actualiseScoreDpe(){
         scoreDpe = (cElectromenager+cEclairage+cCuisson+cClimatisation+cEcs+cch)/sh;
-        System.out.println("scoreDpe = " + scoreDpe);
-        System.out.println("cElectromenager = " + cElectromenager);
-        System.out.println("cEclairage = " + cEclairage);
-        System.out.println("cCuisson = " + cCuisson);
-        System.out.println("cClims = " + cClimatisation);
-        System.out.println("cEcs = " + cEcs);
-        System.out.println("cch = " + cch);
-        System.out.println("sh = " + sh);
+//        System.out.println("scoreDpe = " + scoreDpe);
+//        System.out.println("cElectromenager = " + cElectromenager);
+//        System.out.println("cEclairage = " + cEclairage);
+//        System.out.println("cCuisson = " + cCuisson);
+//        System.out.println("cClims = " + cClimatisation);
+//        System.out.println("cEcs = " + cEcs);
+//        System.out.println("cch = " + cch);
+//        System.out.println("sh = " + sh);
         System.out.println();
     }
     public float getScoreDpe(){
@@ -1819,6 +1832,7 @@ public class Dpe implements EventListener {
                             this.actualiseConsommationClimatisation();
                             this.actualiseRendementGenerationAllChauffages();
                             this.actualiseTfr();
+                            this.actualiseFacteurSolaire();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             DepartementBatimentEnum type = this.departementBatiment;
@@ -2130,7 +2144,7 @@ public class Dpe implements EventListener {
                                     presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
 
                             String nameGenerateur = chauffageUnique.getGenerateur().toString();
-                            if (nameGenerateur.startsWith("Chaudière")){ // Si le générateur est une chaudière
+                            if (nameGenerateur.startsWith("Chaudière")){ // Si le générateur est une chaudière mais pas une chaudière électrique
                                 if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
                                         && generateurChauffageUnique != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
                                     chaudiereAssureChauffageEtEcs=true;
@@ -2672,6 +2686,7 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             presenceInstallationSolaire = (PresenceInstallationSolaireEnum) items.get("lastValue");
+                            this.actualiseFacteurSolaire();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             PresenceInstallationSolaireEnum type = presenceInstallationSolaire;
