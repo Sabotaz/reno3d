@@ -121,6 +121,6 @@ public class Deleter extends ModelMaker {
     }
 
     private void deleteObjet(Objet o) {
-        o.setSlab(null); // TODO; getSlab then remove ?
+        o.setSlab(null); // TODO: getSlab then remove ?
     }
 }
