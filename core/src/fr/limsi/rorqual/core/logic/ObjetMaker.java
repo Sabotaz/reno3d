@@ -50,6 +50,7 @@ public class ObjetMaker extends ModelMaker {
                 obj.model_transform.setTranslation(intersection.x, intersection.y, tra.z);
                 obj.setSelectable(false);
                 obj.setSlab(slab);
+                slab.addObjet(obj);
                 making_objet = true;
                 System.out.println(obj.calculateBoundingBox(new BoundingBox()));
             } else {

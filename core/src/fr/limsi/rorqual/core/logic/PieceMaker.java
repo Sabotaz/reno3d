@@ -81,6 +81,7 @@ public class PieceMaker extends ModelMaker {
             slab = new Slab(null);
             for (Mur mur : murs) {
                 mur.setSlabGauche(slab);
+                slab.addMur(mur);
             }
             slab.setSelectable(false);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().addSlab(slab);
@@ -227,16 +228,27 @@ public class PieceMaker extends ModelMaker {
         Slab slabGauche = removed.getSlabGauche();
         Slab slabDroit = removed.getSlabDroit();
 
-        if (restant.getA() == removed.getA() && restant.getB() == removed.getB()) { // meme sense
-            if (slabGauche != null)
+        if (restant.getSlabGauche() != slabGauche && restant.getSlabDroit() != slabGauche) { // s'il existe pas deja
+            if (restant.getSlabGauche() == null) {
                 restant.setSlabGauche(slabGauche);
-            if (slabDroit != null)
-                restant.setSlabDroit(slabDroit);
-        } else { // sens inverse
-            if (slabDroit != null)
-                restant.setSlabGauche(slabDroit);
-            if (slabGauche != null)
+                slabGauche.addMur(restant);
+            }
+            else if (restant.getSlabDroit() == null) {
                 restant.setSlabDroit(slabGauche);
+                slabGauche.addMur(restant);
+            }
+            else; // no more place for this slab :'(
+        }
+        if (restant.getSlabGauche() != slabDroit && restant.getSlabDroit() != slabDroit) { // s'il existe pas deja
+            if (restant.getSlabDroit() == null) {
+                restant.setSlabDroit(slabDroit);
+                slabDroit.addMur(restant);
+            }
+            else if (restant.getSlabGauche() == null) {
+                restant.setSlabGauche(slabDroit);
+                slabDroit.addMur(restant);
+            }
+            else; // no more place for this slab :'(
         }
 
         for (Ouverture o : removed.getOuvertures()) {

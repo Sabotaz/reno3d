@@ -83,6 +83,15 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         slabGauche = model.slabGauche;
         slabDroit = model.slabDroit;
         coeffTransmissionThermique = model.coeffTransmissionThermique;
+
+        setSlabGauche(model.getSlabGauche());
+        if (model.getSlabGauche() != null)
+            model.getSlabGauche().addMur(this);
+
+        setSlabDroit(model.getSlabDroit());
+        if (model.getSlabDroit() != null)
+            model.getSlabDroit().addMur(this);
+
     }
 
     public Mur(Coin a, Coin b) {
@@ -173,7 +182,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     public void setA(Coin a) {
-        A.removeMur(this);
+        if (A != null)
+            A.removeMur(this);
         A = a;
         if (a != null) {
             a.addMur(this);
@@ -189,7 +199,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     public void setB(Coin b) {
-        B.removeMur(this);
+        if (B != null)
+            B.removeMur(this);
         B = b;
         if (b != null) {
             b.addMur(this);

@@ -67,6 +67,8 @@ public class Slab extends ModelContainer {
     private boolean changed = true;
 
     private List<Coin> coins;
+    private ArrayList <Mur> murs = new ArrayList<Mur>();
+    private ArrayList <Objet> objets = new ArrayList<Objet>();
     private float height;
 
     public Slab(List<Coin> coins) {
@@ -114,6 +116,30 @@ public class Slab extends ModelContainer {
     public void setHeight(float height) {
         this.height = height;
         setChanged();
+    }
+
+    public void addMur(Mur m) {
+        murs.add(m);
+    }
+
+    public void removeMur(Mur m) {
+        murs.remove(m);
+    }
+
+    public ArrayList<Mur> getMurs() {
+        return murs;
+    }
+
+    public void addObjet(Objet o) {
+        objets.add(o);
+    }
+
+    public void removeObjet(Objet o) {
+        objets.remove(o);
+    }
+
+    public ArrayList<Objet> getObjets() {
+        return objets;
     }
 
     public void setCoins(List<Coin> coins) {
