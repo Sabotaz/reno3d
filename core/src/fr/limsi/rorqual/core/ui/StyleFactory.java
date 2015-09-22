@@ -82,4 +82,13 @@ public class StyleFactory {
         CircularJauge.CircularJaugeStyle style = new CircularJauge.CircularJaugeStyle(foreground, background);
         return style;
     }
+
+    public static HorizontalBar.HorizontalBarStyle getHorizontalBarStyle(String ... params) {
+        assert params.length == 1;
+
+        Drawable drawable = (Drawable)getDrawable(params[0]);
+
+        HorizontalBar.HorizontalBarStyle style = new HorizontalBar.HorizontalBarStyle(drawable);
+        return style;
+    }
 }

@@ -225,6 +225,9 @@ public class Layout {
             case "CircularJauge":
                 actor = makeCircularJauge(json, updater, parent);
                 break;
+            case "HorizontalBar":
+                actor = makeHorizontalBar(json, updater, parent);
+                break;
             default:
                 return null;
         }
@@ -850,6 +853,28 @@ public class Layout {
         }
 
         return circularJauge;
+    }
+
+    private Actor makeHorizontalBar(JsonValue json, Updater updater, Actor parent) {
+        HorizontalBar horizontalBar;
+        if (json.has("style")) {
+            JsonValue style_list = json.get("style");
+            HorizontalBar.HorizontalBarStyle style = StyleFactory.getHorizontalBarStyle(style_list.asStringArray());
+            horizontalBar = new HorizontalBar(style);
+        } else {
+            throw new RuntimeException("No default skin");
+        }
+        if (json.has("height") && json.has("width")) {
+            Value width = getValue(json, "width", null);
+            Value height = getValue(json, "height", null);
+            if (width instanceof Auto)
+                width = height;
+            if (height instanceof Auto)
+                height = width;
+            horizontalBar.setSize(width.get(null), height.get(null));
+        }
+
+        return horizontalBar;
     }
 
 }
