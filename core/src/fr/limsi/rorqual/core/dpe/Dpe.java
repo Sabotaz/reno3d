@@ -883,6 +883,11 @@ public class Dpe implements EventListener {
     private float fCh=1;
     public void actualiseBch(){
         bch=((bv*dhCor/1000)-pr*rrp)*intermittence;
+        System.out.println("bv = " + bv);
+        System.out.println("dhCor = " + dhCor);
+        System.out.println("pr = " + pr);
+        System.out.println("rrp = " + rrp);
+        System.out.println("intermittence = " + intermittence);
         System.out.println("bch = " + bch);
         this.actualiseCch();
     }
@@ -891,7 +896,7 @@ public class Dpe implements EventListener {
         this.actualiseBch();
     }
     public void actualiseRrp(){
-        rrp=(1-3.6f*(float)Math.pow(x,2.6f)+2.6f*(float)Math.pow(x,1.6))/(float)Math.pow((1-(float)Math.pow(x,3.6)),2);
+        rrp=(1-3.6f*(float)Math.pow(x,2.6f)+2.6f*(float)Math.pow(x,3.6))/(float)Math.pow((1-(float)Math.pow(x,3.6)),2);
         this.actualiseBch();
     }
     public void actualisePrs1(){
