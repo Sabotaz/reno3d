@@ -309,13 +309,11 @@ public class Layout {
 
         if (json.has("label")){
             Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
-            lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+            lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
             lbs.fontColor = Color.DARK_GRAY;
             Label label = new Label(json.getString("label"),lbs);
-            table.add(label).top().width(getValue(json, "labelWidth", 516, null)).pad(getValue(json, "labelPad", 1, null));
-
-//            table.add(label).top().pad(getValue(json,"labelPad",1));
-//            System.out.println("prefWidth"+table.getPrefWidth());
+            table.add(label).center().top();
+            table.row().padTop(10);
         }
 
         if (json.has("content")) {

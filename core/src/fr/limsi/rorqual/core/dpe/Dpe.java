@@ -1,5 +1,7 @@
 package fr.limsi.rorqual.core.dpe;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +51,7 @@ public class Dpe implements EventListener {
         this.actualisePr();
         this.actualiseRendementGenerationAllChauffages();
         this.actualiseConsommationEclairage();
+        this.actualiseConsommationCuisson();
         this.actualiseScoreDpe();
     }
     public void actualisePerimetreBatiment(){
@@ -2112,6 +2115,7 @@ public class Dpe implements EventListener {
                             ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("chaudiere_et_PAC_insert"), false);
                             ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
                             ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
+                            ((TabWindow) layout.getFromId("tab_window")).setPosition((((TabWindow) layout.getFromId("tab_window"))).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) layout.getFromId("tab_window")).getPrefHeight()/2);
                         }
                         break;
                     }

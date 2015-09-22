@@ -11,7 +11,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Type de logement : ",
+          "label": "Type de logement",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -39,7 +39,7 @@
         },
         {
           "type": "Table",
-          "label": "Année de construction : ",
+          "label": "Année de construction",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -102,7 +102,7 @@
         },
         {
           "type": "Table",
-          "label": "Catégorie de logement : ",
+          "label": "Catégorie de logement",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -154,7 +154,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Type d'énergie à la construction : ",
+          "label": "Type d'énergie à la construction",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -181,7 +181,7 @@
         },
         {
           "type": "Table",
-          "label": "Type d'abonnement électrique : ",
+          "label": "Type d'abonnement électrique",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -208,7 +208,7 @@
         },
         {
           "type": "Table",
-          "label": "Équipement pour l'éclairage : ",
+          "label": "Équipement pour l'éclairage",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -241,7 +241,7 @@
         },
         {
           "type": "Table",
-          "label": "Type de ventilation : ",
+          "label": "Type de ventilation",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -299,7 +299,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Équipement électroménager : ",
+          "label": "Équipement électroménager",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -382,7 +382,7 @@
         },
         {
           "type": "Table",
-          "label": "Équipement cuisson : ",
+          "label": "Équipement cuisson",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -434,7 +434,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Département : ",
+          "label": "Département",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -449,7 +449,7 @@
         },
         {
           "type": "Table",
-          "label": "Nombre d'habitants : ",
+          "label": "Nombre d'habitants",
           "labelPad": 5,
           "labelWidth": 176,
           "content": [
@@ -463,7 +463,7 @@
         },
         {
           "type": "Table",
-          "label": "Nombre de jours/an où\nle logement est inoccupé : ",
+          "label": "Nombre de jours/an où le logement est inoccupé",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -477,7 +477,7 @@
         },
         {
           "type": "Table",
-          "label": "Présence d'un système\nde climatisation : ",
+          "label": "Présence d'un système de climatisation",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -504,7 +504,7 @@
         },
         {
           "type": "Table",
-          "label": "Surface climatisée (en m²) : ",
+          "label": "Surface climatisée (en m²)",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [

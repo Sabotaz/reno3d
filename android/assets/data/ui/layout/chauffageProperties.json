@@ -11,7 +11,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Installation gérant le chauffage : ",
+          "label": "Installation gérant le chauffage",
           "labelPad": 5,
           "labelWidth": 273,
           "content": [
@@ -56,7 +56,7 @@
         },
         {
           "type": "Table",
-          "label": "Chauffage programmable : ",
+          "label": "Chauffage programmable",
           "labelPad": 5,
           "labelWidth": 273,
           "content": [
@@ -84,7 +84,7 @@
         },
         {
           "type": "Table",
-          "label": "Présence d'une installation solaire : ",
+          "label": "Présence d'une installation solaire",
           "labelPad": 5,
           "labelWidth": 273,
           "content": [
@@ -112,7 +112,7 @@
         },
         {
           "type": "Table",
-          "label": "Type d'émetteur de chaleur : ",
+          "label": "Type d'émetteur de chaleur",
           "labelPad": 5,
           "labelWidth": 273,
           "content": [
@@ -158,7 +158,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Source unique de chauffage : ",
+          "label": "Source unique de chauffage",
           "labelPad": 5,
           "labelWidth": 213,
           "content": [
@@ -180,7 +180,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Chauffage : ",
+          "label": "Chauffage",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
@@ -197,7 +197,7 @@
         },
         {
           "type": "Table",
-          "label": "Poêle/insert : ",
+          "label": "Poêle/insert",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
@@ -230,7 +230,7 @@
         },
         {
           "type": "Table",
-          "label": "Fréquence d'utilisation poêle/insert : ",
+          "label": "Fréquence d'utilisation poêle/insert",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
@@ -276,7 +276,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Chaudière gaz/fioul : ",
+          "label": "Chaudière gaz/fioul",
           "labelPad": 5,
           "labelWidth": 142,
           "content": [
@@ -293,7 +293,7 @@
         },
         {
           "type": "Table",
-          "label": "Chaudière bois : ",
+          "label": "Chaudière bois",
           "labelPad": 5,
           "labelWidth": 142,
           "content": [
@@ -327,7 +327,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Chaudière : ",
+          "label": "Chaudière",
           "labelPad": 5,
           "labelWidth": 126,
           "content": [
@@ -344,7 +344,7 @@
         },
         {
           "type": "Table",
-          "label": "Pompe à chaleur : ",
+          "label": "Pompe à chaleur",
           "labelPad": 5,
           "labelWidth": 126,
           "content": [
@@ -390,7 +390,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Chaudière : ",
+          "label": "Chaudière",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
@@ -407,7 +407,7 @@
         },
         {
           "type": "Table",
-          "label": "Pompe à chaleur : ",
+          "label": "Pompe à chaleur",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
@@ -446,7 +446,7 @@
         },
         {
           "type": "Table",
-          "label": "Poêle/insert : ",
+          "label": "Poêle/insert",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
@@ -479,7 +479,7 @@
         },
         {
           "type": "Table",
-          "label": "Fréquence d'utilisation poêle/insert : ",
+          "label": "Fréquence d'utilisation poêle/insert",
           "labelPad": 5,
           "labelWidth": 223,
           "content": [
@@ -525,7 +525,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Installation gérant l'eau chaude sanitaire : ",
+          "label": "Installation gérant l'eau chaude sanitaire",
           "labelPad": 5,
           "labelWidth": 273,
           "content": [
@@ -631,7 +631,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Installation gérant l'eau chaude sanitaire : ",
+          "label": "Installation gérant l'eau chaude sanitaire",
           "labelPad": 5,
           "labelWidth": 273,
           "content": [
@@ -732,7 +732,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Température de consigne du chauffage intérieur : ",
+          "label": "Température de consigne du chauffage intérieur",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -771,7 +771,7 @@
         },
         {
           "type": "Table",
-          "label": "Le système de production d'eau chaude sanitaire est situé dans un local chauffé : ",
+          "label": "Le système de production d'eau chaude sanitaire est situé dans un local chauffé",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -799,7 +799,7 @@
         },
         {
           "type": "Table",
-          "label": "Usage principal de l'eau chaude : ",
+          "label": "Usage principal de l'eau chaude",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -827,7 +827,7 @@
         },
         {
           "type": "Table",
-          "label": "La chaudière se déclenche à l'ouverture du robinet d'eau chaude : ",
+          "label": "La chaudière se déclenche à l'ouverture du robinet d'eau chaude",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -855,7 +855,7 @@
         },
         {
           "type": "Table",
-          "label": "Présence de robinet thermostatique sur les radiateurs : ",
+          "label": "Présence de robinet thermostatique sur les radiateurs",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -883,7 +883,7 @@
         },
         {
           "type": "Table",
-          "label": "Présence d'un thermostat d'ambiance ou d'une sonde de température extérieure : ",
+          "label": "Présence d'un thermostat d'ambiance ou d'une sonde de température extérieure",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
