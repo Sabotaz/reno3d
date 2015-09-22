@@ -83,6 +83,7 @@ public class PieceMaker extends ModelMaker {
                 mur.setSlabGauche(slab);
                 slab.addMur(mur);
             }
+            slab.setEtage(ModelHolder.getInstance().getBatiment().getCurrentEtage());
             slab.setSelectable(false);
             ModelHolder.getInstance().getBatiment().getCurrentEtage().addSlab(slab);
 
@@ -217,10 +218,8 @@ public class PieceMaker extends ModelMaker {
         }
 
         for (Mur m : removed) {
-            etage.removeMur(m);
+            Deleter.deleteMur(m);
             dpeEventMurRemoved(m);
-            m.setA(null);
-            m.setB(null);
         }
     }
 

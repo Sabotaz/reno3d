@@ -72,8 +72,8 @@ public class Deleter extends ModelMaker {
         return deleting_objet;
     }
 
-    private void deleteMur(Mur m) {
-        currentEtage.removeMur(m);
+    static public void deleteMur(Mur m) {
+        m.getEtage().removeMur(m);
 
         m.setA(null);
         m.setB(null);
@@ -98,8 +98,8 @@ public class Deleter extends ModelMaker {
 
     }
 
-    private void deleteSlab(Slab s) {
-        currentEtage.removeSlab(s);
+    static public void deleteSlab(Slab s) {
+        s.getEtage().removeSlab(s);
         s.setEtage(null);
         s.setCoins(null);
         for (Mur m : s.getMurs()) {
@@ -116,11 +116,11 @@ public class Deleter extends ModelMaker {
         s.getObjets().clear();
     }
 
-    private void deleteOuverture(Ouverture o) {
+    static public void deleteOuverture(Ouverture o) {
         o.getMur().removeOuverture(o);
     }
 
-    private void deleteObjet(Objet o) {
+    static public void deleteObjet(Objet o) {
         o.setSlab(null); // TODO: getSlab then remove ?
     }
 }

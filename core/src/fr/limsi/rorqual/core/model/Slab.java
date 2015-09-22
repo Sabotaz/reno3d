@@ -109,6 +109,10 @@ public class Slab extends ModelContainer {
         etage = e;
     }
 
+    public Etage getEtage() {
+        return etage;
+    }
+
     public float getHeight() {
         return height;
     }
