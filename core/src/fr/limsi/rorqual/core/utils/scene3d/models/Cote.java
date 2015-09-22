@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import fr.limsi.rorqual.core.model.utils.Coin;
@@ -34,8 +35,9 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 public class Cote extends ModelContainer {
 
     public interface Cotable {
-        public Coin getA();
-        public Coin getB();
+        Vector3 getCotePosA();
+        Vector3 getCotePosB();
+        float getCoteValue();
     }
 
     private Cotable cotable;
@@ -51,18 +53,16 @@ public class Cote extends ModelContainer {
         makeMesh();
     }
 
-    private float len = 0.0f;
+    private float value = 0.0f;
 
     Texture textTexture;
 
     private void makeMesh() {
-        Vector3 p1 = Vector3.Zero.cpy();
-        Vector3 p2 = Vector3.X.cpy().setLength(cotable.getA().getPosition().dst(cotable.getB().getPosition()));
-        p1.add(Vector3.Z.cpy().setLength(0.01f));
-        p2.add(Vector3.Z.cpy().setLength(0.01f));
+        Vector3 p1 = cotable.getCotePosA();
+        Vector3 p2 = cotable.getCotePosB();
 
         Vector3 x_dir = p2.cpy().sub(p1);
-        len = cotable.getA().getPosition().dst(cotable.getB().getPosition());
+        value = cotable.getCoteValue();
 
         Vector3 mid = p1.cpy().add(x_dir.cpy().scl(0.5f));
 
@@ -75,35 +75,35 @@ public class Cote extends ModelContainer {
         MeshPartBuilder meshBuilder;
         meshBuilder = modelBuilder.part("part1", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.RED)));
 
-        meshBuilder.line(p1, p1.cpy().add(y_dir));
-        meshBuilder.line(p2, p2.cpy().add(y_dir));
+//        meshBuilder.line(p1, p1.cpy().add(y_dir));
+//        meshBuilder.line(p2, p2.cpy().add(y_dir));
         meshBuilder.line(p1, p1.cpy().add(my_dir));
         meshBuilder.line(p2, p2.cpy().add(my_dir));
-
+/*
         meshBuilder.line(
                 p1.cpy().add(y_dir.cpy().setLength(0.8f)),
                 p2.cpy().add(y_dir.cpy().setLength(0.8f)));
-
+*/
         meshBuilder.line(
                 p1.cpy().add(my_dir.cpy().setLength(0.8f)),
                 p2.cpy().add(my_dir.cpy().setLength(0.8f)));
 
         meshBuilder = modelBuilder.part("part2", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.RED)));
-
+/*
         meshBuilder.triangle(p1.cpy().add(y_dir.cpy().setLength(0.8f)),
                 p1.cpy().add(y_dir.cpy().setLength(0.6f)).add(x_dir.cpy().setLength(0.25f)),
                 p1.cpy().add(y_dir.cpy().setLength(1.0f)).add(x_dir.cpy().setLength(0.25f))
         );
-
+*/
         meshBuilder.triangle(p1.cpy().add(my_dir.cpy().setLength(0.8f)),
                 p1.cpy().add(my_dir.cpy().setLength(0.6f)).add(x_dir.cpy().setLength(0.25f)),
                 p1.cpy().add(my_dir.cpy().setLength(1.0f)).add(x_dir.cpy().setLength(0.25f))
         );
-
+/*
         meshBuilder.triangle(p2.cpy().add(y_dir.cpy().setLength(0.8f)),
                 p2.cpy().add(y_dir.cpy().setLength(0.6f)).sub(x_dir.cpy().setLength(0.25f)),
                 p2.cpy().add(y_dir.cpy().setLength(1.0f)).sub(x_dir.cpy().setLength(0.25f))
-        );
+        );*/
 
         meshBuilder.triangle(p2.cpy().add(my_dir.cpy().setLength(0.8f)),
                 p2.cpy().add(my_dir.cpy().setLength(0.6f)).sub(x_dir.cpy().setLength(0.25f)),
@@ -111,7 +111,7 @@ public class Cote extends ModelContainer {
         );
 
         FreeTypeFontGenerator generator = (FreeTypeFontGenerator) AssetManager.getInstance().get("default.fnt.generator");
-        String text = String.format("%.2fm", len);
+        String text = String.format("%.2fm", value);
         int startX = 0;
         int startY = 0;
 
@@ -138,13 +138,6 @@ public class Cote extends ModelContainer {
         meshBuilder = modelBuilder.part("part3", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, new Material(TextureAttribute.createDiffuse(texture)));
 
         meshBuilder.setUVRange(0, 0, 1, 1);
-        meshBuilder.rect(
-                mid.cpy().add(y_dir.cpy().setLength(2.0f)).sub(x_dir.cpy().setLength(half)),
-                mid.cpy().add(y_dir.cpy().setLength(2.0f)).add(x_dir.cpy().setLength(half)),
-                mid.cpy().add(y_dir.cpy().setLength(1.0f)).add(x_dir.cpy().setLength(half)),
-                mid.cpy().add(y_dir.cpy().setLength(1.0f)).sub(x_dir.cpy().setLength(half)),
-                Vector3.Z.cpy().scl(-1)
-        );
 
         meshBuilder.rect(
                 mid.cpy().add(my_dir.cpy().setLength(2.0f)).sub(x_dir.cpy().setLength(half)),

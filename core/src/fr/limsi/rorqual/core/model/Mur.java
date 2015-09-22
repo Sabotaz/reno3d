@@ -570,4 +570,19 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             this.setB(next);
         }
     }
+
+    @Override
+    public Vector3 getCotePosA() {
+        return new Vector3(0,0,etage.getHeight());
+    }
+
+    @Override
+    public Vector3 getCotePosB() {
+        return new Vector3(this.getWidth(), 0, getEtage().getHeight());
+    }
+
+    @Override
+    public float getCoteValue() {
+        return this.getWidth();
+    }
 }
