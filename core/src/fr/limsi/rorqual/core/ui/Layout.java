@@ -312,8 +312,8 @@ public class Layout {
             lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
             lbs.fontColor = Color.DARK_GRAY;
             Label label = new Label(json.getString("label"),lbs);
-            table.add(label).center().top();
-            table.row().padTop(10);
+            table.add(label).center().top().padBottom(5);
+            table.row();
         }
 
         if (json.has("content")) {
