@@ -161,9 +161,21 @@ public class Slab extends ModelContainer {
         return coins;
     }
 
+    private boolean valide = false;
+
     private void makeMesh() {
-        if (coins == null)
+        if (coins == null) {
+            this.setModel(new Model());
+            valide = false;
             return;
+        }
+
+        actualiseSurface();
+        if (getSurface() == 0) {
+            this.setModel(new Model());
+            valide = false;
+            return;
+        }
 
         Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
 
@@ -174,11 +186,25 @@ public class Slab extends ModelContainer {
             face.add(CSGUtils.castVector(new MyVector3(c.getPosition())));
         }
 
-        CSG csg = Extrude.points(z, face);
+        try {
 
-        Model model = CSGUtils.toModel(csg);
+            CSG csg = Extrude.points(z, face);
 
-        this.setModel(model);
+            Model model = CSGUtils.toModel(csg);
+            this.setModel(model);
+            valide = true;
+
+        } catch (RuntimeException re) {
+            valide = false;
+        }
+    }
+
+    public boolean isValide() {
+        if (changed) {
+            makeMesh();
+            changed = false;
+        }
+        return valide;
     }
 
     public void act() {

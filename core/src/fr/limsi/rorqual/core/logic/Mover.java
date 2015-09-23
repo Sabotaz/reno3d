@@ -40,21 +40,43 @@ public class Mover extends ModelMaker {
             float d1 = A.getPosition().dst(pos);
             float d2 = B.getPosition().dst(pos);
             if (d1 < d2)
-                initialCoin = A;
+                newCoin = initialCoin = A;
             else
-                initialCoin = B;
+                newCoin = initialCoin = B;
 
-            murs = (ArrayList)initialCoin.getMurs().clone();
-            slabs = (ArrayList)initialCoin.getSlabs().clone();
+            murs = new ArrayList<Mur>(initialCoin.getMurs());
+            slabs = new ArrayList<Slab>(initialCoin.getSlabs());
+
+            for (Mur mur : murs)
+                mur.setSelectable(false);
 
             moving = true;
+        } else if (modelContainer instanceof Slab) {
+
+            float d = 2.5f; // min dist to move
+            for (Coin coin : ((Slab)modelContainer).getCoins()) {
+                if (coin.getPosition().dst(pos) < d)
+                    newCoin = initialCoin = coin;
+            }
+            if (initialCoin != null) {
+                murs = new ArrayList<Mur>(initialCoin.getMurs());
+                slabs = new ArrayList<Slab>(initialCoin.getSlabs());
+
+                for (Mur mur : murs)
+                    mur.setSelectable(false);
+
+                moving = true;
+
+            } else {
+                moving = false;
+            }
         }
     }
 
     Anchor anchor;
 
     @Override
-    public void update(int screenX, int screenY) {
+    public synchronized void update(int screenX, int screenY) {
 
         if (!moving)
             return;
@@ -65,8 +87,7 @@ public class Mover extends ModelMaker {
         if (obj != null) {
             Vector2 intersection = new MyVector2(obj.getIntersection());
 
-
-            ArrayList<Object> forbidden = new ArrayList<Object>();
+            ArrayList<Object> forbidden = new ArrayList<Object>(murs);
 
             Anchor a = calculateAnchor(etage, intersection, forbidden);
 
@@ -104,12 +125,42 @@ public class Mover extends ModelMaker {
 
     @Override
     public void end(int screenX, int screenY) {
-        moving = false;
+
+        if (moving) {
+
+            for (Slab s : slabs) {
+                if (!s.isValide()) {
+                    abort();
+                    return;
+                }
+            }
+
+            moving = false;
+            for (Mur mur : murs)
+                mur.setSelectable(true);
+        }
+        initialCoin = lastCoin = newCoin = null;
+        murs = null;
+        slabs = null;
+        anchor = null;
     }
 
     @Override
     public void abort() {
-        // TODO
+
+        if (moving) {
+            moving = false;
+            for (Slab s : slabs)
+                s.remplaceCoin(newCoin, initialCoin);
+            for (Mur m : murs)
+                m.remplaceCoin(newCoin, initialCoin);
+            for (Mur mur : murs)
+                mur.setSelectable(true);
+        }
+        initialCoin = lastCoin = newCoin = null;
+        murs = null;
+        slabs = null;
+        anchor = null;
     }
 
     @Override

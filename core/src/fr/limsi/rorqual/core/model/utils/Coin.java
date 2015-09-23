@@ -76,7 +76,7 @@ public class Coin {
     public void addSlab(Slab slab) {
         if (slabs.size() == 0 && murs.size() == 0)
             coins.get(etage).add(this);
-        if (!slabs.contains(slab))
+        //if (!slabs.contains(slab))
             slabs.add(slab);
     }
 
