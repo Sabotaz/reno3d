@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.collision.Ray;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import eu.mihosoft.vrl.v3d.CSG;
@@ -83,8 +84,8 @@ public class Slab extends ModelContainer {
         this.mitoyennetePlancher=MitoyennetePlancher.TERRE_PLEIN;
         this.uPlafond=2;
         this.uPlancher=2;
-        this.dateIsolationPlafond=DateIsolationSlab.JAMAIS;
-        this.dateIsolationPlancher=DateIsolationSlab.JAMAIS;
+        this.dateIsolationPlafond=DateIsolationSlab.INCONNUE;
+        this.dateIsolationPlancher=DateIsolationSlab.INCONNUE;
         this.typeIsolationPlancher=TypeIsolationSlab.NON_ISOLE;
     }
 
@@ -421,6 +422,11 @@ public class Slab extends ModelContainer {
         last.removeSlab(this);
         next.addSlab(this);
         this.setChanged();
+    }
+
+    @Override
+    public String toString(){
+        return "Slab ->  s="+surface+" uPlancher="+uPlancher+ " dpPlancher="+deperditionPlancher+" uPlafond="+uPlafond+ " deperditionPlafond="+deperditionPlafond+" mitoyennetePlancher="+mitoyennetePlancher+" mitoyennetePlafond="+mitoyennetePlafond;
     }
 
 }

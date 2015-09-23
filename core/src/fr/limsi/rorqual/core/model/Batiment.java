@@ -181,6 +181,13 @@ public class Batiment {
         return all;
     }
 
+    public ArrayList<Slab> getSlabs() {
+        ArrayList<Slab> all = new ArrayList<Slab>();
+        for (Etage etage : etages.list())
+            all.addAll(etage.getSlabs());
+        return all;
+    }
+
     private Etage first;
     private Etage last;
 
