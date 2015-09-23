@@ -1,5 +1,11 @@
 package fr.limsi.rorqual.core.logic;
 
+import java.util.HashMap;
+
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
@@ -96,6 +102,11 @@ public class Deleter extends ModelMaker {
         for (Ouverture o : m.getOuvertures())
             deleteOuverture(o);
 
+        HashMap<String,Object> currentItems = new HashMap<String,Object>();
+        currentItems.put("userObject", m);
+        Event e = new Event(DpeEvent.MUR_REMOVED, currentItems);
+        EventManager.getInstance().put(Channel.DPE, e);
+
     }
 
     static public void deleteSlab(Slab s) {
@@ -114,10 +125,20 @@ public class Deleter extends ModelMaker {
             deleteObjet(o);
         }
         s.getObjets().clear();
+
+        HashMap<String,Object> currentItems = new HashMap<String,Object>();
+        currentItems.put("userObject", s);
+        Event e = new Event(DpeEvent.SLAB_REMOVED, currentItems);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
 
     static public void deleteOuverture(Ouverture o) {
         o.getMur().removeOuverture(o);
+
+        HashMap<String,Object> currentItems = new HashMap<String,Object>();
+        currentItems.put("userObject", o);
+        Event e = new Event(DpeEvent.OUVERTURE_REMOVED, currentItems);
+        EventManager.getInstance().put(Channel.DPE, e);
     }
 
     static public void deleteObjet(Objet o) {
