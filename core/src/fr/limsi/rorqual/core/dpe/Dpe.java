@@ -3342,7 +3342,7 @@ public class Dpe implements EventListener {
                         fenetre.actualiseC1();
                         fenetre.actualiseFts();
                         fenetre.getMur().actualiseSurface();
-//                        this.actualiseSse();
+                        this.actualiseSse();
                         break;
                     }
                     case PORTE_FENETRE_AJOUTEE: {
