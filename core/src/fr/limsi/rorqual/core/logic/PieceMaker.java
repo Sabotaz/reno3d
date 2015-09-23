@@ -289,7 +289,7 @@ public class PieceMaker extends ModelMaker {
         if (slab == null)
             return;
         ArrayList<Coin> coins = new ArrayList<Coin>(slab.getCoins());
-        if (coins.contains(A) && coins.contains(B)) {
+        if (coins.contains(A) && coins.contains(B) && !coins.contains(M)) {
             int indiceA = coins.indexOf(A);
             int indiceB = coins.indexOf(B);
             if (indiceA < indiceB) {
