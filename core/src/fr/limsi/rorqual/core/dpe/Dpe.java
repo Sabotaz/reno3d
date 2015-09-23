@@ -3344,6 +3344,7 @@ public class Dpe implements EventListener {
                         fenetre.getMur().actualiseSurface();
                         this.actualiseSse();
                         break;
+                        // coucou
                     }
                     case PORTE_FENETRE_AJOUTEE: {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
