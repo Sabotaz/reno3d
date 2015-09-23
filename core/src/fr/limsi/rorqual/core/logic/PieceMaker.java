@@ -286,6 +286,8 @@ public class PieceMaker extends ModelMaker {
     }
 
     private void fixSlab(Slab slab, Coin A, Coin M, Coin B) {
+        if (slab == null)
+            return;
         ArrayList<Coin> coins = new ArrayList<Coin>(slab.getCoins());
         if (coins.contains(A) && coins.contains(B)) {
             int indiceA = coins.indexOf(A);
