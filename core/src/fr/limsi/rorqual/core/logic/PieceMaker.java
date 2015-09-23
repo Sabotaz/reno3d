@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
@@ -284,6 +285,20 @@ public class PieceMaker extends ModelMaker {
         }
     }
 
+    private void fixSlab(Slab slab, Coin A, Coin M, Coin B) {
+        ArrayList<Coin> coins = new ArrayList<Coin>(slab.getCoins());
+        if (coins.contains(A) && coins.contains(B)) {
+            int indiceA = coins.indexOf(A);
+            int indiceB = coins.indexOf(B);
+            if (indiceA < indiceB) {
+                coins.add(indiceA+1, M);
+            } else {
+                coins.add(indiceB+1, M);
+            }
+            slab.setCoins(coins);
+        }
+    }
+
     private void fixConflicts(Mur m1, Mur m2) {
         Vector2 a1 = m1.getA().getPosition();
         Vector2 b1 = m1.getB().getPosition();
@@ -299,6 +314,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
+            fixSlab(m1.getSlabGauche(), A, C, B);
+            fixSlab(m1.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m1);
             ModelHolder.notify(m1);
 
@@ -312,6 +329,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
+            fixSlab(m1.getSlabGauche(), A, C, B);
+            fixSlab(m1.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m1);
             ModelHolder.notify(m1);
         } else
@@ -324,6 +343,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
+            fixSlab(m2.getSlabGauche(), A, C, B);
+            fixSlab(m2.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m2);
             ModelHolder.notify(m2);
         } else
@@ -336,6 +357,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
+            fixSlab(m2.getSlabGauche(), A, C, B);
+            fixSlab(m2.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m2);
             ModelHolder.notify(m2);
         }
