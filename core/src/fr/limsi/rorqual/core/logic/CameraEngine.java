@@ -20,7 +20,7 @@ import fr.limsi.rorqual.core.view.PerspectiveCameraUpdater;
 // Moteur de gestion des différentes caméras
 public class CameraEngine implements GestureDetector.GestureListener {
 
-    private Cameras curent_camera = Cameras.PERSPECTIVE;
+    private Cameras curent_camera = Cameras.ORTHOGRAPHIC;
 
     private enum Cameras {
         PERSPECTIVE,
