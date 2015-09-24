@@ -19,4 +19,5 @@ void main() {
         else {
                 gl_FragColor = vec4(0,0,0, tex.a);
         }
+        //gl_FragColor = mix(vec4(u_firstColor.rgb, tex.a),vec4(u_secondColor.rgb, tex.a), step(u_ratio, intensity));
 }

@@ -316,8 +316,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
-            fixSlab(m1.getSlabGauche(), A, C, B);
-            fixSlab(m1.getSlabDroit(), A, C, B);
+            //fixSlab(m1.getSlabGauche(), A, C, B);
+            //fixSlab(m1.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m1);
             ModelHolder.notify(m1);
 
@@ -331,8 +331,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m1); // CB
             extraWalls.add(extra);
             fixOuvertures(m1, extra);
-            fixSlab(m1.getSlabGauche(), A, C, B);
-            fixSlab(m1.getSlabDroit(), A, C, B);
+            //fixSlab(m1.getSlabGauche(), A, C, B);
+            //fixSlab(m1.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m1);
             ModelHolder.notify(m1);
         } else
@@ -345,8 +345,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
-            fixSlab(m2.getSlabGauche(), A, C, B);
-            fixSlab(m2.getSlabDroit(), A, C, B);
+            //fixSlab(m2.getSlabGauche(), A, C, B);
+            //fixSlab(m2.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m2);
             ModelHolder.notify(m2);
         } else
@@ -359,8 +359,8 @@ public class PieceMaker extends ModelMaker {
             extra = new Mur(C, B, m2); // CB
             extraWalls.add(extra);
             fixOuvertures(m2, extra);
-            fixSlab(m2.getSlabGauche(), A, C, B);
-            fixSlab(m2.getSlabDroit(), A, C, B);
+            //fixSlab(m2.getSlabGauche(), A, C, B);
+            //fixSlab(m2.getSlabDroit(), A, C, B);
             this.dpeEventSizeChanged(m2);
             ModelHolder.notify(m2);
         }
