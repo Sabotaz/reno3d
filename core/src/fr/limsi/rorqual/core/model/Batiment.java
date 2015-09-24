@@ -263,4 +263,8 @@ public class Batiment {
         return last;
     }
 
+    public Etage getEtage(int i) {
+        return etages.get(i);
+    }
+
 }
