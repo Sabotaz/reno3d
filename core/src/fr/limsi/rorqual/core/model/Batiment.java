@@ -79,6 +79,7 @@ public class Batiment {
         etage.setOrientation(globalOrientation);
         etage.getModelGraph().setCamera(camera);
         etage.getModelGraph().getRoot().add(floor);
+        first = last = etage;
         etages.add(etage);
     }
 
@@ -221,6 +222,7 @@ public class Batiment {
             currentItems.put("userObject", newFirst);
             Event e = new Event(DpeEvent.IS_NOW_FIRST_FLOOR, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
+            first = newFirst;
         }
     }
 
@@ -236,6 +238,7 @@ public class Batiment {
             currentItems.put("userObject", newLast);
             Event e = new Event(DpeEvent.IS_NOW_LAST_FLOOR, currentItems);
             EventManager.getInstance().put(Channel.DPE, e);
+            last = newLast;
         }
     }
 
@@ -250,6 +253,14 @@ public class Batiment {
             if (!etages.get(i).isEmpty())
                 return etages.get(i);
         return null;
+    }
+
+    public Etage getFirstEtage() {
+        return first;
+    }
+
+    public Etage getLastEtage() {
+        return last;
     }
 
 }
