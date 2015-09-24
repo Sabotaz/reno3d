@@ -696,16 +696,6 @@ public class PorteFenetre extends Ouverture {
     }
 
     @Override
-    protected void makeModel() {
-        BoundingBox b = new BoundingBox();
-        this.calculateBoundingBox(b);
-        float w = this.getWidth() / b.getWidth();
-        float h = this.getMur().getDepth() / b.getHeight();
-        float d = this.getHeight() / b.getDepth();
-        Vector3 dmin = b.getMin(new Vector3()).scl(-1);
-        model_transform.idt().scale(w, h, d).translate(dmin);
-    }
-    @Override
     public String toString(){
         return "PorteFenetre ->  s="+surface+" u="+coefficientDeTransmissionThermique+ " dp="+deperdition;
     }

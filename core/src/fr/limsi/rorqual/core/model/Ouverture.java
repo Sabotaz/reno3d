@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,18 +114,27 @@ public abstract class Ouverture extends ModelContainer {
         changed = true;
     }
 
+    private Matrix4 scaleMatrix = new Matrix4();
+
     public void act() {
         super.act();
         if (mur == null)
             return;
-        if (changed)
-            makeModel();
+        if (changed) {
+            BoundingBox b = new BoundingBox();
+            this.calculateBoundingBox(b).mul(model_transform);
+            float w = this.getWidth() / b.getWidth();
+            float h = this.getMur().getDepth() / b.getHeight();
+            float d = this.getHeight() / b.getDepth();
+            Vector3 dmin = b.getMin(new Vector3()).scl(-1);
+            scaleMatrix.idt().scale(w, h, d).translate(dmin);
+        }
         changed = false;
         Matrix4 mx = new Matrix4();
         Vector3 vx = new Vector3(position.x, -mur.getDepth()/2, position.y);
         mx.translate(vx);
         local_transform.idt();
-        local_transform.mul(mx);
+        local_transform.mul(mx).mul(scaleMatrix);
     }
 
     @Override
@@ -133,5 +143,4 @@ public abstract class Ouverture extends ModelContainer {
 
     }
 
-    protected abstract void makeModel();
 }
