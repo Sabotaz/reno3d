@@ -1,23 +1,17 @@
 package fr.limsi.rorqual.core.model;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import eu.mihosoft.vrl.v3d.CSG;
@@ -27,25 +21,14 @@ import fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlafond;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlancher;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.TypeIsolationSlab;
-import fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
-import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum;
-import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
-import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
-import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
-import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcPolyline;
-import ifc2x3javatoolbox.ifc2x3tc1.LIST;
-
 /**
  * Created by ricordeau on 20/07/15.
  */
@@ -71,6 +54,7 @@ public class Slab extends ModelContainer {
     private ArrayList <Mur> murs = new ArrayList<Mur>();
     private ArrayList <Objet> objets = new ArrayList<Objet>();
     private float height;
+    private Polygon polygon;
 
     public Slab(List<Coin> coins) {
         this(coins, DEFAULT_HEIGHT);
@@ -104,6 +88,19 @@ public class Slab extends ModelContainer {
         }
         airePolygone=(totX-totY)/2;
         this.surface = Math.abs(airePolygone);
+    }
+
+    public void createCorrespondantPolygon(){
+        float vertices[] = new float[coins.size()*2];
+        for (int i=0,j=0; j<coins.size();i+=2,j++){
+            vertices[i]=coins.get(j).getPosition().x;
+            vertices[i+1]=coins.get(j).getPosition().y;
+        }
+        this.polygon=new Polygon(vertices);
+    }
+
+    public Polygon getPolygon(){
+        return this.polygon;
     }
 
     public void setEtage(Etage e) {

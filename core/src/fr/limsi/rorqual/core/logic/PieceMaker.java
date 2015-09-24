@@ -182,6 +182,8 @@ public class PieceMaker extends ModelMaker {
                 ModelHolder.notify(mur);
             }
             slab.setSelectable(true);
+            slab.actualiseSurface();
+            slab.createCorrespondantPolygon();
             ModelHolder.notify(slab);
             fixConflicts();
         }

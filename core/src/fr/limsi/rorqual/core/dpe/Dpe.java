@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.dpe;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Intersector;
 import com.sun.javafx.sg.prism.NGShape;
 
 import java.util.ArrayList;
@@ -355,8 +356,6 @@ public class Dpe implements EventListener {
             }
             slab.setuPlancher(uPlancher);
             slab.actualiseDeperditionPlancher();
-            System.out.println("uPlancher = " + uPlancher);
-            System.out.println("DeperditionPlancher = " + slab.getDeperditionPlancher());
         }
         if(actualisePlafond){
             float uPlafond=2.5f;
@@ -386,7 +385,7 @@ public class Dpe implements EventListener {
                             uPlafond=0.7f;
                             break;
                         case AUTRE_HABITATION:
-                            uPlafond=0;
+                            uPlafond=0.4f;
                             break;
                     }
                     break;
@@ -402,7 +401,7 @@ public class Dpe implements EventListener {
                             uPlafond=0.55f;
                             break;
                         case AUTRE_HABITATION:
-                            uPlafond=0;
+                            uPlafond=0.3f;
                             break;
                     }
                     break;
@@ -418,7 +417,7 @@ public class Dpe implements EventListener {
                             uPlafond=0.4f;
                             break;
                         case AUTRE_HABITATION:
-                            uPlafond=0;
+                            uPlafond=0.25f;
                             break;
                     }
                     break;
@@ -434,7 +433,7 @@ public class Dpe implements EventListener {
                             uPlafond=0.3f;
                             break;
                         case AUTRE_HABITATION:
-                            uPlafond=0;
+                            uPlafond=0.23f;
                             break;
                     }
                     break;
@@ -450,7 +449,7 @@ public class Dpe implements EventListener {
                             uPlafond=0.27f;
                             break;
                         case AUTRE_HABITATION:
-                            uPlafond=0;
+                            uPlafond=0.2f;
                             break;
                     }
                     break;
@@ -466,7 +465,7 @@ public class Dpe implements EventListener {
                             uPlafond=0.15f;
                             break;
                         case AUTRE_HABITATION:
-                            uPlafond=0;
+                            uPlafond=0.12f;
                             break;
                     }
                     break;
@@ -599,6 +598,35 @@ public class Dpe implements EventListener {
                 break;
         }
         return uPlancher;
+    }
+    public void gestionSuperpositionCreationSlab(Slab slabDuDessous, Slab slabDuDessus){
+        slabDuDessous.setMitoyennetePlafond(MitoyennetePlafond.AUTRE_ETAGE_DU_LOGEMENT);
+        slabDuDessus.setMitoyennetePlancher(MitoyennetePlancher.AUTRE_ETAGE_DU_LOGEMENT);
+        actualiseCoeffDeperditionThermique(slabDuDessous, true, false);
+        actualiseCoeffDeperditionThermique(slabDuDessus, false, true);
+    }
+    public void analyseSuperpositionSlab(Slab slabNouveau){
+        int numberEtage = slabNouveau.getEtage().getNumber();
+        Intersector.MinimumTranslationVector translationVector = new Intersector.MinimumTranslationVector();
+        try{
+            ArrayList<Slab> slabsEtageInf = ModelHolder.getInstance().getBatiment().getEtage(numberEtage-1).getSlabs();
+            for (Slab slabEtageInf : slabsEtageInf){
+                if (Intersector.overlapConvexPolygons(slabNouveau.getPolygon(),slabEtageInf.getPolygon(),translationVector)
+                        && translationVector.depth > 0){
+                    gestionSuperpositionCreationSlab(slabEtageInf,slabNouveau);
+                }
+            }
+        }catch (ArrayIndexOutOfBoundsException e){}
+        try {
+            ModelHolder.getInstance().getBatiment().getEtage(numberEtage+1);
+            ArrayList<Slab> slabsEtageSup = ModelHolder.getInstance().getBatiment().getEtage(numberEtage+1).getSlabs();
+            for (Slab slabEtageSup : slabsEtageSup){
+                if (Intersector.overlapConvexPolygons(slabNouveau.getPolygon(),slabEtageSup.getPolygon(),translationVector)
+                        && translationVector.depth > 0){
+                    gestionSuperpositionCreationSlab(slabNouveau, slabEtageSup);
+                }
+            }
+        }catch(IndexOutOfBoundsException e){}
     }
     ///*** Fenêtres ***///
     private List<Fenetre> fenetreList=new ArrayList<Fenetre>();
@@ -1586,7 +1614,7 @@ public class Dpe implements EventListener {
     private float bEcs=3688;
     private float becs=55;
     private float nbJoursAbsenceParAn=0;
-    private float nbHabitant=4;
+    private float nbHabitant=1;
     private float cEcs=5000;
     private float iEcs=5.45f;
     private float fEcs=0;
@@ -3328,9 +3356,9 @@ public class Dpe implements EventListener {
                     case SLAB_AJOUTE: {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Slab slab = (Slab) items.get("userObject");
-                        slab.actualiseSurface();
                         this.actualiseCoeffDeperditionThermique(slab,true,true);
                         this.actualiseSH();
+                        this.analyseSuperpositionSlab(slab);
                         break;
                     }
                     case FENETRE_AJOUTEE: {
@@ -3344,7 +3372,6 @@ public class Dpe implements EventListener {
                         fenetre.getMur().actualiseSurface();
                         this.actualiseSse();
                         break;
-                        // coucou
                     }
                     case PORTE_FENETRE_AJOUTEE: {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
@@ -3359,7 +3386,6 @@ public class Dpe implements EventListener {
                         break;
                     }
                     case PORTE_AJOUTE: {
-                        System.out.println(ModelHolder.getInstance().getBatiment().getSlabs());
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Porte porte = (Porte) items.get("userObject");
                         porteList.add(porte);
