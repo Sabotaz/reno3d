@@ -32,7 +32,12 @@ public class Dpe implements EventListener {
 
     // 0.Variables générales
     private float sh;
-    private float sdep;
+    private float sdepTot;
+    private float sdepMurs;
+    private float sdepToits;
+    private float sdepFen;
+    private float sdepPorte;
+    private float sdepPorteFenetre;
     private float perimetreBatiment;
     private float scoreDpe = 700;
     private DateConstructionBatimentEnum dateConstructionBatiment = DateConstructionBatimentEnum.AVANT_1975; // Initialisation défavorable
@@ -64,6 +69,56 @@ public class Dpe implements EventListener {
         }
         perimetreBatiment=tampon;
         this.actualiseDpPlancherFuncPerimetre();
+    }
+    public void actualiseSdepMurs(){
+        float tampon = 0;
+        for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
+            if(m.getDeperdition()!=0) {
+                tampon += m.getSurface();
+            }
+        }
+        sdepMurs = tampon;
+        this.actualiseSdep();
+    }
+    public void actualiseSdepToits(){
+        float tampon = 0;
+        for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs()) {
+            if(s.getDeperditionPlafond() !=0) {
+                tampon += s.getSurface();
+            }
+        }
+        sdepToits = tampon;
+        this.actualiseSdep();
+    }
+    public void actualiseSfen(){
+        float tampon = 0;
+        for (Fenetre f : fenetreList) {
+            if(f.getDeperdition() !=0) {
+                tampon += f.getSurface();
+            }
+        }
+        sdepFen = tampon;
+        this.actualiseSdep();
+    }
+    public void actualiseSporte(){
+        float tampon = 0;
+        for (Porte p : porteList) {
+            if(p.getDeperdition() !=0) {
+                tampon += p.getSurface();
+            }
+        }
+        sdepPorte = tampon;
+        this.actualiseSdep();
+    }
+    public void actualiseSporteFenetre(){
+        float tampon = 0;
+        for (PorteFenetre pf : porteFenetreList) {
+            if(pf.getDeperdition() !=0) {
+                tampon += pf.getSurface();
+            }
+        }
+        sdepPorteFenetre = tampon;
+        this.actualiseSdep();
     }
     public void actualiseSdep(){
 
@@ -105,8 +160,6 @@ public class Dpe implements EventListener {
     }
     public void actualiseDpToit(){
         float tampon=0;
-        System.out.println(ModelHolder.getInstance().getBatiment().getSlabs());
-        System.out.println("");
         for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs()) {
             tampon += s.getDeperditionPlafond();
         }
@@ -357,8 +410,6 @@ public class Dpe implements EventListener {
             }
             slab.setuPlancher(uPlancher);
             slab.actualiseDeperditionPlancher();
-            System.out.println("uPlancher = " + uPlancher);
-            System.out.println("DeperditionPlancher = " + slab.getDeperditionPlancher());
         }
         if(actualisePlafond){
             float uPlafond=2.5f;
@@ -602,15 +653,41 @@ public class Dpe implements EventListener {
         }
         return uPlancher;
     }
+    public void gestionSuperpositionCreationSlab(Slab slabDuDessous, Slab slabDuDessus){
+        slabDuDessous.setMitoyennetePlafond(MitoyennetePlafond.AUTRE_ETAGE_DU_LOGEMENT);
+        slabDuDessus.setMitoyennetePlancher(MitoyennetePlancher.AUTRE_ETAGE_DU_LOGEMENT);
+        actualiseCoeffDeperditionThermique(slabDuDessous, true, false);
+        actualiseCoeffDeperditionThermique(slabDuDessus, false, true);
+    }
+    public void analyseSuperpositionSlab(Slab slabNouveau){
+        int numberEtage = slabNouveau.getEtage().getNumber();
+        Intersector.MinimumTranslationVector translationVector = new Intersector.MinimumTranslationVector();
+        try{
+            ArrayList<Slab> slabsEtageInf = ModelHolder.getInstance().getBatiment().getEtage(numberEtage-1).getSlabs();
+            for (Slab slabEtageInf : slabsEtageInf){
+                if (Intersector.overlapConvexPolygons(slabNouveau.getPolygon(),slabEtageInf.getPolygon(),translationVector)
+                        && translationVector.depth > 0){
+                    gestionSuperpositionCreationSlab(slabEtageInf,slabNouveau);
+                }
+            }
+        }catch (ArrayIndexOutOfBoundsException e){}
+        try {
+            ModelHolder.getInstance().getBatiment().getEtage(numberEtage+1);
+            ArrayList<Slab> slabsEtageSup = ModelHolder.getInstance().getBatiment().getEtage(numberEtage+1).getSlabs();
+            for (Slab slabEtageSup : slabsEtageSup){
+                if (Intersector.overlapConvexPolygons(slabNouveau.getPolygon(),slabEtageSup.getPolygon(),translationVector)
+                        && translationVector.depth > 0){
+                    gestionSuperpositionCreationSlab(slabNouveau, slabEtageSup);
+                }
+            }
+        }catch(IndexOutOfBoundsException e){}
+    }
     ///*** Fenêtres ***///
     private List<Fenetre> fenetreList=new ArrayList<Fenetre>();
-    private HashMap<Fenetre,HashMap<DpeChange,Boolean>> fenetreChangeSaveList = new HashMap<Fenetre,HashMap<DpeChange,Boolean>>();
     ///*** Portes-fenêtres ***///
     private List<PorteFenetre> porteFenetreList=new ArrayList<PorteFenetre>();
-    private HashMap<PorteFenetre,HashMap<DpeChange,Boolean>> porteFenetreChangeSaveList = new HashMap<PorteFenetre,HashMap<DpeChange,Boolean>>();
     ///*** Portes ***///
     private List<Porte> porteList=new ArrayList<Porte>();
-    private HashMap<Porte,HashMap<DpeChange,Boolean>> porteChangeSaveList = new HashMap<Porte,HashMap<DpeChange,Boolean>>();
 
     // 2.4. Calcul des ponts thermiques TODO : finir ça !
 
@@ -1879,16 +1956,6 @@ public class Dpe implements EventListener {
         }else{
             scoreDpe = 700;
         }
-
-//        System.out.println("scoreDpe = " + scoreDpe);
-//        System.out.println("cElectromenager = " + cElectromenager);
-//        System.out.println("cEclairage = " + cEclairage);
-//        System.out.println("cCuisson = " + cCuisson);
-//        System.out.println("cClims = " + cClimatisation);
-//        System.out.println("cEcs = " + cEcs);
-//        System.out.println("cch = " + cch);
-//        System.out.println("sh = " + sh);
-//        System.out.println();
     }
     public float getScoreDpe(){
         return Math.round(this.scoreDpe);
@@ -3296,6 +3363,7 @@ public class Dpe implements EventListener {
                         Mur mur = (Mur) items.get("userObject");
                         this.actualiseCoeffDeperditionThermique(mur);
                         this.actualisePerimetreBatiment();
+                        this.actualiseSdepMurs();
                         break;
                     }
                     case SIZE_MUR_CHANGED:{
@@ -3303,15 +3371,18 @@ public class Dpe implements EventListener {
                         Mur mur = (Mur) items.get("userObject");
                         mur.actualiseDeperdition();
                         this.actualisePerimetreBatiment();
+                        this.actualiseSdepMurs();
                         break;
                     }
                     case MUR_REMOVED:{
                         this.actualiseDpMur();
                         this.actualisePerimetreBatiment();
+                        this.actualiseSdepMurs();
                         break;
                     }
                     case DEPERDITION_MURS_CHANGED : {
                         this.actualiseDpMur();
+                        this.actualiseSdepMurs();
                         break;
                     }
                     case MITOYENNETE_MUR_CHANGEE: {
@@ -3338,12 +3409,15 @@ public class Dpe implements EventListener {
                         slab.actualiseSurface();
                         this.actualiseCoeffDeperditionThermique(slab,true,true);
                         this.actualiseSH();
+                        this.actualiseSdepToits();
+                        this.analyseSuperpositionSlab(slab);
                         break;
                     }
                     case SLAB_REMOVED:{
                         this.actualiseDpPlancher();
                         this.actualiseDpToit();
                         this.actualiseSH();
+                        this.actualiseSdepToits();
                         break;
                     }
                     case FENETRE_AJOUTEE: {
@@ -3371,7 +3445,6 @@ public class Dpe implements EventListener {
                         break;
                     }
                     case PORTE_AJOUTE: {
-                        System.out.println(ModelHolder.getInstance().getBatiment().getSlabs());
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Porte porte = (Porte) items.get("userObject");
                         porteList.add(porte);
@@ -3403,6 +3476,7 @@ public class Dpe implements EventListener {
                     }
                     case DEPERDITION_TOITS_CHANGED : {
                         this.actualiseDpToit();
+                        this.actualiseSdepToits();
                     }
                     case DEPERDITION_PLANCHERS_CHANGED : {
                         this.actualiseDpPlancher();
