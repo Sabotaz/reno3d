@@ -244,7 +244,7 @@ public class Dpe implements EventListener {
         }
         return uMur;
     }
-    ///*** Slabs ***/// TODO : tester les slabs
+    ///*** Slabs ***///
     public void actualiseCoeffDeperditionThermique(Slab slab,boolean actualisePlafond,boolean actualisePlancher){
         if(actualisePlancher){
             float uPlancher=2.5f;
@@ -1872,7 +1872,12 @@ public class Dpe implements EventListener {
     /*---------------------------------Calculateur DPE-------------------------------------------*/
 
     public void actualiseScoreDpe(){
-        scoreDpe = (cElectromenager+cEclairage+cCuisson+cClimatisation+cEcs+cch)/sh;
+        if (sh != 0){
+            scoreDpe = (cElectromenager+cEclairage+cCuisson+cClimatisation+cEcs+cch)/sh;
+        }else{
+            scoreDpe = 700;
+        }
+
 //        System.out.println("scoreDpe = " + scoreDpe);
 //        System.out.println("cElectromenager = " + cElectromenager);
 //        System.out.println("cEclairage = " + cEclairage);
@@ -3333,6 +3338,10 @@ public class Dpe implements EventListener {
                         this.actualiseSH();
                         break;
                     }
+                    case SLAB_REMOVED:{
+                        this.actualiseSH();
+                        break;
+                    }
                     case FENETRE_AJOUTEE: {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Fenetre fenetre = (Fenetre) items.get("userObject");
@@ -3344,7 +3353,6 @@ public class Dpe implements EventListener {
                         fenetre.getMur().actualiseSurface();
                         this.actualiseSse();
                         break;
-                        // coucou
                     }
                     case PORTE_FENETRE_AJOUTEE: {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;

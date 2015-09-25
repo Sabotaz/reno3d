@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.math.GeometryUtils;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
@@ -96,6 +97,7 @@ public class Slab extends ModelContainer {
             vertices[i]=coins.get(j).getPosition().x;
             vertices[i+1]=coins.get(j).getPosition().y;
         }
+        GeometryUtils.ensureCCW(vertices);
         this.polygon=new Polygon(vertices);
     }
 
