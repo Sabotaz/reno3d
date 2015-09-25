@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.logic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.limsi.rorqual.core.event.Channel;
@@ -79,6 +80,12 @@ public class Deleter extends ModelMaker {
     }
 
     static public void deleteMur(Mur m) {
+
+        ArrayList<Ouverture> overtures = new ArrayList<Ouverture>(m.getOuvertures());
+
+        for (Ouverture o : overtures)
+            deleteOuverture(o);
+
         m.getEtage().removeMur(m);
 
         m.setA(null);
@@ -97,10 +104,6 @@ public class Deleter extends ModelMaker {
                 deleteSlab((m.getSlabDroit()));
             m.setSlabDroit(null);
         }
-
-
-        for (Ouverture o : m.getOuvertures())
-            deleteOuverture(o);
 
         HashMap<String,Object> currentItems = new HashMap<String,Object>();
         currentItems.put("userObject", m);
