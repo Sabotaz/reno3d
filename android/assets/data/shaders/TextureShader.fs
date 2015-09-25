@@ -35,7 +35,7 @@ void main() {
     }
 
     if (u_is_selected) {
-        float s = sin(8*u_time) * 0.5 + 0.5;
+        float s = sin(8.0*u_time) * 0.5 + 0.5;
         gl_FragColor = vec4(gl_FragColor.rgb * s, gl_FragColor.a);
     }
 }
