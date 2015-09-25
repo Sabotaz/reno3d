@@ -40,10 +40,10 @@ public class Mover extends ModelMaker {
 
         ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
         ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
-        Vector2 pos = new MyVector2(modelContainer.getIntersection());
         if (modelContainer == null) {
             moving = false;
         } else if (modelContainer instanceof Mur) {
+            Vector2 pos = new MyVector2(modelContainer.getIntersection());
             Coin A = ((Mur)modelContainer).getA();
             Coin B = ((Mur)modelContainer).getB();
             float d1 = A.getPosition().dst(pos);
@@ -82,6 +82,7 @@ public class Mover extends ModelMaker {
 
             moving = true;
         } else if (modelContainer instanceof Slab) {
+            Vector2 pos = new MyVector2(modelContainer.getIntersection());
 
             float d = 1.5f; // min dist to move
             for (Coin coin : ((Slab)modelContainer).getCoins()) {
