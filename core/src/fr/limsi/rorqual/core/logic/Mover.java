@@ -1,5 +1,7 @@
 package fr.limsi.rorqual.core.logic;
 
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -26,6 +28,13 @@ public class Mover extends ModelMaker {
     ArrayList<Slab> slabs;
     boolean moving = false;
 
+    boolean translate = false;
+    Mur translatedMur;
+    Coin initialCoinA, initialCoinB;
+    Coin lastCoinA, lastCoinB;
+    Coin newCoinA, newCoinB;
+    int startx, starty;
+
     @Override
     public void begin(int screenX, int screenY) {
 
@@ -39,13 +48,34 @@ public class Mover extends ModelMaker {
             Coin B = ((Mur)modelContainer).getB();
             float d1 = A.getPosition().dst(pos);
             float d2 = B.getPosition().dst(pos);
-            if (d1 < d2)
+            float d = A.getPosition().dst(B.getPosition()); // min dist to move
+            if (d1 < d/4) {
                 newCoin = initialCoin = A;
-            else
-                newCoin = initialCoin = B;
+                translate = false;
 
-            murs = new ArrayList<Mur>(initialCoin.getMurs());
-            slabs = new ArrayList<Slab>(initialCoin.getSlabs());
+                murs = new ArrayList<Mur>(initialCoin.getMurs());
+                slabs = new ArrayList<Slab>(initialCoin.getSlabs());
+            }
+            else if (d2 < d/4) {
+                newCoin = initialCoin = B;
+                translate = false;
+
+                murs = new ArrayList<Mur>(initialCoin.getMurs());
+                slabs = new ArrayList<Slab>(initialCoin.getSlabs());
+            }
+            else {
+                newCoinA = initialCoinA = A;
+                newCoinB = initialCoinB = B;
+                translatedMur = (Mur)modelContainer;
+                translatedMur.setSelectable(false);
+                startx = screenX;
+                starty = screenY;
+                translate = true;
+                murs = new ArrayList<Mur>(initialCoinA.getMurs());
+                murs.addAll(initialCoinB.getMurs());
+                slabs = new ArrayList<Slab>(initialCoinA.getSlabs());
+                slabs.addAll(initialCoinB.getSlabs());
+            }
 
             for (Mur mur : murs)
                 mur.setSelectable(false);
@@ -53,7 +83,7 @@ public class Mover extends ModelMaker {
             moving = true;
         } else if (modelContainer instanceof Slab) {
 
-            float d = 2.5f; // min dist to move
+            float d = 1.5f; // min dist to move
             for (Coin coin : ((Slab)modelContainer).getCoins()) {
                 if (coin.getPosition().dst(pos) < d)
                     newCoin = initialCoin = coin;
@@ -80,6 +110,58 @@ public class Mover extends ModelMaker {
 
         if (!moving)
             return;
+
+        if (translate) {
+            translateMur(screenX, screenY);
+        } else {
+            moveCoin(screenX, screenY);
+        }
+    }
+
+    public void translateMur(int screenX, int screenY) {
+
+        ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
+
+        if (obj != null) {
+            Vector2 intersection = new MyVector2(obj.getIntersection());
+            Vector2 normal = initialCoinB.getPosition().cpy().sub(initialCoinA.getPosition()).rotate90(0).nor();
+
+            // projection
+            Vector2 dv = normal.cpy().scl(normal.dot(intersection));
+            Vector2 projA = normal.cpy().scl(normal.dot(initialCoinA.getPosition()));
+            Vector2 projB = normal.cpy().scl(normal.dot(initialCoinB.getPosition()));
+
+            Vector2 newA = dv.cpy().add(initialCoinA.getPosition()).sub(projA);
+            Vector2 newB = dv.cpy().add(initialCoinB.getPosition()).sub(projB);
+
+            lastCoinA = newCoinA;
+            lastCoinB = newCoinB;
+            newCoinA = Coin.getCoin(etage, newA.cpy());
+            newCoinB = Coin.getCoin(etage, newB.cpy());
+
+            for (Slab s : slabs) {
+                s.remplaceCoin(lastCoinA, newCoinA);
+                s.remplaceCoin(lastCoinB, newCoinB);
+            }
+            for (Mur m : murs) {
+                m.remplaceCoin(lastCoinA, newCoinA);
+                m.remplaceCoin(lastCoinB, newCoinB);
+            }
+
+        } else {
+            for (Slab s : slabs) {
+                s.remplaceCoin(newCoinA, initialCoinA);
+                s.remplaceCoin(newCoinB, initialCoinB);
+            }
+            for (Mur m : murs) {
+                m.remplaceCoin(newCoinA, initialCoinA);
+                m.remplaceCoin(newCoinB, initialCoinB);
+            }
+        }
+    }
+
+    public void moveCoin(int screenX, int screenY) {
 
         ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
         int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
@@ -138,9 +220,12 @@ public class Mover extends ModelMaker {
             moving = false;
             for (Mur mur : murs)
                 mur.setSelectable(true);
+            if (translatedMur != null)
+                translatedMur.setSelectable(true);
         }
         initialCoin = lastCoin = newCoin = null;
         murs = null;
+        translatedMur = null;
         slabs = null;
         anchor = null;
     }
@@ -161,6 +246,7 @@ public class Mover extends ModelMaker {
         murs = null;
         slabs = null;
         anchor = null;
+        translate = false;
     }
 
     @Override
