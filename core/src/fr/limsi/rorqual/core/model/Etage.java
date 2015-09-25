@@ -2,7 +2,6 @@ package fr.limsi.rorqual.core.model;
 
 import java.util.ArrayList;
 
-import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
@@ -15,6 +14,9 @@ public class Etage {
     private ArrayList<Mur> murs = new ArrayList<Mur>();
     private ArrayList<Slab> slabs = new ArrayList<Slab>();
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
+    private ArrayList<Fenetre> fenetres = new ArrayList<Fenetre>();
+    private ArrayList<Porte> portes = new ArrayList<Porte>();
+    private ArrayList<PorteFenetre> porteFenetres = new ArrayList<PorteFenetre>();
     private int number;
     private Batiment batiment;
     private ModelGraph modelGraph = new ModelGraph();
@@ -84,13 +86,40 @@ public class Etage {
 
     public void addOuverture(Ouverture ouverture) {
         this.ouvertures.add(ouverture);
+        if (ouverture instanceof Fenetre){
+            this.fenetres.add((Fenetre)ouverture);
+        }else if (ouverture instanceof Porte){
+            this.portes.add((Porte)ouverture);
+        }else if (ouverture instanceof PorteFenetre){
+            this.porteFenetres.add((PorteFenetre) ouverture);
+        }
     }
+
     public void removeOuverture(Ouverture ouverture) {
         this.ouvertures.remove(ouverture);
+        if (ouverture instanceof Fenetre){
+            this.fenetres.remove((Fenetre) ouverture);
+        }else if (ouverture instanceof Porte){
+            this.portes.remove((Porte) ouverture);
+        }else if (ouverture instanceof PorteFenetre){
+            this.porteFenetres.remove((PorteFenetre) ouverture);
+        }
     }
 
     public ArrayList<Ouverture> getOuvertures() {
         return ouvertures;
+    }
+
+    public ArrayList<Fenetre> getFenetres() {
+        return fenetres;
+    }
+
+    public ArrayList<Porte> getPortes() {
+        return portes;
+    }
+
+    public ArrayList<PorteFenetre> getPorteFenetres() {
+        return porteFenetres;
     }
 
     public int getNumber() {
@@ -121,6 +150,7 @@ public class Etage {
             m.setGlobalOrientation(orientation);
         }
     }
+
     public void updateOrientation(Mur mur){
         mur.setGlobalOrientation(globalOrientation);
     }

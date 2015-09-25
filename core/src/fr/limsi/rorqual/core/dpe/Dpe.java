@@ -90,7 +90,7 @@ public class Dpe implements EventListener {
         sdepToits = tampon;
         this.actualiseSdep();
     }
-    public void actualiseSfen(){
+    public void actualiseSdepFen(){
         float tampon = 0;
         for (Fenetre f : fenetreList) {
             if(f.getDeperdition() !=0) {
@@ -100,7 +100,7 @@ public class Dpe implements EventListener {
         sdepFen = tampon;
         this.actualiseSdep();
     }
-    public void actualiseSporte(){
+    public void actualiseSdepPorte(){
         float tampon = 0;
         for (Porte p : porteList) {
             if(p.getDeperdition() !=0) {
@@ -110,7 +110,7 @@ public class Dpe implements EventListener {
         sdepPorte = tampon;
         this.actualiseSdep();
     }
-    public void actualiseSporteFenetre(){
+    public void actualiseSdepPorteFenetre(){
         float tampon = 0;
         for (PorteFenetre pf : porteFenetreList) {
             if(pf.getDeperdition() !=0) {
@@ -121,7 +121,8 @@ public class Dpe implements EventListener {
         this.actualiseSdep();
     }
     public void actualiseSdep(){
-
+        sdepTot = sdepMurs + sdepToits + sdepFen + sdepPorte + sdepPorteFenetre;
+        this.actualiseQ4paEnv();
     }
 
     // 1.Expression du besoin de chauffage
@@ -131,7 +132,7 @@ public class Dpe implements EventListener {
     public void actualiseBV(){
         bv=gv*(1-f);
         this.actualiseBch();
-    } // TODO : prendre en compte l'actualisation de f
+    }
     public void actualiseGV(){
         gv=dpMur+dpToit+dpPlancher+dpFenetre+dpPorte+dpPorteFenetre;
         if (gv != lastGv){
@@ -186,6 +187,7 @@ public class Dpe implements EventListener {
             tampon += p.getDeperdition();
         }
         dpPorte=tampon;
+        this.actualiseSdepPorte();
         this.actualiseGV();
     }
     public void actualiseDpFenetre(){
@@ -194,6 +196,7 @@ public class Dpe implements EventListener {
             tampon += f.getDeperdition();
         }
         dpFenetre=tampon;
+        this.actualiseSdepFen();
         this.actualiseGV();
     }
     public void actualiseDpPorteFenetre(){
@@ -202,6 +205,7 @@ public class Dpe implements EventListener {
             tampon += pf.getDeperdition();
         }
         dpPorteFenetre=tampon;
+        this.actualiseSdepPorteFenetre();
         this.actualiseGV();
     }
     ///*** Murs ***///
@@ -692,7 +696,7 @@ public class Dpe implements EventListener {
     // 2.4. Calcul des ponts thermiques TODO : finir ça !
 
     // 2.5. Calcul des déperditions par renouvellement d'air TODO : finir ça !
-    private float renouvellementAir, hVent,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,sDep,nbFenetreSV,nbFenetreDV;
+    private float renouvellementAir, hVent,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,nbFenetreSV,nbFenetreDV;
     private TypeVentilationEnum typeVentilation=TypeVentilationEnum.INCONNUE; // Initialisation logique
     private TemperatureInterieurEnum tInt=TemperatureInterieurEnum.ENTRE_22_ET_23; // Initialisation défavorable
     public void actualiseRenouvellementAir(){
@@ -712,7 +716,7 @@ public class Dpe implements EventListener {
         q4pa=q4paEnv+0.45f*smea*sh;
     }
     public void actualiseQ4paEnv(){
-        q4paEnv=q4paConv*sDep;
+        q4paEnv=q4paConv*sdepTot;
     }
     public void actualiseQ4paConv(){
         if(nbFenetreSV>=nbFenetreDV){
@@ -781,10 +785,12 @@ public class Dpe implements EventListener {
         float a=x-(float)Math.pow(x,3.6);
         float b=1-(float)Math.pow(x,3.6);
         f=a/b;
-    }   // TODO : finir ça !
+        this.actualiseBV();
+    }
     public void actualiseX(){
         x=(aI+aS)/(gv*dhCor);
         this.actualiseRrp();
+        this.actualiseF();
     }
     public void actualisedhCor(){
         dhCor=departementBatiment.getDhref()+getKdh()*departementBatiment.getNref();
@@ -3477,18 +3483,38 @@ public class Dpe implements EventListener {
                     case DEPERDITION_TOITS_CHANGED : {
                         this.actualiseDpToit();
                         this.actualiseSdepToits();
+                        break;
                     }
                     case DEPERDITION_PLANCHERS_CHANGED : {
                         this.actualiseDpPlancher();
+                        break;
                     }
                     case DEPERDITION_FENETRES_CHANGED : {
                         this.actualiseDpFenetre();
+                        break;
                     }
                     case DEPERDITION_PORTES_CHANGED : {
                         this.actualiseDpPorte();
+                        break;
                     }
                     case DEPERDITION_PORTES_FENETRES_CHANGED : {
                         this.actualiseDpPorteFenetre();
+                        break;
+                    }
+                    case OUVERTURE_REMOVED:{
+                        HashMap<String, Object> items = (HashMap<String, Object>) o;
+                        Ouverture ouverture = (Ouverture) items.get("userObject");
+                        if (ouverture instanceof Fenetre){
+                            this.fenetreList.remove(ouverture);
+                            this.actualiseDpFenetre();
+                        }else if (ouverture instanceof Porte){
+                            this.porteList.remove(ouverture);
+                            this.actualiseDpPorte();
+                        }else if (ouverture instanceof PorteFenetre){
+                            this.porteFenetreList.remove(ouverture);
+                            this.actualiseDpPorteFenetre();
+                        }
+                        break;
                     }
                 }
             }
