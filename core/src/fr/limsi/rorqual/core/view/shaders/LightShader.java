@@ -40,6 +40,9 @@ public class LightShader extends FileShader {
     protected final int u_is_tinted = register(new Uniform("u_is_tinted"));
     protected final int u_tint = register(new Uniform("u_tint"));
 
+    protected final int u_is_selected = register(new Uniform("u_is_selected"));
+    protected final int u_time = register(new Uniform("u_time"));
+
     public ShaderProgram getProgram() {
         return program;
     }
@@ -108,6 +111,14 @@ public class LightShader extends FileShader {
             set(u_is_blended, 0);
             set(u_opacity, 0.0f);
         }
+
+        if (renderable.material.has(ShaderAttribute.Selectable)) {
+            ShaderAttribute attr = (ShaderAttribute)renderable.material.get(ShaderAttribute.Selectable);
+            set(u_is_selected, (boolean) attr.getUserData() ? 1 : 0);
+        } else {
+            set(u_is_selected, 0);
+        }
+        set(u_time, System.nanoTime() * 1e-9f);
 
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }

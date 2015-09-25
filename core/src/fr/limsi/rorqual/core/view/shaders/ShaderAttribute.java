@@ -13,11 +13,15 @@ public class ShaderAttribute extends Attribute {
     public final static long Billboard = register(BillboardAlias);
     public final static String SunAlias = "Sun";
     public final static long Sun = register(SunAlias);
-    protected static long Mask = Billboard | Sun;
+    public final static String SelectableAlias = "Selectable";
+    public final static long Selectable = register(SelectableAlias);
+    protected static long Mask = Billboard | Sun | Selectable;
     /** Method to check whether the specified type is a valid ShaderAttribute type */
     public static Boolean is(final long type) {
         return (type & Mask) != 0;
     }
+
+    private Object userData;
 
     public ShaderAttribute (final long type) {
         super(type);
@@ -32,6 +36,14 @@ public class ShaderAttribute extends Attribute {
     /** copy constructor */
     public ShaderAttribute (ShaderAttribute other) {
         this(other.type);
+    }
+
+    public void setUserData(Object o) {
+        userData = o;
+    }
+
+    public Object getUserData() {
+        return userData;
     }
 
     @Override

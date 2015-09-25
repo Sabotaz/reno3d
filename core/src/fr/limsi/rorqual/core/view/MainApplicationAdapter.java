@@ -415,12 +415,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         if (selected != null) {
 //            EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
             selected.setColor(Color.YELLOW);
+            selected.setSelected(true);
         }
     }
 
     public static void deselect() {
         if (selected != null) {
             selected.removeColor();
+            selected.setSelected(false);
         }
         selected = null;
 //        EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
@@ -432,6 +434,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             mainUiControleur.removeTb();
             if (selected != null) {
                 selected.removeColor();
+                selected.setSelected(false);
                 //selected.remove(pin);
             }
             //selected = modelGraph.getObject(screenX, screenY);
@@ -442,6 +445,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 //                System.out.println("TOUCH: " + selected.getUserData());
 //                System.out.println(selected);
                 selected.setColor(Color.YELLOW);
+                selected.setSelected(true);
                 mainUiControleur.addTb(dpeui.getPropertyWindow(selected));
                 //selected.add(pin);
                 //pin.local_transform.setToTranslation(selected.getTop());

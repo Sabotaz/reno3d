@@ -7,6 +7,9 @@ uniform vec3 u_light_direction;
 uniform bool u_is_colored;
 uniform vec4 u_color;
 
+uniform bool u_is_selected;
+uniform float u_time;
+
 uniform bool u_is_tinted;
 uniform vec4 u_tint;
 
@@ -29,5 +32,10 @@ void main() {
 
     if (u_is_tinted) {
         gl_FragColor = 0.8 * gl_FragColor + 0.2 * u_tint;
+    }
+
+    if (u_is_selected) {
+        float s = sin(8*u_time) * 0.5 + 0.5;
+        gl_FragColor = vec4(gl_FragColor.rgb * s, gl_FragColor.a);
     }
 }

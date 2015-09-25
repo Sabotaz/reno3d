@@ -2,6 +2,7 @@ package fr.limsi.rorqual.core.utils.scene3d;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
+
+import fr.limsi.rorqual.core.view.shaders.ShaderAttribute;
 
 /**
  * Created by christophe on 30/06/15.
@@ -37,26 +40,19 @@ public class ModelContainer extends ActableModel {
     }
 
     public ModelContainer() {
+        super();
+        selectedAttribute = new ShaderAttribute(ShaderAttribute.Selectable);
+        selectedAttribute.setUserData(false);
     }
 
     public ModelContainer(Model model) {
-        super.materials.clear();     this.materials.addAll(model.materials);
-        super.meshes.clear();        this.meshes.addAll(model.meshes);
-        super.meshParts.clear();     this.meshParts.addAll(model.meshParts);
-        super.nodes.clear();         this.nodes.addAll(model.nodes);
-        super.animations.clear();    this.animations.addAll(model.animations);
+        this();
+        setModel(model);
     }
 
     public ModelContainer(ModelInstance modelInstance) {
+        this(modelInstance.model);
         model_transform = modelInstance.transform;
-
-        Model model = modelInstance.model;
-
-        super.materials.clear();     this.materials.addAll(model.materials);
-        super.meshes.clear();        this.meshes.addAll(model.meshes);
-        super.meshParts.clear();     this.meshParts.addAll(model.meshParts);
-        super.nodes.clear();         this.nodes.addAll(model.nodes);
-        super.animations.clear();    this.animations.addAll(model.animations);
     }
 
     public void act() {
@@ -170,9 +166,21 @@ public class ModelContainer extends ActableModel {
         return visible;
     }
 
+    private boolean selected = false;
+
+    public void setSelected(boolean b) {
+        selected = b;
+        selectedAttribute.setUserData(selected);
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
     protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
         if (isVisible()) {
             renderTransparent = type == Type.TRANSPARENT;
+
             // update mx
             Matrix4 updated_global_transform = global_transform.cpy().mul(local_transform);
 
@@ -297,6 +305,16 @@ public class ModelContainer extends ActableModel {
 
     public void removeColor(){
         modelData.put("Color", null);
+    }
+
+    ShaderAttribute selectedAttribute;
+
+    public void setModel(Model m) {
+        super.setModel(m);
+
+        for (Material material : materials)
+            material.set(selectedAttribute);
+
     }
 
 }

@@ -120,7 +120,7 @@ public class Mover extends ModelMaker {
 
     public void translateMur(int screenX, int screenY) {
 
-        ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        ModelContainer obj = ModelHolder.getInstance().getBatiment().hitCurrentEtage(screenX, screenY);
         int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj != null) {
@@ -163,7 +163,7 @@ public class Mover extends ModelMaker {
 
     public void moveCoin(int screenX, int screenY) {
 
-        ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        ModelContainer obj = ModelHolder.getInstance().getBatiment().hitCurrentEtage(screenX, screenY);
         int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj != null) {

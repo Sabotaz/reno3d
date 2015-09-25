@@ -26,6 +26,7 @@ public class Floor {
     public static ModelContainer getModel() {
         Model model = makeModel();
         ModelContainer container = new ModelContainer(model);
+        container.setSelectable(false);
 
         return container;
     }

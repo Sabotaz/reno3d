@@ -40,7 +40,7 @@ public class WallMaker extends ModelMaker {
 
         Vector2 intersection;
 
-        ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        ModelContainer obj = ModelHolder.getInstance().getBatiment().hitCurrentEtage(screenX, screenY);
         int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj == null) {
@@ -49,7 +49,9 @@ public class WallMaker extends ModelMaker {
         } else {
             intersection = new MyVector2(obj.getIntersection());
 
-            Anchor a = calculateAnchor(etage, intersection);
+            ArrayList<Object> forbidden = new ArrayList<Object>();
+
+            Anchor a = calculateAnchor(etage, intersection, forbidden);
 
             if (a != null) {
                 start = a.getPt();
@@ -80,13 +82,16 @@ public class WallMaker extends ModelMaker {
         if (!making_wall)
             return;
 
-        ModelContainer obj = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().hit(screenX, screenY);
+        ModelContainer obj = ModelHolder.getInstance().getBatiment().hitCurrentEtage(screenX, screenY);
         int etage = ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber();
 
         if (obj != null) {
             Vector2 intersection = new MyVector2(obj.getIntersection());
 
-            Anchor a = calculateAnchor(etage, intersection);
+            ArrayList<Object> forbidden = new ArrayList<Object>();
+            forbidden.add(mur);
+
+            Anchor a = calculateAnchor(etage, intersection, forbidden);
 
             if (a != null) {
                 Coin end = a.getPt();
@@ -145,74 +150,6 @@ public class WallMaker extends ModelMaker {
 
         making_wall = false;
 
-    }
-
-    float EPSILON = 0.000_001f;
-
-    private Anchor calculateAnchor(int etage, Vector2 intersection) {
-        // anchor
-        float anchor_length = 1f;
-        ArrayList<Mur> murs = ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs();
-        ArrayList<Anchor> anchors = new ArrayList<Anchor>();
-
-        for (Mur mur : murs) {
-            if (mur != this.mur) {
-                anchors.add(new Anchor(mur.getA()));
-                anchors.add(new Anchor(mur.getB()));
-            }
-        }
-
-        // anchor-aligned drawing
-        ArrayList<Anchor> alignments = new ArrayList<Anchor>();
-        for (Anchor a : anchors) {
-            Vector2 projx = intersection.cpy();
-            projx.x = a.getPt().getPosition().x;
-            alignments.add(new Anchor(Coin.getCoin(etage, projx)));
-            // add the projection on Y
-            Vector2 projy = intersection.cpy();
-            projy.y = a.getPt().getPosition().y;
-            alignments.add(new Anchor(Coin.getCoin(etage, projy)));
-        }
-
-        // double-anchor-aligned drawing
-        for (Anchor a : anchors) {
-            for (Anchor b : anchors) {
-                if (!a.equals(b)) {
-                    if (Math.abs(a.getPt().getPosition().x - b.getPt().getPosition().x) < EPSILON
-                            && Math.abs(a.getPt().getPosition().y - b.getPt().getPosition().y) < EPSILON) { // s'ils ne sont pas sur la meme ligne / colone
-
-                        Vector2 projxy = intersection.cpy();
-                        projxy.x = a.getPt().getPosition().x;
-                        projxy.y = b.getPt().getPosition().y;
-                        alignments.add(new Anchor(Coin.getCoin(etage, projxy)));
-
-                        Vector2 projyx = intersection.cpy();
-                        projxy.y = a.getPt().getPosition().y;
-                        projxy.x = b.getPt().getPosition().x;
-                        alignments.add(new Anchor(Coin.getCoin(etage, projxy)));
-                    }
-                }
-            }
-        }
-
-        anchors.addAll(alignments);
-
-        // return best one
-        Anchor anchor = null;
-        float dist = -1;
-        for (Anchor a : anchors) {
-            float d = intersection.dst(a.getPt().getPosition());
-            if (d < anchor_length && (d <= dist || dist == -1)) {
-                dist = d;
-                anchor = a;
-            }
-        }
-
-        if (anchor != null && anchor.getPt().getEtage() != etage) { // anchoring in a wrong stage
-            anchor = new Anchor(Coin.getCoin(etage, anchor.getPt().getPosition()));
-        }
-
-        return anchor;
     }
 
 
