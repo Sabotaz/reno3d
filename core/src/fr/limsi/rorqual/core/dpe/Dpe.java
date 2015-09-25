@@ -105,6 +105,8 @@ public class Dpe implements EventListener {
     }
     public void actualiseDpToit(){
         float tampon=0;
+        System.out.println(ModelHolder.getInstance().getBatiment().getSlabs());
+        System.out.println("");
         for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs()) {
             tampon += s.getDeperditionPlafond();
         }
@@ -3339,6 +3341,8 @@ public class Dpe implements EventListener {
                         break;
                     }
                     case SLAB_REMOVED:{
+                        this.actualiseDpPlancher();
+                        this.actualiseDpToit();
                         this.actualiseSH();
                         break;
                     }
