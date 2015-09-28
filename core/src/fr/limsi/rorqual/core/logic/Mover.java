@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
@@ -34,6 +35,9 @@ public class Mover extends ModelMaker {
     Coin lastCoinA, lastCoinB;
     Coin newCoinA, newCoinB;
     int startx, starty;
+
+    Objet movedObjet = null;
+    boolean movingObject = false;
 
     @Override
     public void begin(int screenX, int screenY) {
@@ -101,6 +105,11 @@ public class Mover extends ModelMaker {
             } else {
                 moving = false;
             }
+        } else if (modelContainer instanceof Objet) {
+            movedObjet = (Objet) modelContainer;
+            movedObjet.setSelectable(false);
+            moving = movingObject = true;
+            translate = false;
         }
     }
 
@@ -112,10 +121,26 @@ public class Mover extends ModelMaker {
         if (!moving)
             return;
 
-        if (translate) {
+        if (movingObject) {
+            moveObjet(screenX, screenY);
+        } else if (translate) {
             translateMur(screenX, screenY);
         } else {
             moveCoin(screenX, screenY);
+        }
+    }
+
+    public void moveObjet(int screenX, int screenY) {
+
+        ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
+        ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
+        if (modelContainer == null)
+            return;
+        if (modelContainer instanceof Slab) {
+            Slab slab = (Slab) modelContainer;
+            Vector2 intersection = new MyVector2(slab.getIntersection());
+            movedObjet.setPosition(intersection.x, intersection.y);
+            movedObjet.setSlab(slab);
         }
     }
 
@@ -210,6 +235,13 @@ public class Mover extends ModelMaker {
     public void end(int screenX, int screenY) {
 
         if (moving) {
+
+            if (movingObject) {
+                movedObjet.setSelectable(true);
+                moving = false;
+                movingObject = false;
+                return;
+            }
 
             for (Slab s : slabs) {
                 if (!s.isValide()) {

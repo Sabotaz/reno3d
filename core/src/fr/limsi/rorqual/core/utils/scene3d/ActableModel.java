@@ -1,18 +1,23 @@
 package fr.limsi.rorqual.core.utils.scene3d;
 
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g3d.Attribute;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+
+import java.util.HashMap;
 
 /**
  * Created by christophe on 20/07/15.
@@ -91,10 +96,55 @@ public abstract class ActableModel extends Model implements RenderableProvider {
 
     public void setModel(Model model) {
         this.dispose();
-        this.materials.clear();     this.materials.addAll(model.materials);
+        this.materials.clear();//     this.materials.addAll(model.materials);
         this.meshes.clear();        this.meshes.addAll(model.meshes);
         this.meshParts.clear();     this.meshParts.addAll(model.meshParts);
-        this.nodes.clear();         this.nodes.addAll(model.nodes);
+        //this.nodes.clear();         this.nodes.addAll(model.nodes);
+        this.nodes.clear();         copyNodes(model.nodes);
         this.animations.clear();    this.animations.addAll(model.animations);
     }
+
+    private void copyNodes (Array<Node> nodes) {
+        for (int i = 0, n = nodes.size; i < n; ++i) {
+            final Node node = nodes.get(i);
+            this.nodes.add(copyNode(node));
+        }
+    }
+
+    private Node copyNode (Node node) {
+        Node copy = new Node();
+        copy.id = node.id;
+        copy.inheritTransform = node.inheritTransform;
+        copy.translation.set(node.translation);
+        copy.rotation.set(node.rotation);
+        copy.scale.set(node.scale);
+        copy.localTransform.set(node.localTransform);
+        copy.globalTransform.set(node.globalTransform);
+        for (NodePart nodePart : node.parts) {
+            copy.parts.add(copyNodePart(nodePart));
+        }
+        for (Node child : node.getChildren()) {
+            copy.addChild(copyNode(child));
+        }
+        return copy;
+    }
+
+    private NodePart copyNodePart (NodePart nodePart) {
+        NodePart copy = new NodePart();
+        copy.meshPart = new MeshPart();
+        copy.meshPart.id = nodePart.meshPart.id;
+        copy.meshPart.indexOffset = nodePart.meshPart.indexOffset;
+        copy.meshPart.numVertices = nodePart.meshPart.numVertices;
+        copy.meshPart.primitiveType = nodePart.meshPart.primitiveType;
+        copy.meshPart.mesh = nodePart.meshPart.mesh;
+
+        final int index = materials.indexOf(nodePart.material, false);
+        if (index < 0)
+            materials.add(copy.material = nodePart.material.copy());
+        else
+            copy.material = materials.get(index);
+
+        return copy;
+    }
 }
+
