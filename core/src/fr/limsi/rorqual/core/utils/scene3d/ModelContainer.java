@@ -42,7 +42,7 @@ public class ModelContainer extends ActableModel {
     public ModelContainer() {
         super();
         selectedAttribute = new ShaderAttribute(ShaderAttribute.Selectable);
-        selectedAttribute.setUserData(new Object[] {false});
+        this.setSelected(false);
     }
 
     public ModelContainer(Model model) {

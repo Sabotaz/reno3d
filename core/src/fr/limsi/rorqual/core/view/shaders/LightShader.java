@@ -118,8 +118,8 @@ public class LightShader extends FileShader {
             set(u_time, System.nanoTime() * 1e-9f - (float)((Object[])attr.getUserData())[1]);
         } else {
             set(u_is_selected, 0);
+            set(u_time, System.nanoTime() * 1e-9f);
         }
-        set(u_time, System.nanoTime() * 1e-9f);
 
         renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }
