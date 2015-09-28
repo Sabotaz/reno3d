@@ -11,7 +11,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Le mur donne sur : ",
+          "label": "Mitoyenneté",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -22,39 +22,39 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Un local non chauffé",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "L'extérieur",
+                  "label": "Extérieur",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Une autre habitation",
+                  "label": "Intérieur du logement",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_INTERIEUR"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Local non chauffé",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UN_LOCAL_NON_CHAUFFE"
+                },
+                {
+                  "type": "CheckBox",
+                  "label": "Autre habitation",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_AUTRE_HABITATION"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Une véranda chauffée",
+                  "label": "Véranda chauffée",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_CHAUFFE"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Une véranda non chauffée",
+                  "label": "Véranda non chauffée",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_DONNANT_SUR_UNE_VERANDA_NON_CHAUFFE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "L'intérieur du logement",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_INTERIEUR"
                 }
               ]
             }
@@ -62,7 +62,7 @@
         },
         {
           "type": "Table",
-          "label": "Orientation : ",
+          "label": "Orientation",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
@@ -111,7 +111,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Date de l'isolation : ",
+          "label": "Date de l'isolation",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [

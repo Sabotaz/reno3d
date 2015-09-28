@@ -38,6 +38,6 @@ void main() {
         float s = sin(6.0*u_time) * 0.5 + 0.5;
         float v = sign(s) * s * s;
         vec3 jaune = vec3(1,1,153.0/255.0);
-        gl_FragColor = vec4(gl_FragColor.rgb * (1-v) + jaune * v, gl_FragColor.a);
+        gl_FragColor = vec4(gl_FragColor.rgb * (1.0-v) + jaune * v, gl_FragColor.a);
     }
 }
