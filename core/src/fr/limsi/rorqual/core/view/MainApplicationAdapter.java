@@ -188,7 +188,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         sun = new ModelContainer();
         sun.setSelectable(false);
-        sun.local_transform.setToTranslation(new Vector3(-200, 0, 0));
+        sun.local_transform.setToTranslation(new Vector3(-200, -100, 100));
 
         setLoadingMessage("Loading cameras...");
         ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
@@ -259,7 +259,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public void act() {
         update_cam();
 
-        sun.local_transform.mulLeft(new Matrix4().idt().rotate(0,-1,1,.5f));
+        //sun.local_transform.mulLeft(new Matrix4().idt().rotate(0,-1,1,.5f));
 
         Vector3 light_dir = new Vector3();
         light_dir = sun.local_transform.getTranslation(light_dir).scl(-1).nor();
