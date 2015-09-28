@@ -45,9 +45,7 @@ public class ObjetMaker extends ModelMaker {
             ModelContainer container = ModelLibrary.getInstance().getModelContainerFromId(modelId);
             if (container instanceof Objet) {
                 obj = (Objet) container;
-                Vector3 tra = new Vector3();
-                obj.model_transform.getTranslation(tra);
-                obj.model_transform.setTranslation(intersection.x, intersection.y, tra.z);
+                obj.setPosition(intersection.x, intersection.y);
                 obj.setSelectable(false);
                 obj.setSlab(slab);
                 slab.addObjet(obj);
@@ -71,9 +69,7 @@ public class ObjetMaker extends ModelMaker {
         if (modelContainer instanceof Slab) {
             Slab slab = (Slab) modelContainer;
             Vector2 intersection = new MyVector2(slab.getIntersection());
-            Vector3 tra = new Vector3();
-            obj.model_transform.getTranslation(tra);
-            obj.model_transform.setTranslation(intersection.x, intersection.y, tra.z);
+            obj.setPosition(intersection.x, intersection.y);
             obj.setSlab(slab);
         }
     }

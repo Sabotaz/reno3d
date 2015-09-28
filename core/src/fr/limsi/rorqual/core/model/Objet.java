@@ -102,7 +102,9 @@ public class Objet extends ModelContainer {
         if (super.intersects(ray, global_transform) == -1)
             return -1;
         else {
-            intersection = getIntersection(ray, global_transform.cpy().mul(model_transform));
+            intersection = getIntersection(ray, global_transform.cpy()
+                    .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
+                    .mul(model_transform));
             return intersection == null ? -1 : intersection.dst(ray.origin);
         }
     }
@@ -113,5 +115,9 @@ public class Objet extends ModelContainer {
         if (s != null)
             s.add(this);
         slab = s;
+    }
+
+    public Slab getSlab() {
+        return slab;
     }
 }

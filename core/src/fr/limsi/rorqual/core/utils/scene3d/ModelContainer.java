@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
@@ -155,7 +156,9 @@ public class ModelContainer extends ActableModel {
 
     public Matrix4 getFullTransform() {
         Matrix4 mx = new Matrix4();
-        mx.idt().mul(model_transform);
+        mx.idt()
+                .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
+                .mul(model_transform);
         ModelContainer current = this;
         do {
             mx.mulLeft(current.local_transform);
@@ -194,7 +197,9 @@ public class ModelContainer extends ActableModel {
             Matrix4 updated_global_transform = global_transform.cpy().mul(local_transform);
 
             // update model mx
-            world_transform = updated_global_transform.cpy().mul(model_transform);
+            world_transform = updated_global_transform.cpy()
+                    .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
+                    .mul(model_transform);
             // draw
             modelBatch.render(this, environment);
 
@@ -226,6 +231,16 @@ public class ModelContainer extends ActableModel {
         selectable = b;
     }
 
+    protected Vector2 position = new Vector2();
+
+    public void setPosition(float x, float y) {
+        position.set(x,y);
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
     protected Vector3 intersection = null;
 
     public Vector3 getIntersection() {
@@ -242,7 +257,9 @@ public class ModelContainer extends ActableModel {
 
         calculateBoundingBox(boundBox);
 
-        Matrix4 local_transform = global_transform.cpy().mul(model_transform);
+        Matrix4 local_transform = global_transform.cpy()
+                .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
+                .mul(model_transform);
         boundBox.mul(local_transform);
         boundBox.getCenter(center);
 
@@ -303,7 +320,9 @@ public class ModelContainer extends ActableModel {
 
         calculateBoundingBox(boundBox);
 
-        boundBox.mul(model_transform);
+        boundBox
+                .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
+                .mul(model_transform);
 
         return new Vector3(boundBox.getCenterX(), boundBox.getCenterY(), boundBox.getCenterZ() + boundBox.getDepth()*0.5f);
     }

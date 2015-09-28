@@ -80,15 +80,20 @@ public class Logic implements InputProcessor {
 
         ModelContainer oldModelContainer = MainApplicationAdapter.getSelected();
         if (oldModelContainer != null && newModelContainer != null && oldModelContainer.getCategory().equals(newModelContainer.getCategory())) {
-            ModelContainer parent = oldModelContainer.getParent();
+            if (oldModelContainer instanceof Objet && newModelContainer instanceof Objet) {
+                ((Objet) newModelContainer).setSlab(((Objet) oldModelContainer).getSlab());
+                ((Objet) oldModelContainer).setSlab(null);
+            } else {
+                ModelContainer parent = oldModelContainer.getParent();
+
+                parent.remove(oldModelContainer);
+                parent.add(newModelContainer);
+            }
             newModelContainer.local_transform = oldModelContainer.local_transform;
 
             Vector3 tra = new Vector3();
             oldModelContainer.model_transform.getTranslation(tra);
             newModelContainer.model_transform.setTranslation(tra);
-
-            parent.remove(oldModelContainer);
-            parent.add(newModelContainer);
             MainApplicationAdapter.setSelected(newModelContainer);
         }
     }

@@ -101,6 +101,7 @@ public class ModelLibrary {
 
         public ModelContainer getInstance() {
             final ModelContainer container = newInstance();
+            container.setCategory(category);
             if (model == null) {
                 Runnable runnable = new Runnable() {
                     @Override
@@ -109,7 +110,6 @@ public class ModelLibrary {
                         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
                         model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj","g3db"), Files.FileType.Internal));
                         container.setModel(model);
-                        container.setCategory(category);
 
                         toScale(container);
                     }
@@ -119,7 +119,6 @@ public class ModelLibrary {
             }
             else {
                 container.setModel(model);
-                container.setCategory(category);
                 toScale(container);
             }
             return container;
@@ -131,9 +130,13 @@ public class ModelLibrary {
             container.calculateBoundingBox(b);
             //container.model_transform.idt().scale(1 / 10000f, 1 / 10000f, 1 / 10000f);
             Vector3 min = new Vector3();
+            Vector3 c = new Vector3();
             b.getMin(min);
+            b.getCenter(c);
+            float dx = c.x * 0.01f * width / b.getWidth();
+            float dy = c.z * 0.01f * height / b.getHeight();
             container.model_transform // TODO: is it X or Y ?
-                    .translate(0, 0, Slab.DEFAULT_HEIGHT - min.y * 0.01f * height / b.getHeight() + 0.01f * elevation)
+                    .translate(-dx,dy, Slab.DEFAULT_HEIGHT - min.y * 0.01f * depth / b.getDepth() + 0.01f * elevation)
                     .scale(0.01f * width / b.getWidth(), 0.01f * height / b.getHeight(), 0.01f * depth / b.getDepth())
                     .rotate(1, 0, 0, 90)
                     ;
@@ -369,7 +372,7 @@ public class ModelLibrary {
         scrollPane.updateVisualScroll();
 
         Table t = new Table();
-        t.add(scrollPane).size(400+scrollPane.getScrollBarWidth(),400).top().left();
+        t.add(scrollPane).size(400+scrollPane.getScrollBarWidth(), 400).top().left();
         content.setSize(400 + scrollPane.getScrollBarWidth(), 400);
         t.setName(category);
 
