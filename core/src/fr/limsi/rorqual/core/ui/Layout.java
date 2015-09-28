@@ -437,7 +437,7 @@ public class Layout {
                             break;
                     }
 
-                    if (row)
+                    if (row || json_child.getBoolean("retourneLigne",false))
                         c.row();
 
                     if (child instanceof Button) {
@@ -873,8 +873,6 @@ public class Layout {
                 height = width;
             horizontalBar.setSize(width.get(null), height.get(null));
         }
-
         return horizontalBar;
     }
-
 }

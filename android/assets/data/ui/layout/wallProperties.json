@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés du mur",
-  "width": 624,
+  "width": "30%",
   "id": "tab_window",
   "content": [
     {
@@ -13,7 +13,7 @@
           "type": "Table",
           "label": "Le mur donne sur : ",
           "labelPad": 5,
-          "labelWidth": 131,
+          "labelWidth": "10%",
           "content": [
             {
               "type": "ButtonGroup",
@@ -52,7 +52,7 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Un mur interieur",
+                  "label": "L'intérieur du logement",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum.MUR_INTERIEUR"
                 }
@@ -64,7 +64,7 @@
           "type": "Table",
           "label": "Orientation : ",
           "labelPad": 5,
-          "labelWidth": 131,
+          "labelWidth": "10%",
           "content": [
             {
               "type": "ButtonGroup",
@@ -83,7 +83,8 @@
                   "type": "ImageButton",
                   "image": "textureOrientationEst",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum.EST"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum.EST",
+                  "retourneLigne": true
                 },
                 {
                   "type": "ImageButton",
@@ -112,7 +113,7 @@
           "type": "Table",
           "label": "Date de l'isolation : ",
           "labelPad": 5,
-          "labelWidth": 138,
+          "labelWidth": "10%",
           "content": [
             {
               "type": "ButtonGroup",
@@ -176,46 +177,7 @@
               ]
             }
           ]
-        }/*,
-        {
-          "type": "Table",
-          "label": "Isolation thermique : ",
-          "labelPad": 5,
-          "labelWidth": 138,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_ISOLATION_MUR",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Intérieure (ITI)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITI"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Extérieure (ITE)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Répartie (intérieure + extérieure)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.ITR"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Inconnue",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeIsolationMurEnum.INCONNUE"
-                }
-              ]
-            }
-          ]
-        }*/
+        }
       ]
     }
   ]

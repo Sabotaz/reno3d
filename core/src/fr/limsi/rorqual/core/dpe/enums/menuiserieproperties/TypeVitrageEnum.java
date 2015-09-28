@@ -4,7 +4,6 @@ package fr.limsi.rorqual.core.dpe.enums.menuiserieproperties;
  * Created by ricordeau on 03/07/15.
  */
 public enum TypeVitrageEnum {
-    AUCUNE_VITRE,
     SIMPLE_VITRAGE,
     SURVITRAGE,
     DOUBLE_VITRAGE_INF_1990,

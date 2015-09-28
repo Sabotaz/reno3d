@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import fr.limsi.rorqual.core.dpe.enums.DpeChange;
 import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab;
@@ -26,7 +25,6 @@ public class Dpe implements EventListener {
 
     private HashMap<EventType,Object> general_properties = new HashMap<EventType,Object>();
     private HashMap<EventType,Object> chauffage_properties = new HashMap<EventType,Object>();
-    private HashMap<EventType,Object> ecs_properties = new HashMap<EventType,Object>();
 
     /*** Attributs liés au calcul du DPE ***/
 
@@ -52,6 +50,7 @@ public class Dpe implements EventListener {
             tampon+=s.getSurface();
         }
         this.sh=tampon;
+        this.actualiseQ4pa();
         this.actualiseAi();
         this.actualiseG();
         this.actualisePr();
@@ -134,7 +133,7 @@ public class Dpe implements EventListener {
         this.actualiseBch();
     }
     public void actualiseGV(){
-        gv=dpMur+dpToit+dpPlancher+dpFenetre+dpPorte+dpPorteFenetre;
+        gv=dpMur+dpToit+dpPlancher+dpFenetre+dpPorte+dpPorteFenetre+renouvellementAir;
         if (gv != lastGv){
             this.actualiseBV();
             this.actualiseG();
@@ -688,6 +687,26 @@ public class Dpe implements EventListener {
     }
     ///*** Fenêtres ***///
     private List<Fenetre> fenetreList=new ArrayList<Fenetre>();
+    public void actualiseNbFenetreSvEtDv(){
+        nbFenetreSV=0;
+        nbFenetreDV=0;
+        for (Fenetre f : fenetreList){
+            switch (f.getTypeVitrage()){
+                case SIMPLE_VITRAGE:
+                case SURVITRAGE :
+                case INCONNUE :
+                    nbFenetreSV ++;
+                    break;
+                case DOUBLE_VITRAGE_INF_1990 :
+                case DOUBLE_VITRAGE_SUP_1990_INF_2001 :
+                case DOUBLE_VITRAGE_SUP_2001 :
+                case TRIPLE_VITRAGE :
+                    nbFenetreDV ++;
+                    break;
+            }
+        }
+        this.actualiseQ4paConv();
+    }
     ///*** Portes-fenêtres ***///
     private List<PorteFenetre> porteFenetreList=new ArrayList<PorteFenetre>();
     ///*** Portes ***///
@@ -695,28 +714,34 @@ public class Dpe implements EventListener {
 
     // 2.4. Calcul des ponts thermiques TODO : finir ça !
 
-    // 2.5. Calcul des déperditions par renouvellement d'air TODO : finir ça !
-    private float renouvellementAir, hVent,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,nbFenetreSV,nbFenetreDV;
+    // 2.5. Calcul des déperditions par renouvellement d'air
+    private float renouvellementAir, hVent=0.7293f,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,nbFenetreSV,nbFenetreDV;
     private TypeVentilationEnum typeVentilation=TypeVentilationEnum.INCONNUE; // Initialisation logique
     private TemperatureInterieurEnum tInt=TemperatureInterieurEnum.ENTRE_22_ET_23; // Initialisation défavorable
     public void actualiseRenouvellementAir(){
         renouvellementAir=hVent+hPerm;
+        this.actualiseGV();
     }
     public void actualiseHvent(){
         hVent=0.34f*qVarep;
+        this.actualiseRenouvellementAir();
     }
     public void actualiseHperm(){
         hPerm=0.34f*qVinf;
+        this.actualiseRenouvellementAir();
     }
     public void actualiseqVinf(){
         float val = 0.7f*(tInt.getTemperatureInterieure()-6.58f);
         qVinf=0.0146f*q4pa*(float)Math.pow(val,0.667);
+        this.actualiseHperm();
     }
     public void actualiseQ4pa(){
         q4pa=q4paEnv+0.45f*smea*sh;
+        this.actualiseqVinf();
     }
     public void actualiseQ4paEnv(){
         q4paEnv=q4paConv*sdepTot;
+        this.actualiseQ4pa();
     }
     public void actualiseQ4paConv(){
         if(nbFenetreSV>=nbFenetreDV){
@@ -724,6 +749,7 @@ public class Dpe implements EventListener {
         }else{
             q4paConv=1.7f;
         }
+        this.actualiseQ4paEnv();
     }
     public void actualiseSmeaAndQvarep(){
         switch (typeVentilation){
@@ -772,6 +798,8 @@ public class Dpe implements EventListener {
                 qVarep=1.65f;
                 break;
         }
+        this.actualiseQ4pa();
+        this.actualiseHvent();
     }
 
     // 2.6.Calcul de f : on cherche à minimiser x donc à minimiser aS et aI et à maximiser GV et DHcor
@@ -2100,6 +2128,7 @@ public class Dpe implements EventListener {
                             for(Slab s:ModelHolder.getInstance().getBatiment().getSlabs()){
                                 actualiseCoeffDeperditionThermique(s,true,true);
                             }
+                            this.actualiseSmeaAndQvarep();
                             this.actualiseCch();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
@@ -2259,6 +2288,7 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             typeVentilation = (TypeVentilationEnum) items.get("lastValue");
+                            this.actualiseSmeaAndQvarep();
                         }
                         else if (eventRequest == EventRequest.GET_STATE) {
                             TypeVentilationEnum type = typeVentilation;
@@ -2777,6 +2807,7 @@ public class Dpe implements EventListener {
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             tInt = (TemperatureInterieurEnum) items.get("lastValue");
+                            this.actualiseqVinf();
                             this.actualisedhCor();
                             this.actualiseCch();
                         }
@@ -3197,6 +3228,7 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
                                 fenetre.setTypeVitrage(typeVitrage);
+                                this.actualiseNbFenetreSvEtDv();
                                 this.actualiseSse();
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeVitrageEnum type = fenetre.getTypeVitrage();
@@ -3430,6 +3462,7 @@ public class Dpe implements EventListener {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Fenetre fenetre = (Fenetre) items.get("userObject");
                         fenetreList.add(fenetre);
+                        this.actualiseNbFenetreSvEtDv();
                         fenetre.actualiseCoeffTransmissionThermiqueFenetre();
                         fenetre.actualiseBas();
                         fenetre.actualiseC1();
@@ -3506,6 +3539,7 @@ public class Dpe implements EventListener {
                         Ouverture ouverture = (Ouverture) items.get("userObject");
                         if (ouverture instanceof Fenetre){
                             this.fenetreList.remove(ouverture);
+                            this.actualiseNbFenetreSvEtDv();
                             this.actualiseDpFenetre();
                         }else if (ouverture instanceof Porte){
                             this.porteList.remove(ouverture);
