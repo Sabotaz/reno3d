@@ -42,7 +42,7 @@ public class ModelContainer extends ActableModel {
     public ModelContainer() {
         super();
         selectedAttribute = new ShaderAttribute(ShaderAttribute.Selectable);
-        selectedAttribute.setUserData(false);
+        selectedAttribute.setUserData(new Object[] {false});
     }
 
     public ModelContainer(Model model) {
@@ -170,7 +170,7 @@ public class ModelContainer extends ActableModel {
 
     public void setSelected(boolean b) {
         selected = b;
-        selectedAttribute.setUserData(selected);
+        selectedAttribute.setUserData(new Object[] {selected, System.nanoTime() *  1e-9f});
     }
 
     public boolean isSelected() {

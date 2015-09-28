@@ -114,7 +114,8 @@ public class LightShader extends FileShader {
 
         if (renderable.material.has(ShaderAttribute.Selectable)) {
             ShaderAttribute attr = (ShaderAttribute)renderable.material.get(ShaderAttribute.Selectable);
-            set(u_is_selected, (boolean) attr.getUserData() ? 1 : 0);
+            set(u_is_selected, (boolean) ((Object[])attr.getUserData())[0] ? 1 : 0);
+            set(u_time, System.nanoTime() * 1e-9f - (float)((Object[])attr.getUserData())[1]);
         } else {
             set(u_is_selected, 0);
         }
