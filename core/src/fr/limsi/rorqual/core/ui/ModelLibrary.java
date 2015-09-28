@@ -44,6 +44,8 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 // chargement de la bibliothèque de modèles d'objets
 public class ModelLibrary {
 
+    private HashMap<String, Table> categoriesTables = new HashMap<String, Table>();
+
     private class ModelLoader {
 
         private Model model;
@@ -51,6 +53,7 @@ public class ModelLibrary {
         private String iconFile;
         private String path;
         private String clazz;
+        private String category;
         private float width = 0;
         private float depth = 0;
         private float height = 0;
@@ -66,7 +69,7 @@ public class ModelLibrary {
             String name = i18n.get("name#"+n);
             String tags = i18n.get("tags#"+n);
             String creationDate = i18n.get("creationDate#"+n);
-            String category = i18n.get("category#"+n);
+            category = i18n.get("category#"+n);
             iconFile = i18n.get("icon#"+n);
             modelFile = i18n.get("model#"+n);
             String multiPartModel = i18n.get("multiPartModel#"+n);
@@ -106,6 +109,7 @@ public class ModelLibrary {
                         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
                         model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj","g3db"), Files.FileType.Internal));
                         container.setModel(model);
+                        container.setCategory(category);
 
                         toScale(container);
                     }
@@ -115,6 +119,7 @@ public class ModelLibrary {
             }
             else {
                 container.setModel(model);
+                container.setCategory(category);
                 toScale(container);
             }
             return container;
@@ -307,12 +312,16 @@ public class ModelLibrary {
     }
 
     private void makeTabWindow() {
-        TabWindow tw = new TabWindow(400);
+        TabWindow tw = new TabWindow(450);
         tw.setTitle("Bibliothèque");
         for (Map.Entry<String, HashMap<String, ModelLoader>> entry : categories.entrySet())
             if (!entry.getValue().isEmpty())
                 makeNewTab(tw, entry.getKey(), entry.getValue());
         tabWindow = tw;
+    }
+
+    public Table getModelTable(String category) {
+        return categoriesTables.get(category);
     }
 
     private void makeNewTab(TabWindow tw, String category, HashMap<String, ModelLoader> models) {
@@ -324,6 +333,7 @@ public class ModelLibrary {
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
+        // tab who start new model in logic logic
         for (Map.Entry<String, ModelLoader> entry : models.entrySet()) {
             final String id = entry.getKey();
             ModelLoader modelLoader = entry.getValue();
@@ -360,13 +370,68 @@ public class ModelLibrary {
 
         Table t = new Table();
         t.add(scrollPane).size(400+scrollPane.getScrollBarWidth(),400).top().left();
+        content.setSize(400 + scrollPane.getScrollBarWidth(), 400);
         t.setName(category);
 
+        createUpdaterTab(category, models);
+
         tw.addTable(t);
+    }
+
+    private void createUpdaterTab(String category, HashMap<String, ModelLoader> models) {
+
+        Table content = new Table();
+        content.setSize(400,400);
+        int start_x = 0;
+        final int MAX_X = 4;
+
+        ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
+
+        // tab who update current selected model
+        for (Map.Entry<String, ModelLoader> entry : models.entrySet()) {
+            final String id = entry.getKey();
+            ModelLoader modelLoader = entry.getValue();
+
+            Image image = modelLoader.getImage();
+
+            ImageButton imageButton = new Layout.ClickableImageButton(image.getDrawable());
+            imageButton.setSize(100, 100);
+            group.add(imageButton);
+
+            imageButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    currentModel = id;
+                    Logic.getInstance().updateModel();
+                }
+            });
+            content.add(imageButton).size(100, 100).left().top();
+
+            start_x ++;
+            if (start_x == MAX_X) {
+                start_x = 0;
+                content.row();
+            }
+        }
+        content.layout();
+        content.top().left();
+        Skin skin = (Skin)AssetManager.getInstance().get("uiskin");
+        final ScrollPane scrollPane = new ScrollPane(content, skin, "perso");
+        scrollPane.setFlickScroll(false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.layout();
+        scrollPane.updateVisualScroll();
+
+        Table t = new Table();
+        t.add(scrollPane).size(400+scrollPane.getScrollBarWidth(),400).top().left();
+        content.setSize(400 + scrollPane.getScrollBarWidth(), 400);
+        t.setName(category);
+
+        categoriesTables.put(category, t);
 
     }
 
-    public ModelContainer getModelFromId(String id) {
+    public ModelContainer getModelContainerFromId(String id) {
         return models.get(id).getInstance();
     }
 }

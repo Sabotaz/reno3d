@@ -43,7 +43,7 @@ public class OuvertureMaker extends ModelMaker {
             Vector2 v1 = mur.getB().getPosition().cpy().sub(mur.getA().getPosition()).nor();
             Vector2 v2 = intersection.cpy().sub(mur.getA().getPosition());
             float x = v2.dot(v1);
-            ModelContainer container = ModelLibrary.getInstance().getModelFromId(modelId);
+            ModelContainer container = ModelLibrary.getInstance().getModelContainerFromId(modelId);
             if (container instanceof Ouverture) {
                 ouverture = (Ouverture) container;
                 ouverture.setMur(mur);

@@ -405,6 +405,18 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     static ModelContainer selected = null;
 
+    public static ModelContainer getSelected() {
+        return selected;
+    }
+
+    public static void setSelected(ModelContainer model) {
+        if (selected != null);
+            selected.setSelected(false);
+        selected = model;
+        if (selected != null);
+            selected.setSelected(true);
+    }
+
     public static ModelContainer getFromUserObject(Object o) {
         return modelGraph.getFromUserObject(o);
     }

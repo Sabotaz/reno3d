@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.util.HashMap;
 
@@ -8,6 +9,7 @@ import fr.limsi.rorqual.core.dpe.enums.DpePropertiesEnum;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.PorteFenetre;
 import fr.limsi.rorqual.core.model.Slab;
@@ -41,6 +43,10 @@ public class DpeUi  {
             Actor a = Layout.fromJson("data/ui/layout/slabProperties.json", o).getRoot();
             return a;
         }
+        if (o instanceof Objet) {
+            Actor a = makeObjetTab((Objet) o);
+            return a;
+        }
 
         if(o == DpeEvent.INFOS_GENERALES){
             Actor a = null;
@@ -67,5 +73,12 @@ public class DpeUi  {
             return a;
         }
         return null;
+    }
+
+    private static Table makeObjetTab(Objet o) {
+        TabWindow tabWindow = new TabWindow(450);
+        System.out.println(o.getCategory());
+        tabWindow.addTable(ModelLibrary.getInstance().getModelTable(o.getCategory()));
+        return tabWindow;
     }
 }

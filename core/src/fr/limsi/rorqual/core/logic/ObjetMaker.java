@@ -42,7 +42,7 @@ public class ObjetMaker extends ModelMaker {
             Slab slab = (Slab) modelContainer;
             Vector2 intersection = new MyVector2(slab.getIntersection());
             // intersection in world space, not in wall space
-            ModelContainer container = ModelLibrary.getInstance().getModelFromId(modelId);
+            ModelContainer container = ModelLibrary.getInstance().getModelContainerFromId(modelId);
             if (container instanceof Objet) {
                 obj = (Objet) container;
                 Vector3 tra = new Vector3();

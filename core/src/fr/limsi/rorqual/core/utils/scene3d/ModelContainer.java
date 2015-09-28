@@ -33,6 +33,7 @@ public class ModelContainer extends ActableModel {
     private Shader prefered_shader;
     private Object userData;
     private HashMap<String,Object> modelData = new HashMap<String, Object>();
+    private String category = "";
 
     public enum Type {
         OPAQUE,
@@ -61,6 +62,14 @@ public class ModelContainer extends ActableModel {
                 c.act();
             }
         }
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String cat) {
+        category = cat;
     }
 
     public void setShaderProgram(Shader s) {
