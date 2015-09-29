@@ -31,7 +31,7 @@ public class StyleFactory {
         return style;
     }
 
-    private static Object getDrawable(String id) {
+    public static Object getDrawable(String id) {
 
         if (id == null)
             return null;

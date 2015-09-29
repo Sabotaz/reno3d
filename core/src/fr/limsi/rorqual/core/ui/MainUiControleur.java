@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import java.util.HashMap;
 
@@ -20,6 +21,7 @@ import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.utils.AssetManager;
 
 /**
  * Created by christophe on 28/07/15.
@@ -100,6 +102,7 @@ public class MainUiControleur implements EventListener {
                             break;
                         case SWITCH_2D_3D:
                             CameraEngine.getInstance().switchCamera();
+                            ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
                             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case MOVE:

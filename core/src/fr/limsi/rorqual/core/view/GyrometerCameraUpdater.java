@@ -16,6 +16,10 @@ import fr.limsi.rorqual.core.utils.GyroscopeValues;
 // Caméra utilisant le gyromètre, basée sur la caméra perspective (réagissant donc aux gestures)
 public class GyrometerCameraUpdater extends PerspectiveCameraUpdater {
 
+    public GyrometerCameraUpdater() {
+        super();
+        iconeName = "drawable:gyro";
+    }
 
     protected void update() {
         GyroscopeValues gyroscopeValues = GyroscopeValues.getInstance();

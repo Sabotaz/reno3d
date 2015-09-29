@@ -68,12 +68,13 @@
         {
           "type": "Button",
           "text": "2D/3D",
+          "id": "camera_button",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
           "height": "auto",
           "width": "5%",
           "style": [
-            "drawable:camera",
-            "drawable:camera:tint:CCCCCC",
+            "drawable:2D",
+            null,
             null,
             "default.fnt"
           ]

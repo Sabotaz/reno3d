@@ -10,6 +10,8 @@ import com.badlogic.gdx.input.GestureDetector;
 // Classe servant de base aux différents types de caméras
 public abstract class CameraUpdater implements GestureDetector.GestureListener {
 
+    public String iconeName = "drawable:camera";
+
     public abstract void act();
 
     public abstract Camera getCamera();

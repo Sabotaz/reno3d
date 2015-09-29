@@ -202,6 +202,9 @@ public class AssetManager {
         textures.put("roulette", "data/ui/roulette.png");
         textures.put("roulette_arriere", "data/ui/roulette_arriere.png");
         textures.put("camera", "data/ui/camera.png");
+        textures.put("2D", "data/ui/2D.png");
+        textures.put("3D", "data/ui/3D.png");
+        textures.put("gyro", "data/ui/gyro.png");
         textures.put("close", "data/ui/close.png");
         textures.put("delete", "data/ui/delete.png");
         textures.put("mobilier", "data/ui/mobilier.png");

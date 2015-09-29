@@ -19,6 +19,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     PerspectiveCamera camera;
 
     public PerspectiveCameraUpdater() {
+        iconeName = "drawable:3D";
 
         PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
             @Override

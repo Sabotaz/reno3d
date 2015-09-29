@@ -21,6 +21,7 @@ public class OrthographicCameraUpdater extends CameraUpdater {
     private final float VIEWPORT_WIDTH = 30;
 
     public OrthographicCameraUpdater() {
+        iconeName = "drawable:2D";
 
         float ratio = Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
         OrthographicCamera orthographicCamera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_WIDTH*ratio);

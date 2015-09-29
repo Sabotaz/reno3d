@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
+import fr.limsi.rorqual.core.ui.Layout;
+import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.view.CameraUpdater;
 import fr.limsi.rorqual.core.view.GyrometerCameraUpdater;
 import fr.limsi.rorqual.core.view.OrthographicCameraUpdater;
@@ -61,13 +63,13 @@ public class CameraEngine implements GestureDetector.GestureListener {
     public void switchCamera() {
         switch (curent_camera) {
             case PERSPECTIVE:
-                curent_camera = Cameras.ORTHOGRAPHIC;
-                break;
-            case ORTHOGRAPHIC:
                 curent_camera = Cameras.GYROMETER;
                 break;
-            case GYROMETER:
+            case ORTHOGRAPHIC:
                 curent_camera = Cameras.PERSPECTIVE;
+                break;
+            case GYROMETER:
+                curent_camera = Cameras.ORTHOGRAPHIC;
                 break;
         }
     }
