@@ -161,5 +161,6 @@ public class Cote extends ModelContainer {
     protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
         Gdx.gl.glLineWidth(5);
         super.draw(modelBatch, environment, type, global_transform);
+        Gdx.gl.glLineWidth(1);
     }
 }
