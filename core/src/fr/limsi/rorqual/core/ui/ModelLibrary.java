@@ -284,9 +284,22 @@ public class ModelLibrary {
                     if (!categories.containsKey(category))
                         categories.put(category, new HashMap<String, ModelLoader>());
 
-                    if (Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n).replace("obj","g3db"), Files.FileType.Internal).exists()
-                            && Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).exists()
-                            ) {
+                    /*
+                    boolean exists = Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n).replace("obj","g3db"), Files.FileType.Internal).exists()
+                            && Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).exists();
+                    */
+                    /// IT WAS TOO SLOW !
+
+                    boolean exists = false;
+                    try {
+                        // hack from https://code.google.com/p/libgdx/issues/detail?id=1655
+                        Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n).replace("obj","g3db"), Files.FileType.Internal).read().close();
+                        Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).read().close();
+                        exists = true;
+                    } catch (Exception e) {
+                        // doesn't exist !
+                    }
+                    if (exists) {
 
                         ModelLoader modelLoader = new ModelLoader(file.parent().path(), i18n, n);
                         categories.get(category).put(id, modelLoader);
