@@ -92,8 +92,8 @@ public class Logic implements InputProcessor {
             newModelContainer.local_transform = oldModelContainer.local_transform;
 
             Vector3 tra = new Vector3();
-            oldModelContainer.model_transform.getTranslation(tra);
-            newModelContainer.model_transform.setTranslation(tra);
+
+            newModelContainer.setPosition(oldModelContainer.getPosition());
             MainApplicationAdapter.setSelected(newModelContainer);
         }
     }

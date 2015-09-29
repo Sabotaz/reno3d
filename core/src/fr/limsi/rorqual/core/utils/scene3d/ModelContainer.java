@@ -237,6 +237,9 @@ public class ModelContainer extends ActableModel {
     public void setPosition(float x, float y) {
         position.set(x,y);
     }
+    public void setPosition(Vector2 p) {
+        position.set(p);
+    }
 
     public Vector2 getPosition() {
         return position;
