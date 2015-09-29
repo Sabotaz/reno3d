@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
+import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
@@ -39,6 +40,9 @@ public class Mover extends ModelMaker {
 
     Objet movedObjet = null;
     boolean movingObject = false;
+
+    Ouverture movedOuverture = null;
+    boolean movingOuverture = false;
 
     @Override
     public void begin(int screenX, int screenY) {
@@ -111,6 +115,12 @@ public class Mover extends ModelMaker {
             movedObjet.setSelectable(false);
             moving = movingObject = true;
             translate = false;
+        } else if (modelContainer instanceof Ouverture) {
+            movedOuverture = (Ouverture) modelContainer;
+            movedOuverture.setSelectable(false);
+            moving = movingOuverture = true;
+            translate = false;
+
         }
     }
 
@@ -124,6 +134,8 @@ public class Mover extends ModelMaker {
 
         if (movingObject) {
             moveObjet(screenX, screenY);
+        } else if (movingOuverture) {
+            moveOuverture(screenX, screenY);
         } else if (translate) {
             translateMur(screenX, screenY);
         } else {
@@ -144,6 +156,25 @@ public class Mover extends ModelMaker {
             movedObjet.setSlab(slab);
         }
     }
+
+    public void moveOuverture(int screenX, int screenY) {
+
+        ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
+        ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
+        if (modelContainer == null)
+            return;
+        if (modelContainer instanceof Mur) {
+            Mur mur = (Mur) modelContainer;
+            Vector2 intersection = new MyVector2(mur.getIntersection());
+            // intersection in world space, not in wall space
+            Vector2 v1 = mur.getB().getPosition().cpy().sub(mur.getA().getPosition()).nor();
+            Vector2 v2 = intersection.cpy().sub(mur.getA().getPosition());
+            float x = v2.dot(v1);
+            movedOuverture.setMur(mur);
+            movedOuverture.setX(x);
+        }
+    }
+
 
     public void translateMur(int screenX, int screenY) {
 
@@ -241,6 +272,11 @@ public class Mover extends ModelMaker {
                 movedObjet.setSelectable(true);
                 moving = false;
                 movingObject = false;
+                return;
+            } else if (movingOuverture) {
+                movedOuverture.setSelectable(true);
+                moving = false;
+                movingOuverture = false;
                 return;
             }
 
