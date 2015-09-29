@@ -20,6 +20,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import fr.limsi.rorqual.core.view.shaders.ShaderAttribute;
 
 /**
@@ -247,15 +248,17 @@ public class ModelContainer extends ActableModel {
         return intersection;
     }
 
+    BoundingBox box = new BoundingBox();
+
     protected float intersects(Ray ray, Matrix4 global_transform) {
+
         intersection = null;
 
         if (!selectable) return -1;
+        if (box == null) return -1;
 
-        BoundingBox boundBox = new BoundingBox();
         Vector3 center = new Vector3();
-
-        calculateBoundingBox(boundBox);
+        BoundingBox boundBox = new BoundingBox(box);
 
         Matrix4 local_transform = global_transform.cpy()
                 .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
@@ -339,6 +342,7 @@ public class ModelContainer extends ActableModel {
 
     public void setModel(Model m) {
         super.setModel(m);
+        calculateBoundingBox(box);
 
         for (Material material : materials)
             material.set(selectedAttribute);

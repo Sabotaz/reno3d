@@ -15,6 +15,7 @@ import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
  * Created by christophe on 04/09/15.

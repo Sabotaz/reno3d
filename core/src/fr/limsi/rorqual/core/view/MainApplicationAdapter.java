@@ -94,6 +94,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     private boolean loading_finished = false;
 
+    public static float time[] = {0, 0, 0, 0};
+
     @Override
 	public void create () {
 

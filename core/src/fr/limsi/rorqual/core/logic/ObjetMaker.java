@@ -61,7 +61,6 @@ public class ObjetMaker extends ModelMaker {
     public void update(int screenX, int screenY) {
         if (!making_objet)
             return;
-
         ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
         ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
         if (modelContainer == null)

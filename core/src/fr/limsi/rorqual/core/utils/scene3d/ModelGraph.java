@@ -13,6 +13,8 @@ import java.util.HashMap;
 
 import javax.jws.WebParam;
 
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
+
 /**
  * Created by christophe on 30/06/15.
  */
@@ -38,7 +40,8 @@ public class ModelGraph {
     }
 
     public ModelContainer getObject(int screenX, int screenY) {
-        return hit(screenX, screenY);
+        ModelContainer hit = hit(screenX, screenY);
+        return hit;
     }
 
     public ModelContainer hit(int screenX, int screenY) {

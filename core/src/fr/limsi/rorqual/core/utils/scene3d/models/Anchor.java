@@ -86,6 +86,7 @@ public class Anchor extends ModelContainer {
     }
 
     private void makeMesh() {
+        /*
 
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.begin();
@@ -118,7 +119,7 @@ public class Anchor extends ModelContainer {
 
 
         Model model = modelBuilder.end();
-        this.setModel(model);
+        this.setModel(model);*/
     }
 
     @Override
