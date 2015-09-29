@@ -3538,15 +3538,21 @@ public class Dpe implements EventListener {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
                         Ouverture ouverture = (Ouverture) items.get("userObject");
                         if (ouverture instanceof Fenetre){
-                            this.fenetreList.remove(ouverture);
-                            this.actualiseNbFenetreSvEtDv();
-                            this.actualiseDpFenetre();
+                            synchronized (fenetreList) {
+                                this.fenetreList.remove(ouverture);
+                                this.actualiseNbFenetreSvEtDv();
+                                this.actualiseDpFenetre();
+                            }
                         }else if (ouverture instanceof Porte){
-                            this.porteList.remove(ouverture);
-                            this.actualiseDpPorte();
+                            synchronized (porteList) {
+                                this.porteList.remove(ouverture);
+                                this.actualiseDpPorte();
+                            }
                         }else if (ouverture instanceof PorteFenetre){
-                            this.porteFenetreList.remove(ouverture);
-                            this.actualiseDpPorteFenetre();
+                                synchronized (porteFenetreList) {
+                                    this.porteFenetreList.remove(ouverture);
+                                    this.actualiseDpPorteFenetre();
+                                }
                         }
                         break;
                     }
