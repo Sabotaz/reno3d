@@ -4,9 +4,15 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.graphics.g3d.model.MeshPart;
+import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -19,12 +25,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.UBJsonReader;
 
 import java.lang.reflect.Field;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -49,6 +58,7 @@ public class ModelLibrary {
     private class ModelLoader {
 
         private Model model;
+        private BoundingBox box = new BoundingBox();
         private String modelFile;
         private String iconFile;
         private String path;
@@ -99,35 +109,70 @@ public class ModelLibrary {
             } while (true);
         }
 
+        boolean loading = false;
+
         public ModelContainer getInstance() {
             final ModelContainer container = newInstance();
             container.setCategory(category);
-            if (model == null) {
+            if (model == null && !loading) {
+                loading = true;
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        UBJsonReader jsonReader = new UBJsonReader();
-                        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-                        model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj","g3db"), Files.FileType.Internal));
-                        container.setModel(model);
+                        synchronized (ModelLoader.this) {
+                            UBJsonReader jsonReader = new UBJsonReader();
+                            G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+                            model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj", "g3db"), Files.FileType.Internal));
+                            container.setModel(model);
+                            toScale(container);
 
-                        toScale(container);
+                            box = container.getBoundingBox();
+                            // update normals
+                            validate(model);
+                            container.setModel(model, false);
+                            toScale(container);
+
+                            loading = false;
+                        }
                     }
                 };
 
                 Gdx.app.postRunnable(runnable);
             }
             else {
-                container.setModel(model);
-                toScale(container);
+                synchronized (ModelLoader.this) {
+                    container.setModel(model, false);
+                    container.setBoundingBox(box);
+                    toScale(container);
+                }
             }
             return container;
         }
 
-        private void toScale(ModelContainer container) {
+        public synchronized void preload() {
+            if (model == null && !loading) {
+                loading = true;
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized(ModelLoader.this) {
+                            UBJsonReader jsonReader = new UBJsonReader();
+                            G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+                            model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj", "g3db"), Files.FileType.Internal));
+                            model.calculateBoundingBox(box);
+                            // update normals
+                            validate(model);
+                            loading = false;
+                        }
+                    }
+                };
 
-            BoundingBox b = new BoundingBox();
-            container.calculateBoundingBox(b);
+                Gdx.app.postRunnable(runnable);
+            }
+        }
+
+        private void toScale(ModelContainer container) {
+            BoundingBox b = container.getBoundingBox();
             //container.model_transform.idt().scale(1 / 10000f, 1 / 10000f, 1 / 10000f);
             Vector3 min = new Vector3();
             Vector3 c = new Vector3();
@@ -364,6 +409,7 @@ public class ModelLibrary {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     currentModel = id;
+                    ModelLibrary.this.preload(id); // preload
                     Logic.getInstance().startModel();
                 }
             });
@@ -449,5 +495,106 @@ public class ModelLibrary {
 
     public ModelContainer getModelContainerFromId(String id) {
         return models.get(id).getInstance();
+    }
+
+    public Class getModelClassFromId(String id) {
+        try {
+            return Class.forName(models.get(id).clazz);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void preload(String id) {
+        models.get(id).preload();
+    }
+
+    private static void validate(Model model) {
+        model.meshes.clear();
+        for (MeshPart part : model.meshParts)
+            model.meshes.add(checkNormals(part));
+    }
+
+    private static Mesh checkNormals(final MeshPart meshPart) {
+        if (meshPart.mesh.getVertexAttribute(VertexAttributes.Usage.Normal) == null) {
+            meshPart.mesh = createNormals(meshPart.mesh);
+        }
+        return meshPart.mesh;
+    }
+
+    private static Mesh createNormals(final Mesh mesh) {
+        VertexAttribute atrs[] = new VertexAttribute[mesh.getVertexAttributes().size()+1];
+        for (int i = 0; i < mesh.getVertexAttributes().size(); i++) {
+            atrs[i] = mesh.getVertexAttributes().get(i);
+        }
+        atrs[mesh.getVertexAttributes().size()] = new VertexAttribute(VertexAttributes.Usage.Normal, 3, "a_normal");
+        final VertexAttributes newAttributes = new VertexAttributes(atrs);
+
+        final short[] indices = {0, 0, 0};
+
+        ShortBuffer shbu = mesh.getIndicesBuffer().asReadOnlyBuffer();
+        shbu.position(0);
+        short[] fullIndices = new short[shbu.remaining()];
+        shbu.get(fullIndices);
+
+        FloatBuffer flbu = mesh.getVerticesBuffer().asReadOnlyBuffer();
+        flbu.position(0);
+        int l = flbu.remaining();
+        float[] fb = new float[l];
+        flbu.get(fb);
+
+        final float[] newVertices = new float[l + mesh.getNumVertices() * 3];
+
+        int size = mesh.getVertexSize(); // bytes
+
+        VertexAttribute va = mesh.getVertexAttribute(VertexAttributes.Usage.Position);
+
+        int fsize = Float.SIZE / 8;
+        int nfloats = size / fsize;
+
+        assert va.numComponents == 3;
+
+        float[] v1 = {0, 0, 0};
+        float[] v2 = {0, 0, 0};
+        float[] normal = {0, 0, 0};
+
+        for (int i = 0; i < mesh.getNumIndices(); i += 3) {
+            mesh.getIndices(i, 3, indices, 0);
+            int offset = va.offset; // bytes
+
+            int n1 = (indices[0] * size + offset) / fsize;
+            int n2 = (indices[1] * size + offset) / fsize;
+            int n3 = (indices[2] * size + offset) / fsize;
+
+            v1[0] = fb[n2 + 0] - fb[n1 + 0];
+            v1[1] = fb[n2 + 1] - fb[n1 + 1];
+            v1[2] = fb[n2 + 2] - fb[n1 + 2];
+
+            v2[0] = fb[n3 + 0] - fb[n1 + 0];
+            v2[1] = fb[n3 + 1] - fb[n1 + 1];
+            v2[2] = fb[n3 + 2] - fb[n1 + 2];
+
+            normal[0] = v1[1] * v2[2] - v1[2] * v2[1];
+            normal[1] = v1[2] * v2[0] - v1[0] * v2[2];
+            normal[2] = v1[0] * v2[1] - v1[1] * v2[0];
+
+            // replacer au bon endroit
+            for (int j = 0; j < 3; j++) {
+                System.arraycopy(
+                        fb, indices[j] * nfloats,
+                        newVertices, indices[j] * (nfloats + 3),
+                        nfloats);
+
+                System.arraycopy(
+                        normal, 0,
+                        newVertices, indices[j] * (nfloats + 3) + nfloats,
+                        3);
+            }
+        }
+
+        Mesh newMesh = new Mesh(true, mesh.getNumVertices(), mesh.getNumIndices(), newAttributes);
+        newMesh.setVertices(newVertices);
+        newMesh.setIndices(fullIndices);
+        return newMesh;
     }
 }

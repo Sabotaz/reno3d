@@ -103,108 +103,15 @@ public abstract class ActableModel extends Model implements RenderableProvider {
         }
     }
 
-    boolean modelChanged = false;
-
     public void setModel(Model model) {
         this.dispose();
-        this.materials.clear();     //this.materials.addAll(model.materials);
-        this.meshes.clear();        //this.meshes.addAll(model.meshes);
+        this.materials.clear();
+        this.meshes.clear();
         this.meshParts.clear();
-        //this.meshParts.addAll(model.meshParts);
-        //this.nodes.clear();         this.nodes.addAll(model.nodes);
         this.nodes.clear();
         copyNodes(model.nodes);
         this.animations.clear();
         this.animations.addAll(model.animations);
-
-        modelChanged = true;
-    }
-
-    protected void validate() {
-        if (modelChanged) {
-            for (MeshPart part : meshParts)
-                checkNormals(part);
-            modelChanged = false;
-        }
-    }
-
-    private void checkNormals(final MeshPart meshPart) {
-        if (meshPart.mesh.getVertexAttribute(VertexAttributes.Usage.Normal) == null) {
-            meshPart.mesh = createNormals(meshPart.mesh);
-        }
-        meshes.add(meshPart.mesh);
-    }
-
-    private Mesh createNormals(final Mesh mesh) {
-        VertexAttribute atrs[] = new VertexAttribute[mesh.getVertexAttributes().size()+1];
-        for (int i = 0; i < mesh.getVertexAttributes().size(); i++) {
-            atrs[i] = mesh.getVertexAttributes().get(i);
-        }
-        atrs[mesh.getVertexAttributes().size()] = new VertexAttribute(VertexAttributes.Usage.Normal, 3, "a_normal");
-        final VertexAttributes newAttributes = new VertexAttributes(atrs);
-
-        final short[] indices = {0, 0, 0};
-        final short[] fullIndices = new short[mesh.getNumIndices()];
-        mesh.getIndices(0, mesh.getNumIndices(), fullIndices, 0);
-
-        FloatBuffer flbu = mesh.getVerticesBuffer().asReadOnlyBuffer();
-        flbu.position(0);
-        int l = flbu.remaining();
-        float[] fb = new float[l];
-        final float[] newVertices = new float[l + mesh.getNumVertices() * 3];
-        flbu.get(fb);
-        int size = mesh.getVertexSize(); // bytes
-        VertexAttribute va = mesh.getVertexAttribute(VertexAttributes.Usage.Position);
-        int fsize = Float.SIZE / 8;
-        assert va.numComponents == 3;
-        for (int i = 0; i < mesh.getNumIndices(); i += 3) {
-            mesh.getIndices(i, 3, indices, 0);
-            int offset = va.offset; // bytes
-
-            int n = (indices[0] * size + offset) / fsize;
-            Vector3 p1 = new Vector3(
-                    fb[n + 0],
-                    fb[n + 1],
-                    fb[n + 2]);
-
-            n = (indices[1] * size + offset) / fsize;
-            Vector3 p2 = new Vector3(
-                    fb[n + 0],
-                    fb[n + 1],
-                    fb[n + 2]);
-
-            n = (indices[2] * size + offset) / fsize;
-            Vector3 p3 = new Vector3(
-                    fb[n + 0],
-                    fb[n + 1],
-                    fb[n + 2]);
-
-            Vector3 normal = p2.cpy().sub(p1).crs(p3.cpy().sub(p1));
-
-            // replacer au bon endroit
-            int nfloats = size / fsize;
-            for (int j = 0; j < nfloats; j++) {
-                newVertices[indices[0] * (nfloats + 3) + j] = fb[indices[0] * nfloats + j];
-                newVertices[indices[1] * (nfloats + 3) + j] = fb[indices[1] * nfloats + j];
-                newVertices[indices[2] * (nfloats + 3) + j] = fb[indices[2] * nfloats + j];
-            }
-            newVertices[indices[0] * (nfloats + 3) + nfloats + 0] = normal.x;
-            newVertices[indices[0] * (nfloats + 3) + nfloats + 1] = normal.y;
-            newVertices[indices[0] * (nfloats + 3) + nfloats + 2] = normal.z;
-
-            newVertices[indices[1] * (nfloats + 3) + nfloats + 0] = normal.x;
-            newVertices[indices[1] * (nfloats + 3) + nfloats + 1] = normal.y;
-            newVertices[indices[1] * (nfloats + 3) + nfloats + 2] = normal.z;
-
-            newVertices[indices[2] * (nfloats + 3) + nfloats + 0] = normal.x;
-            newVertices[indices[2] * (nfloats + 3) + nfloats + 1] = normal.y;
-            newVertices[indices[2] * (nfloats + 3) + nfloats + 2] = normal.z;
-        }
-
-        Mesh newMesh = new Mesh(true, mesh.getNumVertices(), mesh.getNumIndices(), newAttributes);
-        newMesh.setVertices(newVertices);
-        newMesh.setIndices(fullIndices);
-        return newMesh;
     }
 
     private void copyNodes (Array<Node> nodes) {
@@ -241,6 +148,7 @@ public abstract class ActableModel extends Model implements RenderableProvider {
         copy.meshPart.primitiveType = nodePart.meshPart.primitiveType;
         copy.meshPart.mesh = nodePart.meshPart.mesh;
         meshParts.add(copy.meshPart);
+        meshes.add(copy.meshPart.mesh);
 
         final int index = materials.indexOf(nodePart.material, false);
         if (index < 0)

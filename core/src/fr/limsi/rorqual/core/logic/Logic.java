@@ -67,11 +67,16 @@ public class Logic implements InputProcessor {
     public void startModel() {
         stop();
         String id = ModelLibrary.getInstance().getCurrentModelId();
-        ModelContainer model = ModelLibrary.getInstance().getModelContainerFromId(id);
-        if (model instanceof Ouverture)
-            modelMaker = new OuvertureMaker(id);
-        else if (model instanceof Objet)
-            modelMaker = new ObjetMaker(id);
+        Class cls = ModelLibrary.getInstance().getModelClassFromId(id);
+
+        try {
+            if (cls.newInstance() instanceof Ouverture)
+                modelMaker = new OuvertureMaker(id);
+            else if (cls.newInstance() instanceof Objet)
+                modelMaker = new ObjetMaker(id);
+        } catch (Exception e) {
+            modelMaker = null;
+        }
     }
 
     public void updateModel() {

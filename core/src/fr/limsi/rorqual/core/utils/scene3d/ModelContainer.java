@@ -192,7 +192,7 @@ public class ModelContainer extends ActableModel {
 
     protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
 
-        validate();
+        //validate();
 
         if (isVisible()) {
             renderTransparent = type == Type.TRANSPARENT;
@@ -254,17 +254,16 @@ public class ModelContainer extends ActableModel {
         return intersection;
     }
 
-    BoundingBox box = new BoundingBox();
+    private BoundingBox box = new BoundingBox();
 
     protected float intersects(Ray ray, Matrix4 global_transform) {
 
         intersection = null;
 
         if (!selectable) return -1;
-        if (box == null) return -1;
 
         Vector3 center = new Vector3();
-        BoundingBox boundBox = new BoundingBox(box);
+        BoundingBox boundBox = new BoundingBox(getBoundingBox());
 
         Matrix4 local_transform = global_transform.cpy()
                 .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
@@ -325,9 +324,7 @@ public class ModelContainer extends ActableModel {
     }
 
     public Vector3 getTop() {
-        BoundingBox boundBox = new BoundingBox();
-
-        calculateBoundingBox(boundBox);
+        BoundingBox boundBox = new BoundingBox(getBoundingBox());
 
         boundBox
                 .mul(new Matrix4().idt().setToTranslation(position.x, position.y, 0))
@@ -347,12 +344,31 @@ public class ModelContainer extends ActableModel {
     ShaderAttribute selectedAttribute;
 
     public void setModel(Model m) {
+        setModel(m, true);
+
+    }
+
+    public void setModel(Model m, boolean calculateBoundingBox) {
         super.setModel(m);
-        calculateBoundingBox(box);
+
+        if (calculateBoundingBox) {
+            box = new BoundingBox();
+            calculateBoundingBox(box);
+        } else {
+            box = new BoundingBox();
+        }
 
         for (Material material : materials)
             material.set(selectedAttribute);
 
+    }
+
+    public synchronized BoundingBox getBoundingBox() {
+        return box;
+    }
+
+    public void setBoundingBox(BoundingBox b) {
+        box = b;
     }
 
 }
