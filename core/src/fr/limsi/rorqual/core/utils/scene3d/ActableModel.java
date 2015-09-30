@@ -103,60 +103,45 @@ public abstract class ActableModel extends Model implements RenderableProvider {
         }
     }
 
+    boolean modelChanged = false;
+
     public void setModel(Model model) {
         this.dispose();
-        this.materials.clear();//     this.materials.addAll(model.materials);
-        this.meshes.clear();        this.meshes.addAll(model.meshes);
-        this.meshParts.clear();     this.meshParts.addAll(model.meshParts);
-        checkNormals();
+        this.materials.clear();     //this.materials.addAll(model.materials);
+        this.meshes.clear();        //this.meshes.addAll(model.meshes);
+        this.meshParts.clear();
+        //this.meshParts.addAll(model.meshParts);
         //this.nodes.clear();         this.nodes.addAll(model.nodes);
-        this.nodes.clear();         copyNodes(model.nodes);
-        this.animations.clear();    this.animations.addAll(model.animations);
+        this.nodes.clear();
+        copyNodes(model.nodes);
+        this.animations.clear();
+        this.animations.addAll(model.animations);
+
+        modelChanged = true;
     }
 
-    private void checkNormals() {
-        for (int i = 0; i < meshes.size; i++) {
-            if (meshes.get(i).getVertexAttribute(VertexAttributes.Usage.Normal) == null) {
-                final Holder holder = createNormals(meshes.get(i));
-                final int j = i;
-                new Thread() {
-                    @Override
-                    public void run() {
-                        Mesh mesh = (Mesh)holder.get();
-                        synchronized (ActableModel.this) {
-                            meshes.set(j, mesh);
-                        }
-                    }
-                }.start();
-            }
-
-        }
-        for (int i = 0; i < meshParts.size; i++) {
-            if (meshParts.get(i).mesh.getVertexAttribute(VertexAttributes.Usage.Normal) == null) {
-                final Holder holder = createNormals(meshParts.get(i).mesh);
-                final int j = i;
-                new Thread() {
-                    @Override
-                    public void run() {
-                        Mesh mesh = (Mesh)holder.get();
-                        synchronized (ActableModel.this) {
-                            meshParts.get(j).mesh = mesh;
-                        }
-                    }
-                }.start();
-            }
-
+    protected void validate() {
+        if (modelChanged) {
+            for (MeshPart part : meshParts)
+                checkNormals(part);
+            modelChanged = false;
         }
     }
 
-    private Holder createNormals(final Mesh mesh) {
+    private void checkNormals(final MeshPart meshPart) {
+        if (meshPart.mesh.getVertexAttribute(VertexAttributes.Usage.Normal) == null) {
+            meshPart.mesh = createNormals(meshPart.mesh);
+        }
+        meshes.add(meshPart.mesh);
+    }
+
+    private Mesh createNormals(final Mesh mesh) {
         VertexAttribute atrs[] = new VertexAttribute[mesh.getVertexAttributes().size()+1];
         for (int i = 0; i < mesh.getVertexAttributes().size(); i++) {
             atrs[i] = mesh.getVertexAttributes().get(i);
         }
         atrs[mesh.getVertexAttributes().size()] = new VertexAttribute(VertexAttributes.Usage.Normal, 3, "a_normal");
         final VertexAttributes newAttributes = new VertexAttributes(atrs);
-
 
         final short[] indices = {0, 0, 0};
         final short[] fullIndices = new short[mesh.getNumIndices()];
@@ -197,36 +182,29 @@ public abstract class ActableModel extends Model implements RenderableProvider {
             Vector3 normal = p2.cpy().sub(p1).crs(p3.cpy().sub(p1));
 
             // replacer au bon endroit
-            for (int j = 0; j < size / fsize; j++) {
-                newVertices[(indices[0] * (size+3 * fsize) + j * fsize) / fsize] = fb[(indices[0]*size + j * fsize) / fsize];
-                newVertices[(indices[1] * (size+3 * fsize) + j * fsize) / fsize] = fb[(indices[1]*size + j * fsize) / fsize];
-                newVertices[(indices[2] * (size+3 * fsize) + j * fsize) / fsize] = fb[(indices[2]*size + j * fsize) / fsize];
+            int nfloats = size / fsize;
+            for (int j = 0; j < nfloats; j++) {
+                newVertices[indices[0] * (nfloats + 3) + j] = fb[indices[0] * nfloats + j];
+                newVertices[indices[1] * (nfloats + 3) + j] = fb[indices[1] * nfloats + j];
+                newVertices[indices[2] * (nfloats + 3) + j] = fb[indices[2] * nfloats + j];
             }
-            newVertices[(indices[0] * (size+3 * fsize) + size) / fsize + 0] = normal.x;
-            newVertices[(indices[0] * (size+3 * fsize) + size) / fsize + 1] = normal.y;
-            newVertices[(indices[0] * (size+3 * fsize) + size) / fsize + 2] = normal.z;
+            newVertices[indices[0] * (nfloats + 3) + nfloats + 0] = normal.x;
+            newVertices[indices[0] * (nfloats + 3) + nfloats + 1] = normal.y;
+            newVertices[indices[0] * (nfloats + 3) + nfloats + 2] = normal.z;
 
-            newVertices[(indices[1] * (size+3 * fsize) + size) / fsize + 0] = normal.x;
-            newVertices[(indices[1] * (size+3 * fsize) + size) / fsize + 1] = normal.y;
-            newVertices[(indices[1] * (size+3 * fsize) + size) / fsize + 2] = normal.z;
+            newVertices[indices[1] * (nfloats + 3) + nfloats + 0] = normal.x;
+            newVertices[indices[1] * (nfloats + 3) + nfloats + 1] = normal.y;
+            newVertices[indices[1] * (nfloats + 3) + nfloats + 2] = normal.z;
 
-            newVertices[(indices[2] * (size+3 * fsize) + size) / fsize + 0] = normal.x;
-            newVertices[(indices[2] * (size+3 * fsize) + size) / fsize + 1] = normal.y;
-            newVertices[(indices[2] * (size+3 * fsize) + size) / fsize + 2] = normal.z;
+            newVertices[indices[2] * (nfloats + 3) + nfloats + 0] = normal.x;
+            newVertices[indices[2] * (nfloats + 3) + nfloats + 1] = normal.y;
+            newVertices[indices[2] * (nfloats + 3) + nfloats + 2] = normal.z;
         }
 
-        final Holder holder = new Holder();
-
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                Mesh newMesh = new Mesh(true, mesh.getNumVertices(), mesh.getNumIndices(), newAttributes);
-                newMesh.setVertices(newVertices);
-                newMesh.setIndices(fullIndices);
-                holder.set(newMesh);
-            }
-        });
-        return holder;
+        Mesh newMesh = new Mesh(true, mesh.getNumVertices(), mesh.getNumIndices(), newAttributes);
+        newMesh.setVertices(newVertices);
+        newMesh.setIndices(fullIndices);
+        return newMesh;
     }
 
     private void copyNodes (Array<Node> nodes) {
@@ -262,6 +240,7 @@ public abstract class ActableModel extends Model implements RenderableProvider {
         copy.meshPart.numVertices = nodePart.meshPart.numVertices;
         copy.meshPart.primitiveType = nodePart.meshPart.primitiveType;
         copy.meshPart.mesh = nodePart.meshPart.mesh;
+        meshParts.add(copy.meshPart);
 
         final int index = materials.indexOf(nodePart.material, false);
         if (index < 0)

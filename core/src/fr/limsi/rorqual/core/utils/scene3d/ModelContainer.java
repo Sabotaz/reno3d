@@ -191,6 +191,9 @@ public class ModelContainer extends ActableModel {
     }
 
     protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform){
+
+        validate();
+
         if (isVisible()) {
             renderTransparent = type == Type.TRANSPARENT;
 
