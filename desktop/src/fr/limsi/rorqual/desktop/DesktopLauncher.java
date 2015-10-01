@@ -4,16 +4,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.model.IfcHelper;
-import fr.limsi.rorqual.core.model.primitives.MaterialTypeEnum;
+import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcCartesianPoint;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
