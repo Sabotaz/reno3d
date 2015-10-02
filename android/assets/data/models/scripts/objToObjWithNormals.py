@@ -32,7 +32,6 @@ def decimate():
 
 	enought_to_decimate = False
 	threshold = MIN_THRESOLD
-	
 	decimables = {}
 	while not enought_to_decimate:
 		for name, indices in n_indices.items():
@@ -42,13 +41,12 @@ def decimate():
 		deletable_indices = sum(decimables.values())
 		if deletable_indices < to_delete:
 			threshold /= 2
-			print ("NEW RATIO: " + str(threshold))
 		else:
 			enought_to_decimate = True
 
 	ratios = {}
 	for name, indices in decimables.items():
-		ratios[name] = indices / (to_delete / (indices / deletable_indices))
+		ratios[name] = 1 - ((to_delete * (indices / deletable_indices)) / indices)
 
 	for name, ratio in ratios.items():
 		mod = bpy.data.objects[name].modifiers.new(name='decimate', type='DECIMATE')
@@ -72,4 +70,3 @@ print("\nDébut du traitement\n")
 racine_directory_path = argv[0]
 computeNormalesInObj(racine_directory_path)
 print("\nFin du traitement")
-
