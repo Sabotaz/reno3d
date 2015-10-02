@@ -131,7 +131,7 @@ project(":core") {
         }
     }
 
-    processResources.dependsOn convert
+    //processResources.dependsOn convert
 
 }
 
