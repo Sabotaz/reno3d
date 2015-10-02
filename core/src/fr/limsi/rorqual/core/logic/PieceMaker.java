@@ -294,9 +294,11 @@ public class PieceMaker extends ModelMaker {
         if (coins.contains(A) && coins.contains(B) && !coins.contains(M)) {
             int indiceA = coins.indexOf(A);
             int indiceB = coins.indexOf(B);
-            if (indiceA < indiceB) {
+            if (coins.get((indiceA+1)%coins.size()).equals(B)) {
+                // A est avant B
                 coins.add(indiceA+1, M);
             } else {
+                // B est avant A
                 coins.add(indiceB+1, M);
             }
             slab.setCoins(coins);
