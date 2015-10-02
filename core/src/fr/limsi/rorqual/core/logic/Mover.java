@@ -235,6 +235,27 @@ public class Mover extends ModelMaker {
 
             if (a != null) {
                 newCoin = a.getPt();
+
+                if (newCoin != lastCoin) {
+                    boolean valid = true;
+                    for (Mur m : newCoin.getMurs())
+                        for (Mur m2 : murs)
+                            if (m2.equals(m))
+                                valid = false;
+                    for (Slab s : newCoin.getSlabs())
+                        for (Slab s2 : slabs)
+                            if (s2.equals(s))
+                                valid = false;
+                    if (!valid) {
+                        for (Slab s : slabs)
+                            s.remplaceCoin(lastCoin, initialCoin);
+                        for (Mur m : murs)
+                            m.remplaceCoin(lastCoin, initialCoin);
+                        newCoin = initialCoin;
+                        return;
+                    }
+                }
+
                 if (anchor != null) {
                     anchor.setPt(a.getPt());
                     anchor.setA(a.getA());
