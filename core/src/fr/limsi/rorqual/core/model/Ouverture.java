@@ -81,6 +81,12 @@ public abstract class Ouverture extends ModelContainer {
         this.height = height;
         changed = true;
     }
+
+    public float getZ() {
+        float s1 = this.getMur().getSlabGauche().getHeight();
+        float s2 = this.getMur().getSlabDroit().getHeight();
+        return Math.max(s1,s2);
+    }
     public float getSurface() {
         return surface;
     }
@@ -92,7 +98,7 @@ public abstract class Ouverture extends ModelContainer {
 
         Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
 
-        Vector3 p1 = new Vector3(this.position.x, 0, this.position.y);
+        Vector3 p1 = new Vector3(this.position.x, 0, this.position.y+Slab.DEFAULT_HEIGHT);
         Vector3 p2 = p1.cpy().add(Vector3.X.cpy().setLength(this.width));
 
         Vector3 y_dir = Vector3.Y.cpy().setLength(mur.getDepth() / 2 + 0.001f);
@@ -121,12 +127,13 @@ public abstract class Ouverture extends ModelContainer {
         if (mur == null)
             return;
         if (changed) {
-            BoundingBox b = new BoundingBox();
-            this.calculateBoundingBox(b).mul(model_transform);
+            BoundingBox b = new BoundingBox(getBoundingBox());
+            b.mul(model_transform);
             float w = this.getWidth() / b.getWidth();
             float h = this.getMur().getDepth() / b.getHeight();
             float d = this.getHeight() / b.getDepth();
             Vector3 dmin = b.getMin(new Vector3()).scl(-1);
+            dmin.z = dmin.z + getZ();
             scaleMatrix.idt().scale(w, h, d).translate(dmin);
         }
         changed = false;
