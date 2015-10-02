@@ -50,7 +50,7 @@ public class ObjetMaker extends ModelMaker {
                 obj.setSlab(slab);
                 slab.addObjet(obj);
                 making_objet = true;
-                System.out.println(obj.calculateBoundingBox(new BoundingBox()));
+                obj.calculateBoundingBox(new BoundingBox());
             } else {
                 System.out.println("A very bad thing append here... " );
                 making_objet = false;

@@ -45,6 +45,7 @@ import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.utils.Holder;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
 /**
@@ -122,7 +123,7 @@ public class ModelLibrary {
                         synchronized (ModelLoader.this) {
                             UBJsonReader jsonReader = new UBJsonReader();
                             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-                            model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj", "g3db"), Files.FileType.Internal));
+                            model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile, Files.FileType.Internal));
                             container.setModel(model);
                             toScale(container);
 
@@ -158,7 +159,7 @@ public class ModelLibrary {
                         synchronized(ModelLoader.this) {
                             UBJsonReader jsonReader = new UBJsonReader();
                             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-                            model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile.replace("obj", "g3db"), Files.FileType.Internal));
+                            model = modelLoader.loadModel(Gdx.files.getFileHandle(path + "/" + modelFile, Files.FileType.Internal));
                             model.calculateBoundingBox(box);
                             // update normals
                             validate(model);
@@ -293,73 +294,54 @@ public class ModelLibrary {
     static HashMap<String, ModelLoader> models = new HashMap<String, ModelLoader>();
 
     private void makeLibrary() {
-        ArrayList<FileHandle> files = listFiles();
-        makeCategories(files);
+        makeCategories(Gdx.files.getFileHandle("data/models/g3db/PluginFurnitureCatalog", Files.FileType.Internal));
         makeTabWindow();
     }
 
-    private ArrayList<FileHandle> listFiles() {
-        String[] folders = {
-                "3DModels-BlendSwap-CC-0-1.5.1/BlendSwap-CC-0.sh3f_FILES",
-                "3DModels-BlendSwap-CC-BY-1.5.1/BlendSwap-CC-BY.sh3f_FILES",
-                "3DModels-Contributions-1.5.1/Contributions.sh3f_FILES",
-                "3DModels-KatorLegaz-1.5.1/KatorLegaz.sh3f_FILES",
-                "3DModels-LucaPresidente-1.5.1/LucaPresidente.sh3f_FILES",
-                "3DModels-Scopia-1.5.1/Scopia.sh3f_FILES"
-        };
-        ArrayList<FileHandle> files = new ArrayList<FileHandle>();
-        for (String folder : folders) {
-            files.add(Gdx.files.getFileHandle("data/models/g3db/" + folder + "/PluginFurnitureCatalog", Files.FileType.Internal));
-        }
-        return files;
-    }
+    private void makeCategories(FileHandle file) {
+        I18NBundle i18n = I18NBundle.createBundle(file, Locale.FRENCH);
 
-    private void makeCategories(ArrayList<FileHandle> files) {
-        for (FileHandle file: files) {
-            I18NBundle i18n = I18NBundle.createBundle(file, Locale.FRENCH);
+        int n = 1;
+        do {
+            try {
+                i18n.setExceptionOnMissingKey(true);
+                String id = i18n.get("id#"+n);
+                i18n.setExceptionOnMissingKey(false);
+                String category = i18n.get("category#"+n);
 
-            int n = 1;
-            do {
+                if (!categories.containsKey(category))
+                    categories.put(category, new HashMap<String, ModelLoader>());
+
+                /*
+                boolean exists = Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n).replace("obj","g3db"), Files.FileType.Internal).exists()
+                        && Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).exists();
+                */
+                /// IT WAS TOO SLOW !
+
+                boolean exists = false;
                 try {
-                    i18n.setExceptionOnMissingKey(true);
-                    String id = i18n.get("id#"+n);
-                    i18n.setExceptionOnMissingKey(false);
-                    String category = i18n.get("category#"+n);
-
-                    if (!categories.containsKey(category))
-                        categories.put(category, new HashMap<String, ModelLoader>());
-
-                    /*
-                    boolean exists = Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n).replace("obj","g3db"), Files.FileType.Internal).exists()
-                            && Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).exists();
-                    */
-                    /// IT WAS TOO SLOW !
-
-                    boolean exists = false;
-                    try {
-                        // hack from https://code.google.com/p/libgdx/issues/detail?id=1655
-                        Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n).replace("obj","g3db"), Files.FileType.Internal).read().close();
-                        Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).read().close();
-                        exists = true;
-                    } catch (Exception e) {
-                        // doesn't exist !
-                    }
-                    if (exists) {
-
-                        ModelLoader modelLoader = new ModelLoader(file.parent().path(), i18n, n);
-                        categories.get(category).put(id, modelLoader);
-                        models.put(id, modelLoader);
-
-                    }
-
-                    // end
-                    n++;
-
-                } catch (MissingResourceException mre) {
-                    break;
+                    // hack from https://code.google.com/p/libgdx/issues/detail?id=1655
+                    Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("model#"+n), Files.FileType.Internal).read().close();
+                    Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("icon#"+n), Files.FileType.Internal).read().close();
+                    exists = true;
+                } catch (Exception e) {
+                    // doesn't exist !
                 }
-            } while (true);
-        }
+                if (exists) {
+
+                    ModelLoader modelLoader = new ModelLoader(file.parent().path(), i18n, n);
+                    categories.get(category).put(id, modelLoader);
+                    models.put(id, modelLoader);
+
+                }
+
+                // end
+                n++;
+
+            } catch (MissingResourceException mre) {
+                break;
+            }
+        } while (true);
     }
 
     private TabWindow tabWindow = null;
@@ -534,7 +516,7 @@ public class ModelLibrary {
 
         ShortBuffer shbu = mesh.getIndicesBuffer().asReadOnlyBuffer();
         shbu.position(0);
-        short[] fullIndices = new short[shbu.remaining()];
+        final short[] fullIndices = new short[shbu.remaining()];
         shbu.get(fullIndices);
 
         FloatBuffer flbu = mesh.getVerticesBuffer().asReadOnlyBuffer();
@@ -595,6 +577,7 @@ public class ModelLibrary {
         Mesh newMesh = new Mesh(true, mesh.getNumVertices(), mesh.getNumIndices(), newAttributes);
         newMesh.setVertices(newVertices);
         newMesh.setIndices(fullIndices);
+
         return newMesh;
     }
 }
