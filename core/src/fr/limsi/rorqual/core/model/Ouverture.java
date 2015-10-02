@@ -82,10 +82,10 @@ public abstract class Ouverture extends ModelContainer {
         changed = true;
     }
 
-    public float getZ() {
+    public float getY() {
         float s1 = this.getMur().getSlabGauche().getHeight();
         float s2 = this.getMur().getSlabDroit().getHeight();
-        return Math.max(s1,s2);
+        return Math.max(s1,s2) + this.position.y;
     }
     public float getSurface() {
         return surface;
@@ -133,7 +133,7 @@ public abstract class Ouverture extends ModelContainer {
             float h = this.getMur().getDepth() / b.getHeight();
             float d = this.getHeight() / b.getDepth();
             Vector3 dmin = b.getMin(new Vector3()).scl(-1);
-            dmin.z = dmin.z + getZ();
+            dmin.z = dmin.z + getY();
             scaleMatrix.idt().scale(w, h, d).translate(dmin);
         }
         changed = false;
