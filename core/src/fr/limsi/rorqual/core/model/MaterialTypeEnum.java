@@ -1,11 +1,8 @@
-package fr.limsi.rorqual.core.model.primitives;
-
+package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.graphics.Texture;
-
 import fr.limsi.rorqual.core.utils.AssetManager;
-
 /**
- * Created by ricordeau on 03/07/15.
+ * Created by ricordeau on 02/10/15.
  */
 public enum MaterialTypeEnum {
     BRIQUE("brickwork-texture", "brickwork_normal-map"),
@@ -33,3 +30,4 @@ public enum MaterialTypeEnum {
         }
     }
 }
+

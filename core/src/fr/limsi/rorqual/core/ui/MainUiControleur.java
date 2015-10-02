@@ -20,6 +20,7 @@ import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
+import fr.limsi.rorqual.core.model.IfcExporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.utils.AssetManager;
 
@@ -176,6 +177,9 @@ public class MainUiControleur implements EventListener {
                         case ETAGE_MINUS:
                             ModelHolder.getInstance().getBatiment().etageInferieur();
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
+                            break;
+                        case EXPORT_IFC:
+                            IfcExporter.getInstance().realiseExportIfc();
                             break;
                         default:
                             System.out.println(lastValue);

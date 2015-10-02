@@ -10,7 +10,6 @@ import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by christophe on 05/08/15.

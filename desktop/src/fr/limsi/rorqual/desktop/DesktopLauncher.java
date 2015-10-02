@@ -2,11 +2,6 @@ package fr.limsi.rorqual.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
-import java.io.File;
-
-import fr.limsi.rorqual.core.model.IfcHelper;
-import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 public class DesktopLauncher {
@@ -16,9 +11,7 @@ public class DesktopLauncher {
         config.height = 720;
         config.width = 1280;
 
-        IfcHelper ifcHelper = new IfcHelper();
 //        ifcHelper.createApartmentTest();
-        ifcHelper.createSecondAppartementTest();
 //        IfcCartesianPoint pointA1 = ifcHelper.createCartesianPoint2D(2,1);
 //        IfcCartesianPoint pointA2 = ifcHelper.createCartesianPoint2D(3,4);
 //        ifcHelper.addWall("1st floor", "wall", pointA1, pointA2, 0.18);
@@ -45,13 +38,6 @@ public class DesktopLauncher {
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_MATERIAU_MENUISERIE));
 //        System.out.println(ifcHelper.getPropertiesWindow(window, WindowPropertiesEnum.TYPE_VITRAGE_MENUISERIE));
 
-        ifcHelper.saveIfcModel();
-
-        try {
-            IfcHolder.getInstance().openModel(new File("data/ifc/coucou.ifc"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 		new LwjglApplication(new MainApplicationAdapter(), config);
 	}
 }

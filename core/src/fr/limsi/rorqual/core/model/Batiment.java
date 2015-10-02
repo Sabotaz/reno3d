@@ -267,6 +267,10 @@ public class Batiment {
         return etages.get(i);
     }
 
+    public ArrayList<Etage> getAllEtages(){
+        return this.etages.list();
+    }
+
     public ModelContainer hitCurrentEtage(int x, int y) {
         this.floor.setSelectable(true);
         ModelContainer modelContainer = this.getCurrentEtage().getModelGraph().hit(x,y);

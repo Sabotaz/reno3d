@@ -15,6 +15,27 @@
       "content": [
         {
           "type": "TextButton",
+          "text": "Export .ifc",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.EXPORT_IFC",
+          "height": "5%",
+          "width": "auto",
+          "padTop": 10,
+          "padRight": -2,
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            null,
+            "default.fnt"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ButtonGroup",
+      "layout": "column",
+      "content": [
+        {
+          "type": "TextButton",
           "text": "-",
           "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_MINUS",
           "height": "5%",

@@ -18,12 +18,15 @@ public class Etage {
     private ArrayList<Porte> portes = new ArrayList<Porte>();
     private ArrayList<PorteFenetre> porteFenetres = new ArrayList<PorteFenetre>();
     private int number;
+    private float elevation;
+    private String name;
     private Batiment batiment;
     private ModelGraph modelGraph = new ModelGraph();
 
     public final static float DEFAULT_HEIGHT = 2.8f;
-
     private float height = DEFAULT_HEIGHT;
+
+    public Etage() {}
 
     public ArrayList<Mur> getMurs() {
         return murs;
@@ -40,6 +43,7 @@ public class Etage {
         for (Mur m : murs) {
             m.setChanged();
         }
+        this.actualiseElevation();
     }
 
     public boolean isEmpty() {
@@ -87,9 +91,9 @@ public class Etage {
     public void addOuverture(Ouverture ouverture) {
         this.ouvertures.add(ouverture);
         if (ouverture instanceof Fenetre){
-            this.fenetres.add((Fenetre)ouverture);
+            this.fenetres.add((Fenetre) ouverture);
         }else if (ouverture instanceof Porte){
-            this.portes.add((Porte)ouverture);
+            this.portes.add((Porte) ouverture);
         }else if (ouverture instanceof PorteFenetre){
             this.porteFenetres.add((PorteFenetre) ouverture);
         }
@@ -128,6 +132,8 @@ public class Etage {
 
     public void setNumber(int number) {
         this.number = number;
+        this.actualiseName();
+        this.actualiseElevation();
     }
 
     public ModelGraph getModelGraph() {
@@ -153,5 +159,43 @@ public class Etage {
 
     public void updateOrientation(Mur mur){
         mur.setGlobalOrientation(globalOrientation);
+    }
+
+    private void actualiseName(){
+        if (this.number<0){
+            switch (this.number){
+                case -1:
+                    this.name = "1er sous-sol";
+                    break;
+                default:
+                    int a = this.number*-1;
+                    this.name = Integer.toString(a)+"eme sous-sol";
+                    break;
+            }
+        }else{
+            switch (this.number){
+                case 0:
+                    this.name = "Rez-de-chaussee";
+                    break;
+                case 1:
+                    this.name = "1er etage";
+                    break;
+                default:
+                    this.name = Integer.toString(this.number)+"eme etage";
+                    break;
+            }
+        }
+    }
+
+    private void actualiseElevation(){
+        this.elevation = this.getNumber()*this.getHeight();
+    }
+
+    public float getElevation(){
+        return this.elevation;
+    }
+
+    public String getName(){
+        return this.name;
     }
 }

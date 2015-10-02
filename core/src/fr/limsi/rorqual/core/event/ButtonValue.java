@@ -22,5 +22,6 @@ public enum ButtonValue {
     MENUISERIE,
     ETAGE_PLUS,
     ETAGE_MINUS,
+    EXPORT_IFC
     ;
 }
