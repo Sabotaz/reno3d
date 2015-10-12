@@ -24,6 +24,8 @@ import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
+import fr.limsi.rorqual.core.utils.scene3d.models.Cote2D;
+import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
 
 /**
  * Created by christophe on 05/08/15.
@@ -35,7 +37,8 @@ public class PieceMaker extends ModelMaker {
     Coin start;
     boolean making_piece = false;
     Mur[] murs = new Mur[4];
-    Cote[] cotes = new Cote[2];
+    Cote2D cote;
+    SurfaceCote surface;
     Slab slab;
     Anchor anchor = null;
 
@@ -72,14 +75,12 @@ public class PieceMaker extends ModelMaker {
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(murs[i]);
             }
 
-            cotes[0] = new Cote(murs[0]);
-            murs[0].add(cotes[0]);
-
-            cotes[1] = new Cote(murs[1]);
-            murs[1].add(cotes[1]);
-
             ArrayList<Vector3> coins = new ArrayList<Vector3>();
             slab = new Slab(null);
+            surface = new SurfaceCote(slab);
+            cote = new Cote2D(slab);
+            slab.add(surface);
+            slab.add(cote);
             for (Mur mur : murs) {
                 mur.setSlabGauche(slab);
                 slab.addMur(mur);
@@ -168,9 +169,8 @@ public class PieceMaker extends ModelMaker {
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
         anchor = null;
 
-
-        murs[0].remove(cotes[0]);
-        murs[1].remove(cotes[1]);
+        slab.remove(surface);
+        slab.remove(cote);
 
         if (murs[0].getWidth() == 0 || murs[1].getWidth() == 0) {
             for (Mur mur : murs)
@@ -400,8 +400,8 @@ public class PieceMaker extends ModelMaker {
         if (anchor != null)
             ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().remove(anchor);
 
-        murs[0].remove(cotes[0]);
-        murs[1].remove(cotes[1]);
+        slab.remove(surface);
+        slab.remove(cote);
 
         for (Mur mur: murs)
             ModelHolder.getInstance().getBatiment().getCurrentEtage().removeMur(mur);

@@ -114,7 +114,11 @@ public abstract class ActableModel extends Model implements RenderableProvider {
         this.animations.addAll(model.animations);
     }
 
-    private void copyNodes (Array<Node> nodes) {
+    public void addModel(Model model) {
+        copyNodes(model.nodes);
+    }
+
+    protected void copyNodes (Array<Node> nodes) {
         for (int i = 0, n = nodes.size; i < n; ++i) {
             final Node node = nodes.get(i);
             this.nodes.add(copyNode(node));

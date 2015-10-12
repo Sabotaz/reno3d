@@ -363,6 +363,13 @@ public class ModelContainer extends ActableModel {
 
     }
 
+    public void addModel(Model m) {
+        super.addModel(m);
+
+        for (Material material : materials)
+            material.set(selectedAttribute);
+    }
+
     public synchronized BoundingBox getBoundingBox() {
         return box;
     }

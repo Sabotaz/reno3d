@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.GeometryUtils;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
@@ -30,11 +31,14 @@ import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
+import fr.limsi.rorqual.core.utils.scene3d.models.Cote2D;
+import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
+
 /**
  * Created by ricordeau on 20/07/15.
  */
 // classe modélisant un plancher (modèle + thermique)
-public class Slab extends ModelContainer {
+public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, Cote2D.Cotable2D {
 
     public final static float DEFAULT_HEIGHT = 0.2f;
     private MitoyennetePlafond mitoyennetePlafond;
@@ -75,6 +79,10 @@ public class Slab extends ModelContainer {
     }
 
     public void actualiseSurface(){
+        if (coins == null || coins.isEmpty()) {
+            surface = 0;
+            return;
+        }
         ArrayList<Coin> listCoin = new ArrayList<Coin>();
         listCoin.addAll(coins);
         listCoin.add(listCoin.get(0));
@@ -211,6 +219,7 @@ public class Slab extends ModelContainer {
         super.act();
         if (!changed)
             return;
+        actualiseSurface();
         makeMesh();
         changed = false;
     }
@@ -428,4 +437,81 @@ public class Slab extends ModelContainer {
         return "Slab ->  s="+surface+" uPlancher="+uPlancher+ " dpPlancher="+deperditionPlancher+" uPlafond="+uPlafond+ " deperditionPlafond="+deperditionPlafond+" mitoyennetePlancher="+mitoyennetePlancher+" mitoyennetePlafond="+mitoyennetePlafond;
     }
 
+    @Override
+    public Vector3 getCotePos() {
+        if (coins == null || coins.isEmpty())
+            return new Vector3();
+        Vector2 pos = new Vector2();
+        for (Coin coin : coins) {
+            pos.add(coin.getPosition());
+        }
+        return new Vector3(pos.x/coins.size(), pos.y/coins.size(), getHeight() + 0.0001f);
+    }
+
+    @Override
+    public float getCoteValue() {
+        return surface;
+    }
+
+    @Override
+    public Vector3 getCotePosVerticalA() { // en bas a droite
+        if (coins == null || coins.isEmpty())
+            return new Vector3();
+        Vector2 pos = new Vector2(-Float.MAX_VALUE, Float.MAX_VALUE);
+        for (Coin coin : coins) {
+            Vector2 p = coin.getPosition();
+            if (p.x >= pos.x && p.y <= pos.y)
+                pos = p;
+        }
+        return new Vector3(pos.x, pos.y, etage.getHeight() + 0.0001f);
+    }
+
+    @Override
+    public Vector3 getCotePosVerticalB() { // en haut a droite
+        if (coins == null || coins.isEmpty())
+            return new Vector3();
+        Vector2 pos = new Vector2(-Float.MAX_VALUE, -Float.MAX_VALUE);
+        for (Coin coin : coins) {
+            Vector2 p = coin.getPosition();
+            if (p.x >= pos.x && p.y >= pos.y)
+                pos = p;
+        }
+        return new Vector3(pos.x, pos.y, etage.getHeight() + 0.0001f);
+    }
+
+    @Override
+    public Vector3 getCotePosHorizontalA() { // en bas a gauche
+        if (coins == null || coins.isEmpty())
+            return new Vector3();
+        Vector2 pos = new Vector2(Float.MAX_VALUE, Float.MAX_VALUE);
+        for (Coin coin : coins) {
+            Vector2 p = coin.getPosition();
+            if (p.x <= pos.x && p.y <= pos.y)
+                pos = p;
+        }
+        return new Vector3(pos.x, pos.y, etage.getHeight() + 0.0001f);
+    }
+
+    @Override
+    public Vector3 getCotePosHorizontalB() { // en bas a droite
+        if (coins == null || coins.isEmpty())
+            return new Vector3();
+        Vector2 pos = new Vector2(-Float.MAX_VALUE, Float.MAX_VALUE);
+        for (Coin coin : coins) {
+            Vector2 p = coin.getPosition();
+            if (p.x >= pos.x && p.y <= pos.y)
+                pos = p;
+        }
+        return new Vector3(pos.x, pos.y, etage.getHeight() + 0.0001f);
+    }
+
+    @Override
+    public float getCoteValueVertical() {
+        return getCotePosVerticalB().cpy().sub(getCotePosVerticalA()).len();
+    }
+
+    @Override
+    public float getCoteValueHorizontal() {
+        return getCotePosHorizontalA().cpy().sub(getCotePosHorizontalB()).len();
+    }
 }

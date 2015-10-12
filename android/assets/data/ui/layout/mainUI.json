@@ -181,7 +181,7 @@
           "style": [
             "skin:uiskin.json:default-round",
             "skin:uiskin.json:default-round-down",
-            null,
+            "skin:uiskin.json:default-round-down",
             "default.fnt"
           ]
         },
@@ -194,7 +194,7 @@
           "style": [
             "skin:uiskin.json:default-round",
             "skin:uiskin.json:default-round-down",
-            null,
+            "skin:uiskin.json:default-round-down",
             "default.fnt"
           ]
         }
