@@ -141,6 +141,27 @@ public class PieceMaker extends ModelMaker {
             coins[2] = end;
             coins[3] = Coin.getCoin(etage, new Vector2(end.getPosition().x, start.getPosition().y));;
 
+            if (start.getPosition().x > end.getPosition().x && start.getPosition().y > end.getPosition().y)// vers bas gauche
+                for (Mur m : murs) {
+                    m.setSlabGauche(null);
+                    m.setSlabDroit(slab);
+                }
+            else if (start.getPosition().x < end.getPosition().x && start.getPosition().y > end.getPosition().y) // vers bas droit
+                for (Mur m : murs) {
+                    m.setSlabGauche(slab);
+                    m.setSlabDroit(null);
+                }
+            else if (start.getPosition().x > end.getPosition().x && start.getPosition().y < end.getPosition().y) // vers haut gauche
+                for (Mur m : murs) {
+                    m.setSlabGauche(slab);
+                    m.setSlabDroit(null);
+                }
+            else
+                for (Mur m : murs) { // vers haut droit
+                    m.setSlabGauche(null);
+                    m.setSlabDroit(slab);
+                }
+
             for (int i = 0; i < 4; i++) {
                 murs[i].setA(coins[i]);
                 murs[i].setB(coins[(i+1)%4]);

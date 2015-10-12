@@ -86,7 +86,7 @@ public class CSGUtils {
     }
 
 
-    public static Model toModel(CSG csg, Material frontMaterial, Material backMaterial) {
+    public static Model toModel(CSG csg, Material frontMaterial, Material backMaterial, Material top, Material depth) {
 
         ModelBuilder builder = new ModelBuilder();
 
@@ -107,8 +107,12 @@ public class CSGUtils {
 
             if (N.epsilonEquals(0,1,0,0))
                 meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, frontMaterial);
-            else
+            else if (N.epsilonEquals(0,-1,0,0))
                 meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, backMaterial);
+            else if (N.epsilonEquals(1,0,0,0) || N.epsilonEquals(-1,0,0,0))
+                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, depth);
+            else
+                meshBuilder = builder.part("polygon_triangles_"+p, GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, top);
 
             Vector2 uv1, uv2, uv3;
             if (N.epsilonEquals(0,1,0,0) || N.epsilonEquals(0,-1,0,0))

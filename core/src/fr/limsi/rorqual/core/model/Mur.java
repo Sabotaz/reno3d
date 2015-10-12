@@ -32,7 +32,6 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
-import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
 import fr.limsi.rorqual.core.utils.CSGUtils;
@@ -61,8 +60,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private float deperdition;
     private Slab slabGauche = null;
     private Slab slabDroit = null;
-
-    private ArrayList<MaterialTypeEnum> materialLayersMaterials = new ArrayList<MaterialTypeEnum>();
 
     private ArrayList<Coin> coins = new ArrayList<Coin>();
 
@@ -111,42 +108,56 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.typeIsolationMur=TypeIsolationMurEnum.INCONNUE;
         this.dateIsolationMur=DateIsolationMurEnum.INCONNUE;
         this.orientationMur=OrientationEnum.NORD;
-        materialLayersMaterials.add(MaterialTypeEnum.BRIQUE);
-        materialLayersMaterials.add(MaterialTypeEnum.PIERRE);
     }
 
     boolean areMaterialSet = false;
 
+    MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
+    MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.PIERRE;
+    MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.PIERRE;
+
     private void makeMaterials() {
-        if (materialLayersMaterials.size() > 0) {
-            Texture texture1_diff = materialLayersMaterials.get(0).getDiffuse();
-            Texture texture1_norm = materialLayersMaterials.get(0).getNormal();
+        //if (materialLayersMaterials.size() > 0) {
+        Texture texture1_diff = exteriorMaterialType.getDiffuse();
+        Texture texture1_norm = exteriorMaterialType.getNormal();
 
-            Texture texture2_diff = materialLayersMaterials.get(materialLayersMaterials.size()-1).getDiffuse();
-            Texture texture2_norm = materialLayersMaterials.get(materialLayersMaterials.size()-1).getNormal();
+        Texture texture2_diff = interiorMaterialType1.getDiffuse();
+        Texture texture2_norm = interiorMaterialType1.getNormal();
 
-            texture1_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            texture1_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            texture2_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            texture2_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        Texture texture3_diff = interiorMaterialType2.getDiffuse();
+        Texture texture3_norm = interiorMaterialType2.getNormal();
 
-            TextureAttribute ta1_diff = TextureAttribute.createDiffuse(texture1_diff);
-            TextureAttribute ta1_norm = TextureAttribute.createNormal(texture1_norm);
-            TextureAttribute ta2_diff = TextureAttribute.createDiffuse(texture2_diff);
-            TextureAttribute ta2_norm = TextureAttribute.createNormal(texture2_norm);
 
-            ta1_diff.scaleU = ta1_diff.scaleV = 0.5f;
-            ta1_norm.scaleU = ta1_norm.scaleV = 0.5f;
-            ta2_diff.scaleU = ta2_diff.scaleV = 0.5f;
-            ta2_norm.scaleU = ta2_norm.scaleV = 0.5f;
+        texture1_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        texture1_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        texture2_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        texture2_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        texture3_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        texture3_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
 
-            frontMaterial.set(ta1_diff, ta1_norm);
-            backMaterial.set(ta2_diff, ta2_norm);
-        }
+        TextureAttribute ta1_diff = TextureAttribute.createDiffuse(texture1_diff);
+        TextureAttribute ta1_norm = TextureAttribute.createNormal(texture1_norm);
+        TextureAttribute ta2_diff = TextureAttribute.createDiffuse(texture2_diff);
+        TextureAttribute ta2_norm = TextureAttribute.createNormal(texture2_norm);
+        TextureAttribute ta3_diff = TextureAttribute.createDiffuse(texture3_diff);
+        TextureAttribute ta3_norm = TextureAttribute.createNormal(texture3_norm);
+
+        ta1_diff.scaleU = ta1_diff.scaleV = 0.5f;
+        ta1_norm.scaleU = ta1_norm.scaleV = 0.5f;
+        ta2_diff.scaleU = ta2_diff.scaleV = 0.5f;
+        ta2_norm.scaleU = ta2_norm.scaleV = 0.5f;
+        ta3_diff.scaleU = ta2_diff.scaleV = 0.5f;
+        ta3_norm.scaleU = ta2_norm.scaleV = 0.5f;
+
+        exteriorMaterial.set(ta1_diff, ta1_norm);
+        interiorMaterial1.set(ta2_diff, ta2_norm);
+        interiorMaterial2.set(ta3_diff, ta3_norm);
+        defaultMaterial.set(ColorAttribute.createDiffuse(Color.GRAY));
+        /*}
         else {
-            frontMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
-            backMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
-        }
+            exteriorMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
+            interiorMaterial1.set(ColorAttribute.createDiffuse(Color.WHITE));
+        }*/
 
         areMaterialSet = true;
     }
@@ -275,8 +286,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     private Model model_non_perce = null;
 
-    Material frontMaterial = new Material();
-    Material backMaterial = new Material();
+    Material exteriorMaterial = new Material();
+    Material interiorMaterial1 = new Material();
+    Material interiorMaterial2 = new Material();
+    Material defaultMaterial = new Material();
 
     private void makeMesh() {
         if (A == null || B == null || B.getPosition().equals(A.getPosition()))
@@ -313,7 +326,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             csg = csg.difference(o.getCSG());
         }
 
-        Model model = CSGUtils.toModel(csg, frontMaterial, backMaterial);
+        Material front = slabGauche == null ? exteriorMaterial : interiorMaterial1;
+        Material back = slabDroit == null ? exteriorMaterial : interiorMaterial2;
+
+        Model model = CSGUtils.toModel(csg, front, back, defaultMaterial, exteriorMaterial);
 
         this.setModel(model);
 
