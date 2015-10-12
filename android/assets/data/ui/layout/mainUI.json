@@ -171,6 +171,32 @@
             "drawable:delete:tint:CCCCCC",
             "default.fnt"
           ]
+        },
+        {
+          "type": "TextButton",
+          "text": "G",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_G",
+          "height": "auto",
+          "width": "5%",
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            null,
+            "default.fnt"
+          ]
+        },
+        {
+          "type": "TextButton",
+          "text": "D",
+          "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_D",
+          "height": "auto",
+          "width": "5%",
+          "style": [
+            "skin:uiskin.json:default-round",
+            "skin:uiskin.json:default-round-down",
+            null,
+            "default.fnt"
+          ]
         }
       ]
     },

@@ -120,6 +120,20 @@ public class MainUiControleur implements EventListener {
                             else
                                 Logic.getInstance().stop();
                             break;
+                        case ROTATE_D:
+                            if (button.isChecked()) {
+                                Logic.getInstance().rotate_d();
+                            }
+                            else
+                                Logic.getInstance().stop();
+                            break;
+                        case ROTATE_G:
+                            if (button.isChecked()) {
+                                Logic.getInstance().rotate_g();
+                            }
+                            else
+                                Logic.getInstance().stop();
+                            break;
                         case MUR:
                             if (button.isChecked()) {
                                 Logic.getInstance().startWall();

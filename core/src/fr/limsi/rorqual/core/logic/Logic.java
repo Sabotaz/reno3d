@@ -64,6 +64,18 @@ public class Logic implements InputProcessor {
         modelMaker = new Deleter();
     }
 
+    public void rotate_g() {
+        stop();
+
+        modelMaker = new Rotater(+1);
+    }
+
+    public void rotate_d() {
+        stop();
+
+        modelMaker = new Rotater(-1);
+    }
+
     public void startModel() {
         stop();
         String id = ModelLibrary.getInstance().getCurrentModelId();
@@ -164,7 +176,7 @@ public class Logic implements InputProcessor {
                 public void run() {
                     modelMaker.end(screenX, screenY);
                 }
-            }, 100L // 20ms ?
+            }, 50L // 20ms ?
             );
             return true;
         }
