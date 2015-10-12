@@ -7,7 +7,9 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 public enum MaterialTypeEnum {
     BRIQUE("brickwork-texture", "brickwork_normal-map"),
     PIERRE("masonry-wall-texture", "masonry-wall-normal-map"),
-    PARQUET("wood-floorboards-texture",null);
+    PARQUET("wood-floorboards-texture",null),
+    BETON("beton",null),
+    ;
 
     private String diffuse;
     private String normal;

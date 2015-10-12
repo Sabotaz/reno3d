@@ -115,51 +115,31 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
     MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.PIERRE;
     MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.PIERRE;
+    MaterialTypeEnum defaultMaterialType = MaterialTypeEnum.BETON;
 
     private void makeMaterials() {
-        //if (materialLayersMaterials.size() > 0) {
-        Texture texture1_diff = exteriorMaterialType.getDiffuse();
-        Texture texture1_norm = exteriorMaterialType.getNormal();
-
-        Texture texture2_diff = interiorMaterialType1.getDiffuse();
-        Texture texture2_norm = interiorMaterialType1.getNormal();
-
-        Texture texture3_diff = interiorMaterialType2.getDiffuse();
-        Texture texture3_norm = interiorMaterialType2.getNormal();
-
-
-        texture1_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        texture1_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        texture2_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        texture2_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        texture3_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        texture3_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-
-        TextureAttribute ta1_diff = TextureAttribute.createDiffuse(texture1_diff);
-        TextureAttribute ta1_norm = TextureAttribute.createNormal(texture1_norm);
-        TextureAttribute ta2_diff = TextureAttribute.createDiffuse(texture2_diff);
-        TextureAttribute ta2_norm = TextureAttribute.createNormal(texture2_norm);
-        TextureAttribute ta3_diff = TextureAttribute.createDiffuse(texture3_diff);
-        TextureAttribute ta3_norm = TextureAttribute.createNormal(texture3_norm);
-
-        ta1_diff.scaleU = ta1_diff.scaleV = 0.5f;
-        ta1_norm.scaleU = ta1_norm.scaleV = 0.5f;
-        ta2_diff.scaleU = ta2_diff.scaleV = 0.5f;
-        ta2_norm.scaleU = ta2_norm.scaleV = 0.5f;
-        ta3_diff.scaleU = ta2_diff.scaleV = 0.5f;
-        ta3_norm.scaleU = ta2_norm.scaleV = 0.5f;
-
-        exteriorMaterial.set(ta1_diff, ta1_norm);
-        interiorMaterial1.set(ta2_diff, ta2_norm);
-        interiorMaterial2.set(ta3_diff, ta3_norm);
-        defaultMaterial.set(ColorAttribute.createDiffuse(Color.GRAY));
-        /*}
-        else {
-            exteriorMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
-            interiorMaterial1.set(ColorAttribute.createDiffuse(Color.WHITE));
-        }*/
-
+        setMaterial(exteriorMaterial, exteriorMaterialType);
+        setMaterial(interiorMaterial1, interiorMaterialType1);
+        setMaterial(interiorMaterial2, interiorMaterialType2);
+        setMaterial(defaultMaterial, defaultMaterialType);
         areMaterialSet = true;
+    }
+
+    private void setMaterial(Material material, MaterialTypeEnum type) {
+        Texture texture_diff = type.getDiffuse();
+        Texture texture_norm = type.getNormal();
+
+        texture_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        TextureAttribute ta_diff = TextureAttribute.createDiffuse(texture_diff);
+        ta_diff.scaleU = ta_diff.scaleV = 0.5f;
+        if (texture_norm != null) {
+            texture_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            TextureAttribute ta_norm = TextureAttribute.createNormal(texture_norm);
+            ta_norm.scaleU = ta_norm.scaleV = 0.5f;
+            material.set(ta_diff, ta_norm);
+        } else {
+            material.set(ta_diff);
+        }
     }
 
     public void setEtage(Etage e) {
