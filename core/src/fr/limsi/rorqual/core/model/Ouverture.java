@@ -151,7 +151,7 @@ public abstract class Ouverture extends ModelContainer {
         // sense ?
         if (this.getMur() != null) {
             if (this.getMur().getSlabGauche() == null) { // vers la gauche
-                local_transform.mulLeft(new Matrix4().setToRotation(0,0,1,180));
+                local_transform.mul(new Matrix4().setToRotation(0,0,1,180));
             } else { // vers la droite
 
             }
