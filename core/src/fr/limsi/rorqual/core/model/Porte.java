@@ -2,8 +2,21 @@ package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.graphics.g3d.model.MeshPart;
+import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -180,5 +193,33 @@ public class Porte extends Ouverture{
     @Override
     public String toString(){
         return "Porte ->  s="+surface+" u="+coefficientDeTransmissionThermique+ " dp="+deperdition;
+    }
+
+    @Override
+    public void setModel(Model m) {
+        super.setModel(m);
+        //set2DModel();
+    }
+
+    @Override
+    public void setModel(Model m, boolean calculateBoundingBox) {
+        super.setModel(m,true);
+        //set2DModel();
+    }
+
+    private void set2DModel() {
+        setChanged();
+        act();
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.begin();
+        Vector3 scl = scaleMatrix.getScale(new Vector3());
+        MeshPartBuilder meshBuilder;
+        meshBuilder = modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.BLACK)));
+        System.out.println(scl);
+        meshBuilder.setVertexTransform(new Matrix4().setToScaling(1/scl.z, 1/scl.y, 1/scl.x));
+        meshBuilder.cylinder(10, 10, 10, 32);
+        Model model = modelBuilder.end();
+
+        copyNodes(model.nodes);
     }
 }
