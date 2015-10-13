@@ -88,11 +88,15 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
             }
             Vector2 center = slab.getCenter();
             pos.set(center.x, center.y, elevation + 1.6f);
-            user_rotation.idt().rotate(1,0,0,-90);
+            user_rotation.idt().rotate(1, 0, 0, -90);
+            yaw = pitch = roll = 0;
+            lastEuler.setFromEulerAngles(yaw, pitch, roll);
             update();
         } else {
             pos.set(0, 0, elevation + 1.6f);
-            user_rotation.idt().rotate(1,0,0,-90);
+            user_rotation.idt().rotate(1, 0, 0, -90);
+            yaw = pitch = roll = 0;
+            lastEuler.setFromEulerAngles(yaw, pitch, roll);
             update();
         }
     }
