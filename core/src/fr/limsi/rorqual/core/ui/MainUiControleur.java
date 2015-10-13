@@ -187,10 +187,12 @@ public class MainUiControleur implements EventListener {
                             break;
                         case ETAGE_PLUS:
                             ModelHolder.getInstance().getBatiment().etageSuperieur();
+                            CameraEngine.getInstance().getCurrentCameraUpdater().reset();
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                             break;
                         case ETAGE_MINUS:
                             ModelHolder.getInstance().getBatiment().etageInferieur();
+                            CameraEngine.getInstance().getCurrentCameraUpdater().reset();
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                             break;
                         case EXPORT_IFC:

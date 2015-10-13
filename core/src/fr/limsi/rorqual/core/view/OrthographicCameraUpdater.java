@@ -69,6 +69,11 @@ public class OrthographicCameraUpdater extends CameraUpdater {
         }
     }
 
+    @Override
+    public Vector3 getPosition() {
+        return camera.position;
+    }
+
     public void act() {
     }
 

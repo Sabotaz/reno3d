@@ -69,7 +69,6 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     int last_screenX = -1;
     int last_screenY = -1;
 
-    protected Vector3 pos = new Vector3();
     protected Matrix4 user_rotation = new Matrix4();
 
     public void act() {

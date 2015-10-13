@@ -63,7 +63,7 @@ public class CameraEngine implements GestureDetector.GestureListener {
     public void switchCamera() {
         switch (curent_camera) {
             case PERSPECTIVE:
-                curent_camera = Cameras.GYROMETER;
+                curent_camera = Cameras.ORTHOGRAPHIC;
                 break;
             case ORTHOGRAPHIC:
                 curent_camera = Cameras.PERSPECTIVE;
