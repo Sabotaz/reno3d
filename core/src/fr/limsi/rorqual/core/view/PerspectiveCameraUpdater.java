@@ -25,7 +25,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     public PerspectiveCameraUpdater() {
         iconeName = "drawable:3D";
 
-        PerspectiveCamera perspectiveCamera = new PerspectiveCamera(30f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
+        PerspectiveCamera perspectiveCamera = new PerspectiveCamera(50f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
             @Override
             public void update (boolean updateFrustum) {
                 float aspect = viewportWidth / viewportHeight;
