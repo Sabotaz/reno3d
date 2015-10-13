@@ -104,7 +104,7 @@ public class MainUiControleur implements EventListener {
                         case SWITCH_2D_3D:
                             CameraEngine.getInstance().switchCamera();
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
-                            ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
+                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case MOVE:
                             if (button.isChecked()) {
