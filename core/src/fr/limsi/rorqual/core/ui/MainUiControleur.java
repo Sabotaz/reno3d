@@ -69,7 +69,7 @@ public class MainUiControleur implements EventListener {
         if (tb != null) {
             synchronized (stage) {
                 if (tb instanceof TabWindow){
-                    tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) tb).getPrefHeight()/2);
+                    tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) tb).getPrefHeight()/2-100);
                 }else{
                     tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - 100);
                 }
@@ -176,9 +176,10 @@ public class MainUiControleur implements EventListener {
                             if (button.isChecked())
                                 addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
                             else
-                                Logic.getInstance().stop();
+                                removeTb();
                             break;
                         case MENUISERIE:
+                            removeTb();
                             if (button.isChecked())
                                 addTb(ModelLibrary.getInstance().getTabWindow());
                             else

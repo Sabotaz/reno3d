@@ -203,6 +203,7 @@
     {
       "type": "ButtonGroup",
       "layout": "column",
+      "minChecked": 0,
       "content": [
         {
           "type": "Button",
