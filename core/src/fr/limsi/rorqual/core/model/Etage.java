@@ -188,10 +188,21 @@ public class Etage {
     }
 
     private void actualiseElevation(){
-        this.elevation = this.getNumber()*this.getHeight();
+        if (this.getNumber() == 0)
+            this.elevation = 0;
+        else if (this.getNumber() > 0) {
+            Etage e = batiment.getEtage(getNumber() - 1);
+            e.actualiseElevation();
+            this.elevation = e.getElevation() + e.getHeight();
+        } else if (this.getNumber() < 0) {
+            Etage e = batiment.getEtage(getNumber() + 1);
+            e.actualiseElevation();
+            this.elevation = e.getElevation() - this.getHeight();
+        }
     }
 
     public float getElevation(){
+        actualiseElevation();
         return this.elevation;
     }
 

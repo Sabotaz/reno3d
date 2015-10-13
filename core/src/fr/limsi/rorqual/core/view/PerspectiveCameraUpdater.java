@@ -10,6 +10,10 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.model.Etage;
+import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Slab;
+
 /**
  * Created by christophe on 15/07/15.
  */
@@ -40,9 +44,8 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         };
         perspectiveCamera.viewportHeight = Gdx.graphics.getHeight();
         perspectiveCamera.viewportWidth = Gdx.graphics.getWidth();
-        perspectiveCamera.near = 1f;
-//        perspectiveCamera.far = 10000f;
-        perspectiveCamera.far = 100f;
+        perspectiveCamera.near = 0.1f;
+        perspectiveCamera.far = 1000f;
         perspectiveCamera.position.set(pos);
         pos.set(0, 0, 30f);
 
@@ -71,6 +74,27 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     public void act() {
         update();
+    }
+
+    @Override
+    public void reset() {
+        Etage etage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
+        float elevation = etage.getElevation();
+        if (!etage.getSlabs().isEmpty()) {
+            Slab slab = etage.getSlabs().get(0);
+            for (Slab s : etage.getSlabs()) {
+                if (s.getSurface() > slab.getSurface())
+                    slab = s;
+            }
+            Vector2 center = slab.getCenter();
+            pos.set(center.x, center.y, elevation + 1.6f);
+            user_rotation.idt().rotate(1,0,0,-90);
+            update();
+        } else {
+            pos.set(0, 0, elevation + 1.6f);
+            user_rotation.idt().rotate(1,0,0,-90);
+            update();
+        }
     }
 
     protected void update() {
@@ -104,17 +128,31 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         return false;
     }
 
+    float yaw = 0;
+    float pitch = 0;
+    float roll = 0;
+    Matrix4 lastEuler = new Matrix4();
+
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
         if (last_screenX == -1 || last_screenY == -1) {
             last_screenX = (int) x;
             last_screenY = (int) y;
         }
+        pitch -= deltaY/10;
+        roll -= deltaX/10;
+        Matrix4 newEuler = new Matrix4().setFromEulerAngles(yaw, pitch, roll);
+        Matrix4 diff = lastEuler.cpy().inv().mul(newEuler);
+        lastEuler = newEuler;
 
+        user_rotation.mul(diff);
+        /*
         Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY, 1)).sub(pos).nor();
         Vector3 after = camera.unproject(new Vector3(x, y, 1)).sub(pos).nor();
-        if (!before.isCollinear(after))
-            user_rotation.rotate(after.cpy().crs(before), -(float) (Math.acos(after.dot(before)) * 180. / Math.PI));
+        if (!before.isCollinear(after)) {
+            user_rotation.rotate(after.cpy().crs(before),-(float) (Math.acos(after.dot(before)) * 180. / Math.PI));
+        }
+        */
 
         last_screenX = (int) x;
         last_screenY = (int) y;

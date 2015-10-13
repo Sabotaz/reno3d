@@ -18,4 +18,6 @@ public abstract class CameraUpdater implements GestureDetector.GestureListener {
 
     public abstract void updateViewport(int height, int width);
 
+    public abstract void reset();
+
 }

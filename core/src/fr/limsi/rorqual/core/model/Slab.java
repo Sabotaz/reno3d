@@ -437,15 +437,21 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         return "Slab ->  s="+surface+" uPlancher="+uPlancher+ " dpPlancher="+deperditionPlancher+" uPlafond="+uPlafond+ " deperditionPlafond="+deperditionPlafond+" mitoyennetePlancher="+mitoyennetePlancher+" mitoyennetePlafond="+mitoyennetePlafond;
     }
 
-    @Override
-    public Vector3 getCotePos() {
+    public Vector2 getCenter() {
         if (coins == null || coins.isEmpty())
-            return new Vector3();
+            return new Vector2();
         Vector2 pos = new Vector2();
         for (Coin coin : coins) {
             pos.add(coin.getPosition());
         }
-        return new Vector3(pos.x/coins.size(), pos.y/coins.size(), getHeight() + 0.0001f);
+        pos.scl(1.0f/coins.size());
+        return pos;
+    }
+
+    @Override
+    public Vector3 getCotePos() {
+        Vector2 pos = getCenter();
+        return new Vector3(pos.x, pos.y, getHeight() + 0.0001f);
     }
 
     @Override

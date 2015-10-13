@@ -182,7 +182,7 @@ public class ModelLibrary {
             float dx = c.x * 0.01f * width / b.getWidth();
             float dy = c.z * 0.01f * height / b.getHeight();
             container.model_transform // TODO: is it X or Y ?
-                    .translate(-dx,dy, - min.y * 0.01f * depth / b.getDepth() + 0.01f * elevation)
+                    .translate(-dx,dy, Slab.DEFAULT_HEIGHT - min.y * 0.01f * depth / b.getDepth() + 0.01f * elevation)
                     .scale(0.01f * width / b.getWidth(), 0.01f * height / b.getHeight(), 0.01f * depth / b.getDepth())
                     .rotate(1, 0, 0, 90)
                     ;

@@ -10,6 +10,11 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.model.Batiment;
+import fr.limsi.rorqual.core.model.Etage;
+import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Slab;
+
 /**
  * Created by christophe on 15/07/15.
  */
@@ -26,7 +31,7 @@ public class OrthographicCameraUpdater extends CameraUpdater {
         float ratio = Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
         OrthographicCamera orthographicCamera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_WIDTH*ratio);
         orthographicCamera.zoom = 1f;
-        orthographicCamera.position.set(0.f, 0, 10f);
+        orthographicCamera.position.set(0.f, 0.f, 10f);
         orthographicCamera.lookAt(0f, 0f, 0f);
         orthographicCamera.up.set(0, 1, 0);
         orthographicCamera.update();
@@ -44,6 +49,24 @@ public class OrthographicCameraUpdater extends CameraUpdater {
         camera.viewportWidth = VIEWPORT_WIDTH;
         camera.viewportHeight = VIEWPORT_WIDTH * height/width;
         camera.update();
+    }
+
+    @Override
+    public void reset() {
+        Etage etage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
+        float height = etage.getElevation();
+        if (!etage.getSlabs().isEmpty()) {
+            Slab slab = etage.getSlabs().get(0);
+            for (Slab s : etage.getSlabs()) {
+                if (s.getSurface() > slab.getSurface()) {
+                    slab = s;
+                }
+
+            }
+            Vector2 center = slab.getCenter();
+            camera.position.set(center.x, center.y, 10f);
+            camera.update();
+        }
     }
 
     public void act() {
