@@ -143,8 +143,8 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
             last_screenX = (int) x;
             last_screenY = (int) y;
         }
-        pitch -= deltaY/10;
-        roll -= deltaX/10;
+        pitch -= deltaY/20;
+        roll -= deltaX/20;
         Matrix4 newEuler = new Matrix4().setFromEulerAngles(yaw, pitch, roll);
         Matrix4 diff = lastEuler.cpy().inv().mul(newEuler);
         lastEuler = newEuler;
