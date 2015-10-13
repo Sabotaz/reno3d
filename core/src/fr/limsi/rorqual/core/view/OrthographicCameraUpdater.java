@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
@@ -53,20 +54,14 @@ public class OrthographicCameraUpdater extends CameraUpdater {
 
     @Override
     public void reset() {
-        Etage etage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
-        float height = etage.getElevation();
-        if (!etage.getSlabs().isEmpty()) {
-            Slab slab = etage.getSlabs().get(0);
-            for (Slab s : etage.getSlabs()) {
-                if (s.getSurface() > slab.getSurface()) {
-                    slab = s;
-                }
-
-            }
-            Vector2 center = slab.getCenter();
-            camera.position.set(center.x, center.y, 10f);
-            camera.update();
+        BoundingBox b = new BoundingBox();
+        for (Etage etage : ModelHolder.getInstance().getBatiment().getAllEtages()) {
+            for (Slab slab : etage.getSlabs())
+                slab.extendBoundingBox(b);
         }
+        Vector3 center = b.getCenter(new Vector3());
+        camera.position.set(center.x, center.y, 50f);
+        camera.update();
     }
 
     @Override
