@@ -204,8 +204,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         Vector3 dir = Vector3.Z.cpy().mul(q);
 
         dir.nor();
-        System.out.println(dir);
-        dir.scl(amount * ZOOM_RATIO);
+        dir.scl(-amount * ZOOM_RATIO);
 
         pos.add(dir);
 

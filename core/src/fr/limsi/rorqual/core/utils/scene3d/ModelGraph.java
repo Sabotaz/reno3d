@@ -80,7 +80,9 @@ public class ModelGraph {
     }
 
     public int count() {
-        return count(this.getRoot());
+        synchronized (this.getRoot()) {
+            return count(this.getRoot());
+        }
     }
 
     public void act() {
