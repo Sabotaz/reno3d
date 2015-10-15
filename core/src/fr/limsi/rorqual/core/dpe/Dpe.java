@@ -62,7 +62,7 @@ public class Dpe implements EventListener {
     public void actualisePerimetreBatiment(){
         float tampon=0;
         for (Mur m: ModelHolder.getInstance().getBatiment().getMurs()){
-            if (m.getEtage().getNumber()==0 && m.getTypeMur() != TypeMurEnum.MUR_INTERIEUR){
+            if (m.getEtage() != null && m.getEtage().getNumber()==0 && m.getTypeMur() != TypeMurEnum.MUR_INTERIEUR){
                 tampon+=m.getWidth();
             }
         }

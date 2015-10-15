@@ -182,16 +182,6 @@
                 "atlas:ui_001.atlas:chauffage:tint:CCCCCC",
                 "default.fnt"
               ]
-            },
-            {
-              "type": "CircularJauge",
-              "id": "dpe_jauge",
-              "height": "auto",
-              "width": "5%",
-              "style": [
-                "texture:roulette",
-                "texture:roulette_arriere"
-              ]
             }
           ]
         }
@@ -271,6 +261,35 @@
                 "skin:uiskin.json:default-round-down",
                 "skin:uiskin.json:default-round-down",
                 "default.fnt"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "Table",
+      "name": "Main score",
+      "id": "main_score",
+      "position": "bottom-center",
+      "align": "right",
+      "layout": "column",
+      "expand":false,
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "layout": "row",
+          "minChecked": 0,
+          "content": [
+            {
+              "type": "CircularJauge",
+              "id": "dpe_jauge",
+              "height": "auto",
+              "width": "5%",
+              "style": [
+                "texture:roulette",
+                "texture:roulette_arriere"
               ]
             }
           ]
