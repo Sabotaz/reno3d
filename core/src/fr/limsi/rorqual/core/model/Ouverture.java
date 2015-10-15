@@ -124,7 +124,11 @@ public abstract class Ouverture extends ModelContainer {
     }
 
     public void setChanged() {
-        changed = true;
+        if (changed != true) {
+            changed = true;
+            if (mur != null)
+                mur.setChanged();
+        }
     }
 
     protected Matrix4 scaleMatrix = new Matrix4();
@@ -136,7 +140,7 @@ public abstract class Ouverture extends ModelContainer {
             BoundingBox b = new BoundingBox(getBoundingBox());
             b.mul(model_transform);
             float w = this.getWidth() / b.getWidth();
-            float h = (mur != null ? this.getMur().getDepth() : Mur.DEFAULT_DEPTH) / b.getDepth();
+            float h = (mur != null ? this.getMur().getDepth() : Mur.DEFAULT_DEPTH) / b.getHeight();
             float d = this.getHeight() / b.getDepth();
             dmin = b.getMin(new Vector3()).scl(-1);
             dmin.z = dmin.z + (getY()-this.position.y) / d;
@@ -162,6 +166,11 @@ public abstract class Ouverture extends ModelContainer {
     protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform) {
         super.draw(modelBatch, environment, type, global_transform);
 
+    }
+
+    @Override
+    protected void defaultSizeChanged() {
+        this.setWidth(this.height * default_width / default_height);
     }
 
 }

@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.UBJsonReader;
 
+import java.awt.Container;
 import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -43,6 +44,7 @@ import java.util.Set;
 
 import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.Holder;
@@ -173,6 +175,7 @@ public class ModelLibrary {
         }
 
         private void toScale(ModelContainer container) {
+            container.setDefaultSize(height, width, depth);
             BoundingBox b = container.getBoundingBox();
             //container.model_transform.idt().scale(1 / 10000f, 1 / 10000f, 1 / 10000f);
             Vector3 min = new Vector3();

@@ -37,6 +37,10 @@ public class ModelContainer extends ActableModel {
     private HashMap<String,Object> modelData = new HashMap<String, Object>();
     private String category = "";
 
+    protected float default_height = 0;
+    protected float default_width = 0;
+    protected float default_depth = 0;
+
     public enum Type {
         OPAQUE,
         TRANSPARENT;
@@ -376,6 +380,17 @@ public class ModelContainer extends ActableModel {
 
     public void setBoundingBox(BoundingBox b) {
         box = b;
+    }
+
+    public void setDefaultSize(float h, float w, float d) {
+        this.default_height = h;
+        this.default_width = w;
+        this.default_depth = d;
+        defaultSizeChanged();
+    }
+
+    protected void defaultSizeChanged() {
+
     }
 
 }

@@ -28,9 +28,10 @@ public class Fenetre extends Ouverture {
     private float deperdition;
     public TypeFenetre typeFenetre;
     public TypeMateriauMenuiserieEnum typeMateriau;
-    private TypeVitrageEnum typeVitrage;
-    private TypeFermetureEnum typeFermeture;
-    private TypeMasqueEnum masqueProche, masqueLointain;
+    private TypeVitrageEnum typeVitrage=TypeVitrageEnum.SIMPLE_VITRAGE;
+    private TypeFermetureEnum typeFermeture=TypeFermetureEnum.SANS_FERMETURE;
+    private TypeMasqueEnum masqueProche=TypeMasqueEnum.ABSENCE_MASQUE_PROCHE;
+    private TypeMasqueEnum masqueLointain=TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
     private float fts=0.64f,fe1=1,fe2=1,c1=1.2f,bas=1,sse=0;
 
     // Constructeur
@@ -43,10 +44,6 @@ public class Fenetre extends Ouverture {
     }
     public Fenetre(Mur mur, float x, float y, float width, float height) {
         super(mur, new Vector2(x, y), width, height);
-        this.typeVitrage=TypeVitrageEnum.SIMPLE_VITRAGE;
-        this.typeFermeture=TypeFermetureEnum.SANS_FERMETURE;
-        this.masqueProche=TypeMasqueEnum.ABSENCE_MASQUE_PROCHE;
-        this.masqueLointain=TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
     }
 
     public float getCoefficientDeTransmissionThermique() {
