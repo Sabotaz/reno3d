@@ -13,7 +13,9 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
+import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Slab;
 
 /**
@@ -56,6 +58,7 @@ public class OrthographicCameraUpdater extends CameraUpdater {
     public void reset() {
         BoundingBox b = new BoundingBox();
         for (Etage etage : ModelHolder.getInstance().getBatiment().getAllEtages()) {
+            etage.shrinkWalls(true);
             for (Slab slab : etage.getSlabs())
                 slab.extendBoundingBox(b);
         }
@@ -152,7 +155,7 @@ public class OrthographicCameraUpdater extends CameraUpdater {
 
     private void avancer(float amount) {
 
-        camera.zoom -= amount * ZOOM_RATIO;
+        camera.zoom += amount * ZOOM_RATIO;
         camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 10);
         System.out.println(camera.zoom);
         camera.update();

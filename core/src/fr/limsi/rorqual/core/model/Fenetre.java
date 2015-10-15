@@ -21,9 +21,9 @@ import fr.limsi.rorqual.core.event.EventManager;
 // Classe modélisant une fenêtre (thermique)
 public class Fenetre extends Ouverture {
 
-    static float DEFAULT_Y = 1.f;
-    static float DEFAULT_WIDTH = 0.6f;
-    static float DEFAULT_HEIGHT = 0.75f;
+    public static float DEFAULT_Y = 1.f;
+    public static float DEFAULT_WIDTH = 0.6f;
+    public static float DEFAULT_HEIGHT = 0.75f;
     private float coefficientDeTransmissionThermique=4;
     private float deperdition;
     public TypeFenetre typeFenetre;
