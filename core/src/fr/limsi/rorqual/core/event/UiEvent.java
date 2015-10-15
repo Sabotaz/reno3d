@@ -6,6 +6,7 @@ package fr.limsi.rorqual.core.event;
 // events venant des UI
 public enum UiEvent implements EventType {
     ITEM_SELECTED,
+    ITEM_DESELECTED,
     BUTTON_CLICKED,
     ;
 }

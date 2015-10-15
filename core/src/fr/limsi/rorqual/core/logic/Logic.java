@@ -2,6 +2,7 @@ package fr.limsi.rorqual.core.logic;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,6 +65,13 @@ public class Logic implements InputProcessor {
         modelMaker = new Deleter();
     }
 
+    public void delete(ModelContainer obj, Button deleteButton) {
+        stop();
+
+        Deleter.delete(obj);
+        deleteButton.setChecked(false);
+    }
+
     public void rotate_g() {
         stop();
 
@@ -74,6 +82,18 @@ public class Logic implements InputProcessor {
         stop();
 
         modelMaker = new Rotater(-1);
+    }
+
+    public void rotate_g(ModelContainer m, Button rotateButton) {
+        stop();
+
+        Rotater.rotate(+1, m, rotateButton);
+    }
+
+    public void rotate_d(ModelContainer m, Button rotateButton) {
+        stop();
+
+        Rotater.rotate(-1, m, rotateButton);
     }
 
     public void startModel() {

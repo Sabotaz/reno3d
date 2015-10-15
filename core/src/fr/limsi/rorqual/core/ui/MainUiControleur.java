@@ -22,7 +22,9 @@ import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.IfcExporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
  * Created by christophe on 28/07/15.
@@ -32,6 +34,7 @@ public class MainUiControleur implements EventListener {
 
     Actor tb = null;
     Stage stage = null;
+    Layout mainLayout = null;
 
     private MainUiControleur() {
         EventManager.getInstance().addListener(Channel.UI, this);
@@ -54,6 +57,10 @@ public class MainUiControleur implements EventListener {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public void setMainLayout(Layout layout) {
+        this.mainLayout = layout;
     }
 
     public void removeTb() {
@@ -115,24 +122,21 @@ public class MainUiControleur implements EventListener {
                             break;
                         case DELETE:
                             if (button.isChecked()) {
-                                Logic.getInstance().delete();
+                                if (MainApplicationAdapter.getSelected() != null)
+                                    Logic.getInstance().delete(MainApplicationAdapter.getSelected(), button);
+                                else
+                                    Logic.getInstance().delete();
                             }
                             else
                                 Logic.getInstance().stop();
                             break;
                         case ROTATE_D:
-                            if (button.isChecked()) {
-                                Logic.getInstance().rotate_d();
-                            }
-                            else
-                                Logic.getInstance().stop();
+                            Logic.getInstance().stop();
+                            Logic.getInstance().rotate_d(MainApplicationAdapter.getSelected(), button);
                             break;
                         case ROTATE_G:
-                            if (button.isChecked()) {
-                                Logic.getInstance().rotate_g();
-                            }
-                            else
-                                Logic.getInstance().stop();
+                            Logic.getInstance().stop();
+                            Logic.getInstance().rotate_g(MainApplicationAdapter.getSelected(), button);
                             break;
                         case MUR:
                             if (button.isChecked()) {
@@ -202,6 +206,18 @@ public class MainUiControleur implements EventListener {
                             System.out.println(lastValue);
                     }
                 }
+            } else if (e.getEventType() == UiEvent.ITEM_SELECTED) {
+                if (e.getUserObject() instanceof Objet) {
+                    mainLayout.getFromId("Rotate_G").setVisible(true);
+                    mainLayout.getFromId("Rotate_D").setVisible(true);
+                } else {
+                    mainLayout.getFromId("Rotate_G").setVisible(false);
+                    mainLayout.getFromId("Rotate_D").setVisible(false);
+                }
+            } else if (e.getEventType() == UiEvent.ITEM_DESELECTED) {
+                mainLayout.getFromId("Rotate_G").setVisible(false);
+                mainLayout.getFromId("Rotate_D").setVisible(false);
+                //removeTb();
             }
         }
     }

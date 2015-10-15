@@ -225,6 +225,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         System.out.println("stage menu ok " + ((System.currentTimeMillis() - start) * 0.001f));
         Layout layout = Layout.fromJson("data/ui/layout/mainUI.json", null);
+        mainUiControleur.setMainLayout(layout);
         stageMenu.addActor(layout.getRoot());
         score = (CircularJauge)layout.getFromId("dpe_jauge");
         System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
@@ -449,13 +450,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             if (selected != null) {
                 selected.removeColor();
                 selected.setSelected(false);
+                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_DESELECTED, selected));
                 //selected.remove(pin);
             }
             //selected = modelGraph.getObject(screenX, screenY);
-            selected = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getObject(screenX, screenY);
+            ModelContainer next = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getObject(screenX, screenY);
             //System.out.println("TOUCH: " + selected);
-            if (selected != null) {
-                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected.getUserData()));
+            if (next != null && next != selected) {
+                selected = next;
+                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected));
 //                System.out.println("TOUCH: " + selected.getUserData());
 //                System.out.println(selected);
                 selected.setColor(Color.YELLOW);
@@ -463,6 +466,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 mainUiControleur.addTb(dpeui.getPropertyWindow(selected));
                 //selected.add(pin);
                 //pin.local_transform.setToTranslation(selected.getTop());
+            } else {
+                selected = null;
             }
             return selected != null;
         }

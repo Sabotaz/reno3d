@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -27,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -201,6 +203,9 @@ public class Layout {
             case "Table":
                 actor = makeTable(json, updater, parent);
                 break;
+            case "Stack":
+                actor = makeStack(json, updater, parent);
+                break;
             case "ButtonGroup":
                 actor = makeButtonGroup(json, updater, parent);
                 break;
@@ -363,7 +368,7 @@ public class Layout {
                     table.setY(Gdx.graphics.getHeight() - table.getPrefHeight() / 2);
                     break;
                 case "bottom":
-                    table.setY(0);
+                    table.setY(0 + table.getPrefHeight() / 2);
                     break;
                 case "center":
                     table.setY(Gdx.graphics.getHeight() / 2);
@@ -372,18 +377,52 @@ public class Layout {
 
             switch (xy[1]) {
                 case "left":
-                    table.setX(0);
+                    table.setX(table.getPrefWidth());
                     break;
                 case "right":
                     table.setX(Gdx.graphics.getWidth() - (align.equals("right") ? 0 : table.getPrefWidth()));
                     break;
                 case "center":
-                    table.setX(Gdx.graphics.getWidth()/2);
+                    table.setX(Gdx.graphics.getWidth() / 2 + table.getPrefWidth() / 2);
                     break;
             }
         }
         table.pad(7);
         return table;
+    }
+
+    private Actor makeStack(JsonValue json, Updater updater, Actor parent) {
+
+        Stack stack = new Stack() {
+            @Deprecated
+            public void layout () {
+                float width = getWidth(), height = getHeight();
+                Array<Actor> children = getChildren();
+                for (int i = 0, n = children.size; i < n; i++) {
+                    Actor child = children.get(i);
+                    //child.setBounds(0, 0, width, height);
+                    if (child instanceof com.badlogic.gdx.scenes.scene2d.utils.Layout) ((com.badlogic.gdx.scenes.scene2d.utils.Layout)child).validate();
+                }
+            }
+        };
+        stack.setName(json.getString("name", ""));
+//        table.setDebug(true);
+        stack.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        if (json.has("content")) {
+            JsonValue json_child;
+            Actor child;
+            int i = 0;
+            while ((json_child = json.get("content").get(i)) != null) {
+                if ((child = getActor(json_child, updater, stack)) != null) {
+                    stack.add(child);
+                    //child.setPosition(400,400);
+                }
+                i++;
+            }
+        }
+
+        return stack;
     }
 
     private Actor makeButtonGroup(JsonValue json, Updater updater, Actor parent) {
@@ -474,6 +513,8 @@ public class Layout {
             button.setSize(width.get(null),height.get(null));
         }
 
+        button.setVisible(json.getBoolean("visible", true));
+
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
 
@@ -501,7 +542,7 @@ public class Layout {
         return button;
     }
 
-    private Actor makeTextButton(JsonValue json, Updater updater, Actor parent) {
+    private Actor makeTextButton(final JsonValue json, Updater updater, Actor parent) {
         final TextButton textButton;
         TextButton.TextButtonStyle tbs;
 
@@ -526,6 +567,8 @@ public class Layout {
             textButton.setSize(width.get(null),height.get(null));
         }
 
+        textButton.setVisible(json.getBoolean("visible", true));
+
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");
 
@@ -539,13 +582,29 @@ public class Layout {
                 textButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        HashMap<String,Object> items = new HashMap<String, Object>();
-                        items.put("userObject",userObject);
-                        items.put("eventRequest",EventRequest.UPDATE_STATE);
-                        items.put("lastValue",last_value);
-                        items.put("layout",Layout.this);
-                        items.put("button",textButton);
-                        last_updater.trigger(items);
+                        if (json.getBoolean("notify_clicked", true)) {
+                            HashMap<String, Object> items = new HashMap<String, Object>();
+                            items.put("userObject", userObject);
+                            items.put("eventRequest", EventRequest.UPDATE_STATE);
+                            items.put("lastValue", last_value);
+                            items.put("layout", Layout.this);
+                            items.put("button", textButton);
+                            last_updater.trigger(items);
+                        }
+                    }
+                    @Override
+                    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                        boolean retour = super.touchDown(event, x, y, pointer, button);
+                        if (json.getBoolean("notify_pressed", false)) {
+                            HashMap<String, Object> items = new HashMap<String, Object>();
+                            items.put("userObject", userObject);
+                            items.put("eventRequest", EventRequest.UPDATE_STATE);
+                            items.put("lastValue", last_value);
+                            items.put("layout", Layout.this);
+                            items.put("button", textButton);
+                            last_updater.trigger(items);
+                        }
+                        return retour;
                     }
                 });
             }
@@ -612,6 +671,8 @@ public class Layout {
                 height = width;
             imageButton.setSize(width.get(null),height.get(null));
         }
+
+        imageButton.setVisible(json.getBoolean("visible", true));
 
         if (updater != null & json.has("value")) {
             Object value_value = getEnumConstant(json, "value");

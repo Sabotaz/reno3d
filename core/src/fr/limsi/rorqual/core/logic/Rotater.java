@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.logic;
 
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,14 +48,14 @@ public class Rotater extends ModelMaker {
             new Thread() {
                 @Override
                 public void run() {
-                    while (rotating_object) {
+                    do {
                         ((Objet) rotated_object).model_transform.mulLeft(new Matrix4().setToRotation(0,0,1,sens * 15f));
                         try {
                             sleep(150);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
+                    } while (rotating_object);
                 }
             }.start();
         }
@@ -79,6 +80,29 @@ public class Rotater extends ModelMaker {
     @Override
     public boolean isStarted() {
         return rotating_object;
+    }
+
+    public static void rotate(final int sens, final ModelContainer rotated_object, final Button rotateButton) {
+
+        Etage currentEtage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
+        if (rotated_object != null && (rotated_object instanceof Objet)) {
+            new Thread() {
+                @Override
+                public void run() {
+                    do {
+                        if (rotateButton.isOver())
+                            ((Objet) rotated_object).model_transform.mulLeft(new Matrix4().setToRotation(0,0,1,sens * 15f));
+                        try {
+                            sleep(150);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } while (rotateButton.getClickListener().getPressedPointer() != -1);
+                    rotateButton.setChecked(false);
+                }
+            }.start();
+        }
+
     }
 
 }
