@@ -201,6 +201,8 @@ public class AssetManager {
         textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
         textures.put("roulette", "data/ui/roulette.png");
         textures.put("roulette_arriere", "data/ui/roulette_arriere.png");
+        textures.put("bar", "data/ui/bar.png");
+        textures.put("bar_background", "data/ui/bar_background.png");
         textures.put("camera", "data/ui/camera.png");
         textures.put("2D", "data/ui/2D.png");
         textures.put("3D", "data/ui/3D.png");

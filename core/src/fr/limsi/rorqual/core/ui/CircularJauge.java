@@ -28,27 +28,30 @@ public class CircularJauge extends Widget {
 
     private enum Score {
         // 0 --A-- 50 --B-- 90 --C-- 150 --D-- 230 --E-- 330 --F-- 450 --G--
-        A(1,50,Color.valueOf("810f7c")),
+        /*A(1,50,Color.valueOf("810f7c")),
         B(51, 90,Color.valueOf("8856a7")),
         C(91,150,Color.valueOf("8c96c6")),
         D(151,230,Color.valueOf("b3cde3")),
         E(231,330,Color.valueOf("edf8fb")),
         F(331,450,Color.BLACK),
         G(451,700,Color.BLACK),
+        ;*/
+        X(1,450,Color.valueOf("810f7c")),
         ;
 
         Color color;
         Color background;
         int min, max;
 
-        static {
+        static {/*
             A.background = B.color;
             B.background = C.color;
             C.background = D.color;
             D.background = E.color;
             E.background = F.color;
             F.background = G.color;
-            G.background = Color.BLACK;
+            G.background = Color.BLACK;*/
+            X.background = Color.valueOf("b3cde3");
         }
 
         Score(int min, int max, Color color) {
@@ -60,7 +63,8 @@ public class CircularJauge extends Widget {
         public static Score getScore(int value) {
             for (Score score : Score.values())
                 if (value >= score.min && value <= score.max) return score;
-            return G;
+            //return G;
+            return X;
         }
 
         public Color getColor() {

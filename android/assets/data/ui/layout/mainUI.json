@@ -285,11 +285,11 @@
             {
               "type": "CircularJauge",
               "id": "dpe_jauge",
-              "height": "auto",
-              "width": "5%",
+              "height": "5%",
+              "width": "40%",
               "style": [
-                "texture:roulette",
-                "texture:roulette_arriere"
+                "texture:bar",
+                "texture:bar_background"
               ]
             }
           ]
