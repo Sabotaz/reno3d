@@ -274,7 +274,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private void makeMesh() {
         if (A == null || B == null || B.getPosition().equals(A.getPosition()))
             return;
-        Vector3 z_shape = Vector3.Z.cpy().scl(etage != null ? etage.getWallHeight() : Etage.DEFAULT_HEIGHT);
+        Vector3 z_shape = Vector3.Z.cpy().scl(etage != null ? etage.getHeight() : Etage.DEFAULT_HEIGHT);
         Vector3 positive_offset = Vector3.X.cpy().setLength(this.depth / 2);
         Vector3 negative_offset = Vector3.X.cpy().setLength(this.depth / 2).scl(-1);
         Vector3 p1 = Vector3.Zero.cpy();
@@ -423,6 +423,13 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         return slabGauche;
     }
 
+    boolean isCreated = false;
+
+    public void setCreated() {
+        isCreated = true;
+        this.mitoyenneteChanged();
+    }
+
     public void setSlabGauche(Slab slab_gauche) {
         this.slabGauche = slab_gauche;
 
@@ -461,6 +468,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     public void mitoyenneteChanged(){
+        if (!isCreated) return;
         HashMap<String,Object> currentItems = new HashMap<String,Object>();
         currentItems.put("userObject", this);
         Event e = new Event(DpeEvent.MITOYENNETE_MUR_CHANGEE, currentItems);
@@ -568,12 +576,12 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     @Override
     public Vector3 getCotePosA() {
-        return new Vector3(0,0,etage.getWallHeight());
+        return new Vector3(0,0,etage.getHeight());
     }
 
     @Override
     public Vector3 getCotePosB() {
-        return new Vector3(this.getWidth(), 0, getEtage().getWallHeight());
+        return new Vector3(this.getWidth(), 0, getEtage().getHeight());
     }
 
     @Override

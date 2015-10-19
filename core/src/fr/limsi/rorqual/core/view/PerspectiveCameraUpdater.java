@@ -98,8 +98,6 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
             lastEuler.setFromEulerAngles(yaw, pitch, roll);
             update();
         }
-        for (Etage e : ModelHolder.getInstance().getBatiment().getAllEtages())
-            e.shrinkWalls(false);
     }
 
     protected void update() {

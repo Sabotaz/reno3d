@@ -195,31 +195,4 @@ public class Porte extends Ouverture{
         return "Porte ->  s="+surface+" u="+coefficientDeTransmissionThermique+ " dp="+deperdition;
     }
 
-    @Override
-    public void setModel(Model m) {
-        super.setModel(m);
-        //set2DModel();
-    }
-
-    @Override
-    public void setModel(Model m, boolean calculateBoundingBox) {
-        super.setModel(m,true);
-        //set2DModel();
-    }
-
-    private void set2DModel() {
-        setChanged();
-        act();
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.begin();
-        Vector3 scl = scaleMatrix.getScale(new Vector3());
-        MeshPartBuilder meshBuilder;
-        meshBuilder = modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.BLACK)));
-        System.out.println(scl);
-        meshBuilder.setVertexTransform(new Matrix4().setToScaling(1/scl.z, 1/scl.y, 1/scl.x));
-        meshBuilder.cylinder(10, 10, 10, 32);
-        Model model = modelBuilder.end();
-
-        copyNodes(model.nodes);
-    }
 }

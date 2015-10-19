@@ -55,6 +55,10 @@ public class ModelGraph {
         camera = c;
     }
 
+    public Camera getCamera() {
+        return camera;
+    }
+
     HashMap<Object, ModelContainer> objects_map = new HashMap<Object, ModelContainer>();
 
     public ModelContainer getFromUserObject(Object o) {

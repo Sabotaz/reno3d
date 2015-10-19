@@ -118,7 +118,7 @@ public class ModelContainer extends ActableModel {
         synchronized (this) {
             if (children.contains(child))
                 children.remove(child);
-            child.parent = null;
+            child.setParent(null);
             child.root = null;
 
             if (root != null) {
@@ -135,8 +135,10 @@ public class ModelContainer extends ActableModel {
         }
     }
 
-    private void setParent(ModelContainer p) {
+    protected void setParent(ModelContainer p) {
         parent = p;
+        if (p == null)
+            return;
         root = parent.root;
         if (root != null) {
             if (root != null) {

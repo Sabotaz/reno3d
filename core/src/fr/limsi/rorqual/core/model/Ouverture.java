@@ -29,6 +29,8 @@ public abstract class Ouverture extends ModelContainer {
     protected float height = 1;
     protected float surface = 0;
 
+    OuverturePlane fausseOuverture = null;
+
     // Constructeur
     public Ouverture(Mur mur, Vector2 position, float width, float height){
         this.setMur(mur);
@@ -36,6 +38,8 @@ public abstract class Ouverture extends ModelContainer {
         this.width=width;
         this.height=height;
         this.surface=width*height;
+        fausseOuverture = new OuverturePlane(this);
+
     }
 
     // Getter & Setter
@@ -43,12 +47,15 @@ public abstract class Ouverture extends ModelContainer {
         return mur;
     }
     public void setMur(Mur mur) {
-        if (this.mur != null)
+        if (this.mur != null) {
             this.mur.removeOuverture(this);
+            this.mur.remove(fausseOuverture);
+        }
 
         this.mur = mur;
         if (this.mur != null) {
             this.mur.addOuverture(this);
+            this.mur.add(fausseOuverture);
         }
         this.setChanged();
     }
@@ -173,4 +180,12 @@ public abstract class Ouverture extends ModelContainer {
         this.setWidth(this.height * default_width / default_height);
     }
 
+    @Override
+    public void setParent(ModelContainer p) {
+        if (parent != null)
+            parent.remove(fausseOuverture);
+        super.setParent(p);
+        if (parent != null)
+            parent.add(fausseOuverture);
+    }
 }

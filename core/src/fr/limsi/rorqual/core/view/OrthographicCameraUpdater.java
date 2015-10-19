@@ -58,7 +58,6 @@ public class OrthographicCameraUpdater extends CameraUpdater {
     public void reset() {
         BoundingBox b = new BoundingBox();
         for (Etage etage : ModelHolder.getInstance().getBatiment().getAllEtages()) {
-            etage.shrinkWalls(true);
             for (Slab slab : etage.getSlabs())
                 slab.extendBoundingBox(b);
         }

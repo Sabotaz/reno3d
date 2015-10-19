@@ -200,6 +200,7 @@ public class PieceMaker extends ModelMaker {
         }else{
             for (Mur mur: murs){
                 mur.setSelectable(true);
+                mur.setCreated();
                 ModelHolder.notify(mur);
             }
             slab.setSelectable(true);

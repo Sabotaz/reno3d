@@ -27,7 +27,6 @@ public class Etage {
     private float height = DEFAULT_HEIGHT;
 
     public Etage() {
-        shrinkWalls(shrinked);
     }
 
     public ArrayList<Mur> getMurs() {
@@ -38,10 +37,6 @@ public class Etage {
         return height;
     }
 
-    public float getWallHeight() {
-        return wallHeight;
-    }
-
     public void setHeight(float h) {
         height = h;
         if (batiment != null)
@@ -49,7 +44,6 @@ public class Etage {
         for (Mur m : murs) {
             m.setChanged();
         }
-        this.shrinkWalls(shrinked);
         this.actualiseElevation();
     }
 
@@ -217,16 +211,4 @@ public class Etage {
         return this.name;
     }
 
-    private float wallHeight = DEFAULT_HEIGHT;
-    private boolean shrinked = true;
-
-    public void shrinkWalls(boolean mode) {
-        shrinked = mode;
-        if (shrinked)
-            wallHeight = Fenetre.DEFAULT_Y + Fenetre.DEFAULT_HEIGHT/2;
-        else
-            wallHeight = height;
-        for (Mur mur : murs)
-            mur.setChanged();
-    }
 }
