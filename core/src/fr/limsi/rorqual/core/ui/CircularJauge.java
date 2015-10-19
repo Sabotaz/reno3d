@@ -131,6 +131,7 @@ public class CircularJauge extends Widget {
         // generate drawables
 
         batch.setShader(shader.getProgram());
+        shader.prepare();
         shader.setFirstColor(score.getBackgroundColor());
         shader.setSecondColor(score.getColor());
         shader.setRatio(percent);

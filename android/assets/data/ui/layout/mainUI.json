@@ -285,8 +285,8 @@
             {
               "type": "CircularJauge",
               "id": "dpe_jauge",
-              "height": "5%",
-              "width": "40%",
+              "height": "64",
+              "width": "1024",
               "style": [
                 "texture:bar",
                 "texture:bar_background"

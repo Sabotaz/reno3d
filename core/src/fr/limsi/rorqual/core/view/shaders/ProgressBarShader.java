@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Attribute;
+import com.badlogic.gdx.graphics.g3d.Attributes;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
@@ -24,6 +25,7 @@ public class ProgressBarShader extends FileShader {
     protected final int u_firstColor = register(new Uniform("u_firstColor"));
     protected final int u_secondColor = register(new Uniform("u_secondColor"));
     protected final int u_ratio = register(new Uniform("u_ratio"));
+    protected final int u_time = register(new Uniform("u_time"));
 
     private Color firstColor = Color.BLACK;
     private Color secondColor = Color.WHITE;
@@ -66,6 +68,10 @@ public class ProgressBarShader extends FileShader {
     public void dispose () {
         super.dispose();
         program.dispose();
+    }
+
+    public void prepare() {
+        set(u_time, System.nanoTime() * 1e-9f);
     }
 
     public void setFirstColor(Color color) {
