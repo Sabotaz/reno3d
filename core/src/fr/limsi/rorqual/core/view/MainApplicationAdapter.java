@@ -205,7 +205,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
         /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
+        //Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
 
         state = new DpeStateUpdater(modelGraph);
 
@@ -287,8 +287,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         }else if (score > 450){
             lettreScore.setText("G");
         }
-
-        stageMenu.act();
+        synchronized (stageMenu) {
+            stageMenu.act();
+        }
         modelGraph.act();
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().act();
     }
