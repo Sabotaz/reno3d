@@ -41,6 +41,10 @@ public class ModelHolder {
         this.batiment = model;
     }
 
+    public void resetModel(){
+        this.batiment=null;
+    }
+
     public static void notify(Object object){
         if (object instanceof Mur){
             HashMap<String,Object> currentItems = new HashMap<String,Object>();

@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -20,6 +21,7 @@ import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.CameraEngine;
+import fr.limsi.rorqual.core.logic.Deleter;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.IfcExporter;
@@ -224,6 +226,9 @@ public class MainUiControleur implements EventListener {
                             break;
                         case EXPORT_IFC:
                             IfcExporter.getInstance().realiseExportIfc();
+                            break;
+                        case NEW_FILE:
+                            Deleter.deleteBatiment();
                             break;
                         default:
                             System.out.println(lastValue);

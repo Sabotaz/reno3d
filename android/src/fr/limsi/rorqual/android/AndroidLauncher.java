@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import fr.limsi.rorqual.android.sensors.GyroscopeListener;
 import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
-import ifc2x3javatoolbox.ifcmodel.IfcModel;
+
 
 public class AndroidLauncher extends AndroidApplication {
     private SensorManager sensorManager;
@@ -72,6 +72,5 @@ public class AndroidLauncher extends AndroidApplication {
         sensorManager.unregisterListener(gyroscopeListener);
         super.onStop();
     }
-
 
 }

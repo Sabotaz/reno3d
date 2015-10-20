@@ -7,11 +7,14 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
+import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Ouverture;
+import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
@@ -142,6 +145,22 @@ public class Deleter extends ModelMaker {
         currentItems.put("userObject", o);
         Event e = new Event(DpeEvent.OUVERTURE_REMOVED, currentItems);
         EventManager.getInstance().put(Channel.DPE, e);
+    }
+
+    static public void deleteBatiment(){
+        Batiment bat = ModelHolder.getInstance().getBatiment();
+        for (Etage e : bat.getAllEtages()){
+
+            for (Ouverture o : new ArrayList<Ouverture>(e.getOuvertures())){
+                deleteOuverture(o);
+            }
+            for (Mur m : new ArrayList<Mur>(e.getMurs())){
+                deleteMur(m);
+            }
+            for (Slab s : new ArrayList<Slab>(e.getSlabs())){
+                deleteSlab(s);
+            }
+        }
     }
 
     static public void deleteObjet(Objet o) {
