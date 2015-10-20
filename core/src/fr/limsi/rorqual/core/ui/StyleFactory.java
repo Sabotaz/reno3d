@@ -28,6 +28,7 @@ public class StyleFactory {
         BitmapFont font = getFont(params[3]);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(up, down, checked, font);
+        style.fontColor = Color.BLACK;
         return style;
     }
 

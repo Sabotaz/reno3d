@@ -89,6 +89,11 @@ public class CameraEngine implements GestureDetector.GestureListener {
         }
     }
 
+    public void reset() {
+        curent_camera = Cameras.ORTHOGRAPHIC;
+        curent_camera.getCameraUpdater().reset();
+    }
+
     // GESTURES
 
     @Override

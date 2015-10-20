@@ -65,7 +65,7 @@ public class OuverturePlane extends ModelContainer {
                     .mul(new Matrix4().translate(
                             ouverture.getPosition().x + ouverture.getWidth() / 2,
                             -ouverture.getMur().getDepth() / 2,
-                            Slab.DEFAULT_HEIGHT + 0.001f))
+                            Slab.DEFAULT_HEIGHT + 0.01f))
                     .mul(new Matrix4().setToScaling(ouverture.getWidth(), ouverture.getWidth(), 1))
             ;
             if (ouverture.getMur().getSlabGauche() == null) { // vers la gauche

@@ -121,6 +121,9 @@ public class MainUiControleur implements EventListener {
                             Gdx.app.exit();
                             break;
                         case SWITCH_2D_3D:
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
                             CameraEngine.getInstance().switchCamera();
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
                             ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
@@ -228,7 +231,12 @@ public class MainUiControleur implements EventListener {
                             IfcExporter.getInstance().realiseExportIfc();
                             break;
                         case NEW_FILE:
+                            Logic.getInstance().stop();
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
                             Deleter.deleteBatiment();
+                            CameraEngine.getInstance().reset();
                             break;
                         default:
                             System.out.println(lastValue);

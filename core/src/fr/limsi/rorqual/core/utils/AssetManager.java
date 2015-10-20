@@ -240,7 +240,7 @@ public class AssetManager {
         assets.putAll((Map<String, Texture>)loadOnUi(textures, Texture.class));
 
         // fonts
-        BitmapFont font,fontTitle;
+        BitmapFont font,fontTitle,buttonsFont;
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/FreeSans.ttf"));
         FreeTypeFontGenerator generatorTitle = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/FreeSansBold.ttf"));
@@ -250,10 +250,12 @@ public class AssetManager {
         font = (BitmapFont) loadOnUi(generator, parameter);
         parameter.size = (int) (25 * Gdx.graphics.getDensity());
         fontTitle = (BitmapFont) loadOnUi(generatorTitle, parameter);
+        buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
 
         //generator.dispose(); // don't forget to dispose to avoid memory leaks!
         assets.put("default.fnt", font);
         assets.put("defaultTitle.fnt", fontTitle);
+        assets.put("buttons.fnt", buttonsFont);
         assets.put("default.fnt.generator", generator);
 
     }

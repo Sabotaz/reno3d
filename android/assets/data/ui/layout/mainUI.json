@@ -68,50 +68,49 @@
           "type": "ButtonGroup",
           "layout": "column",
           "id": "etage_buttons",
+          "padLeft": 15,
+          "padRight": 15,
           "content": [
             {
               "type": "TextButton",
               "text": "-",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_MINUS",
-              "height": "5%",
-              "width": "auto",
-              "padTop": 10,
-              "padRight": -2,
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
               "style": [
-                "skin:uiskin.json:default-round",
-                "skin:uiskin.json:default-round-down",
+                "drawable:void",
+                "drawable:void:tint:888888",
                 null,
-                "default.fnt"
+                "buttons.fnt"
               ]
             },
             {
               "type": "TextButton",
               "text": "0",
               "id": "currentEtage",
-              "height": "5%",
-              "width": "auto",
-              "padTop": 10,
-              "padRight": -2,
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
               "style": [
-                "skin:uiskin.json:default-round",
+                "drawable:void",
                 null,
                 null,
-                "default.fnt"
+                "buttons.fnt"
               ]
             },
             {
               "type": "TextButton",
               "text": "+",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_PLUS",
-              "height": "5%",
-              "width": "auto",
-              "padTop": 10,
-              "padRight": 10,
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
               "style": [
-                "skin:uiskin.json:default-round",
-                "skin:uiskin.json:default-round-down",
+                "drawable:void",
+                "drawable:void:tint:888888",
                 null,
-                "default.fnt"
+                "buttons.fnt"
               ]
             }
           ]

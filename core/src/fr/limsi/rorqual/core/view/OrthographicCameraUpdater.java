@@ -63,6 +63,7 @@ public class OrthographicCameraUpdater extends CameraUpdater {
         }
         Vector3 center = b.getCenter(new Vector3());
         camera.position.set(center.x, center.y, 50f);
+        camera.zoom = 1f;
         camera.update();
     }
 
@@ -154,7 +155,7 @@ public class OrthographicCameraUpdater extends CameraUpdater {
 
     private void avancer(float amount) {
 
-        camera.zoom += amount * ZOOM_RATIO;
+        camera.zoom -= amount * ZOOM_RATIO;
         camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 10);
         System.out.println(camera.zoom);
         camera.update();
