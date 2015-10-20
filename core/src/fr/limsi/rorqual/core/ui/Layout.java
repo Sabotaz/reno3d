@@ -541,8 +541,8 @@ public class Layout {
                         }
                     }
                     @Override
-                    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                        boolean retour = super.touchDown(event, x, y, pointer, button);
+                    public boolean touchDown (InputEvent event, float x, float y, int pointer, int b) {
+                        boolean retour = super.touchDown(event, x, y, pointer, b);
                         if (json.getBoolean("notify_pressed", false)) {
                             HashMap<String, Object> items = new HashMap<String, Object>();
                             items.put("userObject", userObject);
