@@ -38,62 +38,82 @@ public class Logic implements InputProcessor {
     public void startWall() {
         stop();
 
-        modelMaker = new WallMaker();
+        synchronized (this) {
+            modelMaker = new WallMaker();
+        }
     }
 
     public void startPiece() {
         stop();
 
-        modelMaker = new PieceMaker();
+        synchronized (this) {
+            modelMaker = new PieceMaker();
+        }
     }
 
     public void startFenetre() {
         stop();
 
-        //modelMaker = new OuvertureMaker(2);
+        //synchronized (this) {
+            //modelMaker = new OuvertureMaker(2);
+        //}
     }
 
     public void move() {
         stop();
 
-        modelMaker = new Mover();
+        synchronized (this) {
+            modelMaker = new Mover();
+        }
     }
 
     public void delete() {
         stop();
 
-        modelMaker = new Deleter();
+        synchronized (this) {
+            modelMaker = new Deleter();
+        }
     }
 
     public void delete(ModelContainer obj, Button deleteButton) {
         stop();
 
-        Deleter.delete(obj);
-        deleteButton.setChecked(false);
+        synchronized (this) {
+            Deleter.delete(obj);
+            deleteButton.setChecked(false);
+        }
     }
 
     public void rotate_g() {
         stop();
 
-        modelMaker = new Rotater(+1);
+        synchronized (this) {
+            modelMaker = new Rotater(+1);
+        }
     }
 
     public void rotate_d() {
         stop();
 
-        modelMaker = new Rotater(-1);
+        synchronized (this) {
+            modelMaker = new Rotater(-1);
+        }
     }
 
     public void rotate_g(ModelContainer m, Button rotateButton) {
         stop();
 
-        Rotater.rotate(+1, m, rotateButton);
+        synchronized (this) {
+            Rotater.rotate(+1, m, rotateButton);
+        }
     }
 
     public void rotate_d(ModelContainer m, Button rotateButton) {
         stop();
 
-        Rotater.rotate(-1, m, rotateButton);
+        synchronized (this) {
+            Rotater.rotate(-1, m, rotateButton);
+        }
     }
 
     public void startModel() {
@@ -101,13 +121,15 @@ public class Logic implements InputProcessor {
         String id = ModelLibrary.getInstance().getCurrentModelId();
         Class cls = ModelLibrary.getInstance().getModelClassFromId(id);
 
-        try {
-            if (cls.newInstance() instanceof Ouverture)
-                modelMaker = new OuvertureMaker(id);
-            else if (cls.newInstance() instanceof Objet)
-                modelMaker = new ObjetMaker(id);
-        } catch (Exception e) {
-            modelMaker = null;
+        synchronized (this) {
+            try {
+                if (cls.newInstance() instanceof Ouverture)
+                    modelMaker = new OuvertureMaker(id);
+                else if (cls.newInstance() instanceof Objet)
+                    modelMaker = new ObjetMaker(id);
+            } catch (Exception e) {
+                modelMaker = null;
+            }
         }
     }
 
@@ -128,8 +150,6 @@ public class Logic implements InputProcessor {
             }
             newModelContainer.local_transform = oldModelContainer.local_transform;
 
-            Vector3 tra = new Vector3();
-
             newModelContainer.setPosition(oldModelContainer.getPosition());
             MainApplicationAdapter.setSelected(newModelContainer);
         }
@@ -138,14 +158,18 @@ public class Logic implements InputProcessor {
     public void startPorte() {
         stop();
 
-        //modelMaker = new OuvertureMaker(1);
+        //synchronized (this) {
+            //modelMaker = new OuvertureMaker(1);
+        //}
 
     }
 
     public void stop() {
-        if (modelMaker != null)
-            modelMaker.abort();
-        modelMaker = null;
+        synchronized (this) {
+            if (modelMaker != null)
+                modelMaker.abort();
+            modelMaker = null;
+        }
     }
 
     // INPUTS
@@ -167,49 +191,49 @@ public class Logic implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (modelMaker != null) {
-            if (modelMaker.isStarted())
-                timer.cancel();
-            else
-                modelMaker.begin(screenX, screenY);
-            return true;
+        synchronized (this) {
+            if (modelMaker != null) {
+                if (modelMaker.isStarted())
+                    timer.cancel();
+                else
+                    modelMaker.begin(screenX, screenY);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
-
-    TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-
-        }
-    };
-
 
     Timer timer = new Timer();
 
     @Override
     public boolean touchUp(final int screenX, final int screenY, int pointer, int button) {
-        if (modelMaker != null) {
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    modelMaker.end(screenX, screenY);
-                }
-            }, 50L // 20ms ?
-            );
-            return true;
+        synchronized (this) {
+            if (modelMaker != null) {
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        synchronized (Logic.this) {
+                            modelMaker.end(screenX, screenY);
+                        }
+                    }
+                }, 50L // 20ms ?
+                );
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (modelMaker != null) {
-            modelMaker.update(screenX, screenY);
-            return true;
+        synchronized (this) {
+            if (modelMaker != null) {
+                modelMaker.update(screenX, screenY);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     @Override

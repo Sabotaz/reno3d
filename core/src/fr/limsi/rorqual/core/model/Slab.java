@@ -451,7 +451,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     @Override
     public Vector3 getCotePos() {
         Vector2 pos = getCenter();
-        return new Vector3(pos.x, pos.y, getHeight() + 0.0001f);
+        return new Vector3(pos.x, pos.y, etage.getHeight() + 0.0001f);
     }
 
     @Override
