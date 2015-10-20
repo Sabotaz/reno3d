@@ -122,6 +122,7 @@ public class ModelLibrary {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("xdxd");
                         synchronized (ModelLoader.this) {
                             UBJsonReader jsonReader = new UBJsonReader();
                             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
@@ -132,17 +133,17 @@ public class ModelLibrary {
                             box = container.getBoundingBox();
                             // update normals
                             validate(model);
-                            container.setModel(model, false);
-                            toScale(container);
+                            container.setModel(model);
+                            //toScale(container);
 
                             loading = false;
                         }
+                        System.out.println(container);
                     }
                 };
 
                 Gdx.app.postRunnable(runnable);
-            }
-            else {
+            } else {
                 synchronized (ModelLoader.this) {
                     container.setModel(model, false);
                     container.setBoundingBox(box);
