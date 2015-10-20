@@ -23,6 +23,8 @@ public enum ButtonValue {
     ETAGE_PLUS,
     ETAGE_MINUS,
     EXPORT_IFC,
+    IMPORT_IFC,
+    NEW_FILE,
     ROTATE_G,
     ROTATE_D,
 

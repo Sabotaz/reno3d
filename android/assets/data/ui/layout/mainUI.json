@@ -16,19 +16,48 @@
         {
           "type": "ButtonGroup",
           "layout": "column",
+          "pad": 0,
+          "minChecked": 0,
           "content": [
             {
-              "type": "TextButton",
+              "type": "Button",
               "text": "Export .ifc",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.EXPORT_IFC",
-              "height": "5%",
-              "width": "auto",
-              "padTop": 10,
-              "padRight": -2,
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
               "style": [
-                "skin:uiskin.json:default-round",
-                "skin:uiskin.json:default-round-down",
-                null,
+                "drawable:save",
+                "drawable:save:tint:888888",
+                "drawable:save:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "text": "Import .ifc",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.IMPORT_IFC",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:load",
+                "drawable:load:tint:888888",
+                "drawable:load:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "text": "New file",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.NEW_FILE",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:new",
+                "drawable:new:tint:888888",
+                "drawable:new:tint:888888",
                 "default.fnt"
               ]
             }
@@ -89,6 +118,7 @@
           "type": "ButtonGroup",
           "layout": "column",
           "align": "right",
+          "pad": 0,
           "content": [
             {
               "type": "Button",
@@ -97,6 +127,7 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
                 "drawable:2D",
                 null,
@@ -110,6 +141,7 @@
           "type": "ButtonGroup",
           "layout": "column",
           "minChecked": 0,
+          "pad": 0,
           "content": [
             {
               "type": "Button",
@@ -117,10 +149,11 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
                 "drawable:wall",
-                "drawable:wall:tint:CCCCCC",
-                "drawable:wall:tint:CCCCCC",
+                "drawable:wall:tint:888888",
+                "drawable:wall:tint:888888",
                 "default.fnt"
               ]
             },
@@ -130,10 +163,11 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.PIECE",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
                 "drawable:room",
-                "drawable:room:tint:CCCCCC",
-                "drawable:room:tint:CCCCCC",
+                "drawable:room:tint:888888",
+                "drawable:room:tint:888888",
                 "default.fnt"
               ]
             },
@@ -143,10 +177,11 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
                 "drawable:mobilier",
-                "drawable:mobilier:tint:CCCCCC",
-                "drawable:mobilier:tint:CCCCCC",
+                "drawable:mobilier:tint:888888",
+                "drawable:mobilier:tint:888888",
                 "default.fnt"
               ]
             }
@@ -156,6 +191,7 @@
           "type": "ButtonGroup",
           "layout": "column",
           "minChecked": 0,
+          "pad": 0,
           "content": [
             {
               "type": "Button",
@@ -163,10 +199,11 @@
               "name": "dpe",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
-                "atlas:ui_001.atlas:dpe",
-                "atlas:ui_001.atlas:dpe:tint:CCCCCC",
-                "atlas:ui_001.atlas:dpe:tint:CCCCCC",
+                "drawable:dpe",
+                "drawable:dpe:tint:888888",
+                "drawable:dpe:tint:888888",
                 "default.fnt"
               ]
             },
@@ -176,10 +213,11 @@
               "name": "chauffage",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
-                "atlas:ui_001.atlas:chauffage",
-                "atlas:ui_001.atlas:chauffage:tint:CCCCCC",
-                "atlas:ui_001.atlas:chauffage:tint:CCCCCC",
+                "drawable:chauffage",
+                "drawable:chauffage:tint:888888",
+                "drawable:chauffage:tint:888888",
                 "default.fnt"
               ]
             }
@@ -209,10 +247,11 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
                 "drawable:move",
-                "drawable:move:tint:CCCCCC",
-                "drawable:move:tint:CCCCCC",
+                "drawable:move:tint:888888",
+                "drawable:move:tint:888888",
                 "default.fnt"
               ]
             },
@@ -222,32 +261,34 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.DELETE",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "style": [
                 "drawable:delete",
-                "drawable:delete:tint:CCCCCC",
-                "drawable:delete:tint:CCCCCC",
+                "drawable:delete:tint:888888",
+                "drawable:delete:tint:888888",
                 "default.fnt"
               ]
             },
             {
-              "type": "TextButton",
+              "type": "Button",
               "text": "G",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_G",
               "id":"Rotate_G",
               "height": "auto",
               "width": "5%",
+              "pad": 0,
               "notify_clicked":false,
               "notify_pressed":true,
               "visible":false,
               "style": [
-                "skin:uiskin.json:default-round",
-                "skin:uiskin.json:default-round-down",
-                "skin:uiskin.json:default-round-down",
+                "drawable:arrow_G",
+                "drawable:arrow_G:tint:888888",
+                "drawable:arrow_G:tint:888888",
                 "default.fnt"
               ]
             },
             {
-              "type": "TextButton",
+              "type": "Button",
               "text": "D",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_D",
               "id":"Rotate_D",
@@ -255,11 +296,12 @@
               "width": "5%",
               "notify_clicked":false,
               "notify_pressed":true,
+              "pad": 0,
               "visible":false,
               "style": [
-                "skin:uiskin.json:default-round",
-                "skin:uiskin.json:default-round-down",
-                "skin:uiskin.json:default-round-down",
+                "drawable:arrow_D",
+                "drawable:arrow_D:tint:888888",
+                "drawable:arrow_D:tint:888888",
                 "default.fnt"
               ]
             }

@@ -334,11 +334,12 @@ public class Layout {
                     if (json.getBoolean("expand", true))
                         c.expandX().fillX();
 
-                    c.pad(json_child.getFloat("pad", 1));
-                    c.padTop(json_child.getFloat("padTop", 1));
-                    c.padBottom(json_child.getFloat("padBottom", 1));
-                    c.padLeft(json_child.getFloat("padLeft", 1));
-                    c.padRight(json_child.getFloat("padRight", 1));
+                    float pad = json_child.getFloat("pad", 1);
+                    c.pad(pad);
+                    c.padTop(json_child.getFloat("padTop", pad));
+                    c.padBottom(json_child.getFloat("padBottom", pad));
+                    c.padLeft(json_child.getFloat("padLeft", pad));
+                    c.padRight(json_child.getFloat("padRight", pad));
 
                     switch (align) {
                         case "left":
@@ -459,11 +460,12 @@ public class Layout {
 
                     c.size(child.getWidth(), child.getHeight());
 
-                    c.pad(json_child.getFloat("pad", 1));
-                    c.padTop(json_child.getFloat("padTop", 1));
-                    c.padBottom(json_child.getFloat("padBottom", 1));
-                    c.padLeft(json_child.getFloat("padLeft", 1));
-                    c.padRight(json_child.getFloat("padRight", 1));
+                    float pad = json_child.getFloat("pad", 1);
+                    c.pad(pad);
+                    c.padTop(json_child.getFloat("padTop", pad));
+                    c.padBottom(json_child.getFloat("padBottom", pad));
+                    c.padLeft(json_child.getFloat("padLeft", pad));
+                    c.padRight(json_child.getFloat("padRight", pad));
                     switch (align) {
                         case "left":
                             c.left();
@@ -491,7 +493,7 @@ public class Layout {
         return table;
     }
 
-    private Actor makeButton(JsonValue json, Updater updater, Actor parent) {
+    private Actor makeButton(final JsonValue json, Updater updater, Actor parent) {
 
         final Button button;
 
@@ -524,17 +526,33 @@ public class Layout {
             if (value_value != null) {
                 final Object last_value = value_value;
                 final Updater last_updater = updater;
+
                 button.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-//                        System.out.println("click");
-                        HashMap<String,Object> items = new HashMap<String, Object>();
-                        items.put("userObject",userObject);
-                        items.put("eventRequest",EventRequest.UPDATE_STATE);
-                        items.put("lastValue",last_value);
-                        items.put("layout", Layout.this);
-                        items.put("button",button);
-                        last_updater.trigger(items);
+                        if (json.getBoolean("notify_clicked", true)) {
+                            HashMap<String, Object> items = new HashMap<String, Object>();
+                            items.put("userObject", userObject);
+                            items.put("eventRequest", EventRequest.UPDATE_STATE);
+                            items.put("lastValue", last_value);
+                            items.put("layout", Layout.this);
+                            items.put("button", button);
+                            last_updater.trigger(items);
+                        }
+                    }
+                    @Override
+                    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                        boolean retour = super.touchDown(event, x, y, pointer, button);
+                        if (json.getBoolean("notify_pressed", false)) {
+                            HashMap<String, Object> items = new HashMap<String, Object>();
+                            items.put("userObject", userObject);
+                            items.put("eventRequest", EventRequest.UPDATE_STATE);
+                            items.put("lastValue", last_value);
+                            items.put("layout", Layout.this);
+                            items.put("button", button);
+                            last_updater.trigger(items);
+                        }
+                        return retour;
                     }
                 });
             }

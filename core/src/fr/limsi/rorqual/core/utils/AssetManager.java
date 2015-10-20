@@ -215,6 +215,14 @@ public class AssetManager {
         textures.put("wall", "data/ui/wall.png");
         textures.put("porte", "data/ui/porte.png");
         textures.put("fenetre", "data/ui/fenetre.png");
+        textures.put("dpe", "data/ui/dpe.png");
+        textures.put("chauffage", "data/ui/chauffage.png");
+        textures.put("arrow_D", "data/ui/arrow_D.png");
+        textures.put("arrow_G", "data/ui/arrow_G.png");
+        textures.put("new", "data/ui/new.png");
+        textures.put("save", "data/ui/save.png");
+        textures.put("load", "data/ui/load.png");
+        textures.put("void", "data/ui/void.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
