@@ -15,6 +15,7 @@
       "content": [
         {
           "type": "ButtonGroup",
+          "id": "save_buttons",
           "layout": "column",
           "pad": 0,
           "minChecked": 0,
@@ -29,7 +30,7 @@
               "style": [
                 "drawable:save",
                 "drawable:save:tint:888888",
-                "drawable:save:tint:888888",
+                null,
                 "default.fnt"
               ]
             },
@@ -43,7 +44,7 @@
               "style": [
                 "drawable:load",
                 "drawable:load:tint:888888",
-                "drawable:load:tint:888888",
+                null,
                 "default.fnt"
               ]
             },
@@ -57,7 +58,7 @@
               "style": [
                 "drawable:new",
                 "drawable:new:tint:888888",
-                "drawable:new:tint:888888",
+                null,
                 "default.fnt"
               ]
             }
@@ -66,6 +67,7 @@
         {
           "type": "ButtonGroup",
           "layout": "column",
+          "id": "etage_buttons",
           "content": [
             {
               "type": "TextButton",
@@ -139,6 +141,7 @@
         },
         {
           "type": "ButtonGroup",
+          "id": "general_buttons",
           "layout": "column",
           "minChecked": 0,
           "pad": 0,
@@ -184,15 +187,7 @@
                 "drawable:mobilier:tint:888888",
                 "default.fnt"
               ]
-            }
-          ]
-        },
-        {
-          "type": "ButtonGroup",
-          "layout": "column",
-          "minChecked": 0,
-          "pad": 0,
-          "content": [
+            },
             {
               "type": "Button",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.DPE",
@@ -228,7 +223,6 @@
     {
       "type": "Table",
       "name": "Main UI",
-      "id": "control_buttons",
       "channel": "fr.limsi.rorqual.core.event.Channel.UI",
       "event": "fr.limsi.rorqual.core.event.UiEvent.BUTTON_CLICKED",
       "position": "center-right",
@@ -238,6 +232,7 @@
       "content": [
         {
           "type": "ButtonGroup",
+          "id": "control_buttons",
           "layout": "row",
           "minChecked": 0,
           "content": [

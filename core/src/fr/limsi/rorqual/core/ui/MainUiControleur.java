@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
@@ -85,6 +87,14 @@ public class MainUiControleur implements EventListener {
         }
     }
 
+    private void uncheckGeneralButtons() {
+        ((Button)(((Table)mainLayout.getFromId("general_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+    }
+
+    private void uncheckControlButtons() {
+        ((Button)(((Table)mainLayout.getFromId("control_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+    }
+
     @Override
     public void notify(Channel c, Event e) throws InterruptedException {
         if (c == Channel.UI) {
@@ -114,6 +124,8 @@ public class MainUiControleur implements EventListener {
                             ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case MOVE:
+                            uncheckGeneralButtons();
+                            removeTb();
                             if (button.isChecked()) {
                                 Logic.getInstance().move();
                             }
@@ -121,6 +133,8 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case DELETE:
+                            uncheckGeneralButtons();
+                            removeTb();
                             if (button.isChecked()) {
                                 if (MainApplicationAdapter.getSelected() != null)
                                     Logic.getInstance().delete(MainApplicationAdapter.getSelected(), button);
@@ -131,14 +145,19 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case ROTATE_D:
+                            uncheckGeneralButtons();
+                            removeTb();
                             Logic.getInstance().stop();
                             Logic.getInstance().rotate_d(MainApplicationAdapter.getSelected(), button);
                             break;
                         case ROTATE_G:
+                            uncheckGeneralButtons();
+                            removeTb();
                             Logic.getInstance().stop();
                             Logic.getInstance().rotate_g(MainApplicationAdapter.getSelected(), button);
                             break;
                         case MUR:
+                            uncheckControlButtons();
                             if (button.isChecked()) {
                                 Logic.getInstance().startWall();
                                 removeTb();
@@ -147,6 +166,7 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case PIECE:
+                            uncheckControlButtons();
                             if (button.isChecked()) {
                                 Logic.getInstance().startPiece();
                                 removeTb();
@@ -171,18 +191,21 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case DPE:
+                            uncheckControlButtons();
                             if (button.isChecked())
                                 addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES));
                             else
                                 removeTb();
                             break;
                         case CHAUFFAGE:
+                            uncheckControlButtons();
                             if (button.isChecked())
                                 addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
                             else
                                 removeTb();
                             break;
                         case MENUISERIE:
+                            uncheckControlButtons();
                             removeTb();
                             if (button.isChecked())
                                 addTb(ModelLibrary.getInstance().getTabWindow());
