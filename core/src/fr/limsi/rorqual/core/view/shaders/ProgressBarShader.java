@@ -24,6 +24,9 @@ public class ProgressBarShader extends FileShader {
 
     protected final int u_firstColor = register(new Uniform("u_firstColor"));
     protected final int u_secondColor = register(new Uniform("u_secondColor"));
+    protected final int u_colors = register(new Uniform("u_colors"));
+    protected final int u_ratios = register(new Uniform("u_ratios"));
+    protected final int u_nratios = register(new Uniform("u_nratios"));
     protected final int u_ratio = register(new Uniform("u_ratio"));
     protected final int u_time = register(new Uniform("u_time"));
 
@@ -87,5 +90,25 @@ public class ProgressBarShader extends FileShader {
     public void setRatio(float ratio) {
         this.ratio = ratio;
         set(u_ratio, this.ratio);
+    }
+
+    private float[] colors;
+
+    public void setColors(Color colors[]) {
+        this.colors = new float[colors.length*3];
+        for (int i = 0; i < colors.length; i++) {
+            this.colors[3*i+0] = colors[i].r;
+            this.colors[3*i+1] = colors[i].g;
+            this.colors[3*i+2] = colors[i].b;
+        }
+        program.setUniform3fv(loc(u_colors), this.colors, 0, this.colors.length);
+    }
+
+    private float[] ratios;
+
+    public void setRatios(float ratios[]) {
+        this.ratios = ratios;
+        program.setUniform1fv(loc(u_ratios), this.ratios, 0, this.ratios.length);
+        set(u_nratios, this.ratios.length);
     }
 }
