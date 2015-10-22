@@ -25,6 +25,9 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+
+        config.r = config.g = config.b = 8;
+
         MainApplicationAdapter application = new MainApplicationAdapter();
 
         initialize(application, config);

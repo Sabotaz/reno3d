@@ -195,7 +195,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         return false;
     }
 
-    float ZOOM_RATIO = 0.05f;
+    float ZOOM_RATIO = 0.02f;
 
     private void avancer(float amount) {
 

@@ -157,7 +157,6 @@ public class OrthographicCameraUpdater extends CameraUpdater {
 
         camera.zoom -= amount * ZOOM_RATIO;
         camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 10);
-        System.out.println(camera.zoom);
         camera.update();
     }
 }
