@@ -1,9 +1,12 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.GeometryUtils;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
@@ -171,7 +174,40 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
     private boolean valide = false;
 
+    MaterialTypeEnum plafond = MaterialTypeEnum.PIERRE;
+    MaterialTypeEnum plancher = MaterialTypeEnum.PARQUET;
+
+    Material plafondMaterial = new Material();
+    Material plancherMaterial = new Material();
+
+    boolean areMaterialSet = false;
+
+    private void makeMaterials() {
+        setMaterial(plafondMaterial, plafond);
+        setMaterial(plancherMaterial, plancher);
+        areMaterialSet = true;
+    }
+
+    private void setMaterial(Material material, MaterialTypeEnum type) {
+        Texture texture_diff = type.getDiffuse();
+        Texture texture_norm = type.getNormal();
+
+        texture_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        TextureAttribute ta_diff = TextureAttribute.createDiffuse(texture_diff);
+        ta_diff.scaleU = ta_diff.scaleV = 0.2f;
+        if (texture_norm != null) {
+            texture_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+            TextureAttribute ta_norm = TextureAttribute.createNormal(texture_norm);
+            ta_norm.scaleU = ta_norm.scaleV = 0.2f;
+            material.set(ta_diff, ta_norm);
+        } else {
+            material.set(ta_diff);
+        }
+    }
+
     private void makeMesh() {
+        if (!areMaterialSet)
+            makeMaterials();
         if (coins == null) {
             this.setModel(new Model());
             valide = false;
@@ -198,7 +234,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
             CSG csg = Extrude.points(z, face);
 
-            Model model = CSGUtils.toModel(csg);
+            Model model = CSGUtils.toModel(csg,plafondMaterial, plafondMaterial, plancherMaterial, plafondMaterial, plafondMaterial);
             this.setModel(model);
             valide = true;
 

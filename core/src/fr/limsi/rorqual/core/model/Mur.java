@@ -112,8 +112,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     boolean areMaterialSet = false;
 
     MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
-    MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.PIERRE;
-    MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.PIERRE;
+    MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.WALL1;
+    MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.WALL1;
     MaterialTypeEnum defaultMaterialType = MaterialTypeEnum.BETON;
 
     private void makeMaterials() {
@@ -248,7 +248,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void setGlobalOrientation(OrientationEnum orientationMur) {
         float dx = B.getPosition().x - A.getPosition().x;
         float dy = B.getPosition().y - A.getPosition().y;
-        OrientationEnum lastOrientation = this.orientationMur;
         this.orientationMur = orientationMur.wrapX(dx, dy);
     }
 
@@ -308,7 +307,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         Material front = slabGauche == null ? exteriorMaterial : interiorMaterial1;
         Material back = slabDroit == null ? exteriorMaterial : interiorMaterial2;
 
-        Model model = CSGUtils.toModel(csg, front, back, defaultMaterial, exteriorMaterial);
+        Model model = CSGUtils.toModel(csg, front, back, defaultMaterial, exteriorMaterial, defaultMaterial);
 
         this.setModel(model);
 
