@@ -115,9 +115,6 @@ public class Layout {
 
                 }
             }
-            System.out.println(eventType);
-            System.out.println("waiting default value : " + (System.currentTimeMillis() - l) + "ms");
-            System.out.println(default_value);
             return default_value;
         }
 

@@ -1,7 +1,9 @@
 package fr.limsi.rorqual.core.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 
 import java.util.HashMap;
 
@@ -72,7 +74,8 @@ public class DpeUi  {
     }
 
     private static Table makeObjetTab(Objet o) {
-        TabWindow tabWindow = new TabWindow(450);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.45f).get(null);
+        TabWindow tabWindow = new TabWindow(width);
         System.out.println(o.getCategory());
         tabWindow.addTable(ModelLibrary.getInstance().getModelTable(o.getCategory()));
         return tabWindow;

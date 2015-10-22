@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -359,7 +361,8 @@ public class ModelLibrary {
     }
 
     private void makeTabWindow() {
-        TabWindow tw = new TabWindow(450);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.45f).get(null);
+        TabWindow tw = new TabWindow(width);
         tw.setTitle("Bibliothèque");
         for (Map.Entry<String, HashMap<String, ModelLoader>> entry : categories.entrySet())
             if (!entry.getValue().isEmpty())
@@ -374,9 +377,13 @@ public class ModelLibrary {
     private void makeNewTab(TabWindow tw, String category, HashMap<String, ModelLoader> models) {
 
         Table content = new Table();
-        content.setSize(400,400);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.4f).get(null);
+        float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.6f).get(null);
+        content.setSize(width, height);
         int start_x = 0;
-        final int MAX_X = 4;
+        final int MAX_X = (int)(width / 128);
+
+        content.setSize(width,height);
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
@@ -388,7 +395,7 @@ public class ModelLibrary {
             Image image = modelLoader.getImage();
 
             ImageButton imageButton = new Layout.ClickableImageButton(image.getDrawable());
-            imageButton.setSize(100, 100);
+            imageButton.setSize(128, 128);
             group.add(imageButton);
 
             imageButton.addListener(new ClickListener() {
@@ -399,7 +406,7 @@ public class ModelLibrary {
                     Logic.getInstance().startModel();
                 }
             });
-            content.add(imageButton).size(100, 100).left().top();
+            content.add(imageButton).size(128, 128).left().top();
 
             start_x ++;
             if (start_x == MAX_X) {
@@ -417,8 +424,8 @@ public class ModelLibrary {
         scrollPane.updateVisualScroll();
 
         Table t = new Table();
-        t.add(scrollPane).size(400+scrollPane.getScrollBarWidth(), 400).top().left();
-        content.setSize(400 + scrollPane.getScrollBarWidth(), 400);
+        t.add(scrollPane).size(width+scrollPane.getScrollBarWidth(), height).top().left();
+        content.setSize(width + scrollPane.getScrollBarWidth(), height);
         t.setName(category);
 
         createUpdaterTab(category, models);
@@ -427,11 +434,12 @@ public class ModelLibrary {
     }
 
     private void createUpdaterTab(String category, HashMap<String, ModelLoader> models) {
-
         Table content = new Table();
-        content.setSize(400,400);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.4f).get(null);
+        float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.6f).get(null);
+        content.setSize(width,height);
         int start_x = 0;
-        final int MAX_X = 4;
+        final int MAX_X = (int)(width / 128);
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
@@ -443,7 +451,7 @@ public class ModelLibrary {
             Image image = modelLoader.getImage();
 
             ImageButton imageButton = new Layout.ClickableImageButton(image.getDrawable());
-            imageButton.setSize(100, 100);
+            imageButton.setSize(128, 128);
             group.add(imageButton);
 
             imageButton.addListener(new ClickListener() {
@@ -453,7 +461,7 @@ public class ModelLibrary {
                     Logic.getInstance().updateModel();
                 }
             });
-            content.add(imageButton).size(100, 100).left().top();
+            content.add(imageButton).size(128, 128).left().top();
 
             start_x ++;
             if (start_x == MAX_X) {
@@ -471,8 +479,8 @@ public class ModelLibrary {
         scrollPane.updateVisualScroll();
 
         Table t = new Table();
-        t.add(scrollPane).size(400+scrollPane.getScrollBarWidth(),400).top().left();
-        content.setSize(400 + scrollPane.getScrollBarWidth(), 400);
+        t.add(scrollPane).size(width+scrollPane.getScrollBarWidth(),height).top().left();
+        content.setSize(width + scrollPane.getScrollBarWidth(), height);
         t.setName(category);
 
         categoriesTables.put(category, t);
