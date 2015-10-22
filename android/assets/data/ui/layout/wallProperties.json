@@ -134,43 +134,43 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée à la construction",
+                  "label": "À la construction",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.A_LA_CONSTRUCTION"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée avant 1983",
+                  "label": "Avant 1983",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_AVANT_1983"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 1983 et 1988",
+                  "label": "Entre 1983 et 1988",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_1983_ET_1988"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 1989 et 2000",
+                  "label": "Entre 1989 et 2000",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_1989_ET_2000"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 2001 et 2005",
+                  "label": "Entre 2001 et 2005",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_2001_ET_2005"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 2006 et 2012",
+                  "label": "Entre 2006 et 2012",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_ENTRE_2006_ET_2012"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée après 2012",
+                  "label": "Après 2012",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.wallproperties.DateIsolationMurEnum.EN_RENOVATION_APRES_2012"
                 }

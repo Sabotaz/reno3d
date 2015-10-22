@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés de la pièce",
-  "width": 624,
+  "width": "40%",
   "id": "tab_window",
   "content": [
     {
@@ -11,7 +11,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Le plancher bas de la pièce donne sur : ",
+          "label": "Le plancher bas de la pièce donne sur :",
           "labelPad": 5,
           "labelWidth": 131,
           "content": [
@@ -28,13 +28,13 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Un terre_plein",
+                  "label": "Un terre-plein",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlancher.TERRE_PLEIN"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Un local non chauffé (ex: parking,sous-sol,local technique ...)",
+                  "label": "Un local non chauffé",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.MitoyennetePlancher.LOCAL_NON_CHAUFFE"
                 },
@@ -56,7 +56,7 @@
         },
         {
           "type": "Table",
-          "label": "Le plafond de la pièce donne sur : ",
+          "label": "Le plafond de la pièce donne sur :",
           "labelPad": 5,
           "labelWidth": 131,
           "content": [
@@ -105,12 +105,13 @@
       "type": "Table",
       "name": "Isolation",
       "id": "isolation",
+      "layout": "column",
       "content": [
         {
           "type": "Table",
-          "label": "Date de l'isolation du plancher : ",
+          "label": "Isolation du plancher :",
           "labelPad": 5,
-          "labelWidth": 138,
+          //"labelWidth": 138,
           "content": [
             {
               "type": "ButtonGroup",
@@ -131,43 +132,43 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée à la construction",
+                  "label": "À la construction",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.A_LA_CONSTRUCTION"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée avant 1983",
+                  "label": "Avant 1983",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_AVANT_1983"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 1983 et 1988",
+                  "label": "Entre 1983 et 1988",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_1983_ET_1988"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 1989 et 2000",
+                  "label": "Entre 1989 et 2000",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_1989_ET_2000"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 2001 et 2005",
+                  "label": "Entre 2001 et 2005",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_2001_ET_2005"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 2006 et 2012",
+                  "label": "Entre 2006 et 2012",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_2006_ET_2012"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée après 2012",
+                  "label": "Après 2012",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_APRES_2012"
                 }
@@ -177,9 +178,9 @@
         },
         {
           "type": "Table",
-          "label": "Date de l'isolation du plafond : ",
+          "label": "Isolation du plafond :",
           "labelPad": 5,
-          "labelWidth": 138,
+          //"labelWidth": 138,
           "content": [
             {
               "type": "ButtonGroup",
@@ -200,43 +201,43 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée à la construction",
+                  "label": "À la construction",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.A_LA_CONSTRUCTION"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée avant 1983",
+                  "label": "Avant 1983",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_AVANT_1983"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 1983 et 1988",
+                  "label": "Entre 1983 et 1988",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_1983_ET_1988"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 1989 et 2000",
+                  "label": "Entre 1989 et 2000",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_1989_ET_2000"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 2001 et 2005",
+                  "label": "Entre 2001 et 2005",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_2001_ET_2005"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée entre 2006 et 2012",
+                  "label": "Entre 2006 et 2012",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_ENTRE_2006_ET_2012"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Isolation effectuée après 2012",
+                  "label": "Après 2012",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.slabproperties.DateIsolationSlab.EN_RENOVATION_APRES_2012"
                 }

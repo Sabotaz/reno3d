@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Informations relatives au chauffage",
-  "width": "30%",
+  "width": "45%",
   "id": "tab_window",
   "content": [
     {
@@ -22,7 +22,7 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Générateur unique (ex: une chaudière seule, pompe à chaleur seule)",
+                  "label": "Générateur unique (chaudière ou pompe à chaleur seule)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.InstallationChauffageEnum.CHAUFFAGE_UNIQUE"
                 },
@@ -141,7 +141,7 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Solution mixte (ex: radiateur+plancher chauffant)",
+                  "label": "Solution mixte (radiateur+plancher chauffant...)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Emission.SOLUTION_MIXTE"
                 }
@@ -167,7 +167,9 @@
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUFFAGE_UNIQUE",
               "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur"
+              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
+              "width": "40%",
+              "height": "65%"
             }
           ]
         }
@@ -191,7 +193,9 @@
               "align": "left",
               "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
               "indexMin":0,
-              "indexMax":26
+              "indexMax":26,
+              "width": "40%",
+              "height": "35%"
             }
           ]
         },
@@ -287,7 +291,9 @@
               "align": "left",
               "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
               "indexMin":1,
-              "indexMax":17
+              "indexMax":17,
+              "width": "40%",
+              "height": "35%"
             }
           ]
         },
@@ -304,15 +310,15 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Chaudière bois ancienne (age > 15 ans)",
+                  "label": "Chaudière bois ancienne (> 15 ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Chaudière bois ancienne (age > 15 ans)"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_BOIS_PLUS_DE_15_ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chaudière bois récente (age < 15 ans)",
+                  "label": "Chaudière bois récente (< 15 ans)",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Chaudière bois récente (age < 15 ans)"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_BOIS_MOINS_DE_15_ANS"
                 }
               ]
             }
@@ -338,7 +344,9 @@
               "align": "left",
               "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
               "indexMin":0,
-              "indexMax":19
+              "indexMax":19,
+              "width": "40%",
+              "height": "35%"
             }
           ]
         },
@@ -357,25 +365,25 @@
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/air",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/air"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_AIR"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/eau",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/eau"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_EAU"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur sur nappe",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur sur nappe"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_SUR_NAPPE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur géothermique",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur géothermique"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_GEOTHERMIQUE"
                 }
               ]
             }
@@ -401,7 +409,9 @@
               "align": "left",
               "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
               "indexMin":0,
-              "indexMax":19
+              "indexMax":19,
+              "width": "40%",
+              "height": "15%"
             }
           ]
         },
@@ -536,25 +546,25 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal ancien (age >= 15 ans)",
+                  "label": "Ballon électrique horizontal ancien (> 15 ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal récent (age < 15ans)",
+                  "label": "Ballon électrique horizontal récent (< 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique vertical ancien (age >= 15ans)",
+                  "label": "Ballon électrique vertical ancien (> 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique vertical récent (age < 15ans)",
+                  "label": "Ballon électrique vertical récent (< 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
                 },
@@ -572,37 +582,37 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date < 1991)",
+                  "label": "Chauffe-eau gaz (avant 1991)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date comprise entre 1991 et 2002)",
+                  "label": "Chauffe-eau gaz (entre 1991 et 2002)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date > 2003)",
+                  "label": "Chauffe-eau gaz (après 2003)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_SUP_2003"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date < 1991)",
+                  "label": "Accumulateur gaz classique (avant 1991)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date comprise entre 1991 et 2002)",
+                  "label": "Accumulateur gaz classique (entre 1991 et 2002)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1991_2002"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date > 2003)",
+                  "label": "Accumulateur gaz classique (après 2003)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2003"
                 },
@@ -642,25 +652,25 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal ancien (age >= 15 ans)",
+                  "label": "Ballon électrique horizontal ancien (> 15 ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal récent (age < 15ans)",
+                  "label": "Ballon électrique horizontal récent (< 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_INF_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique horizontal ancien (age >= 15ans)",
+                  "label": "Ballon électrique horizontal ancien (> 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_SUP_15ANS"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Ballon électrique vertical récent A(age < 15ans)",
+                  "label": "Ballon électrique vertical récent A (< 15ans)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.BALLON_ELECTRIQUE_VERTICAL_INF_15ANS"
                 },
@@ -678,37 +688,37 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date < 1991)",
+                  "label": "Chauffe-eau gaz (avant 1991)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date comprise entre 1991 et 2002)",
+                  "label": "Chauffe-eau gaz (entre 1991 et 2002)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_ENTRE_1991_2002"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Chauffe-eau gaz (date > 2003)",
+                  "label": "Chauffe-eau gaz (après 2003)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.CHAUFFE_EAU_GAZ_SUP_2003"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date < 1991)",
+                  "label": "Accumulateur gaz classique (avant 1991)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_INF_1991"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date comprise entre 1991 et 2002)",
+                  "label": "Accumulateur gaz classique (entre 1991 et 2002)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_ENTRE_1991_2002"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "Accumulateur gaz classique (date > 2003)",
+                  "label": "Accumulateur gaz classique (après 2003)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.ecsproperties.TypeEquipementEcsEnum.ACCUMULATEUR_GAZ_CLASSIQUE_SUP_2003"
                 },
@@ -771,7 +781,7 @@
         },
         {
           "type": "Table",
-          "label": "Le système de production d'eau chaude sanitaire est situé dans un local chauffé",
+          "label": "Système de production d'eau chaude\nsanitaire situé dans un local chauffé",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -827,7 +837,7 @@
         },
         {
           "type": "Table",
-          "label": "La chaudière se déclenche à l'ouverture du robinet d'eau chaude",
+          "label": "La chaudière se déclenche à l'ouverture\ndu robinet d'eau chaude",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -855,7 +865,7 @@
         },
         {
           "type": "Table",
-          "label": "Présence de robinet thermostatique sur les radiateurs",
+          "label": "Robinet thermostatique sur les radiateurs",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [
@@ -883,7 +893,7 @@
         },
         {
           "type": "Table",
-          "label": "Présence d'un thermostat d'ambiance ou d'une sonde de température extérieure",
+          "label": "Thermostat d'ambiance ou\nsonde de température extérieure",
           "labelPad" : 5,
           "labelWidth" : 516,
           "content": [

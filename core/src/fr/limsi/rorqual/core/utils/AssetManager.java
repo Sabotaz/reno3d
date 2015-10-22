@@ -245,12 +245,37 @@ public class AssetManager {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/FreeSans.ttf"));
         FreeTypeFontGenerator generatorTitle = new FreeTypeFontGenerator(Gdx.files.internal("data/fonts/FreeSansBold.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (20 * Gdx.graphics.getDensity());
 
-        font = (BitmapFont) loadOnUi(generator, parameter);
-        parameter.size = (int) (25 * Gdx.graphics.getDensity());
-        fontTitle = (BitmapFont) loadOnUi(generatorTitle, parameter);
-        buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
+
+        if (dpi <= 140) { // ldpi ~ 0.6x
+            parameter.size = 15;
+            font = (BitmapFont) loadOnUi(generator, parameter);
+            parameter.size = 17;
+            fontTitle = (BitmapFont) loadOnUi(generatorTitle, parameter);
+            parameter.size = 30;
+            buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
+        } else if (dpi <= 200) { // mdpi ~ 1x
+            parameter.size = (int) (15);
+            font = (BitmapFont) loadOnUi(generator, parameter);
+            parameter.size = (int) (20);
+            fontTitle = (BitmapFont) loadOnUi(generatorTitle, parameter);
+            parameter.size = (int) (25);
+            buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
+        } else if (dpi <= 380) { // hdpi ~ 1.5x
+            parameter.size = 30;
+            font = (BitmapFont) loadOnUi(generator, parameter);
+            parameter.size = 30;
+            fontTitle = (BitmapFont) loadOnUi(generatorTitle, parameter);
+            parameter.size = 50;
+            buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
+        } else { //xhdpi ~ 2x
+            parameter.size = 30;
+            font = (BitmapFont) loadOnUi(generator, parameter);
+            parameter.size = 32;
+            fontTitle = (BitmapFont) loadOnUi(generatorTitle, parameter);
+            parameter.size = 40;
+            buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
+        }
 
         //generator.dispose(); // don't forget to dispose to avoid memory leaks!
         assets.put("default.fnt", font);

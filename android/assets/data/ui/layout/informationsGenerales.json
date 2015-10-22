@@ -2,7 +2,7 @@
   "type": "TabWindow",
   "name": "Informations générales du logement",
   "id": "tab_window",
-  "width": "30%",
+  "width": "35%",
   "content": [
     {
       "type": "Table",
@@ -192,7 +192,7 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Double tarif (heures creuses/heures pleines)",
+                  "label": "Double tarif (heures pleines/heures creuses)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeAbonnementElectriqueEnum.DOUBLE_TARIF"
                 },
@@ -258,19 +258,19 @@
                 },
                 {
                   "type": "CheckBox",
-                  "label": "VMC auto-réglable (année d'installation < 1982)",
+                  "label": "VMC auto-réglable (installation avant 1982)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_AVANT_1982"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "VMC auto-réglable (année d'installation > 1982)",
+                  "label": "VMC auto-réglable (installation après 1982)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_APRES_1982"
                 },
                 {
                   "type": "CheckBox",
-                  "label": "VMC Hygro b",
+                  "label": "VMC Hygro B",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_HYGRO"
                 },
@@ -443,7 +443,9 @@
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.DEPARTEMENT_BATIMENT",
               "enum": "fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum",
-              "align": "left"
+              "align": "left",
+              "width": "30%",
+              "height": "20%"
             }
           ]
         },

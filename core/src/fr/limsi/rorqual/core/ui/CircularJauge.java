@@ -28,13 +28,13 @@ public class CircularJauge extends Widget {
 
     private enum Score {
         // 0 --A-- 50 --B-- 90 --C-- 150 --D-- 230 --E-- 330 --F-- 450 --G--
-        A(1,50,Color.valueOf("00f52c")),
-        B(51, 90,Color.valueOf("4dff2e")),
+        A(1,40,Color.valueOf("00ca2e")),
+        B(41, 90,Color.valueOf("4dff2e")),
         C(91,150,Color.valueOf("aeff30")),
         D(151,230,Color.valueOf("fcff31")),
         E(231,330,Color.valueOf("fcb325")),
         F(331,450,Color.valueOf("fc4f18")),
-        G(451,600,Color.valueOf("fc0014")),
+        G(451,600,Color.valueOf("b6000e")),
         ;
         //X(1,450,Color.valueOf("810f7c")),
         ;

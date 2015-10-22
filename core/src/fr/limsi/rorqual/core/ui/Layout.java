@@ -320,7 +320,7 @@ public class Layout {
             lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
             lbs.fontColor = Color.DARK_GRAY;
             Label label = new Label(json.getString("label"),lbs);
-            table.add(label).center().top().padBottom(5);
+            table.add(label)/*.center()*/.left().top().padBottom(5);
             table.row();
         }
 
@@ -824,7 +824,13 @@ public class Layout {
             }
         });
 
-        table.add(scrollPane).size(sizeMaxEnum * 7 + 50, 93).pad(5);
+        Value width = getValue(json, "width", null);
+        Value height = getValue(json, "height", null);
+
+        table.add(scrollPane)
+                //.size(sizeMaxEnum * 7 + 50, 93)
+                .size(width.get(null), height.get(null))
+                .pad(5);
         return table;
     }
 

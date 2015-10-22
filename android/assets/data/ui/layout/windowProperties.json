@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés de la fenêtre",
-  "width": 574,
+  "width": "35%",
   "id": "tab_window",
   "content": [
 //    {
@@ -129,7 +129,7 @@
         },
         {
           "type": "Table",
-          "label": "Fermeture : ",
+          "label": "Type de volets : ",
           "labelPad": 5,
           "labelWidth": 219,
           "content": [
@@ -140,7 +140,7 @@
               "content": [
                 {
                   "type": "CheckBox",
-                  "label": "Sans Fermeture",
+                  "label": "Aucun",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.SANS_FERMETURE"
                 },
@@ -183,10 +183,17 @@
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Masques",
+      "id": "vitrage_et_fermeture",
+      "content": [
         {
           "type": "Table",
-          "label": "Présence d'un masque proche\nobstruant le soleil (ex : balcon\ndu voisin d'au-dessus, auvent) : ",
+          "label": "Masque proche obstruant le soleil\n(balcon, auvent...)",
           "labelPad": 5,
           "labelWidth": 219,
           "content": [
@@ -214,7 +221,7 @@
         },
         {
           "type": "Table",
-          "label": "Présence d'un obstacle masquant\nle soleil en hiver (ex : arbre,\nautre construction) : ",
+          "label": "Obstacle masquant le soleil en hiver\n(arbre, autre construction...)",
           "labelPad": 5,
           "labelWidth": 219,
           "content": [
