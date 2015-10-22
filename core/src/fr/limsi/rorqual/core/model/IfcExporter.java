@@ -65,7 +65,9 @@ public class IfcExporter {
         Vector2 b = m.getB().getPosition();
         IfcCartesianPoint pointA1 = IfcHelper.getInstance().createCartesianPoint2D(a.x, a.y);
         IfcCartesianPoint pointA2 = IfcHelper.getInstance().createCartesianPoint2D(b.x, b.y);
-        return(IfcHelper.getInstance().addWall(e.getName(),"Mur",pointA1,pointA2,m.getDepth(),e.getHeight()));
+        IfcWallStandardCase wall = IfcHelper.getInstance().addWall(e.getName(),"Mur",pointA1,pointA2,m.getDepth(),e.getHeight());
+        IfcHelper.getInstance().addCoins(wall,a.x,a.y,b.x,b.y,m.getEtage().getNumber());
+        return wall;
     }
 
     private void loadSlab(Etage e, Slab s){

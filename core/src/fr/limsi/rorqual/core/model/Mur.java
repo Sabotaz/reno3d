@@ -87,7 +87,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             model.getSlabDroit().addMur(this);
 
         this.setEtage(model.getEtage());
-
     }
 
     public Mur(Coin a, Coin b) {

@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -284,6 +285,10 @@ public class IfcHelper {
             }
         }
         return null;
+    }
+
+    public Collection<IfcWallStandardCase> getAllWalls (){
+        return ifcModel.getCollection(IfcWallStandardCase.class);
     }
 
     // Permet de récuperer l'épaisseur d'un wall dans le model
@@ -1163,7 +1168,7 @@ public class IfcHelper {
         // Calcul of openingThickness = wallThickness
         float openingThickness = this.getWallThickness(wall);
 
-        IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal,-openingThickness/2,zLocal);
+        IfcCartesianPoint localPointOpening = createCartesianPoint3D(xLocal, -openingThickness / 2, zLocal);
         IfcDirection zLocalOpening = createDirection3D(0.0f,0.0f,1.0f);
         IfcDirection xLocalOpening = createDirection3D(1.0f, 0.0f, 0.0f);
         IfcAxis2Placement3D placementOpening = new IfcAxis2Placement3D(
@@ -1247,7 +1252,7 @@ public class IfcHelper {
         LIST<IfcRepresentation> openingRepresentationsList = new LIST<IfcRepresentation>();
 
         // Opening geometry with extruded area solid placement
-        IfcDirection zLocalExtrusion = createDirection3D(0.0f,0.0f,1.0f);
+        IfcDirection zLocalExtrusion = createDirection3D(0.0f, 0.0f, 1.0f);
         IfcDirection xLocalExtrusion = createDirection3D(1.0f, 0.0f, 0.0f);
         IfcCartesianPoint centerOpening = createCartesianPoint3D(openingWidth / 2, openingHeight / 2, 0.0f);
         IfcAxis2Placement3D placementCenterOpening = new IfcAxis2Placement3D(
@@ -2245,6 +2250,95 @@ public class IfcHelper {
         window.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
+    public void addCoins(IfcProduct product, float xA, float yA, float xB, float yB, int elevation){
+
+        boolean hasProperties=false;
+        boolean hasSameProperty=false;
+
+        // On créer la property
+        IfcIdentifier nameProperty = new IfcIdentifier(Propertie.COINS.getName(),true);
+        IfcValue valueProperty = new IfcIdentifier(xA+"$"+yA+"$"+xB+"$"+yB+"$"+elevation,true);
+        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
+
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null){
+            for (IfcRelDefines actualRelDefines : relDefinesSET){
+                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
+                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
+                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                        if (propertySetDefinition instanceof IfcPropertySet){
+                            hasProperties=true;
+                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                            for (IfcProperty actualProperty : propertySET){
+                                if (actualProperty instanceof IfcPropertySingleValue){
+                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
+                                        hasSameProperty=true;
+                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
+                                    }
+                                }
+                            }
+                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
+                                propertySET.add(property);
+                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
+                                ifcModel.addIfcObject(property);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
+        if (!hasProperties){
+            SET<IfcProperty> propertySET = new SET<IfcProperty>();
+            propertySET.add(property);
+            IfcPropertySet propertySet = new IfcPropertySet(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    new IfcLabel("3DReno-Properties",true),null,propertySET);
+            SET<IfcObject> objectSET = new SET<IfcObject>();
+            objectSET.add(product);
+            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
+                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
+                    null,null,objectSET,propertySet);
+            ifcModel.addIfcObject(propertySet);
+            ifcModel.addIfcObject(property);
+            ifcModel.addIfcObject(relDefinesByProperties);
+        }
+    }
+
+    // Permet de récupérer les propriétées liées à une door
+    public HashMap<String,String> get3DRenoProperties(IfcProduct product) {
+        HashMap<String, String> hm = new HashMap<String, String>();
+        // On va voir si des propriétés existent déja
+        SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
+        if (relDefinesSET != null) {
+            for (IfcRelDefines actualRelDefines : relDefinesSET) {
+                if (actualRelDefines instanceof IfcRelDefinesByProperties) { // des propriétés éxistent déja sur l'objet
+                    String namePropertie = ((((IfcRelDefinesByProperties) actualRelDefines)).getRelatingPropertyDefinition().getName().toString());
+                    if("3DReno-Properties".equals(namePropertie)){ // On ne prend en compte que nos propriétées
+                        SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
+                        for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET) {
+                            IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
+                            if (propertySetDefinition instanceof IfcPropertySet) {
+                                SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
+                                for (IfcProperty actualProperty : propertySET) {
+                                    if(actualProperty instanceof IfcPropertySingleValue){
+                                        String key = actualProperty.getName().toString();
+                                        String value = ((IfcPropertySingleValue) actualProperty).getNominalValue().toString();
+                                        hm.put(key,value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return hm;
+    }
+
     // Permet d'exporter le model au format .ifc
     public void saveIfcModel(){
         File saveStepFile = new File("data/ifc/coucou.ifc");
@@ -2256,194 +2350,28 @@ public class IfcHelper {
         }
     }
 
-//    // Permet de créer notre appt de test
-//    public void createApartmentTest(){
-//        // Create all the points
-//        IfcCartesianPoint pointA1 = createCartesianPoint2D(0,-0.0f9);
-//        IfcCartesianPoint pointA2 = createCartesianPoint2D(1.40,-0.0f9);
-//        IfcCartesianPoint pointB1 = createCartesianPoint2D(1.49,0);
-//        IfcCartesianPoint pointB2 = createCartesianPoint2D(1.49,-1.25);
-//        IfcCartesianPoint pointC1 = createCartesianPoint2D(1.58,-1.16);
-//        IfcCartesianPoint pointC2 = createCartesianPoint2D(8.62,-1.16);
-//        IfcCartesianPoint pointD1 = createCartesianPoint2D(8.53,-1.25);
-//        IfcCartesianPoint pointD2 = createCartesianPoint2D(8.53,-4.96);
-//        IfcCartesianPoint pointE1 = createCartesianPoint2D(8.44,-5.05);
-//        IfcCartesianPoint pointE2 = createCartesianPoint2D(10.44,-5.05);
-//        IfcCartesianPoint pointF1 = createCartesianPoint2D(10.35,-5.14);
-//        IfcCartesianPoint pointF2 = createCartesianPoint2D(10.35,-12.15);
-//        IfcCartesianPoint pointG1 = createCartesianPoint2D(10.26,-12.06);
-//        IfcCartesianPoint pointG2 = createCartesianPoint2D(5.82,-12.06);
-//        IfcCartesianPoint pointH1 = createCartesianPoint2D(5.91,-11.97);
-//        IfcCartesianPoint pointH2 = createCartesianPoint2D(5.91,-9.03);
-//        IfcCartesianPoint pointI1 = createCartesianPoint2D(5.82,-9.12);
-//        IfcCartesianPoint pointI2 = createCartesianPoint2D(0,-9.12);
-//        IfcCartesianPoint pointJ1 = createCartesianPoint2D(0.0f9,-9.03);
-//        IfcCartesianPoint pointJ2 = createCartesianPoint2D(0.0f9,-0.18);
-//        IfcCartesianPoint pointK1 = createCartesianPoint2D(1.435,-1.25);
-//        IfcCartesianPoint pointK2 = createCartesianPoint2D(1.435,-2.89);
-//        IfcCartesianPoint pointL1 = createCartesianPoint2D(0.18,-2.925);
-//        IfcCartesianPoint pointL2 = createCartesianPoint2D(4.75,-2.925);
-//        IfcCartesianPoint pointM1 = createCartesianPoint2D(4.785,-1.25);
-//        IfcCartesianPoint pointM2 = createCartesianPoint2D(4.785,-5.14);
-//        IfcCartesianPoint pointN1 = createCartesianPoint2D(4.82,-5.105);
-//        IfcCartesianPoint pointN2 = createCartesianPoint2D(8.44,-5.105);
-//        IfcCartesianPoint pointO1 = createCartesianPoint2D(7.005,-5.14);
-//        IfcCartesianPoint pointO2 = createCartesianPoint2D(7.005,-9.03);
-//        IfcCartesianPoint pointP1 = createCartesianPoint2D(6.00,-9.065);
-//        IfcCartesianPoint pointP2 = createCartesianPoint2D(10.26,-9.065);
-//        IfcCartesianPoint hall1 = createCartesianPoint2D(0.18,-0.18);
-//        IfcCartesianPoint hall2 = createCartesianPoint2D(1.40,-0.18);
-//        IfcCartesianPoint hall3 = createCartesianPoint2D(1.40,-2.89);
-//        IfcCartesianPoint hall4 = createCartesianPoint2D(0.18,-2.89);
-//        IfcCartesianPoint sdb1 = createCartesianPoint2D(1.47,-1.25);
-//        IfcCartesianPoint sdb2 = createCartesianPoint2D(4.75,-1.25);
-//        IfcCartesianPoint sdb3 = createCartesianPoint2D(4.75,-2.89);
-//        IfcCartesianPoint sdb4 = createCartesianPoint2D(1.47,-2.89);
-//        IfcCartesianPoint chamberOne1 = createCartesianPoint2D(4.82,-1.25);
-//        IfcCartesianPoint chamberOne2 = createCartesianPoint2D(8.44,-1.25);
-//        IfcCartesianPoint chamberOne3 = createCartesianPoint2D(8.44,-5.07);
-//        IfcCartesianPoint chamberOne4 = createCartesianPoint2D(4.82,-5.07);
-//        IfcCartesianPoint chamberTwo1 = createCartesianPoint2D(7.04,-5.14);
-//        IfcCartesianPoint chamberTwo2 = createCartesianPoint2D(10.26,-5.14);
-//        IfcCartesianPoint chamberTwo3 = createCartesianPoint2D(10.26,-9.03);
-//        IfcCartesianPoint chamberTwo4 = createCartesianPoint2D(7.04,-9.03);
-//        IfcCartesianPoint chamberThree1 = createCartesianPoint2D(6.00,-9.10);
-//        IfcCartesianPoint chamberThree2 = createCartesianPoint2D(10.26,-9.10);
-//        IfcCartesianPoint chamberThree3 = createCartesianPoint2D(10.26,-11.97);
-//        IfcCartesianPoint chamberThree4 = createCartesianPoint2D(6.00,-11.97);
-//        IfcCartesianPoint salon1 = createCartesianPoint2D(0.18,-2.96);
-//        IfcCartesianPoint salon2 = createCartesianPoint2D(4.75,-2.96);
-//        IfcCartesianPoint salon3 = createCartesianPoint2D(4.75,-5.14);
-//        IfcCartesianPoint salon4 = createCartesianPoint2D(6.97,-5.14);
-//        IfcCartesianPoint salon5 = createCartesianPoint2D(6.97,-9.03);
-//        IfcCartesianPoint salon6 = createCartesianPoint2D(0.18,-9.03);
-//
-//        // Create all the walls
-//        addWall("1st floor","WallExt A",pointA1,pointA2,0.18);
-//        addWall("1st floor","WallExt B",pointB1,pointB2,0.18);
-//        addWall("1st floor","WallExt C",pointC1,pointC2,0.18);
-//        addWall("1st floor","WallExt D",pointD1,pointD2,0.18);
-//        addWall("1st floor","WallExt E",pointE1,pointE2,0.18);
-//        addWall("1st floor","WallExt F",pointF1,pointF2,0.18);
-//        addWall("1st floor","WallExt G",pointG1,pointG2,0.18);
-//        addWall("1st floor","WallExt H",pointH1,pointH2,0.18);
-//        addWall("1st floor","WallExt I",pointI1,pointI2,0.18);
-//        addWall("1st floor","WallExt J",pointJ1,pointJ2,0.18);
-//        addWall("1st floor","WallInt K",pointK1,pointK2,0.0f7);
-//        addWall("1st floor","WallInt L",pointL1,pointL2,0.0f7);
-//        addWall("1st floor","WallInt M",pointM1,pointM2,0.0f7);
-//        addWall("1st floor","WallInt N",pointN1,pointN2,0.0f7);
-//        addWall("1st floor","WallInt O",pointO1,pointO2,0.0f7);
-//        addWall( "1st floor", "WallInt P", pointP1, pointP2, 0.0f7);
-//        IfcWallStandardCase wallA = getWall("WallExt A");
-//        IfcWallStandardCase wallB = getWall("WallExt B");
-//        IfcWallStandardCase wallC = getWall("WallExt C");
-//        IfcWallStandardCase wallD = getWall("WallExt D");
-//        IfcWallStandardCase wallE = getWall("WallExt E");
-//        IfcWallStandardCase wallF = getWall("WallExt F");
-//        IfcWallStandardCase wallG = getWall("WallExt G");
-//        IfcWallStandardCase wallH = getWall("WallExt H");
-//        IfcWallStandardCase wallI = getWall("WallExt I");
-//        IfcWallStandardCase wallJ = getWall("WallExt J");
-//        IfcWallStandardCase wallK = getWall("WallInt K");
-//        IfcWallStandardCase wallL = getWall("WallInt L");
-//        IfcWallStandardCase wallM = getWall("WallInt M");
-//        IfcWallStandardCase wallN = getWall("WallInt N");
-//        IfcWallStandardCase wallO = getWall("WallInt O");
-//        IfcWallStandardCase wallP = getWall("WallInt P");
-//
-//        // Create all the slabs
-//        LIST<IfcCartesianPoint> hall = new LIST<IfcCartesianPoint>();
-//        hall.add(hall1);
-//        hall.add(hall2);
-//        hall.add(hall3);
-//        hall.add(hall4);
-//        LIST<IfcCartesianPoint> sdb = new LIST<IfcCartesianPoint>();
-//        sdb.add(sdb1);
-//        sdb.add(sdb2);
-//        sdb.add(sdb3);
-//        sdb.add(sdb4);
-//        LIST<IfcCartesianPoint> chamber1 = new LIST<IfcCartesianPoint>();
-//        chamber1.add(chamberOne1);
-//        chamber1.add(chamberOne2);
-//        chamber1.add(chamberOne3);
-//        chamber1.add(chamberOne4);
-//        LIST<IfcCartesianPoint> chamber2 = new LIST<IfcCartesianPoint>();
-//        chamber2.add(chamberTwo1);
-//        chamber2.add(chamberTwo2);
-//        chamber2.add(chamberTwo3);
-//        chamber2.add(chamberTwo4);
-//        LIST<IfcCartesianPoint> chamber3 = new LIST<IfcCartesianPoint>();
-//        chamber3.add(chamberThree1);
-//        chamber3.add(chamberThree2);
-//        chamber3.add(chamberThree3);
-//        chamber3.add(chamberThree4);
-//        LIST<IfcCartesianPoint> salon = new LIST<IfcCartesianPoint>();
-//        salon.add(salon1);
-//        salon.add(salon2);
-//        salon.add(salon3);
-//        salon.add(salon4);
-//        salon.add(salon5);
-//        salon.add(salon6);
-//        addSlab("1st floor", hall);
-//        addSlab("1st floor", sdb);
-//        addSlab("1st floor", chamber1);
-//        addSlab("1st floor", chamber2);
-//        addSlab("1st floor", chamber3);
-//        addSlab("1st floor", salon);
-//
-//        // Create all the doors
-//        addDoor("door A",wallA,0.94,2.13,0.32);
-//        addDoor("door K",wallK,0.90,2.04,0.37);
-//        addDoor("door L",wallL,0.90,2.04,0.16);
-//        addDoor("door N",wallN,0.90,2.04,0.625);
-//        addDoor("door O",wallO,0.90,2.04,0.270);
-//        addDoor("door P",wallP,0.80,2.04,0.0f85);
-//
-//        // Create all the windows
-//        addWindow("window D",wallD,1.0f0,1.50,1.47,0.50);
-//        addWindow("window F",wallF,1.0f0,1.50,1.395,0.50);
-//        addWindow("window I1",wallI,1.0f0,1.50,3.75,0.50);
-//        addWindow("window I2",wallI,2.00,1.50.0f.70.0f.50);
-//        addWindow("window G",wallG,1.0f0,1.50,1.63,0.50);
-//    }
+    // Permet d'exporter le model au format .ifc
+    public void saveIfcModel2(){
+        File saveStepFile = new File("data/ifc/coucou2.ifc");
+        try {
+            ifcModel.writeStepfile(saveStepFile);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-//    // Permet de créer un second appartement test (plus simple)
-//    public void createSecondAppartementTest(){
-//        IfcCartesianPoint pointA = createCartesianPoint2D(0,-0.18f);
-//        IfcCartesianPoint pointB = createCartesianPoint2D(4,-0.18f);
-//        IfcCartesianPoint pointC = createCartesianPoint2D(4,-3);
-//        IfcCartesianPoint pointD = createCartesianPoint2D(0,-3);
-//        IfcCartesianPoint pointA1 = createCartesianPoint2D(-0.18,-0.09f);
-//        IfcCartesianPoint pointA2 = createCartesianPoint2D(4.18,-0.09f);
-//        IfcCartesianPoint pointB1 = createCartesianPoint2D(-0.0f9,0);
-//        IfcCartesianPoint pointB2 = createCartesianPoint2D(-0.0f9,-3);
-//        IfcCartesianPoint pointC1 = createCartesianPoint2D(4.09,0);
-//        IfcCartesianPoint pointC2 = createCartesianPoint2D(4.09,-3);
-//        IfcCartesianPoint pointD1 = createCartesianPoint2D(-0.18,-3.09);
-//        IfcCartesianPoint pointD2 = createCartesianPoint2D(4.18,-3.09);
-//        addWall("1st floor","WallExt A",pointA2,pointA1.0f.18);
-//        addWall("1st floor","WallExt B",pointB1,pointB2,0.18);
-//        addWall("1st floor","WallExt C",pointC2,pointC1.0f.18);
-//        addWall("1st floor","WallExt D",pointD1,pointD2,0.18);
-//        IfcWallStandardCase wallA = getWall("WallExt A");
-//        IfcWallStandardCase wallB = getWall("WallExt B");
-//        IfcWallStandardCase wallC = getWall("WallExt C");
-//        IfcWallStandardCase wallD = getWall("WallExt D");
-//        LIST<IfcCartesianPoint> hall = new LIST<IfcCartesianPoint>();
-//        hall.add(pointA);
-//        hall.add(pointB);
-//        hall.add(pointC);
-//        hall.add(pointD);
-//        addSlab("1st floor", hall);
-//        addDoor("door A", wallA, 0.98, 2.13, 1.5);
-//        addDoor("door B", wallC, 0.94, 2.13, 1.1);
-//        addWindow("window C", wallB, 1.0f0, 1.50, 1.5, 0.50);
-//        addWindow("window D", wallD, 1.0f0, 1.50, 1.5, 0.50);
-//        addBuildingStorey("2nd floor", 2.80);
-//        addBuildingStorey("3rd floor",5.60);
-//        addSlab("2nd floor", hall);
-//        addSlab("3rd floor", hall);
+    // Permet d'importer le model au format .ifc
+    public void loadIfcModel(){
+        this.ifcModel = new IfcModel();
+        File loadStepFile = new File("data/ifc/coucou.ifc");
+        try {
+            ifcModel.readStepFile(loadStepFile);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }
 
 

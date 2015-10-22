@@ -234,15 +234,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         state = new DpeStateUpdater(modelGraph);
 
         dpe=Dpe.getInstance();
-        double scoreDpe=dpe.getScoreDpe();
         score.setCurrentValue((float)dpe.getScoreDpe());
-        skin = (Skin)AssetManager.getInstance().get("uiskin");
-        labelScore= new Label("("+Double.toString(scoreDpe)+")",skin);
-        stageMenu.addActor(labelScore);
-        lettreScore=new Label("F",skin);
-        labelScore.setPosition(20, 0);
-        stageMenu.addActor(lettreScore);
-        System.out.println("dpe ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         setLoadingMessage("Loading models library...");
 
@@ -269,23 +261,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         score.setConsignValue((float) dpe.getScoreDpe());
 
-        double score = dpe.getScoreDpe();
-        labelScore.setText("("+Double.toString(score)+")");
-        if(score<=50){
-            lettreScore.setText("A");
-        }else if (score <=90){
-            lettreScore.setText("B");
-        }else if (score <=150){
-            lettreScore.setText("C");
-        }else if (score <=230){
-            lettreScore.setText("D");
-        }else if (score <=330){
-            lettreScore.setText("E");
-        }else if (score <=450){
-            lettreScore.setText("F");
-        }else if (score > 450){
-            lettreScore.setText("G");
-        }
         synchronized (stageMenu) {
             stageMenu.act();
         }

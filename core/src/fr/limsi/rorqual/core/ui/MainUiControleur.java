@@ -25,6 +25,7 @@ import fr.limsi.rorqual.core.logic.Deleter;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.IfcExporter;
+import fr.limsi.rorqual.core.model.IfcImporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.utils.AssetManager;
@@ -237,6 +238,10 @@ public class MainUiControleur implements EventListener {
                             removeTb();
                             Deleter.deleteBatiment();
                             CameraEngine.getInstance().reset();
+                            break;
+                        case IMPORT_IFC:
+//                            Deleter.deleteBatiment();
+//                            IfcImporter.getInstance().realiseImportIfc();
                             break;
                         default:
                             System.out.println(lastValue);
