@@ -37,6 +37,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.UiEvent;
@@ -234,7 +235,10 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         state = new DpeStateUpdater(modelGraph);
 
         dpe=Dpe.getInstance();
-        score.setCurrentValue((float)dpe.getScoreDpe());
+        score.setCurrentValue(dpe.getScoreDpe());
+
+        DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES);
+        DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
 
         setLoadingMessage("Loading models library...");
 

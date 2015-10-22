@@ -34,22 +34,19 @@ public class DpeUi  {
         if (o instanceof Fenetre || o instanceof PorteFenetre) {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
             return a;
-        }
-        if (o instanceof Mur) {
+        } else if (o instanceof Mur) {
             Actor a = Layout.fromJson("data/ui/layout/wallProperties.json", o).getRoot();
             return a;
-        }
-        if (o instanceof Slab) {
+        } else if (o instanceof Slab) {
             Actor a = Layout.fromJson("data/ui/layout/slabProperties.json", o).getRoot();
             return a;
-        }
-        if (o instanceof Objet) {
+        } else if (o instanceof Objet) {
             Actor a = makeObjetTab((Objet) o);
             return a;
         }
 
-        if(o == DpeEvent.INFOS_GENERALES){
-            Actor a = null;
+        else if(o == DpeEvent.INFOS_GENERALES){
+            Actor a;
             if (!sauvegarde_layout.containsKey(DpePropertiesEnum.GENERAL)){
                 Layout l = Layout.fromJson("data/ui/layout/informationsGenerales.json", null);
                 a = l.getRoot();
@@ -59,9 +56,8 @@ public class DpeUi  {
                 a = l.getRoot();
             }
             return a;
-        }
-        if(o == DpeEvent.INFOS_CHAUFFAGE){
-            Actor a = null;
+        } else if(o == DpeEvent.INFOS_CHAUFFAGE){
+            Actor a;
             if (!sauvegarde_layout.containsKey(DpePropertiesEnum.CHAUFFAGE)){
                 Layout l = Layout.fromJson("data/ui/layout/chauffageProperties.json", null);
                 a = l.getRoot();

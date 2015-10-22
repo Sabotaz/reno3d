@@ -65,7 +65,7 @@ public class EventManager {
 
                 while (running) { // s'il y a des événements, on notifie les listeners
                     try {
-                        Event e = eventQueue.poll(100, TimeUnit.MILLISECONDS);
+                        Event e = eventQueue.poll(15, TimeUnit.MILLISECONDS);
                         if (e != null) {
                             synchronized (listeners) {
                                 for (EventListener l : listeners) {

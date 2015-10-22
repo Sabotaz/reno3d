@@ -107,6 +107,7 @@ public class Layout {
         }
 
         public Object getDefaultValue() {
+            long l = System.currentTimeMillis();
             while (!default_value_received) {
                 try {
                     Thread.sleep(10);
@@ -114,6 +115,9 @@ public class Layout {
 
                 }
             }
+            System.out.println(eventType);
+            System.out.println("waiting default value : " + (System.currentTimeMillis() - l) + "ms");
+            System.out.println(default_value);
             return default_value;
         }
 
