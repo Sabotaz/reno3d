@@ -4,8 +4,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
@@ -75,5 +77,11 @@ public class OuverturePlane extends ModelContainer {
             }
         }
         this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
+    }
+
+    @Override
+    protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform) {
+        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
+        super.draw(modelBatch, environment, type, global_transform);
     }
 }
