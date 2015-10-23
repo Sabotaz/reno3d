@@ -278,4 +278,13 @@ public class Batiment {
         return modelContainer;
     }
 
+    public void setEtage(int i) {
+        current = i; // etage
+        getCurrentEtage().getModelGraph().getRoot().add(floor);
+    }
+
+    public void reset() {
+        setEtage(0);
+    }
+
 }

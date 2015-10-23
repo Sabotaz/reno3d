@@ -161,6 +161,7 @@ public class Deleter extends ModelMaker {
                 deleteSlab(s);
             }
         }
+        bat.reset();
     }
 
     static public void deleteObjet(Objet o) {
