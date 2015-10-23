@@ -122,6 +122,7 @@ public class MainUiControleur implements EventListener {
                             Gdx.app.exit();
                             break;
                         case SWITCH_2D_3D:
+                            Logic.getInstance().stop();
                             uncheckGeneralButtons();
                             uncheckControlButtons();
                             removeTb();
@@ -219,11 +220,19 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case ETAGE_PLUS:
+                            Logic.getInstance().stop();
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
                             ModelHolder.getInstance().getBatiment().etageSuperieur();
                             CameraEngine.getInstance().getCurrentCameraUpdater().reset();
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                             break;
                         case ETAGE_MINUS:
+                            Logic.getInstance().stop();
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
                             ModelHolder.getInstance().getBatiment().etageInferieur();
                             CameraEngine.getInstance().getCurrentCameraUpdater().reset();
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
@@ -238,10 +247,21 @@ public class MainUiControleur implements EventListener {
                             removeTb();
                             Deleter.deleteBatiment();
                             CameraEngine.getInstance().reset();
+
+                            ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
+                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case IMPORT_IFC:
+                            Logic.getInstance().stop();
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
 //                            Deleter.deleteBatiment();
 //                            IfcImporter.getInstance().realiseImportIfc();
+                            CameraEngine.getInstance().reset();
+
+                            ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
+                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         default:
                             System.out.println(lastValue);
