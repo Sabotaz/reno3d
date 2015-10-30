@@ -55,14 +55,18 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     private TypeIsolationSlab typeIsolationPlancher;
     private float surface;
     private Etage etage = null;
-
     private boolean changed = true;
-
     private List<Coin> coins;
     private ArrayList <Mur> murs = new ArrayList<Mur>();
     private ArrayList <Objet> objets = new ArrayList<Objet>();
     private float height;
     private Polygon polygon;
+    private boolean valide = false;
+    private MaterialTypeEnum plafond = MaterialTypeEnum.PIERRE;
+    private MaterialTypeEnum plancher = MaterialTypeEnum.PARQUET;
+    private Material plafondMaterial = new Material();
+    private Material plancherMaterial = new Material();
+    boolean areMaterialSet = false;
 
     public Slab(List<Coin> coins) {
         this(coins, DEFAULT_HEIGHT);
@@ -172,16 +176,6 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         return coins;
     }
 
-    private boolean valide = false;
-
-    MaterialTypeEnum plafond = MaterialTypeEnum.PIERRE;
-    MaterialTypeEnum plancher = MaterialTypeEnum.PARQUET;
-
-    Material plafondMaterial = new Material();
-    Material plancherMaterial = new Material();
-
-    boolean areMaterialSet = false;
-
     private void makeMaterials() {
         setMaterial(plafondMaterial, plafond);
         setMaterial(plancherMaterial, plancher);
@@ -259,7 +253,6 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         makeMesh();
         changed = false;
     }
-
 
     public void setChanged() {
         changed = true;

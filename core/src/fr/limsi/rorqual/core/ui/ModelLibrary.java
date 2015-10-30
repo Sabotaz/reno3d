@@ -192,7 +192,6 @@ public class ModelLibrary {
                     .scale(0.01f * width / b.getWidth(), 0.01f * height / b.getHeight(), 0.01f * depth / b.getDepth())
                     .rotate(1, 0, 0, 90)
                     ;
-
         }
 
         private ModelContainer newInstance() {

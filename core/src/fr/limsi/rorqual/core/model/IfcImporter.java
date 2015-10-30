@@ -32,6 +32,10 @@ public class IfcImporter {
         this.loadMurs();
     }
 
+    private void loadSlabs(){
+
+    }
+
     private void loadMurs(){
         Collection<IfcWallStandardCase> tabMurs = IfcHelper.getInstance().getAllWalls();
         for(IfcWallStandardCase wall : tabMurs){

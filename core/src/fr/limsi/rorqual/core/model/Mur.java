@@ -60,14 +60,21 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private float deperdition;
     private Slab slabGauche = null;
     private Slab slabDroit = null;
-
     private ArrayList<Coin> coins = new ArrayList<Coin>();
-
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
-
     private Etage etage = null;
-
     private boolean changed = true;
+    private boolean areMaterialSet = false;
+    private MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
+    private MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.WALL2;
+    private MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.WALL2;
+    private MaterialTypeEnum defaultMaterialType = MaterialTypeEnum.BETON;
+    private Material exteriorMaterial = new Material();
+    private Material interiorMaterial1 = new Material();
+    private Material interiorMaterial2 = new Material();
+    private Material defaultMaterial = new Material();
+    private boolean isCreated = false;
+    private Model model_non_perce = null;
 
     public Mur(Coin a, Coin b, Mur model) {
         this(a, b, model.depth);
@@ -108,13 +115,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.dateIsolationMur=DateIsolationMurEnum.INCONNUE;
         this.orientationMur=OrientationEnum.NORD;
     }
-
-    boolean areMaterialSet = false;
-
-    MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
-    MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.WALL1;
-    MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.WALL1;
-    MaterialTypeEnum defaultMaterialType = MaterialTypeEnum.BETON;
 
     private void makeMaterials() {
         setMaterial(exteriorMaterial, exteriorMaterialType);
@@ -261,13 +261,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         anchors.add(B);
         return anchors;
     }
-
-    private Model model_non_perce = null;
-
-    Material exteriorMaterial = new Material();
-    Material interiorMaterial1 = new Material();
-    Material interiorMaterial2 = new Material();
-    Material defaultMaterial = new Material();
 
     private void makeMesh() {
         if (A == null || B == null || B.getPosition().equals(A.getPosition()))
@@ -420,8 +413,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public Slab getSlabGauche() {
         return slabGauche;
     }
-
-    boolean isCreated = false;
 
     public void setCreated() {
         isCreated = true;

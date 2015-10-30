@@ -26,7 +26,14 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 //  * orientation globale du batiment
 public class Batiment {
 
-    ModelContainer floor = Floor.getModel();
+    private ModelContainer floor = Floor.getModel();
+    private Etage first;
+    private Etage last;
+    private int current;
+    private OrientationEnum globalOrientation = OrientationEnum.SUD;
+    private Camera camera = null;
+    private EtageHolder etages = new EtageHolder();
+
 
     private class EtageHolder {
 
@@ -68,10 +75,6 @@ public class Batiment {
 
     }
 
-    private EtageHolder etages = new EtageHolder();
-
-    int current;
-
     public Batiment() {
         current = 0;
         Etage etage = new Etage();
@@ -86,8 +89,6 @@ public class Batiment {
     public Etage getCurrentEtage() {
         return etages.get(current);
     }
-
-    OrientationEnum globalOrientation = OrientationEnum.SUD;
 
     public void setGlobalOrientation(OrientationEnum orientation) {
         globalOrientation = orientation;
@@ -166,8 +167,6 @@ public class Batiment {
         }
     }
 
-    private Camera camera = null;
-
     public void setCamera(Camera camera) {
         this.camera = camera;
         for (Etage etage : etages.list()) {
@@ -188,9 +187,6 @@ public class Batiment {
             all.addAll(etage.getSlabs());
         return all;
     }
-
-    private Etage first;
-    private Etage last;
 
     public void emptinessChanged(Etage etage) {
         if (etage.isEmpty()) { // c'est qu'on a enlevé des trucs
@@ -248,6 +244,7 @@ public class Batiment {
                 return etages.get(i);
         return null;
     }
+
     private Etage searchNewLast() {
         for (int i = etages.getMax(); i >= etages.getMin(); i--)
             if (!etages.get(i).isEmpty())

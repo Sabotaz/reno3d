@@ -10,6 +10,7 @@ public enum MaterialTypeEnum {
     PARQUET("wood-floorboards-texture",null),
     BETON("beton",null),
     WALL1("wall_1",null),
+    WALL2("wall_2",null),
     ;
 
     private String diffuse;
