@@ -116,6 +116,26 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.orientationMur=OrientationEnum.NORD;
     }
 
+    public void setInteriorMaterialType1(MaterialTypeEnum mat) {
+        interiorMaterialType1 = mat;
+        areMaterialSet = false;
+    }
+
+    public void setInteriorMaterialType2(MaterialTypeEnum mat) {
+        interiorMaterialType2 = mat;
+        areMaterialSet = false;
+    }
+
+    public void setExteriorMaterialType(MaterialTypeEnum mat) {
+        exteriorMaterialType = mat;
+        areMaterialSet = false;
+    }
+
+    public void setDefaultMaterialType(MaterialTypeEnum mat) {
+        defaultMaterialType = mat;
+        areMaterialSet = false;
+    }
+    
     private void makeMaterials() {
         setMaterial(exteriorMaterial, exteriorMaterialType);
         setMaterial(interiorMaterial1, interiorMaterialType1);

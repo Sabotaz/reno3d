@@ -11,6 +11,9 @@ public enum MaterialTypeEnum {
     BETON("beton",null),
     WALL1("wall_1",null),
     WALL2("wall_2",null),
+    WALL3("wall_3",null),
+    WALL4("wall_4",null),
+    WALL5("wall_5",null),
     ;
 
     private String diffuse;

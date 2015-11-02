@@ -54,14 +54,78 @@ public abstract class ModelMaker {
 
         // anchor-aligned drawing
         ArrayList<Anchor> coins_align = new ArrayList<Anchor>();
+        ArrayList<Anchor> coins_grid_align = new ArrayList<Anchor>();
+        ArrayList<Anchor> coins_grid_align2 = new ArrayList<Anchor>();
         for (Coin coin : c) {
             Vector2 projx = intersection.cpy();
             projx.x = coin.getPosition().x;
             coins_align.add(new Anchor(Coin.getCoin(etage, projx)));
+
             // add the projection on Y
             Vector2 projy = intersection.cpy();
             projy.y = coin.getPosition().y;
             coins_align.add(new Anchor(Coin.getCoin(etage, projy)));
+
+            // anchor aligned + grid
+            Vector2 p0 = projx.cpy();
+            Vector2 p1 = projx.cpy();
+            Vector2 p2 = projx.cpy();
+            Vector2 p3 = projx.cpy();
+            float scale = 10;
+            p0.y = (float) Math.ceil(p0.y * scale)/scale;
+            p1.y = (float) Math.floor(p1.y * scale)/scale;
+            p2.y = (float) Math.ceil(p2.y * scale)/scale;
+            p3.y = (float) Math.floor(p3.y * scale)/scale;
+
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p0)));
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p1)));
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p2)));
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p3)));
+
+            p0 = projy.cpy();
+            p1 = projy.cpy();
+            p2 = projy.cpy();
+            p3 = projy.cpy();
+            p0.x = (float) Math.ceil(p0.x * scale)/scale;
+            p1.x = (float) Math.floor(p1.x * scale)/scale;
+            p2.x = (float) Math.ceil(p2.x * scale)/scale;
+            p3.x = (float) Math.floor(p3.x * scale)/scale;
+
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p0)));
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p1)));
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p2)));
+            coins_grid_align.add(new Anchor(Coin.getCoin(etage, p3)));
+
+            scale = 1;
+
+            p0 = projx.cpy();
+            p1 = projx.cpy();
+            p2 = projx.cpy();
+            p3 = projx.cpy();
+            p0.y = (float) Math.ceil(p0.y * scale)/scale;
+            p1.y = (float) Math.floor(p1.y * scale)/scale;
+            p2.y = (float) Math.ceil(p2.y * scale)/scale;
+            p3.y = (float) Math.floor(p3.y * scale)/scale;
+
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p0)));
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p1)));
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p2)));
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p3)));
+
+            p0 = projy.cpy();
+            p1 = projy.cpy();
+            p2 = projy.cpy();
+            p3 = projy.cpy();
+            p0.x = (float) Math.ceil(p0.x * scale)/scale;
+            p1.x = (float) Math.floor(p1.x * scale)/scale;
+            p2.x = (float) Math.ceil(p2.x * scale)/scale;
+            p3.x = (float) Math.floor(p3.x * scale)/scale;
+
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p0)));
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p1)));
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p2)));
+            coins_grid_align2.add(new Anchor(Coin.getCoin(etage, p3)));
+
         }
 
         ArrayList<Anchor> double_coins_align = new ArrayList<Anchor>();
@@ -141,12 +205,16 @@ public abstract class ModelMaker {
         final float GRID_ANCHOR_LENGTH = .1f;
         final float GRID2_ANCHOR_LENGTH = .2f;
         final float ALIGN_ANCHOR_LENGTH = .5f;
+        final float GRID_ALIGN_ANCHOR_LENGTH = .1f;
+        final float GRID2_ALIGN_ANCHOR_LENGTH = .2f;
         final float DOUBLE_ALIGN_ANCHOR_LENGTH = 1f;
         final float COINS_ANCHOR_LENGTH = 1f;
         Object prior_anchors[][] =  new Object[][]{
                 {grid_align,            GRID_ANCHOR_LENGTH},
                 {grid_align2,           GRID2_ANCHOR_LENGTH},
                 {coins_align,           ALIGN_ANCHOR_LENGTH},
+                {coins_grid_align,      GRID_ALIGN_ANCHOR_LENGTH},
+                {coins_grid_align2,     GRID2_ALIGN_ANCHOR_LENGTH},
                 {double_coins_align,    DOUBLE_ALIGN_ANCHOR_LENGTH},
                 {coins,                 COINS_ANCHOR_LENGTH}
         } ;

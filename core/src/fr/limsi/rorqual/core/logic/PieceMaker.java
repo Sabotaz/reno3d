@@ -9,12 +9,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.Etage;
+import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Ouverture;
@@ -69,10 +71,34 @@ public class PieceMaker extends ModelMaker {
                 anchor = null;
             }
 
+            MaterialTypeEnum mat;
+            switch (new Random().nextInt(5)) {
+                case 0:
+                    mat = MaterialTypeEnum.WALL1;
+                    break;
+                case 1:
+                    mat = MaterialTypeEnum.WALL2;
+                    break;
+                case 2:
+                    mat = MaterialTypeEnum.WALL3;
+                    break;
+                case 3:
+                    mat = MaterialTypeEnum.WALL4;
+                    break;
+                case 4:
+                    mat = MaterialTypeEnum.WALL5;
+                    break;
+                default:
+                    mat = MaterialTypeEnum.WALL1;
+                    break;
+            }
+
             for (int i = 0; i < 4; i++) {
                 murs[i] = new Mur(start, start);
                 murs[i].setSelectable(false);
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(murs[i]);
+                murs[i].setInteriorMaterialType1(mat);
+                murs[i].setInteriorMaterialType2(mat);
             }
 
             ArrayList<Vector3> coins = new ArrayList<Vector3>();
