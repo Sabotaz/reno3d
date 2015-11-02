@@ -25,7 +25,7 @@ import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
 // Classe permetant le chargement des fenètres pour le DPE, suivant l'élément
 public class DpeUi  {
 
-    private static HashMap<DpePropertiesEnum,Layout> sauvegarde_layout = new HashMap<DpePropertiesEnum,Layout>();
+    private static HashMap<Object,Layout> sauvegarde_layout = new HashMap<Object,Layout>();
 
     public static Actor getPropertyWindow(Object o) {
 //        if (o instanceof Porte) {
@@ -34,21 +34,37 @@ public class DpeUi  {
 //        }
         System.out.println(o.toString()+"\n");
         if (o instanceof Fenetre || o instanceof PorteFenetre) {
-            Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
+            Actor a;
+            if (!sauvegarde_layout.containsKey(o)){
+                Layout l = Layout.fromJson("data/ui/layout/windowProperties.json", o);
+                a = l.getRoot();
+                sauvegarde_layout.put(o,l);
+            }else{
+                Layout l = sauvegarde_layout.get(o);
+                a = l.getRoot();
+            }
             return a;
         } else if (o instanceof Mur) {
             Actor a;
-            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.MUR)){
+            if (!sauvegarde_layout.containsKey(o)){
                 Layout l = Layout.fromJson("data/ui/layout/wallProperties.json", o);
                 a = l.getRoot();
-                sauvegarde_layout.put(DpePropertiesEnum.MUR,l);
+                sauvegarde_layout.put(o,l);
             }else{
-                Layout l = sauvegarde_layout.get(DpePropertiesEnum.MUR);
+                Layout l = sauvegarde_layout.get(o);
                 a = l.getRoot();
             }
             return a;
         } else if (o instanceof Slab) {
-            Actor a = Layout.fromJson("data/ui/layout/slabProperties.json", o).getRoot();
+            Actor a;
+            if (!sauvegarde_layout.containsKey(o)){
+                Layout l = Layout.fromJson("data/ui/layout/slabProperties.json", o);
+                a = l.getRoot();
+                sauvegarde_layout.put(o,l);
+            }else{
+                Layout l = sauvegarde_layout.get(o);
+                a = l.getRoot();
+            }
             return a;
         } else if (o instanceof Objet) {
             Actor a = makeObjetTab((Objet) o);
@@ -57,23 +73,23 @@ public class DpeUi  {
 
         else if(o == DpeEvent.INFOS_GENERALES){
             Actor a;
-            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.GENERAL)){
+            if (!sauvegarde_layout.containsKey(o)){
                 Layout l = Layout.fromJson("data/ui/layout/informationsGenerales.json", null);
                 a = l.getRoot();
-                sauvegarde_layout.put(DpePropertiesEnum.GENERAL,l);
+                sauvegarde_layout.put(o,l);
             }else{
-                Layout l = sauvegarde_layout.get(DpePropertiesEnum.GENERAL);
+                Layout l = sauvegarde_layout.get(o);
                 a = l.getRoot();
             }
             return a;
         } else if(o == DpeEvent.INFOS_CHAUFFAGE){
             Actor a;
-            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.CHAUFFAGE)){
+            if (!sauvegarde_layout.containsKey(o)){
                 Layout l = Layout.fromJson("data/ui/layout/chauffageProperties.json", null);
                 a = l.getRoot();
-                sauvegarde_layout.put(DpePropertiesEnum.CHAUFFAGE,l);
+                sauvegarde_layout.put(o,l);
             }else{
-                Layout l = sauvegarde_layout.get(DpePropertiesEnum.CHAUFFAGE);
+                Layout l = sauvegarde_layout.get(o);
                 a = l.getRoot();
             }
             return a;
