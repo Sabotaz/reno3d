@@ -41,6 +41,7 @@ import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.EventType;
+import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.utils.AssetManager;
 
 /**
@@ -233,6 +234,9 @@ public class Layout {
                 break;
             case "HorizontalBar":
                 actor = makeHorizontalBar(json, updater, parent);
+                break;
+            case "TexturePicker":
+                actor = makeTexturePicker(json, updater, parent);
                 break;
             default:
                 return null;
@@ -960,5 +964,128 @@ public class Layout {
             horizontalBar.setSize(width.get(null), height.get(null));
         }
         return horizontalBar;
+    }
+
+    private Actor makeTexturePicker(JsonValue json, Updater updater, Actor parent) {
+        Table table = new Table();
+
+        String align = json.getString("align", "center");
+        switch (align) {
+            case "left":
+                table.align(Align.left);
+                break;
+            case "right":
+                table.align(Align.right);
+                break;
+            case "center":
+                table.align(Align.center);
+                break;
+        }
+
+        Value width = getValue(json, "width", null);
+        Value height = getValue(json, "height", null);
+
+        Object[] tabObject=null;
+
+        final Object[] valuesEnum = getClass(json, "enum");
+
+        int sizeMaxEnum=0;
+        if (json.has("indexMin") && json.has("indexMax")){
+            int indexMax=json.getInt("indexMax");
+            int indexMin=json.getInt("indexMin");
+            int size = indexMax-indexMin;
+            tabObject = new Object[size];
+            for(int i=0;i<size;i++) {
+                tabObject[i] = valuesEnum[i+indexMin];
+                if (valuesEnum[i+indexMin].toString().length()>sizeMaxEnum){
+                    sizeMaxEnum = valuesEnum[i+indexMin].toString().length();
+                }
+            }
+        }else{
+            tabObject = new Object[valuesEnum.length];
+            for(int i=0;i<valuesEnum.length;i++) {
+                tabObject[i] = valuesEnum[i];
+                if (valuesEnum[i].toString().length()>sizeMaxEnum){
+                    sizeMaxEnum = valuesEnum[i].toString().length();
+                }
+            }
+        }
+
+        ButtonGroup<ImageButton> buttonGroup = new ButtonGroup<ImageButton>();
+        Table buttonsTable = new Table();
+
+        int start_x = 0;
+        final int MAX_X = (int)(width.get(null) / 128);
+
+        buttonsTable.setSize(width.get(null),height.get(null));
+
+        for (Object o : tabObject) {
+            ImageButton imageButton = (ImageButton)makeTextureImageButton((MaterialTypeEnum) o, updater);
+            buttonGroup.add(imageButton);
+            buttonsTable.add(imageButton).size(128, 128).left().top();
+
+            start_x ++;
+            if (start_x == MAX_X) {
+                start_x = 0;
+                buttonsTable.row();
+            }
+        }
+        //buttonGroup.setChecked(((MaterialTypeEnum) updater.getDefaultValue()).name());
+
+        ScrollPane.ScrollPaneStyle sps = skin.get("perso",ScrollPane.ScrollPaneStyle.class);
+        final ScrollPane scrollPane = new ScrollPane(buttonsTable, sps);
+        scrollPane.setFlickScroll(false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.layout();
+        scrollPane.updateVisualScroll();
+
+//        scrollPane.setupFadeScrollBars(1f,0.5f);
+
+
+        if (json.has("label")){
+            Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
+            lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
+            lbs.fontColor = Color.DARK_GRAY;
+            Label label = new Label(json.getString("label"),lbs);
+            table.add(label)/*.center()*/.left().top().padBottom(5);
+            table.row();
+        }
+
+        table.add(scrollPane)
+                //.size(sizeMaxEnum * 7 + 50, 93)
+                .size(width.get(null), height.get(null))
+                .pad(5);
+        return table;
+    }
+
+    private Actor makeTextureImageButton (MaterialTypeEnum material, Updater updater){
+        Texture textureImage = material.getDiffuse();
+        Image image = new Image(textureImage);
+
+        final ImageButton imageButton = new ClickableImageButton(image.getDrawable());
+
+        imageButton.setSize(128, 128);
+
+
+        if (updater.getDefaultValue() == material) {
+            imageButton.setChecked(true);
+        }
+
+        final Object last_value = material;
+        final Updater last_updater = updater;
+        imageButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                HashMap<String,Object> items = new HashMap<String, Object>();
+                items.put("userObject",userObject);
+                items.put("eventRequest",EventRequest.UPDATE_STATE);
+                items.put("lastValue",last_value);
+                items.put("layout",Layout.this);
+                items.put("button",imageButton);
+                last_updater.trigger(items);
+            }
+        });
+
+        return imageButton;
     }
 }

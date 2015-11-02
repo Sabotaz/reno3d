@@ -382,8 +382,6 @@ public class ModelLibrary {
         int start_x = 0;
         final int MAX_X = (int)(width / 128);
 
-        content.setSize(width,height);
-
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
         // tab who start new model in logic logic

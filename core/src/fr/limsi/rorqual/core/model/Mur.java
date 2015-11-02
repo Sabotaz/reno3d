@@ -142,6 +142,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         setMaterial(interiorMaterial2, interiorMaterialType2);
         setMaterial(defaultMaterial, defaultMaterialType);
         areMaterialSet = true;
+        setChanged();
     }
 
     private void setMaterial(Material material, MaterialTypeEnum type) {
@@ -596,5 +597,21 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     @Override
     public float getCoteValue() {
         return this.getWidth();
+    }
+
+    public MaterialTypeEnum getExteriorMaterialType() {
+        return exteriorMaterialType;
+    }
+
+    public MaterialTypeEnum getInteriorMaterialType1() {
+        return interiorMaterialType1;
+    }
+
+    public MaterialTypeEnum getInteriorMaterialType2() {
+        return interiorMaterialType2;
+    }
+
+    public MaterialTypeEnum getDefaultMaterialType() {
+        return defaultMaterialType;
     }
 }

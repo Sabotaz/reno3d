@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import java.util.HashMap;
 
+import fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum;
 import fr.limsi.rorqual.core.event.ButtonValue;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
@@ -26,8 +27,11 @@ import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.IfcExporter;
 import fr.limsi.rorqual.core.model.IfcImporter;
+import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
+import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
@@ -281,6 +285,84 @@ public class MainUiControleur implements EventListener {
                 mainLayout.getFromId("Rotate_G").setVisible(false);
                 mainLayout.getFromId("Rotate_D").setVisible(false);
                 //removeTb();
+            }
+
+            // textures
+
+            else if (e.getEventType() == UiEvent.TEXTURE1_PICKED) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                    if (items.get("userObject") instanceof Slab) {
+                        Slab slab = (Slab)items.get("userObject");
+                        slab.setPlancherMaterialType((MaterialTypeEnum) items.get("lastValue"));
+                    } else if (items.get("userObject") instanceof Mur) {
+                        Mur mur = (Mur)items.get("userObject");
+                        mur.setExteriorMaterialType((MaterialTypeEnum)items.get("lastValue"));
+                    }
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    if (items.get("userObject") instanceof Slab) {
+                        Slab slab = (Slab)items.get("userObject");
+                        currentItems.put("lastValue", slab.getPlancherMaterialType());
+                    } else if (items.get("userObject") instanceof Mur) {
+                        Mur mur = (Mur)items.get("userObject");
+                        currentItems.put("lastValue", mur.getExteriorMaterialType());
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.TEXTURE1_PICKED, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
+
+            } else if (e.getEventType() == UiEvent.TEXTURE2_PICKED) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                    if (items.get("userObject") instanceof Mur) {
+                        Mur mur = (Mur)items.get("userObject");
+                        mur.setInteriorMaterialType1((MaterialTypeEnum) items.get("lastValue"));
+                    }
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    if (items.get("userObject") instanceof Mur) {
+                        Mur mur = (Mur)items.get("userObject");
+                        currentItems.put("lastValue", mur.getInteriorMaterialType1());
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.TEXTURE2_PICKED, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
+
+            } else if (e.getEventType() == UiEvent.TEXTURE3_PICKED) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                    if (items.get("userObject") instanceof Mur) {
+                        Mur mur = (Mur)items.get("userObject");
+                        mur.setInteriorMaterialType2((MaterialTypeEnum) items.get("lastValue"));
+                    }
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    if (items.get("userObject") instanceof Mur) {
+                        Mur mur = (Mur)items.get("userObject");
+                        currentItems.put("lastValue", mur.getInteriorMaterialType2());
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.TEXTURE3_PICKED, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
             }
         }
     }

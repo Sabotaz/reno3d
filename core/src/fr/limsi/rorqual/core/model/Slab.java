@@ -176,10 +176,22 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         return coins;
     }
 
+
+    public void setPlafondMaterialType(MaterialTypeEnum mat) {
+        plafond = mat;
+        areMaterialSet = false;
+    }
+
+    public void setPlancherMaterialType(MaterialTypeEnum mat) {
+        plancher = mat;
+        areMaterialSet = false;
+    }
+
     private void makeMaterials() {
         setMaterial(plafondMaterial, plafond);
         setMaterial(plancherMaterial, plancher);
         areMaterialSet = true;
+        setChanged();
     }
 
     private void setMaterial(Material material, MaterialTypeEnum type) {
@@ -200,8 +212,6 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     }
 
     private void makeMesh() {
-        if (!areMaterialSet)
-            makeMaterials();
         if (coins == null) {
             this.setModel(new Model());
             valide = false;
@@ -238,6 +248,8 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     }
 
     public boolean isValide() {
+        if (!areMaterialSet)
+            makeMaterials();
         if (changed) {
             makeMesh();
             changed = false;
@@ -247,6 +259,8 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
     public void act() {
         super.act();
+        if (!areMaterialSet)
+            makeMaterials();
         if (!changed)
             return;
         actualiseSurface();
@@ -548,5 +562,13 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     @Override
     public float getCoteValueHorizontal() {
         return getCotePosHorizontalA().cpy().sub(getCotePosHorizontalB()).len();
+    }
+
+    public MaterialTypeEnum getPlancherMaterialType() {
+        return plancher;
+    }
+
+    public MaterialTypeEnum getPlafondMaterialType() {
+        return plafond;
     }
 }

@@ -246,6 +246,23 @@
           ]
         }
       ]
+    },
+    {
+      "type": "Table",
+      "name": "Textures",
+      "id": "textures",
+      "content": [
+        {
+          "type": "TexturePicker",
+          "label": "Plancher : ",
+          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
+          "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
+          "align": "left",
+          "width": "30%",
+          "height": "50%"
+        }
+      ]
     }
   ]
 }
