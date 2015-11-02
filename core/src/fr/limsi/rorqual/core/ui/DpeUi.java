@@ -39,7 +39,7 @@ public class DpeUi  {
         } else if (o instanceof Mur) {
             Actor a;
             if (!sauvegarde_layout.containsKey(DpePropertiesEnum.MUR)){
-                Layout l = Layout.fromJson("data/ui/layout/wallProperties.json", null);
+                Layout l = Layout.fromJson("data/ui/layout/wallProperties.json", o);
                 a = l.getRoot();
                 sauvegarde_layout.put(DpePropertiesEnum.MUR,l);
             }else{
