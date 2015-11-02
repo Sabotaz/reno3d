@@ -37,7 +37,15 @@ public class DpeUi  {
             Actor a = Layout.fromJson("data/ui/layout/windowProperties.json", o).getRoot();
             return a;
         } else if (o instanceof Mur) {
-            Actor a = Layout.fromJson("data/ui/layout/wallProperties.json", o).getRoot();
+            Actor a;
+            if (!sauvegarde_layout.containsKey(DpePropertiesEnum.MUR)){
+                Layout l = Layout.fromJson("data/ui/layout/wallProperties.json", null);
+                a = l.getRoot();
+                sauvegarde_layout.put(DpePropertiesEnum.MUR,l);
+            }else{
+                Layout l = sauvegarde_layout.get(DpePropertiesEnum.MUR);
+                a = l.getRoot();
+            }
             return a;
         } else if (o instanceof Slab) {
             Actor a = Layout.fromJson("data/ui/layout/slabProperties.json", o).getRoot();
