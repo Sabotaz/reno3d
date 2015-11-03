@@ -1,0 +1,30 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl Default_Texture
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Glass
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.614521 0.614521 0.614521
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.400000
+illum 2
+
+newmtl woodfloor
+Ns 100.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.340000 0.340000 0.340000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /people/ricordeau/Bureau/Test biblio/WorkingFolder/DianaWindow1.jpg
