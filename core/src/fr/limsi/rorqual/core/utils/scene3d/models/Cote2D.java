@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.utils.scene3d.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -51,6 +52,7 @@ public class Cote2D extends ModelContainer {
             makeVerticalMesh();
             makeHorizontalMesh();
         }
+        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
     }
 
     private float value = 0.0f;

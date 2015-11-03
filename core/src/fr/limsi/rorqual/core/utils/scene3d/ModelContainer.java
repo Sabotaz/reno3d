@@ -137,21 +137,31 @@ public class ModelContainer extends ActableModel {
 
     protected void setParent(ModelContainer p) {
         parent = p;
-        if (p == null)
-            return;
-        root = parent.root;
-        if (root != null) {
+        if (p != null) {
+            root = parent.root;
             if (root != null) {
-                // remove root datas
-                Deque<ModelContainer> added = new ArrayDeque<ModelContainer>();
-                added.add(this);
-                do {
-                    ModelContainer current = added.remove();
-                    root.add(current);
-                    for (ModelContainer c : current.getChildren())
-                        added.add(c);
-                } while (!added.isEmpty());
+                if (root != null) {
+                    // remove root datas
+                    Deque<ModelContainer> added = new ArrayDeque<ModelContainer>();
+                    added.add(this);
+                    do {
+                        ModelContainer current = added.remove();
+                        root.add(current);
+                        for (ModelContainer c : current.getChildren())
+                            added.add(c);
+                    } while (!added.isEmpty());
+                }
             }
+        } else {
+            root = null;
+        }
+        setRoot(root);
+    }
+
+    private void setRoot(ModelGraph r) {
+        root = r;
+        for (ModelContainer c : getChildren()) {
+            c.setRoot(root);
         }
     }
 

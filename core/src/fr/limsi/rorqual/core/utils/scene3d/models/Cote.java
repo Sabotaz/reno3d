@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -51,6 +52,7 @@ public class Cote extends ModelContainer {
     public void act() {
         super.act();
         makeMesh();
+        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
     }
 
     private float value = 0.0f;

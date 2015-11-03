@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum;
@@ -33,6 +34,9 @@ import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
+import fr.limsi.rorqual.core.utils.scene3d.models.Cote2D;
+import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
@@ -102,8 +106,11 @@ public class MainUiControleur implements EventListener {
         ((Button)(((Table)mainLayout.getFromId("control_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
+    ArrayList<Cote> cotes = new ArrayList<Cote>();
+    SurfaceCote surface;
+
     @Override
-    public void notify(Channel c, Event e) throws InterruptedException {
+    public synchronized void notify(Channel c, Event e) throws InterruptedException {
         if (c == Channel.UI) {
             if (e.getEventType() == UiEvent.BUTTON_CLICKED) {
 
@@ -281,10 +288,39 @@ public class MainUiControleur implements EventListener {
                     mainLayout.getFromId("Rotate_G").setVisible(false);
                     mainLayout.getFromId("Rotate_D").setVisible(false);
                 }
+                if (e.getUserObject() instanceof Slab) {
+                    Slab slab = ((Slab) e.getUserObject());
+                    surface = new SurfaceCote(slab);
+                    slab.add(surface);
+                    for (Mur m : slab.getMurs()) {
+                        Cote cote = new Cote(m);
+                        cotes.add(cote);
+                        m.add(cote);
+                    }
+                } else if (e.getUserObject() instanceof Mur) {
+                    Mur mur = ((Mur) e.getUserObject());
+                    Cote cote = new Cote(mur);
+                    cotes.add(cote);
+                    mur.add(cote);
+                }
             } else if (e.getEventType() == UiEvent.ITEM_DESELECTED) {
                 mainLayout.getFromId("Rotate_G").setVisible(false);
                 mainLayout.getFromId("Rotate_D").setVisible(false);
                 //removeTb();
+                if (e.getUserObject() instanceof Slab) {
+                    surface.getParent().remove(surface);
+
+                    for (Cote cote : cotes) {
+                        cote.getParent().remove(cote);
+                    }
+                    cotes.clear();
+
+                } else if (e.getUserObject() instanceof Mur) {
+                    for (Cote cote : cotes) {
+                        cote.getParent().remove(cote);
+                    }
+                    cotes.clear();
+                }
             }
 
             // textures
