@@ -249,27 +249,29 @@ public class ModelLibrary {
             }
         }
 
-        private Image image = null;
+        boolean image_loading_done = false;
 
-        public Image getImage() {
-            if (image == null) {
+        public String getImageName() {
+            if (AssetManager.getInstance().get(path + "/" + iconFile) == null) {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         Texture t = new Texture(Gdx.files.internal(path + "/" + iconFile));
-                        image = new Image(t);
+                        image_loading_done = true;
+
+                        AssetManager.getInstance().put(path + "/" + iconFile, t);
                     }
                 };
                 Gdx.app.postRunnable(runnable);
                 try {
-                    while (image == null) {
+                    while (!image_loading_done) {
                         Thread.sleep(15L);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            return image;
+            return path + "/" + iconFile;
         }
 
     }
@@ -389,10 +391,7 @@ public class ModelLibrary {
             final String id = entry.getKey();
             ModelLoader modelLoader = entry.getValue();
 
-            Image image = modelLoader.getImage();
-
-            ImageButton imageButton = new Layout.ClickableImageButton(image.getDrawable());
-            imageButton.setSize(128, 128);
+            ImageButton imageButton = new Layout.ClickableImageButton(modelLoader.getImageName(), 128, 128);
             group.add(imageButton);
 
             imageButton.addListener(new ClickListener() {
@@ -445,10 +444,7 @@ public class ModelLibrary {
             final String id = entry.getKey();
             ModelLoader modelLoader = entry.getValue();
 
-            Image image = modelLoader.getImage();
-
-            ImageButton imageButton = new Layout.ClickableImageButton(image.getDrawable());
-            imageButton.setSize(128, 128);
+            ImageButton imageButton = new Layout.ClickableImageButton(modelLoader.getImageName(),128,128);
             group.add(imageButton);
 
             imageButton.addListener(new ClickListener() {

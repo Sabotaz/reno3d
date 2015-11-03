@@ -301,4 +301,7 @@ public class AssetManager {
     public Object get(String s) {
         return assets.get(s);
     }
+    public void put(String s, Object o) {
+        assets.put(s,o);
+    }
 }

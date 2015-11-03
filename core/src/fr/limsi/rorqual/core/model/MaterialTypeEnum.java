@@ -36,5 +36,8 @@ public enum MaterialTypeEnum {
             return (Texture)AssetManager.getInstance().get(normal);
         }
     }
+    public String getName() {
+        return diffuse;
+    }
 }
 

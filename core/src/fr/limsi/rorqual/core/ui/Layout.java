@@ -635,38 +635,39 @@ public class Layout {
         return textButton;
     }
 
+    int n = 0;
+
     public static class ClickableImageButton extends ImageButton {
 
-        public ClickableImageButton(Drawable d) {
-            super(d);
+        public ClickableImageButton(String imageName, float w, float h) {
+            super(new Image((Texture) AssetManager.getInstance().get(imageName)).getDrawable());
+            this.setSize(w, h);
+            clicked_texture_name = imageName + "_clicked";
+            clicked_texture = (Texture) AssetManager.getInstance().get(clicked_texture_name);
+            if (clicked_texture == null)
+                makeTexture();
         }
 
         Texture clicked_texture = null;
-        {
-            makeTexture();
-        }
+        String clicked_texture_name = null;
 
         private void makeTexture() {
-            final Pixmap p = new Pixmap((int)this.getWidth(),(int)this.getHeight(),Pixmap.Format.RGBA8888);
+            final Pixmap p = new Pixmap((int) this.getWidth(), (int) this.getHeight(), Pixmap.Format.RGBA8888);
             p.setColor(Color.RED);
-            p.drawRectangle(0, 0, (int)this.getWidth(),(int)this.getHeight());
-            p.drawRectangle(1, 1, (int)this.getWidth()-2,(int)this.getHeight()-2);
+            p.drawRectangle(0, 0, (int) this.getWidth(), (int) this.getHeight());
+            p.drawRectangle(1, 1, (int) this.getWidth() - 2, (int) this.getHeight() - 2);
 
             // run on UI thread
             Runnable runable = new Runnable() {
                 @Override
                 public void run() {
                     clicked_texture = new Texture(p);
+                    p.dispose();
+                    AssetManager.getInstance().put(clicked_texture_name, clicked_texture);
                 }
             };
 
             Gdx.app.postRunnable(runable);
-        }
-
-        @Override
-        public void setSize(float width, float height) {
-            super.setSize(width, height);
-            makeTexture();
         }
 
         @Override
@@ -678,22 +679,21 @@ public class Layout {
     }
 
     private Actor makeImageButton (JsonValue json, Updater updater, Actor parent){
-        String nameImage = json.getString("image");
-        Texture textureImage = (Texture) AssetManager.getInstance().get(nameImage);
-        Image image = new Image(textureImage);
+        String imageName = json.getString("image");
 
-        final ImageButton imageButton = new ClickableImageButton(image.getDrawable());
-
+        Value width = new Value.Fixed(128);
+        Value height = new Value.Fixed(128);
 
         if (json.has("height") && json.has("width")) {
-            Value width = getValue(json, "width", null);
-            Value height = getValue(json, "height", null);
+            width = getValue(json, "width",null);
+            height = getValue(json, "height", null);
             if (width instanceof Auto)
                 width = height;
             if (height instanceof Auto)
                 height = width;
-            imageButton.setSize(width.get(null),height.get(null));
         }
+
+        final ImageButton imageButton = new ClickableImageButton(imageName,width.get(null),height.get(null));
 
         imageButton.setVisible(json.getBoolean("visible", true));
 
@@ -1059,13 +1059,8 @@ public class Layout {
     }
 
     private Actor makeTextureImageButton (MaterialTypeEnum material, Updater updater){
-        Texture textureImage = material.getDiffuse();
-        Image image = new Image(textureImage);
 
-        final ImageButton imageButton = new ClickableImageButton(image.getDrawable());
-
-        imageButton.setSize(128, 128);
-
+        final ImageButton imageButton = new ClickableImageButton(material.getName(), 128, 128);
 
         if (updater.getDefaultValue() == material) {
             imageButton.setChecked(true);
