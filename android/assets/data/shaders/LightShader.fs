@@ -22,7 +22,8 @@ void main() {
     vec3 intensity = u_ambient_color.rgb + diffuse;
     vec3 finalColor = u_color.rgb * intensity;
     //Idiff = clamp(Idiff, 0.0, 1.0);
-    gl_FragColor = vec4(finalColor, 1.0 - u_opacity);
+    gl_FragColor = vec4(finalColor, u_color.a * (1.0 - u_opacity));
+
     if (u_is_tinted) {
         gl_FragColor = 0.8 * gl_FragColor + 0.2 * u_tint;
     }

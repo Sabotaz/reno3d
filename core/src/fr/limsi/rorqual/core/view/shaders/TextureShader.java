@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -46,6 +47,9 @@ public class TextureShader extends FileShader {
 
     protected final int u_is_selected = register(new Uniform("u_is_selected"));
     protected final int u_time = register(new Uniform("u_time"));
+
+    protected final int u_is_blended = register(new Uniform("u_is_blended"));
+    protected final int u_opacity = register(new Uniform("u_opacity"));
 
     //private boolean withColor;
 
@@ -111,6 +115,16 @@ public class TextureShader extends FileShader {
             set(u_color, colorAttr.color);
         } else {
             set(u_is_colored, 0);
+        }
+
+        if(renderable.material.get(BlendingAttribute.Type) != null) {
+            set(u_is_blended, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).blended
+                    && ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity != 0
+                    ? 1 : 0);
+            set(u_opacity, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity);
+        } else {
+            set(u_is_blended, 0);
+            set(u_opacity, 0.0f);
         }
 
         if (renderable.material.has(ShaderAttribute.Selectable)) {

@@ -17,6 +17,9 @@ varying vec2 v_texCoords;
 varying vec3 N;
 varying vec3 v;
 
+uniform bool u_is_blended;
+uniform float u_opacity;
+
 void main() {
 
     vec3 diffuse = u_light_color.rgb * max(-dot(N,u_light_direction), 0.0);
@@ -38,6 +41,6 @@ void main() {
         float s = sin(6.0*u_time) * 0.2 + 0.5;
         float v = sign(s) * s * s;
         vec3 jaune = vec3(1,1,153.0/255.0);
-        gl_FragColor = vec4(gl_FragColor.rgb * (1.0-v) + jaune * v, gl_FragColor.a);
+        gl_FragColor = vec4(gl_FragColor.rgb * (1.0-v) + jaune * v, gl_FragColor.a * (1.0 - u_opacity));
     }
 }
