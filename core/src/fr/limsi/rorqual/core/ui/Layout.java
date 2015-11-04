@@ -161,7 +161,7 @@ public class Layout {
             Object[] consts = clz.getEnumConstants();
             Object value = null;
             for (Object o : consts) {
-                if (o.toString().equals(enum_value)){
+                if (((Enum)o).name().equals(enum_value)){
                     value = o;
                 }
             }
@@ -805,7 +805,7 @@ public class Layout {
         list.setItems(tabObject);
         list.getSelection().setMultiple(false);
         list.getSelection().setRequired(true);
-        if (updater.getDefaultValue() != null) {
+        if (updater != null && updater.getDefaultValue() != null) {
             list.setSelected(updater.getDefaultValue());
         }
         ScrollPane.ScrollPaneStyle sps = skin.get("perso",ScrollPane.ScrollPaneStyle.class);
