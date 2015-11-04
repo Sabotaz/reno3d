@@ -1,29 +1,29 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'projetVide.blend'
 # Material Count: 3
 
 newmtl bone.001
-Ns 96.078431
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.512000 0.512000 0.512000
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd data/models/g3db/contributions/table/pinewoodRackLowHeight.jpg
+map_Kd /home/christophe/AndroidStudioProjects/reno3d/android/assets/data/models/obj_a_g3dbiser/tableBasseBois/pinewoodRackLowHeight.jpg
 
 newmtl brownlips
-Ns 96.078431
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.034988 0.009290 0.004484
+Kd 0.027990 0.007432 0.003587
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
 
 newmtl silver.004
-Ns 96.078431
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.254837 0.254837 0.254837
+Kd 0.203870 0.203870 0.203870
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000

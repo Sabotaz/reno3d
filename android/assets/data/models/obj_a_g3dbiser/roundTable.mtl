@@ -1,10 +1,10 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'projetVide.blend'
 # Material Count: 1
 
 newmtl lighttan
-Ns 96.078431
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.566701 0.181573 0.046244
+Kd 0.453361 0.145258 0.036995
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000

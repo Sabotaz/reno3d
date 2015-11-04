@@ -1,12 +1,12 @@
-# 
-# Copyrights (C) 2010  Peter Smolik
-# Released under Free Art  Licence Art Libre http://www.artlibre.org
-# 
+# Blender MTL File: 'projetVide.blend'
+# Material Count: 1
 
 newmtl Sofa1_Tri_1
+Ns 5.882353
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
 illum 2
-Ka 0 0 0
-Kd 1 1 1
-Ks 0 0 0
-Ns 8
-map_Kd data/models/g3db/contributions/sofa1/wool256.jpg
+map_Kd /home/christophe/AndroidStudioProjects/reno3d/android/assets/data/models/obj_a_g3dbiser/sofa1/wool256.jpg
