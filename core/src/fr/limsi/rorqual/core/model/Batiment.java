@@ -284,4 +284,14 @@ public class Batiment {
         setEtage(0);
     }
 
+    boolean plafondsVisibles = true;
+
+    public boolean arePlafondsVisibles() {
+        return plafondsVisibles;
+    }
+
+    public void setPlafondsVisibles(boolean b) {
+        plafondsVisibles = b;
+    }
+
 }
