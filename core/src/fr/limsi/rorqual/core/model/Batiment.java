@@ -284,7 +284,7 @@ public class Batiment {
         setEtage(0);
     }
 
-    boolean plafondsVisibles = true;
+    boolean plafondsVisibles = false;
 
     public boolean arePlafondsVisibles() {
         return plafondsVisibles;
