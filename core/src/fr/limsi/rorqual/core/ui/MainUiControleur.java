@@ -358,7 +358,10 @@ public class MainUiControleur implements EventListener {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                 if (eventRequest == EventRequest.UPDATE_STATE) {
-                    if (items.get("userObject") instanceof Mur) {
+                    if (items.get("userObject") instanceof Slab) {
+                        Slab slab = (Slab)items.get("userObject");
+                        slab.setPlafondMaterialType((MaterialTypeEnum) items.get("lastValue"));
+                    } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
                         mur.setInteriorMaterialType1((MaterialTypeEnum) items.get("lastValue"));
                     }
@@ -366,7 +369,10 @@ public class MainUiControleur implements EventListener {
                 else if (eventRequest == EventRequest.GET_STATE) {
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
 
-                    if (items.get("userObject") instanceof Mur) {
+                    if (items.get("userObject") instanceof Slab) {
+                        Slab slab = (Slab)items.get("userObject");
+                        currentItems.put("lastValue", slab.getPlafondMaterialType());
+                    } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
                         currentItems.put("lastValue", mur.getInteriorMaterialType1());
                     }

@@ -260,7 +260,17 @@
           "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
           "align": "left",
           "width": "30%",
-          "height": "50%"
+          "height": "25%"
+        },
+        {
+          "type": "TexturePicker",
+          "label": "Plafond : ",
+          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
+          "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
+          "align": "left",
+          "width": "30%",
+          "height": "25%"
         }
       ]
     }
