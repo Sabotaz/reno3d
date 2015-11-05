@@ -268,7 +268,7 @@ public class MainUiControleur implements EventListener {
                             System.out.println("Calcul ces putains de surfaces !!! HAHAHAHAHAHAHAH");
                             break;
                         case VISIBILITY_TOIT:
-                            System.out.println("Rend visible ce putain de toit !!!! HAHAHAHAHAHAHAHAH");
+                            ModelHolder.getInstance().getBatiment().setPlafondsVisibles(button.isChecked());
                             break;
                         case IMPORT_IFC:
 
