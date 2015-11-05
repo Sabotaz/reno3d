@@ -62,11 +62,12 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     private float height;
     private Polygon polygon;
     private boolean valide = false;
-    private MaterialTypeEnum plafond = MaterialTypeEnum.PIERRE;
+    private MaterialTypeEnum plafondType = MaterialTypeEnum.PIERRE;
     private MaterialTypeEnum plancher = MaterialTypeEnum.PARQUET;
     private Material plafondMaterial = new Material();
     private Material plancherMaterial = new Material();
     boolean areMaterialSet = false;
+    Plafond plafond;
 
     public Slab(List<Coin> coins) {
         this(coins, DEFAULT_HEIGHT);
@@ -83,6 +84,8 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         this.dateIsolationPlafond=DateIsolationSlab.INCONNUE;
         this.dateIsolationPlancher=DateIsolationSlab.INCONNUE;
         this.typeIsolationPlancher=TypeIsolationSlab.NON_ISOLE;
+        plafond = new Plafond(this);
+        this.add(plafond);
     }
 
     public void actualiseSurface(){
@@ -178,7 +181,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
 
     public void setPlafondMaterialType(MaterialTypeEnum mat) {
-        plafond = mat;
+        plafondType = mat;
         areMaterialSet = false;
     }
 
@@ -188,7 +191,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     }
 
     private void makeMaterials() {
-        setMaterial(plafondMaterial, plafond);
+        setMaterial(plafondMaterial, plafondType);
         setMaterial(plancherMaterial, plancher);
         areMaterialSet = true;
         setChanged();
@@ -225,7 +228,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
             return;
         }
 
-        Vector3 z_shape = Vector3.Z.cpy().scl(this.height);
+        Vector3 z_shape = Vector3.Z.cpy().scl(this.height/2);
 
         Vector3d z = CSGUtils.castVector(z_shape);
 
@@ -270,6 +273,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
     public void setChanged() {
         changed = true;
+        plafond.setChanged();
     }
 
     private Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
@@ -569,6 +573,10 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     }
 
     public MaterialTypeEnum getPlafondMaterialType() {
-        return plafond;
+        return plafondType;
+    }
+
+    public Material getPlafondMaterial() {
+        return plafondMaterial;
     }
 }

@@ -145,6 +145,7 @@ public class Etage {
         return batiment;
     }
 
+
     public void setBatiment(Batiment batiment) {
         this.batiment = batiment;
     }

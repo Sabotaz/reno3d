@@ -91,14 +91,14 @@ public abstract class Ouverture extends ModelContainer {
     }
 
     public float getY() {
-        float s1 = Slab.DEFAULT_HEIGHT;
-        float s2 = Slab.DEFAULT_HEIGHT;
+        float s1 = Slab.DEFAULT_HEIGHT/2;
+        float s2 = Slab.DEFAULT_HEIGHT/2;
         if (this.getMur() == null)
-            return Slab.DEFAULT_HEIGHT + this.position.y;
+            return Slab.DEFAULT_HEIGHT/2 + this.position.y;
         if (this.getMur().getSlabGauche() != null)
-            s1 = this.getMur().getSlabGauche().getHeight();
+            s1 = this.getMur().getSlabGauche().getHeight()/2;
         if (this.getMur().getSlabDroit() != null)
-            s2 = this.getMur().getSlabDroit().getHeight();
+            s2 = this.getMur().getSlabDroit().getHeight()/2;
         return Math.max(s1,s2) + this.position.y;
     }
     public float getSurface() {
