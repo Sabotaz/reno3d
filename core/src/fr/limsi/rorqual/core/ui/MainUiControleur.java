@@ -264,7 +264,14 @@ public class MainUiControleur implements EventListener {
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
                             ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
+                        case CALCUL_SURFACE:
+                            System.out.println("Calcul ces putains de surfaces !!! HAHAHAHAHAHAHAH");
+                            break;
+                        case VISIBILITY_TOIT:
+                            System.out.println("Rend visible ce putain de toit !!!! HAHAHAHAHAHAHAHAH");
+                            break;
                         case IMPORT_IFC:
+
                             Logic.getInstance().stop();
                             uncheckGeneralButtons();
                             uncheckControlButtons();

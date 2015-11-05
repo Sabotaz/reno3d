@@ -212,4 +212,20 @@ public class Etage {
         return this.name;
     }
 
+    public boolean isFirst(){
+        if (this == this.batiment.getFirstEtage()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean isLast(){
+        if (this == this.batiment.getLastEtage()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

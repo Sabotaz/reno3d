@@ -120,6 +120,9 @@
           "layout": "column",
           "align": "right",
           "pad": 0,
+          "minChecked": 0,
+          "maxChecked": 2,
+          "padRight": 15,
           "content": [
             {
               "type": "Button",
@@ -135,6 +138,20 @@
                 null,
                 "default.fnt"
               ]
+            },
+            {
+              "type": "Button",
+              "text": "VISIBILITY_TOIT",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.VISIBILITY_TOIT",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:toit",
+                "drawable:toit:tint:888888",
+                "drawable:toit:tint:888888",
+                "default.fnt"
+              ]
             }
           ]
         },
@@ -144,6 +161,7 @@
           "layout": "column",
           "minChecked": 0,
           "pad": 0,
+          "padRight": 15,
           "content": [
             {
               "type": "Button",
@@ -212,6 +230,20 @@
                 "drawable:chauffage",
                 "drawable:chauffage:tint:888888",
                 "drawable:chauffage:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.CALCUL_SURFACE",
+              "name": "calculSurface",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:calcul",
+                "drawable:calcul:tint:888888",
+                "drawable:calcul:tint:888888",
                 "default.fnt"
               ]
             }

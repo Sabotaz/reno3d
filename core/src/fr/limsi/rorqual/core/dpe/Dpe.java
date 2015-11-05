@@ -1069,6 +1069,11 @@ public class Dpe implements EventListener {
                     this.actualiseRendementGenerationChauffage(chauffageUnique);
                 float ich=chauffageUnique.getIch();
                 this.cch=this.bch*ich*fCh;
+//                System.out.println("-- Chauffage unique --");
+//                System.out.println("cch = " + cch);
+//                System.out.println("bch = " + bch);
+//                System.out.println("ich = " + ich);
+//                System.out.println("-- ********* --");
                 break;
             case CHAUFFAGE_AVEC_POIL_OU_INSERT_BOIS:
                 if(this.rendementHasTobeCalculated(chauffageAvecPoil))
@@ -1077,6 +1082,12 @@ public class Dpe implements EventListener {
                 float ichChauffage = chauffageAvecPoil.getIch();
                 float ichPoele = poeleAvecChauffage.getIch();
                 this.cch=(k1*bch*ichPoele+(1-k1)*bch*ichChauffage)*fCh;
+//                System.out.println("-- Chaudiere avec poele --");
+//                System.out.println("cch = " + cch);
+//                System.out.println("bch = " + bch);
+//                System.out.println("ichChauffage = " + ichChauffage);
+//                System.out.println("ichPoele = " + ichPoele);
+//                System.out.println("-- ********* --");
                 break;
             case CHAUDIERE_GAZ_OU_FIOUL_AVEC_CHAUDIERE_BOIS:
                 this.actualiseRendementGenerationChauffage(chaudiereGaz);
@@ -1084,6 +1095,12 @@ public class Dpe implements EventListener {
                 float ichChaudiereGazFioul = chaudiereGaz.getIch();
                 float ichChaudiereBois = chaudiereBois.getIch();
                 this.cch=(0.75f*bch*ichChaudiereBois+0.25f*bch*ichChaudiereGazFioul)*fCh;
+//                System.out.println("-- Chaudiere Gaz + chaudiere bois --");
+//                System.out.println("cch = " + cch);
+//                System.out.println("bch = " + bch);
+//                System.out.println("ichChaudiereGazFioul = " + ichChaudiereGazFioul);
+//                System.out.println("ichChaudiereBois = " + ichChaudiereBois);
+//                System.out.println("-- ********* --");
                 break;
             case CHAUDIERE_AVEC_PAC:
                 if(this.rendementHasTobeCalculated(chaudiereAvecPac))
@@ -1091,6 +1108,12 @@ public class Dpe implements EventListener {
                 float ichChaudiere = chaudiereAvecPac.getIch();
                 float ichPac = pacAvecChaudiere.getIch();
                 this.cch=(0.8f*bch*ichPac+0.2f*bch*ichChaudiere)*fCh;
+//                System.out.println("-- Chaudiere avec pac --");
+//                System.out.println("cch = " + cch);
+//                System.out.println("bch = " + bch);
+//                System.out.println("ichChaudiere = " + ichChaudiere);
+//                System.out.println("ichPac = " + ichPac);
+//                System.out.println("-- ********* --");
                 break;
             case CHAUDIERE_AVEC_PAC_ET_INSERT_BOIS:
                 if(this.rendementHasTobeCalculated(chaudiereAvecPacEtPoil))
@@ -1100,6 +1123,13 @@ public class Dpe implements EventListener {
                 float ichPac2 = pacAvecChaudiereEtPoele.getIch();
                 float ichPoele2 = poeleAvecChaudiereEtPac.getIch();
                 this.cch=((1-k2)*(0.8f*bch*ichPac2)+(1-k2)*(0.2f*bch*ichChaudiere2)+k2*bch*ichPoele2)*fCh;
+//                System.out.println("-- Chaudiere avec pac et poele --");
+//                System.out.println("cch = " + cch);
+//                System.out.println("bch = " + bch);
+//                System.out.println("ichChaudiere2 = " + ichChaudiere2);
+//                System.out.println("ichPac2 = " + ichPac2);
+//                System.out.println("ichPoele2 = " + ichPoele2);
+//                System.out.println("-- ********* --");
                 break;
         }
         this.actualiseScoreDpe();

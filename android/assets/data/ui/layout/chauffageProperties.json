@@ -214,19 +214,19 @@
                   "type": "CheckBox",
                   "label": "Poêle ou insert bois installé avant 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé avant 2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POIL_OU_INSERT_BOIS_AVANT_2001"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Poêle ou insert bois installé à partir de 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé à partir de 2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POIL_OU_INSERT_BOIS_APRES_2001"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Poêle fioul ou GPL",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil fioul ou GPL"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POIL_FIOUL_OU_GPL"
                 }
               ]
             }
@@ -430,25 +430,25 @@
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/air",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/air"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_AIR"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur air/eau",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur air/eau"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_EAU"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur sur nappe",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur sur nappe"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_SUR_NAPPE"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Pompe à chaleur géothermique",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Pompe à chaleur géothermique"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_GEOTHERMIQUE"
                 }
               ]
             }
@@ -469,19 +469,19 @@
                   "type": "CheckBox",
                   "label": "Poêle ou insert bois installé avant 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé avant 2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POIL_OU_INSERT_BOIS_AVANT_2001"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Poêle ou insert bois installé à partir de 2001",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil ou insert bois installé à partir de 2001"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POIL_OU_INSERT_BOIS_APRES_2001"
                 },
                 {
                   "type": "CheckBox",
                   "label": "Poêle fioul ou GPL",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.Poil fioul ou GPL"
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POIL_FIOUL_OU_GPL"
                 }
               ]
             }

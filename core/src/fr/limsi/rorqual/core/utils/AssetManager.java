@@ -223,6 +223,8 @@ public class AssetManager {
         textures.put("save", "data/ui/save.png");
         textures.put("load", "data/ui/load.png");
         textures.put("void", "data/ui/void.png");
+        textures.put("toit", "data/ui/toit.png");
+        textures.put("calcul", "data/ui/calcul.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);

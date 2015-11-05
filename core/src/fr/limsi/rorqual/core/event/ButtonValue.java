@@ -27,6 +27,8 @@ public enum ButtonValue {
     NEW_FILE,
     ROTATE_G,
     ROTATE_D,
+    CALCUL_SURFACE,
+    VISIBILITY_TOIT,
 
     ;
 }
