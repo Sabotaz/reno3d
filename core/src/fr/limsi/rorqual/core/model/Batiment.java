@@ -294,4 +294,11 @@ public class Batiment {
         plafondsVisibles = b;
     }
 
+    public void act() {
+        for (int i = etages.getMin(); i <= current; i++) {
+            Etage etage = etages.get(i);
+            etage.getModelGraph().act();
+        }
+    }
+
 }

@@ -269,7 +269,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             stageMenu.act();
         }
         modelGraph.act();
-        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().act();
+        ModelHolder.getInstance().getBatiment().act();
     }
 
     private void renderStartScreen() {
