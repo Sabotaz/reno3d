@@ -5,7 +5,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.DpeEvent;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
@@ -37,6 +42,8 @@ public class Mover extends ModelMaker {
     Coin lastCoinA, lastCoinB;
     Coin newCoinA, newCoinB;
     int startx, starty;
+
+    boolean surfaceChanged = false;
 
     Objet movedObjet = null;
     boolean movingObject = false;
@@ -138,8 +145,10 @@ public class Mover extends ModelMaker {
             moveOuverture(screenX, screenY);
         } else if (translate) {
             translateMur(screenX, screenY);
+            surfaceChanged = true;
         } else {
             moveCoin(screenX, screenY);
+            surfaceChanged = true;
         }
     }
 
@@ -313,6 +322,12 @@ public class Mover extends ModelMaker {
                 mur.setSelectable(true);
             if (translatedMur != null)
                 translatedMur.setSelectable(true);
+
+            if (surfaceChanged) {
+                HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                Event e = new Event(DpeEvent.SURFACE_CHANGED, currentItems);
+                EventManager.getInstance().put(Channel.DPE, e);
+            }
         }
         initialCoin = lastCoin = newCoin = null;
         murs = null;
