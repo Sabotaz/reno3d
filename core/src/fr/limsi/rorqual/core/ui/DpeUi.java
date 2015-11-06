@@ -82,7 +82,9 @@ public class DpeUi  {
                 a = l.getRoot();
             }
             return a;
-        } else if(o == DpeEvent.INFOS_CHAUFFAGE){
+        }
+
+        else if(o == DpeEvent.INFOS_CHAUFFAGE){
             Actor a;
             if (!sauvegarde_layout.containsKey(o)){
                 Layout l = Layout.fromJson("data/ui/layout/chauffageProperties.json", null);
@@ -94,6 +96,7 @@ public class DpeUi  {
             }
             return a;
         }
+
         return null;
     }
 

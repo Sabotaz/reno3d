@@ -50,6 +50,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     private float uPlancher;
     private float deperditionPlafond;
     private float deperditionPlancher;
+    private float volume;
     private DateIsolationSlab dateIsolationPlafond;
     private DateIsolationSlab dateIsolationPlancher;
     private TypeIsolationSlab typeIsolationPlancher;
@@ -578,5 +579,14 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
     public Material getPlafondMaterial() {
         return plafondMaterial;
+    }
+
+    private void calculateVolume(){
+        volume = this.etage.getHeight()*this.getSurface();
+    }
+
+    public float getVolume(){
+        this.calculateVolume();
+        return this.volume;
     }
 }

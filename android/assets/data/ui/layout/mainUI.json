@@ -204,7 +204,16 @@
                 "drawable:mobilier:tint:888888",
                 "default.fnt"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "ButtonGroup",
+          "id": "calcul_buttons",
+          "layout": "column",
+          "minChecked": 0,
+          "pad": 0,
+          "content": [
             {
               "type": "Button",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.DPE",
