@@ -3586,6 +3586,15 @@ public class Dpe implements EventListener {
                         }
                         break;
                     }
+                    case SURFACE_CHANGED:{
+                        this.actualiseSdepMurs();
+                        this.actualiseSdepToits();
+                        this.actualiseDpMur();
+                        this.actualiseDpPlancher();
+                        this.actualiseDpToit();
+                        this.actualiseSH();
+                        break;
+                    }
                 }
             }
         }
