@@ -49,20 +49,19 @@ public class Calculateur {
     public Window getWindow(){
         Skin skin = (Skin)AssetManager.getInstance().get("uiskin");
         Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
-        Window w = new Window("Information",skin);
-        Label sh_label = new Label("Surface habitable = "+Float.toString(surfaceHabitable)+" m²",ls);
-        Label ss_label = new Label("Surface au sol = "+Float.toString(surfaceAuSol)+" m²",ls);
-        Label stmi_label = new Label("Surface mur intérieur = "+Float.toString(surfaceTotaleMurInterieur)+" m²",ls);
-        Label stme_label = new Label("Surface mur extérieur = "+Float.toString(surfaceTotaleMurExterieur)+" m²",ls);
-        Label vt_label = new Label("Volume total = "+Float.toString(volumeTotal)+" m³",ls);
-        w.setDebug(true);
+        Window w = new Window("Informations",skin);
+        Label sh_label = new Label("Surface habitable = "+Integer.toString(Math.round(surfaceHabitable))+" m²",ls);
+        Label ss_label = new Label("Surface au sol = "+Integer.toString(Math.round(surfaceAuSol))+" m²",ls);
+        Label stmi_label = new Label("Surface mur intérieur = "+Integer.toString(Math.round(surfaceTotaleMurInterieur))+" m²",ls);
+        Label stme_label = new Label("Surface mur extérieur = "+Integer.toString(Math.round(surfaceTotaleMurExterieur))+" m²",ls);
+        Label vt_label = new Label("Volume total = "+Integer.toString(Math.round(volumeTotal))+" m³",ls);
         w.add(sh_label).left().pad(2).row();
         w.add(ss_label).left().pad(2).row();
         w.add(stmi_label).left().pad(2).row();
         w.add(stme_label).left().pad(2).row();
         w.add(vt_label).pad(2).left();
         w.setWidth(w.getPrefWidth());
-        MainUiControleur.getInstance().addTb(w);
+        w.setHeight(w.getPrefHeight());
         return w;
     }
 

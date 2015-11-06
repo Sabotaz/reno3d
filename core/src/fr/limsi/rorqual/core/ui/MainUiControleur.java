@@ -93,7 +93,7 @@ public class MainUiControleur implements EventListener {
                 if (tb instanceof TabWindow){
                     tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) tb).getPrefHeight()/2-100);
                 }else if(tb instanceof Window) {
-                    tb.setPosition(((Window) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((Window) tb).getPrefHeight()/2-100);
+                    tb.setPosition(Gdx.graphics.getWidth() - ((Window) tb).getPrefWidth() - 5, Gdx.graphics.getHeight() - ((Window) tb).getPrefHeight()-100);
                 } else {
                     tb.setPosition(tb.getHeight()/2, Gdx.graphics.getHeight() - 100);
                 }
@@ -275,7 +275,6 @@ public class MainUiControleur implements EventListener {
                                 addTb(Calculateur.getInstance().getWindow());
                             else
                                 removeTb();
-
                             break;
                         case VISIBILITY_TOIT:
                             Logic.getInstance().stop();
