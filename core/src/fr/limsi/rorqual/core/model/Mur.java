@@ -66,8 +66,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private boolean changed = true;
     private boolean areMaterialSet = false;
     private MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
-    private MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.WALL2;
-    private MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.WALL2;
+    private MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.WALL1;
+    private MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.WALL1;
     private MaterialTypeEnum defaultMaterialType = MaterialTypeEnum.BETON;
     private Material exteriorMaterial = new Material();
     private Material interiorMaterial1 = new Material();

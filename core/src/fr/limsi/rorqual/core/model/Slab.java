@@ -62,7 +62,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     private float height;
     private Polygon polygon;
     private boolean valide = false;
-    private MaterialTypeEnum plafondType = MaterialTypeEnum.PIERRE;
+    private MaterialTypeEnum plafondType = MaterialTypeEnum.WALL4;
     private MaterialTypeEnum plancher = MaterialTypeEnum.PARQUET;
     private Material plafondMaterial = new Material();
     private Material plancherMaterial = new Material();

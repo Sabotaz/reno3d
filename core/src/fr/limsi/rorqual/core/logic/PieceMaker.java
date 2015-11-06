@@ -71,34 +71,10 @@ public class PieceMaker extends ModelMaker {
                 anchor = null;
             }
 
-            MaterialTypeEnum mat;
-            switch (new Random().nextInt(5)) {
-                case 0:
-                    mat = MaterialTypeEnum.WALL1;
-                    break;
-                case 1:
-                    mat = MaterialTypeEnum.WALL2;
-                    break;
-                case 2:
-                    mat = MaterialTypeEnum.WALL3;
-                    break;
-                case 3:
-                    mat = MaterialTypeEnum.WALL4;
-                    break;
-                case 4:
-                    mat = MaterialTypeEnum.WALL5;
-                    break;
-                default:
-                    mat = MaterialTypeEnum.WALL1;
-                    break;
-            }
-
             for (int i = 0; i < 4; i++) {
                 murs[i] = new Mur(start, start);
                 murs[i].setSelectable(false);
                 ModelHolder.getInstance().getBatiment().getCurrentEtage().addMur(murs[i]);
-                murs[i].setInteriorMaterialType1(mat);
-                murs[i].setInteriorMaterialType2(mat);
             }
 
             ArrayList<Vector3> coins = new ArrayList<Vector3>();
