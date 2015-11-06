@@ -94,7 +94,7 @@ public class Plafond extends ModelContainer {
         }
     }
 
-    MaterialTypeEnum terrasseType = MaterialTypeEnum.PIERRE;
+    MaterialTypeEnum terrasseType = MaterialTypeEnum.TOIT1;
     Material terrasseMaterial = new Material();
 
     public void setTerasseMaterialType(MaterialTypeEnum mat) {
