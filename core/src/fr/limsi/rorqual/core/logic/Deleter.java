@@ -18,6 +18,7 @@ import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
  * Created by christophe on 04/09/15.
@@ -176,5 +177,6 @@ public class Deleter extends ModelMaker {
             deleteOuverture((Ouverture) m);
         else if (m instanceof Objet)
             deleteObjet((Objet) m);
+        MainApplicationAdapter.deselect();
     }
 }

@@ -414,9 +414,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     public static void deselect() {
+        MainUiControleur.getInstance().removeTb();
         if (selected != null) {
             selected.removeColor();
             selected.setSelected(false);
+            EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_DESELECTED, selected));
         }
         selected = null;
 //        EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, null));
