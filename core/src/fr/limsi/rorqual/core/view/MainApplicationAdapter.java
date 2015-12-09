@@ -128,7 +128,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         Container container = new Container();
 
         Image image = new Image(new Texture(Gdx.files.internal("data/img/screen.png")));
-        Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("data/font/black.fnt")), Color.BLACK);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("data/font/white.fnt")), Color.WHITE);
         loadingLabel = new Label("loading...", labelStyle);
         float img_ratio = image.getWidth() / image.getImageHeight();
         float height = Gdx.graphics.getHeight();
