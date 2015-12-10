@@ -181,7 +181,7 @@ public class Fenetre extends Ouverture {
         EventManager.getInstance().put(Channel.DPE, e);
     }
     public void actualiseCoeffTransmissionThermiqueFenetre(){
-        float u=5;
+        float u=5f;
         switch(this.typeMateriau){
             case METALLIQUE:
                 switch (this.typeFenetre){
@@ -190,27 +190,21 @@ public class Fenetre extends Ouverture {
                         switch (this.typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=4.95f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=4;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=3.7f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=3.6f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=2.25f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.88f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -218,27 +212,21 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=4.63f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=3.46f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=3.46f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=3.36f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=2.18f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.65f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -247,27 +235,21 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=4.95f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=4.38f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=4.01f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=3.92f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=3.30f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=3.15f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -280,27 +262,21 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=3.90f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=2.75f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=2.45f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=2.35f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=1.70f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.24f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -308,27 +284,21 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=4.25f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=3.00f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=2.62f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=2.52f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=1.85f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.39f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -337,27 +307,21 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=3.90f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=2.92f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=2.70f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=2.70f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=2.01f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.39f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -370,27 +334,21 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=4.2f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=2.9f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=2.7f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=2.55f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=1.75f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.24f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -398,27 +356,21 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=4.2f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=2.9f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=2.7f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=2.55f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=1.75f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.24f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
@@ -427,33 +379,30 @@ public class Fenetre extends Ouverture {
                         switch (typeVitrage){
                             case SIMPLE_VITRAGE:
                                 u=4.2f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case SURVITRAGE:
                                 u=3.15f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_INF_1990:
                                 u=2.96f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_1990_INF_2001:
                                 u=2.9f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case DOUBLE_VITRAGE_SUP_2001:
                                 u=2.04f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                             case TRIPLE_VITRAGE:
                                 u=1.46f;
-                                u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
                                 break;
                         }
                         break;
                 }
                 break;
         }
+        if (u != 5f) // INCONNU
+            u=actualiseCoeffTransmissionThermiqueAvecFermeture(u);
+
         this.coefficientDeTransmissionThermique=u;
         this.actualiseDeperdition();
     }
@@ -499,15 +448,15 @@ public class Fenetre extends Ouverture {
         switch(typeFermeture){
             case JALOUSIE_ACCORDEON:
             case VOLET_BATTANT_AVEC_AJOURES_FIXES:
-                for (float[] us : uMapping) nouveauU = uDevantEtreActualise < us[0] ? us[1] : nouveauU;
+                for (float[] us : uMapping) nouveauU = uDevantEtreActualise >= us[0] ? us[1] : nouveauU;
                 break;
             case VOLET_ROULANT_EN_METAL:
             case FERMETURE_SANS_AJOURES:
-                for (float[] us : uMapping) nouveauU = uDevantEtreActualise < us[0] ? us[2] : nouveauU;
+                for (float[] us : uMapping) nouveauU = uDevantEtreActualise >= us[0] ? us[2] : nouveauU;
                 break;
             case VOLET_BATTANT_BOIS:
             case VOLET_ROULANT_PVC:
-                for (float[] us : uMapping) nouveauU = uDevantEtreActualise < us[0] ? us[3] : nouveauU;
+                for (float[] us : uMapping) nouveauU = uDevantEtreActualise >= us[0] ? us[3] : nouveauU;
                 break;
             case SANS_FERMETURE:
                 break;
