@@ -399,20 +399,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             selected.setSelected(true);
     }
 
-    public static ModelContainer getFromUserObject(Object o) {
-        return modelGraph.getFromUserObject(o);
-    }
-
-    public static void select(Object o) {
-        deselect();
-        selected = modelGraph.getFromUserObject(o);
-        if (selected != null) {
-//            EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, o));
-            selected.setColor(Color.YELLOW);
-            selected.setSelected(true);
-        }
-    }
-
     public static void deselect() {
         MainUiControleur.getInstance().removeTb();
         if (selected != null) {

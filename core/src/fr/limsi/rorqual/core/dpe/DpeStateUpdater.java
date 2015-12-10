@@ -75,7 +75,7 @@ public class DpeStateUpdater implements EventListener {
                     case DPE_STATE_CHANGED:
                         Object items[] = (Object[]) o;
                         setState(items[0], (DpeState) items[1]);
-                        ModelContainer node = modelGraph.getFromUserObject(items[0]);
+                        /*ModelContainer node = modelGraph.getFromUserObject(items[0]);
                         switch ((DpeState) items[1]) {
                             case UNKNOWN:
                                 node.setColor(Color.RED);
@@ -88,7 +88,7 @@ public class DpeStateUpdater implements EventListener {
                             default:
                                 node.setColor(Color.WHITE);
                                 break;
-                        }
+                        }*/
                         setState(items[0], (DpeState) items[1]);
                         if (regardeEtatWall){
                             verifyStatesWall();

@@ -34,7 +34,7 @@ public class ModelGraph {
     }
 
     public void draw(ModelBatch modelBatch, Environment environment, ModelContainer.Type type){
-        synchronized (this) {
+        synchronized (this.getRoot()) {
             root.draw(modelBatch, environment, type);
         }
     }
@@ -59,23 +59,6 @@ public class ModelGraph {
         return camera;
     }
 
-    HashMap<Object, ModelContainer> objects_map = new HashMap<Object, ModelContainer>();
-
-    public ModelContainer getFromUserObject(Object o) {
-        if (objects_map.containsKey(o))
-            return objects_map.get(o);
-        return null;
-    }
-
-    public void add(ModelContainer m) {
-        if (m.getUserData() != null)
-            objects_map.put(m.getUserData(), m);
-    }
-    public void remove(ModelContainer m) {
-        if (m.getUserData() != null && objects_map.containsKey(m.getUserData()))
-            objects_map.remove(m.getUserData());
-    }
-
     private int count(ModelContainer current) {
         int i = 1;
         for (ModelContainer child : current.getChildren())
@@ -90,7 +73,7 @@ public class ModelGraph {
     }
 
     public void act() {
-        synchronized (this) {
+        synchronized (this.getRoot()) {
             root.act();
         }
     }

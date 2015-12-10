@@ -82,17 +82,6 @@ public class ModelContainer extends ActableModel {
         prefered_shader = s;
     }
 
-    public void setUserData(Object o) {
-        if (root != null)
-            root.remove(this);
-        userData = o;
-        if (root != null)
-            root.add(this);
-    }
-    public Object getUserData() {
-        return userData;
-    }
-
     public void add(ModelContainer child) {
         synchronized (this) {
             child.remove();
@@ -120,18 +109,6 @@ public class ModelContainer extends ActableModel {
                 children.remove(child);
             child.setParent(null);
             child.root = null;
-
-            if (root != null) {
-                // remove root datas
-                Deque<ModelContainer> removed = new ArrayDeque<ModelContainer>();
-                removed.add(child);
-                do {
-                    ModelContainer current = removed.remove();
-                    root.remove(current);
-                    for (ModelContainer c : current.getChildren())
-                        removed.add(c);
-                } while (!removed.isEmpty());
-            }
         }
     }
 
@@ -139,19 +116,6 @@ public class ModelContainer extends ActableModel {
         parent = p;
         if (p != null) {
             root = parent.root;
-            if (root != null) {
-                if (root != null) {
-                    // remove root datas
-                    Deque<ModelContainer> added = new ArrayDeque<ModelContainer>();
-                    added.add(this);
-                    do {
-                        ModelContainer current = added.remove();
-                        root.add(current);
-                        for (ModelContainer c : current.getChildren())
-                            added.add(c);
-                    } while (!added.isEmpty());
-                }
-            }
         } else {
             root = null;
         }
