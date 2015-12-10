@@ -72,7 +72,7 @@
           "padRight": 15,
           "content": [
             {
-              "type": "TextButton",
+              "type": "Button",
               "text": "-",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_MINUS",
               "height": "auto",
