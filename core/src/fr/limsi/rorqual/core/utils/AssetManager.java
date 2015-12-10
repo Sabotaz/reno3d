@@ -164,8 +164,6 @@ public class AssetManager {
         assets.put("ask", patch);
         assets.put("ask_texture", region.getTexture());
 
-        assets.put("bulle", loadOnUi("data/ui/bulle.png", Texture.class));
-
         assets.put("black.fnt", loadOnUi("data/font/black.fnt", BitmapFont.class));
 
         HashMap<String, String> textures = new HashMap<String, String>();
@@ -199,32 +197,6 @@ public class AssetManager {
         textures.put("textureOrientationEst", "data/img/dpe/Orientation/est.png");
         textures.put("textureOrientationSud", "data/img/dpe/Orientation/sud.png");
         textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
-        textures.put("roulette", "data/ui/roulette.png");
-        textures.put("roulette_arriere", "data/ui/roulette_arriere.png");
-        textures.put("bar", "data/ui/bar.png");
-        textures.put("bar_background", "data/ui/bar_background.png");
-        textures.put("camera", "data/ui/camera.png");
-        textures.put("2D", "data/ui/2D.png");
-        textures.put("3D", "data/ui/3D.png");
-        textures.put("gyro", "data/ui/gyro.png");
-        textures.put("close", "data/ui/close.png");
-        textures.put("delete", "data/ui/delete.png");
-        textures.put("mobilier", "data/ui/mobilier.png");
-        textures.put("move", "data/ui/move.png");
-        textures.put("room", "data/ui/room.png");
-        textures.put("wall", "data/ui/wall.png");
-        textures.put("porte", "data/ui/porte.png");
-        textures.put("fenetre", "data/ui/fenetre.png");
-        textures.put("dpe", "data/ui/dpe.png");
-        textures.put("chauffage", "data/ui/chauffage.png");
-        textures.put("arrow_D", "data/ui/arrow_D.png");
-        textures.put("arrow_G", "data/ui/arrow_G.png");
-        textures.put("new", "data/ui/new.png");
-        textures.put("save", "data/ui/save.png");
-        textures.put("load", "data/ui/load.png");
-        textures.put("void", "data/ui/void.png");
-        textures.put("toit", "data/ui/toit.png");
-        textures.put("calcul", "data/ui/calcul.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
@@ -233,7 +205,13 @@ public class AssetManager {
         assets.put("modelWindowTest", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/window7.g3db", Files.FileType.Internal)));
         assets.put("fenetre_coulissante", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/fenetre_coulissante.g3db", Files.FileType.Internal)));
 */
-        FileHandle file = Gdx.files.internal("data/textures/");
+        FileHandle file = Gdx.files.internal("data/ui/img/");
+        if (file.isDirectory())
+            for (FileHandle f : file.list()) {
+                textures.put(f.nameWithoutExtension(), f.path());
+            }
+
+        file = Gdx.files.internal("data/textures/");
         if (file.isDirectory())
             for (FileHandle f : file.list()) {
                 textures.put(f.nameWithoutExtension(), f.path());

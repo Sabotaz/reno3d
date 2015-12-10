@@ -79,8 +79,8 @@
               "width": "5%",
               "pad": 0,
               "style": [
-                "drawable:void",
-                "drawable:void:tint:888888",
+                "drawable:etage-down",
+                "drawable:etage-down:tint:888888",
                 null,
                 "buttons.fnt"
               ]
@@ -100,15 +100,15 @@
               ]
             },
             {
-              "type": "TextButton",
+              "type": "Button",
               "text": "+",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_PLUS",
               "height": "auto",
               "width": "5%",
               "pad": 0,
               "style": [
-                "drawable:void",
-                "drawable:void:tint:888888",
+                "drawable:etage-up",
+                "drawable:etage-up:tint:888888",
                 null,
                 "buttons.fnt"
               ]
