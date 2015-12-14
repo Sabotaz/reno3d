@@ -257,9 +257,10 @@ public class ModelLibrary {
                     @Override
                     public void run() {
                         Texture t = new Texture(Gdx.files.internal(path + "/" + iconFile));
-                        image_loading_done = true;
+                        //System.out.println(t);
 
                         AssetManager.getInstance().put(path + "/" + iconFile, t);
+                        image_loading_done = true;
                     }
                 };
                 Gdx.app.postRunnable(runnable);
