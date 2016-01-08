@@ -72,6 +72,8 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+        compile "com.thoughtworks.xstream:xstream:1.4.2"
     }
 
     task convert {
