@@ -296,6 +296,13 @@ public class MainUiControleur implements EventListener {
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
                             ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
+                        case SAVE:
+                            //TODO: save popup;
+                            break;
+                        case LOAD:
+                            //TODO: load popup;
+                            break;
+
                         default:
                             System.out.println(lastValue);
                     }
