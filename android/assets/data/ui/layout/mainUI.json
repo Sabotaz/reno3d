@@ -28,6 +28,20 @@
               "width": "5%",
               "pad": 0,
               "style": [
+                "drawable:export",
+                "drawable:export:tint:888888",
+                null,
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "text": "Save",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.SAVE",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
                 "drawable:save",
                 "drawable:save:tint:888888",
                 null,
@@ -36,8 +50,8 @@
             },
             {
               "type": "Button",
-              "text": "Import .ifc",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.IMPORT_IFC",
+              "text": "Load",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.LOAD",
               "height": "auto",
               "width": "5%",
               "pad": 0,

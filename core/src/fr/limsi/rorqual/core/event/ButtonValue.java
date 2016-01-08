@@ -29,6 +29,8 @@ public enum ButtonValue {
     ROTATE_D,
     CALCUL_SURFACE,
     VISIBILITY_TOIT,
+    SAVE,
+    LOAD,
 
     ;
 }
