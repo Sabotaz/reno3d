@@ -39,6 +39,8 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote2D;
 import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
+import fr.limsi.rorqual.core.utils.serialization.Deserializer;
+import fr.limsi.rorqual.core.utils.serialization.Serializer;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
@@ -298,9 +300,11 @@ public class MainUiControleur implements EventListener {
                             break;
                         case SAVE:
                             //TODO: save popup;
+                            Serializer.saveAll();
                             break;
                         case LOAD:
                             //TODO: load popup;
+                            Deserializer.loadAll();
                             break;
 
                         default:
