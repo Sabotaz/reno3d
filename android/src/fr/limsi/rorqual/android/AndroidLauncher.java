@@ -2,13 +2,10 @@ package fr.limsi.rorqual.android;
 
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.media.MediaRouter;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.badlogic.gdx.backends.android.surfaceview.FixedResolutionStrategy;
-import com.badlogic.gdx.backends.android.surfaceview.ResolutionStrategy;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,20 +28,12 @@ public class AndroidLauncher extends AndroidApplication {
 
         config.r = config.g = config.b = 8;
 
-        //config.resolutionStrategy = new FixedResolutionStrategy(1280,800);
-
         MainApplicationAdapter application = new MainApplicationAdapter();
 
         initialize(application, config);
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         gyroscopeListener = new GyroscopeListener();
-
-        MediaRouter mediaRouter = (MediaRouter) getSystemService(MEDIA_ROUTER_SERVICE);
-        for (int i = 0; i < mediaRouter.getRouteCount(); i++) {
-            System.out.println(mediaRouter.getRouteAt(i));
-        }
-
 
         initListeners();
 
