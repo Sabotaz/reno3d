@@ -300,10 +300,27 @@ public class MainUiControleur implements EventListener {
                             break;
                         case SAVE:
                             //TODO: save popup;
+                            Logic.getInstance().stop();
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
+
                             Serializer.saveAll();
                             break;
                         case LOAD:
                             //TODO: load popup;
+                            Logic.getInstance().stop();
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
+
+                            Deleter.deleteBatiment();
+                            ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
+                            CameraEngine.getInstance().reset();
+
+                            ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
+                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
+
                             Deserializer.loadAll();
                             break;
 

@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -41,12 +42,45 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
  * Created by ricordeau on 20/07/15.
  */
 // Objet (mobilier...) (modèle)
+@XStreamAlias("objet")
 public class Objet extends ModelContainer {
 
     public Objet() {
     }
 
+    @XStreamAlias("x")
+    float x = 0;
+    @XStreamAlias("y")
+    float y = 0;
+    @XStreamAlias("angle")
+    float angle = 0;
+    @XStreamAlias("modelId")
+    String modelId = "";
+    @XStreamAlias("slab")
     private Slab slab = null;
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        this.x = x;
+        this.y = y;
+    }
+
+    public void setToRotation(float angle) {
+        this.model_transform.mulLeft(new Matrix4().setToRotation(0, 0, 1, -this.angle));
+        this.angle = angle;
+        this.model_transform.mulLeft(new Matrix4().setToRotation(0, 0, 1, this.angle));
+    }
+
+    public void rotate(int sens) {
+        this.model_transform.mulLeft(new Matrix4().setToRotation(0, 0, 1, -this.angle));
+        this.angle += sens * 15f;
+        this.model_transform.mulLeft(new Matrix4().setToRotation(0, 0, 1, this.angle));
+    }
 
     private Vector3 getIntersection(Ray ray, Matrix4 global_transform) {
         float min_dist = -1;
@@ -118,5 +152,9 @@ public class Objet extends ModelContainer {
 
     public Slab getSlab() {
         return slab;
+    }
+
+    public String getModelId() {
+        return modelId;
     }
 }

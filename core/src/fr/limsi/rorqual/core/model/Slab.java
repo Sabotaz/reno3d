@@ -14,6 +14,9 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -41,33 +44,60 @@ import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
  * Created by ricordeau on 20/07/15.
  */
 // classe modélisant un plancher (modèle + thermique)
+@XStreamAlias("slab")
 public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, Cote2D.Cotable2D {
 
+    @XStreamOmitField
     public final static float DEFAULT_HEIGHT = 0.2f;
+    @XStreamAlias("mitoyennetePlafond")
     private MitoyennetePlafond mitoyennetePlafond;
+    @XStreamAlias("mitoyennetePlancher")
     private MitoyennetePlancher mitoyennetePlancher;
+    @XStreamOmitField
     private float uPlafond;
+    @XStreamOmitField
     private float uPlancher;
+    @XStreamOmitField
     private float deperditionPlafond;
+    @XStreamOmitField
     private float deperditionPlancher;
+    @XStreamOmitField
     private float volume;
+    @XStreamAlias("dateIsolationPlafond")
     private DateIsolationSlab dateIsolationPlafond;
+    @XStreamAlias("dateIsolationPlancher")
     private DateIsolationSlab dateIsolationPlancher;
+    @XStreamAlias("typeIsolationPlancher")
     private TypeIsolationSlab typeIsolationPlancher;
+    @XStreamOmitField
     private float surface;
+    @XStreamOmitField
     private Etage etage = null;
+    @XStreamOmitField
     private boolean changed = true;
+    @XStreamImplicit(itemFieldName="coin")
     private List<Coin> coins;
+    @XStreamImplicit(itemFieldName="wall")
     private ArrayList <Mur> murs = new ArrayList<Mur>();
+    @XStreamImplicit(itemFieldName="objet")
     private ArrayList <Objet> objets = new ArrayList<Objet>();
+    @XStreamAlias("height")
     private float height;
+    @XStreamOmitField
     private Polygon polygon;
+    @XStreamOmitField
     private boolean valide = false;
+    @XStreamAlias("plafondMaterial")
     private MaterialTypeEnum plafondType = MaterialTypeEnum.WALL4;
+    @XStreamAlias("plancherMaterial")
     private MaterialTypeEnum plancher = MaterialTypeEnum.PARQUET;
+    @XStreamOmitField
     private Material plafondMaterial = new Material();
+    @XStreamOmitField
     private Material plancherMaterial = new Material();
+    @XStreamOmitField
     boolean areMaterialSet = false;
+    @XStreamOmitField
     Plafond plafond;
 
     public Slab(List<Coin> coins) {
@@ -87,6 +117,24 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         this.typeIsolationPlancher=TypeIsolationSlab.NON_ISOLE;
         plafond = new Plafond(this);
         this.add(plafond);
+    }
+
+    public Slab(List<Coin> coins, Slab model) {
+        this(coins, model.getHeight());
+        this.height = model.height;
+        this.mitoyennetePlafond=model.getMitoyennetePlafond();
+        this.mitoyennetePlancher=model.getMitoyennetePlancher();
+        this.uPlafond=model.getuPlafond();
+        this.uPlancher=model.getuPlancher();
+        this.dateIsolationPlafond=model.getDateIsolationPlafond();
+        this.dateIsolationPlancher=model.getDateIsolationPlancher();
+        this.typeIsolationPlancher=model.getTypeIsolationPlancher();
+        this.setPlafondMaterialType(model.getPlafondMaterialType());
+        this.setPlancherMaterialType(model.getPlancherMaterialType());
+        plafond = new Plafond(this);
+        this.add(plafond);
+
+        this.setEtage(model.getEtage());
     }
 
     public void actualiseSurface(){
@@ -179,7 +227,6 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     public List<Coin> getCoins() {
         return coins;
     }
-
 
     public void setPlafondMaterialType(MaterialTypeEnum mat) {
         plafondType = mat;

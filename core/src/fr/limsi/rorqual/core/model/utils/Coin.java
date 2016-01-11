@@ -2,6 +2,8 @@ package fr.limsi.rorqual.core.model.utils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,15 +16,25 @@ import fr.limsi.rorqual.core.model.Slab;
  * Created by christophe on 20/07/15.
  */
 // Classe modélisant un coin de pièce, pour la modélisation des planchers et murs
+@XStreamAlias("coin")
 public class Coin {
 
+    @XStreamOmitField
     private ArrayList<Mur> murs = new ArrayList<Mur>();
+    @XStreamOmitField
     private ArrayList<Slab> slabs = new ArrayList<Slab>();
 
+    @XStreamAlias("position")
     private Vector2 position = new Vector2();
+    @XStreamOmitField
     private int etage = 0;
 
+    @XStreamOmitField
     private static HashMap<Integer, ArrayList<Coin>> coins = new HashMap<Integer, ArrayList<Coin>>();
+
+    public static HashMap<Integer, ArrayList<Coin>> getCoins() {
+        return coins;
+    }
 
     public static Coin getCoin(int etage, Vector2 p) {
         if (!coins.containsKey(etage)) {

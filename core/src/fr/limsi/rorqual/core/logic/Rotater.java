@@ -49,7 +49,7 @@ public class Rotater extends ModelMaker {
                 @Override
                 public void run() {
                     do {
-                        ((Objet) rotated_object).model_transform.mulLeft(new Matrix4().setToRotation(0,0,1,sens * 15f));
+                        ((Objet) rotated_object).rotate(sens);
                         try {
                             sleep(150);
                         } catch (InterruptedException e) {
@@ -91,7 +91,7 @@ public class Rotater extends ModelMaker {
                 public void run() {
                     do {
                         if (rotateButton.isOver())
-                            ((Objet) rotated_object).model_transform.mulLeft(new Matrix4().setToRotation(0,0,1,sens * 15f));
+                            ((Objet) rotated_object).rotate(sens);
                         try {
                             sleep(150);
                         } catch (InterruptedException e) {

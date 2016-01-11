@@ -48,6 +48,7 @@ public class ObjetMaker extends ModelMaker {
                 obj.setPosition(intersection.x, intersection.y);
                 obj.setSelectable(false);
                 obj.setSlab(slab);
+                obj.setModelId(modelId);
                 slab.addObjet(obj);
                 making_objet = true;
                 obj.calculateBoundingBox(new BoundingBox());

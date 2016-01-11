@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,20 +27,33 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 //  * etage min/max
 //  * draw
 //  * orientation globale du batiment
+@XStreamAlias("batiment")
 public class Batiment {
 
+    @XStreamOmitField
     private ModelContainer floor = Floor.getModel();
+    @XStreamOmitField
     private Etage first;
+    @XStreamOmitField
     private Etage last;
+    @XStreamAlias("currentFloor")
     private int current;
+    @XStreamAlias("globalOrientation")
     private OrientationEnum globalOrientation = OrientationEnum.SUD;
+    @XStreamOmitField
     private Camera camera = null;
+    @XStreamAlias("etages")
     private EtageHolder etages = new EtageHolder();
 
+    @XStreamAlias("plafondsVisibles")
+    boolean plafondsVisibles = false;
 
-    private class EtageHolder {
 
+    private static class EtageHolder {
+
+        @XStreamImplicit(itemFieldName="floor")
         private ArrayList<Etage> etages = new ArrayList<Etage>();
+        @XStreamAlias("floorOffset")
         private int diff = 0; // positive offset
 
         public void add(Etage e) {
@@ -284,8 +300,6 @@ public class Batiment {
         setEtage(0);
     }
 
-    boolean plafondsVisibles = false;
-
     public boolean arePlafondsVisibles() {
         return plafondsVisibles;
     }
@@ -295,9 +309,26 @@ public class Batiment {
     }
 
     public void act() {
-        for (int i = etages.getMin(); i <= current; i++) {
-            Etage etage = etages.get(i);
-            etage.getModelGraph().act();
+        synchronized (this) {
+            for (int i = etages.getMin(); i <= current; i++) {
+                Etage etage = etages.get(i);
+                etage.getModelGraph().act();
+            }
+        }
+    }
+
+    public void reload() {
+        synchronized (this) {
+            System.out.println("reload...");
+            floor = Floor.getModel();
+            for (int i = etages.getMin(); i <= etages.getMax(); i++) {
+                Etage etage = etages.get(i);
+                etage.setBatiment(this);
+                etage.setOrientation(globalOrientation);
+                etage.reload();
+            }
+            getCurrentEtage().getModelGraph().getRoot().add(floor);
+            System.out.println("done !");
         }
     }
 

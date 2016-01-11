@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import eu.mihosoft.vrl.v3d.CSG;
 import eu.mihosoft.vrl.v3d.Extrude;
@@ -42,38 +44,66 @@ import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
  * Created by ricordeau on 20/07/15.
  */
 // Mur (modèle + thermique)
+@XStreamAlias("wall")
 public class Mur extends ModelContainer implements Cote.Cotable {
 
     public final static float DEFAULT_DEPTH = 0.2f;
 
+    @XStreamAlias("A")
     private Coin A;
+    @XStreamAlias("B")
     private Coin B;
+    @XStreamAlias("width")
     private float width;
+    @XStreamAlias("depth")
     private float depth;
+    @XStreamOmitField
     private float surfaceInitiale;
+    @XStreamOmitField
     private float surface;
+    @XStreamAlias("wallType")
     private TypeMurEnum typeMur;
+    @XStreamAlias("isolationType")
     private TypeIsolationMurEnum typeIsolationMur;
+    @XStreamAlias("isolationDate")
     private DateIsolationMurEnum dateIsolationMur;
+    @XStreamAlias("orientation")
     private OrientationEnum orientationMur;
+    @XStreamOmitField
     private float coeffTransmissionThermique;
+    @XStreamOmitField
     private float deperdition;
+    @XStreamOmitField
     private Slab slabGauche = null;
+    @XStreamOmitField
     private Slab slabDroit = null;
-    private ArrayList<Coin> coins = new ArrayList<Coin>();
+    @XStreamOmitField
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
+    @XStreamOmitField
     private Etage etage = null;
+    @XStreamOmitField
     private boolean changed = true;
+    @XStreamOmitField
     private boolean areMaterialSet = false;
+    @XStreamAlias("exteriorMaterial")
     private MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
+    @XStreamAlias("interiorMaterial1")
     private MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.WALL1;
+    @XStreamAlias("interiorMaterial2")
     private MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.WALL1;
+    @XStreamAlias("defaultMaterial")
     private MaterialTypeEnum defaultMaterialType = MaterialTypeEnum.BETON;
+    @XStreamOmitField
     private Material exteriorMaterial = new Material();
+    @XStreamOmitField
     private Material interiorMaterial1 = new Material();
+    @XStreamOmitField
     private Material interiorMaterial2 = new Material();
+    @XStreamOmitField
     private Material defaultMaterial = new Material();
+    @XStreamOmitField
     private boolean isCreated = false;
+    @XStreamOmitField
     private Model model_non_perce = null;
 
     public Mur(Coin a, Coin b, Mur model) {
@@ -94,6 +124,11 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             model.getSlabDroit().addMur(this);
 
         this.setEtage(model.getEtage());
+
+        this.setDefaultMaterialType(model.getDefaultMaterialType());
+        this.setExteriorMaterialType(model.getExteriorMaterialType());
+        this.setInteriorMaterialType1(model.getInteriorMaterialType1());
+        this.setInteriorMaterialType2(model.getInteriorMaterialType2());
     }
 
     public Mur(Coin a, Coin b) {
@@ -613,5 +648,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
 
     public MaterialTypeEnum getDefaultMaterialType() {
         return defaultMaterialType;
+    }
+
+    public void reload() {
+
     }
 }

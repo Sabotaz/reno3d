@@ -1,8 +1,16 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.math.collision.BoundingBox;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
+import fr.limsi.rorqual.core.model.utils.Coin;
+import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 /**
@@ -10,21 +18,38 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
  */
 // un étage d'un batiment
 //  * contient des murs, slabs, ouvertures
+@XStreamAlias("floor")
 public class Etage {
+    @XStreamImplicit(itemFieldName="wall")
     private ArrayList<Mur> murs = new ArrayList<Mur>();
+    @XStreamImplicit(itemFieldName="slab")
     private ArrayList<Slab> slabs = new ArrayList<Slab>();
+    @XStreamOmitField
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
+    @XStreamOmitField
     private ArrayList<Fenetre> fenetres = new ArrayList<Fenetre>();
+    @XStreamOmitField
     private ArrayList<Porte> portes = new ArrayList<Porte>();
+    @XStreamOmitField
     private ArrayList<PorteFenetre> porteFenetres = new ArrayList<PorteFenetre>();
+    @XStreamAlias("number")
     private int number;
+    @XStreamAlias("elevation")
     private float elevation;
+    @XStreamAlias("name")
     private String name;
+    @XStreamOmitField
     private Batiment batiment;
+    @XStreamOmitField
     private ModelGraph modelGraph = new ModelGraph();
 
+    @XStreamOmitField
     public final static float DEFAULT_HEIGHT = 2.8f;
+    @XStreamAlias("height")
     private float height = DEFAULT_HEIGHT;
+
+    @XStreamOmitField
+    private OrientationEnum globalOrientation = OrientationEnum.SUD;
 
     public Etage() {
     }
@@ -150,8 +175,6 @@ public class Etage {
         this.batiment = batiment;
     }
 
-    private OrientationEnum globalOrientation = OrientationEnum.SUD;
-
     public void setOrientation(OrientationEnum orientation) {
         globalOrientation = orientation;
         for (Mur m : murs){
@@ -226,6 +249,44 @@ public class Etage {
         }else{
             return false;
         }
+    }
+
+    public void reload() {
+        this.modelGraph = new ModelGraph();
+        HashMap<Mur,Mur> reloadedMurs = new HashMap<Mur, Mur>();
+        HashMap<Slab,Slab> reloadedSlabs = new HashMap<Slab, Slab>();
+
+        for (Mur m : murs) {
+            Mur mur = new Mur(Coin.getCoin(number, m.getA().getPosition()), Coin.getCoin(number, m.getB().getPosition()), m);
+            mur.setEtage(this);
+            reloadedMurs.put(m, mur);
+            modelGraph.getRoot().add(mur);
+        }
+
+        for (Slab s : slabs) {
+            ArrayList<Coin> coins = new ArrayList<Coin>();
+            for (Coin coin : s.getCoins())
+                coins.add(Coin.getCoin(number, coin.getPosition()));
+            Slab slab = new Slab(coins, s);
+            for (Mur m : s.getMurs())
+                slab.addMur(reloadedMurs.get(m));
+            slab.setEtage(this);
+            for (Objet o : s.getObjets()) {
+                Objet obj = (Objet)(ModelLibrary.getInstance().getModelContainerFromId(o.getModelId()));
+                obj.setModelId(o.getModelId());
+                obj.setSelectable(false);
+                obj.setSlab(slab);
+                obj.setPosition(o.x, o.y);
+                obj.setToRotation(o.angle);
+                slab.addObjet(obj);
+                obj.calculateBoundingBox(new BoundingBox());
+            }
+            reloadedSlabs.put(s,slab);
+            modelGraph.getRoot().add(slab);
+        }
+
+        murs = new ArrayList<Mur>(reloadedMurs.values());
+        slabs = new ArrayList<Slab>(reloadedSlabs.values());
     }
 
 }
