@@ -3,6 +3,8 @@ package fr.limsi.rorqual.core.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum;
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeMasqueEnum;
@@ -21,18 +23,40 @@ import fr.limsi.rorqual.core.event.EventManager;
 // classe modélisant une porte-fenetre (thermique)
 public class PorteFenetre extends Ouverture {
 
+    @XStreamOmitField
     static float DEFAULT_Y = 0f;
+    @XStreamOmitField
     static float DEFAULT_WIDTH = 1.0f;
+    @XStreamOmitField
     static float DEFAULT_HEIGHT = 2.15f;
+    @XStreamAlias("coefficientTransmissionThermique")
     private float coefficientDeTransmissionThermique;
+    @XStreamAlias("deperdition")
     private float deperdition;
+    @XStreamAlias("typePorteFenetre")
     public TypePorteFenetre typePorteFenetre;
+    @XStreamAlias("typeMateriau")
     public TypeMateriauMenuiserieEnum typeMateriau;
+    @XStreamAlias("typeVitrage")
     private TypeVitrageEnum typeVitrage=TypeVitrageEnum.SIMPLE_VITRAGE;
+    @XStreamAlias("typeFermeture")
     private TypeFermetureEnum typeFermeture=TypeFermetureEnum.SANS_FERMETURE;
+    @XStreamAlias("masqueProche")
     private TypeMasqueEnum masqueProche=TypeMasqueEnum.ABSENCE_MASQUE_PROCHE;
+    @XStreamAlias("masqueLointain")
     private TypeMasqueEnum masqueLointain=TypeMasqueEnum.ABSENCE_MASQUE_LOINTAIN;
-    private float fts=0.64f,fe1=1,fe2=1,c1=1.2f,bas=1,sse;
+    @XStreamOmitField
+    private float fts=0.64f;
+    @XStreamOmitField
+    private float fe1=1;
+    @XStreamOmitField
+    private float fe2=1;
+    @XStreamOmitField
+    private float c1=1.2f;
+    @XStreamOmitField
+    private float bas=1;
+    @XStreamOmitField
+    private float sse;
 
     // Constructeur
     public PorteFenetre() {
@@ -695,6 +719,22 @@ public class PorteFenetre extends Ouverture {
     @Override
     public String toString(){
         return "PorteFenetre ->  s="+surface+" u="+coefficientDeTransmissionThermique+ " dp="+deperdition;
+    }
+
+    @Override
+    public void copy(Ouverture other) {
+        super.copy(other);
+        if (other instanceof PorteFenetre) {
+            PorteFenetre porte = (PorteFenetre) other;
+            coefficientDeTransmissionThermique = porte.coefficientDeTransmissionThermique;
+            deperdition = porte.deperdition;
+            typePorteFenetre = porte.typePorteFenetre;
+            typeMateriau = porte.typeMateriau;
+            typeVitrage = porte.typeVitrage;
+            typeFermeture = porte.typeFermeture;
+            masqueProche = porte.masqueProche;
+            masqueLointain = porte.masqueLointain;
+        }
     }
 }
 

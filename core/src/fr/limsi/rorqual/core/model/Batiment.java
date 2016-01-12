@@ -324,8 +324,8 @@ public class Batiment {
             for (int i = etages.getMin(); i <= etages.getMax(); i++) {
                 Etage etage = etages.get(i);
                 etage.setBatiment(this);
-                etage.setOrientation(globalOrientation);
                 etage.reload();
+                etage.setOrientation(globalOrientation);
             }
             getCurrentEtage().getModelGraph().getRoot().add(floor);
             System.out.println("done !");

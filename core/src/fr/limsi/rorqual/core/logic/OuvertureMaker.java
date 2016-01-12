@@ -46,6 +46,7 @@ public class OuvertureMaker extends ModelMaker {
             ModelContainer container = ModelLibrary.getInstance().getModelContainerFromId(modelId);
             if (container instanceof Ouverture) {
                 ouverture = (Ouverture) container;
+                ouverture.setModelId(modelId);
                 ouverture.setMur(mur);
                 ouverture.setX(x);
                 ouverture.setSelectable(false);

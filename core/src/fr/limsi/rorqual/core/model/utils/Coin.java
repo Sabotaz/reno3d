@@ -112,6 +112,10 @@ public class Coin {
         coins.get(etage).remove(this);
     }
 
+    public static void clearAll() {
+        coins.clear();
+    }
+
     public boolean isFirst(Mur mur) {
         return murs.size() > 0 && murs.get(0).equals(mur);
     }

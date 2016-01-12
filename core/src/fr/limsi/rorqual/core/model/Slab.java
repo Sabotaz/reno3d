@@ -121,6 +121,8 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
     public Slab(List<Coin> coins, Slab model) {
         this(coins, model.getHeight());
+        for (Coin coin : coins)
+            coin.addSlab(this);
         this.height = model.height;
         this.mitoyennetePlafond=model.getMitoyennetePlafond();
         this.mitoyennetePlancher=model.getMitoyennetePlancher();

@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,39 +25,44 @@ public class OuverturePlane extends ModelContainer {
 
     public Ouverture ouverture;
 
-    public OuverturePlane(ModelContainer parent) {
+    public OuverturePlane(final ModelContainer parent) {
         setSelectable(false);
-        makeModel(parent);
+        if (parent instanceof Ouverture) {
+            ouverture = (Ouverture) parent;
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    makeModel(parent);
+                }
+            });
+        }
     }
 
     private void makeModel(ModelContainer p) {
-        if (p instanceof Ouverture) {
-            ouverture = (Ouverture)p;
-            TextureAttribute ta;
-            if (p instanceof Porte) {
-                ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("porte"));
-            } else if (p instanceof Fenetre) {
-                ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
-            } else if (p instanceof PorteFenetre) {
-                ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
-            } else {
-                ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
-            }
-
-            ModelBuilder modelBuilder = new ModelBuilder();
-            modelBuilder.begin();
-            MeshPartBuilder meshBuilder;
-            meshBuilder = modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, new Material(ta));
-            meshBuilder.rect(
-                    new Vector3( 0.5f, 0, 0),
-                    new Vector3(-0.5f, 0, 0),
-                    new Vector3(-0.5f, 1, 0),
-                    new Vector3( 0.5f, 1, 0),
-                    new Vector3(0, 0, 1));
-            Model model = modelBuilder.end();
-
-            setModel(model);
+        TextureAttribute ta;
+        if (p instanceof Porte) {
+            ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("porte"));
+        } else if (p instanceof Fenetre) {
+            ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
+        } else if (p instanceof PorteFenetre) {
+            ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
+        } else {
+            ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
         }
+
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.begin();
+        MeshPartBuilder meshBuilder;
+        meshBuilder = modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, new Material(ta));
+        meshBuilder.rect(
+                new Vector3( 0.5f, 0, 0),
+                new Vector3(-0.5f, 0, 0),
+                new Vector3(-0.5f, 1, 0),
+                new Vector3( 0.5f, 1, 0),
+                new Vector3(0, 0, 1));
+        Model model = modelBuilder.end();
+
+        setModel(model);
     }
 
     @Override

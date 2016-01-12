@@ -11,6 +11,7 @@ import java.util.HashMap;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 
 /**
@@ -24,7 +25,7 @@ public class Etage {
     private ArrayList<Mur> murs = new ArrayList<Mur>();
     @XStreamImplicit(itemFieldName="slab")
     private ArrayList<Slab> slabs = new ArrayList<Slab>();
-    @XStreamOmitField
+    @XStreamImplicit(itemFieldName="opening")
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
     @XStreamOmitField
     private ArrayList<Fenetre> fenetres = new ArrayList<Fenetre>();
@@ -48,7 +49,7 @@ public class Etage {
     @XStreamAlias("height")
     private float height = DEFAULT_HEIGHT;
 
-    @XStreamOmitField
+    @XStreamAlias("globalOrientation")
     private OrientationEnum globalOrientation = OrientationEnum.SUD;
 
     public Etage() {
@@ -255,34 +256,66 @@ public class Etage {
         this.modelGraph = new ModelGraph();
         HashMap<Mur,Mur> reloadedMurs = new HashMap<Mur, Mur>();
         HashMap<Slab,Slab> reloadedSlabs = new HashMap<Slab, Slab>();
+        HashMap<Fenetre,Fenetre> reloadedFenetres = new HashMap<Fenetre, Fenetre>();
+        HashMap<Porte,Porte> reloadedPortes = new HashMap<Porte, Porte>();
+        HashMap<PorteFenetre,PorteFenetre> reloadedPorteFenetres = new HashMap<PorteFenetre, PorteFenetre>();
+        HashMap<Ouverture,Ouverture> reloadedOuvertures = new HashMap<Ouverture, Ouverture>();
 
-        for (Mur m : murs) {
-            Mur mur = new Mur(Coin.getCoin(number, m.getA().getPosition()), Coin.getCoin(number, m.getB().getPosition()), m);
-            mur.setEtage(this);
-            reloadedMurs.put(m, mur);
-            modelGraph.getRoot().add(mur);
+        // reload walls
+        if (murs != null)
+            for (Mur m : murs) {
+                Mur mur = new Mur(Coin.getCoin(number, m.getA().getPosition()), Coin.getCoin(number, m.getB().getPosition()), m);
+                mur.setEtage(this);
+                reloadedMurs.put(m, mur);
+                modelGraph.getRoot().add(mur);
+            }
+
+        // reload slabs
+        if (slabs != null)
+            for (Slab s : slabs) {
+                ArrayList<Coin> coins = new ArrayList<Coin>();
+                for (Coin coin : s.getCoins())
+                    coins.add(Coin.getCoin(number, coin.getPosition()));
+                Slab slab = new Slab(coins, s);
+                for (Mur m : s.getMurs())
+                    if (reloadedMurs.containsKey(m))
+                        slab.addMur(reloadedMurs.get(m));
+                slab.setEtage(this);
+                if (s.getObjets() != null)
+                    for (Objet o : s.getObjets()) {
+                        Objet obj = (Objet)(ModelLibrary.getInstance().getModelContainerFromId(o.getModelId()));
+                        obj.setModelId(o.getModelId());
+                        obj.setSelectable(false);
+                        obj.setSlab(slab);
+                        obj.setPosition(o.x, o.y);
+                        obj.setToRotation(o.angle);
+                        slab.addObjet(obj);
+                        obj.calculateBoundingBox(new BoundingBox());
+                    }
+                reloadedSlabs.put(s,slab);
+                modelGraph.getRoot().add(slab);
+            }
+
+        // reload left/right slab for walls
+        for (Mur mur : reloadedMurs.values()) {
+            if (mur.getSlabGauche() != null)
+                mur.setSlabGauche(reloadedSlabs.get(mur.getSlabGauche()));
+            if (mur.getSlabDroit() != null)
+                mur.setSlabDroit(reloadedSlabs.get(mur.getSlabDroit()));
         }
 
-        for (Slab s : slabs) {
-            ArrayList<Coin> coins = new ArrayList<Coin>();
-            for (Coin coin : s.getCoins())
-                coins.add(Coin.getCoin(number, coin.getPosition()));
-            Slab slab = new Slab(coins, s);
-            for (Mur m : s.getMurs())
-                slab.addMur(reloadedMurs.get(m));
-            slab.setEtage(this);
-            for (Objet o : s.getObjets()) {
-                Objet obj = (Objet)(ModelLibrary.getInstance().getModelContainerFromId(o.getModelId()));
-                obj.setModelId(o.getModelId());
-                obj.setSelectable(false);
-                obj.setSlab(slab);
-                obj.setPosition(o.x, o.y);
-                obj.setToRotation(o.angle);
-                slab.addObjet(obj);
-                obj.calculateBoundingBox(new BoundingBox());
-            }
-            reloadedSlabs.put(s,slab);
-            modelGraph.getRoot().add(slab);
+        fenetres = new ArrayList<Fenetre>();
+        portes = new ArrayList<Porte>();
+        porteFenetres = new ArrayList<PorteFenetre>();
+        ArrayList<Ouverture> badOuvertures = ouvertures;
+        ouvertures = new ArrayList<Ouverture>();
+
+        for (Ouverture o : badOuvertures) {
+            Ouverture ouverture = (Ouverture)ModelLibrary.getInstance().getModelContainerFromId(o.getModelId());
+            reloadedOuvertures.put(o, ouverture);
+
+            ouverture.copy(o);
+            ouverture.setMur(reloadedMurs.get(o.getMur()));
         }
 
         murs = new ArrayList<Mur>(reloadedMurs.values());

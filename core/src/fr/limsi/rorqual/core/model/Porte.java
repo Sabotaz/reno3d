@@ -21,6 +21,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.UBJsonReader;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte;
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.TypeMurEnum;
@@ -36,11 +38,17 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 // classe modélisant une porte (thermique)
 public class Porte extends Ouverture{
 
+    @XStreamOmitField
     static float DEFAULT_Y = 0.0f;
+    @XStreamOmitField
     static float DEFAULT_WIDTH = 1.0f;
+    @XStreamOmitField
     static float DEFAULT_HEIGHT = 2.15f;
+    @XStreamAlias("coefficientTransmissionThermique")
     private double coefficientDeTransmissionThermique;
+    @XStreamAlias("deperdition")
     private double deperdition;
+    @XStreamAlias("typePorte")
     public TypePorte typePorte;
 
     // Attributs
@@ -193,6 +201,17 @@ public class Porte extends Ouverture{
     @Override
     public String toString(){
         return "Porte ->  s="+surface+" u="+coefficientDeTransmissionThermique+ " dp="+deperdition;
+    }
+
+    @Override
+    public void copy(Ouverture other) {
+        super.copy(other);
+        if (other instanceof Porte) {
+            Porte porte = (Porte) other;
+            coefficientDeTransmissionThermique = porte.coefficientDeTransmissionThermique;
+            deperdition = porte.deperdition;
+            typePorte = porte.typePorte;
+        }
     }
 
 }

@@ -73,9 +73,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private float coeffTransmissionThermique;
     @XStreamOmitField
     private float deperdition;
-    @XStreamOmitField
+    @XStreamAlias("leftSlab")
     private Slab slabGauche = null;
-    @XStreamOmitField
+    @XStreamAlias("rightSlab")
     private Slab slabDroit = null;
     @XStreamOmitField
     private ArrayList<Ouverture> ouvertures = new ArrayList<Ouverture>();
@@ -111,8 +111,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         typeMur = model.typeMur;
         typeIsolationMur = model.typeIsolationMur;
         dateIsolationMur = model.dateIsolationMur;
-        slabGauche = model.slabGauche;
-        slabDroit = model.slabDroit;
         coeffTransmissionThermique = model.coeffTransmissionThermique;
 
         setSlabGauche(model.getSlabGauche());

@@ -25,6 +25,7 @@ public class SerialHolder {
     Batiment batiment = ModelHolder.getInstance().getBatiment();
 
     public void recreateModel() {
+        Coin.clearAll();
         ModelHolder.getInstance().setBatiment(batiment);
         batiment.reload();
     }

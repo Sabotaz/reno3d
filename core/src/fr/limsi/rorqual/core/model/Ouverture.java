@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,29 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 public abstract class Ouverture extends ModelContainer {
 
     // Attributs
+    @XStreamAlias("wall")
     protected Mur mur;
+    @XStreamAlias("position")
     protected Vector2 position = new Vector2();
+    @XStreamAlias("width")
     protected float width = 1;
+    @XStreamAlias("height")
     protected float height = 1;
+    @XStreamOmitField
     protected float surface = 0;
 
+    @XStreamOmitField
     OuverturePlane fausseOuverture = null;
+
+    @XStreamOmitField
+    private boolean changed = true;
+
+    @XStreamOmitField
+    protected Matrix4 scaleMatrix = new Matrix4();
+    @XStreamOmitField
+    private Vector3 dmin = new Vector3();
+    @XStreamAlias("modelId")
+    private String modelId = "";
 
     // Constructeur
     public Ouverture(Mur mur, Vector2 position, float width, float height){
@@ -73,7 +91,6 @@ public abstract class Ouverture extends ModelContainer {
         mur.setChanged();
     }
 
-    private boolean changed = true;
 
     public float getWidth() {
         return width;
@@ -138,9 +155,6 @@ public abstract class Ouverture extends ModelContainer {
         }
     }
 
-    protected Matrix4 scaleMatrix = new Matrix4();
-    private Vector3 dmin = new Vector3();
-
     public void act() {
         super.act();
         if (changed) {
@@ -187,5 +201,17 @@ public abstract class Ouverture extends ModelContainer {
         super.setParent(p);
         if (parent != null)
             parent.add(fausseOuverture);
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void copy(Ouverture other) {
+        this.position = other.getPosition();
     }
 }
