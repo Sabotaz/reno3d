@@ -8,6 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import fr.limsi.rorqual.core.dpe.Dpe;
+
 // Singleton
 // Gestionnaire d'événements
 public class EventManager {
@@ -44,6 +46,13 @@ public class EventManager {
 
     public void put(Channel c, Event e) {
         eventQueues.get(c).offer(e);
+    }
+
+    public void removeListener(Channel c, EventListener l) {
+        List<EventListener> listeners = eventListeners.get(c);
+        synchronized (listeners) {
+            listeners.remove(l);
+        }
     }
 
     // Holder

@@ -1,5 +1,8 @@
 package fr.limsi.rorqual.core.dpe.enums.chauffageproperties;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 import java.util.ArrayList;
 
 import fr.limsi.rorqual.core.dpe.enums.ecsproperties.DeclenchementChaudiereEnum;
@@ -8,6 +11,7 @@ import fr.limsi.rorqual.core.dpe.enums.ecsproperties.LocalEquipementEcsEnum;
 /**
  * Created by ricordeau on 21/07/15.
  */
+@XStreamAlias("chauffage")
 public class Chauffage {
 
     public enum Generateur {

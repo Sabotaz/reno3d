@@ -2,6 +2,8 @@ package fr.limsi.rorqual.core.dpe;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Intersector;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import fr.limsi.rorqual.core.model.*;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.TabWindow;
 
+@XStreamAlias("dpe")
 public class Dpe implements EventListener {
 
     private HashMap<EventType,Object> general_properties = new HashMap<EventType,Object>();
@@ -44,6 +47,7 @@ public class Dpe implements EventListener {
     private TypeBatimentEnum typeBatiment = TypeBatimentEnum.MAISON;
     private CategorieLogementEnum categorieLogement = CategorieLogementEnum.T1_F1;
     private TypeAbonnementElectriqueEnum typeAbonnementElectrique = TypeAbonnementElectriqueEnum.AUTRE;
+
     public void actualiseSH(){
         float tampon=0;
         for (Slab s: ModelHolder.getInstance().getBatiment().getSlabs()){
@@ -150,6 +154,7 @@ public class Dpe implements EventListener {
     private float dpPorte;
     private float dpFenetre;
     private float dpPorteFenetre;
+
     public void actualiseDpMur(){
         float tampon=0;
         for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
@@ -686,6 +691,7 @@ public class Dpe implements EventListener {
         }catch(IndexOutOfBoundsException e){}
     }
     ///*** Fenêtres ***///
+    @XStreamOmitField
     private List<Fenetre> fenetreList=new ArrayList<Fenetre>();
     public void actualiseNbFenetreSvEtDv(){
         nbFenetreSV=0;
@@ -708,9 +714,23 @@ public class Dpe implements EventListener {
         this.actualiseQ4paConv();
     }
     ///*** Portes-fenêtres ***///
+    @XStreamOmitField
     private List<PorteFenetre> porteFenetreList=new ArrayList<PorteFenetre>();
     ///*** Portes ***///
+    @XStreamOmitField
     private List<Porte> porteList=new ArrayList<Porte>();
+
+    public void setFenetreList(List<Fenetre> fenetres) {
+        fenetreList = fenetres;
+    }
+
+    public void setPorteList(List<Porte> portes) {
+        porteList = portes;
+    }
+
+    public void setPorteFenetreList(List<PorteFenetre> portefenetres) {
+        porteFenetreList = portefenetres;
+    }
 
     // 2.4. Calcul des ponts thermiques TODO : finir ça !
 
@@ -1987,13 +2007,22 @@ public class Dpe implements EventListener {
     private static class DpeHolder
     {
         /** Instance unique non préinitialisée */
-        private final static Dpe INSTANCE = new Dpe();
+        private static Dpe INSTANCE = new Dpe();
+    }
+
+    public static synchronized void loadDpe(Dpe dpe) {
+        DpeHolder.INSTANCE = dpe;
+        dpe.init();
     }
 
     public static synchronized Dpe getInstance() {
         return DpeHolder.INSTANCE;
     }
     private Dpe () {
+        init();
+    }
+
+    private void init() {
         EventManager.getInstance().addListener(Channel.DPE, this);
         tabCoeffPondX[0]=0.1f;
         tabCoeffPondX[1]=0.25f;

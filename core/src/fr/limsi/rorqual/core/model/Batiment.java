@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import fr.limsi.rorqual.core.dpe.enums.wallproperties.OrientationEnum;
 import fr.limsi.rorqual.core.event.Channel;
@@ -47,7 +48,6 @@ public class Batiment {
 
     @XStreamAlias("plafondsVisibles")
     boolean plafondsVisibles = false;
-
 
     private static class EtageHolder {
 
@@ -194,6 +194,34 @@ public class Batiment {
         ArrayList<Mur> all = new ArrayList<Mur>();
         for (Etage etage : etages.list())
             all.addAll(etage.getMurs());
+        return all;
+    }
+
+    public ArrayList<Fenetre> getFenetres() {
+        ArrayList<Fenetre> all = new ArrayList<Fenetre>();
+        for (Etage etage : etages.list())
+            all.addAll(etage.getFenetres());
+        return all;
+    }
+
+    public ArrayList<Porte> getPortes() {
+        ArrayList<Porte> all = new ArrayList<Porte>();
+        for (Etage etage : etages.list())
+            all.addAll(etage.getPortes());
+        return all;
+    }
+
+    public ArrayList<PorteFenetre> getPorteFenetres() {
+        ArrayList<PorteFenetre> all = new ArrayList<PorteFenetre>();
+        for (Etage etage : etages.list())
+            all.addAll(etage.getPorteFenetres());
+        return all;
+    }
+
+    public ArrayList<Ouverture> getOuvertures() {
+        ArrayList<Ouverture> all = new ArrayList<Ouverture>();
+        for (Etage etage : etages.list())
+            all.addAll(etage.getOuvertures());
         return all;
     }
 

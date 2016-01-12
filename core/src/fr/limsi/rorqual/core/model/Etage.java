@@ -310,12 +310,14 @@ public class Etage {
         ArrayList<Ouverture> badOuvertures = ouvertures;
         ouvertures = new ArrayList<Ouverture>();
 
-        for (Ouverture o : badOuvertures) {
-            Ouverture ouverture = (Ouverture)ModelLibrary.getInstance().getModelContainerFromId(o.getModelId());
-            reloadedOuvertures.put(o, ouverture);
+        if (badOuvertures != null) {
+            for (Ouverture o : badOuvertures) {
+                Ouverture ouverture = (Ouverture) ModelLibrary.getInstance().getModelContainerFromId(o.getModelId());
+                reloadedOuvertures.put(o, ouverture);
 
-            ouverture.copy(o);
-            ouverture.setMur(reloadedMurs.get(o.getMur()));
+                ouverture.copy(o);
+                ouverture.setMur(reloadedMurs.get(o.getMur()));
+            }
         }
 
         murs = new ArrayList<Mur>(reloadedMurs.values());
