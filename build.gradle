@@ -73,7 +73,10 @@ project(":core") {
 
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
-        compile "com.thoughtworks.xstream:xstream:1.4.2"
+        compile ("com.thoughtworks.xstream:xstream:1.4.2"){
+            exclude group: 'xmlpull'
+        }
+
     }
 
     task convert {
