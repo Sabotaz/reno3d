@@ -39,6 +39,9 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+        compile ("com.thoughtworks.xstream:xstream:1.4.2"){
+        }
     }
 }
 
