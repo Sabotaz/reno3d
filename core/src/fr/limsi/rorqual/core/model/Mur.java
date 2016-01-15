@@ -106,6 +106,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     @XStreamOmitField
     private Model model_non_perce = null;
 
+    private Mur() {
+    }
+
     public Mur(Coin a, Coin b, Mur model) {
         this(a, b, model.depth);
         typeMur = model.typeMur;

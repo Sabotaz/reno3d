@@ -47,6 +47,9 @@ public class Coin {
         return new Coin(etage, p);
     }
 
+    private Coin() {
+    }
+
     private Coin(int etage, Vector2 p) {
         this.etage = etage;
         position.set(p);

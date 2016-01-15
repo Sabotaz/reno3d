@@ -100,6 +100,9 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     @XStreamOmitField
     Plafond plafond;
 
+    private Slab() {
+    }
+
     public Slab(List<Coin> coins) {
         this(coins, DEFAULT_HEIGHT);
     }
