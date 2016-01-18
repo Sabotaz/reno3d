@@ -1,11 +1,9 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -14,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import fr.limsi.rorqual.core.dpe.enums.generalproperties.DateConstructionBatimentEnum;
 import fr.limsi.rorqual.core.event.ButtonValue;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
@@ -27,17 +24,12 @@ import fr.limsi.rorqual.core.logic.Calculateur;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Deleter;
 import fr.limsi.rorqual.core.logic.Logic;
-import fr.limsi.rorqual.core.model.Batiment;
-import fr.limsi.rorqual.core.model.IfcExporter;
-import fr.limsi.rorqual.core.model.IfcImporter;
 import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Slab;
-import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
-import fr.limsi.rorqual.core.utils.scene3d.models.Cote2D;
 import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
 import fr.limsi.rorqual.core.utils.serialization.Deserializer;
 import fr.limsi.rorqual.core.utils.serialization.Serializer;
@@ -253,7 +245,7 @@ public class MainUiControleur implements EventListener {
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                             break;
                         case EXPORT_IFC:
-                            IfcExporter.getInstance().realiseExportIfc();
+                            //IfcExporter.getInstance().realiseExportIfc();
                             break;
                         case NEW_FILE:
                             Logic.getInstance().stop();

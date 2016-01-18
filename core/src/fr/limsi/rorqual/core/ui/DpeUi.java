@@ -15,9 +15,6 @@ import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.PorteFenetre;
 import fr.limsi.rorqual.core.model.Slab;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcDoor;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWindow;
 
 /**
  * Created by christophe on 03/06/15.

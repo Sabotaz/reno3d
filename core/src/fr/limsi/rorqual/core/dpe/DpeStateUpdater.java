@@ -10,7 +10,6 @@ import java.util.Set;
 import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
-import ifc2x3javatoolbox.ifc2x3tc1.IfcWallStandardCase;
 
 /**
  * Created by christophe on 04/06/15.
@@ -54,9 +53,9 @@ public class DpeStateUpdater implements EventListener {
         while (it.hasNext()){
             Object cle = it.next();
             Object valeur = states.get(cle);
-            if (cle instanceof IfcWallStandardCase && valeur.equals(DpeState.UNKNOWN)){
+            /*if (cle instanceof IfcWallStandardCase && valeur.equals(DpeState.UNKNOWN)){
                 isAllWallKnown = false;
-            }
+            }*/
         }
         if (isAllWallKnown == true) {
             regardeEtatWall=false;

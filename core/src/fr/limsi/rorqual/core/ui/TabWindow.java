@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.limsi.rorqual.core.utils.AssetManager;
-import ifc2x3javatoolbox.ifc2x3tc1.BOOLEAN;
 
 /**
  * Created by christophe on 08/07/15.

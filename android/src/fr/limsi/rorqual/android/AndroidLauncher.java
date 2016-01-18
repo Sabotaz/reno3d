@@ -7,13 +7,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import fr.limsi.rorqual.android.sensors.GyroscopeListener;
-import fr.limsi.rorqual.core.model.IfcHelper;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 

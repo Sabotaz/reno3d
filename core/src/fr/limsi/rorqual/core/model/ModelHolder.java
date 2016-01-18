@@ -9,8 +9,6 @@ import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
-import ifc2x3javatoolbox.helpers.IfcSpatialStructure;
-import ifc2x3javatoolbox.ifcmodel.IfcModel;
 
 /**
  * Created by christophe on 20/03/15.
