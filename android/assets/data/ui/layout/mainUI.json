@@ -269,6 +269,20 @@
                 "drawable:calcul:tint:888888",
                 "default.fnt"
               ]
+            },
+            {
+              "type": "Button",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.CREDITS",
+              "name": "credits",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:credits",
+                "drawable:credits:tint:888888",
+                "drawable:credits:tint:888888",
+                "default.fnt"
+              ]
             }
           ]
         }

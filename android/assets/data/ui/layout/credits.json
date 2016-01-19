@@ -1,0 +1,17 @@
+{
+  "type": "Window",
+  "name": "Crédits",
+  "width": "45%",
+  "id": "credits_window",
+  "content": [
+    {
+      "type": "Table",
+      "content": [
+        {
+          "type": "Label",
+          "label": ""
+        }
+      ]
+    }
+  ]
+}

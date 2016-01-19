@@ -302,7 +302,6 @@ public class MainUiControleur implements EventListener {
                             ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case SAVE:
-                            //TODO: save popup;
                             Logic.getInstance().stop();
                             uncheckGeneralButtons();
                             uncheckControlButtons();
@@ -310,12 +309,21 @@ public class MainUiControleur implements EventListener {
                             addTb(getSaveTb());
                             break;
                         case LOAD:
-                            //TODO: load popup;
                             Logic.getInstance().stop();
                             uncheckGeneralButtons();
                             uncheckControlButtons();
                             removeTb();
                             addTb(getLoadTb());
+                            break;
+                        case CREDITS:
+                            uncheckControlButtons();
+                            uncheckGeneralButtons();
+                            if (button.isChecked()) {
+                                Layout l = Layout.fromJson("data/ui/layout/credits.json", null);
+                                addTb(l.getRoot());
+                            }
+                            else
+                                removeTb();
                             break;
 
                         default:

@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -202,6 +203,9 @@ public class Layout {
             case "TabWindow":
                 actor = makeTabWindow(json, updater, parent);
                 break;
+            case "Window":
+                actor = makeWindow(json, updater, parent);
+                break;
             case "Table":
                 actor = makeTable(json, updater, parent);
                 break;
@@ -229,6 +233,9 @@ public class Layout {
             case "TextField":
                 actor = makeTextField(json, updater, parent);
                 break;
+            case "Label":
+                actor = makeLabel(json, updater, parent);
+                break;
             case "CircularJauge":
                 actor = makeCircularJauge(json, updater, parent);
                 break;
@@ -246,6 +253,14 @@ public class Layout {
             actors_ids.put(json.getString("id"), actor);
 
         return actor;
+    }
+
+    private Actor makeLabel(JsonValue json, Updater updater, Actor parent) {
+        Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
+        lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
+        lbs.fontColor = Color.DARK_GRAY;
+        Label label = new Label(json.getString("label", ""),lbs);
+        return label;
     }
 
     private Value getValue(JsonValue json, String name, Actor parent) {
@@ -277,6 +292,28 @@ public class Layout {
             float f = Float.parseFloat(val.substring(0, val.length()));
             return new Value.Fixed(f);
         }
+    }
+
+    private Actor makeWindow(JsonValue json, Updater updater, Actor parent) {
+
+        Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+        Window window = new Window(json.getString("name", ""),skin);
+        Table contentTab = new Table();
+        window.add(contentTab).left().padTop(5).expandX().fillX().width(getValue(json, "width", 900, null)).left();
+        window.setWidth(getValue(json, "width", 900, null).get(null));
+
+        if (json.get("content") != null) {
+            JsonValue json_tab;
+            Actor tab;
+            int i = 0;
+            while ((json_tab = json.get("content").get(i)) != null) {
+                if ((tab = getActor(json_tab, updater, window)) != null) {
+                    contentTab.add(tab).expandX().fillX().left();
+                }
+                i++;
+            }
+        }
+        return window;
     }
 
     private Actor makeTabWindow(JsonValue json, Updater updater, Actor parent) {
