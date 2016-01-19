@@ -1,6 +1,9 @@
 package fr.limsi.rorqual.core.utils.scene3d;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -264,6 +268,20 @@ public class ModelContainer extends ActableModel {
         float dist2 = center.dst2(ray.origin.x + ray.direction.x * len, ray.origin.y + ray.direction.y * len, ray.origin.z + ray.direction.z * len);
         //return (dist2 <= radius * radius) ? dist2cam : -1f;
         return (dist2 <= radius * radius) ? intersectsMesh(ray, boundBox) : -1f;
+    }
+
+    public boolean intersects(ModelContainer other) {
+
+        BoundingBox boundBox1 = new BoundingBox(getBoundingBox());
+        BoundingBox boundBox2 = new BoundingBox(other.getBoundingBox());
+        boundBox1.mul(this.getFullTransform());
+        boundBox2.mul(other.getFullTransform());
+        System.out.println(boundBox1);
+        System.out.println(boundBox2);
+
+        if (!boundBox1.intersects(boundBox2))
+            return false;
+        return true;
     }
 
     private class Hit {

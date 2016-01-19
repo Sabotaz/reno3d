@@ -11,6 +11,7 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
@@ -118,6 +119,8 @@ public class Mover extends ModelMaker {
                 moving = false;
             }
         } else if (modelContainer instanceof Objet) {
+            has_valid_pos = false;
+
             movedObjet = (Objet) modelContainer;
             movedObjet.setSelectable(false);
             moving = movingObject = true;
@@ -163,6 +166,39 @@ public class Mover extends ModelMaker {
             Vector2 intersection = new MyVector2(slab.getIntersection());
             movedObjet.setPosition(intersection.x, intersection.y);
             movedObjet.setSlab(slab);
+            checkCollisions(intersection.x, intersection.y, slab);
+
+        }
+    }
+
+    boolean valid = false;
+    float last_valid_x = 0;
+    float last_valid_y = 0;
+    Slab last_valid_slab = null;
+    boolean has_valid_pos = false;
+
+    private void checkCollisions(float x, float y, Slab slab) {
+        Etage etage = movedObjet.getSlab().getEtage();
+        valid = true;
+        for (Mur mur : etage.getMurs()) {
+            if (movedObjet.intersects(mur))
+                valid = false;
+        }
+        for (Objet objet : etage.getObjets()) {
+            if (movedObjet != objet && movedObjet.intersects(objet))
+                valid = false;
+        }
+
+        if (valid) {
+            has_valid_pos = true;
+            last_valid_x = x;
+            last_valid_y = y;
+            last_valid_slab = slab;
+        } else {
+            if (has_valid_pos) {
+                movedObjet.setPosition(last_valid_x, last_valid_y);
+                movedObjet.setSlab(last_valid_slab);
+            }
         }
     }
 

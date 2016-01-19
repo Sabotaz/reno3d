@@ -33,6 +33,8 @@ public class Etage {
     private ArrayList<Porte> portes = new ArrayList<Porte>();
     @XStreamOmitField
     private ArrayList<PorteFenetre> porteFenetres = new ArrayList<PorteFenetre>();
+    @XStreamOmitField
+    private ArrayList<Objet> objets = new ArrayList<Objet>();
     @XStreamAlias("number")
     private int number;
     @XStreamAlias("elevation")
@@ -93,6 +95,18 @@ public class Etage {
         mur.setEtage(null);
         if (isEmpty())
             batiment.emptinessChanged(this);
+    }
+
+    public void addObjet(Objet objet) {
+        this.objets.add(objet);
+    }
+
+    public void removeObjet(Objet objet) {
+        this.objets.remove(objet);
+    }
+
+    public ArrayList<Objet> getObjets() {
+        return objets;
     }
 
     public void addSlab(Slab slab) {
@@ -260,6 +274,7 @@ public class Etage {
         HashMap<Porte,Porte> reloadedPortes = new HashMap<Porte, Porte>();
         HashMap<PorteFenetre,PorteFenetre> reloadedPorteFenetres = new HashMap<PorteFenetre, PorteFenetre>();
         HashMap<Ouverture,Ouverture> reloadedOuvertures = new HashMap<Ouverture, Ouverture>();
+        HashMap<Objet,Objet> reloadedObjets = new HashMap<Objet, Objet>();
 
         // reload walls
         if (murs != null)
@@ -291,6 +306,7 @@ public class Etage {
                         obj.setToRotation(o.angle);
                         slab.addObjet(obj);
                         obj.calculateBoundingBox(new BoundingBox());
+                        reloadedObjets.put(o, obj);
                     }
                 reloadedSlabs.put(s,slab);
                 modelGraph.getRoot().add(slab);
@@ -320,6 +336,7 @@ public class Etage {
             }
         }
 
+        objets = new ArrayList<Objet>(reloadedObjets.values());
         murs = new ArrayList<Mur>(reloadedMurs.values());
         slabs = new ArrayList<Slab>(reloadedSlabs.values());
     }

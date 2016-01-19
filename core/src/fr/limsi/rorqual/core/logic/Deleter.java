@@ -166,7 +166,8 @@ public class Deleter extends ModelMaker {
     }
 
     static public void deleteObjet(Objet o) {
-        o.setSlab(null); // TODO: getSlab then remove ?
+        o.getSlab().removeObjet(o);
+        o.setSlab(null);
     }
     static public void delete(ModelContainer m) {
         if (m instanceof Mur)

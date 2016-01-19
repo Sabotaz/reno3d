@@ -208,10 +208,14 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
     public void addObjet(Objet o) {
         objets.add(o);
+        if (etage != null)
+            etage.addObjet(o);
     }
 
     public void removeObjet(Objet o) {
         objets.remove(o);
+        if (etage != null)
+            etage.removeObjet(o);
     }
 
     public ArrayList<Objet> getObjets() {
