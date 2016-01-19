@@ -445,6 +445,25 @@ public class MainUiControleur implements EventListener {
                     EventManager.getInstance().put(Channel.UI, e2);
                 }
             }
+            else if (e.getEventType() == UiEvent.SAVE_FILE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                String filename = (String)items.get("filename");
+                Serializer.saveAll(filename);
+            }
+            else if (e.getEventType() == UiEvent.LOAD_FILE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                String filename = (String)items.get("filename");
+
+                Deleter.deleteBatiment();
+                ((TextButton)mainLayout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
+                CameraEngine.getInstance().reset();
+
+                ((Button)mainLayout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
+                ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
+
+                Deserializer.loadAll(filename);
+
+            }
         }
     }
 
@@ -468,7 +487,12 @@ public class MainUiControleur implements EventListener {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (tf.getText().toString() != "") {
-                    Serializer.saveAll(tf.getText().toString());
+
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                    currentItems.put("filename",tf.getText().toString());
+                    Event e = new Event(UiEvent.SAVE_FILE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e);
+
                     w.remove();
                 }
             }
@@ -497,14 +521,11 @@ public class MainUiControleur implements EventListener {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (tf.getText().toString() != "") {
-                    Deleter.deleteBatiment();
-                    ((TextButton)mainLayout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
-                    CameraEngine.getInstance().reset();
 
-                    ((Button)mainLayout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
-                    ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
-
-                    Deserializer.loadAll(tf.getText().toString());
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                    currentItems.put("filename",tf.getText().toString());
+                    Event e = new Event(UiEvent.LOAD_FILE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e);
 
                     w.remove();
                 }

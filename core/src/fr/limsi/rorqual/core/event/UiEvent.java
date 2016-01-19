@@ -11,5 +11,7 @@ public enum UiEvent implements EventType {
     TEXTURE1_PICKED,
     TEXTURE2_PICKED,
     TEXTURE3_PICKED,
+    SAVE_FILE,
+    LOAD_FILE,
     ;
 }
