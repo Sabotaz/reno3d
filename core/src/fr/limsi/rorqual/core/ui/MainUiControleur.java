@@ -505,15 +505,34 @@ public class MainUiControleur implements EventListener {
 
     private Window getLoadTb() {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
-        Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
-        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
-        tfs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
         final Window w = new Window("Charger",skin);
 
         FileHandle handle = Gdx.files.external(".");
         ArrayList<String> filenames = new ArrayList<String>();
         for (FileHandle fh : handle.list(".3dr"))
             filenames.add(fh.name());
+
+        if (filenames.isEmpty()) {
+            Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
+            Label label = new Label("Aucun fichier 3dr n'a été trouvé",ls);
+            TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
+            tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+            final TextButton button = new TextButton("Ok", tbs);
+            w.add(label).pad(2).left().row();
+            w.add(button).pad(2);
+            w.setWidth(w.getPrefWidth());
+            w.setHeight(w.getPrefHeight());
+
+            button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    w.remove();
+                }
+            });
+
+            return w;
+
+        }
 
         List.ListStyle lls = skin.get("default", List.ListStyle.class);
         lls.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
