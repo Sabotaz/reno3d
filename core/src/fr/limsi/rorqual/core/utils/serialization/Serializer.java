@@ -18,7 +18,7 @@ import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
  */
 public class Serializer {
 
-    public static void saveAll() {
+    public static void saveAll(String filename) {
         XStream stream = new XStream() {
             @Override
             protected MapperWrapper wrapMapper(MapperWrapper next) {
@@ -44,7 +44,7 @@ public class Serializer {
         stream.autodetectAnnotations(true);
         stream.setMode(XStream.ID_REFERENCES);
 
-        FileHandle handle = Gdx.files.external("save.3dr");
+        FileHandle handle = Gdx.files.external(filename + ".3dr");
         handle.writeString(stream.toXML(new SerialHolder()), false);
     }
 

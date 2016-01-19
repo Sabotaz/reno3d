@@ -13,13 +13,13 @@ import fr.limsi.rorqual.core.model.Batiment;
  */
 public class Deserializer {
 
-    public static void loadAll() {
+    public static void loadAll(String filename) {
         XStream stream = new XStream();
         stream.processAnnotations(SerialHolder.class);
         stream.autodetectAnnotations(true);
         stream.setMode(XStream.ID_REFERENCES);
 
-        FileHandle handle = Gdx.files.external("save.3dr");
+        FileHandle handle = Gdx.files.external(filename + ".3dr");
         SerialHolder serialHolder = (SerialHolder) stream.fromXML(handle.read());
         serialHolder.recreateModel();
 

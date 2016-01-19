@@ -1,12 +1,19 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import java.util.ArrayList;
@@ -29,6 +36,7 @@ import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Slab;
+import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
 import fr.limsi.rorqual.core.utils.serialization.Deserializer;
@@ -296,8 +304,7 @@ public class MainUiControleur implements EventListener {
                             uncheckGeneralButtons();
                             uncheckControlButtons();
                             removeTb();
-
-                            Serializer.saveAll();
+                            addTb(getSaveTb());
                             break;
                         case LOAD:
                             //TODO: load popup;
@@ -305,15 +312,7 @@ public class MainUiControleur implements EventListener {
                             uncheckGeneralButtons();
                             uncheckControlButtons();
                             removeTb();
-
-                            Deleter.deleteBatiment();
-                            ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
-                            CameraEngine.getInstance().reset();
-
-                            ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
-                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
-
-                            Deserializer.loadAll();
+                            addTb(getLoadTb());
                             break;
 
                         default:
@@ -447,5 +446,70 @@ public class MainUiControleur implements EventListener {
                 }
             }
         }
+    }
+
+    private Window getSaveTb() {
+        Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+        Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
+        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
+        tfs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        final Window w = new Window("Sauvegarder",skin);
+        final TextField tf = new TextField("model",tfs);
+        Label label = new Label(".3dr",ls);
+        TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+        final TextButton button = new TextButton("Sauvegarder", tbs);
+        w.add(tf).left().pad(2);
+        w.add(label).pad(2).left().row();
+        w.add(button).pad(2).left();
+        w.setWidth(w.getPrefWidth());
+        w.setHeight(w.getPrefHeight());
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (tf.getText().toString() != "") {
+                    Serializer.saveAll(tf.getText().toString());
+                    w.remove();
+                }
+            }
+        });
+        return w;
+    }
+
+    private Window getLoadTb() {
+        Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+        Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
+        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
+        tfs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        final Window w = new Window("Sauvegarder",skin);
+        final TextField tf = new TextField("model",tfs);
+        Label label = new Label(".3dr",ls);
+        TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+        final TextButton button = new TextButton("Charger", tbs);
+        w.add(tf).left().pad(2);
+        w.add(label).pad(2).left().row();
+        w.add(button).pad(2).left();
+        w.setWidth(w.getPrefWidth());
+        w.setHeight(w.getPrefHeight());
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (tf.getText().toString() != "") {
+                    Deleter.deleteBatiment();
+                    ((TextButton)mainLayout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
+                    CameraEngine.getInstance().reset();
+
+                    ((Button)mainLayout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
+                    ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
+
+                    Deserializer.loadAll(tf.getText().toString());
+
+                    w.remove();
+                }
+            }
+        });
+        return w;
     }
 }
