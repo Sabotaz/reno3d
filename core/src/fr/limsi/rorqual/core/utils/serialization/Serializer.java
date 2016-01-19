@@ -44,7 +44,7 @@ public class Serializer {
         stream.autodetectAnnotations(true);
         stream.setMode(XStream.ID_REFERENCES);
 
-        FileHandle handle = Gdx.files.external(filename + ".3dr");
+        FileHandle handle = Gdx.files.external(filename);
         handle.writeString(stream.toXML(new SerialHolder()), false);
     }
 

@@ -19,7 +19,7 @@ public class Deserializer {
         stream.autodetectAnnotations(true);
         stream.setMode(XStream.ID_REFERENCES);
 
-        FileHandle handle = Gdx.files.external(filename + ".3dr");
+        FileHandle handle = Gdx.files.external(filename);
         SerialHolder serialHolder = (SerialHolder) stream.fromXML(handle.read());
         serialHolder.recreateModel();
 

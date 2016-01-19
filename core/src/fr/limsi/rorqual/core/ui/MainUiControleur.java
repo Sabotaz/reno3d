@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -489,7 +492,7 @@ public class MainUiControleur implements EventListener {
                 if (tf.getText().toString() != "") {
 
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                    currentItems.put("filename",tf.getText().toString());
+                    currentItems.put("filename",tf.getText().toString() + ".3dr");
                     Event e = new Event(UiEvent.SAVE_FILE, currentItems);
                     EventManager.getInstance().put(Channel.UI, e);
 
@@ -505,25 +508,33 @@ public class MainUiControleur implements EventListener {
         Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
         TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
         tfs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
-        final Window w = new Window("Sauvegarder",skin);
-        final TextField tf = new TextField("model",tfs);
-        Label label = new Label(".3dr",ls);
-        TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
-        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
-        final TextButton button = new TextButton("Charger", tbs);
-        w.add(tf).left().pad(2);
-        w.add(label).pad(2).left().row();
-        w.add(button).pad(2).left();
-        w.setWidth(w.getPrefWidth());
-        w.setHeight(w.getPrefHeight());
+        final Window w = new Window("Charger",skin);
 
-        button.addListener(new ClickListener() {
+        FileHandle handle = Gdx.files.external(".");
+        ArrayList<String> filenames = new ArrayList<String>();
+        for (FileHandle fh : handle.list(".3dr"))
+            filenames.add(fh.name());
+
+        List.ListStyle lls = skin.get("default", List.ListStyle.class);
+        lls.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        final List list = new List(lls);
+        list.setItems(filenames.toArray());
+        ScrollPane.ScrollPaneStyle sps = skin.get("perso",ScrollPane.ScrollPaneStyle.class);
+        final ScrollPane scrollPane = new ScrollPane(list, sps);
+        scrollPane.setFlickScroll(false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.layout();
+        scrollPane.updateVisualScroll();
+
+//        scrollPane.setupFadeScrollBars(1f,0.5f);
+
+        list.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (tf.getText().toString() != "") {
 
+                if (list.getSelected() != null) {
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                    currentItems.put("filename",tf.getText().toString());
+                    currentItems.put("filename",list.getSelected());
                     Event e = new Event(UiEvent.LOAD_FILE, currentItems);
                     EventManager.getInstance().put(Channel.UI, e);
 
@@ -531,6 +542,11 @@ public class MainUiControleur implements EventListener {
                 }
             }
         });
+
+        w.add(scrollPane).left().pad(2);
+        w.setWidth(w.getPrefWidth());
+        w.setHeight(w.getPrefHeight());
+
         return w;
     }
 }
