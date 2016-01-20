@@ -320,7 +320,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     private void makeMesh() {
-        if (A == null || B == null || B.getPosition().equals(A.getPosition()))
+        if (A == null || B == null || B.getPosition().epsilonEquals(A.getPosition(), 0.000_001f))
             return;
         Vector3 z_shape = Vector3.Z.cpy().scl(etage != null ? etage.getHeight() : Etage.DEFAULT_HEIGHT);
         Vector3 positive_offset = Vector3.X.cpy().setLength(this.depth / 2);
@@ -337,6 +337,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         } else {
             p2.add(negative_offset);
         }
+
+        if (p1.epsilonEquals(p2, 0.000_001f))
+            return;
+
         Vector3 y_dir = Vector3.Y.cpy().setLength(this.depth / 2);
 
         Vector3d z = CSGUtils.castVector(z_shape);
