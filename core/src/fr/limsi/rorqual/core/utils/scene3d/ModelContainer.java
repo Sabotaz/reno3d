@@ -317,8 +317,10 @@ public class ModelContainer extends ActableModel {
     }
 
     public ModelContainer hit(Ray ray) {
-        Hit hit = hit(ray, new Matrix4());
-        return hit.hit;
+        synchronized (this) {
+            Hit hit = hit(ray, new Matrix4());
+            return hit.hit;
+        }
     }
 
     public Vector3 getTop() {
