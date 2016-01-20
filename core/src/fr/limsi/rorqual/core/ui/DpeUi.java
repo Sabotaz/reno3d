@@ -97,6 +97,10 @@ public class DpeUi  {
         return null;
     }
 
+    public static void clear() {
+        sauvegarde_layout.clear();
+    }
+
     private static Table makeObjetTab(Objet o) {
         float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.45f).get(null);
         TabWindow tabWindow = new TabWindow(width);

@@ -13,6 +13,7 @@ import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.utils.Coin;
+import fr.limsi.rorqual.core.ui.DpeUi;
 
 /**
  * Created by christophe on 11/01/16.
@@ -39,6 +40,7 @@ public class SerialHolder {
         dpe.setPorteFenetreList(batiment.getPorteFenetres());
         dpe.setPorteList(batiment.getPortes());
         Dpe.loadDpe(dpe);
+        DpeUi.clear();
     }
 
 }

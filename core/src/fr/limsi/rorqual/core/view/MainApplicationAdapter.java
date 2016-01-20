@@ -72,7 +72,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private static int ncam = 1;
     private Environment environnement;
     private ShaderProvider shaderProvider;
-    private Dpe dpe;
     private DpeUi dpeui;
     private DpeStateUpdater state;
     private Model model;
@@ -234,8 +233,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         state = new DpeStateUpdater(modelGraph);
 
-        dpe=Dpe.getInstance();
-        score.setCurrentValue(dpe.getScoreDpe());
+        score.setCurrentValue(Dpe.getInstance().getScoreDpe());
 
         DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES);
         DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
@@ -263,7 +261,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light_dir = sun.local_transform.getTranslation(light_dir).scl(-1).nor();
         light.direction.set(light_dir);
 
-        score.setConsignValue((float) dpe.getScoreDpe());
+        score.setConsignValue(Dpe.getInstance().getScoreDpe());
 
         synchronized (stageMenu) {
             stageMenu.act();
