@@ -276,8 +276,6 @@ public class ModelContainer extends ActableModel {
         BoundingBox boundBox2 = new BoundingBox(other.getBoundingBox());
         boundBox1.mul(this.getFullTransform());
         boundBox2.mul(other.getFullTransform());
-        System.out.println(boundBox1);
-        System.out.println(boundBox2);
 
         if (!boundBox1.intersects(boundBox2))
             return false;
@@ -298,29 +296,29 @@ public class ModelContainer extends ActableModel {
     }
 
     private Hit hit(Ray ray, Matrix4 mx) {
-        Matrix4 current_mx = mx.cpy().mul(local_transform);
-        Hit temp = new Hit();
-        for (ModelContainer child : children) {
-            Hit hit = child.hit(ray, current_mx);
-            if (hit.isCloserThan(temp))
-                temp = hit;
-        }
-
-        if (temp.hit == null) {
-            float dist2 = this.intersects(ray, current_mx);
-            if (dist2 >= 0f) {
-                temp.hit = this;
-                temp.distance = dist2;
+        synchronized (this) {
+            Matrix4 current_mx = mx.cpy().mul(local_transform);
+            Hit temp = new Hit();
+            for (ModelContainer child : children) {
+                Hit hit = child.hit(ray, current_mx);
+                if (hit.isCloserThan(temp))
+                    temp = hit;
             }
+
+            if (temp.hit == null) {
+                float dist2 = this.intersects(ray, current_mx);
+                if (dist2 >= 0f) {
+                    temp.hit = this;
+                    temp.distance = dist2;
+                }
+            }
+            return temp;
         }
-        return temp;
     }
 
     public ModelContainer hit(Ray ray) {
-        synchronized (this) {
-            Hit hit = hit(ray, new Matrix4());
-            return hit.hit;
-        }
+        Hit hit = hit(ray, new Matrix4());
+        return hit.hit;
     }
 
     public Vector3 getTop() {
