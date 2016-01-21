@@ -190,7 +190,7 @@
           "label": "Extérieur :",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
-          "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
+          "category": "Mur",
           "align": "left",
           "width": "30%",
           "height": "20%"
@@ -200,7 +200,7 @@
           "label": "Intérieur 1 :",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
-          "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
+          "category": "Mur",
           "align": "left",
           "width": "30%",
           "height": "20%"
@@ -210,7 +210,7 @@
           "label": "Intérieur 2 :",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE3_PICKED",
-          "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
+          "category": "Mur",
           "align": "left",
           "width": "30%",
           "height": "20%"

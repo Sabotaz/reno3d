@@ -257,7 +257,7 @@
           "label": "Plancher : ",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
-          "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
+          "category": "Sol",
           "align": "left",
           "width": "30%",
           "height": "25%"
@@ -267,7 +267,7 @@
           "label": "Plafond : ",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
-          "enum": "fr.limsi.rorqual.core.model.MaterialTypeEnum",
+          "category": "Sol",
           "align": "left",
           "width": "30%",
           "height": "25%"

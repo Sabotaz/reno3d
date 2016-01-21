@@ -40,7 +40,7 @@ public class TextureLibrary {
 
     private HashMap<String, Table> categoriesTables = new HashMap<String, Table>();
 
-    private class TextureLoader {
+    class TextureLoader {
 
         private Texture texture;
         private Image image;
@@ -134,8 +134,8 @@ public class TextureLibrary {
     static HashMap<String, TextureLoader> textures = new HashMap<String, TextureLoader>();
 
     private void makeLibrary() {
-        makeCategories(Gdx.files.getFileHandle("data/textures/contributions/PluginFTexturesCatalog", Files.FileType.Internal));
-        makeCategories(Gdx.files.getFileHandle("data/textures/eTeksScopia/PluginFTexturesCatalog", Files.FileType.Internal));
+        makeCategories(Gdx.files.getFileHandle("data/textures/contributions/PluginTexturesCatalog", Files.FileType.Internal));
+        makeCategories(Gdx.files.getFileHandle("data/textures/eTeksScopia/PluginTexturesCatalog", Files.FileType.Internal));
     }
 
     private void makeCategories(FileHandle file) {
@@ -166,6 +166,14 @@ public class TextureLibrary {
 
     public Set<String> getCategories() {
         return categories.keySet();
+    }
+
+    public Set<String> getCategory(String category) {
+        return categories.get(category).keySet();
+    }
+
+    public TextureLoader getTextureLoader(String name) {
+        return textures.get(name);
     }
 
 }

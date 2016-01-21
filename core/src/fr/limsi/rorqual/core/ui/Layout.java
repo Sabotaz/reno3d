@@ -34,6 +34,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum;
 import fr.limsi.rorqual.core.event.Channel;
@@ -685,6 +686,15 @@ public class Layout {
                 makeTexture();
         }
 
+        public ClickableImageButton(String imageName, Texture texture, float w, float h) {
+            super(new Image(texture).getDrawable());
+            this.setSize(w, h);
+            clicked_texture_name = imageName + "_clicked";
+            clicked_texture = (Texture) AssetManager.getInstance().get(clicked_texture_name);
+            if (clicked_texture == null)
+                makeTexture();
+        }
+
         Texture clicked_texture = null;
         String clicked_texture_name = null;
 
@@ -1022,31 +1032,8 @@ public class Layout {
         Value width = getValue(json, "width", null);
         Value height = getValue(json, "height", null);
 
-        Object[] tabObject=null;
-
-        final Object[] valuesEnum = getClass(json, "enum");
-
-        int sizeMaxEnum=0;
-        if (json.has("indexMin") && json.has("indexMax")){
-            int indexMax=json.getInt("indexMax");
-            int indexMin=json.getInt("indexMin");
-            int size = indexMax-indexMin;
-            tabObject = new Object[size];
-            for(int i=0;i<size;i++) {
-                tabObject[i] = valuesEnum[i+indexMin];
-                if (valuesEnum[i+indexMin].toString().length()>sizeMaxEnum){
-                    sizeMaxEnum = valuesEnum[i+indexMin].toString().length();
-                }
-            }
-        }else{
-            tabObject = new Object[valuesEnum.length];
-            for(int i=0;i<valuesEnum.length;i++) {
-                tabObject[i] = valuesEnum[i];
-                if (valuesEnum[i].toString().length()>sizeMaxEnum){
-                    sizeMaxEnum = valuesEnum[i].toString().length();
-                }
-            }
-        }
+        String category = json.getString("category");
+        Set<String> tabObject = TextureLibrary.getInstance().getCategory(category);
 
         ButtonGroup<ImageButton> buttonGroup = new ButtonGroup<ImageButton>();
         Table buttonsTable = new Table();
@@ -1056,8 +1043,8 @@ public class Layout {
 
         buttonsTable.setSize(width.get(null),height.get(null));
 
-        for (Object o : tabObject) {
-            ImageButton imageButton = (ImageButton)makeTextureImageButton((MaterialTypeEnum) o, updater);
+        for (String name : tabObject) {
+            ImageButton imageButton = (ImageButton)makeTextureImageButton(name, updater);
             buttonGroup.add(imageButton);
             buttonsTable.add(imageButton).size(128, 128).left().top();
 
@@ -1095,15 +1082,15 @@ public class Layout {
         return table;
     }
 
-    private Actor makeTextureImageButton (MaterialTypeEnum material, Updater updater){
+    private Actor makeTextureImageButton (String name, Updater updater){
 
-        final ImageButton imageButton = new ClickableImageButton(material.getName(), 128, 128);
+        final ImageButton imageButton = new ClickableImageButton(name, TextureLibrary.getInstance().getTextureLoader(name).getTexture(), 128, 128);
 
-        if (updater.getDefaultValue() == material) {
+        if (updater.getDefaultValue() == name) {
             imageButton.setChecked(true);
         }
 
-        final Object last_value = material;
+        final Object last_value = name;
         final Updater last_updater = updater;
         imageButton.addListener(new ClickListener() {
             @Override
