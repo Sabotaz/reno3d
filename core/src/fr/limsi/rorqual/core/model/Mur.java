@@ -36,6 +36,7 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
+import fr.limsi.rorqual.core.ui.TextureLibrary;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
@@ -86,13 +87,13 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     @XStreamOmitField
     private boolean areMaterialSet = false;
     @XStreamAlias("exteriorMaterial")
-    private MaterialTypeEnum exteriorMaterialType = MaterialTypeEnum.BRIQUE;
+    private String exteriorMaterialType = "eTeksScopia#grey-rough-stonewall";
     @XStreamAlias("interiorMaterial1")
-    private MaterialTypeEnum interiorMaterialType1 = MaterialTypeEnum.WALL1;
+    private String interiorMaterialType1 = "eTeksScopia#pastel-brown-sponge-wallpaint";
     @XStreamAlias("interiorMaterial2")
-    private MaterialTypeEnum interiorMaterialType2 = MaterialTypeEnum.WALL1;
+    private String interiorMaterialType2 = "eTeksScopia#pastel-brown-sponge-wallpaint";
     @XStreamAlias("defaultMaterial")
-    private MaterialTypeEnum defaultMaterialType = MaterialTypeEnum.BETON;
+    private String defaultMaterialType = "eTeksScopia#grey-rough-stonewall";
     @XStreamOmitField
     private Material exteriorMaterial = new Material();
     @XStreamOmitField
@@ -152,22 +153,22 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.orientationMur=OrientationEnum.NORD;
     }
 
-    public void setInteriorMaterialType1(MaterialTypeEnum mat) {
+    public void setInteriorMaterialType1(String mat) {
         interiorMaterialType1 = mat;
         areMaterialSet = false;
     }
 
-    public void setInteriorMaterialType2(MaterialTypeEnum mat) {
+    public void setInteriorMaterialType2(String mat) {
         interiorMaterialType2 = mat;
         areMaterialSet = false;
     }
 
-    public void setExteriorMaterialType(MaterialTypeEnum mat) {
+    public void setExteriorMaterialType(String mat) {
         exteriorMaterialType = mat;
         areMaterialSet = false;
     }
 
-    public void setDefaultMaterialType(MaterialTypeEnum mat) {
+    public void setDefaultMaterialType(String mat) {
         defaultMaterialType = mat;
         areMaterialSet = false;
     }
@@ -179,23 +180,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         setMaterial(defaultMaterial, defaultMaterialType);
         areMaterialSet = true;
         setChanged();
-    }
-
-    private void setMaterial(Material material, MaterialTypeEnum type) {
-        Texture texture_diff = type.getDiffuse();
-        Texture texture_norm = type.getNormal();
-
-        texture_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        TextureAttribute ta_diff = TextureAttribute.createDiffuse(texture_diff);
-        ta_diff.scaleU = ta_diff.scaleV = 0.5f;
-        if (texture_norm != null) {
-            texture_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            TextureAttribute ta_norm = TextureAttribute.createNormal(texture_norm);
-            ta_norm.scaleU = ta_norm.scaleV = 0.5f;
-            material.set(ta_diff, ta_norm);
-        } else {
-            material.set(ta_diff);
-        }
     }
 
     public void setEtage(Etage e) {
@@ -639,19 +623,19 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         return this.getWidth();
     }
 
-    public MaterialTypeEnum getExteriorMaterialType() {
+    public String getExteriorMaterialType() {
         return exteriorMaterialType;
     }
 
-    public MaterialTypeEnum getInteriorMaterialType1() {
+    public String getInteriorMaterialType1() {
         return interiorMaterialType1;
     }
 
-    public MaterialTypeEnum getInteriorMaterialType2() {
+    public String getInteriorMaterialType2() {
         return interiorMaterialType2;
     }
 
-    public MaterialTypeEnum getDefaultMaterialType() {
+    public String getDefaultMaterialType() {
         return defaultMaterialType;
     }
 

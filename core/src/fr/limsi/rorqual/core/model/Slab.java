@@ -1,12 +1,10 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.GeometryUtils;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
@@ -88,9 +86,9 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     @XStreamOmitField
     private boolean valide = false;
     @XStreamAlias("plafondMaterial")
-    private MaterialTypeEnum plafondType = MaterialTypeEnum.WALL4;
+    private String plafondType = "eTeksScopia#pavement_2";
     @XStreamAlias("plancherMaterial")
-    private MaterialTypeEnum plancher = MaterialTypeEnum.PARQUET;
+    private String plancherType = "eTeksScopia#old-brown-parquet";
     @XStreamOmitField
     private Material plafondMaterial = new Material();
     @XStreamOmitField
@@ -237,38 +235,21 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         return coins;
     }
 
-    public void setPlafondMaterialType(MaterialTypeEnum mat) {
+    public void setPlafondMaterialType(String mat) {
         plafondType = mat;
         areMaterialSet = false;
     }
 
-    public void setPlancherMaterialType(MaterialTypeEnum mat) {
-        plancher = mat;
+    public void setPlancherMaterialType(String mat) {
+        plancherType = mat;
         areMaterialSet = false;
     }
 
     private void makeMaterials() {
         setMaterial(plafondMaterial, plafondType);
-        setMaterial(plancherMaterial, plancher);
+        setMaterial(plancherMaterial, plancherType);
         areMaterialSet = true;
         setChanged();
-    }
-
-    private void setMaterial(Material material, MaterialTypeEnum type) {
-        Texture texture_diff = type.getDiffuse();
-        Texture texture_norm = type.getNormal();
-
-        texture_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        TextureAttribute ta_diff = TextureAttribute.createDiffuse(texture_diff);
-        ta_diff.scaleU = ta_diff.scaleV = 0.2f;
-        if (texture_norm != null) {
-            texture_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            TextureAttribute ta_norm = TextureAttribute.createNormal(texture_norm);
-            ta_norm.scaleU = ta_norm.scaleV = 0.2f;
-            material.set(ta_diff, ta_norm);
-        } else {
-            material.set(ta_diff);
-        }
     }
 
     private void makeMesh() {
@@ -625,11 +606,11 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         return getCotePosHorizontalA().cpy().sub(getCotePosHorizontalB()).len();
     }
 
-    public MaterialTypeEnum getPlancherMaterialType() {
-        return plancher;
+    public String getPlancherMaterialType() {
+        return plancherType;
     }
 
-    public MaterialTypeEnum getPlafondMaterialType() {
+    public String getPlafondMaterialType() {
         return plafondType;
     }
 

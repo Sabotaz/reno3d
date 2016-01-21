@@ -8,15 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.Etage;
-import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Ouverture;
@@ -25,7 +22,6 @@ import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
-import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote2D;
 import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
 

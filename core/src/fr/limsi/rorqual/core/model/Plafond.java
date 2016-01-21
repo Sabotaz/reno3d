@@ -94,10 +94,10 @@ public class Plafond extends ModelContainer {
         }
     }
 
-    MaterialTypeEnum terrasseType = MaterialTypeEnum.TOIT1;
+    String terrasseType = "eTeksScopia#terrazo-floor";
     Material terrasseMaterial = new Material();
 
-    public void setTerasseMaterialType(MaterialTypeEnum mat) {
+    public void setTerasseMaterialType(String mat) {
         terrasseType = mat;
         areMaterialSet = false;
     }
@@ -106,23 +106,6 @@ public class Plafond extends ModelContainer {
         setMaterial(terrasseMaterial, terrasseType);
         areMaterialSet = true;
         setChanged();
-    }
-
-    private void setMaterial(Material material, MaterialTypeEnum type) {
-        Texture texture_diff = type.getDiffuse();
-        Texture texture_norm = type.getNormal();
-
-        texture_diff.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-        TextureAttribute ta_diff = TextureAttribute.createDiffuse(texture_diff);
-        ta_diff.scaleU = ta_diff.scaleV = 0.2f;
-        if (texture_norm != null) {
-            texture_norm.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
-            TextureAttribute ta_norm = TextureAttribute.createNormal(texture_norm);
-            ta_norm.scaleU = ta_norm.scaleV = 0.2f;
-            material.set(ta_diff, ta_norm);
-        } else {
-            material.set(ta_diff);
-        }
     }
 
     public boolean isValide() {

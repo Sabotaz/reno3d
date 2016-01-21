@@ -197,6 +197,7 @@ public class AssetManager {
         textures.put("textureOrientationEst", "data/img/dpe/Orientation/est.png");
         textures.put("textureOrientationSud", "data/img/dpe/Orientation/sud.png");
         textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
+        textures.put("grid", "data/textures/grid.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
@@ -208,14 +209,9 @@ public class AssetManager {
         FileHandle file = Gdx.files.internal("data/ui/img/");
         if (file.isDirectory())
             for (FileHandle f : file.list()) {
-                textures.put(f.nameWithoutExtension(), f.path());
-            }
-
-        file = Gdx.files.internal("data/textures/");
-        if (file.isDirectory())
-            for (FileHandle f : file.list()) {
-                if (!f.isDirectory())
+                if (!f.isDirectory()) {
                     textures.put(f.nameWithoutExtension(), f.path());
+                }
             }
 
         assets.putAll((Map<String, Texture>)loadOnUi(textures, Texture.class));

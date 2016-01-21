@@ -2,6 +2,7 @@ package fr.limsi.rorqual.core.utils.scene3d;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -24,6 +26,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.limsi.rorqual.core.ui.TextureLibrary;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import fr.limsi.rorqual.core.view.shaders.ShaderAttribute;
 
@@ -72,6 +75,17 @@ public class ModelContainer extends ActableModel {
                 c.act();
             }
         }
+    }
+
+    protected void setMaterial(Material material, String type) {
+        TextureLibrary.TextureLoader loader = TextureLibrary.getInstance().getTextureLoader(type);
+        Texture texture = loader.getTexture();
+
+        texture.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
+        TextureAttribute ta_diff = TextureAttribute.createDiffuse(texture);
+        ta_diff.scaleU = -loader.getWidth()/100;
+        ta_diff.scaleV = -loader.getHeight()/100;
+        material.set(ta_diff);
     }
 
     public String getCategory() {

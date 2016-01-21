@@ -1,7 +1,6 @@
 package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -27,7 +26,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
@@ -36,14 +34,12 @@ import com.badlogic.gdx.utils.JsonValue;
 import java.util.HashMap;
 import java.util.Set;
 
-import fr.limsi.rorqual.core.dpe.enums.generalproperties.DepartementBatimentEnum;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.EventType;
-import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.utils.AssetManager;
 
 /**
@@ -1054,7 +1050,7 @@ public class Layout {
                 buttonsTable.row();
             }
         }
-        //buttonGroup.setChecked(((MaterialTypeEnum) updater.getDefaultValue()).name());
+        //buttonGroup.setChecked((String)updater.getDefaultValue());
 
         ScrollPane.ScrollPaneStyle sps = skin.get("perso",ScrollPane.ScrollPaneStyle.class);
         final ScrollPane scrollPane = new ScrollPane(buttonsTable, sps);
@@ -1086,7 +1082,7 @@ public class Layout {
 
         final ImageButton imageButton = new ClickableImageButton(name, TextureLibrary.getInstance().getTextureLoader(name).getTexture(), 128, 128);
 
-        if (updater.getDefaultValue() == name) {
+        if ((updater.getDefaultValue()).equals(name)) {
             imageButton.setChecked(true);
         }
 

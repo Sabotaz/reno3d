@@ -40,7 +40,7 @@ public class TextureLibrary {
 
     private HashMap<String, Table> categoriesTables = new HashMap<String, Table>();
 
-    class TextureLoader {
+    public class TextureLoader {
 
         private Texture texture;
         private Image image;

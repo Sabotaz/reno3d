@@ -34,7 +34,6 @@ import fr.limsi.rorqual.core.logic.Calculateur;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Deleter;
 import fr.limsi.rorqual.core.logic.Logic;
-import fr.limsi.rorqual.core.model.MaterialTypeEnum;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
@@ -381,10 +380,10 @@ public class MainUiControleur implements EventListener {
                 if (eventRequest == EventRequest.UPDATE_STATE) {
                     if (items.get("userObject") instanceof Slab) {
                         Slab slab = (Slab)items.get("userObject");
-                        slab.setPlancherMaterialType((MaterialTypeEnum) items.get("lastValue"));
+                        slab.setPlancherMaterialType((String) items.get("lastValue"));
                     } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
-                        mur.setExteriorMaterialType((MaterialTypeEnum)items.get("lastValue"));
+                        mur.setExteriorMaterialType((String)items.get("lastValue"));
                     }
                 }
                 else if (eventRequest == EventRequest.GET_STATE) {
@@ -410,10 +409,10 @@ public class MainUiControleur implements EventListener {
                 if (eventRequest == EventRequest.UPDATE_STATE) {
                     if (items.get("userObject") instanceof Slab) {
                         Slab slab = (Slab)items.get("userObject");
-                        slab.setPlafondMaterialType((MaterialTypeEnum) items.get("lastValue"));
+                        slab.setPlafondMaterialType((String) items.get("lastValue"));
                     } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
-                        mur.setInteriorMaterialType1((MaterialTypeEnum) items.get("lastValue"));
+                        mur.setInteriorMaterialType1((String) items.get("lastValue"));
                     }
                 }
                 else if (eventRequest == EventRequest.GET_STATE) {
@@ -439,7 +438,7 @@ public class MainUiControleur implements EventListener {
                 if (eventRequest == EventRequest.UPDATE_STATE) {
                     if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
-                        mur.setInteriorMaterialType2((MaterialTypeEnum) items.get("lastValue"));
+                        mur.setInteriorMaterialType2((String) items.get("lastValue"));
                     }
                 }
                 else if (eventRequest == EventRequest.GET_STATE) {
