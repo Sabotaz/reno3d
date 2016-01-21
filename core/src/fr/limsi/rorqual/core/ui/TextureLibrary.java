@@ -47,6 +47,7 @@ public class TextureLibrary {
         private String textureFile;
         private String path;
         private String category;
+        private String id;
         private String name;
         private float width = 0;
         private float height = 0;
@@ -54,6 +55,11 @@ public class TextureLibrary {
 
         public TextureLoader(String path, I18NBundle i18n, int n) {
             this.path = path;
+
+            i18n.setExceptionOnMissingKey(true);
+            id = i18n.get("id#"+n);
+            i18n.setExceptionOnMissingKey(false);
+
             name = i18n.get("name#" + n);
             category = i18n.get("category#" + n);
             textureFile = i18n.get("image#" + n);
@@ -78,6 +84,14 @@ public class TextureLibrary {
 
         public Image getImage() {
             return image;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public String getId() {
+            return id;
         }
 
         public synchronized void preload() {
@@ -130,16 +144,14 @@ public class TextureLibrary {
         int n = 1;
         do {
             try {
-                i18n.setExceptionOnMissingKey(true);
-                String id = i18n.get("id#"+n);
-                i18n.setExceptionOnMissingKey(false);
-                String category = i18n.get("category#"+n);
-
-                if (!categories.containsKey(category))
-                    categories.put(category, new HashMap<String, TextureLoader>());
 
 
                 TextureLoader textureLoader = new TextureLoader(file.parent().path(), i18n, n);
+                String category = textureLoader.getCategory();
+                String id = textureLoader.getId();
+
+                if (!categories.containsKey(category))
+                    categories.put(category, new HashMap<String, TextureLoader>());
                 categories.get(category).put(id, textureLoader);
                 textures.put(id, textureLoader);
 
