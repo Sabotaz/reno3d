@@ -83,8 +83,8 @@ public class ModelContainer extends ActableModel {
 
         texture.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);
         TextureAttribute ta_diff = TextureAttribute.createDiffuse(texture);
-        ta_diff.scaleU = -loader.getWidth()/100;
-        ta_diff.scaleV = -loader.getHeight()/100;
+        ta_diff.scaleU = -loader.getHeight()/100;
+        ta_diff.scaleV = -loader.getWidth()/100;
         material.set(ta_diff);
     }
 
