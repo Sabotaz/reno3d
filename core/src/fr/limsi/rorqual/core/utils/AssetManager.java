@@ -214,7 +214,8 @@ public class AssetManager {
         file = Gdx.files.internal("data/textures/");
         if (file.isDirectory())
             for (FileHandle f : file.list()) {
-                textures.put(f.nameWithoutExtension(), f.path());
+                if (!f.isDirectory())
+                    textures.put(f.nameWithoutExtension(), f.path());
             }
 
         assets.putAll((Map<String, Texture>)loadOnUi(textures, Texture.class));
