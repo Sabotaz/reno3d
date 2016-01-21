@@ -51,6 +51,7 @@ import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.ui.Popup;
+import fr.limsi.rorqual.core.ui.TextureLibrary;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
@@ -242,6 +243,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         ModelLibrary.getInstance();
         System.out.println("models library ok " + ((System.currentTimeMillis() - start) * 0.001f));
+
+        setLoadingMessage("Loading textures library...");
+
+        TextureLibrary.getInstance();
+        System.out.println("textures library ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         setLoadingMessage("Setting input processor...");
 
