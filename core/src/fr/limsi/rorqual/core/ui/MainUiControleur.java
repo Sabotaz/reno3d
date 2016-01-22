@@ -270,7 +270,11 @@ public class MainUiControleur implements EventListener {
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                             break;
                         case EXPORT_IFC:
-                            //IfcExporter.getInstance().realiseExportIfc();
+                            Logic.getInstance().stop();
+                            uncheckGeneralButtons();
+                            uncheckControlButtons();
+                            removeTb();
+                            addTb(getExportTb());
                             break;
                         case NEW_FILE:
                             Logic.getInstance().stop();
@@ -488,6 +492,12 @@ public class MainUiControleur implements EventListener {
                 Deserializer.loadAll(filename);
 
             }
+            else if (e.getEventType() == UiEvent.SAVE_FILE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                String filename = (String)items.get("filename");
+                //IfcExporter.getInstance().realiseExportIfc(filename);
+            }
+
         }
     }
 
@@ -515,6 +525,39 @@ public class MainUiControleur implements EventListener {
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
                     currentItems.put("filename",tf.getText().toString() + ".3dr");
                     Event e = new Event(UiEvent.SAVE_FILE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e);
+
+                    w.remove();
+                }
+            }
+        });
+        return w;
+    }
+
+    private Window getExportTb() {
+        Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+        Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
+        TextField.TextFieldStyle tfs = skin.get("default", TextField.TextFieldStyle.class);
+        tfs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        final Window w = new Window("Exporter",skin);
+        final TextField tf = new TextField("model",tfs);
+        Label label = new Label(".ifc",ls);
+        TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+        final TextButton button = new TextButton("Exporter", tbs);
+        w.add(tf).left().pad(2);
+        w.add(label).pad(2).left().row();
+        w.add(button).pad(2).left();
+        w.setWidth(w.getPrefWidth());
+        w.setHeight(w.getPrefHeight());
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (tf.getText().toString() != "") {
+
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                    currentItems.put("filename",tf.getText().toString() + ".ifc");
+                    Event e = new Event(UiEvent.EXPORT_FILE, currentItems);
                     EventManager.getInstance().put(Channel.UI, e);
 
                     w.remove();
