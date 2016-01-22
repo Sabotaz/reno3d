@@ -26,10 +26,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.Scaling;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -233,6 +235,9 @@ public class Layout {
             case "Label":
                 actor = makeLabel(json, updater, parent);
                 break;
+            case "Image":
+                actor = makeImage(json, updater, parent);
+                break;
             case "CircularJauge":
                 actor = makeCircularJauge(json, updater, parent);
                 break;
@@ -258,6 +263,29 @@ public class Layout {
         lbs.fontColor = Color.DARK_GRAY;
         Label label = new Label(json.getString("label", ""),lbs);
         return label;
+    }
+
+    private Actor makeImage(JsonValue json, Updater updater, Actor parent) {
+
+        String imageName = json.getString("image");
+        Value width = new Value.Fixed(128);
+        Value height = new Value.Fixed(128);
+
+        if (json.has("height") && json.has("width")) {
+            width = getValue(json, "width",null);
+            height = getValue(json, "height", null);
+            if (width instanceof Auto)
+                width = height;
+            if (height instanceof Auto)
+                height = width;
+        }
+        Image image = new Image(((Texture) AssetManager.getInstance().get(imageName)));
+        float w = width.get(null);
+        float h = height.get(null);
+        image = new Image(image.getDrawable(), Scaling.fill);
+        image.scaleBy(image.getImageWidth() / w, image.getImageHeight() / h);
+        //image.setSize(w, h);
+        return image;
     }
 
     private Value getValue(JsonValue json, String name, Actor parent) {
@@ -295,8 +323,6 @@ public class Layout {
 
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
         Window window = new Window(json.getString("name", ""),skin);
-        Table contentTab = new Table();
-        window.add(contentTab).left().padTop(5).expandX().fillX().width(getValue(json, "width", 900, null)).left();
         window.setWidth(getValue(json, "width", 900, null).get(null));
 
         if (json.get("content") != null) {
@@ -305,7 +331,7 @@ public class Layout {
             int i = 0;
             while ((json_tab = json.get("content").get(i)) != null) {
                 if ((tab = getActor(json_tab, updater, window)) != null) {
-                    contentTab.add(tab).expandX().fillX().left();
+                    window.add(tab).expandX().fillX().left();
                 }
                 i++;
             }
@@ -372,6 +398,10 @@ public class Layout {
                     Cell c = table.add(child);
                     if (json.getBoolean("expand", true))
                         c.expandX().fillX();
+
+
+                    if (json.getBoolean("update-children-size", false))
+                        c.size(child.getWidth(), child.getHeight());
 
                     float pad = json_child.getFloat("pad", 1);
                     c.pad(pad);

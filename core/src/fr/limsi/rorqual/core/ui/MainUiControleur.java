@@ -3,11 +3,13 @@ package fr.limsi.rorqual.core.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -16,8 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Scaling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,6 +105,17 @@ public class MainUiControleur implements EventListener {
                 } else {
                     tb.setPosition(tb.getHeight()/2, Gdx.graphics.getHeight() - 100);
                 }
+                stage.addActor(tb);
+            }
+        }
+    }
+
+    public void addTb(Actor actor, float x, float y) {
+        removeTb();
+        tb = actor;
+        if (tb != null) {
+            synchronized (stage) {
+                tb.setPosition(x, y);
                 stage.addActor(tb);
             }
         }
@@ -318,8 +333,7 @@ public class MainUiControleur implements EventListener {
                             uncheckControlButtons();
                             uncheckGeneralButtons();
                             if (button.isChecked()) {
-                                Layout l = Layout.fromJson("data/ui/layout/help.json", null);
-                                addTb(l.getRoot());
+                                addTb(getHelp(), 0,0);
                             }
                             else
                                 removeTb();
@@ -508,6 +522,15 @@ public class MainUiControleur implements EventListener {
             }
         });
         return w;
+    }
+
+    private Actor getHelp() {
+        Image image = new Image((Texture)AssetManager.getInstance().get("help-panel"));
+        image.setAlign(Align.center);
+        image.setHeight(Gdx.graphics.getHeight());
+        image.setWidth(Gdx.graphics.getWidth());
+        image.setScaling(Scaling.fit);
+        return image;
     }
 
     private Window getLoadTb() {

@@ -198,6 +198,7 @@ public class AssetManager {
         textures.put("textureOrientationSud", "data/img/dpe/Orientation/sud.png");
         textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
         textures.put("grid", "data/textures/grid.png");
+        textures.put("help-panel", "data/img/help-panel.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);

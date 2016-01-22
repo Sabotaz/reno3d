@@ -278,9 +278,9 @@
               "width": "5%",
               "pad": 0,
               "style": [
-                "drawable:credits",
-                "drawable:credits:tint:888888",
-                "drawable:credits:tint:888888",
+                "drawable:help",
+                "drawable:help:tint:888888",
+                "drawable:help:tint:888888",
                 "default.fnt"
               ]
             }
