@@ -67,11 +67,16 @@ project(":android") {
 project(":jcsg") {
 }
 
+project(":ifc2x3javatoolbox") {
+}
+
 project(":core") {
     apply plugin: "java"
 
     dependencies {
         compile project(":jcsg")
+        compile project(":ifc2x3javatoolbox")
+
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"

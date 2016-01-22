@@ -38,6 +38,7 @@ import fr.limsi.rorqual.core.logic.Calculateur;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Deleter;
 import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.model.IfcExporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
@@ -492,10 +493,10 @@ public class MainUiControleur implements EventListener {
                 Deserializer.loadAll(filename);
 
             }
-            else if (e.getEventType() == UiEvent.SAVE_FILE) {
+            else if (e.getEventType() == UiEvent.EXPORT_FILE) {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 String filename = (String)items.get("filename");
-                //IfcExporter.getInstance().realiseExportIfc(filename);
+                IfcExporter.getInstance().realiseExportIfc(filename);
             }
 
         }

@@ -1,2 +1,2 @@
-include ':jcsg'
+include ':jcsg', ':ifc2x3javatoolbox'
 include 'desktop', 'android', 'core'
