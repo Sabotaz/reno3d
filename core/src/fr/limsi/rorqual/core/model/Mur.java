@@ -106,6 +106,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private boolean isCreated = false;
     @XStreamOmitField
     private Model model_non_perce = null;
+    @XStreamAlias("cloison")
+    private boolean cloison = false;
 
     private Mur() {
     }
@@ -124,6 +126,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         setSlabDroit(model.getSlabDroit());
         if (model.getSlabDroit() != null)
             model.getSlabDroit().addMur(this);
+
+        setCloison(model.isCloison());
 
         this.setEtage(model.getEtage());
 
@@ -212,7 +216,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     public void setA(Coin a) {
-        if (A != null)
+        if (A != null && A != B)
             A.removeMur(this);
         A = a;
         if (a != null) {
@@ -229,7 +233,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     public void setB(Coin b) {
-        if (B != null)
+        if (B != null && A != B)
             B.removeMur(this);
         B = b;
         if (b != null) {
@@ -342,8 +346,8 @@ public class Mur extends ModelContainer implements Cote.Cotable {
             csg = csg.difference(o.getCSG());
         }
 
-        Material front = slabGauche == null ? exteriorMaterial : interiorMaterial1;
-        Material back = slabDroit == null ? exteriorMaterial : interiorMaterial2;
+        Material front = (slabGauche == null && !isCloison()) ? exteriorMaterial : interiorMaterial1;
+        Material back = (slabDroit == null && !isCloison()) ? exteriorMaterial : interiorMaterial2;
 
         Model model = CSGUtils.toModel(csg, front, back, defaultMaterial, exteriorMaterial, defaultMaterial);
 
@@ -493,8 +497,26 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         }
     }
 
+    public boolean isCloison() {
+        return cloison;
+    }
+
+    public void setCloison(boolean c) {
+        cloison = c;
+        if (cloison)
+            typeMur = TypeMurEnum.MUR_INTERIEUR;
+        else {
+            if (isInterieur()) {
+                this.typeMur = TypeMurEnum.MUR_INTERIEUR;
+            } else  {
+                this.typeMur = TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
+            }
+        }
+        this.mitoyenneteChanged();
+    }
+
     public boolean isInterieur() {
-        return (slabGauche != null && slabDroit != null);
+        return ((slabGauche != null && slabDroit != null) || isCloison());
     }
 
     public float getDeperdition(){

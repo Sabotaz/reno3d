@@ -61,6 +61,7 @@ public class WallMaker extends ModelMaker {
             }
 
             mur = new Mur(start, start);
+            mur.setCloison(true);
 
             mur.setSelectable(false);
             cote = new Cote(mur);
