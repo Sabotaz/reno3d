@@ -1,8 +1,8 @@
 {
   "type": "Window",
-  "name": "Crédits",
+  "name": "Aide",
   "width": "45%",
-  "id": "credits_window",
+  "id": "help_window",
   "content": [
     {
       "type": "Table",

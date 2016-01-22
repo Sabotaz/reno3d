@@ -31,7 +31,7 @@ public enum ButtonValue {
     VISIBILITY_TOIT,
     SAVE,
     LOAD,
-    CREDITS,
+    HELP,
 
 
     ;

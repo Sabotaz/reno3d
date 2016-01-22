@@ -314,11 +314,11 @@ public class MainUiControleur implements EventListener {
                             removeTb();
                             addTb(getLoadTb());
                             break;
-                        case CREDITS:
+                        case HELP:
                             uncheckControlButtons();
                             uncheckGeneralButtons();
                             if (button.isChecked()) {
-                                Layout l = Layout.fromJson("data/ui/layout/credits.json", null);
+                                Layout l = Layout.fromJson("data/ui/layout/help.json", null);
                                 addTb(l.getRoot());
                             }
                             else
