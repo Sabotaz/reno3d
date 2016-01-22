@@ -272,8 +272,8 @@
             },
             {
               "type": "Button",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.CREDITS",
-              "name": "credits",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.HELP",
+              "name": "help",
               "height": "auto",
               "width": "5%",
               "pad": 0,
