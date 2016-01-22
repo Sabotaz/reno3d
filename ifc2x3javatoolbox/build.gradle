@@ -1,0 +1,33 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = '1.7'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+
+eclipse.project {
+    name = appName + "-ifc2x3javatoolbox"
+}
+
+task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper to the current directory.') {
+    gradleVersion = '1.11'
+}
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'jfc2x3javatoolbox.demo.StructureViewer'
+}
+
+applicationDefaultJvmArgs = ["-Xss515m"]
+mainClassName = mainClass
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    
+}
+
