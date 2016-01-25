@@ -9,6 +9,9 @@ import java.util.Map;
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.logic.CameraEngine;
+import fr.limsi.rorqual.core.logic.Deleter;
+import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
@@ -32,6 +35,9 @@ public class SerialHolder {
     Dpe dpe = Dpe.getInstance();
 
     public void recreateModel() {
+        Logic.getInstance().stop();
+        Deleter.deleteBatiment();
+        CameraEngine.getInstance().reset();
         Coin.clearAll();
         ModelHolder.getInstance().setBatiment(batiment);
         batiment.reload();
@@ -41,6 +47,7 @@ public class SerialHolder {
         dpe.setPorteList(batiment.getPortes());
         Dpe.loadDpe(dpe);
         DpeUi.clear();
+        ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
     }
 
 }
