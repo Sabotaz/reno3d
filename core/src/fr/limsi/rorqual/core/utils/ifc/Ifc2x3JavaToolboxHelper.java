@@ -1,8 +1,18 @@
-package fr.limsi.rorqual.core.model;
+package fr.limsi.rorqual.core.utils.ifc;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import fr.limsi.rorqual.core.model.Etage;
+import fr.limsi.rorqual.core.model.Fenetre;
+import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Porte;
+import fr.limsi.rorqual.core.model.PorteFenetre;
+import fr.limsi.rorqual.core.model.Propertie;
+import fr.limsi.rorqual.core.model.Slab;
+import fr.limsi.rorqual.core.model.utils.Coin;
 import ifc2x3javatoolbox.ifc2x3tc1.*;
 import ifc2x3javatoolbox.ifcmodel.IfcModel;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcChangeActionEnum.IfcChangeActionEnum_internal;
@@ -16,12 +26,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by ricordeau on 08/04/2015.
  */
-public class IfcHelper {
+public class Ifc2x3JavaToolboxHelper extends AbstractIfcHelper {
 
     private IfcModel ifcModel;
     private IfcOwnerHistory ownerHistory;
@@ -29,15 +38,15 @@ public class IfcHelper {
     private IfcRelAggregates relationBuildingToBuildingStorey;
 
     /*** Mis en place du singleton ***/
-    private IfcHelper(){
+    private Ifc2x3JavaToolboxHelper(){
 
     }
     private static class IfcHelperHolder
     {
-        private final static IfcHelper INSTANCE = new IfcHelper();
+        private final static Ifc2x3JavaToolboxHelper INSTANCE = new Ifc2x3JavaToolboxHelper();
     }
 
-    public static synchronized IfcHelper getInstance() {
+    public static synchronized Ifc2x3JavaToolboxHelper getInstance() {
         return IfcHelperHolder.INSTANCE;
     }
 
@@ -47,7 +56,7 @@ public class IfcHelper {
 
     // Permet de compléter un model de départ contenant les informations du projet, un site,
     // un building
-    public IfcModel initialiseIfcModel (){
+    public IfcModel createIfcModel(){
         this.ifcModel = new IfcModel();
         relationBuildingToBuildingStorey=null;
         // Initialize File Name
@@ -796,7 +805,7 @@ public class IfcHelper {
     }
 
     // Permet d'ajouter un étage au batiment en lui rentrant son nom et son élévation
-    public void addBuildingStorey (String nameFloor , float elevation){
+    public void createBuildingStorey(String nameFloor, float elevation){
         IfcCartesianPoint ifcCartesianPointOriginBuildingStorey = createCartesianPoint3D(0.0f,0.0f,elevation);
         IfcDirection ifcDirectionZAxisBuildingStorey = createDirection3D(0.0f,0.0f,1.0f);
         IfcDirection ifcDirectionXDirectionBuildingStorey = createDirection3D(1.0f,0.0f,0.0f);
@@ -2340,18 +2349,6 @@ public class IfcHelper {
     }
 
     // Permet d'exporter le model au format .ifc
-    public void saveIfcModel(String filename){
-        FileHandle handle = Gdx.files.external(filename);
-        File saveStepFile = handle.file();
-        try {
-            ifcModel.writeStepfile(saveStepFile);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    // Permet d'exporter le model au format .ifc
     public void saveIfcModel2(String filename){
         FileHandle handle = Gdx.files.external(filename);
         File saveStepFile = handle.file();
@@ -2371,6 +2368,68 @@ public class IfcHelper {
         try {
             ifcModel.readStepFile(loadStepFile);
         } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /// AbstractIfcHelper definitions
+
+    @Override
+    public void addBuildingStorey(String name, float elevation) {
+        createBuildingStorey(name, elevation);
+    }
+
+    @Override
+    public WallContainer loadWall(Etage e,Mur m){
+        Vector2 a = m.getA().getPosition();
+        Vector2 b = m.getB().getPosition();
+        IfcCartesianPoint pointA1 = createCartesianPoint2D(a.x, a.y);
+        IfcCartesianPoint pointA2 = createCartesianPoint2D(b.x, b.y);
+        IfcWallStandardCase wall = addWall(e.getName(), "Mur", pointA1, pointA2, m.getDepth(), e.getHeight());
+        addCoins(wall, a.x, a.y, b.x, b.y, m.getEtage().getNumber());
+        return new WallContainer(wall);
+    }
+
+    @Override
+    public void loadSlab(Etage e, Slab s){
+        LIST<IfcCartesianPoint> listSlabCartesianPoint = new LIST<IfcCartesianPoint>();
+        ArrayList<Coin> coins = new ArrayList<Coin>(s.getCoins());
+        for (Coin c:coins){
+            IfcCartesianPoint point = createCartesianPoint2D(c.getPosition().x, c.getPosition().y);
+            listSlabCartesianPoint.add(point);
+        }
+        addSlab(e.getName(), listSlabCartesianPoint);
+    }
+
+    @Override
+    public void loadPorte(Porte p, WallContainer w){
+        addDoor("Porte", (IfcWallStandardCase) w.wall, p.getWidth(), p.getHeight(), p.getPosition().x, p.getY());
+    }
+
+    @Override
+    public void loadFenetre(Fenetre f, WallContainer w){
+        addWindow("Fenetre", (IfcWallStandardCase) w.wall, f.getWidth(), f.getHeight(), f.getPosition().x, f.getY());
+    }
+
+    @Override
+    public void loadPorteFenetre(PorteFenetre pf, WallContainer w){
+        addWindow("PorteFenetre", (IfcWallStandardCase) w.wall, pf.getWidth(), pf.getHeight(), pf.getPosition().x, pf.getY());
+    }
+
+    @Override
+    public void initialiseIfcModel() {
+        createIfcModel();
+    }
+
+    // Permet d'exporter le model au format .ifc
+    @Override
+    public void saveIfcModel(String filename){
+        FileHandle handle = Gdx.files.external(filename);
+        File saveStepFile = handle.file();
+        try {
+            ifcModel.writeStepfile(saveStepFile);
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

@@ -24,7 +24,7 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventType;
-import fr.limsi.rorqual.core.model.IfcHelper;
+import fr.limsi.rorqual.core.utils.ifc.IfcHelper;
 import fr.limsi.rorqual.core.model.IfcHolder;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3javatoolbox.ifc2x3tc1.IfcSlab;
@@ -129,7 +129,7 @@ public class Dpesave implements EventListener {
         _wallStandardCaseCollection = _ifcModel.getCollection(IfcWallStandardCase.class);
         _slabCollection = _ifcModel.getCollection(IfcSlab.class);
         _windowCollection = _ifcModel.getCollection(IfcWindow.class);
-        _SH = IfcHelper.calculSurfaceHabitable(_ifcModel);
+        _SH = Ifc2x3JavaToolboxHelper.calculSurfaceHabitable(_ifcModel);
     }
 
     */
@@ -175,7 +175,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Mur(){
-        _S = IfcHelper.getWallSurface(_wall);
+        _S = Ifc2x3JavaToolboxHelper.getWallSurface(_wall);
         _b=1;
         switch (_derriere){
             case "ext":
@@ -194,7 +194,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Mur(IfcWallStandardCase wall, String derriere){
-        _S = IfcHelper.getWallSurface(wall);
+        _S = Ifc2x3JavaToolboxHelper.getWallSurface(wall);
         _b=1;
         switch (derriere){
             case "ext":
@@ -213,7 +213,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Plancher(){
-        _S = IfcHelper.getSlabSurface(_slab);
+        _S = Ifc2x3JavaToolboxHelper.getSlabSurface(_slab);
         _b=1;
         switch (_derriere){
             case "vs":
@@ -232,7 +232,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Fenetre(){
-        _S = IfcHelper.getWindowSurface(_ifcModel,_window);
+        _S = Ifc2x3JavaToolboxHelper.getWindowSurface(_ifcModel,_window);
         _DP_fen += _S*_U;
     }
 
@@ -363,7 +363,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calcUplanTp(){
-        double surfacePlancher = IfcHelper.getSlabSurface(_slab);
+        double surfacePlancher = Ifc2x3JavaToolboxHelper.getSlabSurface(_slab);
         double variableTest;
 
         if (_typeBatiment == "Maison"){
@@ -1275,7 +1275,7 @@ public class Dpesave implements EventListener {
 
     public void demandeDerriereMur(){
 
-        if(IfcHelper.getPropertyTypeWall(_wall).equals("ext")){
+        if(Ifc2x3JavaToolboxHelper.getPropertyTypeWall(_wall).equals("ext")){
             Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur : ", _skin, "dialog") {
                 protected void result (Object object) {
                     if(object.equals(1)){
