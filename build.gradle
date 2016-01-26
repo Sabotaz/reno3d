@@ -72,6 +72,7 @@ project(":android") {
                 args = ['info']
                 standardOutput = os
             }
+            def outputAsString = os.toString()
             def matchLastChangedRev = outputAsString =~ /Révision de la dernière modification : (\d+)/
             //def matchLastChangedRev = outputAsString =~ /Last Changed Rev: (\d+)/
             def rev = matchLastChangedRev[0][1]
