@@ -89,6 +89,9 @@ project(":android") {
             manifestFile.write(manifestContent)
         }
     }
+
+    preBuild.dependsOn svninfo
+
 }
 
 project(":jcsg") {
