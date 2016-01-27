@@ -12,22 +12,23 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.math.ConvexHull;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.utils.FloatArray;
 
 import java.nio.FloatBuffer;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.ui.TextureLibrary;
-import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import fr.limsi.rorqual.core.view.shaders.ShaderAttribute;
 
 /**
@@ -285,14 +286,34 @@ public class ModelContainer extends ActableModel {
     }
 
     public boolean intersects(ModelContainer other) {
+        if (other instanceof Mur) {
+            return other.intersects(this);
+        }
+        if (this instanceof Mur) {
+            BoundingBox boundBox1 = new BoundingBox(getBoundingBox());
+            BoundingBox boundBox2 = new BoundingBox(other.getBoundingBox());
+            // don't rotate boundBox1 !
+            boundBox2.mul(other.getFullTransform()).mul(this.getFullTransform().inv());
 
-        BoundingBox boundBox1 = new BoundingBox(getBoundingBox());
-        BoundingBox boundBox2 = new BoundingBox(other.getBoundingBox());
-        boundBox1.mul(this.getFullTransform());
-        boundBox2.mul(other.getFullTransform());
+            if (!boundBox1.intersects(boundBox2))
+                return false;
+            return this.intersectsMeshes(other);
 
-        if (!boundBox1.intersects(boundBox2))
-            return false;
+        } else {
+
+            BoundingBox boundBox1 = new BoundingBox(getBoundingBox());
+            BoundingBox boundBox2 = new BoundingBox(other.getBoundingBox());
+            boundBox1.mul(this.getFullTransform());
+            boundBox2.mul(other.getFullTransform());
+
+            if (!boundBox1.intersects(boundBox2))
+                return false;
+            return this.intersectsMeshes(other);
+
+        }
+    }
+
+    public boolean intersectsMeshes(ModelContainer other) {
         return true;
     }
 
