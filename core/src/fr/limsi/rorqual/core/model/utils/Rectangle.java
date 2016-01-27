@@ -33,11 +33,11 @@ public class Rectangle {
         return this;
     }
 
-    public boolean overlaps(Rectangle other) {
+    public boolean overlaps(Rectangle other, Intersector.MinimumTranslationVector mtv) {
         Polygon p1 = this.getPolygon();
         Polygon p2 = other.getPolygon();
         if (Intersector.overlaps(p1.getBoundingRectangle(), p2.getBoundingRectangle()))
-            return Intersector.overlapConvexPolygons(p2, p1);
+            return Intersector.overlapConvexPolygons(p2, p1, mtv);
         return false;
     }
 

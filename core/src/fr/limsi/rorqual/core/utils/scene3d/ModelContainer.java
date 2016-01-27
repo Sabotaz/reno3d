@@ -286,7 +286,7 @@ public class ModelContainer extends ActableModel {
         return (dist2 <= radius * radius) ? intersectsMesh(ray, boundBox) : -1f;
     }
 
-    public boolean intersects(ModelContainer other) {
+    public boolean intersects(ModelContainer other, Intersector.MinimumTranslationVector mtv) {
         BoundingBox bb1 = new BoundingBox(this.getBoundingBox());
         Rectangle rect1 = new Rectangle(bb1);
         rect1.mul(this.getFullTransform());
@@ -295,7 +295,7 @@ public class ModelContainer extends ActableModel {
         Rectangle rect2 = new Rectangle(bb2);
         rect2.mul(other.getFullTransform());
 
-        return rect1.overlaps(rect2);
+        return rect1.overlaps(rect2, mtv);
 
     }
 
