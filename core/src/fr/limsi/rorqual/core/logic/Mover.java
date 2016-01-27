@@ -51,12 +51,15 @@ public class Mover extends ModelMaker {
 
     Ouverture movedOuverture = null;
     boolean movingOuverture = false;
+    CollisionController collisionController;
 
     @Override
     public void begin(int screenX, int screenY) {
 
         ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
         ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
+        collisionController = new CollisionController();
+
         if (modelContainer == null) {
             moving = false;
         } else if (modelContainer instanceof Mur) {
@@ -119,12 +122,11 @@ public class Mover extends ModelMaker {
                 moving = false;
             }
         } else if (modelContainer instanceof Objet) {
-            has_valid_pos = false;
-
             movedObjet = (Objet) modelContainer;
             movedObjet.setSelectable(false);
             moving = movingObject = true;
             translate = false;
+            collisionController.startNewCollision(movedObjet);
         } else if (modelContainer instanceof Ouverture) {
             movedOuverture = (Ouverture) modelContainer;
             movedOuverture.setSelectable(false);
@@ -132,6 +134,7 @@ public class Mover extends ModelMaker {
             translate = false;
 
         }
+
     }
 
     Anchor anchor;
@@ -166,39 +169,8 @@ public class Mover extends ModelMaker {
             Vector2 intersection = new MyVector2(slab.getIntersection());
             movedObjet.setPosition(intersection.x, intersection.y);
             movedObjet.setSlab(slab);
-            checkCollisions(intersection.x, intersection.y, slab);
+            collisionController.checkCollisions(intersection.x, intersection.y, slab);
 
-        }
-    }
-
-    boolean valid = false;
-    float last_valid_x = 0;
-    float last_valid_y = 0;
-    Slab last_valid_slab = null;
-    boolean has_valid_pos = false;
-
-    private void checkCollisions(float x, float y, Slab slab) {
-        Etage etage = movedObjet.getSlab().getEtage();
-        valid = true;
-        for (Mur mur : etage.getMurs()) {
-            if (movedObjet.intersects(mur))
-                valid = false;
-        }
-        for (Objet objet : etage.getObjets()) {
-            if (movedObjet != objet && movedObjet.intersects(objet))
-                valid = false;
-        }
-
-        if (valid) {
-            has_valid_pos = true;
-            last_valid_x = x;
-            last_valid_y = y;
-            last_valid_slab = slab;
-        } else {
-            if (has_valid_pos) {
-                movedObjet.setPosition(last_valid_x, last_valid_y);
-                movedObjet.setSlab(last_valid_slab);
-            }
         }
     }
 
