@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.utils.Rectangle;
 import fr.limsi.rorqual.core.ui.TextureLibrary;
 import fr.limsi.rorqual.core.view.shaders.ShaderAttribute;
 
@@ -286,6 +287,17 @@ public class ModelContainer extends ActableModel {
     }
 
     public boolean intersects(ModelContainer other) {
+        BoundingBox bb1 = new BoundingBox(this.getBoundingBox());
+        Rectangle rect1 = new Rectangle(bb1);
+        rect1.mul(this.getFullTransform());
+
+        BoundingBox bb2 = new BoundingBox(other.getBoundingBox());
+        Rectangle rect2 = new Rectangle(bb2);
+        rect2.mul(other.getFullTransform());
+
+        return rect1.overlaps(rect2);
+
+        /*
         if (other instanceof Mur) {
             return other.intersects(this);
         }
@@ -310,7 +322,7 @@ public class ModelContainer extends ActableModel {
                 return false;
             return this.intersectsMeshes(other);
 
-        }
+        }*/
     }
 
     public boolean intersectsMeshes(ModelContainer other) {
