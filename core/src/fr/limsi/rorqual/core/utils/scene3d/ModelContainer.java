@@ -297,36 +297,6 @@ public class ModelContainer extends ActableModel {
 
         return rect1.overlaps(rect2);
 
-        /*
-        if (other instanceof Mur) {
-            return other.intersects(this);
-        }
-        if (this instanceof Mur) {
-            BoundingBox boundBox1 = new BoundingBox(getBoundingBox());
-            BoundingBox boundBox2 = new BoundingBox(other.getBoundingBox());
-            // don't rotate boundBox1 !
-            boundBox2.mul(other.getFullTransform()).mul(this.getFullTransform().inv());
-
-            if (!boundBox1.intersects(boundBox2))
-                return false;
-            return this.intersectsMeshes(other);
-
-        } else {
-
-            BoundingBox boundBox1 = new BoundingBox(getBoundingBox());
-            BoundingBox boundBox2 = new BoundingBox(other.getBoundingBox());
-            boundBox1.mul(this.getFullTransform());
-            boundBox2.mul(other.getFullTransform());
-
-            if (!boundBox1.intersects(boundBox2))
-                return false;
-            return this.intersectsMeshes(other);
-
-        }*/
-    }
-
-    public boolean intersectsMeshes(ModelContainer other) {
-        return true;
     }
 
     private class Hit {
