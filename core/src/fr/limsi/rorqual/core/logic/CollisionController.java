@@ -19,23 +19,19 @@ public class CollisionController {
     Slab last_valid_slab = null;
     boolean has_valid_pos = false;
     Objet movedObjet = null;
-    Intersector.MinimumTranslationVector mtv;
 
     public void checkCollisions(float x, float y, Slab slab) {
         Etage etage = movedObjet.getSlab().getEtage();
         valid = true;
-        Intersector.MinimumTranslationVector _mtv = new Intersector.MinimumTranslationVector();
 
         for (Mur mur : etage.getMurs()) {
-            if (movedObjet.intersects(mur, _mtv)) {
+            if (movedObjet.intersects(mur, null)) {
                 valid = false;
-                mtv = _mtv;
             }
         }
         for (Objet objet : etage.getObjets()) {
-            if (movedObjet != objet && movedObjet.intersects(objet, _mtv)) {
+            if (movedObjet != objet && movedObjet.intersects(objet, null)) {
                 valid = false;
-                mtv = _mtv;
             }
         }
 
@@ -46,18 +42,6 @@ public class CollisionController {
             last_valid_slab = slab;
         } else {
 
-            //// try MTV
-            movedObjet.setPosition(x + mtv.normal.x*(mtv.depth*1.1f), y + mtv.normal.y*(mtv.depth*1.1f));
-            valid = true;
-
-            for (Mur mur : etage.getMurs()) {
-                if (movedObjet.intersects(mur, null))
-                    valid = false;
-            }
-            for (Objet objet : etage.getObjets()) {
-                if (movedObjet != objet && movedObjet.intersects(objet, null))
-                    valid = false;
-            }
             if (valid) {
                 has_valid_pos = true;
                 last_valid_x = x;
