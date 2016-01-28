@@ -47,22 +47,17 @@ public class ObjetMaker extends ModelMaker {
             Vector2 intersection = new MyVector2(slab.getIntersection());
             // intersection in world space, not in wall space
             ModelContainer container = ModelLibrary.getInstance().getModelContainerFromId(modelId);
-            if (container instanceof Objet) {
-                obj = (Objet) container;
-                obj.setPosition(intersection.x, intersection.y);
-                obj.setSelectable(false);
-                obj.setSlab(slab);
-                obj.setModelId(modelId);
-                slab.addObjet(obj);
-                making_objet = true;
-                obj.calculateBoundingBox(new BoundingBox());
-                collisionController = new CollisionController();
-                collisionController.startNewCollision(obj);
-                collisionController.checkCollisions(intersection.x, intersection.y, slab);
-            } else {
-                System.out.println("A very bad thing append here... " );
-                making_objet = false;
-            }
+            obj = (Objet) container;
+            obj.setPosition(intersection.x, intersection.y);
+            obj.setSelectable(false);
+            obj.setSlab(slab);
+            obj.setModelId(modelId);
+            slab.addObjet(obj);
+            making_objet = true;
+            obj.calculateBoundingBox(new BoundingBox());
+            collisionController = new CollisionController();
+            collisionController.startNewCollision(obj);
+            collisionController.checkCollisions(intersection.x, intersection.y, slab);
         }
     }
 
