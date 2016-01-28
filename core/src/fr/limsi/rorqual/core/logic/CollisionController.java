@@ -85,7 +85,7 @@ public class CollisionController {
             }
 
             // end try
-            if (!valid && has_valid_pos) {
+            if (has_valid_pos) {
                 movedObjet.setPosition(last_valid_x, last_valid_y);
                 movedObjet.setSlab(last_valid_slab);
             }
