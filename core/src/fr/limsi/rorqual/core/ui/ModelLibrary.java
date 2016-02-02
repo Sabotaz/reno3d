@@ -374,7 +374,6 @@ public class ModelLibrary {
     }
 
     public Table getModelTable(String category) {
-        System.out.println(categoriesTables.keySet());
         return categoriesTables.get(category);
     }
 

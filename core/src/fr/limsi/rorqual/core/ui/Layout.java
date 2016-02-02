@@ -1113,8 +1113,7 @@ public class Layout {
     }
 
     private Actor makeModelPicker(JsonValue json, Updater updater, Actor parent) {
-        Table table = ModelLibrary.getInstance().getModelTable(json.getString("category"));
-        System.out.println(json.getString("category"));
+        Table table = ModelLibrary.getInstance().getModelTable(json.getString("category"));;
 
         String align = json.getString("align", "center");
         switch (align) {
