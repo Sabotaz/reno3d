@@ -83,12 +83,14 @@ public abstract class Ouverture extends ModelContainer {
     }
     public void setPosition(Vector2 position) {
         this.position = position;
-        mur.setChanged();
+        if (mur != null)
+            mur.setChanged();
         changed = true;
     }
     public void setX(float x) {
         this.position.x = x-this.width/2;
-        mur.setChanged();
+        if (mur != null)
+            mur.setChanged();
     }
 
 
@@ -147,6 +149,7 @@ public abstract class Ouverture extends ModelContainer {
         return csg;
     }
 
+    @Override
     public void setChanged() {
         if (changed != true) {
             changed = true;
@@ -166,8 +169,9 @@ public abstract class Ouverture extends ModelContainer {
             dmin = b.getMin(new Vector3()).scl(-1);
             dmin.z = dmin.z + (getY()-this.position.y) / d;
             scaleMatrix.idt().scale(w, h, d);
+            this.mur.setChanged();
+            changed = false;
         }
-        changed = false;
         Matrix4 mx = new Matrix4();
         Vector3 vx = new Vector3(position.x, -(mur != null ? mur.getDepth() : Mur.DEFAULT_DEPTH) / 2, position.y);
         mx.translate(vx);

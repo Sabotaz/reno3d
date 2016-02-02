@@ -39,11 +39,11 @@ import fr.limsi.rorqual.core.utils.AssetManager;
 public class Porte extends Ouverture{
 
     @XStreamOmitField
-    static float DEFAULT_Y = 0.0f;
+    public static float DEFAULT_Y = 0.0f;
     @XStreamOmitField
-    static float DEFAULT_WIDTH = 1.0f;
+    public static float DEFAULT_WIDTH = 1.0f;
     @XStreamOmitField
-    static float DEFAULT_HEIGHT = 2.15f;
+    public static float DEFAULT_HEIGHT = 2.15f;
     @XStreamAlias("coefficientTransmissionThermique")
     private double coefficientDeTransmissionThermique;
     @XStreamAlias("deperdition")

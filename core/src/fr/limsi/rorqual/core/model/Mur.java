@@ -393,6 +393,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         setChanged();
     }
 
+    @Override
     public void setChanged() {
         changed = true;
         for (Ouverture o : ouvertures)

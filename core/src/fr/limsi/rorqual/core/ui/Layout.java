@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -246,6 +247,9 @@ public class Layout {
                 break;
             case "TexturePicker":
                 actor = makeTexturePicker(json, updater, parent);
+                break;
+            case "ModelPicker":
+                actor = makeModelPicker(json, updater, parent);
                 break;
             default:
                 return null;
@@ -1105,6 +1109,37 @@ public class Layout {
                 //.size(sizeMaxEnum * 7 + 50, 93)
                 .size(width.get(null), height.get(null))
                 .pad(5);
+        return table;
+    }
+
+    private Actor makeModelPicker(JsonValue json, Updater updater, Actor parent) {
+        Table table = ModelLibrary.getInstance().getModelTable(json.getString("category"));
+        System.out.println(json.getString("category"));
+
+        String align = json.getString("align", "center");
+        switch (align) {
+            case "left":
+                table.align(Align.left);
+                break;
+            case "right":
+                table.align(Align.right);
+                break;
+            case "center":
+                table.align(Align.center);
+                break;
+        }
+
+        Value width = getValue(json, "width", null);
+        Value height = getValue(json, "height", null);
+
+//        if (json.has("label")){
+//            Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
+//            lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
+//            lbs.fontColor = Color.DARK_GRAY;
+//            Label label = new Label(json.getString("label"),lbs);
+//            table.add(label)/*.center()*/.left().top().padBottom(5);
+//            table.row();
+//        }
         return table;
     }
 

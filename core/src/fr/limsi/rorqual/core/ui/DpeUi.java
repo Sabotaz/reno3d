@@ -41,6 +41,17 @@ public class DpeUi  {
                 a = l.getRoot();
             }
             return a;
+        } else if (o instanceof Porte) {
+            Actor a;
+            if (!sauvegarde_layout.containsKey(o)){
+                Layout l = Layout.fromJson("data/ui/layout/doorProperties.json", o);
+                a = l.getRoot();
+                sauvegarde_layout.put(o,l);
+            }else{
+                Layout l = sauvegarde_layout.get(o);
+                a = l.getRoot();
+            }
+            return a;
         } else if (o instanceof Mur) {
             Actor a;
             if (!sauvegarde_layout.containsKey(o)){

@@ -7,8 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import fr.limsi.rorqual.core.model.Fenetre;
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Ouverture;
+import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
@@ -150,7 +153,17 @@ public class Logic implements InputProcessor {
             }
             newModelContainer.local_transform = oldModelContainer.local_transform;
 
-            newModelContainer.setPosition(oldModelContainer.getPosition());
+            if (newModelContainer instanceof Ouverture) {
+                Ouverture old = (Ouverture) oldModelContainer;
+                Ouverture nwe = (Ouverture) newModelContainer;
+                Mur mur = old.getMur();
+                mur.removeOuverture(old);
+                nwe.setX(old.getPosition().x + old.getWidth() / 2);
+                nwe.setMur(mur);
+                mur.setChanged();
+            } else {
+                newModelContainer.setPosition(oldModelContainer.getPosition());
+            }
             MainApplicationAdapter.setSelected(newModelContainer);
         }
     }

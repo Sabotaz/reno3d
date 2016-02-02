@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.utils.Rectangle;
 import fr.limsi.rorqual.core.ui.TextureLibrary;
 import fr.limsi.rorqual.core.view.shaders.ShaderAttribute;
@@ -77,6 +78,9 @@ public class ModelContainer extends ActableModel {
                 c.act();
             }
         }
+    }
+
+    public void setChanged() {
     }
 
     protected void setMaterial(Material material, String type) {

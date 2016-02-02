@@ -138,6 +138,7 @@ public class ModelLibrary {
                             //toScale(container);
 
                             loading = false;
+                            container.setChanged();
                         }
                         System.out.println(container);
                     }
@@ -149,6 +150,7 @@ public class ModelLibrary {
                     container.setModel(model, false);
                     container.setBoundingBox(box);
                     toScale(container);
+                    container.setChanged();
                 }
             }
             return container;
@@ -372,6 +374,7 @@ public class ModelLibrary {
     }
 
     public Table getModelTable(String category) {
+        System.out.println(categoriesTables.keySet());
         return categoriesTables.get(category);
     }
 

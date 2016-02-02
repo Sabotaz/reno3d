@@ -6,59 +6,16 @@
   "content": [
     {
       "type": "Table",
-      "name": "Type / Matériau",
-      "id": "type_et_materiau",
+      "name": "Modèle",
+      "id": "models",
       "content": [
         {
-          "type": "Table",
-          "label": "Type : ",
-          "labelPad": 5,
-          "labelWidth": 77,
-          "content": [
-            {
-              "type": "ButtonGroup",
-              "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
-              "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_PORTE",
-              "content": [
-                {
-                  "type": "CheckBox",
-                  "label": "Porte opaque pleine",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_OPAQUE_PLEINE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Porte avec simple vitrage (< 30%)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_AVEC_MOIS_DE_30_POURCENT_DE_SIMPLE_VITRAGE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Porte avec simple vitrage (entre 30% et 60%)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_AVEC_30_60_POURCENT_DE_SIMPLE_VITRAGE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Porte avec double vitrage",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_AVEC_DOUBLE_VITRAGE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Porte opaque pleine isolée",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_OPAQUE_PLEINE_ISOLEE"
-                },
-                {
-                  "type": "CheckBox",
-                  "label": "Porte précédée d'un SAS",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypePorte.PORTE_PRECEDE_DUN_SAS"
-                }
-              ]
-            }
-          ]
+          "type": "ModelPicker",
+          "label": "Modèle :",
+          "category": "Portes et fenêtres",
+          "align": "left",
+          "width": "30%",
+          "height": "20%"
         }
       ]
     }
