@@ -41,11 +41,16 @@ public class SurfaceCote extends ModelContainer {
         this.setSelectable(false);
     }
 
+    private boolean changed = true;
+
     public void act() {
         super.act();
-        setModel(new Model());
-        if (cotable.getCoteValue() != 0) {
+        float v = cotable.getCoteValue();
+        changed |= (v != 0 && v != value);
+        if (changed) {
+            setModel(new Model());
             makeMesh();
+            changed = false;
         }
         this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
     }

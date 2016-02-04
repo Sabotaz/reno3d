@@ -45,24 +45,38 @@ public class Cote2D extends ModelContainer {
         this.setSelectable(false);
     }
 
+    boolean changed = true;
+
     public void act() {
         super.act();
-        this.setModel(new Model());
-        if (cotable.getCoteValueVertical() != 0 && cotable.getCoteValueHorizontal() != 0) {
+
+        float vv = cotable.getCoteValueVertical();
+        float hv = cotable.getCoteValueHorizontal();
+
+        changed |= (vv != 0 && vv != vvalue);
+        changed |= (hv != 0 && hv != hvalue);
+
+        if (changed) {
+            setModel(new Model());
             makeVerticalMesh();
             makeHorizontalMesh();
+            changed = false;
         }
+
         this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
     }
 
-    private float value = 0.0f;
+    private float vvalue = 0.0f;
+    private float hvalue = 0.0f;
 
     Texture textTextures[] = new Texture[2];
 
     private void makeVerticalMesh() {
+        vvalue = cotable.getCoteValueVertical();
         makeMesh(cotable.getCotePosVerticalA(), cotable.getCotePosVerticalB(), cotable.getCoteValueVertical(), 0);
     }
     private void makeHorizontalMesh() {
+        vvalue = cotable.getCoteValueHorizontal();
         makeMesh(cotable.getCotePosHorizontalA(), cotable.getCotePosHorizontalB(), cotable.getCoteValueHorizontal(), 1);
     }
 

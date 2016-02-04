@@ -49,9 +49,19 @@ public class Cote extends ModelContainer {
         this.setSelectable(false);
     }
 
+    boolean changed = true;
+
     public void act() {
         super.act();
-        makeMesh();
+
+        float v = cotable.getCoteValue();
+        changed |= (v != 0 && v != value);
+        if (changed) {
+            setModel(new Model());
+            makeMesh();
+            changed = false;
+        }
+
         this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
     }
 
