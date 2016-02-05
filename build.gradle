@@ -65,17 +65,14 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
     }
 
-    task svninfo << {
+    task gitinfo << {
         new ByteArrayOutputStream().withStream { os ->
             def result = exec {
-                executable = 'svn'
-                args = ['info']
+                executable = 'sh'
+                args = ["-c", "git log --pretty=format:'' | wc -l"]
                 standardOutput = os
             }
-            def outputAsString = os.toString()
-            def matchLastChangedRev = outputAsString =~ /Révision de la dernière modification : (\d+)/
-            //def matchLastChangedRev = outputAsString =~ /Last Changed Rev: (\d+)/
-            def rev = matchLastChangedRev[0][1]
+            def rev = os.toString().trim()
 
             def manifestBaseFile = file("android/manifest/AndroidManifest.xml")
             def manifestFile = file("android/AndroidManifest.xml")
@@ -90,7 +87,7 @@ project(":android") {
         }
     }
 
-    preBuild.dependsOn svninfo
+    preBuild.dependsOn gitinfo
 
 }
 
