@@ -1,0 +1,69 @@
+
+############### 
+# FORMATTING  #
+###############
+
+(from http://stackoverflow.com/questions/11071127/google-play-app-description-formatting)
+
+Experimentally, I've discovered that you can provide:
+
+ * Single line breaks are ignored; double line breaks open a new paragraph.
+ * Single line breaks can be enforced by ending a line with two spaces (similar to Markdown).
+ * A limited set of HTML tags (optionally nested), specifically:
+  * <b>…</b> for boldface,
+  * <i>…</i> for italics,
+  * <u>…</u> for underline,
+  * <br /> to enforce a single line break,
+  * I could not find any way to get strikethrough (<s>…</s>) working.
+ * A fully-formatted URL such as http://google.com; this appears as a hyperlink.
+   (Beware that trying to use an HTML <a> tag for a custom description does not work and breaks the formatting.)
+ * HTML character entities are supported, such as &rarr; (→), &trade; (™) and &reg; (®); consult this W3 reference (http://www.w3.org/TR/html4/sgml/entities.html) for the exhaustive list.
+ * UTF-8 encoded characters are supported, such as é, €, £, ‘, ’, ★ and ☆.
+ * Indentation isn't strictly possible, but using a bullet and em space character looks reasonable (&#8226;&#8195; yields "• ").
+ * Emoji are also supported (though on the website depends on the user's OS & browser).
+
+Special notes concerning the *only Google Play app*:
+
+ * Some HTML tags only work in the app:
+  * <blockquote>…</blockquote> to indent a paragraph of text,
+  * <small>…</small> for a slightly smaller text,
+  * <sup>…</sup> and <sub>…</sub> for super- and subscripts.
+  * <font color="#a32345">…</font> for setting font colors in HEX code.
+ * Some symbols do not appear correctly, such as ‣.
+ * All these notes also apply to the app's "What's New" section.
+
+Special notes concerning the *only Google Play website*:
+
+ * All HTML formatting appears as plain text appears in the website's "What's New" section (i.e. users will see the HTML source).
+
+###############
+#   CONTENU   #
+###############
+
+ * création de plan en 2D et 3D
+ * modification
+ * ajout de meuble
+ * choix des matériaux des murs, fenêtres
+ * gestion des étages
+ * calcul automatique de la classe énergétique du logement
+ * …
+ * fonctionne sur tablettes, smartphone (lesquels)
+ * Mettre une information sur les développeurs ?
+
+###############
+# DESCRIPTION #
+###############
+
+Modélisez votre logement à l'aide de 3DRéno, puis effectuez une évaluation énergétique de celui-ci.
+
+LICENCES
+ * LibGDX
+https://raw.githubusercontent.com/libgdx/libgdx/master/LICENSE
+* JCSG
+https://raw.githubusercontent.com/miho/JCSG/master/LICENSE.txt
+* IFC2x3JavaToolbox (free version)
+https://creativecommons.org/licenses/by-nc-sa/3.0/fr/ (cc) 2013 Eike Tauscher and Michael Theiler
+* Models 3D :
+http://www.sweethome3d.com/importModels.jsp
+* Textures :
+http://www.sweethome3d.com/importTextures.jsp
