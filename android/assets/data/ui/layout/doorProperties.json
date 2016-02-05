@@ -12,7 +12,7 @@
         {
           "type": "ModelPicker",
           "label": "Modèle :",
-          "category": "Portes et fenêtres",
+          "category": "Portes et fenetres",
           "align": "left",
           "width": "30%",
           "height": "20%"
