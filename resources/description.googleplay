@@ -56,14 +56,14 @@ Special notes concerning the *only Google Play website*:
 
 Modélisez votre logement à l'aide de 3DRéno, puis effectuez une évaluation énergétique de celui-ci.
 
-LICENCES
- * LibGDX
+<b><u>LICENCES</u></b>
+&#8226;&#8195;<b>LibGDX :</b>
 https://raw.githubusercontent.com/libgdx/libgdx/master/LICENSE
-* JCSG
+&#8226;&#8195;<b>JCSG :</b>
 https://raw.githubusercontent.com/miho/JCSG/master/LICENSE.txt
-* IFC2x3JavaToolbox (free version)
+&#8226;&#8195;<b>IFC2x3JavaToolbox <i>(free version)</i> :</b>
 https://creativecommons.org/licenses/by-nc-sa/3.0/fr/ (cc) 2013 Eike Tauscher and Michael Theiler
-* Models 3D :
+&#8226;&#8195;<b>Models 3D :</b>
 http://www.sweethome3d.com/importModels.jsp
-* Textures :
+&#8226;&#8195;<b>Textures :</b>
 http://www.sweethome3d.com/importTextures.jsp
