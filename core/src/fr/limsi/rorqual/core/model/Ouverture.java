@@ -218,4 +218,11 @@ public abstract class Ouverture extends ModelContainer {
     public void copy(Ouverture other) {
         this.position = other.getPosition();
     }
+
+    public void setY(float y) {
+        this.position.y = y;
+        if (mur != null)
+            mur.setChanged();
+        changed = true;
+    }
 }

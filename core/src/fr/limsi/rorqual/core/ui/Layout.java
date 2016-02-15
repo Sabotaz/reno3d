@@ -941,6 +941,14 @@ public class Layout {
         final TextField textField = new TextField("",tfs);
         textField.setFocusTraversal(false);
 
+        Object str = updater.getDefaultValue();
+        if (str instanceof String)
+            textField.setText((String) str);
+        else if (str instanceof Float)
+            textField.setText(Float.toString((Float) str));
+        else if (str instanceof Integer)
+            textField.setText(Integer.toString((Integer) str));
+
         if (json.has("maxLength")){
             textField.setMaxLength(json.getInt("maxLength"));
         }
@@ -984,7 +992,6 @@ public class Layout {
                     try {
                         result = Float.parseFloat(textSaisie);
                     }catch (NumberFormatException e){
-
                     }
                     HashMap<String, Object> items = new HashMap<String, Object>();
                     items.put("userObject", userObject);

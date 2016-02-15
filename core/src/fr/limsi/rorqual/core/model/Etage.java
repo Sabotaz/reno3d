@@ -72,6 +72,9 @@ public class Etage {
         for (Mur m : murs) {
             m.setChanged();
         }
+        for (Slab s : slabs) {
+            s.setChanged();
+        }
         this.actualiseElevation();
     }
 

@@ -202,6 +202,70 @@
           "height": "20%"
         }
       ]
+    },
+    {
+      "type": "Table",
+      "name": "Taille",
+      "id": "sizes",
+      "content": [
+        {
+          "type": "Table",
+          "label": "Hauteur (en cm)",
+          "labelPad": 5,
+          "labelWidth": "10%",
+          "content": [
+            {
+              "type": "TextField",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.HAUTEUR_MODELE",
+              "maxLength": 20
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Largeur (en cm)",
+          "labelPad": 5,
+          "labelWidth": "10%",
+          "content": [
+            {
+              "type": "TextField",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.LARGEUR_MODELE",
+              "maxLength": 20
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "align": "left",
+          "padLeft": -75,
+          "content": [
+            {
+              "type": "CheckBox",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.RATIO_MODELE",
+              "label": "Respecter le ratio hauteur/largeur du modèle 3D",
+              "labelWidth": "10%"
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "label": "Hauteur au sol (en cm)",
+          "labelPad": 5,
+          "labelWidth": "10%",
+          "id": "hauteur_au_sol",
+          "content": [
+            {
+              "type": "TextField",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.HAUTEUR_SOL_MODELE",
+              "maxLength": 20
+            }
+          ]
+        }
+      ]
     }
   ]
 }

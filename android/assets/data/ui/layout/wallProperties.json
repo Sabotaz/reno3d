@@ -216,6 +216,27 @@
           "height": "20%"
         }
       ]
+    },
+    {
+      "type": "Table",
+      "name": "Taille",
+      "id": "sizes",
+      "content": [
+        {
+          "type": "Table",
+          "label": "Hauteur (en cm)",
+          "labelPad": 5,
+          "labelWidth": "10%",
+          "content": [
+            {
+              "type": "TextField",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.HAUTEUR_MODELE",
+              "maxLength": 20
+            }
+          ]
+        }
+      ]
     }
   ]
 }

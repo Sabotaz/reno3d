@@ -14,5 +14,11 @@ public enum UiEvent implements EventType {
     SAVE_FILE,
     LOAD_FILE,
     EXPORT_FILE,
+
+    HAUTEUR_MODELE,
+    LARGEUR_MODELE,
+    HAUTEUR_SOL_MODELE,
+    RATIO_MODELE,
+
     ;
 }

@@ -38,12 +38,17 @@ import fr.limsi.rorqual.core.logic.Calculateur;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Deleter;
 import fr.limsi.rorqual.core.logic.Logic;
+import fr.limsi.rorqual.core.model.Batiment;
+import fr.limsi.rorqual.core.model.Fenetre;
+import fr.limsi.rorqual.core.model.Ouverture;
+import fr.limsi.rorqual.core.model.PorteFenetre;
 import fr.limsi.rorqual.core.utils.ifc.IfcExporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote;
 import fr.limsi.rorqual.core.utils.scene3d.models.SurfaceCote;
 import fr.limsi.rorqual.core.utils.serialization.Deserializer;
@@ -497,6 +502,104 @@ public class MainUiControleur implements EventListener {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 String filename = (String)items.get("filename");
                 IfcExporter.getInstance().realiseExportIfc(filename);
+            }
+
+            // model sizes
+            else if (e.getEventType() == UiEvent.HAUTEUR_MODELE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Ouverture) {
+                        ((Ouverture) model).setHeight((Float) items.get("lastValue") / 100);
+                    } else if (model instanceof Mur) {
+                        ModelHolder.getInstance().getBatiment().getCurrentEtage().setHeight((Float) items.get("lastValue") / 100);
+                    }
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Ouverture) {
+                        currentItems.put("lastValue", 100*((Ouverture) model).getHeight());
+                    } else if (model instanceof Mur) {
+                        currentItems.put("lastValue", 100 * ModelHolder.getInstance().getBatiment().getCurrentEtage().getHeight());
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.HAUTEUR_MODELE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
+            }
+            else if (e.getEventType() == UiEvent.LARGEUR_MODELE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Ouverture) {
+                        ((Ouverture) model).setWidth((Float) items.get("lastValue") / 100);
+                    }
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Ouverture) {
+                        currentItems.put("lastValue", 100*((Ouverture) model).getWidth());
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.LARGEUR_MODELE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
+            }
+            else if (e.getEventType() == UiEvent.RATIO_MODELE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    currentItems.put("lastValue", false);
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.RATIO_MODELE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
+            }
+            else if (e.getEventType() == UiEvent.HAUTEUR_SOL_MODELE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Fenetre) {
+                        ((Fenetre) model).setY((Float) items.get("lastValue") / 100);
+                    }
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    Layout layout = (Layout)items.get("layout");
+
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Fenetre) {
+                        currentItems.put("lastValue", 100*model.getPosition().y);
+                    } else if (model instanceof PorteFenetre) {
+                        currentItems.put("lastValue", 100*model.getPosition().y);
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.HAUTEUR_SOL_MODELE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+
+                    Actor actor;
+                    do Thread.sleep(15); while ((actor = layout.getFromId("hauteur_au_sol")) == null);
+                    actor.setVisible(model instanceof Fenetre);
+                }
             }
 
         }
