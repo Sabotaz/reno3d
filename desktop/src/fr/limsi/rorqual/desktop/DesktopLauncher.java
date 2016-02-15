@@ -7,7 +7,7 @@ import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "3DReno";
+        config.title = "PLAN 3D ENERGY home edition";
         config.height = 720;
         config.width = 1280;
 		new LwjglApplication(new MainApplicationAdapter(), config);
