@@ -252,7 +252,7 @@
         },
         {
           "type": "Table",
-          "label": "Hauteur au sol (en cm)",
+          "label": "Allège (en cm)",
           "labelPad": 5,
           "labelWidth": "10%",
           "id": "hauteur_au_sol",
