@@ -129,7 +129,7 @@ public class Dpesave implements EventListener {
         _wallStandardCaseCollection = _ifcModel.getCollection(IfcWallStandardCase.class);
         _slabCollection = _ifcModel.getCollection(IfcSlab.class);
         _windowCollection = _ifcModel.getCollection(IfcWindow.class);
-        _SH = Ifc2x3JavaToolboxHelper.calculSurfaceHabitable(_ifcModel);
+        _SH = Ifc2x3Helper.calculSurfaceHabitable(_ifcModel);
     }
 
     */
@@ -175,7 +175,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Mur(){
-        _S = Ifc2x3JavaToolboxHelper.getWallSurface(_wall);
+        _S = Ifc2x3Helper.getWallSurface(_wall);
         _b=1;
         switch (_derriere){
             case "ext":
@@ -194,7 +194,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Mur(IfcWallStandardCase wall, String derriere){
-        _S = Ifc2x3JavaToolboxHelper.getWallSurface(wall);
+        _S = Ifc2x3Helper.getWallSurface(wall);
         _b=1;
         switch (derriere){
             case "ext":
@@ -213,7 +213,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Plancher(){
-        _S = Ifc2x3JavaToolboxHelper.getSlabSurface(_slab);
+        _S = Ifc2x3Helper.getSlabSurface(_slab);
         _b=1;
         switch (_derriere){
             case "vs":
@@ -232,7 +232,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calc_DP_Fenetre(){
-        _S = Ifc2x3JavaToolboxHelper.getWindowSurface(_ifcModel,_window);
+        _S = Ifc2x3Helper.getWindowSurface(_ifcModel,_window);
         _DP_fen += _S*_U;
     }
 
@@ -363,7 +363,7 @@ public class Dpesave implements EventListener {
     }
 
     public void calcUplanTp(){
-        double surfacePlancher = Ifc2x3JavaToolboxHelper.getSlabSurface(_slab);
+        double surfacePlancher = Ifc2x3Helper.getSlabSurface(_slab);
         double variableTest;
 
         if (_typeBatiment == "Maison"){
@@ -1275,7 +1275,7 @@ public class Dpesave implements EventListener {
 
     public void demandeDerriereMur(){
 
-        if(Ifc2x3JavaToolboxHelper.getPropertyTypeWall(_wall).equals("ext")){
+        if(Ifc2x3Helper.getPropertyTypeWall(_wall).equals("ext")){
             Dialog dialog = new Dialog(" Qu'est-ce qu'il y a derriere ce mur : ", _skin, "dialog") {
                 protected void result (Object object) {
                     if(object.equals(1)){

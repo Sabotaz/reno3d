@@ -94,15 +94,13 @@ project(":android") {
 project(":jcsg") {
 }
 
-project(":ifc2x3javatoolbox") {
-}
-
 project(":core") {
     apply plugin: "java"
 
     dependencies {
         compile project(":jcsg")
-        compile project(":ifc2x3javatoolbox")
+
+        if (gradle.use_javatoolbox) compile project(":ifc2x3javatoolbox") else compile project(":ifc2x3native")
 
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 

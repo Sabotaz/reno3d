@@ -1,4 +1,4 @@
-package fr.limsi.rorqual.core.model;
+package ifc2x3utils;
 
 /**
  * Created by ricordeau on 21/10/15.

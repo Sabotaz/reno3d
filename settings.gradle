@@ -1,2 +1,5 @@
-include ':jcsg', ':ifc2x3javatoolbox'
+gradle.ext.use_javatoolbox = false
+
+include ':jcsg'
+if (gradle.use_javatoolbox) include ':ifc2x3javatoolbox' else include ':ifc2x3native'
 include 'desktop', 'android', 'core'
