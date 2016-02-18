@@ -1,7 +1,11 @@
 package ifc2x3utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+
+import core.IfcModel;
 
 /**
  * Created by ricordeau on 08/04/2015.
@@ -21,8 +25,11 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
         return IfcHelperHolder.INSTANCE;
     }
 
+    IfcModel ifcModel;
+
     @Override
     public void addBuildingStorey(String name, float elevation) {
+        ifcModel.STOREY(name, elevation);
     }
 
     @Override
@@ -44,15 +51,26 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
 
     @Override
     public void loadPorteFenetre(float portefenetre_width, float portefenetre_height, float portefenetre_x, float portefenetre_y, WallContainer w){
+        Object wall = w.wall;
     }
 
     @Override
     public void initialiseIfcModel() {
+        ifcModel = new IfcModel();
     }
 
     // Permet d'exporter le model au format .ifc
     @Override
     public void saveIfcModel(File saveStepFile){
+        try {
+            FileOutputStream outputStream = new FileOutputStream(saveStepFile);
+            ifcModel.setFilename(saveStepFile.getAbsolutePath());
+            outputStream.write(ifcModel.toString().getBytes());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
