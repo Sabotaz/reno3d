@@ -12,11 +12,13 @@ public class IfcModel {
     IfcRules.IFCOWNERHISTORY IFCOWNERHISTORY;
     IfcRules.IFCPROJECT IFCPROJECT;
     String filename = "projet.ifc";
-    ArrayList<IfcRules> IfcRulesList = new ArrayList<IfcRules>();
     IfcRules.IFCBUILDINGSTOREY ACTIVE_IFCBUILDINGSTOREY;
+    IfcRules.IFCRELAGGREGATES STOREYS_IFCRELAGGREGATES;
 
     public IfcModel() {
+        IfcRules.restRules();
         PROJECT();
+        BUILDING();
     }
 
     public void setFilename(String filename) {
@@ -28,7 +30,7 @@ public class IfcModel {
 
         String data = "";
         data += IFCPROJECT;
-        for (IfcRules rule : IfcRulesList)
+        for (IfcRules rule : IfcRules.getRules())
             data += rule;
 
         return FILE (
@@ -40,7 +42,6 @@ public class IfcModel {
 
     public String HEADER(String filename) {
         return
-            "ISO-10303-21;\n" +
             "HEADER;\n" +
             "FILE_DESCRIPTION(('ViewDefinition [CoordinationView]'),'2;1');\n" +
             "FILE_NAME('" + filename + "','2016-02-17T15:08:32+0100',('Thomas Ricordeau','Julien Christophe'),('LIMSI-CNRS'),'IFC2x3native','','');\n" +
@@ -51,18 +52,18 @@ public class IfcModel {
     public String DATA(String content) {
         return
             "DATA;\n" +
-            content + "\n" +
+            content +
             "ENDSEC;\n";
     }
 
     public String FILE(String header, String data) {
         return
             "ISO-10303-21;\n" +
-            header + "\n" +
+            header +
             "\n" +
-            data + "\n" +
+            data +
             "\n" +
-            "END-ISO-10303-21\n";
+            "END-ISO-10303-21;";
     }
 
     public void PROJECT() {
@@ -89,6 +90,28 @@ public class IfcModel {
         this.IFCPROJECT = new IfcRules.IFCPROJECT(IFCOWNERHISTORY, IFCGEOMETRICREPRESENTATIONCONTEXT, IFCUNITASSIGNMENT);
     }
 
+    public void BUILDING() {
+        IfcRules.IFCCARTESIANPOINT IFCCARTESIANPOINT = new IfcRules.IFCCARTESIANPOINT(0,0,0);
+        IfcRules.IFCDIRECTION IFCDIRECTION1 = new IfcRules.IFCDIRECTION(0,0,1);
+        IfcRules.IFCDIRECTION IFCDIRECTION2 = new IfcRules.IFCDIRECTION(1,0,0);
+        IfcRules.IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D = new IfcRules.IFCAXIS2PLACEMENT3D(IFCCARTESIANPOINT, IFCDIRECTION1, IFCDIRECTION2);
+        IfcRules.IFCLOCALPLACEMENT IFCLOCALPLACEMENT = new IfcRules.IFCLOCALPLACEMENT(IFCAXIS2PLACEMENT3D);
+
+        IfcRules.IFCSITE IFCSITE = new IfcRules.IFCSITE(IFCOWNERHISTORY, IFCLOCALPLACEMENT);
+        IfcRules.IFCRELAGGREGATES IFCRELAGGREGATES = new IfcRules.IFCRELAGGREGATES(IFCOWNERHISTORY, "ProjectContainer", "ProjectContainer for Sites", IFCPROJECT, new IfcRules[]{IFCSITE});
+
+        IFCCARTESIANPOINT = new IfcRules.IFCCARTESIANPOINT(0,0,0);
+        IFCDIRECTION1 = new IfcRules.IFCDIRECTION(0,0,1);
+        IFCDIRECTION2 = new IfcRules.IFCDIRECTION(1,0,0);
+        IFCAXIS2PLACEMENT3D = new IfcRules.IFCAXIS2PLACEMENT3D(IFCCARTESIANPOINT, IFCDIRECTION1, IFCDIRECTION2);
+        IFCLOCALPLACEMENT = new IfcRules.IFCLOCALPLACEMENT(IFCAXIS2PLACEMENT3D);
+
+        IfcRules.IFCBUILDING IFCBUILDING = new IfcRules.IFCBUILDING(IFCOWNERHISTORY, IFCLOCALPLACEMENT);
+        IFCRELAGGREGATES = new IfcRules.IFCRELAGGREGATES(IFCOWNERHISTORY, "SiteContainer", "SiteContainer for Building", IFCSITE, new IfcRules[]{IFCBUILDING});
+
+        STOREYS_IFCRELAGGREGATES = new IfcRules.IFCRELAGGREGATES(IFCOWNERHISTORY, "BuildingContainer", "BuildingContainer for BuildingStorey", IFCBUILDING);
+    }
+
     public void STOREY(String name, float elevation) {
         IfcRules.IFCCARTESIANPOINT IFCCARTESIANPOINT = new IfcRules.IFCCARTESIANPOINT(0,0,elevation);
         IfcRules.IFCDIRECTION IFCDIRECTION1 = new IfcRules.IFCDIRECTION(0,0,0);
@@ -96,7 +119,7 @@ public class IfcModel {
         IfcRules.IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D = new IfcRules.IFCAXIS2PLACEMENT3D(IFCCARTESIANPOINT, IFCDIRECTION1, IFCDIRECTION2);
         IfcRules.IFCLOCALPLACEMENT IFCLOCALPLACEMENT = new IfcRules.IFCLOCALPLACEMENT(IFCAXIS2PLACEMENT3D);
         IfcRules.IFCBUILDINGSTOREY IFCBUILDINGSTOREY = new IfcRules.IFCBUILDINGSTOREY(IFCOWNERHISTORY, name, IFCLOCALPLACEMENT, elevation);
-        IfcRulesList.add(IFCBUILDINGSTOREY);
+        STOREYS_IFCRELAGGREGATES.addChild(IFCBUILDINGSTOREY);
         ACTIVE_IFCBUILDINGSTOREY = IFCBUILDINGSTOREY;
     }
 

@@ -1,5 +1,8 @@
 package core;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -8,6 +11,16 @@ import java.util.Random;
 public class IfcRules {
 
     private static int n_rules = 0;
+    private static ArrayList<IfcRules> rules = new ArrayList<IfcRules>();
+
+    public static void restRules() {
+        n_rules = 0;
+        rules.clear();
+    }
+
+    public static ArrayList<IfcRules> getRules() {
+        return rules;
+    }
 
     enum CONST {
         ADDED,
@@ -34,17 +47,21 @@ public class IfcRules {
     String content;
     int n;
 
-    public IfcRules(String content) {
-        this.content = content;
+    public IfcRules() {
         this.n = ++n_rules;
+        rules.add(this);
+    }
+
+    public IfcRules(String content) {
+        this();
+        this.content = content;
     }
 
     public IfcRules(String name, Object... params) {
-        this("");
-        content = name + "(" + makeString(params) + ");";
+        this(name + "(" + makeString(params) + ");");
     }
 
-    private String makeString(Object ... params) {
+    private static String makeString(Object ... params) {
         String c = "";
         for (Object o : params) {
             if (o == null)
@@ -58,7 +75,9 @@ public class IfcRules {
             else if (o instanceof String)
                 c += "'" + o + "'";
             else if (o instanceof Object[])
-                c += "(" + makeString(o) + ")";
+                if (((Object[]) o).length == 0)
+                    c += "$";
+                else c += "(" + makeString((Object[])o) + ")";
             else
                 c += o;
 
@@ -269,14 +288,48 @@ public class IfcRules {
     }
 
     static class IFCRELAGGREGATES extends IfcRules {
+        String guid;
+        IFCOWNERHISTORY IFCOWNERHISTORY;
+        String rel_name;
+        String inv_rel_name;
+        IfcRules parent;
+        List<IfcRules> children;
         public IFCRELAGGREGATES(IFCOWNERHISTORY IFCOWNERHISTORY, String rel_name, String inv_rel_name, IfcRules parent, IfcRules[] children) {
-            super("IFCRELAGGREGATES",
-                    GUID.uid(),
-                    IFCOWNERHISTORY,
-                    rel_name,
-                    inv_rel_name,
-                    parent,
-                    children);
+            super();
+            guid = GUID.uid();
+            this.IFCOWNERHISTORY = IFCOWNERHISTORY;
+            this.rel_name = rel_name;
+            this.inv_rel_name = inv_rel_name;
+            this.parent = parent;
+            this.children = Arrays.asList(children);
+            makeContent();
+        }
+
+        public IFCRELAGGREGATES(IFCOWNERHISTORY IFCOWNERHISTORY, String rel_name, String inv_rel_name, IfcRules parent) {
+            super();
+            guid = GUID.uid();
+            this.IFCOWNERHISTORY = IFCOWNERHISTORY;
+            this.rel_name = rel_name;
+            this.inv_rel_name = inv_rel_name;
+            this.parent = parent;
+            this.children = new ArrayList<IfcRules>();
+            makeContent();
+        }
+
+        public void addChild(IfcRules child) {
+            children.add(child);
+            makeContent();
+        }
+
+        private void makeContent() {
+            content = "IFCRELAGGREGATES" + "(" + makeString(
+                    guid,
+                    this.IFCOWNERHISTORY,
+                    this.rel_name,
+                    this.inv_rel_name,
+                    this.parent,
+                    this.children.toArray()
+            ) + ");";
         }
     }
 }
