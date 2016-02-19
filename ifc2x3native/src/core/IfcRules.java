@@ -350,6 +350,52 @@ public class IfcRules {
         }
     }
 
+    static class IFCRELCONTAINEDINSPATIALSTRUCTURE extends IfcRules {
+        String guid;
+        IFCOWNERHISTORY IFCOWNERHISTORY;
+        String rel_name;
+        String inv_rel_name;
+        IfcRules parent;
+        List<IfcRules> children;
+        public IFCRELCONTAINEDINSPATIALSTRUCTURE(IFCOWNERHISTORY IFCOWNERHISTORY, String rel_name, String inv_rel_name, IfcRules parent, IfcRules[] children) {
+            super();
+            guid = GUID.uid();
+            this.IFCOWNERHISTORY = IFCOWNERHISTORY;
+            this.rel_name = rel_name;
+            this.inv_rel_name = inv_rel_name;
+            this.parent = parent;
+            this.children = Arrays.asList(children);
+            makeContent();
+        }
+
+        public IFCRELCONTAINEDINSPATIALSTRUCTURE(IFCOWNERHISTORY IFCOWNERHISTORY, String rel_name, String inv_rel_name, IfcRules parent) {
+            super();
+            guid = GUID.uid();
+            this.IFCOWNERHISTORY = IFCOWNERHISTORY;
+            this.rel_name = rel_name;
+            this.inv_rel_name = inv_rel_name;
+            this.parent = parent;
+            this.children = new ArrayList<IfcRules>();
+            makeContent();
+        }
+
+        public void addChild(IfcRules child) {
+            children.add(child);
+            makeContent();
+        }
+
+        private void makeContent() {
+            content = "IFCRELCONTAINEDINSPATIALSTRUCTURE" + "(" + makeString(
+                    guid,
+                    this.IFCOWNERHISTORY,
+                    this.rel_name,
+                    this.inv_rel_name,
+                    this.children.toArray(),
+                    this.parent
+            ) + ");";
+        }
+    }
+
     static class IFCSLAB extends IfcRules {
         public IFCSLAB(IFCOWNERHISTORY IFCOWNERHISTORY, String name, IFCLOCALPLACEMENT IFCLOCALPLACEMENT, IFCPRODUCTDEFINITIONSHAPE IFCPRODUCTDEFINITIONSHAPE) {
             super("IFCSLAB",
