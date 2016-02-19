@@ -29,7 +29,6 @@ public class IfcModel {
     public String toString() {
 
         String data = "";
-        data += IFCPROJECT;
         for (IfcRules rule : IfcRules.getRules())
             data += rule;
 
@@ -63,7 +62,7 @@ public class IfcModel {
             "\n" +
             data +
             "\n" +
-            "END-ISO-10303-21;";
+            "END-ISO-10303-21;\n";
     }
 
     public void PROJECT() {
