@@ -38,15 +38,18 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
     }
 
     @Override
-    public void loadSlab(String etage_name, float[][] coins) {
+    public void loadSlab(String etage_name, float[][] coins, float height) {
+        ifcModel.SLAB(etage_name, coins, height);
     }
 
     @Override
     public void loadPorte(float porte_width, float porte_height, float porte_x, float porte_y, WallContainer w){
+        Object wall = w.wall;
     }
 
     @Override
     public void loadFenetre(float fenetre_width, float fenetre_height, float fenetre_x, float fenetre_y, WallContainer w){
+        Object wall = w.wall;
     }
 
     @Override

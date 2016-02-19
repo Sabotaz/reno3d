@@ -24,7 +24,7 @@ public class IfcRules {
 
     enum CONST {
         ADDED,
-        LENGTHUNIT, METRE, PLANEANGLEUNIT, RADIAN, TIMEUNIT, SECOND, ELEMENT;
+        LENGTHUNIT, METRE, PLANEANGLEUNIT, RADIAN, TIMEUNIT, SECOND, ELEMENT, FLOOR, AREA;
     }
 
     enum SIGN {
@@ -195,22 +195,39 @@ public class IfcRules {
     }
 
     static class IFCCARTESIANPOINT extends IfcRules {
+        public IFCCARTESIANPOINT(String name, Object... params) {
+            super(name + "((" + makeString(params) + "));");
+        }
+
+        public IFCCARTESIANPOINT(float x, float y) {
+            this("IFCCARTESIANPOINT",
+                    new Object[]{x, y});
+        }
+
         public IFCCARTESIANPOINT(float x, float y, float z) {
-            super("IFCCARTESIANPOINT",
+            this("IFCCARTESIANPOINT",
                     new Object[]{x, y, z});
         }
     }
 
     static class IFCDIRECTION extends IfcRules {
+        public IFCDIRECTION(String name, Object... params) {
+            super(name + "((" + makeString(params) + "));");
+        }
+
         public IFCDIRECTION(float x, float y, float z) {
-            super("IFCDIRECTION",
+            this("IFCDIRECTION",
                     new Object[]{x, y, z});
         }
     }
 
     static class IFCUNITASSIGNMENT extends IfcRules {
+        public IFCUNITASSIGNMENT(String name, Object... params) {
+            super(name + "((" + makeString(params) + "));");
+        }
+
         public IFCUNITASSIGNMENT(IFCSIUNIT[] units) {
-            super("IFCUNITASSIGNMENT",
+            this("IFCUNITASSIGNMENT",
                     units);
         }
     }
@@ -332,4 +349,67 @@ public class IfcRules {
             ) + ");";
         }
     }
+
+    static class IFCSLAB extends IfcRules {
+        public IFCSLAB(IFCOWNERHISTORY IFCOWNERHISTORY, String name, IFCLOCALPLACEMENT IFCLOCALPLACEMENT, IFCPRODUCTDEFINITIONSHAPE IFCPRODUCTDEFINITIONSHAPE) {
+            super("IFCSLAB",
+                    GUID.uid(),
+                    IFCOWNERHISTORY,
+                    "Slab",
+                    "Slab = floor / etage = " + name,
+                    null,
+                    IFCLOCALPLACEMENT,
+                    IFCPRODUCTDEFINITIONSHAPE,
+                    null,
+                    CONST.FLOOR);
+        }
+    }
+
+    static class IFCPRODUCTDEFINITIONSHAPE extends IfcRules {
+        public IFCPRODUCTDEFINITIONSHAPE(IFCSHAPEREPRESENTATION IFCSHAPEREPRESENTATION) {
+            super("IFCPRODUCTDEFINITIONSHAPE",
+                    null,
+                    null,
+                    new Object[]{IFCSHAPEREPRESENTATION});
+        }
+    }
+
+    static class IFCSHAPEREPRESENTATION extends IfcRules {
+        public IFCSHAPEREPRESENTATION(IFCGEOMETRICREPRESENTATIONCONTEXT IFCGEOMETRICREPRESENTATIONCONTEXT, IFCEXTRUDEDAREASOLID IFCEXTRUDEDAREASOLID) {
+            super("IFCSHAPEREPRESENTATION",
+                    IFCGEOMETRICREPRESENTATIONCONTEXT,
+                    "Body",
+                    "SweptSolid",
+                    new Object[]{IFCEXTRUDEDAREASOLID});
+        }
+    }
+
+    static class IFCEXTRUDEDAREASOLID extends IfcRules {
+        public IFCEXTRUDEDAREASOLID(IFCARBITRARYCLOSEDPROFILEDEF IFCARBITRARYCLOSEDPROFILEDEF, IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D, IFCDIRECTION IFCDIRECTION, float extrusion_size) {
+            super("IFCEXTRUDEDAREASOLID",
+                    IFCARBITRARYCLOSEDPROFILEDEF,
+                    IFCAXIS2PLACEMENT3D,
+                    IFCDIRECTION,
+                    extrusion_size);
+        }
+    }
+
+    static class IFCARBITRARYCLOSEDPROFILEDEF extends IfcRules {
+        public IFCARBITRARYCLOSEDPROFILEDEF(IFCPOLYLINE IFCPOLYLINE) {
+            super("IFCARBITRARYCLOSEDPROFILEDEF",
+                    CONST.AREA,
+                    null,
+                    IFCPOLYLINE);
+        }
+    }
+
+    static class IFCPOLYLINE extends IfcRules {
+        public IFCPOLYLINE(String name, Object... params) {
+            super(name + "((" + makeString(params) + "));");
+        }
+        public IFCPOLYLINE(IFCCARTESIANPOINT[] points) {
+            this("IFCPOLYLINE", points);
+        }
+    }
+
 }
