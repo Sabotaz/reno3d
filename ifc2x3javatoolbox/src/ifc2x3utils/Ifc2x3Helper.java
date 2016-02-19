@@ -1077,7 +1077,7 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
     }
 
     // Permet d'ajouter un slab à un IfcModel
-    public void addSlab(String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint){
+    public void addSlab(String nameBuildingStorey, LIST<IfcCartesianPoint> listSlabCartesianPoint, float height){
         IfcBuildingStorey buildingStorey = getBuildingStorey(nameBuildingStorey);
         IfcCartesianPoint ifcCartesianPointOriginSlab = createCartesianPoint3D(0.0f, 0.0f, 0.0f);
         IfcDirection ifcDirectionZAxisLocalSlab = createDirection3D(0.0f, 0.0f, 1.0f);
@@ -1098,7 +1098,7 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
         IfcCartesianPoint ifcCartesianPointOriginSlabRepresentation = createCartesianPoint3D(0.0f,0.0f,0.0f);
         IfcAxis2Placement3D ifcAxis2Placement3DSlabRepresentation = new IfcAxis2Placement3D(
                 ifcCartesianPointOriginSlabRepresentation, null, null);
-        IfcDirection ifcSlabExtrudedDirection = createDirection3D(0.0f,0.0f,1.0f);
+        IfcDirection ifcSlabExtrudedDirection = createDirection3D(0.0f,0.0f, height);
         IfcLengthMeasure lengthExtrusion = new IfcLengthMeasure(0.2);
         IfcExtrudedAreaSolid extrudedSlab = new IfcExtrudedAreaSolid(slabArbitraryClosedProfileDef,
                 ifcAxis2Placement3DSlabRepresentation,ifcSlabExtrudedDirection,new IfcPositiveLengthMeasure(lengthExtrusion));
@@ -2247,64 +2247,6 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
         window.setOverallHeight(new IfcPositiveLengthMeasure(new IfcLengthMeasure(newHeight)));
     }
 
-    public void addCoins(IfcProduct product, float xA, float yA, float xB, float yB, int elevation){
-
-        boolean hasProperties=false;
-        boolean hasSameProperty=false;
-
-        // On créer la property
-        IfcIdentifier nameProperty = new IfcIdentifier(Propertie.COINS.getName(),true);
-        IfcValue valueProperty = new IfcIdentifier(xA+"$"+yA+"$"+xB+"$"+yB+"$"+elevation,true);
-        IfcPropertySingleValue property = new IfcPropertySingleValue(nameProperty,null,valueProperty,null);
-
-        // On va voir si des propriétés existent déja
-        SET<IfcRelDefines> relDefinesSET = product.getIsDefinedBy_Inverse();
-        if (relDefinesSET != null){
-            for (IfcRelDefines actualRelDefines : relDefinesSET){
-                if (actualRelDefines instanceof IfcRelDefinesByProperties){ // des propriétés éxistent déja sur l'objet
-                    SET<IfcRelDefinesByProperties> relDefinesByPropertiesSET = ((IfcRelDefinesByProperties) actualRelDefines).getRelatingPropertyDefinition().getPropertyDefinitionOf_Inverse();
-                    for (IfcRelDefinesByProperties actualRelDefinesByProperties : relDefinesByPropertiesSET){
-                        IfcPropertySetDefinition propertySetDefinition = actualRelDefinesByProperties.getRelatingPropertyDefinition();
-                        if (propertySetDefinition instanceof IfcPropertySet){
-                            hasProperties=true;
-                            SET<IfcProperty> propertySET = ((IfcPropertySet) propertySetDefinition).getHasProperties();
-                            for (IfcProperty actualProperty : propertySET){
-                                if (actualProperty instanceof IfcPropertySingleValue){
-                                    if (actualProperty.getName().getDecodedValue().equals(nameProperty.getDecodedValue())) { // notre propriétée existe déja
-                                        hasSameProperty=true;
-                                        ((IfcPropertySingleValue) actualProperty).setNominalValue(valueProperty); // On change la valeur de la propriété qui existe déja
-                                    }
-                                }
-                            }
-                            if (!hasSameProperty){ // Si la propriétée n'existe pas, on l'ajoute au tableau de propriétées
-                                propertySET.add(property);
-                                ((IfcPropertySet) propertySetDefinition).setHasProperties(propertySET);
-                                ifcModel.addIfcObject(property);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Si aucune RelDefinesProperty ne se trouvent sur l'objet, on la créer
-        if (!hasProperties){
-            SET<IfcProperty> propertySET = new SET<IfcProperty>();
-            propertySET.add(property);
-            IfcPropertySet propertySet = new IfcPropertySet(
-                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                    new IfcLabel("3DReno-Properties",true),null,propertySET);
-            SET<IfcObject> objectSET = new SET<IfcObject>();
-            objectSET.add(product);
-            IfcRelDefinesByProperties relDefinesByProperties = new IfcRelDefinesByProperties(
-                    new IfcGloballyUniqueId(ifcModel.getNewGlobalUniqueId()), ifcModel.getIfcProject().getOwnerHistory(),
-                    null,null,objectSET,propertySet);
-            ifcModel.addIfcObject(propertySet);
-            ifcModel.addIfcObject(property);
-            ifcModel.addIfcObject(relDefinesByProperties);
-        }
-    }
-
     // Permet de récupérer les propriétées liées à une door
     public HashMap<String,String> get3DRenoProperties(IfcProduct product) {
         HashMap<String, String> hm = new HashMap<String, String>();
@@ -2371,18 +2313,17 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
         IfcCartesianPoint pointA1 = createCartesianPoint2D(mur_ax, mur_ay);
         IfcCartesianPoint pointA2 = createCartesianPoint2D(mur_bx, mur_by);
         IfcWallStandardCase wall = addWall(etage_name, "Mur", pointA1, pointA2, mur_depth, mur_height);
-        addCoins(wall, mur_ax, mur_ay, mur_bx, mur_by, etage_number);
         return new WallContainer(wall);
     }
 
     @Override
-    public void loadSlab(String etage_name, float[][] coins) {
+    public void loadSlab(String etage_name, float[][] coins, float height) {
         LIST<IfcCartesianPoint> listSlabCartesianPoint = new LIST<IfcCartesianPoint>();
         for (float[] c : coins){
             IfcCartesianPoint point = createCartesianPoint2D(c[0], c[1]);
             listSlabCartesianPoint.add(point);
         }
-        addSlab(etage_name, listSlabCartesianPoint);
+        addSlab(etage_name, listSlabCartesianPoint, height);
     }
 
     @Override

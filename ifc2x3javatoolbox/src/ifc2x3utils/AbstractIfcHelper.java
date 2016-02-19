@@ -18,7 +18,7 @@ public abstract class AbstractIfcHelper {
 
     public abstract WallContainer loadWall(String etage_name, int etage_number, float mur_ax, float mur_ay, float mur_bx, float mur_by, float mur_depth, float mur_height);
 
-    public abstract void loadSlab(String etage_name, float[][] coins);
+    public abstract void loadSlab(String etage_name, float[][] coins, float height);
 
     public abstract void loadPorte(float porte_width, float porte_height, float porte_x, float porte_y, WallContainer w);
 

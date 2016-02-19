@@ -24,7 +24,7 @@ public class IfcRules {
 
     enum CONST {
         ADDED,
-        LENGTHUNIT, METRE, PLANEANGLEUNIT, RADIAN, TIMEUNIT, SECOND, ELEMENT, FLOOR, AREA;
+        LENGTHUNIT, METRE, PLANEANGLEUNIT, RADIAN, TIMEUNIT, SECOND, ELEMENT, FLOOR, AREA, T, CARTESIAN;
     }
 
     enum SIGN {
@@ -219,6 +219,11 @@ public class IfcRules {
             this("IFCDIRECTION",
                     new Object[]{x, y, z});
         }
+
+        public IFCDIRECTION(float x, float y) {
+            this("IFCDIRECTION",
+                    new Object[]{x, y});
+        }
     }
 
     static class IFCUNITASSIGNMENT extends IfcRules {
@@ -266,6 +271,11 @@ public class IfcRules {
         public IFCLOCALPLACEMENT(IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D) {
             super("IFCLOCALPLACEMENT",
                     null,
+                    IFCAXIS2PLACEMENT3D);
+        }
+        public IFCLOCALPLACEMENT(IFCLOCALPLACEMENT IFCLOCALPLACEMENT, IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D) {
+            super("IFCLOCALPLACEMENT",
+                    IFCLOCALPLACEMENT,
                     IFCAXIS2PLACEMENT3D);
         }
     }
@@ -412,31 +422,81 @@ public class IfcRules {
     }
 
     static class IFCPRODUCTDEFINITIONSHAPE extends IfcRules {
-        public IFCPRODUCTDEFINITIONSHAPE(IFCSHAPEREPRESENTATION IFCSHAPEREPRESENTATION) {
+        public IFCPRODUCTDEFINITIONSHAPE(IFCSHAPEREPRESENTATION[] IFCSHAPEREPRESENTATIONS) {
             super("IFCPRODUCTDEFINITIONSHAPE",
                     null,
                     null,
-                    new Object[]{IFCSHAPEREPRESENTATION});
+                    IFCSHAPEREPRESENTATIONS);
         }
     }
 
     static class IFCSHAPEREPRESENTATION extends IfcRules {
-        public IFCSHAPEREPRESENTATION(IFCGEOMETRICREPRESENTATIONCONTEXT IFCGEOMETRICREPRESENTATIONCONTEXT, IFCEXTRUDEDAREASOLID IFCEXTRUDEDAREASOLID) {
+        public IFCSHAPEREPRESENTATION(IFCGEOMETRICREPRESENTATIONCONTEXT IFCGEOMETRICREPRESENTATIONCONTEXT, String type1, String type2, IFCSHAPEDEFINITION IFCSHAPEDEFINITION) {
             super("IFCSHAPEREPRESENTATION",
                     IFCGEOMETRICREPRESENTATIONCONTEXT,
-                    "Body",
-                    "SweptSolid",
-                    new Object[]{IFCEXTRUDEDAREASOLID});
+                    type1,
+                    type2,
+                    new Object[]{IFCSHAPEDEFINITION});
         }
     }
 
-    static class IFCEXTRUDEDAREASOLID extends IfcRules {
+    static class IFCSHAPEREPRESENTATION_SWEPTSOLID extends IFCSHAPEREPRESENTATION {
+        public IFCSHAPEREPRESENTATION_SWEPTSOLID(IFCGEOMETRICREPRESENTATIONCONTEXT IFCGEOMETRICREPRESENTATIONCONTEXT, IFCEXTRUDEDAREASOLID IFCEXTRUDEDAREASOLID) {
+            super(IFCGEOMETRICREPRESENTATIONCONTEXT,
+                    "Body",
+                    "SweptSolid",
+                    IFCEXTRUDEDAREASOLID);
+        }
+    }
+
+    static class IFCSHAPEREPRESENTATION_CURVE2D extends IFCSHAPEREPRESENTATION {
+        public IFCSHAPEREPRESENTATION_CURVE2D(IFCGEOMETRICREPRESENTATIONCONTEXT IFCGEOMETRICREPRESENTATIONCONTEXT, IFCTRIMMEDCURVE IFCTRIMMEDCURVE) {
+            super(IFCGEOMETRICREPRESENTATIONCONTEXT,
+                    "Axis",
+                    "Curve2D",
+                    IFCTRIMMEDCURVE);
+        }
+    }
+    static class IFCSHAPEDEFINITION extends IfcRules {
+        public IFCSHAPEDEFINITION(String name, Object... params) {
+            super(name, params);
+        }
+    }
+
+    static class IFCEXTRUDEDAREASOLID extends IFCSHAPEDEFINITION {
         public IFCEXTRUDEDAREASOLID(IFCARBITRARYCLOSEDPROFILEDEF IFCARBITRARYCLOSEDPROFILEDEF, IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D, IFCDIRECTION IFCDIRECTION, float extrusion_size) {
             super("IFCEXTRUDEDAREASOLID",
                     IFCARBITRARYCLOSEDPROFILEDEF,
                     IFCAXIS2PLACEMENT3D,
                     IFCDIRECTION,
                     extrusion_size);
+        }
+    }
+
+    static class IFCTRIMMEDCURVE extends IFCSHAPEDEFINITION {
+        public IFCTRIMMEDCURVE(IFCLINE IFCLINE, IFCCARTESIANPOINT[] IFCCARTESIANPOINTS1, IFCCARTESIANPOINT[] IFCCARTESIANPOINTS2) {
+            super("IFCTRIMMEDCURVE",
+                    IFCLINE,
+                    IFCCARTESIANPOINTS1,
+                    IFCCARTESIANPOINTS2,
+                    CONST.T,
+                    CONST.CARTESIAN);
+        }
+    }
+
+    static class IFCLINE extends IfcRules {
+        public IFCLINE(IFCCARTESIANPOINT IFCCARTESIANPOINT, IFCVECTOR IFCVECTOR) {
+            super("IFCLINE",
+                    IFCCARTESIANPOINT,
+                    IFCVECTOR);
+        }
+    }
+
+    static class IFCVECTOR extends IfcRules {
+        public IFCVECTOR(IFCDIRECTION IFCDIRECTION, float norme) {
+            super("IFCVECTOR",
+                    IFCDIRECTION,
+                    norme);
         }
     }
 
@@ -457,5 +517,20 @@ public class IfcRules {
             this("IFCPOLYLINE", points);
         }
     }
+
+    static class IFCWALLSTANDARDCASE extends IfcRules {
+        public IFCWALLSTANDARDCASE(IFCOWNERHISTORY IFCOWNERHISTORY, String name, IFCLOCALPLACEMENT IFCLOCALPLACEMENT, IFCPRODUCTDEFINITIONSHAPE IFCPRODUCTDEFINITIONSHAPE) {
+            super("IFCWALLSTANDARDCASE",
+                    GUID.uid(),
+                    IFCOWNERHISTORY,
+                    "Mur",
+                    "Mur / etage = " + name,
+                    null,
+                    IFCLOCALPLACEMENT,
+                    IFCPRODUCTDEFINITIONSHAPE,
+                    null);
+        }
+    }
+
 
 }

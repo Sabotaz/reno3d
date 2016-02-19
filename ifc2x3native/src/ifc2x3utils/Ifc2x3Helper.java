@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import core.IfcModel;
+import core.IfcRules;
 
 /**
  * Created by ricordeau on 08/04/2015.
@@ -34,7 +35,8 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
 
     @Override
     public WallContainer loadWall(String etage_name, int etage_number, float mur_ax, float mur_ay, float mur_bx, float mur_by, float mur_depth, float mur_height) {
-        return new WallContainer(null);
+        IfcRules wall = ifcModel.WALL(etage_name, etage_number, mur_ax, mur_ay, mur_bx, mur_by, mur_depth, mur_height);
+        return new WallContainer(wall);
     }
 
     @Override

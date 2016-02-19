@@ -100,7 +100,7 @@ public class IfcExporter {
                     i++;
                 }
 
-                helper.loadSlab(e.getName(), coins);
+                helper.loadSlab(e.getName(), coins, s.getHeight());
             }
         }
     }
