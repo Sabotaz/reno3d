@@ -46,17 +46,17 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
 
     @Override
     public void loadPorte(float porte_width, float porte_height, float porte_x, float porte_y, WallContainer w){
-        ifcModel.DOOR( porte_width, porte_height, porte_x, porte_y, w.wall);
+        ifcModel.DOOR(porte_width, porte_height, porte_x, porte_y, w.wall);
     }
 
     @Override
     public void loadFenetre(float fenetre_width, float fenetre_height, float fenetre_x, float fenetre_y, WallContainer w){
-        Object wall = w.wall;
+        ifcModel.WINDOW(fenetre_width, fenetre_height, fenetre_x, fenetre_y, w.wall);
     }
 
     @Override
     public void loadPorteFenetre(float portefenetre_width, float portefenetre_height, float portefenetre_x, float portefenetre_y, WallContainer w){
-        Object wall = w.wall;
+        ifcModel.WINDOWDOOR(portefenetre_width, portefenetre_height, portefenetre_x, portefenetre_y, w.wall);
     }
 
     @Override
