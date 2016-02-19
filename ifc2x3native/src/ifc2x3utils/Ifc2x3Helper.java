@@ -35,7 +35,7 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
 
     @Override
     public WallContainer loadWall(String etage_name, int etage_number, float mur_ax, float mur_ay, float mur_bx, float mur_by, float mur_depth, float mur_height) {
-        IfcRules wall = ifcModel.WALL(etage_name, etage_number, mur_ax, mur_ay, mur_bx, mur_by, mur_depth, mur_height);
+        Object wall = ifcModel.WALL(etage_name, etage_number, mur_ax, mur_ay, mur_bx, mur_by, mur_depth, mur_height);
         return new WallContainer(wall);
     }
 
@@ -46,7 +46,7 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
 
     @Override
     public void loadPorte(float porte_width, float porte_height, float porte_x, float porte_y, WallContainer w){
-        Object wall = w.wall;
+        ifcModel.DOOR( porte_width, porte_height, porte_x, porte_y, w.wall);
     }
 
     @Override

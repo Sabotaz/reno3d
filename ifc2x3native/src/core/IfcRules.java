@@ -194,6 +194,14 @@ public class IfcRules {
         }
     }
 
+    static class IFCAXIS2PLACEMENT2D extends IfcRules {
+        public IFCAXIS2PLACEMENT2D(IFCCARTESIANPOINT IFCCARTESIANPOINT, IFCDIRECTION IFCDIRECTION) {
+            super("IFCAXIS2PLACEMENT2D",
+                    IFCCARTESIANPOINT,
+                    IFCDIRECTION);
+        }
+    }
+
     static class IFCCARTESIANPOINT extends IfcRules {
         public IFCCARTESIANPOINT(String name, Object... params) {
             super(name + "((" + makeString(params) + "));");
@@ -311,7 +319,10 @@ public class IfcRules {
                     null,
                     CONST.ELEMENT,
                     elevation);
+            this.IFCLOCALPLACEMENT = IFCLOCALPLACEMENT;
         }
+
+        IFCLOCALPLACEMENT IFCLOCALPLACEMENT;
     }
 
     static class IFCRELAGGREGATES extends IfcRules {
@@ -464,9 +475,9 @@ public class IfcRules {
     }
 
     static class IFCEXTRUDEDAREASOLID extends IFCSHAPEDEFINITION {
-        public IFCEXTRUDEDAREASOLID(IFCARBITRARYCLOSEDPROFILEDEF IFCARBITRARYCLOSEDPROFILEDEF, IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D, IFCDIRECTION IFCDIRECTION, float extrusion_size) {
+        public IFCEXTRUDEDAREASOLID(IFCPROFILEDEF IFCPROFILEDEF, IFCAXIS2PLACEMENT3D IFCAXIS2PLACEMENT3D, IFCDIRECTION IFCDIRECTION, float extrusion_size) {
             super("IFCEXTRUDEDAREASOLID",
-                    IFCARBITRARYCLOSEDPROFILEDEF,
+                    IFCPROFILEDEF,
                     IFCAXIS2PLACEMENT3D,
                     IFCDIRECTION,
                     extrusion_size);
@@ -500,12 +511,28 @@ public class IfcRules {
         }
     }
 
-    static class IFCARBITRARYCLOSEDPROFILEDEF extends IfcRules {
+    static class IFCPROFILEDEF extends IfcRules {
+        public IFCPROFILEDEF(String name, Object ... params) {
+            super(name, params);
+        }
+    }
+
+    static class IFCARBITRARYCLOSEDPROFILEDEF extends IFCPROFILEDEF {
         public IFCARBITRARYCLOSEDPROFILEDEF(IFCPOLYLINE IFCPOLYLINE) {
             super("IFCARBITRARYCLOSEDPROFILEDEF",
                     CONST.AREA,
                     null,
                     IFCPOLYLINE);
+        }
+    }
+
+    static class IFCRECTANGLEPROFILEDEF extends IFCPROFILEDEF {
+        public IFCRECTANGLEPROFILEDEF(IFCAXIS2PLACEMENT2D IFCAXIS2PLACEMENT2D, float height, float width) {
+            super("IFCRECTANGLEPROFILEDEF",
+                    CONST.AREA,
+                    null,
+                    IFCAXIS2PLACEMENT2D,
+                    height, width);
         }
     }
 
@@ -529,8 +556,90 @@ public class IfcRules {
                     IFCLOCALPLACEMENT,
                     IFCPRODUCTDEFINITIONSHAPE,
                     null);
+            this.IFCLOCALPLACEMENT = IFCLOCALPLACEMENT;
+        }
+        IFCLOCALPLACEMENT IFCLOCALPLACEMENT;
+        float DEPTH;
+    }
+
+    static class IFCRELVOIDSELEMENT extends IfcRules {
+        public IFCRELVOIDSELEMENT(IFCOWNERHISTORY IFCOWNERHISTORY, IFCWALLSTANDARDCASE IFCWALLSTANDARDCASE, IFCOPENINGELEMENT IFCOPENINGELEMENT) {
+            super("IFCRELVOIDSELEMENT",
+                    GUID.uid(),
+                    IFCOWNERHISTORY,
+                    "Wall Container",
+                    "WallContainer for OpeningElement",
+                    IFCWALLSTANDARDCASE,
+                    IFCOPENINGELEMENT);
         }
     }
+
+    static class IFCOPENINGELEMENT extends IfcRules {
+        public IFCOPENINGELEMENT(IFCOWNERHISTORY IFCOWNERHISTORY, String name, IFCLOCALPLACEMENT IFCLOCALPLACEMENT, IFCPRODUCTDEFINITIONSHAPE IFCPRODUCTDEFINITIONSHAPE) {
+            super("IFCOPENINGELEMENT",
+                    GUID.uid(),
+                    IFCOWNERHISTORY,
+                    name,
+                    name + " / wall = Mur",
+                    null,
+                    IFCLOCALPLACEMENT,
+                    IFCPRODUCTDEFINITIONSHAPE,
+                    null);
+            this.IFCLOCALPLACEMENT = IFCLOCALPLACEMENT;
+        }
+        IFCLOCALPLACEMENT IFCLOCALPLACEMENT;
+    }
+
+    static class IFCRELFILLSELEMENT extends IfcRules {
+        public IFCRELFILLSELEMENT(IFCOWNERHISTORY IFCOWNERHISTORY, String name, IFCOPENINGELEMENT IFCOPENINGELEMENT, IFCOPENING IFCOPENING) {
+            super("IFCRELFILLSELEMENT",
+                    GUID.uid(),
+                    IFCOWNERHISTORY,
+                    "Opening Container",
+                    "Opening Container for " + name,
+                    IFCOPENINGELEMENT,
+                    IFCOPENING);
+        }
+    }
+
+    static class IFCOPENING extends IfcRules {
+        public IFCOPENING(String name, Object ... params) {
+            super(name, params);
+        }
+    }
+
+    static class IFCWINDOW extends IFCOPENING {
+        public IFCWINDOW(IFCOWNERHISTORY IFCOWNERHISTORY, String name, IFCLOCALPLACEMENT IFCLOCALPLACEMENT, float height, float width) {
+            super("IFCWINDOW",
+                    GUID.uid(),
+                    IFCOWNERHISTORY,
+                    name,
+                    "",
+                    "",
+                    IFCLOCALPLACEMENT,
+                    null,
+                    null,
+                    height,
+                    width);
+        }
+    }
+
+    static class IFCDOOR extends IFCOPENING {
+        public IFCDOOR(IFCOWNERHISTORY IFCOWNERHISTORY, String name, IFCLOCALPLACEMENT IFCLOCALPLACEMENT, float height, float width) {
+            super("IFCDOOR",
+                    GUID.uid(),
+                    IFCOWNERHISTORY,
+                    name,
+                    "",
+                    null,
+                    IFCLOCALPLACEMENT,
+                    null,
+                    null,
+                    height,
+                    width);
+        }
+    }
+
 
 
 }
