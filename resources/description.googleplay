@@ -58,18 +58,18 @@ Première application pour tablette de création et d’édition de plan 2D 3D d
 En plus découvrez la simulation interactive et dynamique de performance énergétique du logement.
 Sauvegardez et exportez vos plans au format IFC (BIM ready maquette numérique).
 
-Les Fonctionnalités PLAN 3D ENERGY :
-Modélisation et édition de plan 2D et 3D de logements (maison et appartement)
-Par un simple sélection et glisser déposer, choisir vos meubles et équipements techniques et matériaux intérieurs à partir d’une bibliothèque d’objets,
-Sauvegarde et récupération de vos projets,
-Evaluation énergétique du logement réalisée en temps réel en fonction des matériaux utilisés selon la méthode 3CL,
-Compatibilité BIM (Building Information Modeling)avec export au format .IFC, utilisable comme base à une maquette numérique d’un bâtiment. Le format IFC  pour Industry Foundation Classes est le format de fichier standardisé selon la norme ISO 16739 utilisé pour échanger et partager des informations standardisées en applications et logiciels du secteur du bâtiment.
-Vous pouvez librement tracer des pièces, ajouter ou modifier vos murs intérieurs et extérieurs, créer des ouvertures (portes, fenêtres),
-Ajout illimité d’étages, de pièces, de murs
-Assistance au design (alignement et liaison des murs et des pièces)
-Calcul automatique des surfaces, volumes, hauteur
-Changez la hauteur des murs,
-Définir l’orientation grâce à la boussole pour tenir compte des apports naturels de lumière et de chaleur…
+<b><u>Les Fonctionnalités PLAN 3D ENERGY :</u></b>
+&#8226;&#8195;Modélisation et édition de plan 2D et 3D de logements (maison et appartement)
+&#8226;&#8195;Par un simple sélection et glisser déposer, choisir vos meubles et équipements techniques et matériaux intérieurs à partir d’une bibliothèque d’objets,
+&#8226;&#8195;Sauvegarde et récupération de vos projets,
+&#8226;&#8195;Evaluation énergétique du logement réalisée en temps réel en fonction des matériaux utilisés selon la méthode 3CL,
+&#8226;&#8195;Compatibilité BIM (Building Information Modeling)avec export au format .IFC, utilisable comme base à une maquette numérique d’un bâtiment. Le format IFC  pour Industry Foundation Classes est le format de fichier standardisé selon la norme ISO 16739 utilisé pour échanger et partager des informations standardisées en applications et logiciels du secteur du bâtiment.
+&#8226;&#8195;Vous pouvez librement tracer des pièces, ajouter ou modifier vos murs intérieurs et extérieurs, créer des ouvertures (portes, fenêtres),
+&#8226;&#8195;Ajout illimité d’étages, de pièces, de murs
+&#8226;&#8195;Assistance au design (alignement et liaison des murs et des pièces)
+&#8226;&#8195;Calcul automatique des surfaces, volumes, hauteur
+&#8226;&#8195;Changez la hauteur des murs,
+&#8226;&#8195;Définir l’orientation grâce à la boussole pour tenir compte des apports naturels de lumière et de chaleur…
 
 <b><u>LICENCES</u></b>
 &#8226;&#8195;<b>LibGDX :</b>
