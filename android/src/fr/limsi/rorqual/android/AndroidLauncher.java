@@ -6,16 +6,96 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
+import java.util.HashMap;
+
+import fr.limsi.rorqual.R;
 import fr.limsi.rorqual.android.sensors.GyroscopeListener;
+import fr.limsi.rorqual.core.utils.analytics.Action;
+import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
+import fr.limsi.rorqual.core.utils.analytics.Category;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends AndroidApplication implements ActionResolver {
+
     private SensorManager sensorManager;
     private GyroscopeListener gyroscopeListener;
+
+    private final static String PROPERTY_ID = "UA-73647708-1";
+
+    /**
+     * Enum used to identify the tracker that needs to be used for tracking.
+     *
+     * A single tracker is usually enough for most purposes. In case you do need
+     * multiple trackers, storing them all in Application object helps ensure
+     * that they are created only once per application instance.
+     */
+    public enum TrackerName {
+        APP_TRACKER, // Tracker used only in this app.
+        GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg:
+        // roll-up tracking.
+        ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a
+        // company.
+    }
+
+    private Tracker tracker;
+    private Tracker globalTracker;
+
+    HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+
+    synchronized Tracker getTracker(TrackerName trackerId) {
+        if (!mTrackers.containsKey(trackerId)) {
+
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+
+            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics
+                    .newTracker(R.xml.app_tracker)
+                    : (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics
+                    .newTracker(R.xml.global_tracker) : analytics
+                    .newTracker(R.xml.ecommerce_tracker);
+            mTrackers.put(trackerId, t);
+        }
+        return mTrackers.get(trackerId);
+    }
+
+    @Override
+    public void setTrackerScreenName(String path) {
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        globalTracker.setScreenName(path);
+        globalTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    @Override
+    public void sendTrackerEvent(Category category, Action action) {
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        globalTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category.name())
+                .setAction(action.name())
+                .build());
+    }
+
+    @Override
+    public void sendTrackerEvent(Category category, Action action, String label) {
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        globalTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category.name())
+                .setAction(action.name())
+                .setLabel(label)
+                .build());
+    }
+
+
+
     @Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,7 +104,7 @@ public class AndroidLauncher extends AndroidApplication {
 
         config.r = config.g = config.b = 8;
 
-        MainApplicationAdapter application = new MainApplicationAdapter();
+        MainApplicationAdapter application = new MainApplicationAdapter(this);
 
         initialize(application, config);
 
@@ -46,6 +126,9 @@ public class AndroidLauncher extends AndroidApplication {
             application.setVersionCode(1);
             e.printStackTrace();
         }
+
+        tracker = this.getTracker(TrackerName.APP_TRACKER);
+        globalTracker = this.getTracker(TrackerName.GLOBAL_TRACKER);
 
 	}
 
@@ -70,6 +153,13 @@ public class AndroidLauncher extends AndroidApplication {
 
     //when this Activity starts
     @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    //when this Activity resumes
+    @Override
     protected void onResume()
     {
         super.onResume();
@@ -81,6 +171,7 @@ public class AndroidLauncher extends AndroidApplication {
     {
         //unregister the sensor listener
         sensorManager.unregisterListener(gyroscopeListener);
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
         super.onStop();
     }
 

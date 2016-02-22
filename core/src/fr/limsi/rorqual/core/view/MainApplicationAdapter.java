@@ -52,6 +52,7 @@ import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.ui.Popup;
 import fr.limsi.rorqual.core.ui.TextureLibrary;
+import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
@@ -97,6 +98,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static float time[] = {0, 0, 0, 0};
     public static String versionName = "1.0.x";
     public static int versionCode = 1;
+
+    private ActionResolver actionResolver;
+
+    public MainApplicationAdapter(ActionResolver actionResolver) {
+        this.actionResolver = actionResolver;
+    }
 
     @Override
 	public void create () {
