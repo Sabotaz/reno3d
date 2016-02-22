@@ -487,6 +487,7 @@ public class ModelLibrary {
     }
 
     public ModelContainer getModelContainerFromId(String id) {
+        System.out.println(id + ": " + models.get(id));
         return models.get(id).getInstance();
     }
 

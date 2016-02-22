@@ -232,15 +232,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         score = (CircularJauge)layout.getFromId("dpe_jauge");
         System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
-        setLoadingMessage("Initializing EE...");
-
-        state = new DpeStateUpdater(modelGraph);
-
-        score.setCurrentValue(Dpe.getInstance().getScoreDpe());
-
-        DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES);
-        DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
-
         setLoadingMessage("Loading models library...");
 
         ModelLibrary.getInstance();
@@ -250,6 +241,16 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         TextureLibrary.getInstance();
         System.out.println("textures library ok " + ((System.currentTimeMillis() - start) * 0.001f));
+
+        setLoadingMessage("Initializing EE...");
+
+        state = new DpeStateUpdater(modelGraph);
+
+        score.setCurrentValue(Dpe.getInstance().getScoreDpe());
+
+        DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES);
+        DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
+        System.out.println("EE ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         setLoadingMessage("Setting input processor...");
 

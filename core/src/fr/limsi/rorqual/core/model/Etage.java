@@ -307,6 +307,7 @@ public class Etage {
                         obj.setSlab(slab);
                         obj.setPosition(o.x, o.y);
                         obj.setToRotation(o.angle);
+                        obj.setSelectable(true);
                         slab.addObjet(obj);
                         obj.calculateBoundingBox(new BoundingBox());
                         reloadedObjets.put(o, obj);
@@ -332,6 +333,7 @@ public class Etage {
         if (badOuvertures != null) {
             for (Ouverture o : badOuvertures) {
                 Ouverture ouverture = (Ouverture) ModelLibrary.getInstance().getModelContainerFromId(o.getModelId());
+                ouverture.setModelId(o.getModelId());
                 reloadedOuvertures.put(o, ouverture);
 
                 ouverture.copy(o);
