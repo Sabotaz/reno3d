@@ -140,12 +140,16 @@ public class ModelLibrary {
                             loading = false;
                             container.setChanged();
                         }
-                        System.out.println(container);
                     }
                 };
 
                 Gdx.app.postRunnable(runnable);
             } else {
+                while (loading) try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 synchronized (ModelLoader.this) {
                     container.setModel(model, false);
                     container.setBoundingBox(box);

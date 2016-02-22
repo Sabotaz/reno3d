@@ -346,18 +346,14 @@ public class Batiment {
     }
 
     public void reload() {
-        synchronized (this) {
-            System.out.println("reload...");
-            floor = Floor.getModel();
-            for (int i = etages.getMin(); i <= etages.getMax(); i++) {
-                Etage etage = etages.get(i);
-                etage.setBatiment(this);
-                etage.reload();
-                etage.setOrientation(globalOrientation);
-            }
-            getCurrentEtage().getModelGraph().getRoot().add(floor);
-            System.out.println("done !");
+        System.out.println("reload...");
+        floor = Floor.getModel();
+        for (int i = etages.getMin(); i <= etages.getMax(); i++) {
+            Etage etage = etages.get(i);
+            etage.setBatiment(this);
+            etage.reload();
+            etage.setOrientation(globalOrientation);
         }
+        getCurrentEtage().getModelGraph().getRoot().add(floor);
     }
-
 }

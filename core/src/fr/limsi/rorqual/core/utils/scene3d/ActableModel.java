@@ -109,9 +109,11 @@ public abstract class ActableModel extends Model implements RenderableProvider {
         this.meshes.clear();
         this.meshParts.clear();
         this.nodes.clear();
-        copyNodes(model.nodes);
+        if (model != null)
+            copyNodes(model.nodes);
         this.animations.clear();
-        this.animations.addAll(model.animations);
+        if (model != null)
+            this.animations.addAll(model.animations);
     }
 
     public void addModel(Model model) {
