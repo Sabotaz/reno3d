@@ -1,6 +1,8 @@
 package core;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by christophe on 17/02/16.
@@ -15,9 +17,9 @@ public class IfcModel {
     IfcRules.IFCGEOMETRICREPRESENTATIONCONTEXT IFCGEOMETRICREPRESENTATIONCONTEXT;
     IfcRules.IFCRELCONTAINEDINSPATIALSTRUCTURE ACTIVE_IFCRELCONTAINEDINSPATIALSTRUCTURE;
 
-    public IfcModel() {
+    public IfcModel(String versionName, int versionCode) {
         IfcRules.restRules();
-        PROJECT();
+        PROJECT(versionName, versionCode);
         BUILDING();
     }
 
@@ -40,10 +42,13 @@ public class IfcModel {
 
 
     public String HEADER(String filename) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        String date = sdf.format(new Date());
         return
             "HEADER;\n" +
             "FILE_DESCRIPTION(('ViewDefinition [CoordinationView]'),'2;1');\n" +
-            "FILE_NAME('" + filename + "','2016-02-17T15:08:32+0100',('Thomas Ricordeau','Julien Christophe'),('LIMSI-CNRS'),'IFC2x3native','','');\n" +
+            "FILE_NAME('" + filename + "','" + date + "',('Thomas Ricordeau','Julien Christophe'),('LIMSI-CNRS'),'IFC2x3native','PLAN 3D ENERGY home edition','');\n" +
             "FILE_SCHEMA(('IFC2X3'));\n" +
             "ENDSEC;\n";
     }
@@ -65,7 +70,7 @@ public class IfcModel {
             "END-ISO-10303-21;\n";
     }
 
-    public void PROJECT() {
+    public void PROJECT(String versionName, int versionCode) {
         IfcRules.IFCPERSON IFCPERSON1 = new IfcRules.IFCPERSON("Ricordeau", "Thomas");
         IfcRules.IFCPERSON IFCPERSON2 = new IfcRules.IFCPERSON("Christophe", "Julien");
         IfcRules.IFCORGANIZATION IFCORGANIZATION = new IfcRules.IFCORGANIZATION("LIMSI-CNRS");
@@ -73,7 +78,7 @@ public class IfcModel {
         IfcRules.IFCPERSONANDORGANIZATION IFCPERSONANDORGANIZATION1 = new IfcRules.IFCPERSONANDORGANIZATION(IFCPERSON1, IFCORGANIZATION);
         IfcRules.IFCPERSONANDORGANIZATION IFCPERSONANDORGANIZATION2 = new IfcRules.IFCPERSONANDORGANIZATION(IFCPERSON2, IFCORGANIZATION);
 
-        IfcRules.IFCAPPLICATION IFCAPPLICATION = new IfcRules.IFCAPPLICATION(IFCORGANIZATION, "1.0f", "3D-Reno Application");
+        IfcRules.IFCAPPLICATION IFCAPPLICATION = new IfcRules.IFCAPPLICATION(IFCORGANIZATION, versionName, "PLAN 3D ENERGY home edition");
 
         this.IFCOWNERHISTORY = new IfcRules.IFCOWNERHISTORY(IFCPERSONANDORGANIZATION1, IFCAPPLICATION);
 

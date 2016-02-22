@@ -44,7 +44,7 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
 
     // Permet de compléter un model de départ contenant les informations du projet, un site,
     // un building
-    public IfcModel createIfcModel(){
+    public IfcModel createIfcModel(String versionName, int versionCode){
         this.ifcModel = new IfcModel();
         relationBuildingToBuildingStorey=null;
         // Initialize File Name
@@ -78,7 +78,7 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
 
         // Create IfcApplication
         IfcApplication ifcApplication = new IfcApplication(ifcOrganization,
-                new IfcLabel("1.0f", true), new IfcLabel("3D-Reno Application",
+                new IfcLabel(versionName, true), new IfcLabel("PLAN 3D ENERGY home edition",
                 true),null);
 
         // Create IfcOwnerHistory
@@ -121,7 +121,7 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
         // Create IfcProject
         IfcProject ifcProject = new IfcProject(new IfcGloballyUniqueId(
                 ifcModel.getNewGlobalUniqueId()), ifcOwnerHistory, new IfcLabel(
-                "Projet 3D-RENO", true), new IfcText(
+                "PLAN 3D ENERGY home edition", true), new IfcText(
                 "Modelisation interieur + calcul DPE", true), null, null, null,
                 contexts, ifcUnitAssignment);
 
@@ -2342,8 +2342,8 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
     }
 
     @Override
-    public void initialiseIfcModel() {
-        createIfcModel();
+    public void initialiseIfcModel(String versionName, int versionCode) {
+        createIfcModel(versionName, versionCode);
     }
 
     // Permet d'exporter le model au format .ifc

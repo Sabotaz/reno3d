@@ -15,6 +15,7 @@ import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.PorteFenetre;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.model.utils.Coin;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import ifc2x3utils.Ifc2x3Helper;
 
 /**
@@ -40,7 +41,7 @@ public class IfcExporter {
     /*** Méthodes ***/
     public void realiseExportIfc(String filename){
         helper = Ifc2x3Helper.getInstance();
-        helper.initialiseIfcModel();
+        helper.initialiseIfcModel(MainApplicationAdapter.versionName, MainApplicationAdapter.versionCode);
         this.loadAllModels();
         this.saveFile(filename);
     }

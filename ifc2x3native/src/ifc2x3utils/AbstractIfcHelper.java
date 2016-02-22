@@ -26,7 +26,7 @@ public abstract class AbstractIfcHelper {
 
     public abstract void loadPorteFenetre(float portefenetre_width, float portefenetre_height, float portefenetre_x, float portefenetre_y, WallContainer w);
 
-    public abstract void initialiseIfcModel();
+    public abstract void initialiseIfcModel(String versionName, int versionCode);
 
     public abstract void saveIfcModel(File saveStepFile);
 

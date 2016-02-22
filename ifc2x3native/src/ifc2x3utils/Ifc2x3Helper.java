@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import core.IfcModel;
-import core.IfcRules;
 
 /**
  * Created by ricordeau on 08/04/2015.
@@ -60,8 +59,8 @@ public class Ifc2x3Helper extends AbstractIfcHelper {
     }
 
     @Override
-    public void initialiseIfcModel() {
-        ifcModel = new IfcModel();
+    public void initialiseIfcModel(String versionName, int versionCode) {
+        ifcModel = new IfcModel(versionName, versionCode);
     }
 
     // Permet d'exporter le model au format .ifc

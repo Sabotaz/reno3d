@@ -1,5 +1,7 @@
 package fr.limsi.rorqual.android;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -32,6 +34,18 @@ public class AndroidLauncher extends AndroidApplication {
         initListeners();
 
         //gyroscopeListener.startTask();
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+
+            application.setVersionName(pInfo.versionName);
+            application.setVersionCode(pInfo.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+
+            application.setVersionName("1.0.x");
+            application.setVersionCode(1);
+            e.printStackTrace();
+        }
 
 	}
 

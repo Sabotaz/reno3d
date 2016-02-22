@@ -95,6 +95,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private boolean loading_finished = false;
 
     public static float time[] = {0, 0, 0, 0};
+    public static String versionName = "1.0.x";
+    public static int versionCode = 1;
 
     @Override
 	public void create () {
@@ -485,5 +487,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         if (CameraEngine.getInstance().getCurrentCamera() instanceof PerspectiveCamera) {
             CameraEngine.getInstance().getCurrentCameraUpdater().act();
         }
+    }
+
+    public void setVersionName(String versionName) {
+        this.versionName = versionName;
+    }
+
+    public void setVersionCode(int versionCode) {
+        this.versionCode = versionCode;
     }
 }
