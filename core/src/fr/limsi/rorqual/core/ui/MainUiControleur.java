@@ -745,6 +745,8 @@ public class MainUiControleur implements EventListener {
 
         final Window w = new Window("Informations",skin);
 
+        Table tab = new Table();
+
         String rd = "Équipe R&D";
         String julien = "Julien CHRISTOPHE\n    Ingénieur CNRS\n    Développement mobile";
         String thomas = "Thomas Ricordeau\n    Ingénieur CNRS\n    Développement thermique";
@@ -756,20 +758,22 @@ public class MainUiControleur implements EventListener {
         Image logo_limsi = new Image((Texture)AssetManager.getInstance().get("logo-limsi"));
         Image logo_upsud = new Image((Texture)AssetManager.getInstance().get("logo-upsud"));
 
-        logo_rpe.setHeight(100);
-        logo_rpe.setWidth(100);
+        int img_size = 200;
+
+        logo_rpe.setHeight(img_size);
+        logo_rpe.setWidth(img_size);
         logo_rpe.setScaling(Scaling.fit);
 
-        logo_cnrs.setHeight(100);
-        logo_cnrs.setWidth(100);
+        logo_cnrs.setHeight(img_size);
+        logo_cnrs.setWidth(img_size);
         logo_cnrs.setScaling(Scaling.fit);
 
-        logo_limsi.setHeight(100);
-        logo_limsi.setWidth(100);
+        logo_limsi.setHeight(img_size);
+        logo_limsi.setWidth(img_size);
         logo_limsi.setScaling(Scaling.fit);
 
-        logo_upsud.setHeight(100);
-        logo_upsud.setWidth(100);
+        logo_upsud.setHeight(img_size);
+        logo_upsud.setWidth(img_size);
         logo_upsud.setScaling(Scaling.fit);
 
         String site = "Accéder au site web de l'application";
@@ -801,20 +805,22 @@ public class MainUiControleur implements EventListener {
 
         Table imgtab = new Table();
 
-        imgtab.add(logo_rpe).left().pad(10).size(100,100);
-        imgtab.add(logo_cnrs).right().pad(10).size(100, 100).row();
-        imgtab.add(logo_limsi).left().pad(10).size(100, 100);
-        imgtab.add(logo_upsud).right().pad(10).size(100, 100).row();
+        imgtab.add(logo_rpe).left().pad(10).size(img_size,img_size);
+        imgtab.add(logo_cnrs).right().pad(10).size(img_size, img_size).row();
+        imgtab.add(logo_limsi).left().pad(10).size(img_size, img_size);
+        imgtab.add(logo_upsud).right().pad(10).size(img_size, img_size).row();
 
-        w.add(label1).center().padTop(20).padBottom(20).row();
-        w.add(label2).left().padBottom(10).row();
-        w.add(label3).left().padBottom(10).row();
-        w.add(label4).left().row();
+        tab.add(label1).center().padBottom(20).row();
+        tab.add(label2).left().padBottom(10).row();
+        tab.add(label3).left().padBottom(10).row();
+        tab.add(label4).left().row();
 
-        w.add(imgtab).center().size(240, 240).pad(20).row();
+        tab.add(imgtab).center().size(2 * img_size + 40, 2 * img_size + 40).pad(20).row();
 
-        w.add(label5).center().pad(10).row();
-        w.add(label6).center().pad(10).padBottom(20).row();
+        tab.add(label5).center().pad(10).row();
+        tab.add(label6).center().pad(10).row();
+
+        w.add(tab).pad(10);
 
         w.setWidth(w.getPrefWidth());
         w.setHeight(w.getPrefHeight());
