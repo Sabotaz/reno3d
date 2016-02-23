@@ -99,10 +99,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static String versionName = "1.0.x";
     public static int versionCode = 1;
 
-    private ActionResolver actionResolver;
+    private static ActionResolver actionResolver;
 
     public MainApplicationAdapter(ActionResolver actionResolver) {
         this.actionResolver = actionResolver;
+    }
+
+    public static ActionResolver getActionResolver() {
+        return actionResolver;
     }
 
     @Override

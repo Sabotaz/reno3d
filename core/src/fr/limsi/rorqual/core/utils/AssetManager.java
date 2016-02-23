@@ -197,8 +197,14 @@ public class AssetManager {
         textures.put("textureOrientationEst", "data/img/dpe/Orientation/est.png");
         textures.put("textureOrientationSud", "data/img/dpe/Orientation/sud.png");
         textures.put("textureOrientationOuest", "data/img/dpe/Orientation/ouest.png");
+
         textures.put("grid", "data/textures/grid.png");
         textures.put("help-panel", "data/img/help-panel.png");
+
+        textures.put("logo-cnrs", "data/ui/logos/CNRS.png");
+        textures.put("logo-limsi", "data/ui/logos/LIMSI.png");
+        textures.put("logo-rpe", "data/ui/logos/RPE.png");
+        textures.put("logo-upsud", "data/ui/logos/UPSUD.png");
 /*
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);

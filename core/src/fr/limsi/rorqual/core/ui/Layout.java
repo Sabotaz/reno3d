@@ -804,7 +804,7 @@ public class Layout {
     private Actor makeCheckBox (JsonValue json, Updater updater, Actor parent){
         String text = " " + json.getString("label");
         CheckBox.CheckBoxStyle cbs = skin.get("default",CheckBox.CheckBoxStyle.class);
-        cbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+        cbs.font = (BitmapFont)AssetManager.getInstance().get(json.getString("labelFont", "default.fnt"));
         cbs.fontColor = Color.DARK_GRAY;
         CheckBox checkBox = new CheckBox(text,cbs);
 

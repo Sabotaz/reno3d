@@ -42,6 +42,7 @@ import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.PorteFenetre;
+import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
 import fr.limsi.rorqual.core.utils.ifc.IfcExporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
@@ -399,7 +400,7 @@ public class MainUiControleur implements EventListener {
                         case INFO:
                             uncheckNonInfoButtons();
                             if (button.isChecked()) {
-                                addTb(getHelp(), 0,0);
+                                addTb(getInfo());
                             }
                             else
                                 removeTb();
@@ -734,6 +735,91 @@ public class MainUiControleur implements EventListener {
         image.setWidth(Gdx.graphics.getWidth());
         image.setScaling(Scaling.fit);
         return image;
+    }
+
+    private Window getInfo() {
+        Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+        Label.LabelStyle title = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("buttons.fnt"), Color.BLACK);
+        Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.BLACK);
+        Label.LabelStyle link = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.BLUE);
+
+        final Window w = new Window("Informations",skin);
+
+        String rd = "Équipe R&D";
+        String julien = "Julien CHRISTOPHE\n    Ingénieur CNRS\n    Développement mobile";
+        String thomas = "Thomas Ricordeau\n    Ingénieur CNRS\n    Développement thermique";
+        String mehdi = "Mehdi AMMI\n    Maitre de conférences, Université Paris-Sud, LIMSI-CNRS\n    Responsable R&D";
+
+
+        Image logo_rpe = new Image((Texture)AssetManager.getInstance().get("logo-rpe"));
+        Image logo_cnrs = new Image((Texture)AssetManager.getInstance().get("logo-cnrs"));
+        Image logo_limsi = new Image((Texture)AssetManager.getInstance().get("logo-limsi"));
+        Image logo_upsud = new Image((Texture)AssetManager.getInstance().get("logo-upsud"));
+
+        logo_rpe.setHeight(100);
+        logo_rpe.setWidth(100);
+        logo_rpe.setScaling(Scaling.fit);
+
+        logo_cnrs.setHeight(100);
+        logo_cnrs.setWidth(100);
+        logo_cnrs.setScaling(Scaling.fit);
+
+        logo_limsi.setHeight(100);
+        logo_limsi.setWidth(100);
+        logo_limsi.setScaling(Scaling.fit);
+
+        logo_upsud.setHeight(100);
+        logo_upsud.setWidth(100);
+        logo_upsud.setScaling(Scaling.fit);
+
+        String site = "Accéder au site web de l'application";
+
+        String mail = "Contacter l'équipe de développement";
+
+        Label label1 = new Label(rd,title);
+        Label label2 = new Label(julien,ls);
+        Label label3 = new Label(thomas,ls);
+        Label label4 = new Label(mehdi,ls);
+
+        Label label5 = new Label(site,link);
+        label5.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.net.openURI("http://blog.laplateformedelarenovation.fr/plan-3d-energy/");
+            }
+        });
+        Label label6 = new Label(mail,link);
+        label6.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                ActionResolver actionResolver = MainApplicationAdapter.getActionResolver();
+                actionResolver.sendEmail("");
+            }
+        });
+
+        Table imgtab = new Table();
+
+        imgtab.add(logo_rpe).left().pad(10).size(100,100);
+        imgtab.add(logo_cnrs).right().pad(10).size(100, 100).row();
+        imgtab.add(logo_limsi).left().pad(10).size(100, 100);
+        imgtab.add(logo_upsud).right().pad(10).size(100, 100).row();
+
+        w.add(label1).center().padTop(20).padBottom(20).row();
+        w.add(label2).left().padBottom(10).row();
+        w.add(label3).left().padBottom(10).row();
+        w.add(label4).left().row();
+
+        w.add(imgtab).center().size(240, 240).pad(20).row();
+
+        w.add(label5).center().pad(10).row();
+        w.add(label6).center().pad(10).padBottom(20).row();
+
+        w.setWidth(w.getPrefWidth());
+        w.setHeight(w.getPrefHeight());
+
+        return w;
     }
 
     private Window getLoadTb() {
