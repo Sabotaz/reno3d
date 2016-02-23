@@ -752,7 +752,7 @@ public class MainUiControleur implements EventListener {
 
         String rd = "Équipe R&D";
         String julien = "Julien CHRISTOPHE\n    Ingénieur CNRS\n    Développement mobile";
-        String thomas = "Thomas Ricordeau\n    Ingénieur CNRS\n    Développement thermique";
+        String thomas = "Thomas RICORDEAU\n    Ingénieur CNRS\n    Développement thermique";
         String mehdi = "Mehdi AMMI\n    Maitre de conférences, Université Paris-Sud, LIMSI-CNRS\n    Responsable R&D";
 
 
