@@ -107,7 +107,7 @@ public class MainUiControleur implements EventListener {
                 if (tb instanceof TabWindow){
                     tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) tb).getPrefHeight()/2-100);
                 }else if(tb instanceof Window) {
-                    tb.setPosition(Gdx.graphics.getWidth() - ((Window) tb).getPrefWidth() - 5, Gdx.graphics.getHeight() - ((Window) tb).getPrefHeight()-100);
+                    tb.setPosition((Gdx.graphics.getWidth() - ((Window) tb).getPrefWidth())/2, (Gdx.graphics.getHeight() - ((Window) tb).getPrefHeight())/2);
                 } else {
                     tb.setPosition(tb.getHeight()/2, Gdx.graphics.getHeight() - 100);
                 }
@@ -127,6 +127,63 @@ public class MainUiControleur implements EventListener {
         }
     }
 
+    public void uncheckAll() {
+        uncheckGeneralButtons();
+        uncheckControlButtons();
+        uncheckCalculButtons();
+        uncheckInfoButtons();
+        uncheckCameraButtons();
+        uncheckSaveButtons();
+    }
+
+    private void uncheckNonGeneralButtons() {
+        uncheckControlButtons();
+        uncheckCalculButtons();
+        uncheckInfoButtons();
+        uncheckCameraButtons();
+        uncheckSaveButtons();
+    }
+
+    private void uncheckNonCalculButtons() {
+        uncheckGeneralButtons();
+        uncheckControlButtons();
+        uncheckInfoButtons();
+        uncheckCameraButtons();
+        uncheckSaveButtons();
+    }
+
+    private void uncheckNonInfoButtons() {
+        uncheckGeneralButtons();
+        uncheckControlButtons();
+        uncheckCalculButtons();
+        uncheckCameraButtons();
+        uncheckSaveButtons();
+    }
+
+    private void uncheckNonControlButtons() {
+        uncheckGeneralButtons();
+        uncheckCalculButtons();
+        uncheckInfoButtons();
+        uncheckCameraButtons();
+        uncheckSaveButtons();
+    }
+
+    private void uncheckNonCameraButtons() {
+        uncheckGeneralButtons();
+        uncheckControlButtons();
+        uncheckCalculButtons();
+        uncheckInfoButtons();
+        uncheckSaveButtons();
+    }
+
+    private void uncheckNonSaveButtons() {
+        uncheckGeneralButtons();
+        uncheckControlButtons();
+        uncheckCalculButtons();
+        uncheckInfoButtons();
+        uncheckCameraButtons();
+    }
+
     private void uncheckGeneralButtons() {
         ((Button)(((Table)mainLayout.getFromId("general_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
@@ -137,6 +194,18 @@ public class MainUiControleur implements EventListener {
 
     private void uncheckCalculButtons() {
         ((Button)(((Table)mainLayout.getFromId("calcul_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+    }
+
+    private void uncheckInfoButtons() {
+        ((Button)(((Table)mainLayout.getFromId("info_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+    }
+
+    private void uncheckCameraButtons() {
+        ((Button)(((Table)mainLayout.getFromId("etage_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+    }
+
+    private void uncheckSaveButtons() {
+        ((Button)(((Table)mainLayout.getFromId("save_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     ArrayList<Cote> cotes = new ArrayList<Cote>();
@@ -167,17 +236,14 @@ public class MainUiControleur implements EventListener {
                             break;
                         case SWITCH_2D_3D:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
-                            uncheckCalculButtons();
+                            uncheckAll();
                             removeTb();
                             CameraEngine.getInstance().switchCamera();
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
                             ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case MOVE:
-                            uncheckGeneralButtons();
-                            uncheckCalculButtons();
+                            uncheckNonControlButtons();
                             removeTb();
                             if (button.isChecked()) {
                                 Logic.getInstance().move();
@@ -186,8 +252,7 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case DELETE:
-                            uncheckGeneralButtons();
-                            uncheckCalculButtons();
+                            uncheckNonControlButtons();
                             removeTb();
                             if (button.isChecked()) {
                                 if (MainApplicationAdapter.getSelected() != null)
@@ -199,22 +264,19 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case ROTATE_D:
-                            uncheckGeneralButtons();
-                            uncheckCalculButtons();
+                            uncheckNonControlButtons();
                             removeTb();
                             Logic.getInstance().stop();
                             Logic.getInstance().rotate_d(MainApplicationAdapter.getSelected(), button);
                             break;
                         case ROTATE_G:
-                            uncheckGeneralButtons();
-                            uncheckCalculButtons();
+                            uncheckNonControlButtons();
                             removeTb();
                             Logic.getInstance().stop();
                             Logic.getInstance().rotate_g(MainApplicationAdapter.getSelected(), button);
                             break;
                         case MUR:
-                            uncheckControlButtons();
-                            uncheckCalculButtons();
+                            uncheckNonGeneralButtons();
                             if (button.isChecked()) {
                                 Logic.getInstance().startWall();
                                 removeTb();
@@ -223,8 +285,7 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case PIECE:
-                            uncheckControlButtons();
-                            uncheckCalculButtons();
+                            uncheckNonGeneralButtons();
                             if (button.isChecked()) {
                                 Logic.getInstance().startPiece();
                                 removeTb();
@@ -233,24 +294,21 @@ public class MainUiControleur implements EventListener {
                                 Logic.getInstance().stop();
                             break;
                         case DPE:
-                            uncheckControlButtons();
-                            uncheckGeneralButtons();
+                            uncheckNonCalculButtons();
                             if (button.isChecked())
                                 addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES));
                             else
                                 removeTb();
                             break;
                         case CHAUFFAGE:
-                            uncheckControlButtons();
-                            uncheckGeneralButtons();
+                            uncheckNonCalculButtons();
                             if (button.isChecked())
                                 addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
                             else
                                 removeTb();
                             break;
                         case MENUISERIE:
-                            uncheckControlButtons();
-                            uncheckCalculButtons();
+                            uncheckNonGeneralButtons();
                             removeTb();
                             if (button.isChecked())
                                 addTb(ModelLibrary.getInstance().getTabWindow());
@@ -259,8 +317,7 @@ public class MainUiControleur implements EventListener {
                             break;
                         case ETAGE_PLUS:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckAll();
                             removeTb();
                             ModelHolder.getInstance().getBatiment().etageSuperieur();
                             CameraEngine.getInstance().getCurrentCameraUpdater().reset();
@@ -268,8 +325,7 @@ public class MainUiControleur implements EventListener {
                             break;
                         case ETAGE_MINUS:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckAll();
                             removeTb();
                             ModelHolder.getInstance().getBatiment().etageInferieur();
                             CameraEngine.getInstance().getCurrentCameraUpdater().reset();
@@ -277,15 +333,13 @@ public class MainUiControleur implements EventListener {
                             break;
                         case EXPORT_IFC:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckNonSaveButtons();
                             removeTb();
                             addTb(getExportTb());
                             break;
                         case NEW_FILE:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckNonSaveButtons();
                             removeTb();
 
                             Deleter.deleteBatiment();
@@ -297,8 +351,7 @@ public class MainUiControleur implements EventListener {
                             break;
                         case CALCUL_SURFACE:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckNonInfoButtons();
                             Calculateur.getInstance().actualiseCalculs();
                             if (button.isChecked())
                                 addTb(Calculateur.getInstance().getWindow());
@@ -307,16 +360,14 @@ public class MainUiControleur implements EventListener {
                             break;
                         case VISIBILITY_TOIT:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckNonCameraButtons();
                             removeTb();
 
                             ModelHolder.getInstance().getBatiment().setPlafondsVisibles(button.isChecked());
                             break;
                         case IMPORT_IFC:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckNonSaveButtons();
                             removeTb();
 //                            Deleter.deleteBatiment();
 //                            IfcImporter.getInstance().realiseImportIfc();
@@ -327,21 +378,26 @@ public class MainUiControleur implements EventListener {
                             break;
                         case SAVE:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckNonSaveButtons();
                             removeTb();
                             addTb(getSaveTb());
                             break;
                         case LOAD:
                             Logic.getInstance().stop();
-                            uncheckGeneralButtons();
-                            uncheckControlButtons();
+                            uncheckNonSaveButtons();
                             removeTb();
                             addTb(getLoadTb());
                             break;
                         case HELP:
-                            uncheckControlButtons();
-                            uncheckGeneralButtons();
+                            uncheckNonInfoButtons();
+                            if (button.isChecked()) {
+                                addTb(getHelp(), 0,0);
+                            }
+                            else
+                                removeTb();
+                            break;
+                        case INFO:
+                            uncheckNonInfoButtons();
                             if (button.isChecked()) {
                                 addTb(getHelp(), 0,0);
                             }

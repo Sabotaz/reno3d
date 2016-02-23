@@ -34,5 +34,5 @@ public enum ButtonValue {
     HELP,
 
 
-    ;
+    INFO;
 }

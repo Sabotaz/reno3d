@@ -428,6 +428,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (!dragged) {
             mainUiControleur.removeTb();
+            mainUiControleur.uncheckAll();
             if (selected != null) {
                 selected.removeColor();
                 selected.setSelected(false);

@@ -227,6 +227,7 @@
           "layout": "column",
           "minChecked": 0,
           "pad": 0,
+          "padRight": 15,
           "content": [
             {
               "type": "Button",
@@ -255,7 +256,16 @@
                 "drawable:chauffage:tint:888888",
                 "default.fnt"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "ButtonGroup",
+          "id": "info_buttons",
+          "layout": "column",
+          "minChecked": 0,
+          "pad": 0,
+          "content": [
             {
               "type": "Button",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.CALCUL_SURFACE",
@@ -281,6 +291,20 @@
                 "drawable:help",
                 "drawable:help:tint:888888",
                 "drawable:help:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.INFO",
+              "name": "info",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:info",
+                "drawable:info:tint:888888",
+                "drawable:info:tint:888888",
                 "default.fnt"
               ]
             }
