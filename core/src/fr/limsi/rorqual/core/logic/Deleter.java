@@ -85,9 +85,7 @@ public class Deleter extends ModelMaker {
 
     static public void deleteMur(Mur m) {
 
-        ArrayList<Ouverture> overtures = new ArrayList<Ouverture>(m.getOuvertures());
-
-        for (Ouverture o : overtures)
+        for (Ouverture o : new ArrayList<Ouverture>(m.getOuvertures()))
             deleteOuverture(o);
 
         m.getEtage().removeMur(m);
@@ -120,7 +118,7 @@ public class Deleter extends ModelMaker {
         s.getEtage().removeSlab(s);
         s.setEtage(null);
         s.setCoins(null);
-        for (Mur m : s.getMurs()) {
+        for (Mur m : new ArrayList<Mur>(s.getMurs())) {
             if (s.equals(m.getSlabGauche()))
                 m.setSlabGauche(null);
             if (s.equals(m.getSlabDroit()))
@@ -128,10 +126,10 @@ public class Deleter extends ModelMaker {
             if (m.getSlabGauche() == null && m.getSlabDroit() == null)
                 deleteMur(m);
         }
-        for (Objet o : s.getObjets()) {
+
+        for (Objet o : new ArrayList<Objet>(s.getObjets())) {
             deleteObjet(o);
         }
-        s.getObjets().clear();
 
         HashMap<String,Object> currentItems = new HashMap<String,Object>();
         currentItems.put("userObject", s);

@@ -743,6 +743,9 @@ public class MainUiControleur implements EventListener {
         Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.BLACK);
         Label.LabelStyle link = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.BLUE);
 
+        TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+
         final Window w = new Window("Informations",skin);
 
         Table tab = new Table();
@@ -785,16 +788,17 @@ public class MainUiControleur implements EventListener {
         Label label3 = new Label(thomas,ls);
         Label label4 = new Label(mehdi,ls);
 
-        Label label5 = new Label(site,link);
-        label5.addListener(new ClickListener() {
+        TextButton button1 = new TextButton(site, tbs);
+        TextButton button2 = new TextButton(mail, tbs);
+
+        button1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.net.openURI("http://blog.laplateformedelarenovation.fr/plan-3d-energy/");
             }
         });
-        Label label6 = new Label(mail,link);
-        label6.addListener(new ClickListener() {
+        button2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
@@ -817,8 +821,8 @@ public class MainUiControleur implements EventListener {
 
         tab.add(imgtab).center().size(2 * img_size + 40, 2 * img_size + 40).pad(20).row();
 
-        tab.add(label5).center().pad(10).row();
-        tab.add(label6).center().pad(10).row();
+        tab.add(button1).center().pad(10).row();
+        tab.add(button2).center().pad(10).row();
 
         w.add(tab).pad(10);
 
