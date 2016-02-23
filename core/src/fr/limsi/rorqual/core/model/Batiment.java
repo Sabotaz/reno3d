@@ -1,6 +1,7 @@
 package fr.limsi.rorqual.core.model;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -17,6 +18,7 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
+import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Floor;
 
@@ -151,9 +153,14 @@ public class Batiment {
     }
 
     public void draw(ModelBatch modelBatch, Environment environnement, ModelContainer.Type type) {
-        for (int i = etages.getMin(); i <= current; i++) {
-            Etage etage = etages.get(i);
-            etage.getModelGraph().draw(modelBatch, environnement, type);
+        if (camera instanceof OrthographicCamera) {
+            for (int i = etages.getMin(); i <= current; i++) {
+                Etage etage = etages.get(i);
+                etage.getModelGraph().draw(modelBatch, environnement, type);
+            }
+        }
+        else {
+            drawAll(modelBatch, environnement, type);
         }
     }
 
@@ -338,8 +345,7 @@ public class Batiment {
 
     public void act() {
         synchronized (this) {
-            for (int i = etages.getMin(); i <= current; i++) {
-                Etage etage = etages.get(i);
+            for (Etage etage : etages.list()) {
                 etage.getModelGraph().act();
             }
         }
