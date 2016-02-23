@@ -20,6 +20,9 @@ public class DesktopLauncher {
 
 		@Override
 		public void sendTrackerEvent(Category category, Action action, String label) { }
+
+		@Override
+		public void sendEmail(String subject) { }
 	}
 
 	public static void main (String[] arg) {

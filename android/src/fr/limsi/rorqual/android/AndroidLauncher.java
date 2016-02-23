@@ -1,10 +1,12 @@
 package fr.limsi.rorqual.android;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -94,6 +96,19 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 .build());
     }
 
+    @Override
+    public void sendEmail(String subject) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"3drenodev@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, subject);
+        i.putExtra(Intent.EXTRA_TEXT   , "");
+        try {
+            startActivity(Intent.createChooser(i, "Envoyer un mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(AndroidLauncher.this, "Aucun client mail n'est installé.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     @Override

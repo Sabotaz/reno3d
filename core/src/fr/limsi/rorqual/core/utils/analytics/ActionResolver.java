@@ -7,8 +7,10 @@ public interface ActionResolver {
 
     void setTrackerScreenName(String path);
 
-    public void sendTrackerEvent(Category category, Action action);
+    void sendTrackerEvent(Category category, Action action);
 
-    public void sendTrackerEvent(Category category, Action action, String label);
+    void sendTrackerEvent(Category category, Action action, String label);
+
+    void sendEmail(String subject);
 
 }
