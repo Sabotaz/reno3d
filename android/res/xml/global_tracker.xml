@@ -24,9 +24,6 @@
     <!-- Treat events as test events and don't send to google -->
     <bool name="ga_dryRun">false</bool>
 
-    <!-- The screen names that will appear in reports -->
-    <screenName name="fr.limsi.rorqual.android.AndroidLauncher">Android Launcher</screenName>
-
     <!-- The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-73647708-1</string>
 

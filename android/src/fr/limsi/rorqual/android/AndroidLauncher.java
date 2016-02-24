@@ -71,15 +71,15 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public void setTrackerScreenName(String path) {
         // Set screen name.
         // Where path is a String representing the screen name.
-        globalTracker.setScreenName(path);
-        globalTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        tracker.setScreenName(path);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
     public void sendTrackerEvent(Category category, Action action) {
         // Set screen name.
         // Where path is a String representing the screen name.
-        globalTracker.send(new HitBuilders.EventBuilder()
+        tracker.send(new HitBuilders.EventBuilder()
                 .setCategory(category.name())
                 .setAction(action.name())
                 .build());
@@ -89,7 +89,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public void sendTrackerEvent(Category category, Action action, String label) {
         // Set screen name.
         // Where path is a String representing the screen name.
-        globalTracker.send(new HitBuilders.EventBuilder()
+        tracker.send(new HitBuilders.EventBuilder()
                 .setCategory(category.name())
                 .setAction(action.name())
                 .setLabel(label)
