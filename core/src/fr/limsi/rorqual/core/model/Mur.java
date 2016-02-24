@@ -342,7 +342,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         CSG csg = Extrude.points(z, face);
         model_non_perce = CSGUtils.toModel(csg);
 
-        for (Ouverture o : ouvertures) {
+        for (Ouverture o : new ArrayList<Ouverture>(ouvertures)) {
             csg = csg.difference(o.getCSG());
         }
 

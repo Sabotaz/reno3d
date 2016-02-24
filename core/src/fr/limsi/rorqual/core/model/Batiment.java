@@ -153,14 +153,15 @@ public class Batiment {
     }
 
     public void draw(ModelBatch modelBatch, Environment environnement, ModelContainer.Type type) {
-        if (camera instanceof OrthographicCamera) {
-            for (int i = etages.getMin(); i <= current; i++) {
-                Etage etage = etages.get(i);
-                etage.getModelGraph().draw(modelBatch, environnement, type);
+        synchronized (this) {
+            if (camera instanceof OrthographicCamera) {
+                for (int i = etages.getMin(); i <= current; i++) {
+                    Etage etage = etages.get(i);
+                    etage.getModelGraph().draw(modelBatch, environnement, type);
+                }
+            } else {
+                drawAll(modelBatch, environnement, type);
             }
-        }
-        else {
-            drawAll(modelBatch, environnement, type);
         }
     }
 
@@ -352,14 +353,14 @@ public class Batiment {
     }
 
     public void reload() {
-        System.out.println("reload...");
-        floor = Floor.getModel();
-        for (int i = etages.getMin(); i <= etages.getMax(); i++) {
-            Etage etage = etages.get(i);
-            etage.setBatiment(this);
-            etage.reload();
-            etage.setOrientation(globalOrientation);
-        }
-        getCurrentEtage().getModelGraph().getRoot().add(floor);
+            System.out.println("reload...");
+            floor = Floor.getModel();
+            for (int i = etages.getMin(); i <= etages.getMax(); i++) {
+                Etage etage = etages.get(i);
+                etage.setBatiment(this);
+                etage.reload();
+                etage.setOrientation(globalOrientation);
+            }
+            getCurrentEtage().getModelGraph().getRoot().add(floor);
     }
 }
