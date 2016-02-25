@@ -9,6 +9,9 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+
+            if (gradle.pro) java.exclude 'fr/limsi/rorqual/free/android/AndroidLauncher.java' else java.exclude 'fr/limsi/rorqual/android/AndroidLauncher.java'
+
         }
 
         instrumentTest.setRoot('tests')
@@ -63,7 +66,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'fr.limsi.rorqual/fr.limsi.rorqual.android.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'fr.limsi.rorqual/fr.limsi.rorqual.free.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

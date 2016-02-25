@@ -1,4 +1,5 @@
 gradle.ext.use_javatoolbox = false
+gradle.ext.pro = true
 
 include ':jcsg'
 if (gradle.use_javatoolbox) include ':ifc2x3javatoolbox' else include ':ifc2x3native'

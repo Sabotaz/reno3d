@@ -231,7 +231,8 @@ public class AssetManager {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
 
-        if (dpi <= 140) { // ldpi ~ 0.6x
+        if (dpi <= 140) { // ldpi ~ 0.6x : desktop (96)
+            System.out.println("LDPI (" + dpi + ")");
             parameter.size = 15;
             font = (BitmapFont) loadOnUi(generator, parameter);
             parameter.size = 17;
@@ -239,13 +240,15 @@ public class AssetManager {
             parameter.size = 30;
             buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
         } else if (dpi <= 200) { // mdpi ~ 1x
+            System.out.println("MDPI (" + dpi + ")");
             parameter.size = (int) (15);
             font = (BitmapFont) loadOnUi(generator, parameter);
             parameter.size = (int) (20);
             fontTitle = (BitmapFont) loadOnUi(generatorTitle, parameter);
             parameter.size = (int) (25);
             buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
-        } else if (dpi <= 380) { // hdpi ~ 1.5x
+        } else if (dpi <= 380) { // hdpi ~ 1.5x : htc one mini (320) | nvidia shield (320)
+            System.out.println("HDPI (" + dpi + ")");
             parameter.size = 30;
             font = (BitmapFont) loadOnUi(generator, parameter);
             parameter.size = 30;
@@ -253,6 +256,7 @@ public class AssetManager {
             parameter.size = 50;
             buttonsFont = (BitmapFont) loadOnUi(generatorTitle, parameter);
         } else { //xhdpi ~ 2x
+            System.out.println("XHDPI (" + dpi + ")");
             parameter.size = 30;
             font = (BitmapFont) loadOnUi(generator, parameter);
             parameter.size = 32;

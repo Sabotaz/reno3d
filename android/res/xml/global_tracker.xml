@@ -4,7 +4,7 @@
     <integer name="ga_sessionTimeout">300</integer>
 
     <!-- Enable automatic Activity measurement -->
-    <bool name="ga_autoActivityTracking">true</bool>
+    <bool name="ga_autoActivityTracking">false</bool>
 
     <!-- Percentage of events to include in reports -->
     <string name="ga_sampleFrequency">100.0</string>
@@ -26,5 +26,8 @@
 
     <!-- The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-73647708-1</string>
+
+    <screenName name="fr.limsi.rorqual.free.android.AndroidLauncher">Android Launcher Free</screenName>
+    <screenName name="fr.limsi.rorqual.android.AndroidLauncher">Android Launcher</screenName>
 
 </resources>

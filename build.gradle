@@ -85,6 +85,13 @@ project(":android") {
             println "Setting __revision__ to ${rev} in AndroidManifest.xml"
             def manifestContent = matcher.replaceAll(rev)
 
+            def pkg = gradle.pro ? "fr.limsi.rorqual" : "fr.limsi.rorqual.free"
+            def pattern2 = Pattern.compile("(__package__)")
+            def matcher2 = pattern2.matcher(manifestContent)
+            matcher2.find()
+            println "Setting __package__ to ${pkg} in AndroidManifest.xml"
+            manifestContent = matcher2.replaceAll(pkg)
+
             manifestFile.write(manifestContent)
         }
     }

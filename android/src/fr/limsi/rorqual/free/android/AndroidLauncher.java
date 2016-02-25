@@ -1,4 +1,4 @@
-package fr.limsi.rorqual.android;
+package fr.limsi.rorqual.free.android;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -17,7 +17,7 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 import java.util.HashMap;
 
-import fr.limsi.rorqual.R;
+import fr.limsi.rorqual.free.R;
 import fr.limsi.rorqual.android.sensors.GyroscopeListener;
 import fr.limsi.rorqual.core.utils.analytics.Action;
 import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
