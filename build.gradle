@@ -67,36 +67,50 @@ project(":android") {
         compile 'com.google.android.gms:play-services-analytics:8.4.0'
     }
 
-    task gitinfo << {
+    task updateManifest << {
         new ByteArrayOutputStream().withStream { os ->
+
+            // get git version
             def result = exec {
                 executable = 'sh'
                 args = ["-c", "git log --pretty=format:'' | wc -l"]
                 standardOutput = os
             }
-            def rev = os.toString().trim()
 
+            // open base file
             def manifestBaseFile = file("android/manifest/AndroidManifest.xml")
             def manifestFile = file("android/AndroidManifest.xml")
-            def pattern = Pattern.compile("(__revision__)")
-            def manifestText = manifestBaseFile.getText()
-            def matcher = pattern.matcher(manifestText)
-            matcher.find()
-            println "Setting __revision__ to ${rev} in AndroidManifest.xml"
-            def manifestContent = matcher.replaceAll(rev)
+            def manifestContent = manifestBaseFile.getText()
 
+            // pattern for revision
+            def rev = os.toString().trim()
+            def pattern_rev = Pattern.compile("(__revision__)")
+            def matcher_rev = pattern_rev.matcher(manifestContent)
+            matcher_rev.find()
+            println "Setting __revision__ to ${rev} in AndroidManifest.xml"
+            manifestContent = matcher_rev.replaceAll(rev)
+
+            // pattern for package
             def pkg = gradle.pro ? "fr.limsi.rorqual" : "fr.limsi.rorqual.free"
-            def pattern2 = Pattern.compile("(__package__)")
-            def matcher2 = pattern2.matcher(manifestContent)
-            matcher2.find()
+            def pattern_pkg = Pattern.compile("(__package__)")
+            def matcher_pkg = pattern_pkg.matcher(manifestContent)
+            matcher_pkg.find()
             println "Setting __package__ to ${pkg} in AndroidManifest.xml"
-            manifestContent = matcher2.replaceAll(pkg)
+            manifestContent = matcher_pkg.replaceAll(pkg)
+
+            // pattern for icon
+            def icon = gradle.pro ? "ic_launcher" : "ic_launcher_free"
+            def pattern_icn = Pattern.compile("(__icon__)")
+            def matcher_icn = pattern_icn.matcher(manifestContent)
+            matcher_icn.find()
+            println "Setting __icon__ to ${icon} in AndroidManifest.xml"
+            manifestContent = matcher_icn.replaceAll(icon)
 
             manifestFile.write(manifestContent)
         }
     }
 
-    preBuild.dependsOn gitinfo
+    preBuild.dependsOn updateManifest
 
 }
 
