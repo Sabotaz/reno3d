@@ -54,31 +54,31 @@ Special notes concerning the *only Google Play website*:
 # DESCRIPTION #
 ###############
 
-Première application pour tablette de création et d’édition de plan 2D 3D des logements avec estimation énergétique dynamique. Idéal pour concevoir son architecture d’intérieur, décorer,  aménager (meubles) , simuler des travaux de rénovation dans sa maison ou son appartement, réaliser des modifications de plans…
-En plus découvrez la simulation interactive et dynamique de performance énergétique du logement.
-Sauvegardez et exportez vos plans au format IFC (BIM ready maquette numérique).
+&#8226;&#8195;Première application pour tablette de création et d’édition de plan 2D et 3D des logements avec une estimation énergétique dynamique. Idéal pour concevoir son architecture d’intérieur, décorer,  aménager (meubles), simuler des travaux de rénovation dans sa maison ou son appartement, réaliser des modifications de plans…
+&#8226;&#8195;De plus, découvrez l'évaluation interactive et dynamique de la performance énergétique du logement.
+&#8226;&#8195;Sauvegardez et exportez vos plans au format IFC (BIM ready maquette numérique).
 
-<b><u>Les Fonctionnalités PLAN 3D ENERGY :</u></b>
+<b><u>Les Fonctionnalités PLAN 3D ENERGY home edition:</u></b>
 &#8226;&#8195;Modélisation et édition de plan 2D et 3D de logements (maison et appartement)
-&#8226;&#8195;Par un simple sélection et glisser déposer, choisir vos meubles et équipements techniques et matériaux intérieurs à partir d’une bibliothèque d’objets,
-&#8226;&#8195;Sauvegarde et récupération de vos projets,
-&#8226;&#8195;Evaluation énergétique du logement réalisée en temps réel en fonction des matériaux utilisés selon la méthode 3CL,
-&#8226;&#8195;Compatibilité BIM (Building Information Modeling)avec export au format .IFC, utilisable comme base à une maquette numérique d’un bâtiment. Le format IFC  pour Industry Foundation Classes est le format de fichier standardisé selon la norme ISO 16739 utilisé pour échanger et partager des informations standardisées en applications et logiciels du secteur du bâtiment.
-&#8226;&#8195;Vous pouvez librement tracer des pièces, ajouter ou modifier vos murs intérieurs et extérieurs, créer des ouvertures (portes, fenêtres),
+&#8226;&#8195;Ajout de meubles et équipements techniques et matériaux intérieurs à partir d’une bibliothèque d’objets
+&#8226;&#8195;Sauvegarde et récupération de vos projets
+&#8226;&#8195;Évaluation énergétique du logement réalisée en temps réel en fonction des matériaux utilisés selon la méthode 3CL
+&#8226;&#8195;Compatibilité BIM (Building Information Modeling) avec export au format .IFC, utilisable comme base à une maquette numérique d’un bâtiment. Le format IFC  (Industry Foundation Classes) est le format de fichier standardisé selon la norme ISO-16739 utilisé pour échanger et partager des informations standardisées entre applications et logiciels dans le secteur du bâtiment.
+&#8226;&#8195;Modélisation des pièces, ajout ou modification de vos murs intérieurs et extérieurs, création d'ouvertures (portes, fenêtres)
 &#8226;&#8195;Ajout illimité d’étages, de pièces, de murs
 &#8226;&#8195;Assistance au design (alignement et liaison des murs et des pièces)
-&#8226;&#8195;Calcul automatique des surfaces, volumes, hauteur
-&#8226;&#8195;Changez la hauteur des murs,
-&#8226;&#8195;Définir l’orientation grâce à la boussole pour tenir compte des apports naturels de lumière et de chaleur…
+&#8226;&#8195;Calcul automatique des surfaces, volumes, hauteurs
+&#8226;&#8195;Hauteur des murs modifiable
+&#8226;&#8195;Orientation du bâtiment pour tenir compte des apports naturels de lumière et de chaleur
 
 <b><u>LICENCES</u></b>
-&#8226;&#8195;<b>LibGDX :</b>
+&#8226;&#8195;LibGDX :
 https://raw.githubusercontent.com/libgdx/libgdx/master/LICENSE
-&#8226;&#8195;<b>JCSG :</b>
+&#8226;&#8195;JCSG :
 https://raw.githubusercontent.com/miho/JCSG/master/LICENSE.txt
-&#8226;&#8195;<b>IFC2x3JavaToolbox <i>(free version)</i> :</b>
-https://creativecommons.org/licenses/by-nc-sa/3.0/fr/ (cc) 2013 Eike Tauscher and Michael Theiler
-&#8226;&#8195;<b>Models 3D :</b>
+&#8226;&#8195;IFC2x3JavaToolbox <i>(free version)</i> :
+https://creativecommons.org/licenses/by-nc-sa/3.0/fr/ (cc) Eike Tauscher and Michael Theiler
+&#8226;&#8195;Models 3D :
 http://www.sweethome3d.com/importModels.jsp
-&#8226;&#8195;<b>Textures :</b>
+&#8226;&#8195;Textures :
 http://www.sweethome3d.com/importTextures.jsp
