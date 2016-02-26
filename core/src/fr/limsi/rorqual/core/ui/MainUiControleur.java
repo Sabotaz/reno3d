@@ -740,7 +740,7 @@ public class MainUiControleur implements EventListener {
         String rd = "Équipe R&D";
         String julien = "Julien CHRISTOPHE\n    Ingénieur CNRS\n    Développement mobile";
         String thomas = "Thomas RICORDEAU\n    Ingénieur CNRS\n    Développement thermique";
-        String mehdi = "Mehdi AMMI\n    Maitre de conférences, Université Paris-Sud, LIMSI-CNRS\n    Responsable R&D";
+        String mehdi = "Mehdi AMMI\n    Responsable de projet\n    Maitre de conférences\n    Université Paris-Sud, LIMSI-CNRS";
 
 
         Image logo_rpe = new Image((Texture)AssetManager.getInstance().get("logo-rpe"));
@@ -768,6 +768,8 @@ public class MainUiControleur implements EventListener {
 
         String site = "Accéder au site web de l'application";
 
+        String renov = "Obtenez des informations sur la rénovation";
+
         String mail = "Contacter l'équipe de développement";
 
         Label label1 = new Label(rd,title);
@@ -776,7 +778,8 @@ public class MainUiControleur implements EventListener {
         Label label4 = new Label(mehdi,ls);
 
         TextButton button1 = new TextButton(site, tbs);
-        TextButton button2 = new TextButton(mail, tbs);
+        TextButton button2 = new TextButton(renov, tbs);
+        TextButton button3 = new TextButton(mail, tbs);
 
         button1.addListener(new ClickListener() {
             @Override
@@ -785,7 +788,16 @@ public class MainUiControleur implements EventListener {
                 Gdx.net.openURI("http://blog.laplateformedelarenovation.fr/plan-3d-energy/");
             }
         });
+
         button2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.net.openURI("http://laplateformedelarenovation.fr");
+            }
+        });
+
+        button3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
@@ -796,20 +808,21 @@ public class MainUiControleur implements EventListener {
 
         Table imgtab = new Table();
 
-        imgtab.add(logo_rpe).left().pad(10).size(img_size,img_size);
-        imgtab.add(logo_cnrs).right().pad(10).size(img_size, img_size).row();
-        imgtab.add(logo_limsi).left().pad(10).size(img_size, img_size);
-        imgtab.add(logo_upsud).right().pad(10).size(img_size, img_size).row();
+        imgtab.add(logo_rpe)/*.left()*/.pad(10).size(img_size,img_size);
+        imgtab.add(logo_cnrs)/*.right()*/.pad(10).size(img_size, img_size);//.row();
+        imgtab.add(logo_limsi)/*.left()*/.pad(10).size(img_size, img_size);
+        imgtab.add(logo_upsud)/*.right()*/.pad(10).size(img_size, img_size).row();
 
         tab.add(label1).center().padBottom(20).row();
         tab.add(label2).left().padBottom(10).row();
         tab.add(label3).left().padBottom(10).row();
         tab.add(label4).left().row();
 
-        tab.add(imgtab).center().size(2 * img_size + 40, 2 * img_size + 40).pad(20).row();
+        tab.add(imgtab).center().size(4 * img_size + 80, 1 * img_size + 40).pad(20).row();
 
         tab.add(button1).center().pad(10).row();
         tab.add(button2).center().pad(10).row();
+        tab.add(button3).center().pad(10).row();
 
         w.add(tab).pad(10);
 
