@@ -45,7 +45,7 @@ public class OuverturePlane extends ModelContainer {
         } else if (p instanceof Fenetre) {
             ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
         } else if (p instanceof PorteFenetre) {
-            ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
+            ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("porte"));
         } else {
             ta = TextureAttribute.createDiffuse((Texture)AssetManager.getInstance().get("fenetre"));
         }
@@ -77,9 +77,9 @@ public class OuverturePlane extends ModelContainer {
                     .mul(new Matrix4().setToScaling(ouverture.getWidth(), ouverture.getWidth(), 1))
             ;
             if (ouverture.getMur().getSlabGauche() == null) { // vers la gauche
-            } else { // vers la droite
                 if (ouverture instanceof Fenetre)
                     model_transform.mul(new Matrix4().setToRotation(0,0,1,180));
+            } else { // vers la droite
             }
         }
         this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
