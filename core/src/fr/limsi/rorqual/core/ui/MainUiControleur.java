@@ -42,7 +42,9 @@ import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.PorteFenetre;
+import fr.limsi.rorqual.core.utils.Timeit;
 import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
+import fr.limsi.rorqual.core.utils.analytics.Category;
 import fr.limsi.rorqual.core.utils.ifc.IfcExporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
@@ -93,17 +95,32 @@ public class MainUiControleur implements EventListener {
         this.mainLayout = layout;
     }
 
+    Timeit timeit;
+    String tabName;
+
     public void removeTb() {
         if (tb != null)
             synchronized (stage) {
+                timeit.stop();
                 tb.remove();
+                if (timeit != null) {
+                    timeit.stop();
+                    MainApplicationAdapter.getActionResolver().sendTiming(Category.UI, timeit.value(), tabName);
+                }
+                timeit = null;
             }
+    }
+
+    public void addTb(Actor actor, String tabName) {
+        this.tabName = tabName;
+        addTb(actor);
     }
 
     public void addTb(Actor actor) {
         removeTb();
         tb = actor;
         if (tb != null) {
+            timeit = new Timeit().start();
             synchronized (stage) {
                 if (tb instanceof TabWindow){
                     tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) tb).getPrefHeight()/2-100);
@@ -121,6 +138,7 @@ public class MainUiControleur implements EventListener {
         removeTb();
         tb = actor;
         if (tb != null) {
+            timeit = new Timeit().start();
             synchronized (stage) {
                 tb.setPosition(x, y);
                 stage.addActor(tb);
@@ -294,23 +312,27 @@ public class MainUiControleur implements EventListener {
                             break;
                         case DPE:
                             uncheckNonCalculButtons();
-                            if (button.isChecked())
+                            if (button.isChecked()) {
+                                tabName = "Infos generales";
                                 addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES));
-                            else
+                            } else
                                 removeTb();
                             break;
                         case CHAUFFAGE:
                             uncheckNonCalculButtons();
-                            if (button.isChecked())
+                            if (button.isChecked()) {
+                                tabName = "Infos chauffage";
                                 addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE));
-                            else
+                            }else
                                 removeTb();
                             break;
                         case MENUISERIE:
                             uncheckNonGeneralButtons();
                             removeTb();
-                            if (button.isChecked())
+                            if (button.isChecked()) {
+                                tabName = "Menuiserie";
                                 addTb(ModelLibrary.getInstance().getTabWindow());
+                            }
                             break;
                         case ETAGE_PLUS:
                             uncheckAll();
@@ -329,6 +351,7 @@ public class MainUiControleur implements EventListener {
                         case EXPORT_IFC:
                             uncheckNonSaveButtons();
                             removeTb();
+                            tabName = "export";
                             addTb(getExportTb());
                             break;
                         case NEW_FILE:
@@ -345,8 +368,10 @@ public class MainUiControleur implements EventListener {
                         case CALCUL_SURFACE:
                             uncheckNonInfoButtons();
                             Calculateur.getInstance().actualiseCalculs();
-                            if (button.isChecked())
+                            if (button.isChecked()) {
+                                tabName = "Calculateur";
                                 addTb(Calculateur.getInstance().getWindow());
+                            }
                             else
                                 removeTb();
                             break;
@@ -369,16 +394,19 @@ public class MainUiControleur implements EventListener {
                         case SAVE:
                             uncheckNonSaveButtons();
                             removeTb();
+                            tabName = "Save";
                             addTb(getSaveTb());
                             break;
                         case LOAD:
                             uncheckNonSaveButtons();
                             removeTb();
+                            tabName = "Load";
                             addTb(getLoadTb());
                             break;
                         case HELP:
                             uncheckNonInfoButtons();
                             if (button.isChecked()) {
+                                tabName = "Help";
                                 addTb(getHelp(), 0,0);
                             }
                             else
@@ -387,6 +415,7 @@ public class MainUiControleur implements EventListener {
                         case INFO:
                             uncheckNonInfoButtons();
                             if (button.isChecked()) {
+                                tabName = "Info";
                                 addTb(getInfo());
                             }
                             else

@@ -11,6 +11,12 @@ public interface ActionResolver {
 
     void sendTrackerEvent(Category category, Action action, String label);
 
+    void sendTiming(Category category, long value);
+
+    void sendTiming(Category category, long value, String name);
+
+    void sendTiming(Category category, long value, String name, String label);
+
     void sendEmail(String subject);
 
 }

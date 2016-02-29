@@ -22,6 +22,15 @@ public class DesktopLauncher {
 		public void sendTrackerEvent(Category category, Action action, String label) { }
 
 		@Override
+		public void sendTiming(Category category, long value) { }
+
+		@Override
+		public void sendTiming(Category category, long value, String name) { }
+
+		@Override
+		public void sendTiming(Category category, long value, String name, String label) { }
+
+		@Override
 		public void sendEmail(String subject) { }
 	}
 

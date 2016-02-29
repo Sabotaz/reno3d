@@ -97,6 +97,33 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     }
 
     @Override
+    public void sendTiming(Category category, long value) {
+        tracker.send(new HitBuilders.TimingBuilder()
+                .setCategory(category.name())
+                .setValue(value)
+                .build());
+    }
+
+    @Override
+    public void sendTiming(Category category, long value, String name) {
+        tracker.send(new HitBuilders.TimingBuilder()
+                .setCategory(category.name())
+                .setValue(value)
+                .setVariable(name)
+                .build());
+    }
+
+    @Override
+    public void sendTiming(Category category, long value, String name, String label) {
+        tracker.send(new HitBuilders.TimingBuilder()
+                .setCategory(category.name())
+                .setValue(value)
+                .setVariable(name)
+                .setLabel(label)
+                .build());
+    }
+
+    @Override
     public void sendEmail(String subject) {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");

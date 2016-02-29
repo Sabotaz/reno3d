@@ -52,10 +52,12 @@ import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.ui.Popup;
 import fr.limsi.rorqual.core.ui.TextureLibrary;
+import fr.limsi.rorqual.core.utils.Timeit;
 import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.DefaultMutableTreeNode;
 
+import fr.limsi.rorqual.core.utils.analytics.Category;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.view.shaders.ShaderChooser;
@@ -119,7 +121,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 load();
 
                 try {
-                    Thread.sleep(1_000);
+                    Thread.sleep(750);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -167,25 +169,38 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     private void load() {
-        long start = System.currentTimeMillis();
-        System.out.println("start init " + ((System.currentTimeMillis() - start) * 0.001f));
+        Timeit start = new Timeit().start();
+        Timeit timeit;
+        System.out.println("start init 0");
 
         setLoadingMessage("Starting event manager...");
+        timeit = new Timeit().start();
         EventManager.getInstance().start();
-        System.out.println("event manager ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("event manager ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Event manager loading time");
 
         setLoadingMessage("Loading assets...");
+        timeit = new Timeit().start();
         assets = AssetManager.getInstance();
         assets.init();
-        System.out.println("assets ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("assets ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Assets loading time");
 
         setLoadingMessage("Loading building...");
+        timeit = new Timeit().start();
         ModelHolder.getInstance().setBatiment(new Batiment());
-        System.out.println("batiment ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("batiment ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Batiment loading time", "Batiment vide");
 
         setLoadingMessage("Loading shader engine...");
+        timeit = new Timeit().start();
         shaderProvider = new ShaderChooser();
-        System.out.println("shaders ok " + ((System.currentTimeMillis()-start)*0.001f));
+        timeit.stop();
+        System.out.println("shaders ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Shader engine loading time");
 
         modelGraph = new ModelGraph();
         modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
@@ -194,20 +209,27 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         /*** Création des lumières ***/
         setLoadingMessage("Loading environment...");
+        timeit = new Timeit().start();
         environnement = new Environment();
         environnement.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         light = new DirectionalLight();
         light.set(1f, 1f, 1f, 0f, 0f, 0f);
         environnement.add(light);
-        System.out.println("environnement ok " + ((System.currentTimeMillis() - start) * 0.001f));
 
         sun = new ModelContainer();
         sun.setSelectable(false);
         sun.local_transform.setToTranslation(new Vector3(-200, -100, 100));
 
+        timeit.stop();
+        System.out.println("environnement ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Environment loading time");
+
         setLoadingMessage("Loading cameras...");
+        timeit = new Timeit().start();
         ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
-        System.out.println("current camera ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("current camera ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Cameras loading time");
 
         //modelGraph.getRoot().add(popup);
 
@@ -222,11 +244,16 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         state = new DpeStateUpdater(modelGraph);
 
+        timeit = new Timeit().start();
+
         mainUiControleur = MainUiControleur.getInstance();
         mainUiControleur.setStage(stageMenu);
-        System.out.println("main ui controleur ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("main ui controleur ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Main ui controller loading time");
 
         setLoadingMessage("Loading menu...");
+        timeit = new Timeit().start();
         stageMenu.getRoot().addCaptureListener(
                 new InputListener() {
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -236,38 +263,57 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     }
                 });
 
-        System.out.println("stage menu ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("stage menu ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Stage loading time");
+
+        timeit = new Timeit().start();
         Layout layout = Layout.fromJson("data/ui/layout/mainUI.json", null);
         mainUiControleur.setMainLayout(layout);
         stageMenu.addActor(layout.getRoot());
         score = (CircularJauge)layout.getFromId("dpe_jauge");
-        System.out.println("layout ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("layout ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Layout loading time");
 
         setLoadingMessage("Loading models library...");
-
+        timeit = new Timeit().start();
         ModelLibrary.getInstance();
-        System.out.println("models library ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("models library ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Models library loading time");
 
         setLoadingMessage("Loading textures library...");
-
+        timeit = new Timeit().start();
         TextureLibrary.getInstance();
-        System.out.println("textures library ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("textures library ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Textures library loading time");
 
         setLoadingMessage("Initializing EE...");
-
+        timeit = new Timeit().start();
         state = new DpeStateUpdater(modelGraph);
 
         score.setCurrentValue(Dpe.getInstance().getScoreDpe());
 
         DpeUi.getPropertyWindow(DpeEvent.INFOS_GENERALES);
         DpeUi.getPropertyWindow(DpeEvent.INFOS_CHAUFFAGE);
-        System.out.println("EE ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("EE ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "EE loading time");
 
         setLoadingMessage("Setting input processor...");
+        timeit = new Timeit().start();
 
         /*** On autorise les inputs en entrée ***/
         Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
-        System.out.println("input processor ok " + ((System.currentTimeMillis() - start) * 0.001f));
+        timeit.stop();
+        System.out.println("input processor ok " + (timeit.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, timeit.value(), "Input processor loading time");
+
+        start.stop();
+        System.out.println("all ok " + (start.value() * 0.001f));
+        actionResolver.sendTiming(Category.LOADING, start.value(), "Global loading time");
 
         setLoadingMessage("Done !");
     }
@@ -449,7 +495,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 //                System.out.println(selected);
                 selected.setColor(Color.YELLOW);
                 selected.setSelected(true);
-                mainUiControleur.addTb(dpeui.getPropertyWindow(selected));
+                mainUiControleur.addTb(dpeui.getPropertyWindow(selected), "Properties");
                 //selected.add(pin);
                 //pin.local_transform.setToTranslation(selected.getTop());
             } else {
