@@ -102,7 +102,6 @@ public class MainUiControleur implements EventListener {
     public void removeTb() {
         if (tb != null)
             synchronized (stage) {
-                timeit.stop();
                 tb.remove();
                 if (timeit != null) {
                     timeit.stop();
