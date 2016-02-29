@@ -10,8 +10,12 @@ import com.badlogic.gdx.math.Vector2;
 
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
+import fr.limsi.rorqual.core.utils.Timeit;
+import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
+import fr.limsi.rorqual.core.utils.analytics.Category;
 import fr.limsi.rorqual.core.view.CameraUpdater;
 import fr.limsi.rorqual.core.view.GyrometerCameraUpdater;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import fr.limsi.rorqual.core.view.OrthographicCameraUpdater;
 import fr.limsi.rorqual.core.view.PerspectiveCameraUpdater;
 
@@ -47,7 +51,9 @@ public class CameraEngine implements GestureDetector.GestureListener {
         }
     }
 
-    private CameraEngine() {}
+    Timeit timeit = new Timeit().start();
+    private CameraEngine() {
+    }
 
     /** Holder */
     private static class CameraEngineHolder
@@ -61,6 +67,7 @@ public class CameraEngine implements GestureDetector.GestureListener {
     }
 
     public void switchCamera() {
+        log();
         switch (curent_camera) {
             case PERSPECTIVE:
                 curent_camera = Cameras.ORTHOGRAPHIC;
@@ -90,8 +97,16 @@ public class CameraEngine implements GestureDetector.GestureListener {
     }
 
     public void reset() {
+        log();
         curent_camera = Cameras.ORTHOGRAPHIC;
         curent_camera.getCameraUpdater().reset();
+    }
+
+    public void log() {
+        timeit.stop();
+        ActionResolver actionResolver = MainApplicationAdapter.getActionResolver();
+        actionResolver.sendTiming(Category.CAMERA, timeit.value(), curent_camera.name());
+        timeit.start();
     }
 
     // GESTURES

@@ -7,5 +7,5 @@ public enum Category {
     UI,
     DPE,
     LOADING,
-    BATIMENT;
+    BATIMENT, CAMERA;
 }
