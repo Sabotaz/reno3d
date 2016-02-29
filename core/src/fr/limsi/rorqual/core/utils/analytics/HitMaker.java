@@ -23,8 +23,7 @@ public class HitMaker {
     }
 
     public static void makeHitOnNew() {
-        ActionResolver ar = MainApplicationAdapter.getActionResolver();
-        ar.sendTrackerEvent(Category.BATIMENT, Action.NEW);
+        makeHitsOnBatiment(Action.NEW);
     }
 
     private static void makeHitsOnBatiment(Action action) {
@@ -41,17 +40,17 @@ public class HitMaker {
         ar.sendTrackerEvent(Category.BATIMENT, action, "Nombre meubles", nb_meubles);
 
         Calculateur.getInstance().actualiseCalculs();
-        float area = Calculateur.getInstance().getSurfaceHabitable() * 10E2f; // to dm²
-        ar.sendTrackerEvent(Category.BATIMENT, action, "Taille moyenne pièces (dm²)", (long)area/ModelHolder.getInstance().getBatiment().getSlabs().size());
-        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface habitable (dm²)", (long)area);
-        area = Calculateur.getInstance().getSurfaceAuSol() * 10E2f; // to dm²
-        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface au sol (dm²)", (long)area);
-        area = Calculateur.getInstance().getSurfaceTotaleMurInterieur() * 10E2f; // to dm²
-        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface murs intérieurs (dm²)", (long)area);
-        area = Calculateur.getInstance().getSurfaceTotaleMurExterieur() * 10E2f; // to dm²
-        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface murs extérieur (dm²)", (long)area);
-        float volume = Calculateur.getInstance().getVolumeTotal() * 10E3f; // to dm²
-        ar.sendTrackerEvent(Category.BATIMENT, action, "Volume total (dm³)", (long)volume);
+        float area = Calculateur.getInstance().getSurfaceHabitable();
+        ar.sendTrackerEvent(Category.BATIMENT, action, "Taille moyenne pièces", (long)area/ModelHolder.getInstance().getBatiment().getSlabs().size());
+        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface habitable", (long)area);
+        area = Calculateur.getInstance().getSurfaceAuSol();
+        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface au sol", (long)area);
+        area = Calculateur.getInstance().getSurfaceTotaleMurInterieur();
+        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface murs intérieurs", (long)area);
+        area = Calculateur.getInstance().getSurfaceTotaleMurExterieur();
+        ar.sendTrackerEvent(Category.BATIMENT, action, "Surface murs extérieur", (long)area);
+        float volume = Calculateur.getInstance().getVolumeTotal();
+        ar.sendTrackerEvent(Category.BATIMENT, action, "Volume total", (long)volume);
 
     }
 
