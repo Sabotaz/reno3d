@@ -41,7 +41,8 @@ public class HitMaker {
 
         Calculateur.getInstance().actualiseCalculs();
         float area = Calculateur.getInstance().getSurfaceHabitable();
-        ar.sendTrackerEvent(Category.BATIMENT, action, "Taille moyenne pièces", (long)area/ModelHolder.getInstance().getBatiment().getSlabs().size());
+        if (ModelHolder.getInstance().getBatiment().getSlabs().size() != 0)
+            ar.sendTrackerEvent(Category.BATIMENT, action, "Taille moyenne pièces", (long)area/ModelHolder.getInstance().getBatiment().getSlabs().size());
         ar.sendTrackerEvent(Category.BATIMENT, action, "Surface habitable", (long)area);
         area = Calculateur.getInstance().getSurfaceAuSol();
         ar.sendTrackerEvent(Category.BATIMENT, action, "Surface au sol", (long)area);
