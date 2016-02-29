@@ -97,6 +97,31 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     }
 
     @Override
+    public void sendTrackerEvent(Category category, Action action, long value) {
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category.name())
+                .setAction(action.name())
+                .setValue(value)
+                .build());
+
+    }
+
+    @Override
+    public void sendTrackerEvent(Category category, Action action, String label, long value) {
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category.name())
+                .setAction(action.name())
+                .setLabel(label)
+                .setValue(value)
+                .build());
+
+    }
+
+    @Override
     public void sendTiming(Category category, long value) {
         tracker.send(new HitBuilders.TimingBuilder()
                 .setCategory(category.name())

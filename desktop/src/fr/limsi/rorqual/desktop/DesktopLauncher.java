@@ -22,6 +22,12 @@ public class DesktopLauncher {
 		public void sendTrackerEvent(Category category, Action action, String label) { }
 
 		@Override
+		public void sendTrackerEvent(Category category, Action action, long value) { }
+
+		@Override
+		public void sendTrackerEvent(Category category, Action action, String label, long value) { }
+
+		@Override
 		public void sendTiming(Category category, long value) { }
 
 		@Override

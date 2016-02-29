@@ -45,6 +45,7 @@ import fr.limsi.rorqual.core.model.PorteFenetre;
 import fr.limsi.rorqual.core.utils.Timeit;
 import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
 import fr.limsi.rorqual.core.utils.analytics.Category;
+import fr.limsi.rorqual.core.utils.analytics.HitMaker;
 import fr.limsi.rorqual.core.utils.ifc.IfcExporter;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
@@ -357,6 +358,7 @@ public class MainUiControleur implements EventListener {
                         case NEW_FILE:
                             uncheckNonSaveButtons();
                             removeTb();
+                            HitMaker.makeHitOnNew();
 
                             Deleter.deleteBatiment();
                             ((TextButton)layout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
@@ -555,6 +557,7 @@ public class MainUiControleur implements EventListener {
             else if (e.getEventType() == UiEvent.SAVE_FILE) {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 String filename = (String)items.get("filename");
+                HitMaker.makeHitOnSave();
                 Serializer.saveAll(filename);
             }
             else if (e.getEventType() == UiEvent.LOAD_FILE) {
@@ -570,10 +573,14 @@ public class MainUiControleur implements EventListener {
 
                 Deserializer.loadAll(filename);
 
+                HitMaker.makeHitOnLoad();
+
             }
             else if (e.getEventType() == UiEvent.EXPORT_FILE) {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 String filename = (String)items.get("filename");
+
+                HitMaker.makeHitOnExport();
                 IfcExporter.getInstance().realiseExportIfc(filename);
             }
 
@@ -797,9 +804,11 @@ public class MainUiControleur implements EventListener {
 
         String site = "Accéder au site web de l'application";
 
-        String renov = "Obtenez des informations sur la rénovation";
+        String renov = "Estimez vos travaux de rénovation";
 
         String mail = "Contacter l'équipe de développement";
+
+        String feedback = "Laissez votre avis";
 
         Label label1 = new Label(rd,title);
         Label label2 = new Label(julien,ls);
@@ -809,6 +818,7 @@ public class MainUiControleur implements EventListener {
         TextButton button1 = new TextButton(site, tbs);
         TextButton button2 = new TextButton(renov, tbs);
         TextButton button3 = new TextButton(mail, tbs);
+        TextButton button4 = new TextButton(feedback, tbs);
 
         button1.addListener(new ClickListener() {
             @Override
@@ -835,6 +845,14 @@ public class MainUiControleur implements EventListener {
             }
         });
 
+        button4.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.net.openURI("http://blog.laplateformedelarenovation.fr/plan-3d-energy/plan-3d-energy-avis-betat-testeur/");
+            }
+        });
+
         Table imgtab = new Table();
 
         imgtab.add(logo_rpe)/*.left()*/.pad(10).size(img_size,img_size);
@@ -852,6 +870,7 @@ public class MainUiControleur implements EventListener {
         tab.add(button1).center().pad(10).row();
         tab.add(button2).center().pad(10).row();
         tab.add(button3).center().pad(10).row();
+        tab.add(button4).center().pad(10).row();
 
         w.add(tab).pad(10);
 

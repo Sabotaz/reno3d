@@ -14,7 +14,7 @@
     <bool name="ga_reportUncaughtExceptions">true</bool>
 
     <!-- How long a session exists before giving up -->
-    <integer name="ga_sessionTimeout">-1</integer>
+    <integer name="ga_sessionTimeout">60</integer>
 
     <screenName name="fr.limsi.rorqual.free.android.AndroidLauncher">Android Launcher Free</screenName>
     <screenName name="fr.limsi.rorqual.android.AndroidLauncher">Android Launcher</screenName>

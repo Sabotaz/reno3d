@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- How long a session exists before giving up -->
     <integer name="ga_sessionTimeout">300</integer>
 
     <!-- Enable automatic Activity measurement -->
@@ -11,9 +12,6 @@
 
     <!-- catch and report uncaught exceptions from the app -->
     <bool name="ga_reportUncaughtExceptions">true</bool>
-
-    <!-- How long a session exists before giving up -->
-    <integer name="ga_sessionTimeout">-1</integer>
 
     <!-- the Local LogLevel for Analytics -->
     <string name="ga_logLevel">verbose</string>
