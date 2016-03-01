@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,6 +34,8 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
@@ -184,6 +187,15 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         timeit = new Timeit().start();
         assets = AssetManager.getInstance();
         assets.init();
+
+        // copy examples
+        for (FileHandle fileHandle : Gdx.files.internal("data/examples/").list(".3dr")) {
+            FileHandle handle = Gdx.files.external(fileHandle.name());
+            if (!handle.exists()) {
+                handle.write(fileHandle.read(), false);
+            }
+        }
+
         timeit.stop();
         System.out.println("assets ok " + (timeit.value() * 0.001f));
         actionResolver.sendTiming(Category.LOADING, timeit.value(), "Assets loading time");

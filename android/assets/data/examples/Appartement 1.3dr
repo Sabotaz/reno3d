@@ -1,0 +1,860 @@
+<model id="1">
+  <batiment id="2">
+    <currentFloor>0</currentFloor>
+    <etages id="3">
+      <floorOffset>0</floorOffset>
+      <floor id="4">
+        <elevation>0.0</elevation>
+        <globalOrientation>SUD</globalOrientation>
+        <height>2.8</height>
+        <wall id="5">
+          <A id="6">
+            <position id="7">
+              <x>-1.5</x>
+              <y>5.1</y>
+            </position>
+          </A>
+          <B id="8">
+            <position id="9">
+              <x>-1.5</x>
+              <y>2.0</y>
+            </position>
+          </B>
+          <cloison>false</cloison>
+          <isolationDate>INCONNUE</isolationDate>
+          <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+          <depth>0.2</depth>
+          <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+          <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+          <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+          <orientation>OUEST</orientation>
+          <rightSlab id="10">
+            <coin id="11">
+              <position id="12">
+                <x>-6.6</x>
+                <y>5.1</y>
+              </position>
+            </coin>
+            <coin id="13">
+              <position id="14">
+                <x>-6.6</x>
+                <y>-0.7</y>
+              </position>
+            </coin>
+            <coin id="15">
+              <position id="16">
+                <x>-1.5</x>
+                <y>-0.7</y>
+              </position>
+            </coin>
+            <coin reference="8"/>
+            <coin reference="6"/>
+            <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
+            <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
+            <height>0.2</height>
+            <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
+            <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
+            <wall id="17">
+              <A reference="11"/>
+              <B reference="13"/>
+              <cloison>false</cloison>
+              <isolationDate>INCONNUE</isolationDate>
+              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+              <depth>0.2</depth>
+              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+              <orientation>OUEST</orientation>
+              <leftSlab reference="10"/>
+              <isolationType>NON_ISOLE</isolationType>
+              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+              <width>5.7999997</width>
+            </wall>
+            <wall id="18">
+              <A reference="13"/>
+              <B reference="15"/>
+              <cloison>false</cloison>
+              <isolationDate>INCONNUE</isolationDate>
+              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+              <depth>0.2</depth>
+              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+              <orientation>SUD</orientation>
+              <leftSlab reference="10"/>
+              <isolationType>NON_ISOLE</isolationType>
+              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+              <width>5.1</width>
+            </wall>
+            <wall id="19">
+              <A reference="15"/>
+              <B reference="8"/>
+              <cloison>false</cloison>
+              <isolationDate>INCONNUE</isolationDate>
+              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+              <depth>0.2</depth>
+              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+              <orientation>EST</orientation>
+              <rightSlab id="20">
+                <coin reference="8"/>
+                <coin reference="15"/>
+                <coin id="21">
+                  <position id="22">
+                    <x>2.0</x>
+                    <y>-0.7</y>
+                  </position>
+                </coin>
+                <coin id="23">
+                  <position id="24">
+                    <x>2.0</x>
+                    <y>2.0</y>
+                  </position>
+                </coin>
+                <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
+                <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
+                <height>0.2</height>
+                <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
+                <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
+                <wall id="25">
+                  <A reference="15"/>
+                  <B reference="21"/>
+                  <cloison>false</cloison>
+                  <isolationDate>INCONNUE</isolationDate>
+                  <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                  <depth>0.2</depth>
+                  <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                  <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                  <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                  <orientation>SUD</orientation>
+                  <leftSlab reference="20"/>
+                  <isolationType>NON_ISOLE</isolationType>
+                  <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                  <width>3.5</width>
+                </wall>
+                <wall id="26">
+                  <A reference="21"/>
+                  <B reference="23"/>
+                  <cloison>false</cloison>
+                  <isolationDate>INCONNUE</isolationDate>
+                  <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                  <depth>0.2</depth>
+                  <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                  <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                  <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                  <orientation>EST</orientation>
+                  <leftSlab reference="20"/>
+                  <isolationType>NON_ISOLE</isolationType>
+                  <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                  <width>2.7</width>
+                </wall>
+                <wall reference="19"/>
+                <wall id="27">
+                  <A reference="8"/>
+                  <B reference="23"/>
+                  <cloison>false</cloison>
+                  <isolationDate>INCONNUE</isolationDate>
+                  <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                  <depth>0.2</depth>
+                  <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                  <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                  <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                  <orientation>SUD</orientation>
+                  <rightSlab reference="20"/>
+                  <leftSlab id="28">
+                    <coin reference="6"/>
+                    <coin reference="8"/>
+                    <coin reference="23"/>
+                    <coin id="29">
+                      <position id="30">
+                        <x>2.0</x>
+                        <y>5.1</y>
+                      </position>
+                    </coin>
+                    <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
+                    <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
+                    <height>0.2</height>
+                    <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
+                    <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
+                    <wall reference="5"/>
+                    <wall reference="27"/>
+                    <wall id="31">
+                      <A reference="23"/>
+                      <B reference="29"/>
+                      <cloison>false</cloison>
+                      <isolationDate>INCONNUE</isolationDate>
+                      <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                      <depth>0.2</depth>
+                      <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                      <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                      <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                      <orientation>EST</orientation>
+                      <leftSlab reference="28"/>
+                      <isolationType>NON_ISOLE</isolationType>
+                      <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                      <width>3.1</width>
+                    </wall>
+                    <wall id="32">
+                      <A reference="29"/>
+                      <B reference="6"/>
+                      <cloison>false</cloison>
+                      <isolationDate>INCONNUE</isolationDate>
+                      <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                      <depth>0.2</depth>
+                      <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                      <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                      <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                      <orientation>NORD</orientation>
+                      <leftSlab reference="28"/>
+                      <isolationType>NON_ISOLE</isolationType>
+                      <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                      <width>3.5</width>
+                    </wall>
+                    <objet id="33">
+                      <angle>-90.0</angle>
+                      <modelId>Blend Swap CC-0#bedWithTexture</modelId>
+                      <slab reference="28"/>
+                      <x>0.7658758</x>
+                      <y>3.6695476</y>
+                    </objet>
+                    <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
+                    <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
+                    <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
+                  </leftSlab>
+                  <isolationType>NON_ISOLE</isolationType>
+                  <wallType>MUR_INTERIEUR</wallType>
+                  <width>3.5</width>
+                </wall>
+                <objet id="34">
+                  <angle>540.0</angle>
+                  <modelId>Blend Swap CC-0#toiletsUnit</modelId>
+                  <slab reference="20"/>
+                  <x>-0.5869274</x>
+                  <y>-0.25105935</y>
+                </objet>
+                <objet id="35">
+                  <angle>360.0</angle>
+                  <modelId>Blend Swap CC-BY#bath_jay_hardy</modelId>
+                  <slab reference="20"/>
+                  <x>0.99514425</x>
+                  <y>-0.2441257</y>
+                </objet>
+                <objet id="36">
+                  <angle>0.0</angle>
+                  <modelId>Scopia#double_vanity</modelId>
+                  <slab reference="20"/>
+                  <x>0.6560434</x>
+                  <y>1.558128</y>
+                </objet>
+                <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
+                <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
+                <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
+              </rightSlab>
+              <leftSlab reference="10"/>
+              <isolationType>NON_ISOLE</isolationType>
+              <wallType>MUR_INTERIEUR</wallType>
+              <width>2.7</width>
+            </wall>
+            <wall id="37">
+              <A reference="6"/>
+              <B reference="11"/>
+              <cloison>false</cloison>
+              <isolationDate>INCONNUE</isolationDate>
+              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+              <depth>0.2</depth>
+              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+              <orientation>NORD</orientation>
+              <leftSlab reference="10"/>
+              <isolationType>NON_ISOLE</isolationType>
+              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+              <width>5.1</width>
+            </wall>
+            <wall reference="5"/>
+            <objet id="38">
+              <angle>180.0</angle>
+              <modelId>Pencilart#largeCouch</modelId>
+              <slab reference="10"/>
+              <x>-5.2580986</x>
+              <y>-0.21064419</y>
+            </objet>
+            <objet id="39">
+              <angle>0.0</angle>
+              <modelId>Scopia#table_wood_and_iron</modelId>
+              <slab reference="10"/>
+              <x>-5.346052</x>
+              <y>0.59150285</y>
+            </objet>
+            <objet id="40">
+              <angle>-180.0</angle>
+              <modelId>Kator Legaz#full-bookcase</modelId>
+              <slab reference="10"/>
+              <x>-2.5948281</x>
+              <y>-0.42510083</y>
+            </objet>
+            <objet id="41">
+              <angle>0.0</angle>
+              <modelId>Blend Swap CC-BY#kitchenSink</modelId>
+              <slab reference="10"/>
+              <x>-6.010901</x>
+              <y>4.629526</y>
+            </objet>
+            <objet id="42">
+              <angle>0.0</angle>
+              <modelId>Pencilart#stove1</modelId>
+              <slab reference="10"/>
+              <x>-5.0780783</x>
+              <y>4.5275464</y>
+            </objet>
+            <objet id="43">
+              <angle>0.0</angle>
+              <modelId>Pastierovic#cabinet</modelId>
+              <slab reference="10"/>
+              <x>-4.2199097</x>
+              <y>4.681831</y>
+            </objet>
+            <objet id="44">
+              <angle>0.0</angle>
+              <modelId>Scopia#table4</modelId>
+              <slab reference="10"/>
+              <x>-3.3874717</x>
+              <y>2.2793834</y>
+            </objet>
+            <objet id="45">
+              <angle>0.0</angle>
+              <modelId>Blend Swap CC-0#oakChair</modelId>
+              <slab reference="10"/>
+              <x>-3.6396682</x>
+              <y>2.7399166</y>
+            </objet>
+            <objet id="46">
+              <angle>0.0</angle>
+              <modelId>Blend Swap CC-0#oakChair</modelId>
+              <slab reference="10"/>
+              <x>-3.12431</x>
+              <y>2.734434</y>
+            </objet>
+            <objet id="47">
+              <angle>180.0</angle>
+              <modelId>Blend Swap CC-0#oakChair</modelId>
+              <slab reference="10"/>
+              <x>-3.1133451</x>
+              <y>1.7914377</y>
+            </objet>
+            <objet id="48">
+              <angle>180.0</angle>
+              <modelId>Blend Swap CC-0#oakChair</modelId>
+              <slab reference="10"/>
+              <x>-3.6999762</x>
+              <y>1.8133678</y>
+            </objet>
+            <objet id="49">
+              <angle>270.0</angle>
+              <modelId>GdB#pianoDroit</modelId>
+              <slab reference="10"/>
+              <x>-6.183241</x>
+              <y>2.3289118</y>
+            </objet>
+            <objet id="50">
+              <angle>0.0</angle>
+              <modelId>GdB#tabouretPiano</modelId>
+              <slab reference="10"/>
+              <x>-5.591445</x>
+              <y>2.3778224</y>
+            </objet>
+            <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
+            <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
+            <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
+          </rightSlab>
+          <leftSlab reference="28"/>
+          <isolationType>NON_ISOLE</isolationType>
+          <wallType>MUR_INTERIEUR</wallType>
+          <width>3.1</width>
+        </wall>
+        <wall reference="37"/>
+        <wall reference="25"/>
+        <wall reference="17"/>
+        <wall reference="31"/>
+        <wall reference="19"/>
+        <wall reference="27"/>
+        <wall reference="26"/>
+        <wall reference="32"/>
+        <wall reference="18"/>
+        <name>Rez-de-chaussee</name>
+        <number>0</number>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="51">
+          <height>2.15</height>
+          <modelId>Artist373#frontDoorDark</modelId>
+          <wall reference="37"/>
+          <position id="52">
+            <x>0.69889635</x>
+            <y>0.0</y>
+          </position>
+          <width>1.1830245</width>
+          <coefficientTransmissionThermique>4.0</coefficientTransmissionThermique>
+          <deperdition>8.600000381469727</deperdition>
+          <typePorte>PORTE_AVEC_MOINS_DE_30_POURCENT_DE_SIMPLE_VITRAGE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="53">
+          <height>0.75</height>
+          <modelId>Pencilart#DianaWindow</modelId>
+          <wall reference="37"/>
+          <position id="54">
+            <x>2.436176</x>
+            <y>1.0</y>
+          </position>
+          <width>1.3914286</width>
+          <coefficientTransmissionThermique>4.2</coefficientTransmissionThermique>
+          <deperdition>1.89</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>BOIS</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="55">
+          <height>0.75</height>
+          <modelId>Pencilart#DianaWindow</modelId>
+          <wall reference="17"/>
+          <position id="56">
+            <x>0.9693081</x>
+            <y>1.0</y>
+          </position>
+          <width>1.3914286</width>
+          <coefficientTransmissionThermique>4.2</coefficientTransmissionThermique>
+          <deperdition>1.89</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>BOIS</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="57">
+          <height>0.75</height>
+          <modelId>Pencilart#DianaWindow</modelId>
+          <wall reference="17"/>
+          <position id="58">
+            <x>3.627011</x>
+            <y>1.0</y>
+          </position>
+          <width>1.3914286</width>
+          <coefficientTransmissionThermique>4.2</coefficientTransmissionThermique>
+          <deperdition>1.89</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>BOIS</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="59">
+          <height>0.75</height>
+          <modelId>Pencilart#DianaWindow</modelId>
+          <wall reference="32"/>
+          <position id="60">
+            <x>1.123604</x>
+            <y>1.0</y>
+          </position>
+          <width>1.3914286</width>
+          <coefficientTransmissionThermique>4.2</coefficientTransmissionThermique>
+          <deperdition>1.89</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>BOIS</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="61">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="19"/>
+          <position id="62">
+            <x>1.6120429</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="63">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="5"/>
+          <position id="64">
+            <x>2.031059</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="65">
+          <height>0.75</height>
+          <modelId>Pencilart#newWindowDk</modelId>
+          <wall reference="26"/>
+          <position id="66">
+            <x>1.0530919</x>
+            <y>1.5</y>
+          </position>
+          <width>0.48129612</width>
+          <coefficientTransmissionThermique>4.2</coefficientTransmissionThermique>
+          <deperdition>1.89</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>BOIS</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <slab reference="20"/>
+        <slab reference="28"/>
+        <slab reference="10"/>
+      </floor>
+    </etages>
+    <globalOrientation>SUD</globalOrientation>
+    <plafondsVisibles>false</plafondsVisibles>
+  </batiment>
+  <coins id="67">
+    <entry>
+      <int>0</int>
+      <list id="68">
+        <coin reference="11"/>
+        <coin reference="13"/>
+        <coin reference="8"/>
+        <coin reference="23"/>
+        <coin reference="29"/>
+        <coin reference="6"/>
+        <coin reference="15"/>
+        <coin reference="21"/>
+      </list>
+    </entry>
+  </coins>
+  <dpe id="69">
+    <aI>1019198.06</aI>
+    <aS>32416.674</aS>
+    <bEcs>3688.0</bEcs>
+    <bch>6244.3765</bch>
+    <becs>55.0</becs>
+    <bv>109.20863</bv>
+    <cClimatisation>0.0</cClimatisation>
+    <cCuisson>1660.0</cCuisson>
+    <cEclairage>184.556</cEclairage>
+    <cEclairageSurfacique>3.7</cEclairageSurfacique>
+    <cEcs>5000.0</cEcs>
+    <cElectromenager>0.0</cElectromenager>
+    <categorieLogement>T1_F1</categorieLogement>
+    <cch>6240.3213</cch>
+    <chaudiereAssureChauffageEtEcs>false</chaudiereAssureChauffageEtEcs>
+    <chaudiereAvecPac id="70">
+      <emission>RADIATEUR</emission>
+      <generateur>CHAUDIERE_ELECTRIQUE</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>0.9993506</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>3.6</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>0.77</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </chaudiereAvecPac>
+    <chaudiereAvecPacEtPoil id="71">
+      <emission>RADIATEUR</emission>
+      <generateur>CHAUDIERE_ELECTRIQUE</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>0.9993506</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>3.6</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>0.77</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </chaudiereAvecPacEtPoil>
+    <chaudiereBois id="72">
+      <emission>RADIATEUR</emission>
+      <generateur>CHAUDIERE_BOIS_PLUS_DE_15_ANS</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>1.165909</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>0.0</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>0.66</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </chaudiereBois>
+    <chaudiereEcs id="73">
+      <emission>RADIATEUR</emission>
+      <generateur>CHAUDIERE_ELECTRIQUE</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>0.9993506</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>3.6</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>0.77</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </chaudiereEcs>
+    <chaudiereGaz id="74">
+      <emission>RADIATEUR</emission>
+      <generateur>CHAUDIERE_GAZ_CLASSIQUE_AVANT_1981</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>1.165909</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>3.6</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>0.66</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </chaudiereGaz>
+    <chauffageAvecPoil id="75">
+      <emission>RADIATEUR</emission>
+      <generateur>CHAUDIERE_ELECTRIQUE</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>0.9993506</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>3.6</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>0.77</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </chauffageAvecPoil>
+    <chauffageUnique id="76">
+      <emission>RADIATEUR</emission>
+      <generateur>CHAUDIERE_ELECTRIQUE</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>0.9993506</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>3.6</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>0.77</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </chauffageUnique>
+    <chauffage__properties id="77"/>
+    <dateConstructionBatiment>AVANT_1975</dateConstructionBatiment>
+    <declenchementChaudiere>NON_DECLENCHEMENT_OUVERTURE_ROBINET_EAU_CHAUDE</declenchementChaudiere>
+    <departementBatiment>AIN</departementBatiment>
+    <dhCor>64800.0</dhCor>
+    <dpFenetre>11.34</dpFenetre>
+    <dpMur>0.0</dpMur>
+    <dpPlancher>0.0</dpPlancher>
+    <dpPorte>8.6</dpPorte>
+    <dpPorteFenetre>0.0</dpPorteFenetre>
+    <dpToit>99.76</dpToit>
+    <equipementCuisson>FEUX_GAZ_ET_FOUR_GAZ</equipementCuisson>
+    <equipementEclairage>MAJORITAIREMENT_AMPOULE_A_INCANDESCENCE</equipementEclairage>
+    <f>0.12889397</f>
+    <fCh>1.0</fCh>
+    <fEcs>0.0</fEcs>
+    <frequenceUtilisationPoeleAvecChauffage>TRES_PEU</frequenceUtilisationPoeleAvecChauffage>
+    <frequenceUtilisationPoeleAvecChauffageEtPac>TRES_PEU</frequenceUtilisationPoeleAvecChauffageEtPac>
+    <g>1.0053551</g>
+    <general__properties id="78"/>
+    <generateurChaudiereAvecPac>CHAUDIERE_ELECTRIQUE</generateurChaudiereAvecPac>
+    <generateurChaudiereAvecPacEtPoil>CHAUDIERE_ELECTRIQUE</generateurChaudiereAvecPacEtPoil>
+    <generateurChaudiereBois>CHAUDIERE_BOIS_PLUS_DE_15_ANS</generateurChaudiereBois>
+    <generateurChaudiereGaz>CHAUDIERE_GAZ_CLASSIQUE_AVANT_1981</generateurChaudiereGaz>
+    <generateurChauffageAvecPoil>CHAUDIERE_ELECTRIQUE</generateurChauffageAvecPoil>
+    <generateurChauffageUnique>CHAUDIERE_ELECTRIQUE</generateurChauffageUnique>
+    <generateurPacAvecChaudiere>POMPE_A_CHALEUR_AIR_AIR</generateurPacAvecChaudiere>
+    <generateurPacAvecChaudiereEtPoele>POMPE_A_CHALEUR_AIR_AIR</generateurPacAvecChaudiereEtPoele>
+    <generateurPoeleAvecChaudiereEtPac>POIL_OU_INSERT_BOIS_AVANT_2001</generateurPoeleAvecChaudiereEtPac>
+    <generateurPoeleAvecChauffage>POIL_OU_INSERT_BOIS_AVANT_2001</generateurPoeleAvecChauffage>
+    <gv>125.36778</gv>
+    <hPerm>4.938482</hPerm>
+    <hVent>0.7293</hVent>
+    <i0>0.93</i0>
+    <iEcs>5.45</iEcs>
+    <installationChauffage>CHAUFFAGE_UNIQUE</installationChauffage>
+    <installationEcs>BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS</installationEcs>
+    <intermittence>0.92950225</intermittence>
+    <lastGv>125.36778</lastGv>
+    <listEquipementElectromenager id="79"/>
+    <localEquipementEcs>SITUE_DANS_LOCAL_CHAUFFE</localEquipementEcs>
+    <nbFenetreDV>0.0</nbFenetreDV>
+    <nbFenetreSV>6.0</nbFenetreSV>
+    <nbHabitant>4.0</nbHabitant>
+    <nbJoursAbsenceParAn>0.0</nbJoursAbsenceParAn>
+    <pacAvecChaudiere id="80">
+      <emission>RADIATEUR</emission>
+      <generateur>POMPE_A_CHALEUR_AIR_AIR</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>0.3497727</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>0.0</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>2.2</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </pacAvecChaudiere>
+    <pacAvecChaudiereEtPoele id="81">
+      <emission>RADIATEUR</emission>
+      <generateur>POMPE_A_CHALEUR_AIR_AIR</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>0.3497727</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>0.0</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>0.9</rd>
+      <re>0.95</re>
+      <rg>2.2</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.9</rr>
+      <type>CENTRALE</type>
+    </pacAvecChaudiereEtPoele>
+    <perimetreBatiment>0.0</perimetreBatiment>
+    <poeleAvecChaudiereEtPac id="82">
+      <emission>RADIATEUR</emission>
+      <generateur>POIL_OU_INSERT_BOIS_AVANT_2001</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>1.1515151</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>0.0</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>1.0</rd>
+      <re>0.95</re>
+      <rg>0.66</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.8</rr>
+      <type>DIVISE</type>
+    </poeleAvecChaudiereEtPac>
+    <poeleAvecChauffage id="83">
+      <emission>RADIATEUR</emission>
+      <generateur>POIL_OU_INSERT_BOIS_AVANT_2001</generateur>
+      <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
+      <ich>1.1515151</ich>
+      <pn>0.0</pn>
+      <presenceRobinetThermostatique>false</presenceRobinetThermostatique>
+      <prs1>0.0</prs1>
+      <puissanceVeilleuse>0.0</puissanceVeilleuse>
+      <qp0>0.0</qp0>
+      <rd>1.0</rd>
+      <re>0.95</re>
+      <rg>0.66</rg>
+      <rpint>0.0</rpint>
+      <rpn>0.0</rpn>
+      <rr>0.8</rr>
+      <type>DIVISE</type>
+    </poeleAvecChauffage>
+    <pr>364.12402</pr>
+    <presenceClimatisation>NON</presenceClimatisation>
+    <presenceInstallationSolaire>INSTALLATION_SOLAIRE_ABSENTE</presenceInstallationSolaire>
+    <presenceRobinetThermostatique>ABSENCE_ROBINET_THERMOSTATIQUE</presenceRobinetThermostatique>
+    <presenceThermostat>AUCUN_DES_DEUX</presenceThermostat>
+    <programmationSysteme>IMPOSSIBLE</programmationSysteme>
+    <prs1>3.6</prs1>
+    <prs2>3.7</prs2>
+    <q4pa>199.244</q4pa>
+    <q4paConv>2.0</q4paConv>
+    <q4paEnv>109.46001</q4paEnv>
+    <qVarep>2.145</qVarep>
+    <qVinf>14.524946</qVinf>
+    <rClimatisation>4.0</rClimatisation>
+    <renouvellementAir>5.667782</renouvellementAir>
+    <rrp>0.98521596</rrp>
+    <sClimatisation>0.0</sClimatisation>
+    <scoreDpe>262.32712</scoreDpe>
+    <sdepFen>2.7</sdepFen>
+    <sdepMurs>0.0</sdepMurs>
+    <sdepPorte>2.15</sdepPorte>
+    <sdepPorteFenetre>0.0</sdepPorteFenetre>
+    <sdepToits>49.88</sdepToits>
+    <sdepTot>54.730003</sdepTot>
+    <sh>49.88</sh>
+    <smea>4.0</smea>
+    <sse>0.082695596</sse>
+    <tInt>ENTRE_22_ET_23</tInt>
+    <tabCoeffPondX id="84">
+      <float>0.1</float>
+      <float>0.25</float>
+      <float>0.2</float>
+      <float>0.15</float>
+      <float>0.1</float>
+      <float>0.1</float>
+      <float>0.05</float>
+      <float>0.025</float>
+      <float>0.025</float>
+      <float>0.0</float>
+    </tabCoeffPondX>
+    <tabTauxDeCharge id="85">
+      <int>5</int>
+      <int>15</int>
+      <int>25</int>
+      <int>35</int>
+      <int>45</int>
+      <int>55</int>
+      <int>65</int>
+      <int>75</int>
+      <int>85</int>
+      <int>95</int>
+    </tabTauxDeCharge>
+    <tfr>10.5</tfr>
+    <typeAbonnementElectrique>AUTRE</typeAbonnementElectrique>
+    <typeBatiment>MAISON</typeBatiment>
+    <typeEmetteurDeChaleur>RADIATEUR</typeEmetteurDeChaleur>
+    <typeEnergieConstruction>AUTRE</typeEnergieConstruction>
+    <typeVentilation>INCONNUE</typeVentilation>
+    <usageEauChaude>DOUCHES</usageEauChaude>
+    <x>0.12944812</x>
+  </dpe>
+</model>
