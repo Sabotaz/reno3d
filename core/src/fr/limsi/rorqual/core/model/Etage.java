@@ -101,6 +101,8 @@ public class Etage {
     }
 
     public void addObjet(Objet objet) {
+        if (objets == null)
+            objets = new ArrayList<Objet>();
         this.objets.add(objet);
     }
 
@@ -181,6 +183,8 @@ public class Etage {
     }
 
     public ModelGraph getModelGraph() {
+        if (modelGraph == null)
+            modelGraph = new ModelGraph();
         return modelGraph;
     }
 
