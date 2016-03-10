@@ -14,6 +14,7 @@ import fr.limsi.rorqual.core.utils.Timeit;
 import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
 import fr.limsi.rorqual.core.utils.analytics.Category;
 import fr.limsi.rorqual.core.view.CameraUpdater;
+import fr.limsi.rorqual.core.view.ExteriorPerspectiveCameraUpdater;
 import fr.limsi.rorqual.core.view.GyrometerCameraUpdater;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 import fr.limsi.rorqual.core.view.OrthographicCameraUpdater;
@@ -30,6 +31,7 @@ public class CameraEngine implements GestureDetector.GestureListener {
 
     private enum Cameras {
         PERSPECTIVE,
+        EXTERIOR_PERSPECTIVE,
         ORTHOGRAPHIC,
         GYROMETER, // use of Android Gyro
         ;
@@ -40,6 +42,7 @@ public class CameraEngine implements GestureDetector.GestureListener {
             ORTHOGRAPHIC.updater = new OrthographicCameraUpdater();
             PERSPECTIVE.updater = new PerspectiveCameraUpdater();
             GYROMETER.updater = new GyrometerCameraUpdater();
+            EXTERIOR_PERSPECTIVE.updater = new ExteriorPerspectiveCameraUpdater();
         }
 
         public CameraUpdater getCameraUpdater() {
@@ -70,6 +73,9 @@ public class CameraEngine implements GestureDetector.GestureListener {
         log();
         switch (curent_camera) {
             case PERSPECTIVE:
+                curent_camera = Cameras.EXTERIOR_PERSPECTIVE;
+                break;
+            case EXTERIOR_PERSPECTIVE:
                 curent_camera = Cameras.ORTHOGRAPHIC;
                 break;
             case ORTHOGRAPHIC:
