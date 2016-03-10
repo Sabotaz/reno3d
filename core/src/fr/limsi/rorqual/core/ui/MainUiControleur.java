@@ -211,27 +211,33 @@ public class MainUiControleur implements EventListener {
     }
 
     private void uncheckGeneralButtons() {
-        ((Button)(((Table)mainLayout.getFromId("general_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+        if (mainLayout.getFromId("general_buttons") != null)
+            ((Button)(((Table)mainLayout.getFromId("general_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     private void uncheckControlButtons() {
-        ((Button)(((Table)mainLayout.getFromId("control_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+        if (mainLayout.getFromId("control_buttons") != null)
+            ((Button)(((Table)mainLayout.getFromId("control_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     private void uncheckCalculButtons() {
-        ((Button)(((Table)mainLayout.getFromId("calcul_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+        if (mainLayout.getFromId("calcul_buttons") != null)
+            ((Button)(((Table)mainLayout.getFromId("calcul_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     private void uncheckInfoButtons() {
-        ((Button)(((Table)mainLayout.getFromId("info_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+        if (mainLayout.getFromId("info_buttons") != null)
+            ((Button)(((Table)mainLayout.getFromId("info_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     private void uncheckCameraButtons() {
-        ((Button)(((Table)mainLayout.getFromId("etage_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+        if (mainLayout.getFromId("etage_buttons") != null)
+            ((Button)(((Table)mainLayout.getFromId("etage_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     private void uncheckSaveButtons() {
-        ((Button)(((Table)mainLayout.getFromId("save_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+        if (mainLayout.getFromId("save_buttons") != null)
+            ((Button)(((Table)mainLayout.getFromId("save_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     ArrayList<Cote> cotes = new ArrayList<Cote>();
@@ -429,11 +435,15 @@ public class MainUiControleur implements EventListener {
                 }
             } else if (e.getEventType() == UiEvent.ITEM_SELECTED) {
                 if (e.getUserObject() instanceof Objet) {
-                    mainLayout.getFromId("Rotate_G").setVisible(true);
-                    mainLayout.getFromId("Rotate_D").setVisible(true);
+                    if (mainLayout.getFromId("Rotate_G") != null)
+                        mainLayout.getFromId("Rotate_G").setVisible(true);
+                    if (mainLayout.getFromId("Rotate_D") != null)
+                        mainLayout.getFromId("Rotate_D").setVisible(true);
                 } else {
-                    mainLayout.getFromId("Rotate_G").setVisible(false);
-                    mainLayout.getFromId("Rotate_D").setVisible(false);
+                    if (mainLayout.getFromId("Rotate_G") != null)
+                        mainLayout.getFromId("Rotate_G").setVisible(false);
+                    if (mainLayout.getFromId("Rotate_D") != null)
+                        mainLayout.getFromId("Rotate_D").setVisible(false);
                 }
                 if (e.getUserObject() instanceof Slab) {
                     Slab slab = ((Slab) e.getUserObject());
@@ -451,8 +461,10 @@ public class MainUiControleur implements EventListener {
                     mur.add(cote);
                 }
             } else if (e.getEventType() == UiEvent.ITEM_DESELECTED) {
-                mainLayout.getFromId("Rotate_G").setVisible(false);
-                mainLayout.getFromId("Rotate_D").setVisible(false);
+                if (mainLayout.getFromId("Rotate_G") != null)
+                    mainLayout.getFromId("Rotate_G").setVisible(false);
+                if (mainLayout.getFromId("Rotate_D") != null)
+                    mainLayout.getFromId("Rotate_D").setVisible(false);
                 //removeTb();
                 if (e.getUserObject() instanceof Slab) {
                     surface.getParent().remove(surface);
@@ -564,7 +576,8 @@ public class MainUiControleur implements EventListener {
                 String filename = (String)items.get("filename");
 
                 Deleter.deleteBatiment();
-                ((TextButton)mainLayout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
+                if (mainLayout.getFromId("currentEtage") != null)
+                    ((TextButton)mainLayout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                 CameraEngine.getInstance().reset();
 
                 ((Button)mainLayout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
