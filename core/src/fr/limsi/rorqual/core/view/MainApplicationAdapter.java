@@ -36,6 +36,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
@@ -124,6 +125,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 load();
 
                 try {
+
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                    currentItems.put("filename","expe.3dr.hidden");
+                    Event e = new Event(UiEvent.LOAD_FILE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e);
+
                     Thread.sleep(750);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -132,6 +139,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 loading_finished = true;
             }
         };
+
         t.start();
 
 	}
