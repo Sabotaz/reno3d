@@ -22,20 +22,6 @@
           "content": [
             {
               "type": "Button",
-              "text": "Export .ifc",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.EXPORT_IFC",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:export",
-                "drawable:export:tint:888888",
-                null,
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
               "text": "Save",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.SAVE",
               "height": "auto",
@@ -47,85 +33,6 @@
                 null,
                 "default.fnt"
               ]
-            },
-            {
-              "type": "Button",
-              "text": "Load",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.LOAD",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:load",
-                "drawable:load:tint:888888",
-                null,
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "New file",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.NEW_FILE",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:new",
-                "drawable:new:tint:888888",
-                null,
-                "default.fnt"
-              ]
-            }
-          ]
-        },
-        {
-          "type": "ButtonGroup",
-          "layout": "column",
-          "id": "etage_buttons",
-          "padLeft": 15,
-          "padRight": 15,
-          "content": [
-            {
-              "type": "Button",
-              "text": "-",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_MINUS",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:etage-down",
-                "drawable:etage-down:tint:888888",
-                null,
-                "buttons.fnt"
-              ]
-            },
-            {
-              "type": "TextButton",
-              "text": "0",
-              "id": "currentEtage",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:void",
-                null,
-                null,
-                "buttons.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "+",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.ETAGE_PLUS",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:etage-up",
-                "drawable:etage-up:tint:888888",
-                null,
-                "buttons.fnt"
-              ]
             }
           ]
         },
@@ -136,7 +43,6 @@
           "pad": 0,
           "minChecked": 0,
           "maxChecked": 2,
-          "padRight": 15,
           "content": [
             {
               "type": "Button",
@@ -150,72 +56,6 @@
                 "drawable:2D",
                 null,
                 null,
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "VISIBILITY_TOIT",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.VISIBILITY_TOIT",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:toit",
-                "drawable:toit:tint:888888",
-                "drawable:toit:tint:888888",
-                "default.fnt"
-              ]
-            }
-          ]
-        },
-        {
-          "type": "ButtonGroup",
-          "id": "general_buttons",
-          "layout": "column",
-          "minChecked": 0,
-          "pad": 0,
-          "padRight": 15,
-          "content": [
-            {
-              "type": "Button",
-              "text": "MUR",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:wall",
-                "drawable:wall:tint:888888",
-                "drawable:wall:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "PIECE",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.PIECE",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:room",
-                "drawable:room:tint:888888",
-                "drawable:room:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "MENUISERIE",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:mobilier",
-                "drawable:mobilier:tint:888888",
-                "drawable:mobilier:tint:888888",
                 "default.fnt"
               ]
             }
@@ -258,145 +98,9 @@
               ]
             }
           ]
-        },
-        {
-          "type": "ButtonGroup",
-          "id": "info_buttons",
-          "layout": "column",
-          "minChecked": 0,
-          "pad": 0,
-          "content": [
-            {
-              "type": "Button",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.CALCUL_SURFACE",
-              "name": "calculSurface",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:calcul",
-                "drawable:calcul:tint:888888",
-                "drawable:calcul:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.HELP",
-              "name": "help",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:help",
-                "drawable:help:tint:888888",
-                "drawable:help:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.INFO",
-              "name": "info",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:info",
-                "drawable:info:tint:888888",
-                "drawable:info:tint:888888",
-                "default.fnt"
-              ]
-            }
-          ]
         }
       ]
     },
-    {
-      "type": "Table",
-      "name": "Main UI",
-      "channel": "fr.limsi.rorqual.core.event.Channel.UI",
-      "event": "fr.limsi.rorqual.core.event.UiEvent.BUTTON_CLICKED",
-      "position": "center-right",
-      "align": "right",
-      "layout": "column",
-      "expand":false,
-      "content": [
-        {
-          "type": "ButtonGroup",
-          "id": "control_buttons",
-          "layout": "row",
-          "minChecked": 0,
-          "content": [
-            {
-              "type": "Button",
-              "text": "Modifier",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:move",
-                "drawable:move:tint:888888",
-                "drawable:move:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "Supprimer",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.DELETE",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:delete",
-                "drawable:delete:tint:888888",
-                "drawable:delete:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "G",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_G",
-              "id":"Rotate_G",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "notify_clicked":false,
-              "notify_pressed":true,
-              "visible":false,
-              "style": [
-                "drawable:arrow_G",
-                "drawable:arrow_G:tint:888888",
-                "drawable:arrow_G:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "text": "D",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_D",
-              "id":"Rotate_D",
-              "height": "auto",
-              "width": "5%",
-              "notify_clicked":false,
-              "notify_pressed":true,
-              "pad": 0,
-              "visible":false,
-              "style": [
-                "drawable:arrow_D",
-                "drawable:arrow_D:tint:888888",
-                "drawable:arrow_D:tint:888888",
-                "default.fnt"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-
     {
       "type": "Table",
       "name": "Main score",

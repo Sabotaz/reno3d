@@ -43,8 +43,13 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "PLAN 3D ENERGY home edition";
+		/*config.height = 1200;
+		config.width = 1920;
+		config.fullscreen = true;*/
         config.height = 720;
         config.width = 1280;
+		config.fullscreen = false;
+
 		new LwjglApplication(new MainApplicationAdapter(new ActionResolverImpl()), config);
 	}
 }
