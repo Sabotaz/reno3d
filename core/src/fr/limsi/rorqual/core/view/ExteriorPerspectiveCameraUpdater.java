@@ -73,6 +73,11 @@ public class ExteriorPerspectiveCameraUpdater extends CameraUpdater {
         update();
     }
 
+    private float dist = 10;
+    private float center_x = 0;
+    private float center_y = 0;
+    private float center_z = 0;
+
     @Override
     public void reset() {
         Etage etage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
@@ -84,21 +89,45 @@ public class ExteriorPerspectiveCameraUpdater extends CameraUpdater {
                     slab = s;
             }
             Vector2 center = slab.getCenter();
-            pos.set(center.x, center.y, elevation + 1.6f);
-            user_rotation.idt().rotate(1, 0, 0, -90);
-            yaw = pitch = roll = 0;
-            lastEuler.setFromEulerAngles(yaw, pitch, roll);
-            update();
+            center_x = center.x;
+            center_y = center.y;
+            center_z = 0;
         } else {
-            pos.set(0, 0, elevation + 1.6f);
-            user_rotation.idt().rotate(1, 0, 0, -90);
-            yaw = pitch = roll = 0;
-            lastEuler.setFromEulerAngles(yaw, pitch, roll);
-            update();
+            center_x = 0;
+            center_y = 0;
+            center_z = 0;
         }
+
+        yaw = 0;
+        pitch = 45;
+        roll = -45;
+
+        float py = (float)(dist * Math.cos(pitch)*Math.sin(roll));
+        float px = (float)(dist * Math.sin(pitch)*Math.sin(roll));
+        float pz = (float)(dist * Math.cos(roll));
+
+        user_rotation.idt().rotate(1, 0, 0, -45);
+        user_rotation.rotate(0, 0, 1, 45);
+        pos.set(center_x + px, center_y + py, center_z + pz);
+        update();
     }
 
     protected void update() {
+        /* set look at */
+        float py = (float)(dist * Math.cos(pitch * Math.PI / 180)*Math.sin(roll*Math.PI / 180));
+        float px = (float)(dist * Math.sin(pitch*Math.PI / 180)*Math.sin(roll*Math.PI / 180));
+        float pz = (float)(dist * Math.cos(roll*Math.PI / 180));
+
+        pos.set(center_x + px, center_y + py, center_z + pz);
+
+        Vector3 dir = new Vector3(px, py, pz);
+        Vector3 up = new Vector3(0,0,1);
+        Vector3 vz = dir.cpy().nor();
+        Vector3 vx = up.cpy().crs(vz);
+        Vector3 vy = vz.cpy().crs(vx);
+
+        user_rotation.set(vx, vy, vz, Vector3.Zero);
+
         Matrix4 translation = new Matrix4().translate(new Vector3().sub(pos));
         Matrix4 mx = new Matrix4();
         mx.mul(user_rotation);
@@ -132,7 +161,6 @@ public class ExteriorPerspectiveCameraUpdater extends CameraUpdater {
     float yaw = 0;
     float pitch = 0;
     float roll = 0;
-    Matrix4 lastEuler = new Matrix4();
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
@@ -140,23 +168,12 @@ public class ExteriorPerspectiveCameraUpdater extends CameraUpdater {
             last_screenX = (int) x;
             last_screenY = (int) y;
         }
-        pitch -= deltaY/20;
-        roll -= deltaX/20;
-        Matrix4 newEuler = new Matrix4().setFromEulerAngles(yaw, pitch, roll);
-        Matrix4 diff = lastEuler.cpy().inv().mul(newEuler);
-        lastEuler = newEuler;
-
-        user_rotation.mul(diff);
-        /*
-        Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY, 1)).sub(pos).nor();
-        Vector3 after = camera.unproject(new Vector3(x, y, 1)).sub(pos).nor();
-        if (!before.isCollinear(after)) {
-            user_rotation.rotate(after.cpy().crs(before),-(float) (Math.acos(after.dot(before)) * 180. / Math.PI));
-        }
-        */
+        pitch += deltaX/10;
+        roll += deltaY/15;
 
         last_screenX = (int) x;
         last_screenY = (int) y;
+        update();
         return true;
 
     }
