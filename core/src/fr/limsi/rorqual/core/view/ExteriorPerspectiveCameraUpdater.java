@@ -194,10 +194,8 @@ public class ExteriorPerspectiveCameraUpdater extends CameraUpdater {
             zoomStart = initialDistance;
             zoomLast = zoomStart;
         }
-        // diff
-        float diff = distance - zoomLast;
 
-        avancer(diff);
+        avancer(zoomLast/distance);
 
         // update last
         zoomLast = distance;
@@ -210,18 +208,9 @@ public class ExteriorPerspectiveCameraUpdater extends CameraUpdater {
         return false;
     }
 
-    float ZOOM_RATIO = 0.02f;
-
     private void avancer(float amount) {
 
-        Quaternion q = camera.view.cpy().inv().getRotation(new Quaternion());
-
-        Vector3 dir = Vector3.Z.cpy().mul(q);
-
-        dir.nor();
-        dir.scl(-amount * ZOOM_RATIO);
-
-        pos.add(dir);
+        dist *= amount;
 
     }
 
