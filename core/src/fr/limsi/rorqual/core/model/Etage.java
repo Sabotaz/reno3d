@@ -183,6 +183,8 @@ public class Etage {
     }
 
     public ModelGraph getModelGraph() {
+        if (modelGraph == null)
+            modelGraph = new ModelGraph();
         return modelGraph;
     }
 
