@@ -2022,6 +2022,13 @@ public class Dpe implements EventListener {
         init();
     }
 
+    private boolean isFake = false;
+
+    public Dpe (Object ... fake) {
+        isFake = true;
+        init();
+    }
+
     private void init() {
         EventManager.getInstance().addListener(Channel.DPE, this);
         tabCoeffPondX[0]=0.1f;
@@ -2076,7 +2083,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_BATIMENT, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2095,7 +2103,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CATEGORIE_BATIMENT, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2119,7 +2128,8 @@ public class Dpe implements EventListener {
 //                            currentItems.put("lastValue",type);
 //                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
 //                            Event e2 = new Event(DpeEvent.FORME_MAISON, currentItems);
-//                            EventManager.getInstance().put(Channel.DPE, e2);
+//                            if (!isFake)
+//                                EventManager.getInstance().put(Channel.DPE, e2);
 //                        }
 //                        break;
 //                    }
@@ -2145,7 +2155,8 @@ public class Dpe implements EventListener {
 //                            currentItems.put("lastValue",type);
 //                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
 //                            Event e2 = new Event(DpeEvent.MITOYENNETE_MAISON, currentItems);
-//                            EventManager.getInstance().put(Channel.DPE, e2);
+//                            if (!isFake)
+//                                EventManager.getInstance().put(Channel.DPE, e2);
 //                        }
 //                        break;
 //                    }
@@ -2169,7 +2180,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.DEPARTEMENT_BATIMENT, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2196,7 +2208,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.ANNEE_CONSTRUCTION, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2220,7 +2233,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.ENERGIE_CONSTRUCTION, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2238,7 +2252,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.ABONNEMENT_ELECTRIQUE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2256,7 +2271,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CLIMATISATION_LOGEMENT, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2278,7 +2294,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.SURFACE_CLIMATISATION, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2296,7 +2313,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.EQUIPEMENT_ECLAIRAGE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2319,7 +2337,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.EQUIPEMENT_ELECTROMENAGER, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2337,7 +2356,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.EQUIPEMENT_CUISSON, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2355,7 +2375,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_VENTILATION, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2371,7 +2392,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue", nbHabitant);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.NOMBRE_PERSONNES_DANS_LOGEMENT, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2387,7 +2409,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue", nbJoursAbsenceParAn);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.NOMBRE_JOURS_ABSENCE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2447,7 +2470,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.INSTALLATION_CHAUFFAGE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
 
                             // wait for layout to be  populated
 
@@ -2525,7 +2549,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CHAUFFAGE_UNIQUE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2584,7 +2609,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CHAUFFAGE_SANS_POIL, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2605,7 +2631,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.POELE_OU_INSERT_AVEC_CHAUFFAGE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2623,7 +2650,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUFFAGE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2641,7 +2669,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.FREQUENCE_UTILISATION_POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2672,7 +2701,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CHAUDIERE_GAZ_FIOUL, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2693,7 +2723,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CHAUDIERE_BOIS, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2743,7 +2774,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CHAUDIERE_AVEC_PAC, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2764,7 +2796,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2814,7 +2847,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.CHAUDIERE_AVEC_PAC_ET_POELE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2835,7 +2869,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.POMPE_A_CHALEUR_AVEC_CHAUDIERE_ET_POELE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2856,7 +2891,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.POELE_OU_INSERT_AVEC_CHAUDIERE_ET_PAC, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2879,7 +2915,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TEMPERATURE_INTERIEUR, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2899,7 +2936,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_EMETTEUR_DE_CHALEUR, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2918,7 +2956,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.PRESENCE_THERMOSTAT_OU_SONDE_EXTERIEUR, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2936,7 +2975,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.PRESENCE_ROBINET_THERMOSTATIQUE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2954,7 +2994,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.SYSTEME_PROGRAMMABLE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -2995,7 +3036,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue", type);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_EQUIPEMENT_ECS, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3013,7 +3055,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.PRESENCE_INSTALLATION_SOLAIRE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3033,7 +3076,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.LOCAL_EQUIPEMENT_ECS, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3051,7 +3095,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.USAGE_EAU_CHAUDE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3068,7 +3113,8 @@ public class Dpe implements EventListener {
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.DECLENCHEMENT_CHAUDIERE_ROBINET, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3087,7 +3133,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.TYPE_MUR, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3119,7 +3166,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.DATE_ISOLATION_MUR, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3138,7 +3186,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.TYPE_ISOLATION_MUR, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3157,7 +3206,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.ORIENTATION_MUR, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3177,7 +3227,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", plancher);
                             Event e2 = new Event(DpeEvent.MITOYENNETE_PLANCHER, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3197,7 +3248,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", plafond);
                             Event e2 = new Event(DpeEvent.MITOYENNETE_PLAFOND, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3217,7 +3269,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", plancher);
                             Event e2 = new Event(DpeEvent.DATE_ISOLATION_PLANCHER, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3237,7 +3290,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", plancher);
                             Event e2 = new Event(DpeEvent.DATE_ISOLATION_PLAFOND, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3256,7 +3310,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", fenetre);
                             Event e2 = new Event(DpeEvent.TYPE_FENETRE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3274,7 +3329,8 @@ public class Dpe implements EventListener {
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                             currentItems.put("userObject", fenetre);
                             Event e2 = new Event(DpeEvent.TYPE_MATERIAU_MENUISERIE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3296,7 +3352,8 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                if (!isFake)
+                                    EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }else if (items.get("userObject") instanceof PorteFenetre){
                             PorteFenetre porteFenetre = (PorteFenetre)items.get("userObject");
@@ -3311,7 +3368,8 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", porteFenetre);
                                 Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                if (!isFake)
+                                    EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }
                         break;
@@ -3332,7 +3390,8 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.TYPE_FERMETURE_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                if (!isFake)
+                                    EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }else if (items.get("userObject") instanceof PorteFenetre){
                             PorteFenetre porteFenetre = (PorteFenetre)items.get("userObject");
@@ -3346,7 +3405,8 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", porteFenetre);
                                 Event e2 = new Event(DpeEvent.TYPE_FERMETURE_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                if (!isFake)
+                                    EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }
                         break;
@@ -3368,7 +3428,8 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.MASQUE_PROCHE_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                if (!isFake)
+                                    EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }else if(items.get("userObject") instanceof PorteFenetre){
                             PorteFenetre porteFenetre = (PorteFenetre)items.get("userObject");
@@ -3383,7 +3444,8 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", porteFenetre);
                                 Event e2 = new Event(DpeEvent.MASQUE_PROCHE_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                if (!isFake)
+                                    EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }
                         break;
@@ -3405,7 +3467,8 @@ public class Dpe implements EventListener {
                                 currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
                                 currentItems.put("userObject", fenetre);
                                 Event e2 = new Event(DpeEvent.MASQUE_LOINTAIN_MENUISERIE, currentItems);
-                                EventManager.getInstance().put(Channel.DPE, e2);
+                                if (!isFake)
+                                    EventManager.getInstance().put(Channel.DPE, e2);
                             }
                         }else if (items.get("userObject") instanceof PorteFenetre){
                             PorteFenetre porteFenetre = (PorteFenetre)items.get("userObject");
@@ -3440,7 +3503,8 @@ public class Dpe implements EventListener {
                             currentItems.put("userObject", porte);
                             currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.TYPE_PORTE, currentItems);
-                            EventManager.getInstance().put(Channel.DPE, e2);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
 
                             // wait for layout to be  populated
 
