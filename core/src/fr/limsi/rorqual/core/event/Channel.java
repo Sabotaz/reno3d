@@ -9,5 +9,5 @@ public enum Channel {
     UI, // tout ce qui concerne l'UI (boutons, champs...)
     @Deprecated
     IFC, // tout ce qui concerne les modifications de l'IFC
-    ;
+    FAKE_DPE;
 }

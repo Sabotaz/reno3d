@@ -2064,7 +2064,7 @@ public class Dpe implements EventListener {
     public void notify(Channel c, Event e) throws InterruptedException {
 
         EventType eventType = e.getEventType();
-        if (c == Channel.DPE) {
+        if (c == Channel.DPE || (isFake && c == Channel.FAKE_DPE)) {
             if (eventType instanceof DpeEvent) {
                 DpeEvent event = (DpeEvent) eventType;
                 Object o = e.getUserObject();
