@@ -96,6 +96,34 @@
                 "drawable:chauffage:tint:888888",
                 "default.fnt"
               ]
+            },
+            {
+              "type": "Button",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
+              "name": "mur",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:wall",
+                "drawable:wall:tint:888888",
+                "drawable:wall:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.FENETRE",
+              "name": "fenetre",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:window",
+                "drawable:window:tint:888888",
+                "drawable:window:tint:888888",
+                "default.fnt"
+              ]
             }
           ]
         }
