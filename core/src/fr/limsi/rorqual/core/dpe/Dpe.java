@@ -3121,17 +3121,17 @@ public class Dpe implements EventListener {
 
                     case TYPE_MUR: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        Mur mur = (Mur)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             TypeMurEnum typeMur = (TypeMurEnum)items.get("lastValue");
-                            mur.setTypeMur(typeMur);
+                            for (Mur mur : ModelHolder.getInstance().getBatiment().getMurs())
+                                mur.setTypeMur(typeMur);
                         } else if (eventRequest == EventRequest.GET_STATE) {
+                            Mur mur = ModelHolder.getInstance().getBatiment().getMurs().get(0);
                             TypeMurEnum type = mur.getTypeMur();
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
                             currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", mur);
                             Event e2 = new Event(DpeEvent.TYPE_MUR, currentItems);
                             if (!isFake)
                                 EventManager.getInstance().put(Channel.DPE, e2);
@@ -3141,30 +3141,31 @@ public class Dpe implements EventListener {
 
                     case DATE_ISOLATION_MUR: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
-                        Mur mur = (Mur)items.get("userObject");
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
                         if (eventRequest == EventRequest.UPDATE_STATE) {
                             DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum)items.get("lastValue");
-                            mur.setDateIsolationMurEnum(dateIsolationMur);
-                            actualiseCoeffDeperditionThermique(mur);
-                            ArrayList<Ouverture> ouverturesMur = mur.getOuvertures();
-                            if (!ouverturesMur.isEmpty()){
-                                for(Ouverture actualOuverture : ouverturesMur){
-                                    if (actualOuverture instanceof Fenetre){
-                                        ((Fenetre) actualOuverture).actualiseDeperdition();
-                                    }else if (actualOuverture instanceof PorteFenetre){
-                                        ((PorteFenetre) actualOuverture).actualiseDeperdition();
-                                    }else if (actualOuverture instanceof Porte){
-                                        ((Porte) actualOuverture).actualiseDeperdition();
+                            for (Mur mur : ModelHolder.getInstance().getBatiment().getMurs()) {
+                                mur.setDateIsolationMurEnum(dateIsolationMur);
+                                actualiseCoeffDeperditionThermique(mur);
+                                ArrayList<Ouverture> ouverturesMur = mur.getOuvertures();
+                                if (!ouverturesMur.isEmpty()) {
+                                    for (Ouverture actualOuverture : ouverturesMur) {
+                                        if (actualOuverture instanceof Fenetre) {
+                                            ((Fenetre) actualOuverture).actualiseDeperdition();
+                                        } else if (actualOuverture instanceof PorteFenetre) {
+                                            ((PorteFenetre) actualOuverture).actualiseDeperdition();
+                                        } else if (actualOuverture instanceof Porte) {
+                                            ((Porte) actualOuverture).actualiseDeperdition();
+                                        }
                                     }
                                 }
                             }
                         } else if (eventRequest == EventRequest.GET_STATE) {
+                            Mur mur = ModelHolder.getInstance().getBatiment().getMurs().get(0);
                             DateIsolationMurEnum type = mur.getDateIsolationMurEnum();
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("lastValue",type);
-                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                            currentItems.put("userObject", mur);
+                            currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                             Event e2 = new Event(DpeEvent.DATE_ISOLATION_MUR, currentItems);
                             if (!isFake)
                                 EventManager.getInstance().put(Channel.DPE, e2);
@@ -3338,39 +3339,23 @@ public class Dpe implements EventListener {
                     case TYPE_VITRAGE_MENUISERIE: {
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        if(items.get("userObject") instanceof Fenetre){
-                            Fenetre fenetre = (Fenetre)items.get("userObject");
-                            if (eventRequest == EventRequest.UPDATE_STATE) {
-                                TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
+                            for (Fenetre fenetre : ModelHolder.getInstance().getBatiment().getFenetres())
                                 fenetre.setTypeVitrage(typeVitrage);
-                                this.actualiseNbFenetreSvEtDv();
-                                this.actualiseSse();
-                            } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeVitrageEnum type = fenetre.getTypeVitrage();
-                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                                currentItems.put("lastValue",type);
-                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", fenetre);
-                                Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
-                                if (!isFake)
-                                    EventManager.getInstance().put(Channel.DPE, e2);
-                            }
-                        }else if (items.get("userObject") instanceof PorteFenetre){
-                            PorteFenetre porteFenetre = (PorteFenetre)items.get("userObject");
-                            if (eventRequest == EventRequest.UPDATE_STATE) {
-                                TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
+                            for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
                                 porteFenetre.setTypeVitrage(typeVitrage);
-                                this.actualiseSse();
-                            } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeVitrageEnum type = porteFenetre.getTypeVitrage();
-                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                                currentItems.put("lastValue",type);
-                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", porteFenetre);
-                                Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
-                                if (!isFake)
-                                    EventManager.getInstance().put(Channel.DPE, e2);
-                            }
+                            this.actualiseNbFenetreSvEtDv();
+                            this.actualiseSse();
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            Fenetre fenetre = ModelHolder.getInstance().getBatiment().getFenetres().get(0);
+                            TypeVitrageEnum type = fenetre.getTypeVitrage();
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_VITRAGE_MENUISERIE, currentItems);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }
@@ -3378,36 +3363,21 @@ public class Dpe implements EventListener {
                     case TYPE_FERMETURE_MENUISERIE:{
                         HashMap<String,Object> items = (HashMap<String,Object>) o;
                         EventRequest eventRequest = (EventRequest)items.get("eventRequest");
-                        if (items.get("userObject") instanceof Fenetre){
-                            Fenetre fenetre = (Fenetre)items.get("userObject");
-                            if (eventRequest == EventRequest.UPDATE_STATE) {
-                                TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
+                        if (eventRequest == EventRequest.UPDATE_STATE) {
+                            TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
+                            for (Fenetre fenetre : ModelHolder.getInstance().getBatiment().getFenetres())
                                 fenetre.setTypeFermeture(typeFermeture);
-                            } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeFermetureEnum type = fenetre.getTypeFermeture();
-                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                                currentItems.put("lastValue",type);
-                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", fenetre);
-                                Event e2 = new Event(DpeEvent.TYPE_FERMETURE_MENUISERIE, currentItems);
-                                if (!isFake)
-                                    EventManager.getInstance().put(Channel.DPE, e2);
-                            }
-                        }else if (items.get("userObject") instanceof PorteFenetre){
-                            PorteFenetre porteFenetre = (PorteFenetre)items.get("userObject");
-                            if (eventRequest == EventRequest.UPDATE_STATE) {
-                                TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
+                            for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
                                 porteFenetre.setTypeFermeture(typeFermeture);
-                            } else if (eventRequest == EventRequest.GET_STATE) {
-                                TypeFermetureEnum type = porteFenetre.getTypeFermeture();
-                                HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                                currentItems.put("lastValue",type);
-                                currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
-                                currentItems.put("userObject", porteFenetre);
-                                Event e2 = new Event(DpeEvent.TYPE_FERMETURE_MENUISERIE, currentItems);
-                                if (!isFake)
-                                    EventManager.getInstance().put(Channel.DPE, e2);
-                            }
+                        } else if (eventRequest == EventRequest.GET_STATE) {
+                            Fenetre fenetre = ModelHolder.getInstance().getBatiment().getFenetres().get(0);
+                            TypeFermetureEnum type = fenetre.getTypeFermeture();
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("lastValue",type);
+                            currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                            Event e2 = new Event(DpeEvent.TYPE_FERMETURE_MENUISERIE, currentItems);
+                            if (!isFake)
+                                EventManager.getInstance().put(Channel.DPE, e2);
                         }
                         break;
                     }

@@ -105,6 +105,32 @@ public class DpeUi  {
             return a;
         }
 
+        else if(o == DpeEvent.INFOS_MURS){
+            Actor a;
+            if (!sauvegarde_layout.containsKey(o)){
+                Layout l = Layout.fromJson("data/ui/layout/wallProperties.json", null);
+                a = l.getRoot();
+                sauvegarde_layout.put(o,l);
+            }else{
+                Layout l = sauvegarde_layout.get(o);
+                a = l.getRoot();
+            }
+            return a;
+        }
+
+        else if(o == DpeEvent.INFOS_FENETRES){
+            Actor a;
+            if (!sauvegarde_layout.containsKey(o)){
+                Layout l = Layout.fromJson("data/ui/layout/windowProperties.json", null);
+                a = l.getRoot();
+                sauvegarde_layout.put(o,l);
+            }else{
+                Layout l = sauvegarde_layout.get(o);
+                a = l.getRoot();
+            }
+            return a;
+        }
+
         return null;
     }
 

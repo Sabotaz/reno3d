@@ -303,11 +303,20 @@ public class MainUiControleur implements EventListener {
                             Logic.getInstance().rotate_g(MainApplicationAdapter.getSelected(), button);
                             break;
                         case MUR:
-                            uncheckNonGeneralButtons();
+                            uncheckNonCalculButtons();
                             if (button.isChecked()) {
-                                Logic.getInstance().startWall();
+                                tabName = "Infos murs";
+                                addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_MURS));
+                            } else
                                 removeTb();
-                            }
+                            break;
+                        case FENETRE:
+                            uncheckNonCalculButtons();
+                            if (button.isChecked()) {
+                                tabName = "Infos fenetres";
+                                addTb(DpeUi.getPropertyWindow(DpeEvent.INFOS_FENETRES));
+                            } else
+                                removeTb();
                             break;
                         case PIECE:
                             uncheckNonGeneralButtons();

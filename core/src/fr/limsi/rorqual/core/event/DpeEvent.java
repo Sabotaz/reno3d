@@ -8,6 +8,8 @@ public enum DpeEvent implements EventType {
     INFOS_GENERALES,
     INFOS_CHAUFFAGE,
     INFOS_ECS,
+    INFOS_MURS,
+    INFOS_FENETRES,
 
     TYPE_BATIMENT,
     CATEGORIE_BATIMENT,
