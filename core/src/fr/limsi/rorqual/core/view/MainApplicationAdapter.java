@@ -504,7 +504,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 selected.setSelected(false);
                 EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_DESELECTED, selected));
                 //selected.remove(pin);
-            }
+            }/*
             //selected = modelGraph.getObject(screenX, screenY);
             ModelContainer next = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getObject(screenX, screenY);
             //System.out.println("TOUCH: " + selected);
@@ -520,7 +520,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 //pin.local_transform.setToTranslation(selected.getTop());
             } else {
                 selected = null;
-            }
+            }*/
             return selected != null;
         }
         return false;
