@@ -1792,10 +1792,11 @@ public class Dpe implements EventListener {
     public void notify(Channel c, Event e) throws InterruptedException {
 
         EventType eventType = e.getEventType();
-        if (c == Channel.DPE || (isFake && c == Channel.FAKE_DPE)) {
+        Object o = e.getUserObject();
+        HashMap<String, Object> content = (HashMap<String, Object>) o;
+        if (c == Channel.DPE || (isFake && c == Channel.FAKE_DPE && content.get("dpe") == this)) {
             if (eventType instanceof DpeEvent) {
                 DpeEvent event = (DpeEvent) eventType;
-                Object o = e.getUserObject();
                 switch (event) {
                     case TYPE_BATIMENT: {
                         HashMap<String, Object> items = (HashMap<String, Object>) o;
