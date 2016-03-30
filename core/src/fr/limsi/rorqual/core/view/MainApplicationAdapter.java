@@ -312,6 +312,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         System.out.println("textures library ok " + (timeit.value() * 0.001f));
         actionResolver.sendTiming(Category.LOADING, timeit.value(), "Textures library loading time");
 
+        setLoadingMessage("Setting fake dpes...");
+        timeit = new Timeit().start();
+        kartoffelator = new DpeKartoffelator();
+        timeit.stop();
+        System.out.println("fake dpes ok " + (timeit.value() * 0.001f));
+
         setLoadingMessage("Initializing EE...");
         timeit = new Timeit().start();
         state = new DpeStateUpdater(modelGraph);
@@ -333,13 +339,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         System.out.println("input processor ok " + (timeit.value() * 0.001f));
         actionResolver.sendTiming(Category.LOADING, timeit.value(), "Input processor loading time");
 
-        setLoadingMessage("Setting fake dpes...");
-        timeit = new Timeit().start();
-        kartoffelator = new DpeKartoffelator();
-        timeit.stop();
-        System.out.println("fake dpes ok " + (timeit.value() * 0.001f));
-
-
         start.stop();
         System.out.println("all ok " + (start.value() * 0.001f));
         actionResolver.sendTiming(Category.LOADING, start.value(), "Global loading time");
@@ -357,6 +356,11 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         light.direction.set(light_dir);
 
         score.setConsignValue(Dpe.getInstance().getScoreDpe());
+
+        System.out.println("true value: " + Dpe.getInstance().getScoreDpe());
+
+        kartoffelator.calculate_all();
+        kartoffelator.update_diffs();
 
         synchronized (stageMenu) {
             stageMenu.act();

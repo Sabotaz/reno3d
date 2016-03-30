@@ -1746,19 +1746,23 @@ public class Dpe implements EventListener {
     public static synchronized Dpe getInstance() {
         return DpeHolder.INSTANCE;
     }
-    private Dpe () {
-        init();
-    }
 
     private boolean isFake = false;
 
-    public Dpe (Object ... fake) {
-        isFake = true;
+    private Dpe () {
+        isFake = false;
+        init();
+    }
+
+    public Dpe (boolean fake) {
+        isFake = fake;
         init();
     }
 
     private void init() {
         EventManager.getInstance().addListener(Channel.DPE, this);
+        if (isFake)
+            EventManager.getInstance().addListener(Channel.FAKE_DPE, this);
         tabCoeffPondX[0]=0.1f;
         tabCoeffPondX[1]=0.25f;
         tabCoeffPondX[2]=0.2f;
@@ -1779,10 +1783,20 @@ public class Dpe implements EventListener {
     /*---------------------------------Calculateur DPE-------------------------------------------*/
 
     public void actualiseScoreDpe(){
+
         if (sh != 0){
             scoreDpe = (cElectromenager+cEclairage+cCuisson+cClimatisation+cEcs+cch)/sh;
         }else{
-            scoreDpe = 700;
+            float tampon = 0;
+            for (Slab s: ModelHolder.getInstance().getBatiment().getSlabs()){
+                tampon+=s.getSurface();
+            }
+            this.sh=tampon;
+            if (sh != 0) {
+                scoreDpe = (cElectromenager + cEclairage + cCuisson + cClimatisation + cEcs + cch) / sh;
+            } else {
+                scoreDpe = 700;
+            }
         }
     }
     public float getScoreDpe(){

@@ -35,64 +35,48 @@ public class DpeKartoffelator {
         fake_dpes.put(DpeEvent.DATE_ISOLATION_MUR, new Hashtable<Object, Dpe>());
         for (DateIsolationMurEnum value : DateIsolationMurEnum.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.DATE_ISOLATION_MUR).put(value, dpe);
         }
 
         fake_dpes.put(DpeEvent.ABONNEMENT_ELECTRIQUE, new Hashtable<Object, Dpe>());
         for (TypeAbonnementElectriqueEnum value : TypeAbonnementElectriqueEnum.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.ABONNEMENT_ELECTRIQUE).put(value, dpe);
         }
 
         fake_dpes.put(DpeEvent.EQUIPEMENT_ECLAIRAGE, new Hashtable<Object, Dpe>());
         for (TypeEquipementEclairageEnum value : TypeEquipementEclairageEnum.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.EQUIPEMENT_ECLAIRAGE).put(value, dpe);
         }
 
         fake_dpes.put(DpeEvent.TYPE_VENTILATION, new Hashtable<Object, Dpe>());
         for (TypeVentilationEnum value : TypeVentilationEnum.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.TYPE_VENTILATION).put(value, dpe);
         }
 
         fake_dpes.put(DpeEvent.EQUIPEMENT_CUISSON, new Hashtable<Object, Dpe>());
         for (TypeEquipementCuissonEnum value : TypeEquipementCuissonEnum.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.EQUIPEMENT_CUISSON).put(value, dpe);
         }
 
         fake_dpes.put(DpeEvent.TYPE_VITRAGE_MENUISERIE, new Hashtable<Object, Dpe>());
         for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.TYPE_VITRAGE_MENUISERIE).put(value, dpe);
         }
 
         fake_dpes.put(DpeEvent.TYPE_FERMETURE_MENUISERIE, new Hashtable<Object, Dpe>());
         for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.TYPE_FERMETURE_MENUISERIE).put(value, dpe);
         }
 
         fake_dpes.put(DpeEvent.CHAUFFAGE_UNIQUE, new Hashtable<Object, Dpe>());
         for (Chauffage.Generateur value : Chauffage.Generateur.values()) {
             Dpe dpe = new Dpe(true);
-            EventManager.getInstance().addListener(Channel.DPE, dpe);
-            EventManager.getInstance().addListener(Channel.FAKE_DPE, dpe);
             fake_dpes.get(DpeEvent.CHAUFFAGE_UNIQUE).put(value, dpe);
         }
     }
@@ -110,6 +94,17 @@ public class DpeKartoffelator {
                 currentItems.put("eventRequest", EventRequest.UPDATE_STATE);
                 Event e = new Event(event, currentItems);
                 EventManager.getInstance().put(Channel.FAKE_DPE, e);
+            }
+        }
+    }
+
+    public void update_diffs() {
+        for (Map.Entry<DpeEvent, Hashtable<Object, Dpe>> dpes : fake_dpes.entrySet()) {
+            DpeEvent event = dpes.getKey();
+            for (Map.Entry<Object, Dpe> entry : dpes.getValue().entrySet()) {
+                Object value = entry.getKey();
+                Dpe dpe = entry.getValue();
+                float score = dpe.getScoreDpe();
             }
         }
     }
