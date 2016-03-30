@@ -2195,40 +2195,6 @@ public class Dpe implements EventListener {
                             chauffageUnique=new Chauffage(generateurChauffageUnique,localEquipementEcs.getBoolean(),
                                     presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
 
-                            String nameGenerateur = chauffageUnique.getGenerateur().toString();
-                            if (nameGenerateur.startsWith("Chaudière")){ // Si le générateur est une chaudière mais pas une chaudière électrique
-                                if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
-                                        && generateurChauffageUnique != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
-                                    chaudiereAssureChauffageEtEcs=true;
-                                    chaudiereEcs=chauffageUnique;
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
-                                }else if (installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
-                                        && generateurChauffageUnique == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
-                                    chaudiereAssureChauffageEtEcs=false;
-                                    installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
-                                }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
-                                        && generateurChauffageUnique != Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
-                                    chaudiereAssureChauffageEtEcs=true;
-                                    chaudiereEcs=chauffageUnique;
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), false);
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), true);
-                                }else if (! installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)
-                                        && generateurChauffageUnique == Chauffage.Generateur.CHAUDIERE_ELECTRIQUE){
-                                    chaudiereAssureChauffageEtEcs=false;
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
-                                    ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
-                                }
-                            }else{
-                                chaudiereAssureChauffageEtEcs=false;
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_sans_chaudiere"), true);
-                                ((TabWindow) layout.getFromId("tab_window")).setTableDisabled(layout.getFromId("installation_ECS_avec_chaudiere"), false);
-                                if(installationEcs.equals(TypeEquipementEcsEnum.CHAUDIERE)){
-                                    installationEcs=TypeEquipementEcsEnum.BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS;
-                                }
-                            }
                             this.actualisePrs1();
                             this.actualiseRendementsChauffage(chauffageUnique);
                             this.actualiseI0();

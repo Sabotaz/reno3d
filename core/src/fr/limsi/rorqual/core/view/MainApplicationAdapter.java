@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.limsi.rorqual.core.dpe.Dpe;
+import fr.limsi.rorqual.core.dpe.DpeKartoffelator;
 import fr.limsi.rorqual.core.dpe.DpeStateUpdater;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
@@ -96,6 +97,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private MainUiControleur mainUiControleur;
     private Label labelScore;
     private Label lettreScore;
+    private DpeKartoffelator kartoffelator;
 
     private CircularJauge score;
 
@@ -330,6 +332,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         timeit.stop();
         System.out.println("input processor ok " + (timeit.value() * 0.001f));
         actionResolver.sendTiming(Category.LOADING, timeit.value(), "Input processor loading time");
+
+        setLoadingMessage("Setting fake dpes...");
+        timeit = new Timeit().start();
+        kartoffelator = new DpeKartoffelator();
+        timeit.stop();
+        System.out.println("fake dpes ok " + (timeit.value() * 0.001f));
+
 
         start.stop();
         System.out.println("all ok " + (start.value() * 0.001f));
