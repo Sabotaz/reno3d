@@ -21,36 +21,42 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VITRAGE_MENUISERIE",
               "content": [
                 {
+                  "id": "SIMPLE_VITRAGE",
                   "type": "CheckBox",
                   "label": "Simple vitrage",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.SIMPLE_VITRAGE"
                 },
                 {
+                  "id": "SURVITRAGE",
                   "type": "CheckBox",
                   "label": "Survitrage",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.SURVITRAGE"
                 },
                 {
+                  "id": "DOUBLE_VITRAGE_INF_1990",
                   "type": "CheckBox",
                   "label": "Double vitrage avant 1990",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_INF_1990"
                 },
                 {
+                  "id": "DOUBLE_VITRAGE_SUP_1990_INF_2001",
                   "type": "CheckBox",
                   "label": "Double vitrage entre 1990 et 2001",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_1990_INF_2001"
                 },
                 {
+                  "id": "DOUBLE_VITRAGE_SUP_2001",
                   "type": "CheckBox",
                   "label": "Double vitrage apres 2001",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeVitrageEnum.DOUBLE_VITRAGE_SUP_2001"
                 },
                 {
+                  "id": "TRIPLE_VITRAGE",
                   "type": "CheckBox",
                   "label": "Triple vitrage",
                   "pad": 5,
@@ -72,42 +78,49 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_FERMETURE_MENUISERIE",
               "content": [
                 {
+                  "id": "SANS_FERMETURE",
                   "type": "CheckBox",
                   "label": "Aucun",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.SANS_FERMETURE"
                 },
                 {
+                  "id": "JALOUSIE_ACCORDEON",
                   "type": "CheckBox",
                   "label": "Jalousie accordéon",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.JALOUSIE_ACCORDEON"
                 },
                 {
+                  "id": "VOLET_BATTANT_AVEC_AJOURES_FIXES",
                   "type": "CheckBox",
                   "label": "Volet battant avec ajoures fixes",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_BATTANT_AVEC_AJOURES_FIXES"
                 },
                 {
+                  "id": "VOLET_ROULANT_EN_METAL",
                   "type": "CheckBox",
                   "label": "Volet roulant en métal",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_ROULANT_EN_METAL"
                 },
                 {
+                  "id": "FERMETURE_SANS_AJOURES",
                   "type": "CheckBox",
                   "label": "Fermeture sans ajoures",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.FERMETURE_SANS_AJOURES"
                 },
                 {
+                  "id": "VOLET_BATTANT_BOIS",
                   "type": "CheckBox",
                   "label": "Volet battant bois",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.TypeFermetureEnum.VOLET_BATTANT_BOIS"
                 },
                 {
+                  "id": "VOLET_ROULANT_PVC",
                   "type": "CheckBox",
                   "label": "Volet roulant PVC",
                   "pad": 5,

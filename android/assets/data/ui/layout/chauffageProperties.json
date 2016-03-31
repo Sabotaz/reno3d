@@ -16,6 +16,7 @@
           "labelWidth": 213,
           "content": [
             {
+              "id": "CHAUFFAGE_UNIQUE",
               "type": "ScrollPaneElement",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUFFAGE_UNIQUE",

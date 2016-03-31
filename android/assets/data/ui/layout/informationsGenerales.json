@@ -21,12 +21,14 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.ABONNEMENT_ELECTRIQUE",
               "content": [
                 {
+                  "id": "DOUBLE_TARIF",
                   "type": "CheckBox",
                   "label": "Double tarif (heures pleines/heures creuses)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeAbonnementElectriqueEnum.DOUBLE_TARIF"
                 },
                 {
+                  "id": "AUTRE",
                   "type": "CheckBox",
                   "label": "Autre",
                   "pad": 5,
@@ -48,18 +50,21 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.EQUIPEMENT_ECLAIRAGE",
               "content": [
                 {
+                  "id": "UNIQUEMENT_BASSE_CONSOMMATION",
                   "type": "CheckBox",
                   "label": "Ampoule basse consommation (uniquement)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementEclairageEnum.UNIQUEMENT_BASSE_CONSOMMATION"
                 },
                 {
+                  "id": "MAJORITAIREMENT_BASSE_CONSOMMATION",
                   "type": "CheckBox",
                   "label": "Ampoule basse consommation (majoritairement)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementEclairageEnum.MAJORITAIREMENT_BASSE_CONSOMMATION"
                 },
                 {
+                  "id": "MAJORITAIREMENT_AMPOULE_A_INCANDESCENCE",
                   "type": "CheckBox",
                   "label": "Ampoule à incandescence (majoritairement)",
                   "pad": 5,
@@ -81,36 +86,42 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.TYPE_VENTILATION",
               "content": [
                 {
+                  "id": "NATURELLE",
                   "type": "CheckBox",
                   "label": "Naturelle",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.NATURELLE"
                 },
                 {
+                  "id": "VMC_AUTO_REGLABLE_AVANT_1982",
                   "type": "CheckBox",
                   "label": "VMC auto-réglable (installation avant 1982)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_AVANT_1982"
                 },
                 {
+                  "id": "VMC_AUTO_REGLABLE_APRES_1982",
                   "type": "CheckBox",
                   "label": "VMC auto-réglable (installation après 1982)",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_APRES_1982"
                 },
                 {
+                  "id": "VMC_HYGRO",
                   "type": "CheckBox",
                   "label": "VMC Hygro B",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_HYGRO"
                 },
                 {
+                  "id": "VMC_DOUBLE_FLUX",
                   "type": "CheckBox",
                   "label": "VMC double flux",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_DOUBLE_FLUX"
                 },
                 {
+                  "id": "INCONNUE",
                   "type": "CheckBox",
                   "label": "Inconnue",
                   "pad": 5,
@@ -139,30 +150,35 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.EQUIPEMENT_CUISSON",
               "content": [
                 {
+                  "id": "PLAQUES_MIXTES_ET_FOUR_ELECTRIQUE",
                   "type": "CheckBox",
                   "label": "Plaques mixtes + Four électrique",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.PLAQUES_MIXTES_ET_FOUR_ELECTRIQUE"
                 },
                 {
+                  "id": "PLAQUES_MIXTES_ET_FOUR_GAZ",
                   "type": "CheckBox",
                   "label": "Plaques mixtes + Four gaz",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.PLAQUES_MIXTES_ET_FOUR_GAZ"
                 },
                 {
+                  "id": "PLAQUES_ELECTRIQUES_ET_FOUR_ELECTRIQUE",
                   "type": "CheckBox",
                   "label": "Plaques électrique + Four électrique",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.PLAQUES_ELECTRIQUES_ET_FOUR_ELECTRIQUE"
                 },
                 {
+                  "id": "FEUX_GAZ_ET_FOUR_ELECTRIQUE",
                   "type": "CheckBox",
                   "label": "Feux gaz + Four électrique",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.FEUX_GAZ_ET_FOUR_ELECTRIQUE"
                 },
                 {
+                  "id": "FEUX_GAZ_ET_FOUR_GAZ",
                   "type": "CheckBox",
                   "label": "Feux gaz + Four gaz",
                   "pad": 5,
