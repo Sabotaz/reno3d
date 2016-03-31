@@ -346,6 +346,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         setLoadingMessage("Done !");
     }
 
+    int frame = 0;
+
     public void act() {
         update_cam();
 
@@ -357,7 +359,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         score.setConsignValue(Dpe.getInstance().getScoreDpe());
 
-        kartoffelator.calculate_all();
+        if (++frame%60 == 0)
+            kartoffelator.calculate_all();
 
         synchronized (stageMenu) {
             stageMenu.act();
