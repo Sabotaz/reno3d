@@ -24,6 +24,12 @@ public class DpeUi  {
 
     private static HashMap<Object,Layout> sauvegarde_layout = new HashMap<Object,Layout>();
 
+    public static Layout getLayout(Object o) {
+       if (sauvegarde_layout.containsKey(o)) return sauvegarde_layout.get(o);
+       else { getPropertyWindow(o); if (sauvegarde_layout.containsKey(o)) return sauvegarde_layout.get(o); else return null; }
+
+    }
+
     public static Actor getPropertyWindow(Object o) {
 //        if (o instanceof Porte) {
 //            Actor a = Layout.fromJson("data/ui/layout/doorProperties.json", o).getRoot();
