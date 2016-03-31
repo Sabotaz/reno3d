@@ -1788,7 +1788,7 @@ public class Dpe implements EventListener {
         }
     }
     public float getScoreDpe(){
-        return Math.round(this.scoreDpe);
+        return this.scoreDpe;
     }
 
     public void notify(Channel c, Event e) throws InterruptedException {
@@ -3228,5 +3228,174 @@ public class Dpe implements EventListener {
                 }
             }
         }
+    }
+
+
+    public float emulateChange(DpeEvent event, Object value) {
+        float score = this.getScoreDpe();
+                switch (event) {
+                    case ABONNEMENT_ELECTRIQUE: {
+                        TypeAbonnementElectriqueEnum type = typeAbonnementElectrique;
+                        typeAbonnementElectrique = (TypeAbonnementElectriqueEnum) value;
+                        this.actualiseRendementEcs();
+                        score = this.getScoreDpe();
+                        typeAbonnementElectrique = type;
+                        this.actualiseRendementEcs();
+                        break;
+                    }
+
+                    case EQUIPEMENT_ECLAIRAGE: {
+                        TypeEquipementEclairageEnum type = equipementEclairage;
+                        equipementEclairage = (TypeEquipementEclairageEnum) value;
+                        this.actualiseConsommationEclairage();
+                        score = this.getScoreDpe();
+                        equipementEclairage = type;
+                        this.actualiseConsommationEclairage();
+                        break;
+                    }
+
+                    case EQUIPEMENT_CUISSON: {
+                        TypeEquipementCuissonEnum type = equipementCuisson;
+                        equipementCuisson = (TypeEquipementCuissonEnum) value;
+                        this.actualiseConsommationCuisson();
+                        score = this.getScoreDpe();
+                        equipementCuisson = type;
+                        this.actualiseConsommationCuisson();
+                        break;
+                    }
+
+                    case TYPE_VENTILATION: {
+                        TypeVentilationEnum type = typeVentilation;
+                        typeVentilation = (TypeVentilationEnum) value;
+                        this.actualiseSmeaAndQvarep();
+                        score = this.getScoreDpe();
+                        typeVentilation = type;
+                        this.actualiseSmeaAndQvarep();
+                        break;
+                    }
+
+                    case CHAUFFAGE_UNIQUE :{
+                        Chauffage.Generateur generateur = generateurChauffageUnique;
+                        Chauffage chauffage = chauffageUnique;
+                        generateurChauffageUnique = (Chauffage.Generateur) value;
+                        chauffageUnique=new Chauffage(generateurChauffageUnique,localEquipementEcs.getBoolean(),
+                                presenceRobinetThermostatique.getBoolean(),typeEmetteurDeChaleur);
+
+                        this.actualisePrs1();
+                        this.actualiseRendementsChauffage(chauffageUnique);
+                        this.actualiseI0();
+                        this.actualiseCch();
+                        this.actualiseRendementEcs();
+
+                        score = this.getScoreDpe();
+
+                        generateurChauffageUnique = generateur;
+                        chauffageUnique=chauffage;
+
+                        this.actualisePrs1();
+                        this.actualiseRendementsChauffage(chauffageUnique);
+                        this.actualiseI0();
+                        this.actualiseCch();
+                        this.actualiseRendementEcs();
+
+                        break;
+                    }
+
+                    case DATE_ISOLATION_MUR: {
+                        if (ModelHolder.getInstance().getBatiment().getMurs().size() == 0) break;
+
+                        Mur m = ModelHolder.getInstance().getBatiment().getMurs().get(0);
+                        DateIsolationMurEnum type = m.getDateIsolationMurEnum();
+
+                        DateIsolationMurEnum dateIsolationMur = (DateIsolationMurEnum)value;
+                        for (Mur mur : ModelHolder.getInstance().getBatiment().getMurs()) {
+                            mur.setDateIsolationMurEnum(dateIsolationMur);
+                            actualiseCoeffDeperditionThermique(mur);
+                            ArrayList<Ouverture> ouverturesMur = mur.getOuvertures();
+                            if (ouverturesMur != null && !ouverturesMur.isEmpty()) {
+                                for (Ouverture actualOuverture : ouverturesMur) {
+                                    if (actualOuverture instanceof Fenetre) {
+                                        ((Fenetre) actualOuverture).actualiseDeperdition();
+                                    } else if (actualOuverture instanceof PorteFenetre) {
+                                        ((PorteFenetre) actualOuverture).actualiseDeperdition();
+                                    } else if (actualOuverture instanceof Porte) {
+                                        ((Porte) actualOuverture).actualiseDeperdition();
+                                    }
+                                }
+                            }
+                        }
+
+                        score = this.getScoreDpe();
+
+                        for (Mur mur : ModelHolder.getInstance().getBatiment().getMurs()) {
+                            mur.setDateIsolationMurEnum(type);
+                            actualiseCoeffDeperditionThermique(mur);
+                            ArrayList<Ouverture> ouverturesMur = mur.getOuvertures();
+                            if (ouverturesMur != null && !ouverturesMur.isEmpty()) {
+                                for (Ouverture actualOuverture : ouverturesMur) {
+                                    if (actualOuverture instanceof Fenetre) {
+                                        ((Fenetre) actualOuverture).actualiseDeperdition();
+                                    } else if (actualOuverture instanceof PorteFenetre) {
+                                        ((PorteFenetre) actualOuverture).actualiseDeperdition();
+                                    } else if (actualOuverture instanceof Porte) {
+                                        ((Porte) actualOuverture).actualiseDeperdition();
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case TYPE_VITRAGE_MENUISERIE: {
+                        if (ModelHolder.getInstance().getBatiment().getFenetres().size() == 0) break;
+
+                        Fenetre f = ModelHolder.getInstance().getBatiment().getFenetres().get(0);
+                        TypeVitrageEnum type = f.getTypeVitrage();
+
+                        TypeVitrageEnum typeVitrage = (TypeVitrageEnum)value;
+                        for (Fenetre fenetre : ModelHolder.getInstance().getBatiment().getFenetres())
+                            fenetre.setTypeVitrage(typeVitrage);
+                        for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
+                            porteFenetre.setTypeVitrage(typeVitrage);
+                        this.actualiseNbFenetreSvEtDv();
+                        this.actualiseSse();
+
+                        score = this.getScoreDpe();
+
+                        for (Fenetre fenetre : ModelHolder.getInstance().getBatiment().getFenetres())
+                            fenetre.setTypeVitrage(type);
+                        for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
+                            porteFenetre.setTypeVitrage(type);
+                        this.actualiseNbFenetreSvEtDv();
+                        this.actualiseSse();
+
+                        break;
+                    }
+
+                    case TYPE_FERMETURE_MENUISERIE:{
+                        if (ModelHolder.getInstance().getBatiment().getFenetres().size() == 0) break;
+
+                        Fenetre f = ModelHolder.getInstance().getBatiment().getFenetres().get(0);
+                        TypeFermetureEnum type = f.getTypeFermeture();
+
+                        TypeFermetureEnum typeFermeture = (TypeFermetureEnum)value;
+                        for (Fenetre fenetre : ModelHolder.getInstance().getBatiment().getFenetres())
+                            fenetre.setTypeFermeture(typeFermeture);
+                        for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
+                            porteFenetre.setTypeFermeture(typeFermeture);
+
+                        score = this.getScoreDpe();
+
+                        for (Fenetre fenetre : ModelHolder.getInstance().getBatiment().getFenetres())
+                            fenetre.setTypeFermeture(type);
+                        for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
+                            porteFenetre.setTypeFermeture(type);
+
+                        break;
+                    }
+
+        }
+        return score;
     }
 }

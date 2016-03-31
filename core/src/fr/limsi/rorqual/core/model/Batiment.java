@@ -201,42 +201,48 @@ public class Batiment {
     public ArrayList<Mur> getMurs() {
         ArrayList<Mur> all = new ArrayList<Mur>();
         for (Etage etage : etages.list())
-            all.addAll(etage.getMurs());
+            if (etage.getMurs() != null)
+                all.addAll(etage.getMurs());
         return all;
     }
 
     public ArrayList<Fenetre> getFenetres() {
         ArrayList<Fenetre> all = new ArrayList<Fenetre>();
         for (Etage etage : etages.list())
-            all.addAll(etage.getFenetres());
+            if (etage.getFenetres() != null)
+                all.addAll(etage.getFenetres());
         return all;
     }
 
     public ArrayList<Porte> getPortes() {
         ArrayList<Porte> all = new ArrayList<Porte>();
         for (Etage etage : etages.list())
-            all.addAll(etage.getPortes());
+            if (etage.getPortes() != null)
+                all.addAll(etage.getPortes());
         return all;
     }
 
     public ArrayList<PorteFenetre> getPorteFenetres() {
         ArrayList<PorteFenetre> all = new ArrayList<PorteFenetre>();
         for (Etage etage : etages.list())
-            all.addAll(etage.getPorteFenetres());
+            if (etage.getPorteFenetres() != null)
+                all.addAll(etage.getPorteFenetres());
         return all;
     }
 
     public ArrayList<Ouverture> getOuvertures() {
         ArrayList<Ouverture> all = new ArrayList<Ouverture>();
         for (Etage etage : etages.list())
-            all.addAll(etage.getOuvertures());
+            if (etage.getOuvertures() != null)
+                all.addAll(etage.getOuvertures());
         return all;
     }
 
     public ArrayList<Slab> getSlabs() {
         ArrayList<Slab> all = new ArrayList<Slab>();
         for (Etage etage : etages.list())
-            all.addAll(etage.getSlabs());
+            if (etage.getSlabs() != null)
+                all.addAll(etage.getSlabs());
         return all;
     }
 

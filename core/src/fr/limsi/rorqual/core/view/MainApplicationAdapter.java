@@ -357,10 +357,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         score.setConsignValue(Dpe.getInstance().getScoreDpe());
 
-        System.out.println("true value: " + Dpe.getInstance().getScoreDpe());
-
         kartoffelator.calculate_all();
-        kartoffelator.update_diffs();
 
         synchronized (stageMenu) {
             stageMenu.act();
