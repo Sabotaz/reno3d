@@ -1,6 +1,14 @@
 package fr.limsi.rorqual.core.dpe;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +31,7 @@ import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
+import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
@@ -86,7 +95,7 @@ public class DpeKartoffelator {
             for (Object value : keys.getValue()) {
                 float avant = dpe.getScoreDpe();
                 float score = dpe.emulateChange(event, value);
-                update_score(event, value, score);
+                update_score(event, value, ((int)(-((score-avant)/avant)*1000))/10.0f);
             }
         }
     }
@@ -111,7 +120,34 @@ public class DpeKartoffelator {
                 layout = DpeUi.getLayout(DpeEvent.INFOS_MURS);
                 break;
         }
-        Actor actor = layout.getFromId(value.toString());
+
+        Actor actor = value instanceof Chauffage.Generateur ? layout.getFromId(((Chauffage.Generateur)value).name()) : layout.getFromId(value.toString());
+        if (actor != null) {
+            if (actor instanceof CheckBox) {
+                CheckBox cb = (CheckBox) actor;
+                Group g = cb.getLabel().getParent();
+                if (!(g instanceof HorizontalGroup)) {
+                    HorizontalGroup hg = new HorizontalGroup();
+                    hg.addActor(cb.getLabel());
+
+                    Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+                    Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
+                    lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
+                    lbs.fontColor = Color.DARK_GRAY;
+                    Label label = new Label("",lbs);
+                    hg.addActor(label);
+
+                    hg.padTop(-20).padLeft(20);
+
+                    g.addActor(hg);
+                }
+
+                Label label = (Label)cb.getLabel().getParent().getChildren().get(1);
+
+                label.setText(" ("+score + "%)");
+
+            }
+        }
 
     }
 

@@ -21,13 +21,6 @@
               "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUFFAGE_UNIQUE",
               "content": [
                 {
-                  "id": "CHAUDIERE_ELECTRIQUE",
-                  "type": "CheckBox",
-                  "label": "Chaudière électrique",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_ELECTRIQUE"
-                },
-                {
                   "id": "CHAUDIERE_GAZ_STANDARD_APRES_2001",
                   "type": "CheckBox",
                   "label": "Chaudière gaz standard (après 2001)",
@@ -49,12 +42,12 @@
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_GAZ_CONDENSATION_APRES_2001"
                 },
                 {
-                  "id": "POMPE_A_CHALEUR_AIR_AIR",
+                  "id": "CHAUDIERE_ELECTRIQUE",
                   "type": "CheckBox",
-                  "label": "Pompe à chaleur air/air",
+                  "label": "Chaudière électrique",
                   "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_AIR"
-                },
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_ELECTRIQUE"
+                }/*,
                 {
                   "id": "POMPE_A_CHALEUR_AIR_EAU",
                   "type": "CheckBox",
@@ -63,12 +56,19 @@
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_EAU"
                 },
                 {
+                  "id": "POMPE_A_CHALEUR_AIR_AIR",
+                  "type": "CheckBox",
+                  "label": "Pompe à chaleur air/air",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_AIR"
+                },
+                {
                   "id": "POMPE_A_CHALEUR_GEOTHERMIQUE",
                   "type": "CheckBox",
                   "label": "Pompe à chaleur géothermique",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_GEOTHERMIQUE"
-                }
+                }*/
               ]
             }
           ]
