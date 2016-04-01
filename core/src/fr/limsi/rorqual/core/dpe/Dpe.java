@@ -3075,6 +3075,9 @@ public class Dpe implements EventListener {
                         }
                     }
 
+                    this.actualiseDpMur();
+                    this.actualiseSdepMurs();
+
                     score = this.getScoreDpe();
 
                     for (Mur mur : ModelHolder.getInstance().getBatiment().getMurs()) {
@@ -3093,6 +3096,9 @@ public class Dpe implements EventListener {
                             }
                         }
                     }
+
+                    this.actualiseDpMur();
+                    this.actualiseSdepMurs();
 
                     break;
                 }
