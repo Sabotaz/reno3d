@@ -13,17 +13,63 @@
           "type": "Table",
           "label": "Source unique de chauffage",
           "labelPad": 5,
-          "labelWidth": 213,
+          "labelWidth": 219,
           "content": [
             {
-              "id": "CHAUFFAGE_UNIQUE",
-              "type": "ScrollPaneElement",
+              "type": "ButtonGroup",
               "channel": "fr.limsi.rorqual.core.event.Channel.DPE",
               "event": "fr.limsi.rorqual.core.event.DpeEvent.CHAUFFAGE_UNIQUE",
-              "align": "left",
-              "enum": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur",
-              "width": "40%",
-              "height": "65%"
+              "content": [
+                {
+                  "id": "CHAUDIERE_ELECTRIQUE",
+                  "type": "CheckBox",
+                  "label": "Chaudière électrique",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_ELECTRIQUE"
+                },
+                {
+                  "id": "CHAUDIERE_GAZ_STANDARD_APRES_2001",
+                  "type": "CheckBox",
+                  "label": "Chaudière gaz standard (après 2001)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_GAZ_STANDARD_APRES_2001"
+                },
+                {
+                  "id": "CHAUDIERE_GAZ_BASSE_TEMPERATURE_APRES_2001",
+                  "type": "CheckBox",
+                  "label": "Chaudière gaz basse température (après 2001)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_GAZ_BASSE_TEMPERATURE_APRES_2001"
+                },
+                {
+                  "id": "CHAUDIERE_GAZ_CONDENSATION_APRES_2001",
+                  "type": "CheckBox",
+                  "label": "Chaudière gaz à condensation (après 2001)",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.CHAUDIERE_GAZ_CONDENSATION_APRES_2001"
+                },
+                {
+                  "id": "POMPE_A_CHALEUR_AIR_AIR",
+                  "type": "CheckBox",
+                  "label": "Pompe à chaleur air/air",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_AIR"
+                },
+                {
+                  "id": "POMPE_A_CHALEUR_AIR_EAU",
+                  "type": "CheckBox",
+                  "label": "Pompe à chaleur air/eau",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_AIR_EAU"
+                },
+                {
+                  "id": "POMPE_A_CHALEUR_GEOTHERMIQUE",
+                  "type": "CheckBox",
+                  "label": "Pompe à chaleur géothermique",
+                  "pad": 5,
+                  "value": "fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage$Generateur.POMPE_A_CHALEUR_GEOTHERMIQUE"
+                }
+              ]
             }
           ]
         }
