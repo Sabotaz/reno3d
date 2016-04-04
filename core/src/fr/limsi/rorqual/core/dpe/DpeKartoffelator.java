@@ -93,12 +93,20 @@ public class DpeKartoffelator {
         }
     }
 
+    private int total = 0;
+
+    public int getTotal() {
+        return total;
+    }
+
     public void calculate_all() {
 
         FileHandle file = Gdx.files.getFileHandle("data/misc/prices", Files.FileType.Internal);
         I18NBundle i18n = I18NBundle.createBundle(file, Locale.FRENCH);
 
         Dpe dpe = Dpe.getInstance();
+        total = 0;
+
         for (Map.Entry<DpeEvent, ArrayList<Object>> keys : fake_dpes.entrySet()) {
             DpeEvent event = keys.getKey();
             for (Object value : keys.getValue()) {
@@ -162,6 +170,8 @@ public class DpeKartoffelator {
                 Label prix = (Label)cb.getLabel().getParent().getChildren().get(2);
 
                 prix.setText(" "+price + " euros");
+
+                if (cb.isChecked()) total += price;
 
             }
         }
