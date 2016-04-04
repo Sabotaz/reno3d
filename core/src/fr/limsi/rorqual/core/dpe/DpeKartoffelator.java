@@ -1,5 +1,8 @@
 package fr.limsi.rorqual.core.dpe;
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,10 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 
 import fr.limsi.rorqual.core.dpe.enums.chauffageproperties.Chauffage;
@@ -89,18 +94,24 @@ public class DpeKartoffelator {
     }
 
     public void calculate_all() {
+
+        FileHandle file = Gdx.files.getFileHandle("data/misc/prices", Files.FileType.Internal);
+        I18NBundle i18n = I18NBundle.createBundle(file, Locale.FRENCH);
+
         Dpe dpe = Dpe.getInstance();
         for (Map.Entry<DpeEvent, ArrayList<Object>> keys : fake_dpes.entrySet()) {
             DpeEvent event = keys.getKey();
             for (Object value : keys.getValue()) {
                 float avant = dpe.getScoreDpe();
                 float score = dpe.emulateChange(event, value);
-                update_score(event, value, ((int)(-((score-avant)/avant)*1000))/10.0f);
+                float percent = ((int)(-((score-avant)/avant)*1000))/10.0f;
+                int price = Integer.parseInt(i18n.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur)value).name() : value.toString())));
+                update_score(event, value, percent, price);
             }
         }
     }
 
-    public void update_score(DpeEvent event, Object value, float score) {
+    public void update_score(DpeEvent event, Object value, float score, int price) {
         Layout layout = null;
         switch (event) {
             case ABONNEMENT_ELECTRIQUE:
@@ -135,7 +146,9 @@ public class DpeKartoffelator {
                     lbs.font = (BitmapFont)AssetManager.getInstance().get("default.fnt");
                     lbs.fontColor = Color.DARK_GRAY;
                     Label label = new Label("",lbs);
+                    Label label2 = new Label("",lbs);
                     hg.addActor(label);
+                    hg.addActor(label2);
 
                     hg.padTop(-20).padLeft(20);
 
@@ -145,6 +158,10 @@ public class DpeKartoffelator {
                 Label label = (Label)cb.getLabel().getParent().getChildren().get(1);
 
                 label.setText(" ("+score + "%)");
+
+                Label prix = (Label)cb.getLabel().getParent().getChildren().get(2);
+
+                prix.setText(" "+price + " euros");
 
             }
         }
