@@ -93,16 +93,9 @@
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.NATURELLE"
                 },
                 {
-                  "id": "VMC_AUTO_REGLABLE_AVANT_1982",
-                  "type": "CheckBox",
-                  "label": "VMC auto-réglable (installation avant 1982)",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_AVANT_1982"
-                },
-                {
                   "id": "VMC_AUTO_REGLABLE_APRES_1982",
                   "type": "CheckBox",
-                  "label": "VMC auto-réglable (installation après 1982)",
+                  "label": "VMC auto-réglable",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_AUTO_REGLABLE_APRES_1982"
                 },
@@ -119,13 +112,6 @@
                   "label": "VMC double flux",
                   "pad": 5,
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.VMC_DOUBLE_FLUX"
-                },
-                {
-                  "id": "INCONNUE",
-                  "type": "CheckBox",
-                  "label": "Inconnue",
-                  "pad": 5,
-                  "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeVentilationEnum.INCONNUE"
                 }
               ]
             }

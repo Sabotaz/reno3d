@@ -736,7 +736,7 @@ public class Dpe implements EventListener {
 
     // 2.5. Calcul des déperditions par renouvellement d'air
     private float renouvellementAir, hVent=0.7293f,hPerm,qVarep=2.145f,qVinf,q4pa,q4paEnv,q4paConv=2,smea=4,nbFenetreSV,nbFenetreDV;
-    private TypeVentilationEnum typeVentilation=TypeVentilationEnum.INCONNUE; // Initialisation logique
+    private TypeVentilationEnum typeVentilation=TypeVentilationEnum.NATURELLE; // Initialisation logique
     private TemperatureInterieurEnum tInt=TemperatureInterieurEnum.ENTRE_22_ET_23; // Initialisation défavorable
     public void actualiseRenouvellementAir(){
         renouvellementAir=hVent+hPerm;

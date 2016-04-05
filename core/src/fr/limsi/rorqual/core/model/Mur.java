@@ -153,7 +153,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.surfaceInitiale = this.surface;
         this.typeMur=TypeMurEnum.MUR_DONNANT_SUR_EXTERIEUR;
         this.typeIsolationMur=TypeIsolationMurEnum.INCONNUE;
-        this.dateIsolationMur=DateIsolationMurEnum.INCONNUE;
+        this.dateIsolationMur=DateIsolationMurEnum.JAMAIS;
         this.orientationMur=OrientationEnum.NORD;
     }
 
