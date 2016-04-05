@@ -474,6 +474,8 @@ public class MainUiControleur implements EventListener {
                     mur.add(cote);
                 }
             } else if (e.getEventType() == UiEvent.ITEM_DESELECTED) {
+                if (mainLayout.getFromId("Move") != null)
+                    mainLayout.getFromId("Move").setVisible(false);
                 if (mainLayout.getFromId("Rotate_G") != null)
                     mainLayout.getFromId("Rotate_G").setVisible(false);
                 if (mainLayout.getFromId("Rotate_D") != null)
