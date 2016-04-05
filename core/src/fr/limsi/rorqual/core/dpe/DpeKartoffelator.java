@@ -33,6 +33,11 @@ import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
+import fr.limsi.rorqual.core.model.Fenetre;
+import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.PorteFenetre;
+import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
@@ -113,13 +118,38 @@ public class DpeKartoffelator {
                 float avant = dpe.getScoreDpe();
                 float score = dpe.emulateChange(event, value);
                 float percent = ((int)(-((score-avant)/avant)*1000))/10.0f;
-                int price = Integer.parseInt(i18n.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur)value).name() : value.toString())));
+                String price_str = i18n.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur) value).name() : value.toString()));
+                float price = 0;
+                if (price_str.endsWith("av")) {
+                    float f = 0;
+                    for (Fenetre fen : ModelHolder.getInstance().getBatiment().getFenetres())
+                        f += fen.getSurface();
+                    for (PorteFenetre fen : ModelHolder.getInstance().getBatiment().getPorteFenetres())
+                        f += fen.getSurface();
+                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
+                } else if (price_str.endsWith("nv")) {
+                    float f = ModelHolder.getInstance().getBatiment().getFenetres().size() + ModelHolder.getInstance().getBatiment().getPorteFenetres().size();
+                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
+                } else if (price_str.endsWith("am")) {
+                    float f = 0;
+                    for (Mur m : ModelHolder.getInstance().getBatiment().getMurs())
+                        if (!m.isInterieur())
+                            f += m.getSurface();
+                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
+                } else if (price_str.endsWith("as")) {
+                    float f = 0;
+                    for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs())
+                        f += s.getSurface();
+                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
+                } else
+                    price = Float.parseFloat(price_str);
+                price = ((int)(100*price))/100.0f;
                 update_score(event, value, percent, price);
             }
         }
     }
 
-    public void update_score(DpeEvent event, Object value, float score, int price) {
+    public void update_score(DpeEvent event, Object value, float score, Float price) {
         Layout layout = null;
         switch (event) {
             case ABONNEMENT_ELECTRIQUE:
