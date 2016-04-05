@@ -444,11 +444,15 @@ public class MainUiControleur implements EventListener {
                 }
             } else if (e.getEventType() == UiEvent.ITEM_SELECTED) {
                 if (e.getUserObject() instanceof Objet) {
+                    if (mainLayout.getFromId("Move") != null)
+                        mainLayout.getFromId("Move").setVisible(true);
                     if (mainLayout.getFromId("Rotate_G") != null)
                         mainLayout.getFromId("Rotate_G").setVisible(true);
                     if (mainLayout.getFromId("Rotate_D") != null)
                         mainLayout.getFromId("Rotate_D").setVisible(true);
                 } else {
+                    if (mainLayout.getFromId("Move") != null)
+                        mainLayout.getFromId("Move").setVisible(false);
                     if (mainLayout.getFromId("Rotate_G") != null)
                         mainLayout.getFromId("Rotate_G").setVisible(false);
                     if (mainLayout.getFromId("Rotate_D") != null)

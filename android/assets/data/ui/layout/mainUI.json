@@ -131,6 +131,78 @@
     },
     {
       "type": "Table",
+      "name": "Main UI",
+      "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+      "event": "fr.limsi.rorqual.core.event.UiEvent.BUTTON_CLICKED",
+      "position": "center-right",
+      "align": "right",
+      "layout": "column",
+      "expand":false,
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "id": "control_buttons",
+          "layout": "row",
+          "minChecked": 0,
+          "content": [
+            {
+              "type": "Button",
+              "text": "Modifier",
+              "id":"Move",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "visible":false,
+              "style": [
+                "drawable:move",
+                "drawable:move:tint:888888",
+                "drawable:move:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "text": "G",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_G",
+              "id":"Rotate_G",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "notify_clicked":false,
+              "notify_pressed":true,
+              "visible":false,
+              "style": [
+                "drawable:arrow_G",
+                "drawable:arrow_G:tint:888888",
+                "drawable:arrow_G:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "text": "D",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_D",
+              "id":"Rotate_D",
+              "height": "auto",
+              "width": "5%",
+              "notify_clicked":false,
+              "notify_pressed":true,
+              "pad": 0,
+              "visible":false,
+              "style": [
+                "drawable:arrow_D",
+                "drawable:arrow_D:tint:888888",
+                "drawable:arrow_D:tint:888888",
+                "default.fnt"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
       "name": "Main score",
       "id": "main_score",
       "position": "bottom-center",
