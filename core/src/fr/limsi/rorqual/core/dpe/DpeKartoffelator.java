@@ -50,8 +50,17 @@ import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 public class DpeKartoffelator {
 
     Hashtable<DpeEvent, ArrayList<Object>> fake_dpes = new Hashtable<DpeEvent, ArrayList<Object>>();
+    I18NBundle prices_file;
+    I18NBundle config_file;
 
     public DpeKartoffelator() {
+
+        FileHandle file = Gdx.files.getFileHandle("data/misc/prices", Files.FileType.Internal);
+        prices_file = I18NBundle.createBundle(file, Locale.FRENCH);
+
+        file = Gdx.files.getFileHandle("data/misc/config", Files.FileType.Internal);
+        config_file = I18NBundle.createBundle(file, Locale.FRENCH);
+
         create_fake_dpe();
     }
 
@@ -98,16 +107,17 @@ public class DpeKartoffelator {
         }
     }
 
-    private int total = 0;
+    private float total = 0;
 
-    public int getTotal() {
+    public float getTotal() {
         return total;
     }
 
-    public void calculate_all() {
+    public int getCash() {
+        return Integer.parseInt(config_file.get("cash"));
+    }
 
-        FileHandle file = Gdx.files.getFileHandle("data/misc/prices", Files.FileType.Internal);
-        I18NBundle i18n = I18NBundle.createBundle(file, Locale.FRENCH);
+    public void calculate_all() {
 
         Dpe dpe = Dpe.getInstance();
         total = 0;
@@ -118,7 +128,7 @@ public class DpeKartoffelator {
                 float avant = dpe.getScoreDpe();
                 float score = dpe.emulateChange(event, value);
                 float percent = ((int)(-((score-avant)/avant)*1000))/10.0f;
-                String price_str = i18n.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur) value).name() : value.toString()));
+                String price_str = prices_file.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur) value).name() : value.toString()));
                 float price = 0;
                 if (price_str.endsWith("av")) {
                     float f = 0;
