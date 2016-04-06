@@ -26,6 +26,10 @@ import fr.limsi.rorqual.core.view.shaders.ProgressBarShader;
 public class CircularJauge extends Widget {
 
 
+    public void setForeground(Texture foreground) {
+        this.foreground = foreground;
+    }
+
     private enum Score {
         // 0 --A-- 50 --B-- 90 --C-- 150 --D-- 230 --E-- 330 --F-- 450 --G--
         A(1,40,Color.valueOf("00ca2e")),

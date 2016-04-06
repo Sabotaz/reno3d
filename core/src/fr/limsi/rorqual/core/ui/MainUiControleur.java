@@ -1,5 +1,6 @@
 package fr.limsi.rorqual.core.ui;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -21,10 +22,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Scaling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import fr.limsi.rorqual.core.event.ButtonValue;
 import fr.limsi.rorqual.core.event.Channel;
@@ -94,6 +97,11 @@ public class MainUiControleur implements EventListener {
 
     public void setMainLayout(Layout layout) {
         this.mainLayout = layout;
+
+        I18NBundle config_file = I18NBundle.createBundle(Gdx.files.getFileHandle("data/misc/config", Files.FileType.Internal), Locale.FRENCH);
+        int version = Integer.parseInt(config_file.get("VERSION"));
+        if (version == 2  || version == 4)
+            ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
     }
 
     Timeit timeit;
