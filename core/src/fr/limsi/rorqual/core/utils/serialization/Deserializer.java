@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.XStream;
 import java.io.IOException;
 
 import fr.limsi.rorqual.core.model.Batiment;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
  * Created by christophe on 08/01/16.
@@ -22,6 +23,8 @@ public class Deserializer {
         FileHandle handle = Gdx.files.external(filename);
         SerialHolder serialHolder = (SerialHolder) stream.fromXML(handle.read());
         serialHolder.recreateModel();
+
+        MainApplicationAdapter.kartoffelator.setInitScore();
 
     }
 

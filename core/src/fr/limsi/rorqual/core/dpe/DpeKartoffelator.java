@@ -52,6 +52,7 @@ public class DpeKartoffelator {
     Hashtable<DpeEvent, ArrayList<Object>> fake_dpes = new Hashtable<DpeEvent, ArrayList<Object>>();
     I18NBundle prices_file;
     I18NBundle config_file;
+    float init = 700;
 
     public DpeKartoffelator() {
 
@@ -114,7 +115,7 @@ public class DpeKartoffelator {
     }
 
     public int getCash() {
-        return Integer.parseInt(config_file.get("cash"));
+        return Integer.parseInt(config_file.get("CASH"));
     }
 
     public void calculate_all() {
@@ -157,6 +158,11 @@ public class DpeKartoffelator {
                 update_score(event, value, percent, price);
             }
         }
+        MainUiControleur.getInstance().setCash(getCash());
+        MainUiControleur.getInstance().setTotal(getTotal());
+        MainUiControleur.getInstance().setScore(init);
+        MainUiControleur.getInstance().setEstimation(dpe.getScoreDpe());
+
     }
 
     public void update_score(DpeEvent event, Object value, float score, Float price) {
@@ -218,4 +224,14 @@ public class DpeKartoffelator {
 
     }
 
+    public void setInitScore() {
+
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Dpe dpe = Dpe.getInstance();
+        init = dpe.getScoreDpe();
+    }
 }

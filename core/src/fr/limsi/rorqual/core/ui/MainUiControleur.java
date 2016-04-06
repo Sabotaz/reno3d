@@ -99,6 +99,22 @@ public class MainUiControleur implements EventListener {
     Timeit timeit;
     String tabName;
 
+    public void setCash(int cash) {
+        ((Label)mainLayout.getFromId("label_cash")).setText("Total: " + cash + " €");
+    }
+
+    public void setTotal(float total) {
+        ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " €");
+    }
+
+    public void setScore(float score) {
+        ((Label)mainLayout.getFromId("label_score")).setText("Base: " + score + " kWh");
+    }
+
+    public void setEstimation(float estim) {
+        ((Label)mainLayout.getFromId("label_estim")).setText("Actuel: " + estim + " kWh");
+    }
+
     public void removeTb() {
         if (tb != null)
             synchronized (stage) {

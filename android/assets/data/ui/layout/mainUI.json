@@ -216,6 +216,26 @@
           "minChecked": 0,
           "content": [
             {
+              "type": "Label",
+              "id": "label_cash",
+              "pad": 10
+            },
+            {
+              "type": "Label",
+              "id": "label_total",
+              "pad": 10
+            },
+            {
+              "type": "Label",
+              "id": "label_score",
+              "pad": 10
+            },
+            {
+              "type": "Label",
+              "id": "label_estim",
+              "pad": 10
+            },
+            {
               "type": "CircularJauge",
               "id": "dpe_jauge",
               "height": "64",

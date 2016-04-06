@@ -98,7 +98,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     private MainUiControleur mainUiControleur;
     private Label labelScore;
     private Label lettreScore;
-    private DpeKartoffelator kartoffelator;
+    public static DpeKartoffelator kartoffelator;
 
     private CircularJauge score;
 
