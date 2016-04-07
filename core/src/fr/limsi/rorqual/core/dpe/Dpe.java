@@ -3116,6 +3116,7 @@ public class Dpe implements EventListener {
                         porteFenetre.setTypeVitrage(typeVitrage);
                     this.actualiseNbFenetreSvEtDv();
                     this.actualiseSse();
+                    this.actualiseDpFenetre();
 
                     score = this.getScoreDpe();
 
@@ -3125,6 +3126,7 @@ public class Dpe implements EventListener {
                         porteFenetre.setTypeVitrage(type);
                     this.actualiseNbFenetreSvEtDv();
                     this.actualiseSse();
+                    this.actualiseDpFenetre();
 
                     break;
                 }
@@ -3140,6 +3142,7 @@ public class Dpe implements EventListener {
                         fenetre.setTypeFermeture(typeFermeture);
                     for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
                         porteFenetre.setTypeFermeture(typeFermeture);
+                    this.actualiseDpFenetre();
 
                     score = this.getScoreDpe();
 
@@ -3147,6 +3150,7 @@ public class Dpe implements EventListener {
                         fenetre.setTypeFermeture(type);
                     for (PorteFenetre porteFenetre : ModelHolder.getInstance().getBatiment().getPorteFenetres())
                         porteFenetre.setTypeFermeture(type);
+                    this.actualiseDpFenetre();
 
                     break;
                 }
