@@ -262,9 +262,16 @@ public class Layout {
     }
 
     private Actor makeLabel(JsonValue json, Updater updater, Actor parent) {
-        Label.LabelStyle lbs = skin.get("default",Label.LabelStyle.class);
-        lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
-        lbs.fontColor = Color.DARK_GRAY;
+
+        Label.LabelStyle lbs;
+        if (json.has("style")) {
+            JsonValue style_list = json.get("style");
+            lbs = StyleFactory.getLabelStyle(style_list.asStringArray());
+        } else {
+            lbs = skin.get("default",Label.LabelStyle.class);
+            lbs.font = (BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt");
+            lbs.fontColor = Color.DARK_GRAY;
+        }
         Label label = new Label(json.getString("label", ""),lbs);
         return label;
     }

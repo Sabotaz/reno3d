@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -91,5 +92,12 @@ public class StyleFactory {
 
         HorizontalBar.HorizontalBarStyle style = new HorizontalBar.HorizontalBarStyle(drawable);
         return style;
+    }
+
+    public static Label.LabelStyle getLabelStyle(String ... params) {
+        assert params.length == 2;
+        Label.LabelStyle lbs = new Label.LabelStyle(getFont(params[0]),Color.DARK_GRAY);
+        lbs.background = (Drawable)getDrawable(params[1]);
+        return lbs;
     }
 }
