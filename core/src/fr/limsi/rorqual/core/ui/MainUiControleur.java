@@ -102,6 +102,8 @@ public class MainUiControleur implements EventListener {
         int version = Integer.parseInt(config_file.get("VERSION"));
         if (version == 2  || version == 4)
             ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
+
+        addTb(getIntro(),"intro");
     }
 
     Timeit timeit;
@@ -922,6 +924,47 @@ public class MainUiControleur implements EventListener {
         tab.add(button2).center().pad(10).row();
         tab.add(button3).center().pad(10).row();
         tab.add(button4).center().pad(10).row();
+
+        w.add(tab).pad(10);
+
+        w.setWidth(w.getPrefWidth());
+        w.setHeight(w.getPrefHeight());
+
+        return w;
+    }
+
+    private Window getIntro() {
+        Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+        Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.BLACK);
+
+        TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+
+        final Window w = new Window("Bienvenue",skin);
+
+        Table tab = new Table();
+
+        I18NBundle config_file = I18NBundle.createBundle(Gdx.files.getFileHandle("data/misc/config", Files.FileType.Internal), Locale.FRENCH);
+        int version = Integer.parseInt(config_file.get("VERSION"));
+        String intro = config_file.get("INTRO#"+version);
+
+        String ok = "J'ai compris";
+
+        Label label = new Label(intro,ls);
+
+        TextButton button = new TextButton(ok, tbs);
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                removeTb();
+            }
+        });
+
+        tab.add(label).center().padBottom(20).row();
+
+        tab.add(button).center().pad(10).row();
 
         w.add(tab).pad(10);
 
