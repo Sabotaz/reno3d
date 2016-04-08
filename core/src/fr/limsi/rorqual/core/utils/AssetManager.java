@@ -219,13 +219,40 @@ public class AssetManager {
         assets.put("modelWindowTest", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/window7.g3db", Files.FileType.Internal)));
         assets.put("fenetre_coulissante", modelLoader.loadModel(Gdx.files.getFileHandle("data/blender/fenetre_coulissante.g3db", Files.FileType.Internal)));
 */
-        FileHandle file = Gdx.files.internal("data/ui/img/");
-        if (file.isDirectory())
-            for (FileHandle f : file.list()) {
-                if (!f.isDirectory()) {
-                    textures.put(f.nameWithoutExtension(), f.path());
-                }
-            }
+
+        textures.put("2D", "data/ui/img/2D.png");
+        textures.put("3D", "data/ui/img/3D.png");
+        textures.put("arrow_D", "data/ui/img/arrow_D.png");
+        textures.put("arrow_G", "data/ui/img/arrow_G.png");
+        textures.put("bar", "data/ui/img/bar.png");
+        textures.put("bar2", "data/ui/img/bar2.png");
+        textures.put("bar_background", "data/ui/img/bar_background.png");
+        textures.put("bulle", "data/ui/img/bulle.png");
+        textures.put("calcul", "data/ui/img/calcul.png");
+        textures.put("camera", "data/ui/img/camera.png");
+        textures.put("chauffage", "data/ui/img/chauffage.png");
+        textures.put("close", "data/ui/img/close.png");
+        textures.put("delete", "data/ui/img/delete.png");
+        textures.put("dpe", "data/ui/img/dpe.png");
+        textures.put("etage-down", "data/ui/img/etage-down.png");
+        textures.put("etage-up", "data/ui/img/etage-up.png");
+        textures.put("export", "data/ui/img/export.png");
+        textures.put("fenetre", "data/ui/img/fenetre.png");
+        textures.put("gyro", "data/ui/img/gyro.png");
+        textures.put("help", "data/ui/img/help.png");
+        textures.put("load", "data/ui/img/load.png");
+        textures.put("mobilier", "data/ui/img/mobilier.png");
+        textures.put("move", "data/ui/img/move.png");
+        textures.put("new", "data/ui/img/new.png");
+        textures.put("porte", "data/ui/img/porte.png");
+        textures.put("room", "data/ui/img/room.png");
+        textures.put("roulette", "data/ui/img/roulette.png");
+        textures.put("roulette_arriere", "data/ui/img/roulette_arriere.png");
+        textures.put("save", "data/ui/img/save.png");
+        textures.put("toit", "data/ui/img/toit.png");
+        textures.put("void", "data/ui/img/void.png");
+        textures.put("wall", "data/ui/img/wall.png");
+        textures.put("window", "data/ui/img/window.png");
 
         assets.putAll((Map<String, Texture>)loadOnUi(textures, Texture.class));
 
