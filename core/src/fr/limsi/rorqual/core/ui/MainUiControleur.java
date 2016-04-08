@@ -110,11 +110,11 @@ public class MainUiControleur implements EventListener {
     String tabName;
 
     public void setCash(int cash) {
-        ((Label)mainLayout.getFromId("label_cash")).setText("Total: " + cash + " €");
+        ((Label)mainLayout.getFromId("label_cash")).setText("Total: " + cash + " euros");
     }
 
     public void setTotal(float total) {
-        ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " €");
+        ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " euros");
     }
 
     public void setScore(float score) {
@@ -946,7 +946,7 @@ public class MainUiControleur implements EventListener {
 
         I18NBundle config_file = I18NBundle.createBundle(Gdx.files.getFileHandle("data/misc/config", Files.FileType.Internal), Locale.FRENCH);
         int version = Integer.parseInt(config_file.get("VERSION"));
-        String intro = config_file.get("INTRO#"+version);
+        String intro = config_file.get("INTRO#" + version);
 
         String ok = "J'ai compris";
 

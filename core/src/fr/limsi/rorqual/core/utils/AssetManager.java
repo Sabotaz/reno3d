@@ -137,26 +137,32 @@ public class AssetManager {
         float density = Gdx.graphics.getDensity();
         int dpi = (int)(160 * density);
         TextureAtlas atlas;
+        TextureAtlas atlas2;
         System.out.println(density);
         if (dpi <= 140) { // ldpi ~ 0.6x
             assets.put("uiskin", loadOnUi("data/ui/ldpi/uiskin.json", Skin.class));
             assets.put("uiskin.json", loadOnUi("data/ui/ldpi/uiskin.json", Skin.class));
             atlas = (TextureAtlas)loadOnUi("data/ui/ldpi/ui_001.atlas", TextureAtlas.class);
+            atlas2 = (TextureAtlas)loadOnUi("data/ui/ldpi/uiskin.atlas", TextureAtlas.class);
         } else if (dpi <= 200) { // mdpi ~ 1x
             assets.put("uiskin", loadOnUi("data/ui/mdpi/uiskin.json", Skin.class));
             assets.put("uiskin.json", loadOnUi("data/ui/mdpi/uiskin.json", Skin.class));
             atlas = (TextureAtlas)loadOnUi("data/ui/mdpi/ui_001.atlas", TextureAtlas.class);
+            atlas2 = (TextureAtlas)loadOnUi("data/ui/mdpi/uiskin.atlas", TextureAtlas.class);
         } else if (dpi <= 380) { // hdpi ~ 1.5x
             assets.put("uiskin", loadOnUi("data/ui/hdpi/uiskin.json", Skin.class));
             assets.put("uiskin.json", loadOnUi("data/ui/hdpi/uiskin.json", Skin.class));
             atlas = (TextureAtlas)loadOnUi("data/ui/hdpi/ui_001.atlas", TextureAtlas.class);
+            atlas2 = (TextureAtlas)loadOnUi("data/ui/hdpi/uiskin.atlas", TextureAtlas.class);
         } else { //xhdpi ~ 2x
             assets.put("uiskin", loadOnUi("data/ui/xhdpi/uiskin.json", Skin.class));
             assets.put("uiskin.json", loadOnUi("data/ui/xhdpi/uiskin.json", Skin.class));
             atlas = (TextureAtlas)loadOnUi("data/ui/xhdpi/ui_001.atlas", TextureAtlas.class);
+            atlas2 = (TextureAtlas)loadOnUi("data/ui/xhdpi/uiskin.atlas", TextureAtlas.class);
         }
 
         assets.put("ui_001.atlas", atlas);
+        assets.put("uiskin.atlas", atlas2);
         TextureAtlas.AtlasRegion region = atlas.findRegion("ask");
         TextureRegionDrawable drawable = new TextureRegionDrawable(region);
 

@@ -206,6 +206,12 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 handle.write(fileHandle.read(), false);
             }
         }
+        for (FileHandle fileHandle : Gdx.files.internal("data/examples/").list(".3dr.hidden")) {
+            FileHandle handle = Gdx.files.external(fileHandle.name());
+            if (!handle.exists()) {
+                handle.write(fileHandle.read(), false);
+            }
+        }
 
         timeit.stop();
         System.out.println("assets ok " + (timeit.value() * 0.001f));

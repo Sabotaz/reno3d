@@ -96,7 +96,7 @@ public class StyleFactory {
 
     public static Label.LabelStyle getLabelStyle(String ... params) {
         assert params.length == 2;
-        Label.LabelStyle lbs = new Label.LabelStyle(getFont(params[0]),Color.DARK_GRAY);
+        Label.LabelStyle lbs = new Label.LabelStyle(getFont(params[0]),Color.BLACK);
         lbs.background = (Drawable)getDrawable(params[1]);
         return lbs;
     }

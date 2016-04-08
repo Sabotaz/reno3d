@@ -218,22 +218,38 @@
             {
               "type": "Label",
               "id": "label_cash",
-              "pad": 10
+              "pad": 10,
+              "style": [
+                "defaultTitle.fnt",
+                "drawable:arrow_D"
+              ]
             },
             {
               "type": "Label",
               "id": "label_total",
-              "pad": 10
+              "pad": 10,
+              "style": [
+                "defaultTitle.fnt",
+                "drawable:arrow_D"
+              ]
             },
             {
               "type": "Label",
               "id": "label_score",
-              "pad": 10
+              "pad": 10,
+              "style": [
+                "defaultTitle.fnt",
+                "drawable:arrow_D"
+              ]
             },
             {
               "type": "Label",
               "id": "label_estim",
-              "pad": 10
+              "pad": 10,
+              "style": [
+                "defaultTitle.fnt",
+                "drawable:arrow_D"
+              ]
             },
             {
               "type": "CircularJauge",
