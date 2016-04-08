@@ -147,7 +147,7 @@ public class Layout {
 
     private Actor readLayout(String name) {
         FileHandle handle = Gdx.files.internal(name);
-        JsonValue json = new JsonReader().parse(handle.readString());
+        JsonValue json = new JsonReader().parse(handle.readString("UTF-8"));
         Actor root = getActor(json, null, null);
         return root;
     }
