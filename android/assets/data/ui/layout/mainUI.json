@@ -218,37 +218,37 @@
             {
               "type": "Label",
               "id": "label_cash",
-              "pad": 10,
+              "pad": 0,
               "style": [
                 "defaultTitle.fnt",
-                "drawable:arrow_D"
+                "drawable:label"
               ]
             },
             {
               "type": "Label",
               "id": "label_total",
-              "pad": 10,
+              "pad": 0,
               "style": [
                 "defaultTitle.fnt",
-                "drawable:arrow_D"
+                "drawable:label"
               ]
             },
             {
               "type": "Label",
               "id": "label_score",
-              "pad": 10,
+              "pad": 0,
               "style": [
                 "defaultTitle.fnt",
-                "drawable:arrow_D"
+                "drawable:label"
               ]
             },
             {
               "type": "Label",
               "id": "label_estim",
-              "pad": 10,
+              "pad": -0,
               "style": [
                 "defaultTitle.fnt",
-                "drawable:arrow_D"
+                "drawable:label"
               ]
             },
             {

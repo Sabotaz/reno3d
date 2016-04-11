@@ -253,6 +253,7 @@ public class AssetManager {
         textures.put("void", "data/ui/img/void.png");
         textures.put("wall", "data/ui/img/wall.png");
         textures.put("window", "data/ui/img/window.png");
+        textures.put("label", "data/ui/img/label.png");
 
         assets.putAll((Map<String, Texture>)loadOnUi(textures, Texture.class));
 
