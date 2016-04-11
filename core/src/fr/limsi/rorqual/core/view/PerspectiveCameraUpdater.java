@@ -85,9 +85,10 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
                 if (s.getSurface() > slab.getSurface())
                     slab = s;
             }
-            Vector2 center = slab.getCenter();
-            pos.set(0, 0, 10);
+            pos.set(-10, 5, 12);
             user_rotation.idt().rotate(1, 0, 0, -90);
+            user_rotation.rotate(1, 0, 0, 50);
+            user_rotation.rotate(0, 0, 1, 90);
             yaw = pitch = roll = 0;
             lastEuler.setFromEulerAngles(yaw, pitch, roll);
             update();
@@ -100,9 +101,42 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
             lastEuler.setFromEulerAngles(yaw, pitch, roll);
             update();
         }
+
+
+        yaw = 0;
+        pitch = 45;
+        roll = -45;
+
+        float py = (float)(dist * Math.cos(pitch)*Math.sin(roll));
+        float px = (float)(dist * Math.sin(pitch)*Math.sin(roll));
+        float pz = (float)(dist * Math.cos(roll));
+
+        user_rotation.idt().rotate(1, 0, 0, -45);
+        user_rotation.rotate(0, 0, 1, 45);
+        pos.set(center_x + px, center_y + py, center_z + pz);
+        update();
     }
 
+    private float center_x = 0;
+    private float center_y = 5;
+    private float center_z = 0;
+
     protected void update() {
+        /* set look at */
+        float py = (float)(dist * Math.cos(pitch * Math.PI / 180)*Math.sin(roll*Math.PI / 180));
+        float px = (float)(dist * Math.sin(pitch*Math.PI / 180)*Math.sin(roll*Math.PI / 180));
+        float pz = (float)(dist * Math.cos(roll*Math.PI / 180));
+
+        pos.set(center_x + px, center_y + py, center_z + pz);
+
+        Vector3 dir = new Vector3(px, py, pz);
+        Vector3 up = new Vector3(0,0,1);
+        Vector3 vz = dir.cpy().nor();
+        Vector3 vx = up.cpy().crs(vz);
+        Vector3 vy = vz.cpy().crs(vx);
+
+        user_rotation.set(vx, vy, vz, Vector3.Zero);
+
         Matrix4 translation = new Matrix4().translate(new Vector3().sub(pos));
         Matrix4 mx = new Matrix4();
         mx.mul(user_rotation);
@@ -144,23 +178,12 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
             last_screenX = (int) x;
             last_screenY = (int) y;
         }
-        pitch -= deltaY/20;
-        roll -= deltaX/20;
-        Matrix4 newEuler = new Matrix4().setFromEulerAngles(yaw, pitch, roll);
-        Matrix4 diff = lastEuler.cpy().inv().mul(newEuler);
-        lastEuler = newEuler;
-
-        user_rotation.mul(diff);
-        /*
-        Vector3 before = camera.unproject(new Vector3(last_screenX, last_screenY, 1)).sub(pos).nor();
-        Vector3 after = camera.unproject(new Vector3(x, y, 1)).sub(pos).nor();
-        if (!before.isCollinear(after)) {
-            user_rotation.rotate(after.cpy().crs(before),-(float) (Math.acos(after.dot(before)) * 180. / Math.PI));
-        }
-        */
+        pitch += deltaX/10;
+        roll += deltaY/15;
 
         last_screenX = (int) x;
         last_screenY = (int) y;
+        update();
         return true;
 
     }
@@ -181,10 +204,8 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
             zoomStart = initialDistance;
             zoomLast = zoomStart;
         }
-        // diff
-        float diff = distance - zoomLast;
 
-        avancer(diff);
+        avancer(zoomLast/distance);
 
         // update last
         zoomLast = distance;
@@ -199,16 +220,10 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     float ZOOM_RATIO = 0.02f;
 
+    private float dist = 10;
     private void avancer(float amount) {
 
-        Quaternion q = camera.view.cpy().inv().getRotation(new Quaternion());
-
-        Vector3 dir = Vector3.Z.cpy().mul(q);
-
-        dir.nor();
-        dir.scl(-amount * ZOOM_RATIO);
-
-        pos.add(dir);
+        dist *= amount;
 
     }
 
