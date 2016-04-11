@@ -7,6 +7,6 @@ print("Content-type: text/html; charset=utf-8\n")
 
 print(form.getvalue("name"))
 
-html = open("html/attitudes.html").read()
+html = open("html/intro.html").read()
 
 print(html)
