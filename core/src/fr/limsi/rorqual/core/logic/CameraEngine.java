@@ -26,7 +26,7 @@ import fr.limsi.rorqual.core.view.PerspectiveCameraUpdater;
 // Moteur de gestion des différentes caméras
 public class CameraEngine implements GestureDetector.GestureListener {
 
-    private Cameras curent_camera = Cameras.ORTHOGRAPHIC;
+    private Cameras curent_camera = Cameras.PERSPECTIVE;
 
     private enum Cameras {
         PERSPECTIVE,
@@ -98,7 +98,7 @@ public class CameraEngine implements GestureDetector.GestureListener {
 
     public void reset() {
         log();
-        curent_camera = Cameras.ORTHOGRAPHIC;
+        curent_camera = Cameras.PERSPECTIVE;
         curent_camera.getCameraUpdater().reset();
     }
 

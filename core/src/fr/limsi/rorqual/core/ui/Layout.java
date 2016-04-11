@@ -273,6 +273,8 @@ public class Layout {
             lbs.fontColor = Color.DARK_GRAY;
         }
         Label label = new Label(json.getString("label", ""),lbs);
+        label.setHeight(25);
+        label.setWidth(200);
         return label;
     }
 
