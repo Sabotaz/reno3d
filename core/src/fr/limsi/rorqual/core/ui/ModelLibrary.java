@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -69,6 +71,7 @@ public class ModelLibrary {
         private String path;
         private String clazz;
         private String category;
+        private float prix = 0;
         private float width = 0;
         private float depth = 0;
         private float height = 0;
@@ -86,7 +89,8 @@ public class ModelLibrary {
             String creationDate = i18n.get("creationDate#"+n);
             category = i18n.get("category#"+n);
             iconFile = i18n.get("icon#"+n);
-            modelFile = i18n.get("model#"+n);
+            modelFile = i18n.get("model#" + n);
+            prix = i18n.get("prix#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("prix#"+n));
             String multiPartModel = i18n.get("multiPartModel#"+n);
 
             width = i18n.get("width#"+n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("width#"+n));
@@ -280,6 +284,9 @@ public class ModelLibrary {
             return path + "/" + iconFile;
         }
 
+        public float getPrix() {
+            return prix;
+        }
     }
 
     private String currentModel = "";
@@ -389,7 +396,7 @@ public class ModelLibrary {
         float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.6f).get(null);
         content.setSize(width, height);
         int start_x = 0;
-        final int MAX_X = (int)(width / 128);
+        final int MAX_X = 1;
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
@@ -410,6 +417,8 @@ public class ModelLibrary {
                 }
             });
             content.add(imageButton).size(128, 128).left().top();
+            Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"),Color.WHITE);
+            content.add(new Label(modelLoader.getPrix() + " euros",lbs)).padLeft(15);
 
             start_x ++;
             if (start_x == MAX_X) {
@@ -442,7 +451,7 @@ public class ModelLibrary {
         float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.6f).get(null);
         content.setSize(width,height);
         int start_x = 0;
-        final int MAX_X = (int)(width / 128);
+        final int MAX_X = 1;
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
@@ -462,6 +471,8 @@ public class ModelLibrary {
                 }
             });
             content.add(imageButton).size(128, 128).left().top();
+            Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"),Color.WHITE);
+            content.add(new Label(modelLoader.getPrix() + " euros",lbs)).padLeft(15);
 
             start_x ++;
             if (start_x == MAX_X) {
