@@ -456,7 +456,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                 return true;
             case Input.Keys.ESCAPE:
-                Gdx.app.exit();
+                mainUiControleur.removeTb();
                 return true;
         }
         return false;
