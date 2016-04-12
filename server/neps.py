@@ -7,6 +7,6 @@ print("Content-type: text/html; charset=utf-8\n")
 
 #print(form.getvalue("name"))
 
-html = open("html/demographie.html").read()
+html = open("html/neps.html").read()
 
 print(html)
