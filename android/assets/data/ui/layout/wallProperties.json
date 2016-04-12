@@ -75,5 +75,42 @@
         }
       ]
     },
+    {
+      "type": "Table",
+      "name": "Textures",
+      "id": "textures",
+      "content": [
+        {
+          "type": "TexturePicker",
+          "label": "Extérieur :",
+          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
+          "category": "Mur",
+          "align": "left",
+          "width": "30%",
+          "height": "20%"
+        },
+        {
+          "type": "TexturePicker",
+          "label": "Intérieur 1 :",
+          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
+          "category": "Mur",
+          "align": "left",
+          "width": "30%",
+          "height": "20%"
+        },
+        {
+          "type": "TexturePicker",
+          "label": "Intérieur 2 :",
+          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE3_PICKED",
+          "category": "Mur",
+          "align": "left",
+          "width": "30%",
+          "height": "20%"
+        }
+      ]
+    }
   ]
 }

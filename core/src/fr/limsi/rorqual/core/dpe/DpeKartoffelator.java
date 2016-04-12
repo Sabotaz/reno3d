@@ -66,11 +66,11 @@ public class DpeKartoffelator {
     }
 
     public void create_fake_dpe() {
-
+/*
         fake_dpes.put(DpeEvent.DATE_ISOLATION_MUR, new ArrayList<Object>());
         for (DateIsolationMurEnum value : DateIsolationMurEnum.values()) {
             fake_dpes.get(DpeEvent.DATE_ISOLATION_MUR).add(value);
-        }
+        }*/
 
         fake_dpes.put(DpeEvent.ABONNEMENT_ELECTRIQUE, new ArrayList<Object>());
         for (TypeAbonnementElectriqueEnum value : TypeAbonnementElectriqueEnum.values()) {
@@ -91,7 +91,7 @@ public class DpeKartoffelator {
         for (TypeEquipementCuissonEnum value : TypeEquipementCuissonEnum.values()) {
             fake_dpes.get(DpeEvent.EQUIPEMENT_CUISSON).add(value);
         }
-
+/*
         fake_dpes.put(DpeEvent.TYPE_VITRAGE_MENUISERIE, new ArrayList<Object>());
         for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
             fake_dpes.get(DpeEvent.TYPE_VITRAGE_MENUISERIE).add(value);
@@ -101,7 +101,7 @@ public class DpeKartoffelator {
         for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
             fake_dpes.get(DpeEvent.TYPE_FERMETURE_MENUISERIE).add(value);
         }
-
+*/
         fake_dpes.put(DpeEvent.CHAUFFAGE_UNIQUE, new ArrayList<Object>());
         for (Chauffage.Generateur value : Chauffage.Generateur.values()) {
             fake_dpes.get(DpeEvent.CHAUFFAGE_UNIQUE).add(value);
