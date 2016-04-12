@@ -103,7 +103,7 @@ public class MainUiControleur implements EventListener {
         if (version == 2  || version == 4)
             ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
 
-        addTb(getIntro(),"intro");
+        //addTb(getIntro(),"intro");
     }
 
     Timeit timeit;
