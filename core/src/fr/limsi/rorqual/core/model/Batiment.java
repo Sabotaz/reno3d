@@ -246,6 +246,13 @@ public class Batiment {
         return all;
     }
 
+    public ArrayList<Objet> getObjets() {
+        ArrayList<Objet> all = new ArrayList<Objet>();
+        for (Slab slab : getSlabs())
+                all.addAll(slab.getObjets());
+        return all;
+    }
+
     public void emptinessChanged(Etage etage) {
         if (etage.isEmpty()) { // c'est qu'on a enlevé des trucs
             if (first == null || etage.getNumber() == first.getNumber()) { // ça n'est plus le first

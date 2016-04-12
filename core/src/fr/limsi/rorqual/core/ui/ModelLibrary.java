@@ -62,7 +62,7 @@ public class ModelLibrary {
 
     private HashMap<String, Table> categoriesTables = new HashMap<String, Table>();
 
-    private class ModelLoader {
+    public class ModelLoader {
 
         private Model model;
         private BoundingBox box = new BoundingBox();
@@ -472,7 +472,7 @@ public class ModelLibrary {
             });
             content.add(imageButton).size(128, 128).left().top();
             Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"),Color.WHITE);
-            content.add(new Label(modelLoader.getPrix() + " euros",lbs)).padLeft(15);
+            content.add(new Label(modelLoader.getPrix() + " euros", lbs)).padLeft(15);
 
             start_x ++;
             if (start_x == MAX_X) {
@@ -501,6 +501,10 @@ public class ModelLibrary {
     public ModelContainer getModelContainerFromId(String id) {
         System.out.println(id + ": " + models.get(id));
         return models.get(id).getInstance();
+    }
+
+    public ModelLoader getModelFromId(String modelId) {
+        return models.get(modelId);
     }
 
     public Class getModelClassFromId(String id) {

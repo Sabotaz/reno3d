@@ -36,11 +36,13 @@ import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.PorteFenetre;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
+import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
@@ -158,6 +160,10 @@ public class DpeKartoffelator {
                 update_score(event, value, percent, price);
             }
         }
+
+        for (Objet o : ModelHolder.getInstance().getBatiment().getObjets())
+            total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
+
         MainUiControleur.getInstance().setCash(getCash());
         MainUiControleur.getInstance().setTotal(getTotal());
         MainUiControleur.getInstance().setScore(init);
