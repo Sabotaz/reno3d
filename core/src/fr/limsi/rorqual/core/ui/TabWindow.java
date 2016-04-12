@@ -69,7 +69,7 @@ public class TabWindow extends Table {
         ws.titleFont = (BitmapFont)AssetManager.getInstance().get("default.fnt");
 
         window = new Window("", ws);
-        window.setMovable(false);
+        //window.setMovable(false);
         buttonTab = new Table();
 //        buttonTab.setDebug(true);
         contentTab = new Table();
