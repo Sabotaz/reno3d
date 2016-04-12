@@ -368,7 +368,7 @@ public class MainUiControleur implements EventListener {
                                 removeTb();
                             break;
                         case MENUISERIE:
-                            uncheckNonGeneralButtons();
+                            uncheckNonCalculButtons();
                             removeTb();
                             if (button.isChecked()) {
                                 tabName = "Menuiserie";

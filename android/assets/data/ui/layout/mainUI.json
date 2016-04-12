@@ -71,6 +71,20 @@
           "content": [
             {
               "type": "Button",
+              "text": "MENUISERIE",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:mobilier",
+                "drawable:mobilier:tint:888888",
+                "drawable:mobilier:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.DPE",
               "name": "dpe",
               "height": "auto",
@@ -94,34 +108,6 @@
                 "drawable:chauffage",
                 "drawable:chauffage:tint:888888",
                 "drawable:chauffage:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.MUR",
-              "name": "mur",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:wall",
-                "drawable:wall:tint:888888",
-                "drawable:wall:tint:888888",
-                "default.fnt"
-              ]
-            },
-            {
-              "type": "Button",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.FENETRE",
-              "name": "fenetre",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:window",
-                "drawable:window:tint:888888",
-                "drawable:window:tint:888888",
                 "default.fnt"
               ]
             }

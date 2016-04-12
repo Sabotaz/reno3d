@@ -372,8 +372,9 @@ public class ModelLibrary {
         TabWindow tw = new TabWindow(width);
         tw.setTitle("Bibliothèque");
         for (Map.Entry<String, HashMap<String, ModelLoader>> entry : categories.entrySet())
-            if (!entry.getValue().isEmpty())
-                makeNewTab(tw, entry.getKey(), entry.getValue());
+            if (!entry.getKey().equals("Portes et fenetres"))
+                if (!entry.getValue().isEmpty())
+                    makeNewTab(tw, entry.getKey(), entry.getValue());
         tabWindow = tw;
     }
 
