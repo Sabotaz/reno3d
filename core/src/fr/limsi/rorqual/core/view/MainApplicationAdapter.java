@@ -51,6 +51,7 @@ import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Objet;
+import fr.limsi.rorqual.core.model.Porte;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.ui.CircularJauge;
 import fr.limsi.rorqual.core.ui.DpeUi;
@@ -520,15 +521,17 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
             ModelContainer next = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getObject(screenX, screenY);
             //System.out.println("TOUCH: " + selected);
             if (next != null && next != selected) {
-                selected = next;
-                EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected));
-                //                System.out.println("TOUCH: " + selected.getUserData());
-                //                System.out.println(selected);
-                selected.setColor(Color.YELLOW);
-                selected.setSelected(true);
-                mainUiControleur.addTb(dpeui.getPropertyWindow(selected), "Properties");
-                //selected.add(pin);
-                //pin.local_transform.setToTranslation(selected.getTop());
+                if (!(next instanceof Porte)) {
+                    selected = next;
+                    EventManager.getInstance().put(Channel.UI, new Event(UiEvent.ITEM_SELECTED, selected));
+                    //                System.out.println("TOUCH: " + selected.getUserData());
+                    //                System.out.println(selected);
+                    selected.setColor(Color.YELLOW);
+                    selected.setSelected(true);
+                    mainUiControleur.addTb(dpeui.getPropertyWindow(selected), "Properties");
+                    //selected.add(pin);
+                    //pin.local_transform.setToTranslation(selected.getTop());
+                }
             } else {
                 selected = null;
             }
