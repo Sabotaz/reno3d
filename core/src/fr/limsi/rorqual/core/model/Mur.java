@@ -521,6 +521,7 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     public float getDeperdition(){
+        actualiseDeperdition(false);
         return this.deperdition;
     }
 
@@ -533,6 +534,9 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     }
 
     public void actualiseDeperdition(){
+        actualiseDeperdition(true);
+    }
+    public void actualiseDeperdition(boolean event){
         switch (this.typeMur){
             case MUR_DONNANT_SUR_EXTERIEUR:
                 this.deperdition = this.surface*this.coeffTransmissionThermique;
@@ -603,8 +607,10 @@ public class Mur extends ModelContainer implements Cote.Cotable {
                 this.deperdition=0;
                 break;
         }
-        Event e = new Event(DpeEvent.DEPERDITION_MURS_CHANGED, null);
-        EventManager.getInstance().put(Channel.DPE, e);
+        if (event) {
+            Event e = new Event(DpeEvent.DEPERDITION_MURS_CHANGED, null);
+            EventManager.getInstance().put(Channel.DPE, e);
+        }
     }
 
     public void actualiseSurface(){

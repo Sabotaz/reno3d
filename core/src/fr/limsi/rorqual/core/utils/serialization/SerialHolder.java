@@ -45,6 +45,7 @@ public class SerialHolder {
         dpe.setFenetreList(batiment.getFenetres());
         dpe.setPorteFenetreList(batiment.getPorteFenetres());
         dpe.setPorteList(batiment.getPortes());
+        dpe.actualiseDpMur();
         Dpe.loadDpe(dpe);
         DpeUi.clear();
         ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());

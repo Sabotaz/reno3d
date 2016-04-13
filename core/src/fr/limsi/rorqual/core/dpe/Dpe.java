@@ -155,9 +155,20 @@ public class Dpe implements EventListener {
     private float dpFenetre;
     private float dpPorteFenetre;
 
+    public void actualiseAll(){
+        actualiseDpMur();
+        actualiseDpFenetre();
+        actualiseDpPorteFenetre();
+        actualiseDpPorte();
+        actualiseDpPlancher();
+        actualiseDpToit();
+
+    }
+
     public void actualiseDpMur(){
         float tampon=0;
         for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
+            actualiseCoeffDeperditionThermique(m, false);
             tampon += m.getDeperdition();
         }
         dpMur=tampon;
@@ -214,6 +225,9 @@ public class Dpe implements EventListener {
     }
     ///*** Murs ***///
     public void actualiseCoeffDeperditionThermique(Mur mur){
+        actualiseCoeffDeperditionThermique(mur, true);
+    }
+    public void actualiseCoeffDeperditionThermique(Mur mur, boolean event){
         float u=0;
         switch (mur.getDateIsolationMurEnum()){
             case JAMAIS:
@@ -256,7 +270,7 @@ public class Dpe implements EventListener {
                 break;
         }
         mur.setCoeffTransmissionThermique(u);
-        mur.actualiseDeperdition();
+        mur.actualiseDeperdition(event);
     }
     public float getUmurFoncAnneeConstruction(Mur mur){
         float uMur=2.5f;

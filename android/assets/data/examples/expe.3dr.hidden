@@ -102,7 +102,7 @@
           <depth>0.2</depth>
           <wallType>MUR_INTERIEUR</wallType>
           <isolationType>NON_ISOLE</isolationType>
-          <isolationDate>INCONNUE</isolationDate>
+          <isolationDate>JAMAIS</isolationDate>
           <orientation>OUEST</orientation>
           <leftSlab id="36">
             <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
@@ -121,7 +121,7 @@
               <depth>0.2</depth>
               <wallType>MUR_INTERIEUR</wallType>
               <isolationType>NON_ISOLE</isolationType>
-              <isolationDate>INCONNUE</isolationDate>
+              <isolationDate>JAMAIS</isolationDate>
               <orientation>SUD</orientation>
               <leftSlab reference="36"/>
               <rightSlab id="38">
@@ -141,7 +141,7 @@
                   <depth>0.2</depth>
                   <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                   <isolationType>NON_ISOLE</isolationType>
-                  <isolationDate>INCONNUE</isolationDate>
+                  <isolationDate>JAMAIS</isolationDate>
                   <orientation>SUD</orientation>
                   <leftSlab reference="38"/>
                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -157,7 +157,7 @@
                   <depth>0.2</depth>
                   <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                   <isolationType>NON_ISOLE</isolationType>
-                  <isolationDate>INCONNUE</isolationDate>
+                  <isolationDate>JAMAIS</isolationDate>
                   <orientation>EST</orientation>
                   <leftSlab reference="38"/>
                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -174,7 +174,7 @@
                   <depth>0.2</depth>
                   <wallType>MUR_INTERIEUR</wallType>
                   <isolationType>NON_ISOLE</isolationType>
-                  <isolationDate>INCONNUE</isolationDate>
+                  <isolationDate>JAMAIS</isolationDate>
                   <orientation>OUEST</orientation>
                   <leftSlab reference="38"/>
                   <rightSlab id="42">
@@ -196,7 +196,7 @@
                       <depth>0.2</depth>
                       <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                       <isolationType>NON_ISOLE</isolationType>
-                      <isolationDate>INCONNUE</isolationDate>
+                      <isolationDate>JAMAIS</isolationDate>
                       <orientation>NORD</orientation>
                       <rightSlab reference="42"/>
                       <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -212,7 +212,7 @@
                       <depth>0.2</depth>
                       <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                       <isolationType>NON_ISOLE</isolationType>
-                      <isolationDate>INCONNUE</isolationDate>
+                      <isolationDate>JAMAIS</isolationDate>
                       <orientation>EST</orientation>
                       <rightSlab reference="42"/>
                       <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -228,7 +228,7 @@
                       <depth>0.2</depth>
                       <wallType>MUR_INTERIEUR</wallType>
                       <isolationType>NON_ISOLE</isolationType>
-                      <isolationDate>INCONNUE</isolationDate>
+                      <isolationDate>JAMAIS</isolationDate>
                       <orientation>SUD</orientation>
                       <leftSlab id="46">
                         <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
@@ -249,7 +249,7 @@
                           <depth>0.2</depth>
                           <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                           <isolationType>NON_ISOLE</isolationType>
-                          <isolationDate>INCONNUE</isolationDate>
+                          <isolationDate>JAMAIS</isolationDate>
                           <orientation>OUEST</orientation>
                           <leftSlab reference="46"/>
                           <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -265,7 +265,7 @@
                           <depth>0.2</depth>
                           <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                           <isolationType>NON_ISOLE</isolationType>
-                          <isolationDate>INCONNUE</isolationDate>
+                          <isolationDate>JAMAIS</isolationDate>
                           <orientation>EST</orientation>
                           <leftSlab reference="46"/>
                           <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -281,7 +281,7 @@
                           <depth>0.2</depth>
                           <wallType>MUR_INTERIEUR</wallType>
                           <isolationType>NON_ISOLE</isolationType>
-                          <isolationDate>INCONNUE</isolationDate>
+                          <isolationDate>JAMAIS</isolationDate>
                           <orientation>NORD</orientation>
                           <leftSlab reference="46"/>
                           <rightSlab id="50">
@@ -301,7 +301,7 @@
                               <depth>0.2</depth>
                               <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                               <isolationType>NON_ISOLE</isolationType>
-                              <isolationDate>INCONNUE</isolationDate>
+                              <isolationDate>JAMAIS</isolationDate>
                               <orientation>EST</orientation>
                               <leftSlab reference="50"/>
                               <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -317,7 +317,7 @@
                               <depth>0.2</depth>
                               <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                               <isolationType>NON_ISOLE</isolationType>
-                              <isolationDate>INCONNUE</isolationDate>
+                              <isolationDate>JAMAIS</isolationDate>
                               <orientation>NORD</orientation>
                               <leftSlab reference="50"/>
                               <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -334,7 +334,7 @@
                               <depth>0.2</depth>
                               <wallType>MUR_INTERIEUR</wallType>
                               <isolationType>NON_ISOLE</isolationType>
-                              <isolationDate>INCONNUE</isolationDate>
+                              <isolationDate>JAMAIS</isolationDate>
                               <orientation>OUEST</orientation>
                               <leftSlab reference="50"/>
                               <rightSlab id="54">
@@ -354,7 +354,7 @@
                                   <depth>0.2</depth>
                                   <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                                   <isolationType>NON_ISOLE</isolationType>
-                                  <isolationDate>INCONNUE</isolationDate>
+                                  <isolationDate>JAMAIS</isolationDate>
                                   <orientation>EST</orientation>
                                   <rightSlab reference="54"/>
                                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -370,7 +370,7 @@
                                   <depth>0.2</depth>
                                   <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
                                   <isolationType>NON_ISOLE</isolationType>
-                                  <isolationDate>INCONNUE</isolationDate>
+                                  <isolationDate>JAMAIS</isolationDate>
                                   <orientation>SUD</orientation>
                                   <rightSlab reference="54"/>
                                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
@@ -387,7 +387,7 @@
                                   <depth>0.2</depth>
                                   <wallType>MUR_INTERIEUR</wallType>
                                   <isolationType>NON_ISOLE</isolationType>
-                                  <isolationDate>INCONNUE</isolationDate>
+                                  <isolationDate>JAMAIS</isolationDate>
                                   <orientation>NORD</orientation>
                                   <leftSlab reference="46"/>
                                   <rightSlab reference="54"/>
@@ -453,7 +453,7 @@
                           <depth>0.2</depth>
                           <wallType>MUR_INTERIEUR</wallType>
                           <isolationType>NON_ISOLE</isolationType>
-                          <isolationDate>INCONNUE</isolationDate>
+                          <isolationDate>JAMAIS</isolationDate>
                           <orientation>NORD</orientation>
                           <leftSlab reference="36"/>
                           <rightSlab reference="46"/>
@@ -580,7 +580,7 @@
               <depth>0.2</depth>
               <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
               <isolationType>NON_ISOLE</isolationType>
-              <isolationDate>INCONNUE</isolationDate>
+              <isolationDate>JAMAIS</isolationDate>
               <orientation>EST</orientation>
               <leftSlab reference="36"/>
               <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
