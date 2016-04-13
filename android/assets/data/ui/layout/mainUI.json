@@ -8,7 +8,7 @@
       "id": "main_ui",
       "channel": "fr.limsi.rorqual.core.event.Channel.UI",
       "event": "fr.limsi.rorqual.core.event.UiEvent.BUTTON_CLICKED",
-      "position": "top-center",
+      "position": "top-left",
       "align": "right",
       "layout": "column",
       "expand":false,
@@ -27,7 +27,7 @@
               "id": "camera_button",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "pad": 0,
               "style": [
                 "drawable:2D",
@@ -51,7 +51,7 @@
               "text": "MENUISERIE",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.MENUISERIE",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "pad": 0,
               "style": [
                 "drawable:mobilier",
@@ -65,7 +65,7 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.DPE",
               "name": "dpe",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "pad": 0,
               "style": [
                 "drawable:dpe",
@@ -79,7 +79,7 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.CHAUFFAGE",
               "name": "chauffage",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "pad": 0,
               "style": [
                 "drawable:chauffage",
@@ -114,7 +114,7 @@
               "id":"Move",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "pad": 0,
               "visible":false,
               "style": [
@@ -130,7 +130,7 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_G",
               "id":"Rotate_G",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "pad": 0,
               "notify_clicked":false,
               "notify_pressed":true,
@@ -148,7 +148,7 @@
               "value": "fr.limsi.rorqual.core.event.ButtonValue.ROTATE_D",
               "id":"Rotate_D",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "notify_clicked":false,
               "notify_pressed":true,
               "pad": 0,
@@ -185,7 +185,7 @@
               "text": "Save",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.SAVE",
               "height": "auto",
-              "width": "5%",
+              "width": "6%",
               "pad": 0,
               "style": [
                 "drawable:save",
@@ -202,14 +202,14 @@
       "type": "Table",
       "name": "Main score",
       "id": "main_score",
-      "position": "bottom-left",
+      "position": "top-right",
       "align": "right",
       "layout": "column",
       "expand": false,
       "content": [
         {
           "type": "Window",
-          "name": "Chiffrage",
+          "name": "Budget",
           "width": "10%",
           "id": "tab_window",
           "padBottom": 100,
@@ -236,7 +236,23 @@
                     "defaultTitle.fnt",
                     null
                   ]
-                },
+                }
+              ]
+            }
+            ]
+          },
+            {
+              "type": "Window",
+              "name": "Energie",
+              "width": "10%",
+              "id": "tab_window",
+              "padBottom": 100,
+              "content": [
+                {
+                  "type": "ButtonGroup",
+                  "layout": "row",
+                  "minChecked": 0,
+                  "content": [
                 {
                   "type": "Label",
                   "id": "label_score",
