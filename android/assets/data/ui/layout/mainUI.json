@@ -15,29 +15,6 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "id": "save_buttons",
-          "layout": "column",
-          "pad": 0,
-          "minChecked": 0,
-          "content": [
-            {
-              "type": "Button",
-              "text": "Save",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.SAVE",
-              "height": "auto",
-              "width": "5%",
-              "pad": 0,
-              "style": [
-                "drawable:save",
-                "drawable:save:tint:888888",
-                null,
-                "default.fnt"
-              ]
-            }
-          ]
-        },
-        {
-          "type": "ButtonGroup",
           "layout": "column",
           "align": "right",
           "pad": 0,
@@ -180,6 +157,40 @@
                 "drawable:arrow_D",
                 "drawable:arrow_D:tint:888888",
                 "drawable:arrow_D:tint:888888",
+                "default.fnt"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Main UI",
+      "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+      "event": "fr.limsi.rorqual.core.event.UiEvent.BUTTON_CLICKED",
+      "position": "bottom-right",
+      "align": "right",
+      "layout": "column",
+      "expand":false,
+      "content": [
+        {
+          "type": "ButtonGroup",
+          "id": "control_buttons",
+          "layout": "row",
+          "minChecked": 0,
+          "content": [
+            {
+              "type": "Button",
+              "text": "Save",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.SAVE",
+              "height": "auto",
+              "width": "5%",
+              "pad": 0,
+              "style": [
+                "drawable:save",
+                "drawable:save:tint:888888",
+                null,
                 "default.fnt"
               ]
             }
