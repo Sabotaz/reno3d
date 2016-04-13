@@ -396,7 +396,7 @@ public class ModelLibrary {
         float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.6f).get(null);
         content.setSize(width, height);
         int start_x = 0;
-        final int MAX_X = 1;
+        final int MAX_X = 2;
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
@@ -418,7 +418,7 @@ public class ModelLibrary {
             });
             content.add(imageButton).size(128, 128).left().top();
             Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"),Color.WHITE);
-            content.add(new Label(modelLoader.getPrix() + " euros",lbs)).padLeft(15);
+            content.add(new Label(modelLoader.getPrix() + " euros",lbs)).padLeft(10).width(128-10);
 
             start_x ++;
             if (start_x == MAX_X) {
@@ -451,7 +451,7 @@ public class ModelLibrary {
         float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.6f).get(null);
         content.setSize(width,height);
         int start_x = 0;
-        final int MAX_X = 1;
+        final int MAX_X = 2;
 
         ButtonGroup<ImageButton> group = new ButtonGroup<ImageButton>();
 
@@ -472,7 +472,7 @@ public class ModelLibrary {
             });
             content.add(imageButton).size(128, 128).left().top();
             Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"),Color.WHITE);
-            content.add(new Label(modelLoader.getPrix() + " euros", lbs)).padLeft(15);
+            content.add(new Label(modelLoader.getPrix() + " euros", lbs)).padLeft(10).width(128-10);
 
             start_x ++;
             if (start_x == MAX_X) {
