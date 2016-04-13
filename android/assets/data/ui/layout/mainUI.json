@@ -191,6 +191,69 @@
       "type": "Table",
       "name": "Main score",
       "id": "main_score",
+      "position": "bottom-left",
+      "align": "right",
+      "layout": "column",
+      "expand": false,
+      "content": [
+        {
+          "type": "Window",
+          "name": "Chiffrage",
+          "width": "10%",
+          "id": "tab_window",
+          "padBottom": 100,
+          "content": [
+            {
+              "type": "ButtonGroup",
+              "layout": "row",
+              "minChecked": 0,
+              "content": [
+                {
+                  "type": "Label",
+                  "id": "label_cash",
+                  "pad": 0,
+                  "style": [
+                    "defaultTitle.fnt",
+                    null
+                  ]
+                },
+                {
+                  "type": "Label",
+                  "id": "label_total",
+                  "pad": 0,
+                  "style": [
+                    "defaultTitle.fnt",
+                    null
+                  ]
+                },
+                {
+                  "type": "Label",
+                  "id": "label_score",
+                  "pad": 0,
+                  "style": [
+                    "defaultTitle.fnt",
+                    null
+                  ]
+                },
+                {
+                  "type": "Label",
+                  "id": "label_estim",
+                  "pad": 0,
+                  "style": [
+                    "defaultTitle.fnt",
+                    null
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Main score",
+      "id": "main_score",
       "position": "bottom-center",
       "align": "right",
       "layout": "column",
@@ -201,42 +264,6 @@
           "layout": "row",
           "minChecked": 0,
           "content": [
-            {
-              "type": "Label",
-              "id": "label_cash",
-              "pad": 0,
-              "style": [
-                "defaultTitle.fnt",
-                "drawable:label"
-              ]
-            },
-            {
-              "type": "Label",
-              "id": "label_total",
-              "pad": 0,
-              "style": [
-                "defaultTitle.fnt",
-                "drawable:label"
-              ]
-            },
-            {
-              "type": "Label",
-              "id": "label_score",
-              "pad": 0,
-              "style": [
-                "defaultTitle.fnt",
-                "drawable:label"
-              ]
-            },
-            {
-              "type": "Label",
-              "id": "label_estim",
-              "pad": -0,
-              "style": [
-                "defaultTitle.fnt",
-                "drawable:label"
-              ]
-            },
             {
               "type": "CircularJauge",
               "id": "dpe_jauge",
