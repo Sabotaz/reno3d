@@ -33,5 +33,5 @@ void main() {
 
     vec3 final_color = current_color.rgb * (1.0-v) + noir * v;
 
-    gl_FragColor = mix(vec4(u_firstColor.rgb, tex.a),vec4(final_color.rgb, tex.a), step(u_ratio, intensity));
+    gl_FragColor = mix(vec4(u_firstColor.rgba),vec4(final_color.rgb, tex.a), step(u_ratio, intensity));
 }
