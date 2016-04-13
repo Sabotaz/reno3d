@@ -48,13 +48,13 @@ public class CircularJauge extends Widget {
         int min, max;
 
         static {
-            A.background = Color.valueOf("b3cde3");
-            B.background = Color.valueOf("b3cde3");
-            C.background = Color.valueOf("b3cde3");
-            D.background = Color.valueOf("b3cde3");
-            E.background = Color.valueOf("b3cde3");
-            F.background = Color.valueOf("b3cde3");
-            G.background = Color.valueOf("b3cde3");
+            A.background = Color.valueOf("b3cde366");
+            B.background = Color.valueOf("b3cde366");
+            C.background = Color.valueOf("b3cde366");
+            D.background = Color.valueOf("b3cde366");
+            E.background = Color.valueOf("b3cde366");
+            F.background = Color.valueOf("b3cde366");
+            G.background = Color.valueOf("b3cde366");
             //X.background = Color.valueOf("b3cde3");
         }
 
