@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# utf-8
 
 import BaseHTTPServer
 import CGIHTTPServer

@@ -1,12 +1,30 @@
-V#!/usr/bin/python
+#!/usr/bin/python
 
-import cgi
+neps = []
+id = ""
 
-form = cgi.FieldStorage()
-print("Content-type: text/html; charset=utf-8\n")
+def afficher():
 
-print(form.getvalue("name"))
+    html = open("html/neps2.html").read()
 
-html = open("html/neps2.html").read()
+    html = html.replace("$ID", id)
 
-print(html)
+    for i, nep in enumerate(neps):
+        if nep is not None:
+            html = html.replace('id="' + str(i+1) + '_' + nep + '"','id="' + str(i+1) + '_' + nep + '" checked')
+
+    print(html)
+
+def traitement(form):
+    global  neps
+    neps = [form.getvalue("Neps_"+str(i))for i in range(1,16)]
+
+    return None not in neps
+
+if __name__ == "__main__":
+    import cgi
+    import neps as last
+    print("Content-type: text/html; charset=utf-8\n")
+    form = cgi.FieldStorage()
+    id = form.getvalue("id")
+    afficher() if last.traitement(form) else last.afficher()

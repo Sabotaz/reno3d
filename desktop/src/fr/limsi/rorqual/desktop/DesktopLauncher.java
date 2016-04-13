@@ -41,6 +41,9 @@ public class DesktopLauncher {
 	}
 
 	public static void main (String[] arg) {
+        String id = "debug";
+        if (arg.length == 1)
+            id = arg[0];
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "PLAN 3D ENERGY home edition";
 		/*config.height = 1200;

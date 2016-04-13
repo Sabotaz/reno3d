@@ -1,12 +1,59 @@
 #!/usr/bin/python
+#coding: utf-8
 
-import cgi
+id = ""
+email = ""
+age = ""
+sexe = ""
+studies = ""
+francais = ""
 
-form = cgi.FieldStorage()
-print("Content-type: text/html; charset=utf-8\n")
+def afficher():
 
-#print(form.getvalue("name"))
+    html = open("html/demographie.html").read()
 
-html = open("html/demographie.html").read()
+    if id is not None:
+       html = html.replace('name="id" value=""','name="id" value="' + id + '"')
 
-print(html)
+    if email is not None:
+       html = html.replace('name="email" value=""','name="email" value="' + email + '"')
+
+    if age is not None:
+       html = html.replace('name="age" value=""','name="age" value="' + email + '"')
+
+    if sexe is not None:
+       html = html.replace('value="' + sexe + '"','value="' + sexe + '" checked')
+
+    if studies is not None:
+        html = html.replace('value="' + studies + '"','value="' + studies + '" checked')
+
+    if francais is not None:
+        html = html.replace('value="' + francais + '"','value="' + francais + '" checked')
+
+    print(html)
+
+def traitement(form):
+    
+    global id
+    global email
+    global age
+    global sexe
+    global studies
+    global francais
+
+    id = form.getvalue("id")
+    email = form.getvalue("email")
+    age = form.getvalue("age")
+    sexe = form.getvalue("sexe")
+    studies = form.getvalue("studies")
+    francais = form.getvalue("français")
+
+    if email and age and sexe and studies and francais:
+        return True
+    return False
+
+if __name__ == "__main__":
+    import cgi
+    import intro as last
+    print("Content-type: text/html; charset=utf-8\n")
+    afficher() if last.traitement(cgi.FieldStorage()) else last.afficher()

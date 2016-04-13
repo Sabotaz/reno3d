@@ -1,15 +1,20 @@
 #!/usr/bin/python
 
-import cgi
+def afficher():
 
-form = cgi.FieldStorage()
-print("Content-type: text/html; charset=utf-8\n")
+    html = open("html/intro.html").read()
+    config = open("../android/assets/data/misc/config.properties").read()
+    config = {c[0] : c[1] for c in [l.split("=") for l in config.split("\n")]}
+    intro = config["INTRO#"+config["VERSION"]].replace("\\n","<br/>")
 
-html = open("html/intro.html").read()
-config = open("../android/assets/data/misc/config.properties").read()
-config = {c[0] : c[1] for c in [l.split("=") for l in config.split("\n")]}
-intro = config["INTRO#"+config["VERSION"]].replace("\\n","<br/>")
+    html = html.replace("$INTRO", intro)
 
-html = html.replace("$INTRO", intro)
+    print(html)
 
-print(html)
+def traitement(form):
+    return True
+
+if __name__ == "__main__":
+    import cgi
+    print("Content-type: text/html; charset=utf-8\n")
+    afficher()
