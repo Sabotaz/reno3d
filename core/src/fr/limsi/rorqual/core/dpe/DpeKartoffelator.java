@@ -37,6 +37,7 @@ import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
+import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.PorteFenetre;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.ui.DpeUi;
@@ -120,6 +121,29 @@ public class DpeKartoffelator {
         return Integer.parseInt(config_file.get("CASH"));
     }
 
+    float getPrice(String price_str, Object ... params) {
+
+        float price = 0;
+        if (price_str.endsWith("av")) {
+            Ouverture m = (Ouverture) params[0];
+            price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * m.getSurface();
+        } else if (price_str.endsWith("nv")) {
+            float f = ModelHolder.getInstance().getBatiment().getFenetres().size() + ModelHolder.getInstance().getBatiment().getPorteFenetres().size();
+            price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
+        } else if (price_str.endsWith("am")) {
+            Mur m = (Mur) params[0];
+            price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * m.getSurface();
+        } else if (price_str.endsWith("as")) {
+            float f = 0;
+            for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs())
+                f += s.getSurface();
+            price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
+        } else
+            price = Float.parseFloat(price_str);
+        price = ((int)(100*price))/100.0f;
+        return price;
+    }
+
     public void calculate_all() {
 
         Dpe dpe = Dpe.getInstance();
@@ -129,40 +153,48 @@ public class DpeKartoffelator {
             DpeEvent event = keys.getKey();
             for (Object value : keys.getValue()) {
                 float avant = dpe.getScoreDpe();
-                float score = dpe.emulateChange(event, value);
+                float score = 0;//dpe.emulateChange(event, value);
                 float percent = ((int)(-((score-avant)/avant)*1000))/10.0f;
                 String price_str = prices_file.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur) value).name() : value.toString()));
-                float price = 0;
-                if (price_str.endsWith("av")) {
-                    float f = 0;
-                    for (Fenetre fen : ModelHolder.getInstance().getBatiment().getFenetres())
-                        f += fen.getSurface();
-                    for (PorteFenetre fen : ModelHolder.getInstance().getBatiment().getPorteFenetres())
-                        f += fen.getSurface();
-                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
-                } else if (price_str.endsWith("nv")) {
-                    float f = ModelHolder.getInstance().getBatiment().getFenetres().size() + ModelHolder.getInstance().getBatiment().getPorteFenetres().size();
-                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
-                } else if (price_str.endsWith("am")) {
-                    float f = 0;
-                    for (Mur m : ModelHolder.getInstance().getBatiment().getMurs())
-                        if (!m.isInterieur())
-                            f += m.getSurface();
-                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
-                } else if (price_str.endsWith("as")) {
-                    float f = 0;
-                    for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs())
-                        f += s.getSurface();
-                    price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
-                } else
-                    price = Float.parseFloat(price_str);
-                price = ((int)(100*price))/100.0f;
-                update_score(event, value, percent, price);
+                update_score(event, value, percent, getPrice(price_str));
             }
         }
 
         for (Objet o : ModelHolder.getInstance().getBatiment().getObjets())
             total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
+
+        for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
+            Layout layout = DpeUi.getLayout(m);
+            for (DateIsolationMurEnum value : DateIsolationMurEnum.values()) {
+                String price_str = prices_file.get("DATE_ISOLATION_MUR#" + value.toString());
+                update_score(m, value, 0, getPrice(price_str, m));
+            }
+        }
+
+        for (Fenetre fen : ModelHolder.getInstance().getBatiment().getFenetres()) {
+            Layout layout = DpeUi.getLayout(fen);
+            for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
+                String price_str = prices_file.get("TYPE_VITRAGE_MENUISERIE#" + value.toString());
+                update_score(fen, value, 0, getPrice(price_str, fen));
+            }
+            for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
+                String price_str = prices_file.get("TYPE_FERMETURE_MENUISERIE#" + value.toString());
+                update_score(fen, value, 0, getPrice(price_str, fen));
+            }
+        }
+
+        for (PorteFenetre fen : ModelHolder.getInstance().getBatiment().getPorteFenetres()) {
+            Layout layout = DpeUi.getLayout(fen);
+            for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
+                String price_str = prices_file.get("TYPE_VITRAGE_MENUISERIE#" + value.toString());
+                update_score(fen, value, 0, getPrice(price_str, fen));
+            }
+            for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
+                String price_str = prices_file.get("TYPE_FERMETURE_MENUISERIE#" + value.toString());
+                update_score(fen, value, 0, getPrice(price_str, fen));
+
+            }
+        }
 
         MainUiControleur.getInstance().setCash(getCash());
         MainUiControleur.getInstance().setTotal(getTotal());
@@ -171,26 +203,28 @@ public class DpeKartoffelator {
 
     }
 
-    public void update_score(DpeEvent event, Object value, float score, Float price) {
+    public void update_score(Object event, Object value, float score, Float price) {
         Layout layout = null;
-        switch (event) {
-            case ABONNEMENT_ELECTRIQUE:
-            case EQUIPEMENT_ECLAIRAGE:
-            case TYPE_VENTILATION:
-            case EQUIPEMENT_CUISSON:
-                layout = DpeUi.getLayout(DpeEvent.INFOS_GENERALES);
-                break;
-            case CHAUFFAGE_UNIQUE:
-                layout = DpeUi.getLayout(DpeEvent.INFOS_CHAUFFAGE);
-                break;
-            case TYPE_VITRAGE_MENUISERIE:
-            case TYPE_FERMETURE_MENUISERIE:
-                layout = DpeUi.getLayout(DpeEvent.INFOS_FENETRES);
-                break;
-            case DATE_ISOLATION_MUR:
-                layout = DpeUi.getLayout(DpeEvent.INFOS_MURS);
-                break;
-        }
+        if (event instanceof DpeEvent) {
+            switch ((DpeEvent)event) {
+                case ABONNEMENT_ELECTRIQUE:
+                case EQUIPEMENT_ECLAIRAGE:
+                case TYPE_VENTILATION:
+                case EQUIPEMENT_CUISSON:
+                    layout = DpeUi.getLayout(DpeEvent.INFOS_GENERALES);
+                    break;
+                case CHAUFFAGE_UNIQUE:
+                    layout = DpeUi.getLayout(DpeEvent.INFOS_CHAUFFAGE);
+                    break;
+                case TYPE_VITRAGE_MENUISERIE:
+                case TYPE_FERMETURE_MENUISERIE:
+                    layout = DpeUi.getLayout(DpeEvent.INFOS_FENETRES);
+                    break;
+                case DATE_ISOLATION_MUR:
+                    layout = DpeUi.getLayout(DpeEvent.INFOS_MURS);
+                    break;
+            }
+        } else layout = DpeUi.getLayout(event);
 
         Actor actor = value instanceof Chauffage.Generateur ? layout.getFromId(((Chauffage.Generateur)value).name()) : layout.getFromId(value.toString());
         if (actor != null) {
@@ -208,18 +242,18 @@ public class DpeKartoffelator {
                     Label label = new Label("",lbs);
                     Label label2 = new Label("",lbs);
                     hg.addActor(label);
-                    hg.addActor(label2);
+                    //hg.addActor(label2);
 
                     hg.padTop(-20).padLeft(20);
 
                     g.addActor(hg);
                 }
 
-                Label label = (Label)cb.getLabel().getParent().getChildren().get(1);
+                //Label label = (Label)cb.getLabel().getParent().getChildren().get(1);
 
-                label.setText(" ("+score + "%)");
+                //label.setText(" ("+score + "%)");
 
-                Label prix = (Label)cb.getLabel().getParent().getChildren().get(2);
+                Label prix = (Label)cb.getLabel().getParent().getChildren().get(1);
 
                 prix.setText(" "+price + " euros");
 
