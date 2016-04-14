@@ -109,8 +109,17 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static float time[] = {0, 0, 0, 0};
     public static String versionName = "1.0.x";
     public static int versionCode = 1;
+    public static int version = 0;
+    public String id = "debug";
+
 
     private static ActionResolver actionResolver;
+
+    public MainApplicationAdapter(ActionResolver actionResolver, int version, String id) {
+        this.actionResolver = actionResolver;
+        this.version = version;
+        this.id = id;
+    }
 
     public MainApplicationAdapter(ActionResolver actionResolver) {
         this.actionResolver = actionResolver;

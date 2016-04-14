@@ -42,8 +42,11 @@ public class DesktopLauncher {
 
 	public static void main (String[] arg) {
         String id = "debug";
-        if (arg.length == 1)
-            id = arg[0];
+        int version = 0;
+        if (arg.length >= 1)
+            version = Integer.parseInt(arg[0]);
+        if (arg.length >= 2)
+            id = arg[1];
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "PLAN 3D ENERGY home edition";
 		/*config.height = 1200;
@@ -54,6 +57,6 @@ public class DesktopLauncher {
         config.width = 1280;
 		config.fullscreen = false;
 
-		new LwjglApplication(new MainApplicationAdapter(new ActionResolverImpl()), config);
+		new LwjglApplication(new MainApplicationAdapter(new ActionResolverImpl(), version, id), config);
 	}
 }

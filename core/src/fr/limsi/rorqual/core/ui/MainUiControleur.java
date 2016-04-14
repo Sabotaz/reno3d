@@ -99,7 +99,7 @@ public class MainUiControleur implements EventListener {
         this.mainLayout = layout;
 
         I18NBundle config_file = I18NBundle.createBundle(Gdx.files.getFileHandle("data/misc/config", Files.FileType.Internal), Locale.FRENCH);
-        int version = Integer.parseInt(config_file.get("VERSION"));
+        int version = MainApplicationAdapter.version;
         if (version == 2  || version == 4)
             ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
 
