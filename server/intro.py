@@ -8,13 +8,11 @@ def afficher():
 
     if debug:
         import os
-        os.system("java -jar ../desktop/build/libs/desktop-1.0.jar " + version)
+        os.system("java -jar jar/desktop-1.0.jar " + version)
 
     else:
         html = open("html/intro.html").read()
-        config = open("../android/assets/data/misc/config.properties").read()
-        config = {c[0] : c[1] for c in [l.split("=") for l in config.split("\n")]}
-        intro = config["INTRO#"+version].replace("\\n","<br/>")
+        intro = open("text/intro"+version).read()
 
         html = html.replace("$INTRO", intro)
         html = html.replace("$VERSION", version)
