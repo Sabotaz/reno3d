@@ -2,12 +2,14 @@
 
 neps = []
 id = ""
+version = ""
 
 def afficher():
 
     html = open("html/neps2.html").read()
 
     html = html.replace("$ID", id)
+    html = html.replace("$VERSION", version)
 
     for i, nep in enumerate(neps):
         if nep is not None:
@@ -27,4 +29,5 @@ if __name__ == "__main__":
     print("Content-type: text/html; charset=utf-8\n")
     form = cgi.FieldStorage()
     id = form.getvalue("id")
+    version = form.getvalue("version")
     afficher() if last.traitement(form) else last.afficher()

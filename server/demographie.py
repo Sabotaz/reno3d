@@ -2,6 +2,7 @@
 #coding: utf-8
 
 id = ""
+version = ""
 email = ""
 age = ""
 sexe = ""
@@ -11,6 +12,8 @@ francais = ""
 def afficher():
 
     html = open("html/demographie.html").read()
+
+    html = html.replace("$VERSION", version)
 
     if id is not None:
        html = html.replace('name="id" value=""','name="id" value="' + id + '"')
@@ -56,4 +59,6 @@ if __name__ == "__main__":
     import cgi
     import intro as last
     print("Content-type: text/html; charset=utf-8\n")
-    afficher() if last.traitement(cgi.FieldStorage()) else last.afficher()
+    form = cgi.FieldStorage()
+    version = form.getvalue("version")
+    afficher() if last.traitement(form) else last.afficher()
