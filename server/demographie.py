@@ -50,8 +50,23 @@ def traitement(form):
     sexe = form.getvalue("sexe")
     studies = form.getvalue("studies")
     francais = form.getvalue("français")
+    version = form.getvalue("version")
 
     if email and age and sexe and studies and francais:
+        id = form.getvalue("id")
+        with open("log/"+id, "a") as log:
+            log.write("version;"+version)
+            log.write("\n")
+            log.write("email;"+email)
+            log.write("\n")
+            log.write("age;"+age)
+            log.write("\n")
+            log.write("sexe;"+sexe)
+            log.write("\n")
+            log.write("studies;"+studies)
+            log.write("\n")
+            log.write("français;"+francais)
+            log.write("\n")
         return True
     return False
 

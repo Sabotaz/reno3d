@@ -20,6 +20,12 @@ def afficher():
 def traitement(form):
     global  neps
     neps = [form.getvalue("Neps_"+str(i))for i in range(1,16)]
+    id = form.getvalue("id")
+    if None not in neps:
+        with open("log/"+id) as log:
+            for i, nep in enumerate(neps):
+                log.write("Neps2_"+str(i)+";"+nep)
+                log.write("\n")
 
     return None not in neps
 
