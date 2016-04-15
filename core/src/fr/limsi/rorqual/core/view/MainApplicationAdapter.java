@@ -110,7 +110,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static String versionName = "1.0.x";
     public static int versionCode = 1;
     public static int version = 0;
-    public String id = "debug";
+    public static String id = "debug";
 
 
     private static ActionResolver actionResolver;

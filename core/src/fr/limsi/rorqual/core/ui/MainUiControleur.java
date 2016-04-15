@@ -436,8 +436,10 @@ public class MainUiControleur implements EventListener {
                         case SAVE:
                             uncheckNonSaveButtons();
                             removeTb();
-                            tabName = "Save";
-                            addTb(getSaveTb());
+                            HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                            currentItems.put("filename", MainApplicationAdapter.id + ".3dr");
+                            Event e2 = new Event(UiEvent.SAVE_FILE, currentItems);
+                            EventManager.getInstance().put(Channel.UI, e2);
                             break;
                         case LOAD:
                             uncheckNonSaveButtons();
@@ -611,6 +613,7 @@ public class MainUiControleur implements EventListener {
                 String filename = (String)items.get("filename");
                 HitMaker.makeHitOnSave();
                 Serializer.saveAll(filename);
+                Gdx.app.exit();
             }
             else if (e.getEventType() == UiEvent.LOAD_FILE) {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
