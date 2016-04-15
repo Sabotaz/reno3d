@@ -6,7 +6,7 @@ version = ""
 def afficher():
 
     import os
-    os.popen("java -jar jar/desktop-1.0.jar" + version + " \"" + id + "\"").read()
+    os.popen("java -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
 
     html = open("html/end.html").read()
 
