@@ -84,7 +84,10 @@ def afficher():
     print(html)
 
 def traitement(form):
+    global id
+    global version
     id = form.getvalue("id")
+    version = form.getvalue("version")
 
     shuffle(id)
 
@@ -109,7 +112,7 @@ def traitement(form):
 
 if __name__ == "__main__":
     import cgi
-    import neps as last
+    import intro as last
     print("Content-type: text/html; charset=utf-8\n")
     form = cgi.FieldStorage()
     id = form.getvalue("id")

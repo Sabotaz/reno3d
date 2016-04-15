@@ -14,9 +14,7 @@ def afficher():
     html = open("html/demographie.html").read()
 
     html = html.replace("$VERSION", version)
-
-    if id is not None:
-       html = html.replace('name="id" value=""','name="id" value="' + id + '"')
+    html = html.replace("$ID", id)
 
     if email is not None:
        html = html.replace('name="email" value=""','name="email" value="' + email + '"')
@@ -38,6 +36,7 @@ def afficher():
 def traitement(form):
     
     global id
+    global version
     global email
     global age
     global sexe
@@ -55,8 +54,6 @@ def traitement(form):
     if email and age and sexe and studies and francais:
         id = form.getvalue("id")
         with open("log/"+id, "a") as log:
-            log.write("version;"+version)
-            log.write("\n")
             log.write("email;"+email)
             log.write("\n")
             log.write("age;"+age)
@@ -72,8 +69,9 @@ def traitement(form):
 
 if __name__ == "__main__":
     import cgi
-    import intro as last
+    import neps as last
     print("Content-type: text/html; charset=utf-8\n")
     form = cgi.FieldStorage()
+    id = form.getvalue("id")
     version = form.getvalue("version")
     afficher() if last.traitement(form) else last.afficher()

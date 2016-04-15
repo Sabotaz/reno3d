@@ -6,6 +6,9 @@ version = ""
 
 def afficher():
 
+    import os
+    os.popen("java -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
+
     html = open("html/neps.html").read()
 
     html = html.replace("$ID", id)
@@ -31,7 +34,7 @@ def traitement(form):
 
 if __name__ == "__main__":
     import cgi
-    import demographie as last
+    import consigne as last
     print("Content-type: text/html; charset=utf-8\n")
     form = cgi.FieldStorage()
     id = form.getvalue("id")

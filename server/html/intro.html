@@ -3,10 +3,12 @@
     <title>Mon programme</title>
 </head>
 <body>
-<p align="justify">$INTRO</p>
-<form action="/demographie.py" method="post">
-    <input type="hidden" name="version" value="$VERSION" /><br>
-    <input type="submit" name="send" value="J'ai compris">
-</form>
+Bonjour !
+    <form action="/neps2.py" method="post">
+    <input type="hidden" name="version" value="$VERSION" />
+<h3>ID</h3>
+        <input type="text" name="id" value="" /><br>
+        <input type="submit" name="send" value="Envoyer">
+    </form>
 </body>
 </html>
