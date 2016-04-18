@@ -49,6 +49,7 @@ public class TextureLibrary {
         private String category;
         private String id;
         private String name;
+        private float prix = 0;
         private float width = 0;
         private float height = 0;
         private HashMap<String, String> fields = new HashMap<String, String>();
@@ -63,6 +64,7 @@ public class TextureLibrary {
             name = i18n.get("name#" + n);
             category = i18n.get("category#" + n);
             textureFile = i18n.get("image#" + n);
+            prix = i18n.get("prix#" + n).startsWith("?") ? 0 : Float.parseFloat(i18n.get("prix#" + n));
 
             width = i18n.get("width#" + n).startsWith("?") ? 100 : Float.parseFloat(i18n.get("width#" + n));
             height = i18n.get("height#" + n).startsWith("?") ? 100 : Float.parseFloat(i18n.get("height#" + n));
@@ -77,6 +79,11 @@ public class TextureLibrary {
         public float getHeight() {
             return height;
         }
+
+        public float getPrix() {
+            return prix;
+        }
+
 
         public float getWidth() {
             return width;

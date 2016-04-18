@@ -1085,14 +1085,16 @@ public class Layout {
         Table buttonsTable = new Table();
 
         int start_x = 0;
-        final int MAX_X = (int)(width.get(null) / 128);
+        final int MAX_X = 2;
 
         buttonsTable.setSize(width.get(null),height.get(null));
 
         for (String name : tabObject) {
             ImageButton imageButton = (ImageButton)makeTextureImageButton(name, updater);
             buttonGroup.add(imageButton);
-            buttonsTable.add(imageButton).size(128, 128).left().top();
+            buttonsTable.add(imageButton).size(64, 64).left().top();
+            Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.WHITE);
+            buttonsTable.add(new Label(TextureLibrary.getInstance().getTextureLoader(name).getPrix() + " euros", lbs)).padLeft(10).width(128-10);
 
             start_x ++;
             if (start_x == MAX_X) {
@@ -1108,6 +1110,9 @@ public class Layout {
         scrollPane.setFadeScrollBars(false);
         scrollPane.layout();
         scrollPane.updateVisualScroll();
+
+        if (json.has("visible"))
+            table.setVisible(json.getBoolean("visible"));
 
 //        scrollPane.setupFadeScrollBars(1f,0.5f);
 
@@ -1160,7 +1165,7 @@ public class Layout {
 
     private Actor makeTextureImageButton (String name, Updater updater){
 
-        final ImageButton imageButton = new ClickableImageButton(name, TextureLibrary.getInstance().getTextureLoader(name).getTexture(), 128, 128);
+        final ImageButton imageButton = new ClickableImageButton(name, TextureLibrary.getInstance().getTextureLoader(name).getTexture(), 64, 64);
 
         if ((updater.getDefaultValue()).equals(name)) {
             imageButton.setChecked(true);
