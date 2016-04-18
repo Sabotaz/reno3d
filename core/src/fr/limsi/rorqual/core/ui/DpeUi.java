@@ -2,6 +2,7 @@ package fr.limsi.rorqual.core.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 
@@ -60,14 +61,29 @@ public class DpeUi  {
             return a;
         } else if (o instanceof Mur) {
             Actor a;
+            Layout l;
             if (!sauvegarde_layout.containsKey(o)){
-                Layout l = Layout.fromJson("data/ui/layout/wallProperties.json", o);
+                l = Layout.fromJson("data/ui/layout/wallProperties.json", o);
                 a = l.getRoot();
                 sauvegarde_layout.put(o,l);
             }else{
-                Layout l = sauvegarde_layout.get(o);
+                l = sauvegarde_layout.get(o);
                 a = l.getRoot();
             }
+
+            Mur mur = (Mur) o;
+            Table table = (Table)l.getFromId("textures");
+            table.clearChildren();
+
+            if (!mur.isInterieur())
+                table.add(l.getFromId("textures ext")).left().row();
+            if (mur.isInterieur() || mur.getSlabGauche() != null)
+                table.add(l.getFromId("textures int 1")).left().row();
+            if (mur.isInterieur() || mur.getSlabDroit() != null)
+                table.add(l.getFromId("textures int 2")).left().row();
+
+            table.setY(0 + table.getPrefHeight() / 2);
+
             return a;
         } else if (o instanceof Slab) {
             Actor a;

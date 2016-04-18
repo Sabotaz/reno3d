@@ -2,6 +2,8 @@ package fr.limsi.rorqual.core.dpe;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -20,7 +22,9 @@ import fr.limsi.rorqual.core.dpe.enums.menuiserieproperties.*;
 import fr.limsi.rorqual.core.dpe.enums.ecsproperties.*;
 import fr.limsi.rorqual.core.event.*;
 import fr.limsi.rorqual.core.model.*;
+import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
+import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.TabWindow;
 
 @XStreamAlias("dpe")
@@ -2889,6 +2893,18 @@ public class Dpe implements EventListener {
                                     }
                                 }
                             }
+                            Table table = (Table)DpeUi.getLayout(mur).getFromId("textures");
+                            table.clearChildren();
+                
+                            if (!mur.isInterieur())
+                                table.add(DpeUi.getLayout(mur).getFromId("textures ext")).left().row();
+                            if (mur.isInterieur() || mur.getSlabGauche() != null)
+                                table.add(DpeUi.getLayout(mur).getFromId("textures int 1")).left().row();
+                            if (mur.isInterieur() || mur.getSlabDroit() != null)
+                                table.add(DpeUi.getLayout(mur).getFromId("textures int 2")).left().row();
+                
+                            table.setY(0 + table.getPrefHeight() / 2);
+
                             break;
                         }
                         case SLAB_AJOUTE: {

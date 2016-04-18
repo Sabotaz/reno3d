@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés du mur",
-  "width": "30%",
+  "width": "33%",
   "id": "tab_window",
   "content": [
     {
@@ -83,32 +83,35 @@
         {
           "type": "TexturePicker",
           "label": "Extérieur :",
+          "id": "textures ext",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
           "category": "Mur",
           "align": "left",
           "width": "30%",
-          "height": "20%"
+          "height": "30%"
         },
         {
           "type": "TexturePicker",
           "label": "Intérieur 1 :",
+          "id": "textures int 1",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
           "category": "Mur",
           "align": "left",
           "width": "30%",
-          "height": "20%"
+          "height": "30%"
         },
         {
           "type": "TexturePicker",
           "label": "Intérieur 2 :",
+          "id": "textures int 2",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE3_PICKED",
           "category": "Mur",
           "align": "left",
           "width": "30%",
-          "height": "20%"
+          "height": "30%"
         }
       ]
     }
