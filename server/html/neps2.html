@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <head>
-    <title>Mon programme</title>
+    <title>Nostromo</title>
 </head>
 <body>
     <form action="/consigne.py" method="post">
         <input type="hidden" name="id" value="$ID" />
         <input type="hidden" name="version" value="$VERSION" />
 
-        <h2>Pour chacun des types d'équipement suivants, triez les différents produits du plus écologique au moins écologique :</h2>
+        <h3>Pour chacun des types d'équipement suivants, triez les différents produits du plus écologique au moins écologique :</h3><br><br>
 
-        <h3>Merci de trier les types de vitrage suivants du plus écologique au moins écologique :</h3>
+        <h4>Merci de trier les types de vitrage suivants du plus écologique au moins écologique :</h4>
         <table>
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
             <tr>
-                <td><label for="fen1">$fen1</label></td>
-                <td><label for="fen2">$fen2</label></td>
-                <td><label for="fen3">$fen3</label></td>
-                <td><label for="fen4">$fen4</label></td>
+                <td align="center"><label for="fen1">$fen1</label></td>
+                <td align="center"><label for="fen2">$fen2</label></td>
+                <td align="center"><label for="fen3">$fen3</label></td>
+                <td align="center"><label for="fen4">$fen4</label></td>
             </tr>
             <tr>
                 <td align="center">
@@ -53,12 +57,15 @@
             </tr>
         </table><br><br>
 
-        <h3>Merci de trier les types de volets suivants du plus écologique au moins écologique :</h3>
+        <h4>Merci de trier les types de volets suivants du plus écologique au moins écologique :</h4>
         <table>
+            <col width="250">
+            <col width="250">
+            <col width="250">
             <tr>
-                <td><label for="vol1">$vol1</label></td>
-                <td><label for="vol2">$vol2</label></td>
-                <td><label for="vol3">$vol3</label></td>
+                <td align="center"><label for="vol1">$vol1</label></td>
+                <td align="center"><label for="vol2">$vol2</label></td>
+                <td align="center"><label for="vol3">$vol3</label></td>
             </tr>
             <tr>
                 <td align="center">
@@ -85,15 +92,21 @@
             </tr>
         </table><br><br>
 
-        <h3>Merci de trier les types d'isolation suivants du plus écologique au moins écologique :</h3>
+        <h4>Merci de trier les types d'isolation suivants du plus écologique au moins écologique :</h4>
         <table>
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
             <tr>
-                <td><label for="iso1">$iso1</label></td>
-                <td><label for="iso2">$iso2</label></td>
-                <td><label for="iso3">$iso3</label></td>
-                <td><label for="iso4">$iso4</label></td>
-                <td><label for="iso5">$iso5</label></td>
-                <td><label for="iso6">$iso6</label></td>
+                <td align="center"><label for="iso1">$iso1</label></td>
+                <td align="center"><label for="iso2">$iso2</label></td>
+                <td align="center"><label for="iso3">$iso3</label></td>
+                <td align="center"><label for="iso4">$iso4</label></td>
+                <td align="center"><label for="iso5">$iso5</label></td>
+                <td align="center"><label for="iso6">$iso6</label></td>
             </tr>
             <tr>
                 <td align="center">
@@ -159,13 +172,17 @@
             </tr>
         </table><br><br>
 
-        <h3>Merci de trier les types de ventilation suivants du plus écologique au moins écologique :</h3>
+        <h4>Merci de trier les types de ventilation suivants du plus écologique au moins écologique :</h4>
         <table>
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
             <tr>
-                <td><label for="vmc1">$vmc1</label></td>
-                <td><label for="vmc2">$vmc2</label></td>
-                <td><label for="vmc3">$vmc3</label></td>
-                <td><label for="vmc4">$vmc4</label></td>
+                <td align="center"><label for="vmc1">$vmc1</label></td>
+                <td align="center"><label for="vmc2">$vmc2</label></td>
+                <td align="center"><label for="vmc3">$vmc3</label></td>
+                <td align="center"><label for="vmc4">$vmc4</label></td>
             </tr>
             <tr>
                 <td align="center">
@@ -203,13 +220,17 @@
             </tr>
         </table><br><br>
 
-        <h3>Merci de trier les types de source de chaleur suivants du plus écologique au moins écologique :</h3>
+        <h4>Merci de trier les types de source de chaleur suivants du plus écologique au moins écologique :</h4>
         <table>
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
         <tr>
-            <td><label for="cha1">$cha1</label></td>
-            <td><label for="cha2">$cha2</label></td>
-            <td><label for="cha3">$cha3</label></td>
-            <td><label for="cha4">$cha4</label></td>
+            <td align="center"><label for="cha1">$cha1</label></td>
+            <td align="center"><label for="cha2">$cha2</label></td>
+            <td align="center"><label for="cha3">$cha3</label></td>
+            <td align="center"><label for="cha4">$cha4</label></td>
         </tr>
         <tr>
             <td align="center">
@@ -247,14 +268,19 @@
         </tr>
     </table><br><br>
 
-        <h3>Merci de trier les types de source de déperdition énergétique suivants du plus important au moins important :</h3>
+        <h4>Merci de trier les types de source de déperdition énergétique suivants du plus important au moins important :</h4>
         <table>
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
+            <col width="250">
             <tr>
-                <td><label for="dep1">$dep1</label></td>
-                <td><label for="dep2">$dep2</label></td>
-                <td><label for="dep3">$dep3</label></td>
-                <td><label for="dep4">$dep1</label></td>
-                <td><label for="dep5">$dep1</label></td>
+                <td align="center"><label for="dep1">$dep1</label></td>
+                <td align="center"><label for="dep2">$dep2</label></td>
+                <td align="center"><label for="dep3">$dep3</label></td>
+                <td align="center"><label for="dep4">$dep1</label></td>
+                <td align="center"><label for="dep5">$dep1</label></td>
             </tr>
             <tr>
                 <td align="center">

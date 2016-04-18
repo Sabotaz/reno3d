@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <head>
-    <title>Mon programme</title>
+    <title>Nostromo</title>
 </head>
 <body>
     <form action="/end.py" method="post">
     <input type="hidden" name="version" value="$VERSION" />
         <input type="hidden" name="id" value="$ID" />
-<h3>Adresse email</h3>
+        <h3>Dernière étape, merci de renseigner les informations suivantes :</h3>
+<h4>Adresse email (servira uniquement à vous adresser un second questionnaire) ::</h4>
         <input type="text" name="email" value="" /><br>
-<h3>Âge</h3>
+<h4>Âge :</h4>
         <input type="text" name="age" value="" /><br>
 
-<h3>Sexe</h3>
+<h4>Sexe :</h4>
         <input type="radio" name="sexe" id="Homme" value="Homme"><label for="Homme">Homme</label><br>
         <input type="radio" name="sexe" id="Femme" value="Femme"><label for="Femme">Femme</label><br>
 
-<h3>Niveau d'études</h3>
+<h4>Niveau d'études (dernier diplôme obtenu) :</h4>
         <input type="radio" name="studies" id="CAP" value="CAP/BEP"><label for="CAP">CAP/BEP</label><br>
         <input type="radio" name="studies" id="BAC" value="BAC/BT/BP"><label for="BAC">BAC/BT/BP</label><br>
         <input type="radio" name="studies" id="BAC3" value="BAC+3"><label for="BAC3">BAC+3</label><br>
         <input type="radio" name="studies" id="BAC5" value="BAC+5"><label for="BAC5">BAC+5</label><br>
         <input type="radio" name="studies" id="BAC8" value="BAC+8"><label for="BAC8">BAC+8</label><br>
-<h3>Degré de maîtrise du français</h3>
+<h4>Degré de maîtrise du français :</h4>
         <input type="radio" name="français" id="1" value="C'est ma langue maternelle"><label for="1">C'est ma langue maternelle</label><br>
         <input type="radio" name="français" id="2" value="Je le parle aussi bien que ma langue maternelle"><label for="2">Je le parle aussi bien que ma langue maternelle</label><br>
         <input type="radio" name="français" id="3" value="Je le parle couramment mais pas aussi bien que ma langue maternelle"><label for="3">Je le parle couramment mais pas aussi bien que ma langue maternelle</label><br>
