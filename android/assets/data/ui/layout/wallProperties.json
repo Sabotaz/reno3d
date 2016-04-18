@@ -77,7 +77,7 @@
     },
     {
       "type": "Table",
-      "name": "Textures",
+      "name": "Couleur",
       "id": "textures",
       "content": [
         {
