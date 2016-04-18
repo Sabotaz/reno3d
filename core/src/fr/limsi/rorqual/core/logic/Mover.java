@@ -63,64 +63,9 @@ public class Mover extends ModelMaker {
         if (modelContainer == null) {
             moving = false;
         } else if (modelContainer instanceof Mur) {
-            Vector2 pos = new MyVector2(modelContainer.getIntersection());
-            Coin A = ((Mur)modelContainer).getA();
-            Coin B = ((Mur)modelContainer).getB();
-            float d1 = A.getPosition().dst(pos);
-            float d2 = B.getPosition().dst(pos);
-            float d = A.getPosition().dst(B.getPosition()); // min dist to move
-            if (d1 < d/4) {
-                newCoin = initialCoin = A;
-                translate = false;
-
-                murs = new ArrayList<Mur>(initialCoin.getMurs());
-                slabs = new ArrayList<Slab>(initialCoin.getSlabs());
-            }
-            else if (d2 < d/4) {
-                newCoin = initialCoin = B;
-                translate = false;
-
-                murs = new ArrayList<Mur>(initialCoin.getMurs());
-                slabs = new ArrayList<Slab>(initialCoin.getSlabs());
-            }
-            else {
-                newCoinA = initialCoinA = A;
-                newCoinB = initialCoinB = B;
-                translatedMur = (Mur)modelContainer;
-                translatedMur.setSelectable(false);
-                startx = screenX;
-                starty = screenY;
-                translate = true;
-                murs = new ArrayList<Mur>(initialCoinA.getMurs());
-                murs.addAll(initialCoinB.getMurs());
-                slabs = new ArrayList<Slab>(initialCoinA.getSlabs());
-                slabs.addAll(initialCoinB.getSlabs());
-            }
-
-            for (Mur mur : murs)
-                mur.setSelectable(false);
-
-            moving = true;
+            moving = false;
         } else if (modelContainer instanceof Slab) {
-            Vector2 pos = new MyVector2(modelContainer.getIntersection());
-
-            float d = 1.5f; // min dist to move
-            for (Coin coin : ((Slab)modelContainer).getCoins()) {
-                if (coin.getPosition().dst(pos) < d)
-                    newCoin = initialCoin = coin;
-            }
-            if (initialCoin != null) {
-                murs = new ArrayList<Mur>(initialCoin.getMurs());
-                slabs = new ArrayList<Slab>(initialCoin.getSlabs());
-
-                for (Mur mur : murs)
-                    mur.setSelectable(false);
-
-                moving = true;
-
-            } else {
-                moving = false;
-            }
+            moving = false;
         } else if (modelContainer instanceof Objet) {
             movedObjet = (Objet) modelContainer;
             movedObjet.setSelectable(false);
@@ -128,11 +73,7 @@ public class Mover extends ModelMaker {
             translate = false;
             collisionController.startNewCollision(movedObjet);
         } else if (modelContainer instanceof Ouverture) {
-            movedOuverture = (Ouverture) modelContainer;
-            movedOuverture.setSelectable(false);
-            moving = movingOuverture = true;
-            translate = false;
-
+            moving = false;
         }
 
     }
