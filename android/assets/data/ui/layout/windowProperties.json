@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés de la fenêtre",
-  "width": "35%",
+  "width": "25%",
   "id": "tab_window",
   "content": [
     {
