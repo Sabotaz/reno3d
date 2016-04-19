@@ -57,10 +57,7 @@ public class TextureLibrary {
         public TextureLoader(String path, I18NBundle i18n, int n) {
             this.path = path;
 
-            i18n.setExceptionOnMissingKey(true);
             id = i18n.get("id#"+n);
-            i18n.setExceptionOnMissingKey(false);
-
             name = i18n.get("name#" + n);
             category = i18n.get("category#" + n);
             textureFile = i18n.get("image#" + n);
@@ -153,15 +150,29 @@ public class TextureLibrary {
             try {
 
 
-                TextureLoader textureLoader = new TextureLoader(file.parent().path(), i18n, n);
-                String category = textureLoader.getCategory();
-                String id = textureLoader.getId();
+                i18n.setExceptionOnMissingKey(true);
+                String id = i18n.get("id#"+n);
+                i18n.setExceptionOnMissingKey(false);
 
-                if (!categories.containsKey(category))
-                    categories.put(category, new HashMap<String, TextureLoader>());
-                categories.get(category).put(id, textureLoader);
-                textures.put(id, textureLoader);
+                boolean exists = false;
+                try {
+                    // hack from https://code.google.com/p/libgdx/issues/detail?id=1655
+                    Gdx.files.getFileHandle(file.parent().path() + "/" + i18n.get("image#" + n), Files.FileType.Internal).read().close();
+                    exists = true;
+                } catch (Exception e) {
+                    // doesn't exist !
+                }
+                if (exists) {
 
+                    TextureLoader textureLoader = new TextureLoader(file.parent().path(), i18n, n);
+                    String category = textureLoader.getCategory();
+
+                    if (!categories.containsKey(category))
+                        categories.put(category, new HashMap<String, TextureLoader>());
+                    categories.get(category).put(id, textureLoader);
+                    textures.put(id, textureLoader);
+
+                }
                 // end
                 n++;
 
