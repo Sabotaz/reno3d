@@ -307,7 +307,6 @@ public class MainUiControleur implements EventListener {
                             removeTb();
                             CameraEngine.getInstance().switchCamera();
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
-                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case MOVE:
                             uncheckNonControlButtons();
@@ -415,7 +414,6 @@ public class MainUiControleur implements EventListener {
                             CameraEngine.getInstance().reset();
 
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
-                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case CALCUL_SURFACE:
                             uncheckNonInfoButtons();
@@ -441,7 +439,6 @@ public class MainUiControleur implements EventListener {
                             CameraEngine.getInstance().reset();
 
                             ((Button)layout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
-                            ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
                             break;
                         case SAVE:
                             uncheckNonSaveButtons();
@@ -641,7 +638,6 @@ public class MainUiControleur implements EventListener {
                 CameraEngine.getInstance().reset();
 
                 ((Button)mainLayout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
-                ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
 
                 Deserializer.loadAll(filename);
 

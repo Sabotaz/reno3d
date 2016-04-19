@@ -43,8 +43,6 @@ public class Batiment {
     private int current;
     @XStreamAlias("globalOrientation")
     private OrientationEnum globalOrientation = OrientationEnum.SUD;
-    @XStreamOmitField
-    private Camera camera = null;
     @XStreamAlias("etages")
     private EtageHolder etages = new EtageHolder();
 
@@ -98,7 +96,6 @@ public class Batiment {
         Etage etage = new Etage();
         etage.setBatiment(this);
         etage.setOrientation(globalOrientation);
-        etage.getModelGraph().setCamera(camera);
         etage.getModelGraph().getRoot().add(floor);
         first = last = etage;
         etages.add(etage);
@@ -126,7 +123,6 @@ public class Batiment {
             Etage etage = new Etage();
             etage.setBatiment(this);
             etage.setOrientation(globalOrientation);
-            etage.getModelGraph().setCamera(camera);
             etages.addAtTop(etage);
         }
         current++;
@@ -142,7 +138,6 @@ public class Batiment {
             Etage etage = new Etage();
             etage.setBatiment(this);
             etage.setOrientation(globalOrientation);
-            etage.getModelGraph().setCamera(camera);
             etages.addAtBottom(etage);
         }
         current--;
@@ -154,7 +149,7 @@ public class Batiment {
 
     public void draw(ModelBatch modelBatch, Environment environnement, ModelContainer.Type type) {
         synchronized (this) {
-            if (camera instanceof OrthographicCamera) {
+            if (modelBatch.getCamera() instanceof OrthographicCamera) {
                 for (int i = etages.getMin(); i <= current; i++) {
                     Etage etage = etages.get(i);
                     etage.getModelGraph().draw(modelBatch, environnement, type);
@@ -188,13 +183,6 @@ public class Batiment {
             Vector3 translation = etage.getModelGraph().getRoot().local_transform.getTranslation(new Vector3());
             translation.z = height;
             etage.getModelGraph().getRoot().local_transform.setTranslation(translation);
-        }
-    }
-
-    public void setCamera(Camera camera) {
-        this.camera = camera;
-        for (Etage etage : etages.list()) {
-            etage.getModelGraph().setCamera(camera);
         }
     }
 

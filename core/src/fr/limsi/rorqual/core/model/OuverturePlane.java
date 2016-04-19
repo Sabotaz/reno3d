@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -82,12 +83,12 @@ public class OuverturePlane extends ModelContainer {
             } else { // vers la droite
             }
         }
-        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
+        this.setVisible(CameraEngine.getInstance().getCurrentCamera() instanceof OrthographicCamera);
     }
 
     @Override
     protected void draw(ModelBatch modelBatch, Environment environment, Type type, Matrix4 global_transform) {
-        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
+        this.setVisible(modelBatch.getCamera() instanceof OrthographicCamera);
         super.draw(modelBatch, environment, type, global_transform);
     }
 }

@@ -28,7 +28,7 @@ public class CameraEngine implements GestureDetector.GestureListener, InputProce
 
     private Cameras curent_camera = Cameras.PERSPECTIVE;
 
-    private enum Cameras {
+    public enum Cameras {
         PERSPECTIVE,
         ORTHOGRAPHIC,
         GYROMETER, // use of Android Gyro
@@ -80,6 +80,10 @@ public class CameraEngine implements GestureDetector.GestureListener, InputProce
                 break;
         }
         curent_camera.updater.reset();
+    }
+
+    public Camera getCamera(Cameras type) {
+        return type.updater.getCamera();
     }
 
     public Camera getCurrentCamera() {

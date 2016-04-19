@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -259,7 +260,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         actionResolver.sendTiming(Category.LOADING, timeit.value(), "Shader engine loading time");
 
         modelGraph = new ModelGraph();
-        modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
 //        stageMenu.setDebugAll(true);
         //System.out.println(stageMenu.getWidth());
 
@@ -282,7 +282,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         setLoadingMessage("Loading cameras...");
         timeit = new Timeit().start();
-        ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
         timeit.stop();
         System.out.println("current camera ok " + (timeit.value() * 0.001f));
         actionResolver.sendTiming(Category.LOADING, timeit.value(), "Cameras loading time");
@@ -291,7 +290,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         //modelGraph.getRoot().add(popup);
         ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().getRoot().add(sun);
-        ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph().setCamera(CameraEngine.getInstance().getCurrentCamera());
 
         //SceneGraphMaker.makeSceneGraph(spatialStructureTreeNode, modelGraph);
 
@@ -409,24 +407,38 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         }
     }
 
-    @Override
-	public void render () {
-        if (!loading_finished) {
-            renderStartScreen();
-            return;
-        }
+	public void renderG() {
+        Gdx.gl.glViewport(0, Gdx.graphics.getHeight() - 375, 300, 300);
+        CameraEngine.Cameras.ORTHOGRAPHIC.getCameraUpdater().updateViewport(300, 300);
+        render(CameraEngine.getInstance().getCamera(CameraEngine.Cameras.ORTHOGRAPHIC));
 
-        act();
+        Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(new Matrix4().idt());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.identity();
+        shapeRenderer.setColor(0, 0, 0, 1);
+        shapeRenderer.rect(-1f, -1f, 2, 0.03f);
+        shapeRenderer.rect(-1f, -1f, 0.03f, 2);
+        shapeRenderer.rect(1f, 1f, -2, -0.03f);
+        shapeRenderer.rect(1f, 1f, -0.03f, -2);
+        shapeRenderer.end();
+        Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
+
+    }
+
+	public void renderD() {
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        render(CameraEngine.getInstance().getCurrentCamera());
+    }
+	public void render (Camera camera) {
 
         if (modelBatchOpaque == null)
             modelBatchOpaque = new ModelBatch(shaderProvider);
         if (modelBatchTransparent == null)
             modelBatchTransparent = new ModelBatch(shaderProvider, new BaseSorter());
 
-        modelBatchOpaque.begin(CameraEngine.getInstance().getCurrentCamera());
-        Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        modelBatchOpaque.begin(camera);
         //Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
@@ -437,9 +449,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         modelBatchOpaque.end();
 
-        modelBatchTransparent.begin(CameraEngine.getInstance().getCurrentCamera());
-
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        modelBatchTransparent.begin(camera);
         //Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
@@ -453,6 +463,25 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         modelBatchTransparent.end();
 
         //Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
+    }
+
+    @Override
+	public void render () {
+        if (!loading_finished) {
+            renderStartScreen();
+            return;
+        }
+
+        act();
+
+        Gdx.gl.glClearColor(0.12f, 0.38f, 0.55f, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+        renderD();
+
+        renderG();
+
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         synchronized (stageMenu) {
             stageMenu.draw();
         }
@@ -486,11 +515,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     @Override
     public boolean keyUp(int keycode) {
         switch (keycode) {
-            case Input.Keys.C:
-                ncam++;
-                modelGraph.setCamera(CameraEngine.getInstance().getCurrentCamera());
-                ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
-                return true;
             case Input.Keys.ESCAPE:
                 mainUiControleur.removeTb();
                 return true;

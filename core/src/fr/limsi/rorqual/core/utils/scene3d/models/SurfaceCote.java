@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -52,7 +53,7 @@ public class SurfaceCote extends ModelContainer {
             makeMesh();
             changed = false;
         }
-        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
+        this.setVisible(CameraEngine.getInstance().getCurrentCamera() instanceof OrthographicCamera);
     }
 
     private float value = 0.0f;

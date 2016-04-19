@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import javax.jws.WebParam;
 
+import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
@@ -21,7 +22,6 @@ import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 public class ModelGraph {
 
     ModelContainer root;
-    Camera camera;
 
     public ModelContainer getRoot() {
         return root;
@@ -45,18 +45,8 @@ public class ModelGraph {
     }
 
     public ModelContainer hit(int screenX, int screenY) {
-        if (camera == null)
-            return null;
-        Ray ray = camera.getPickRay(screenX, screenY);
+        Ray ray = CameraEngine.getInstance().getCurrentCamera().getPickRay(screenX, screenY);
         return root.hit(ray);
-    }
-
-    public void setCamera(Camera c) {
-        camera = c;
-    }
-
-    public Camera getCamera() {
-        return camera;
     }
 
     private int count(ModelContainer current) {

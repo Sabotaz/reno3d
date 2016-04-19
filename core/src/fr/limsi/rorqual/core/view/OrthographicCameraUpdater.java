@@ -33,7 +33,7 @@ public class OrthographicCameraUpdater extends CameraUpdater {
 
         float ratio = Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
         OrthographicCamera orthographicCamera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_WIDTH*ratio);
-        orthographicCamera.zoom = 1f;
+        orthographicCamera.zoom = 0.5f;
         orthographicCamera.position.set(0.f, 0.f, 10f);
         orthographicCamera.lookAt(0f, 0f, 0f);
         orthographicCamera.up.set(0, 1, 0);

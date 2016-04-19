@@ -48,7 +48,6 @@ public class SerialHolder {
         dpe.actualiseDpMur();
         Dpe.loadDpe(dpe);
         DpeUi.clear();
-        ModelHolder.getInstance().getBatiment().setCamera(CameraEngine.getInstance().getCurrentCamera());
     }
 
 }

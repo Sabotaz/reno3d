@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
@@ -62,7 +63,7 @@ public class Cote extends ModelContainer {
             changed = false;
         }
 
-        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
+        this.setVisible(CameraEngine.getInstance().getCurrentCamera() instanceof OrthographicCamera);
     }
 
     private float value = 0.0f;

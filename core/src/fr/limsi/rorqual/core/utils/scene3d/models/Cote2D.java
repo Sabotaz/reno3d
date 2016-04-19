@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.utils.AssetManager;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 
@@ -63,7 +64,7 @@ public class Cote2D extends ModelContainer {
             changed = false;
         }
 
-        this.setVisible(this.root.getCamera() instanceof OrthographicCamera);
+        this.setVisible(CameraEngine.getInstance().getCurrentCamera() instanceof OrthographicCamera);
     }
 
     private float vvalue = 0.0f;
