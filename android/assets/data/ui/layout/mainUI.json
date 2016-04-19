@@ -112,11 +112,27 @@
               "type": "Button",
               "text": "Modifier",
               "id":"Move",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.DELETE",
+              "height": "auto",
+              "width": "6%",
+              "pad": 0,
+              "visible":true,
+              "style": [
+                "drawable:delete",
+                "drawable:delete:tint:888888",
+                "drawable:delete:tint:888888",
+                "default.fnt"
+              ]
+            },
+            {
+              "type": "Button",
+              "text": "Modifier",
+              "id":"Move",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.MOVE",
               "height": "auto",
               "width": "6%",
               "pad": 0,
-              "visible":false,
+              "visible":true,
               "style": [
                 "drawable:move",
                 "drawable:move:tint:888888",

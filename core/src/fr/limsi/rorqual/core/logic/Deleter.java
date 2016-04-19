@@ -35,7 +35,7 @@ public class Deleter extends ModelMaker {
         if (deleting_objet == true) return;
         currentEtage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
         deleted_object = currentEtage.getModelGraph().getObject(screenX, screenY);
-        if (deleted_object == null) {
+        if (deleted_object == null || !(deleted_object instanceof Objet)) {
             deleting_objet = false;
         } else {
             deleting_objet = true;
