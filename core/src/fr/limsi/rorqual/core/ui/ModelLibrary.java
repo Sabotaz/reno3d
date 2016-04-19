@@ -418,7 +418,7 @@ public class ModelLibrary {
             });
             content.add(imageButton).size(64, 64).left().top();
             Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"),Color.WHITE);
-            content.add(new Label(modelLoader.getPrix() + " euros",lbs)).padLeft(10).width(128-10);
+            content.add(new Label(((int)modelLoader.getPrix()) + " euros",lbs)).padLeft(10).width(128-10);
 
             start_x ++;
             if (start_x == MAX_X) {

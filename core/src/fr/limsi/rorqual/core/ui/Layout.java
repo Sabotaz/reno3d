@@ -1094,7 +1094,7 @@ public class Layout {
             buttonGroup.add(imageButton);
             buttonsTable.add(imageButton).size(64, 64).left().top();
             Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.WHITE);
-            buttonsTable.add(new Label(TextureLibrary.getInstance().getTextureLoader(name).getPrix() + " euros", lbs)).padLeft(10).width(128-10);
+            buttonsTable.add(new Label(((int)TextureLibrary.getInstance().getTextureLoader(name).getPrix()) + " euros", lbs)).padLeft(10).width(128-10);
 
             start_x ++;
             if (start_x == MAX_X) {

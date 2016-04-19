@@ -55,7 +55,7 @@ public class DpeKartoffelator {
     Hashtable<DpeEvent, ArrayList<Object>> fake_dpes = new Hashtable<DpeEvent, ArrayList<Object>>();
     I18NBundle prices_file;
     I18NBundle config_file;
-    float init = 700;
+    int init = 700;
 
     public DpeKartoffelator() {
 
@@ -111,9 +111,9 @@ public class DpeKartoffelator {
         }
     }
 
-    private float total = 0;
+    private int total = 0;
 
-    public float getTotal() {
+    public int getTotal() {
         return total;
     }
 
@@ -121,7 +121,7 @@ public class DpeKartoffelator {
         return Integer.parseInt(config_file.get("CASH"));
     }
 
-    float getPrice(String price_str, Object ... params) {
+    int getPrice(String price_str, Object ... params) {
 
         float price = 0;
         if (price_str.endsWith("av")) {
@@ -140,8 +140,7 @@ public class DpeKartoffelator {
             price = Float.parseFloat(price_str.substring(0, price_str.length()-2)) * f;
         } else
             price = Float.parseFloat(price_str);
-        price = ((int)(100*price))/100.0f;
-        return price;
+        return (int) price;
     }
 
     public void calculate_all() {
@@ -152,11 +151,8 @@ public class DpeKartoffelator {
         for (Map.Entry<DpeEvent, ArrayList<Object>> keys : fake_dpes.entrySet()) {
             DpeEvent event = keys.getKey();
             for (Object value : keys.getValue()) {
-                float avant = dpe.getScoreDpe();
-                float score = 0;//dpe.emulateChange(event, value);
-                float percent = ((int)(-((score-avant)/avant)*1000))/10.0f;
                 String price_str = prices_file.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur) value).name() : value.toString()));
-                update_score(event, value, percent, getPrice(price_str));
+                update_score(event, value, getPrice(price_str));
             }
         }
 
@@ -167,7 +163,7 @@ public class DpeKartoffelator {
             Layout layout = DpeUi.getLayout(m);
             for (DateIsolationMurEnum value : DateIsolationMurEnum.values()) {
                 String price_str = prices_file.get("DATE_ISOLATION_MUR#" + value.toString());
-                update_score(m, value, 0, getPrice(price_str, m));
+                update_score(m, value, getPrice(price_str, m));
             }
         }
 
@@ -175,11 +171,11 @@ public class DpeKartoffelator {
             Layout layout = DpeUi.getLayout(fen);
             for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
                 String price_str = prices_file.get("TYPE_VITRAGE_MENUISERIE#" + value.toString());
-                update_score(fen, value, 0, getPrice(price_str, fen));
+                update_score(fen, value, getPrice(price_str, fen));
             }
             for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
                 String price_str = prices_file.get("TYPE_FERMETURE_MENUISERIE#" + value.toString());
-                update_score(fen, value, 0, getPrice(price_str, fen));
+                update_score(fen, value, getPrice(price_str, fen));
             }
         }
 
@@ -187,11 +183,11 @@ public class DpeKartoffelator {
             Layout layout = DpeUi.getLayout(fen);
             for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
                 String price_str = prices_file.get("TYPE_VITRAGE_MENUISERIE#" + value.toString());
-                update_score(fen, value, 0, getPrice(price_str, fen));
+                update_score(fen, value, getPrice(price_str, fen));
             }
             for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
                 String price_str = prices_file.get("TYPE_FERMETURE_MENUISERIE#" + value.toString());
-                update_score(fen, value, 0, getPrice(price_str, fen));
+                update_score(fen, value, getPrice(price_str, fen));
 
             }
         }
@@ -199,11 +195,11 @@ public class DpeKartoffelator {
         MainUiControleur.getInstance().setCash(getCash());
         MainUiControleur.getInstance().setTotal(getTotal());
         MainUiControleur.getInstance().setScore(init);
-        MainUiControleur.getInstance().setEstimation(dpe.getScoreDpe());
+        MainUiControleur.getInstance().setEstimation((int) dpe.getScoreDpe());
 
     }
 
-    public void update_score(Object event, Object value, float score, Float price) {
+    public void update_score(Object event, Object value, int price) {
         Layout layout = null;
         if (event instanceof DpeEvent) {
             switch ((DpeEvent)event) {
@@ -255,7 +251,7 @@ public class DpeKartoffelator {
 
                 Label prix = (Label)cb.getLabel().getParent().getChildren().get(1);
 
-                prix.setText(" "+price + " euros");
+                prix.setText(" ("+price + " euros)");
 
                 if (cb.isChecked()) total += price;
 
@@ -272,6 +268,6 @@ public class DpeKartoffelator {
             e.printStackTrace();
         }
         Dpe dpe = Dpe.getInstance();
-        init = dpe.getScoreDpe();
+        init = (int) dpe.getScoreDpe();
     }
 }

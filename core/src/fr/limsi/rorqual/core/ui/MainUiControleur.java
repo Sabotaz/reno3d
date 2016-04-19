@@ -113,15 +113,15 @@ public class MainUiControleur implements EventListener {
         ((Label)mainLayout.getFromId("label_cash")).setText("Total: " + cash + " euros");
     }
 
-    public void setTotal(float total) {
+    public void setTotal(int total) {
         ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " euros");
     }
 
-    public void setScore(float score) {
+    public void setScore(int score) {
         ((Label)mainLayout.getFromId("label_score")).setText("Base: " + score + " kWh");
     }
 
-    public void setEstimation(float estim) {
+    public void setEstimation(int estim) {
         ((Label)mainLayout.getFromId("label_estim")).setText("Actuel: " + estim + " kWh");
     }
 
