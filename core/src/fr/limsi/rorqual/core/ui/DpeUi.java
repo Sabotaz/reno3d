@@ -96,10 +96,10 @@ public class DpeUi  {
                 a = l.getRoot();
             }
             return a;
-        } else if (o instanceof Objet) {
+        } /*else if (o instanceof Objet) {
             Actor a = makeObjetTab((Objet) o);
             return a;
-        }
+        }*/
 
         else if(o == DpeEvent.INFOS_GENERALES){
             Actor a;

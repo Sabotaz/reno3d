@@ -375,7 +375,7 @@ public class ModelLibrary {
     }
 
     private void makeTabWindow() {
-        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.45f).get(null);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.33f).get(null);
         TabWindow tw = new TabWindow(width);
         tw.setTitle("Bibliothèque");
         for (Map.Entry<String, HashMap<String, ModelLoader>> entry : categories.entrySet())
@@ -392,8 +392,8 @@ public class ModelLibrary {
     private void makeNewTab(TabWindow tw, String category, HashMap<String, ModelLoader> models) {
 
         Table content = new Table();
-        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.4f).get(null);
-        float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.6f).get(null);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.3f).get(null);
+        float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.4f).get(null);
         content.setSize(width, height);
         int start_x = 0;
         final int MAX_X = 2;
@@ -405,7 +405,7 @@ public class ModelLibrary {
             final String id = entry.getKey();
             ModelLoader modelLoader = entry.getValue();
 
-            ImageButton imageButton = new Layout.ClickableImageButton(modelLoader.getImageName(), 128, 128);
+            ImageButton imageButton = new Layout.ClickableImageButton(modelLoader.getImageName(), 64, 64);
             group.add(imageButton);
 
             imageButton.addListener(new ClickListener() {
@@ -416,7 +416,7 @@ public class ModelLibrary {
                     Logic.getInstance().startModel();
                 }
             });
-            content.add(imageButton).size(128, 128).left().top();
+            content.add(imageButton).size(64, 64).left().top();
             Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"),Color.WHITE);
             content.add(new Label(modelLoader.getPrix() + " euros",lbs)).padLeft(10).width(128-10);
 

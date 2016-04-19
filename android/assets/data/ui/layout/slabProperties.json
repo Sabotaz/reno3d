@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés de la pièce",
-  "width": "40%",
+  "width": "33%",
   "id": "tab_window",
   "content": [
     {
