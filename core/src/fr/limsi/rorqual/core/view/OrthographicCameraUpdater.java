@@ -15,6 +15,7 @@ import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Slab;
 
@@ -57,13 +58,33 @@ public class OrthographicCameraUpdater extends CameraUpdater {
     @Override
     public void reset() {
         BoundingBox b = new BoundingBox();
-        for (Etage etage : ModelHolder.getInstance().getBatiment().getAllEtages()) {
-            for (Slab slab : etage.getSlabs())
-                slab.extendBoundingBox(b);
+        Etage etage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
+        float center_x = 0;
+        float center_y = 0;
+        if (!etage.getMurs().isEmpty()) {
+            float min_x = Float.MAX_VALUE;
+            float min_y = Float.MAX_VALUE;
+            float max_x = -Float.MAX_VALUE;
+            float max_y = -Float.MAX_VALUE;
+            for (Mur m : etage.getMurs()) {
+                Vector2 v = m.getA().getPosition();
+                if (v.x < min_x) min_x = v.x;
+                if (v.y < min_y) min_y = v.y;
+                if (v.x > max_x) max_x = v.x;
+                if (v.y > max_y) max_y = v.y;
+                v = m.getB().getPosition();
+                if (v.x < min_x) min_x = v.x;
+                if (v.y < min_y) min_y = v.y;
+                if (v.x > max_x) max_x = v.x;
+                if (v.y > max_y) max_y = v.y;
+            }
+            center_x = min_x + (max_x - min_x)/2;
+            center_y = min_y + (max_y - min_y)/2;
+        } else {
+
         }
-        Vector3 center = b.getCenter(new Vector3());
-        camera.position.set(center.x, center.y, 50f);
-        camera.zoom = 1f;
+        camera.position.set(center_x, center_y, 50f);
+        camera.zoom = 0.5f;
         camera.update();
     }
 

@@ -150,11 +150,15 @@ public class Batiment {
     public void draw(ModelBatch modelBatch, Environment environnement, ModelContainer.Type type) {
         synchronized (this) {
             if (modelBatch.getCamera() instanceof OrthographicCamera) {
+                if (floor != null)
+                    floor.setVisible(false);
                 for (int i = etages.getMin(); i <= current; i++) {
                     Etage etage = etages.get(i);
                     etage.getModelGraph().draw(modelBatch, environnement, type);
                 }
             } else {
+                if (floor != null)
+                    floor.setVisible(true);
                 drawAll(modelBatch, environnement, type);
             }
         }

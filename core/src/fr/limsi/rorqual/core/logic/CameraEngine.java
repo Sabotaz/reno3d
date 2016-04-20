@@ -104,6 +104,7 @@ public class CameraEngine implements GestureDetector.GestureListener, InputProce
         log();
         curent_camera = Cameras.PERSPECTIVE;
         curent_camera.getCameraUpdater().reset();
+        Cameras.ORTHOGRAPHIC.getCameraUpdater().reset();
     }
 
     public void log() {

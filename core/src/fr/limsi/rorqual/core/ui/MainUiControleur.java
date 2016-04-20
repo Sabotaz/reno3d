@@ -590,7 +590,7 @@ public class MainUiControleur implements EventListener {
                     }
 
                     currentItems.put("userObject", items.get("userObject"));
-                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                     Event e2 = new Event(UiEvent.TEXTURE2_PICKED, currentItems);
                     EventManager.getInstance().put(Channel.UI, e2);
                 }
@@ -636,8 +636,6 @@ public class MainUiControleur implements EventListener {
                 if (mainLayout.getFromId("currentEtage") != null)
                     ((TextButton)mainLayout.getFromId("currentEtage")).setText("" + ModelHolder.getInstance().getBatiment().getCurrentEtage().getNumber());
                 CameraEngine.getInstance().reset();
-
-                ((Button)mainLayout.getFromId("camera_button")).getStyle().up = (Drawable)StyleFactory.getDrawable(CameraEngine.getInstance().getCurrentCameraUpdater().iconeName);
 
                 Deserializer.loadAll(filename);
 

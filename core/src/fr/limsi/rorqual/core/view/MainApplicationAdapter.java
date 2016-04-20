@@ -408,13 +408,20 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
 	public void renderG() {
-        Gdx.gl.glViewport(0, Gdx.graphics.getHeight() - 375, 300, 300);
-        CameraEngine.Cameras.ORTHOGRAPHIC.getCameraUpdater().updateViewport(300, 300);
+        Gdx.gl.glViewport(0, Gdx.graphics.getHeight() - 300, 225, 225);
+        CameraEngine.Cameras.ORTHOGRAPHIC.getCameraUpdater().updateViewport(225, 225);
+
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(new Matrix4().idt());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.identity();
+        shapeRenderer.setColor(0.8f, 0.8f, 0.8f, 1);
+        shapeRenderer.rect(-1f, -1f, 2, 2);
+        shapeRenderer.end();
+
         render(CameraEngine.getInstance().getCamera(CameraEngine.Cameras.ORTHOGRAPHIC));
 
         Gdx.gl.glDisable(Gdx.gl.GL_DEPTH_TEST);
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(new Matrix4().idt());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.identity();
         shapeRenderer.setColor(0, 0, 0, 1);
@@ -424,7 +431,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         shapeRenderer.rect(1f, 1f, -0.03f, -2);
         shapeRenderer.end();
         Gdx.gl.glEnable(Gdx.gl.GL_DEPTH_TEST);
-
     }
 
 	public void renderD() {
