@@ -342,7 +342,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         timeit = new Timeit().start();
 
         /*** On autorise les inputs en entrée ***/
-        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, new GestureDetector(CameraEngine.getInstance())));
+        Gdx.input.setInputProcessor(new InputMultiplexer(stageMenu, Logic.getInstance(), this, CameraEngine.getInstance(), new GestureDetector(CameraEngine.getInstance())));
         timeit.stop();
         System.out.println("input processor ok " + (timeit.value() * 0.001f));
         actionResolver.sendTiming(Category.LOADING, timeit.value(), "Input processor loading time");
@@ -564,13 +564,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     @Override
     public boolean scrolled(int amount) {
-
-        Camera camera = CameraEngine.getInstance().getCurrentCamera();
-        if (camera instanceof OrthographicCamera) {
-            OrthographicCamera oc = (OrthographicCamera) camera;
-            oc.zoom = oc.zoom * (1+amount/10f);
-        }
-        return true;
+        return false;
     }
 
     public void print(DefaultMutableTreeNode treeNode, int tab) {

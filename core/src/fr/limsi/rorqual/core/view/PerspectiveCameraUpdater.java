@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Slab;
 
 /**
@@ -79,28 +80,33 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     public void reset() {
         Etage etage = ModelHolder.getInstance().getBatiment().getCurrentEtage();
         float elevation = etage.getElevation();
-        if (!etage.getSlabs().isEmpty()) {
-            Slab slab = etage.getSlabs().get(0);
-            for (Slab s : etage.getSlabs()) {
-                if (s.getSurface() > slab.getSurface())
-                    slab = s;
+        if (!etage.getMurs().isEmpty()) {
+            float min_x = Float.MAX_VALUE;
+            float min_y = Float.MAX_VALUE;
+            float max_x = -Float.MAX_VALUE;
+            float max_y = -Float.MAX_VALUE;
+            for (Mur m : etage.getMurs()) {
+                Vector2 v = m.getA().getPosition();
+                if (v.x < min_x) min_x = v.x;
+                if (v.y < min_y) min_y = v.y;
+                if (v.x > max_x) max_x = v.x;
+                if (v.y > max_y) max_y = v.y;
+                v = m.getB().getPosition();
+                if (v.x < min_x) min_x = v.x;
+                if (v.y < min_y) min_y = v.y;
+                if (v.x > max_x) max_x = v.x;
+                if (v.y > max_y) max_y = v.y;
             }
-            pos.set(-10, 5, 12);
-            user_rotation.idt().rotate(1, 0, 0, -90);
-            user_rotation.rotate(1, 0, 0, 50);
-            user_rotation.rotate(0, 0, 1, 90);
-            yaw = pitch = roll = 0;
-            lastEuler.setFromEulerAngles(yaw, pitch, roll);
-            update();
+            center_x = min_x + (max_x - min_x)/2;
+            center_y = min_y + (max_y - min_y)/2;
         } else {
-            pos.set(-10, 5, 12);
-            user_rotation.idt().rotate(1, 0, 0, -90);
-            user_rotation.rotate(1, 0, 0, 50);
-            user_rotation.rotate(0, 0, 1, 90);
-            yaw = pitch = roll = 0;
-            lastEuler.setFromEulerAngles(yaw, pitch, roll);
-            update();
         }
+        user_rotation.idt().rotate(1, 0, 0, -90);
+        user_rotation.rotate(1, 0, 0, 50);
+        user_rotation.rotate(0, 0, 1, 90);
+        yaw = pitch = roll = 0;
+        lastEuler.setFromEulerAngles(yaw, pitch, roll);
+        update();
 
 
         yaw = 0;
@@ -119,10 +125,12 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     private float center_x = 0;
     private float center_y = 5;
-    private float center_z = 0;
+    private float center_z = 1.6f;
 
     protected void update() {
         /* set look at */
+        roll = roll < -90 ? -90 : (roll > -30 ? -30 : roll);
+
         float py = (float)(dist * Math.cos(pitch * Math.PI / 180)*Math.sin(roll*Math.PI / 180));
         float px = (float)(dist * Math.sin(pitch*Math.PI / 180)*Math.sin(roll*Math.PI / 180));
         float pz = (float)(dist * Math.cos(roll*Math.PI / 180));
@@ -130,7 +138,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         pos.set(center_x + px, center_y + py, center_z + pz);
 
         Vector3 dir = new Vector3(px, py, pz);
-        Vector3 up = new Vector3(0,0,1);
+        Vector3 up = new Vector3(0,0,1);//dir.cpy().crs(new Vector3(0,0,1)).crs(dir);
         Vector3 vz = dir.cpy().nor();
         Vector3 vx = up.cpy().crs(vz);
         Vector3 vy = vz.cpy().crs(vx);
@@ -147,8 +155,11 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         camera.update();
     }
 
+    boolean translating = false;
+
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
+        translating = button == 1;
         return false;
     }
 
@@ -178,8 +189,19 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
             last_screenX = (int) x;
             last_screenY = (int) y;
         }
-        pitch += deltaX/10;
-        roll += deltaY/15;
+        if (translating) {
+            float py = (float)(Math.cos(pitch * Math.PI / 180)*Math.sin(roll*Math.PI / 180));
+            float px = (float)(Math.sin(pitch * Math.PI / 180)*Math.sin(roll*Math.PI / 180));
+
+            Vector2 dir = new Vector2(px, py).nor().scl(-deltaY/50);
+            Vector2 dir2 = new Vector2(px, py).rotate90(1).nor().scl(-deltaX/50);
+
+            center_x += dir.x + dir2.x;
+            center_y += dir.y + dir2.y;
+        } else {
+            pitch += deltaX/7.5;
+            roll += deltaY/10;
+        }
 
         last_screenX = (int) x;
         last_screenY = (int) y;
@@ -209,6 +231,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
         // update last
         zoomLast = distance;
+        update();
 
         return true;
     }
@@ -227,4 +250,53 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     }
 
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+
+        // diff
+        float diff = 1 + amount/15.f;
+
+        avancer(diff);
+
+        // update last
+        update();
+
+        return true;
+
+    }
 }

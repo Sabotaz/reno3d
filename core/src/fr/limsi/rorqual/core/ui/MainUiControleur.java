@@ -623,6 +623,7 @@ public class MainUiControleur implements EventListener {
 
                 Deserializer.loadAll(filename);
 
+                CameraEngine.getInstance().reset();
                 HitMaker.makeHitOnLoad();
 
             }

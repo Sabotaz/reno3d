@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
  * Created by christophe on 06/08/15.
  */
 // Classe servant de base aux différents types de caméras
-public abstract class CameraUpdater implements GestureDetector.GestureListener {
+public abstract class CameraUpdater implements GestureDetector.GestureListener, InputProcessor {
 
     public String iconeName = "drawable:camera";
 

@@ -24,7 +24,7 @@ import fr.limsi.rorqual.core.view.PerspectiveCameraUpdater;
  */
 // Singleton
 // Moteur de gestion des différentes caméras
-public class CameraEngine implements GestureDetector.GestureListener {
+public class CameraEngine implements GestureDetector.GestureListener, InputProcessor {
 
     private Cameras curent_camera = Cameras.PERSPECTIVE;
 
@@ -149,6 +149,46 @@ public class CameraEngine implements GestureDetector.GestureListener {
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
         return getCurrentCameraUpdater().pinch(initialPointer1, initialPointer2, pointer1, pointer2);
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return getCurrentCameraUpdater().scrolled(amount);
     }
 
 }
