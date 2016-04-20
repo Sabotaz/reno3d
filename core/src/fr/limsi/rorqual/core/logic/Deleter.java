@@ -168,13 +168,7 @@ public class Deleter extends ModelMaker {
         o.setSlab(null);
     }
     static public void delete(ModelContainer m) {
-        if (m instanceof Mur)
-            deleteMur((Mur) m);
-        else if (m instanceof Slab)
-            deleteSlab((Slab) m);
-        else if (m instanceof Ouverture)
-            deleteOuverture((Ouverture) m);
-        else if (m instanceof Objet)
+        if (m instanceof Objet)
             deleteObjet((Objet) m);
         MainApplicationAdapter.deselect();
     }
