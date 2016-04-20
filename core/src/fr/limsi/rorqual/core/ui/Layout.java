@@ -43,6 +43,8 @@ import fr.limsi.rorqual.core.event.EventListener;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.EventType;
+import fr.limsi.rorqual.core.model.Mur;
+import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.utils.AssetManager;
 
 /**
@@ -1094,7 +1096,12 @@ public class Layout {
             buttonGroup.add(imageButton);
             buttonsTable.add(imageButton).size(64, 64).left().top();
             Label.LabelStyle lbs = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("defaultTitle.fnt"), Color.WHITE);
-            buttonsTable.add(new Label(((int)TextureLibrary.getInstance().getTextureLoader(name).getPrix()) + " euros", lbs)).padLeft(10).width(128-10);
+            float prix = TextureLibrary.getInstance().getTextureLoader(name).getPrix();
+            if (userObject instanceof Mur)
+                prix*= ((Mur) userObject).getSurface();
+            else if (userObject instanceof Slab)
+                prix*= ((Slab) userObject).getSurface();
+            buttonsTable.add(new Label(((int)prix) + " euros", lbs)).padLeft(10).width(128-10);
 
             start_x ++;
             if (start_x == MAX_X) {
