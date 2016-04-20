@@ -83,7 +83,7 @@ public abstract class ActableModel extends Model implements RenderableProvider {
                 boolean isBlended = false;
 
                 if(nodePart.material.get(BlendingAttribute.Type) != null)
-                    isBlended = ((BlendingAttribute) nodePart.material.get(BlendingAttribute.Type)).blended;
+                    isBlended = ((BlendingAttribute) nodePart.material.get(BlendingAttribute.Type)).blended && ((BlendingAttribute) nodePart.material.get(BlendingAttribute.Type)).opacity != 1.f;
 
                 if(nodePart.material.get(TextureAttribute.Diffuse) != null) {
                     Pixmap.Format format = ((TextureAttribute) nodePart.material.get(TextureAttribute.Diffuse)).textureDescription.texture.getTextureData().getFormat();

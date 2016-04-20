@@ -103,10 +103,14 @@ public class LightShader extends FileShader {
         }
 
         if(renderable.material.get(BlendingAttribute.Type) != null) {
-            set(u_is_blended, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).blended
-                    && ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity != 0
-                    ? 1 : 0);
-            set(u_opacity, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity);
+            if (((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).blended
+                    && ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity != 1.f) {
+                set(u_is_blended, 1);
+                set(u_opacity, ((BlendingAttribute) renderable.material.get(BlendingAttribute.Type)).opacity);
+            } else {
+            set(u_is_blended, 0);
+            set(u_opacity, 0.0f);
+        }
         } else {
             set(u_is_blended, 0);
             set(u_opacity, 0.0f);
