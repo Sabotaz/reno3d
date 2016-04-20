@@ -6,6 +6,10 @@ version = ""
 email = ""
 age = ""
 sexe = ""
+proprio = ""
+habit = ""
+exp = ""
+util = ""
 studies = ""
 francais = ""
 
@@ -25,6 +29,18 @@ def afficher():
     if sexe is not None:
        html = html.replace('value="' + sexe + '"','value="' + sexe + '" checked')
 
+    if proprio is not None:
+        html = html.replace('value="' + proprio + '"','value="' + proprio + '" checked')
+
+    if habit is not None:
+        html = html.replace('value="' + habit + '"','value="' + habit + '" checked')
+
+    if exp is not None:
+        html=html.replace('value="' + exp + '"', 'value="' + exp + '" checked')
+
+    if util is not None:
+        html = html.replace('util="' + util + '"', 'value="' + util + '" checked')
+
     if studies is not None:
         html = html.replace('value="' + studies + '"','value="' + studies + '" checked')
 
@@ -40,6 +56,10 @@ def traitement(form):
     global email
     global age
     global sexe
+    global proprio
+    global habit
+    global exp
+    global util
     global studies
     global francais
 
@@ -47,6 +67,10 @@ def traitement(form):
     email = form.getvalue("email")
     age = form.getvalue("age")
     sexe = form.getvalue("sexe")
+    proprio = form.getvalue("proprio")
+    habit = form.getvalue("habit")
+    exp = form.getvalue("exp")
+    util = form.getvalue("util")
     studies = form.getvalue("studies")
     francais = form.getvalue("français")
     version = form.getvalue("version")
@@ -59,6 +83,14 @@ def traitement(form):
             log.write("age;"+age)
             log.write("\n")
             log.write("sexe;"+sexe)
+            log.write("\n")
+            log.write("proprio;"+proprio)
+            log.write("\n")
+            log.write("habit;"+habit)
+            log.write("\n")
+            log.write("exp;"+exp)
+            log.write("\n")
+            log.write("util;"+util)
             log.write("\n")
             log.write("studies;"+studies)
             log.write("\n")
