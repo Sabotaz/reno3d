@@ -15,31 +15,6 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "layout": "column",
-          "align": "right",
-          "pad": 0,
-          "minChecked": 0,
-          "maxChecked": 2,
-          "content": [
-            {
-              "type": "Button",
-              "text": "2D/3D",
-              "id": "camera_button",
-              "value": "fr.limsi.rorqual.core.event.ButtonValue.SWITCH_2D_3D",
-              "height": "auto",
-              "width": "6%",
-              "pad": 0,
-              "style": [
-                "drawable:2D",
-                null,
-                null,
-                "default.fnt"
-              ]
-            }
-          ]
-        },
-        {
-          "type": "ButtonGroup",
           "id": "calcul_buttons",
           "layout": "column",
           "minChecked": 0,
