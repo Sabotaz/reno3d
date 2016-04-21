@@ -620,8 +620,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static void startLogs() {
         try {
             String path = MainApplicationAdapter.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            if (path.endsWith(".jar"))
-                log_file = Gdx.files.external(path + "/../../log/" + id).write(true);
+            if (path.endsWith("/jar/desktop-1.0.jar"))
+                log_file = Gdx.files.external(path.replace("/jar/desktop-1.0.jar", "/log/" + id)).write(true);
             else
                 log_file = Gdx.files.external(id).write(true);
         } catch (URISyntaxException e) {
