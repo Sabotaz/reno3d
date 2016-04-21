@@ -20,5 +20,7 @@ public enum UiEvent implements EventType {
     HAUTEUR_SOL_MODELE,
     RATIO_MODELE,
 
+    FONCTION_PIECE,
+
     ;
 }

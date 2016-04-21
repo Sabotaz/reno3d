@@ -100,6 +100,8 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     boolean areMaterialSet = false;
     @XStreamOmitField
     Plafond plafond;
+    @XStreamAlias("fonction")
+    private String fonction;
 
     private Slab() {
     }
@@ -641,5 +643,13 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
             prix += loader.getPrix() * getSurface();
 
         return prix;
+    }
+
+    public void setFonction(String fonction) {
+        this.fonction = fonction;
+    }
+
+    public String getFonction() {
+        return fonction;
     }
 }

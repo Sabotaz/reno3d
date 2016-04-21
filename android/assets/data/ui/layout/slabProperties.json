@@ -6,12 +6,26 @@
   "content": [
     {
       "type": "Table",
-      "name": "Textures",
+      "name": "Propriétés",
       "id": "textures",
       "content": [
         {
+          "type": "Table",
+          "label": "Fonction",
+          "labelPad": 5,
+          "labelWidth": "10%",
+          "content": [
+            {
+              "type": "TextField",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.FONCTION_PIECE",
+              "maxLength": 20
+            }
+          ]
+        },
+        {
           "type": "TexturePicker",
-          "label": "Plancher : ",
+          "label": "Sol : ",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
           "category": "Sol",

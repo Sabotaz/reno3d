@@ -969,16 +969,10 @@ public class Layout {
             public void keyTyped(TextField textField, char key) {
                 if ((key == '\r' || key == '\n')) {
                     String textSaisie = textField.getText();
-                    float result = 0;
-                    try {
-                        result = Float.parseFloat(textSaisie);
-                    }catch (NumberFormatException e){
-
-                    }
                     HashMap<String, Object> items = new HashMap<String, Object>();
                     items.put("userObject", userObject);
                     items.put("eventRequest", EventRequest.UPDATE_STATE);
-                    items.put("lastValue", result);
+                    items.put("lastValue", textSaisie);
                     items.put("layout", Layout.this);
                     last_updater.trigger(items);
                 }
@@ -988,9 +982,9 @@ public class Layout {
         textField.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
             public boolean acceptChar(TextField textField, char c) {
-                if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
-                    return true;
-                return false;
+                if (c == ';')
+                    return false;
+                return true;
             }
         });
 
@@ -999,15 +993,10 @@ public class Layout {
             public void keyboardFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
                 if (!focused) {
                     String textSaisie = textField.getText();
-                    float result = 0;
-                    try {
-                        result = Float.parseFloat(textSaisie);
-                    }catch (NumberFormatException e){
-                    }
                     HashMap<String, Object> items = new HashMap<String, Object>();
                     items.put("userObject", userObject);
                     items.put("eventRequest", EventRequest.UPDATE_STATE);
-                    items.put("lastValue", result);
+                    items.put("lastValue", textSaisie);
                     items.put("layout", Layout.this);
                     last_updater.trigger(items);
                 }

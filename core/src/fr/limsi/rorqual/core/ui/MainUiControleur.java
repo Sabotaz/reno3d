@@ -685,6 +685,29 @@ public class MainUiControleur implements EventListener {
                     EventManager.getInstance().put(Channel.UI, e2);
                 }
             }
+            else if (e.getEventType() == UiEvent.FONCTION_PIECE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.UPDATE_STATE) {
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Slab) {
+                        ((Slab) model).setFonction((String) items.get("lastValue"));
+                    }
+                }
+                else if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    if (model instanceof Slab) {
+                        currentItems.put("lastValue", ((Slab) model).getFonction());
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.FONCTION_PIECE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
+            }
             else if (e.getEventType() == UiEvent.RATIO_MODELE) {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 EventRequest eventRequest = (EventRequest)items.get("eventRequest");
@@ -696,7 +719,7 @@ public class MainUiControleur implements EventListener {
                     currentItems.put("lastValue", false);
 
                     currentItems.put("userObject", items.get("userObject"));
-                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    currentItems.put("eventRequest", EventRequest.CURRENT_STATE);
                     Event e2 = new Event(UiEvent.RATIO_MODELE, currentItems);
                     EventManager.getInstance().put(Channel.UI, e2);
                 }
