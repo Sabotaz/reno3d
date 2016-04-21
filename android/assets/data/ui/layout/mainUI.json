@@ -252,7 +252,7 @@
                     "defaultTitle.fnt",
                     null
                   ]
-                }
+                },
                 {
                   "type": "Label",
                   "id": "label_restant",

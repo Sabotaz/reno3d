@@ -24,8 +24,14 @@ public class Deserializer {
         SerialHolder serialHolder = (SerialHolder) stream.fromXML(handle.read());
         serialHolder.recreateModel();
 
-        MainApplicationAdapter.kartoffelator.setInitScore();
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+        MainApplicationAdapter.kartoffelator.setInitScore();
+        MainApplicationAdapter.startLogs();
     }
 
 }

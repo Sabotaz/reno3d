@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
  * Created by christophe on 08/07/15.
@@ -166,6 +167,8 @@ public class TabWindow extends Table {
         last = next;
         button.setChecked(true);
         this.setPosition(lastX, nextY);
+
+        MainApplicationAdapter.LOG("CHANGE_TAB", "" + next.getName());
 
 //        System.out.println("largeurFenetre = " + this.getPrefWidth());
     }

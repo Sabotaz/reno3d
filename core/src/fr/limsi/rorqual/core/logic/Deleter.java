@@ -164,6 +164,7 @@ public class Deleter extends ModelMaker {
     }
 
     static public void deleteObjet(Objet o) {
+        MainApplicationAdapter.LOG("AMENAGEMENT", "REMOVE_OBJET", "" + o.getModelId(), "" + o.getPosition());
         o.getSlab().removeObjet(o);
         o.setSlab(null);
     }

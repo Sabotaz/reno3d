@@ -45,6 +45,7 @@ import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.utils.AssetManager;
+import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
@@ -143,6 +144,8 @@ public class DpeKartoffelator {
         return (int) price;
     }
 
+    int last_total = 0;
+
     public void calculate_all() {
 
         Dpe dpe = Dpe.getInstance();
@@ -202,6 +205,12 @@ public class DpeKartoffelator {
         MainUiControleur.getInstance().setRestant(getCash() - getTotal());
         MainUiControleur.getInstance().setScore(init);
         MainUiControleur.getInstance().setEstimation((int) dpe.getScoreDpe());
+
+        if (last_total != getTotal()) {
+            last_total = getTotal();
+            MainApplicationAdapter.LOG("ARGENT", "TOTAL", "" + getTotal());
+        }
+
 
     }
 
@@ -267,12 +276,6 @@ public class DpeKartoffelator {
     }
 
     public void setInitScore() {
-
-        try {
-            Thread.sleep(2500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Dpe dpe = Dpe.getInstance();
         init = (int) dpe.getScoreDpe();
     }

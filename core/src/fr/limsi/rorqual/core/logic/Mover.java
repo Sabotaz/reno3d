@@ -72,6 +72,7 @@ public class Mover extends ModelMaker {
             moving = movingObject = true;
             translate = false;
             collisionController.startNewCollision(movedObjet);
+            MainApplicationAdapter.LOG("AMENAGEMENT", "START_MOVE_OBJET", "" + movedObjet.getModelId(), "" + movedObjet.getPosition());
         } else if (modelContainer instanceof Ouverture) {
             moving = false;
         }
@@ -251,6 +252,7 @@ public class Mover extends ModelMaker {
                 movedObjet.setSelectable(true);
                 moving = false;
                 movingObject = false;
+                MainApplicationAdapter.LOG("AMENAGEMENT", "END_MOVE_OBJET", "" + movedObjet.getModelId(), "" + movedObjet.getPosition());
                 return;
             } else if (movingOuverture) {
                 movedOuverture.setSelectable(true);

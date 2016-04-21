@@ -26,6 +26,7 @@ import fr.limsi.rorqual.core.ui.DpeUi;
 import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.TabWindow;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 @XStreamAlias("dpe")
 public class Dpe implements EventListener {
@@ -1792,6 +1793,7 @@ public class Dpe implements EventListener {
                 if (eventType instanceof DpeEvent) {
                     DpeEvent event = (DpeEvent) eventType;
                     Object o = e.getUserObject();
+
                     switch (event) {
                         case TYPE_BATIMENT: {
                             HashMap<String, Object> items = (HashMap<String, Object>) o;
@@ -1959,6 +1961,10 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 typeAbonnementElectrique = (TypeAbonnementElectriqueEnum) items.get("lastValue");
                                 this.actualiseRendementEcs();
+
+                                MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeAbonnementElectriqueEnum type = typeAbonnementElectrique;
                                 HashMap<String, Object> currentItems = new HashMap<String, Object>();
@@ -2014,6 +2020,10 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 equipementEclairage = (TypeEquipementEclairageEnum) items.get("lastValue");
                                 this.actualiseConsommationEclairage();
+
+                                MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeEquipementEclairageEnum type = equipementEclairage;
                                 HashMap<String, Object> currentItems = new HashMap<String, Object>();
@@ -2053,6 +2063,10 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 equipementCuisson = (TypeEquipementCuissonEnum) items.get("lastValue");
                                 this.actualiseConsommationCuisson();
+
+                                MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeEquipementCuissonEnum type = equipementCuisson;
                                 HashMap<String, Object> currentItems = new HashMap<String, Object>();
@@ -2070,6 +2084,10 @@ public class Dpe implements EventListener {
                             if (eventRequest == EventRequest.UPDATE_STATE) {
                                 typeVentilation = (TypeVentilationEnum) items.get("lastValue");
                                 this.actualiseSmeaAndQvarep();
+
+                                MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 TypeVentilationEnum type = typeVentilation;
                                 HashMap<String, Object> currentItems = new HashMap<String, Object>();
@@ -2167,6 +2185,10 @@ public class Dpe implements EventListener {
                                 this.actualiseI0();
                                 this.actualiseCch();
                                 this.actualiseRendementEcs();
+
+                                MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 Chauffage.Generateur type = generateurChauffageUnique;
                                 HashMap<String, Object> currentItems = new HashMap<String, Object>();
@@ -2507,6 +2529,10 @@ public class Dpe implements EventListener {
                                         }
                                     }
                                 }
+
+                                MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                             } else if (eventRequest == EventRequest.GET_STATE) {
                                 DateIsolationMurEnum type = mur.getDateIsolationMurEnum();
                                 HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -2684,6 +2710,10 @@ public class Dpe implements EventListener {
                                     fenetre.setTypeVitrage(typeVitrage);
                                     this.actualiseNbFenetreSvEtDv();
                                     this.actualiseSse();
+
+                                    MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                    MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                                 } else if (eventRequest == EventRequest.GET_STATE) {
                                     TypeVitrageEnum type = fenetre.getTypeVitrage();
                                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -2699,6 +2729,10 @@ public class Dpe implements EventListener {
                                     TypeVitrageEnum typeVitrage = (TypeVitrageEnum)items.get("lastValue");
                                     porteFenetre.setTypeVitrage(typeVitrage);
                                     this.actualiseSse();
+
+                                    MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                    MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                                 } else if (eventRequest == EventRequest.GET_STATE) {
                                     TypeVitrageEnum type = porteFenetre.getTypeVitrage();
                                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -2720,6 +2754,10 @@ public class Dpe implements EventListener {
                                 if (eventRequest == EventRequest.UPDATE_STATE) {
                                     TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
                                     fenetre.setTypeFermeture(typeFermeture);
+
+                                    MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                    MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                                 } else if (eventRequest == EventRequest.GET_STATE) {
                                     TypeFermetureEnum type = fenetre.getTypeFermeture();
                                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
@@ -2734,6 +2772,10 @@ public class Dpe implements EventListener {
                                 if (eventRequest == EventRequest.UPDATE_STATE) {
                                     TypeFermetureEnum typeFermeture = (TypeFermetureEnum)items.get("lastValue");
                                     porteFenetre.setTypeFermeture(typeFermeture);
+
+                                    MainApplicationAdapter.LOG("DPE", event.name(), items.get("lastValue").toString());
+                                    MainApplicationAdapter.LOG("DPE_VALUE", "" + getScoreDpe());
+
                                 } else if (eventRequest == EventRequest.GET_STATE) {
                                     TypeFermetureEnum type = porteFenetre.getTypeFermeture();
                                     HashMap<String,Object> currentItems = new HashMap<String,Object>();

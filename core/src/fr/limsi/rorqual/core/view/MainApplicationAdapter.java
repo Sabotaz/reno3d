@@ -130,21 +130,22 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     static OutputStream log_file;
 
     public static void LOG(String ... log) {
-        try {
-            long nw = System.currentTimeMillis();
+        if (log_file != null)
+            try {
+                long nw = System.currentTimeMillis();
 
-            StringBuilder builder = new StringBuilder();
-            for(String s : log) {
-                builder.append(";");
-                builder.append(s);
+                StringBuilder builder = new StringBuilder();
+                for(String s : log) {
+                    builder.append(";");
+                    builder.append(s);
+                }
+
+                log_file.write((nw + builder.toString() + "\n").getBytes());
+                log_file.flush();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            log_file.write((nw + builder.toString() + "\n").getBytes());
-            log_file.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static ActionResolver getActionResolver() {
@@ -167,7 +168,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     Event e = new Event(UiEvent.LOAD_FILE, currentItems);
                     EventManager.getInstance().put(Channel.UI, e);
 
-                    Thread.sleep(750);
+                    Thread.sleep(4000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -216,7 +217,6 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     private void load() {
-        log_file = Gdx.files.external(id).write(true);
         Timeit start = new Timeit().start();
         Timeit timeit;
         System.out.println("start init 0");
@@ -560,7 +560,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     //                System.out.println(selected);
                     selected.setColor(Color.YELLOW);
                     selected.setSelected(true);
-                    mainUiControleur.addTb(dpeui.getPropertyWindow(selected), "Properties");
+                    mainUiControleur.addTb(dpeui.getPropertyWindow(selected), "Propriétés " + selected.getClass().getSimpleName());
                     //selected.add(pin);
                     //pin.local_transform.setToTranslation(selected.getTop());
                 }
@@ -614,5 +614,9 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
     public void setVersionCode(int versionCode) {
         this.versionCode = versionCode;
+    }
+
+    public static void startLogs() {
+        log_file = Gdx.files.external(id).write(true);
     }
 }

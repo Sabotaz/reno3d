@@ -13,6 +13,7 @@ import fr.limsi.rorqual.core.model.utils.MyVector2;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
+import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
  * Created by christophe on 15/09/15.
@@ -84,6 +85,8 @@ public class ObjetMaker extends ModelMaker {
 
         obj.setSelectable(true);
         ModelHolder.notify(obj);
+
+        MainApplicationAdapter.LOG("AMENAGEMENT", "ADD_OBJET", "" + modelId);
 
         making_objet = false;
     }

@@ -136,6 +136,7 @@ public class MainUiControleur implements EventListener {
                 tb.remove();
                 if (timeit != null) {
                     timeit.stop();
+                    MainApplicationAdapter.LOG("CLOSE_TAB", "" + timeit.value());
                     MainApplicationAdapter.getActionResolver().sendTiming(Category.UI, timeit.value(), tabName);
                 }
                 timeit = null;
@@ -152,6 +153,7 @@ public class MainUiControleur implements EventListener {
         tb = actor;
         if (tb != null) {
             timeit = new Timeit().start();
+            MainApplicationAdapter.LOG("OPEN_TAB", tabName);
             synchronized (stage) {
                 if (tb instanceof TabWindow){
                     tb.setPosition(((TabWindow) tb).getPrefWidth()/2, Gdx.graphics.getHeight() - ((TabWindow) tb).getPrefHeight()/2-100);
@@ -170,6 +172,7 @@ public class MainUiControleur implements EventListener {
         tb = actor;
         if (tb != null) {
             timeit = new Timeit().start();
+            MainApplicationAdapter.LOG("OPEN_TAB", tabName);
             synchronized (stage) {
                 tb.setPosition(x, y);
                 stage.addActor(tb);
@@ -280,6 +283,8 @@ public class MainUiControleur implements EventListener {
             if (e.getEventType() == UiEvent.BUTTON_CLICKED) {
 
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+
+                MainApplicationAdapter.LOG("BUTTON_CLICKED", "" + items.get("lastValue"));
                 if (items.get("eventRequest") == EventRequest.GET_STATE) {
                     // FIXME: disable this case (no state to get)
                     HashMap<String,Object> response = new HashMap<String,Object>();
@@ -533,9 +538,15 @@ public class MainUiControleur implements EventListener {
                     if (items.get("userObject") instanceof Slab) {
                         Slab slab = (Slab)items.get("userObject");
                         slab.setPlancherMaterialType((String) items.get("lastValue"));
+
+                        MainApplicationAdapter.LOG("AMENAGEMENT", "TEXTURE_SOL", "" + slab.getSurface(), (String) items.get("lastValue"));
+
                     } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
-                        mur.setExteriorMaterialType((String)items.get("lastValue"));
+                        mur.setExteriorMaterialType((String) items.get("lastValue"));
+
+                        MainApplicationAdapter.LOG("AMENAGEMENT", "TEXTURE_MUR_EXT", "" + mur.getB().getPosition().cpy().sub(mur.getA().getPosition()), (String) items.get("lastValue"));
+
                     }
                 }
                 else if (eventRequest == EventRequest.GET_STATE) {
@@ -565,6 +576,9 @@ public class MainUiControleur implements EventListener {
                     } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
                         mur.setInteriorMaterialType1((String) items.get("lastValue"));
+
+                        MainApplicationAdapter.LOG("AMENAGEMENT", "TEXTURE_MUR_INT1", "" + mur.getB().getPosition().cpy().sub(mur.getA().getPosition()), (String) items.get("lastValue"));
+
                     }
                 }
                 else if (eventRequest == EventRequest.GET_STATE) {
@@ -591,6 +605,9 @@ public class MainUiControleur implements EventListener {
                     if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
                         mur.setInteriorMaterialType2((String) items.get("lastValue"));
+
+                        MainApplicationAdapter.LOG("AMENAGEMENT", "TEXTURE_MUR_INT2", "" + mur.getB().getPosition().cpy().sub(mur.getA().getPosition()), (String) items.get("lastValue"));
+
                     }
                 }
                 else if (eventRequest == EventRequest.GET_STATE) {
@@ -697,7 +714,10 @@ public class MainUiControleur implements EventListener {
                     ModelContainer model = MainApplicationAdapter.getSelected();
                     if (model instanceof Slab) {
                         ((Slab) model).setFonction((String) items.get("lastValue"));
+
+                        MainApplicationAdapter.LOG("AMENAGEMENT", e.getEventType().toString(),""+((Slab) model).getSurface(), (String) items.get("lastValue"));
                     }
+
                 }
                 else if (eventRequest == EventRequest.GET_STATE) {
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
