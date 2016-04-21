@@ -159,7 +159,12 @@ public class DpeKartoffelator {
         for (Objet o : ModelHolder.getInstance().getBatiment().getObjets())
             total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
 
+        for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs()) {
+            total += s.getPrixTextures();
+        }
+
         for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
+            total += m.getPrixTextures();
             Layout layout = DpeUi.getLayout(m);
             for (DateIsolationMurEnum value : DateIsolationMurEnum.values()) {
                 String price_str = prices_file.get("DATE_ISOLATION_MUR#" + value.toString());

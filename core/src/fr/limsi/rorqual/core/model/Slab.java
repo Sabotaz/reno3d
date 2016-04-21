@@ -33,6 +33,7 @@ import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector3;
+import fr.limsi.rorqual.core.ui.TextureLibrary;
 import fr.limsi.rorqual.core.utils.CSGUtils;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.models.Cote2D;
@@ -90,6 +91,8 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     @XStreamAlias("plancherMaterial")
     private String plancherType = "eTeksScopia#old-brown-parquet";
     @XStreamOmitField
+    private String basePlancherType = plancherType;
+    @XStreamOmitField
     private Material plafondMaterial = new Material();
     @XStreamOmitField
     private Material plancherMaterial = new Material();
@@ -134,6 +137,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         this.typeIsolationPlancher=model.getTypeIsolationPlancher();
         this.setPlafondMaterialType(model.getPlafondMaterialType());
         this.setPlancherMaterialType(model.getPlancherMaterialType());
+        basePlancherType = plancherType;
         plafond = new Plafond(this);
         this.add(plafond);
 
@@ -625,5 +629,17 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     public float getVolume(){
         this.calculateVolume();
         return this.volume;
+    }
+
+    public int getPrixTextures() {
+
+        int prix = 0;
+
+        TextureLibrary.TextureLoader loader = TextureLibrary.getInstance().getTextureLoader(getPlancherMaterialType());
+
+        if (plancherType != basePlancherType)
+            prix += loader.getPrix() * getSurface();
+
+        return prix;
     }
 }

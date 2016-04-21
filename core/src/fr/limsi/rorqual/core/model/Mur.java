@@ -88,12 +88,20 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     private boolean areMaterialSet = false;
     @XStreamAlias("exteriorMaterial")
     private String exteriorMaterialType = "eTeksScopia#grey-rough-stonewall";
+    @XStreamOmitField
+    private String baseExteriorMaterialType = exteriorMaterialType;
     @XStreamAlias("interiorMaterial1")
     private String interiorMaterialType1 = "eTeksScopia#pastel-brown-sponge-wallpaint";
+    @XStreamOmitField
+    private String baseInteriorMaterialType1 = interiorMaterialType1;
     @XStreamAlias("interiorMaterial2")
     private String interiorMaterialType2 = "eTeksScopia#pastel-brown-sponge-wallpaint";
+    @XStreamOmitField
+    private String baseInteriorMaterialType2 = interiorMaterialType2;
     @XStreamAlias("defaultMaterial")
     private String defaultMaterialType = "eTeksScopia#grey-rough-stonewall";
+    @XStreamOmitField
+    private String baseDefaultMaterialType = defaultMaterialType;
     @XStreamOmitField
     private Material exteriorMaterial = new Material();
     @XStreamOmitField
@@ -132,9 +140,13 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         this.setEtage(model.getEtage());
 
         this.setDefaultMaterialType(model.getDefaultMaterialType());
+        baseDefaultMaterialType = defaultMaterialType;
         this.setExteriorMaterialType(model.getExteriorMaterialType());
+        baseExteriorMaterialType = exteriorMaterialType;
         this.setInteriorMaterialType1(model.getInteriorMaterialType1());
+        baseInteriorMaterialType1 = interiorMaterialType1;
         this.setInteriorMaterialType2(model.getInteriorMaterialType2());
+        baseInteriorMaterialType2 = interiorMaterialType2;
     }
 
     public Mur(Coin a, Coin b) {
@@ -656,6 +668,24 @@ public class Mur extends ModelContainer implements Cote.Cotable {
         return exteriorMaterialType;
     }
 
+    public int getPrixTextures() {
+
+        int prix = 0;
+
+        TextureLibrary.TextureLoader loader_ext = TextureLibrary.getInstance().getTextureLoader(getExteriorMaterialType());
+        TextureLibrary.TextureLoader loader_int1 = TextureLibrary.getInstance().getTextureLoader(getInteriorMaterialType1());
+        TextureLibrary.TextureLoader loader_int2 = TextureLibrary.getInstance().getTextureLoader(getInteriorMaterialType2());
+
+        if (!isInterieur() && exteriorMaterialType != baseExteriorMaterialType)
+            prix += loader_ext.getPrix() * getSurface();
+        if ((isInterieur() || getSlabGauche() != null) && interiorMaterialType1 != baseInteriorMaterialType1)
+            prix += loader_int1.getPrix() * getSurface();
+        if ((isInterieur() || getSlabDroit() != null) && interiorMaterialType2 != baseInteriorMaterialType2)
+            prix += loader_int2.getPrix() * getSurface();
+
+        return prix;
+    }
+
     public String getInteriorMaterialType1() {
         return interiorMaterialType1;
     }
@@ -671,4 +701,6 @@ public class Mur extends ModelContainer implements Cote.Cotable {
     public void reload() {
 
     }
+
+
 }
