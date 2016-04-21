@@ -3,14 +3,16 @@ Vous allez participer à une étude qui vise à évaluer une application d'amén
 Dans ce cadre, nous vous demandons d'imaginer le scénario suivant :<br>
 Vous venez d'acheter une maison et il vous faut maintenant aménager les différentes pièces.<br>
 Pour ce faire, vous disposez d'un budget de 10000€.<br>
-Cet argent sert à l'achat des différents meubles et à la rénovation d'une partie des équipements du logement.<br>
+Cet argent sert à l'achat des différents meubles et à la rénovation des équipements du logement.<br>
 <br>
 C'est à vous d'aménager les différentes pièces du logement en fonction de vos besoins et goûts.<br>
 Vous pouvez ainsi disposer les meubles où vous le souhaitez et les organiser librement.<br>
 <br>
 Vous avez enfin la possibilité de modifier les caractéristiques des sols, des murs et des fenêtres simplement en cliquant dessus.<br>
+La seule contrainte est que nous vous demandons de nommer les différentes pièces selon leur fonction.<br>
+Pour ce faire, tout ce que vous avez à faire est de cliquer sur le sol de la pièce que vous souhaitez nommer.<br>
 <br>
-Pour chaque équipement, son impact sur la performance énergétique du bâtiment sera affiché.<br>
+La performance énergétique du bâtiment sera affichée à l'écran et évoluera en temps réel en fonction des aménagements réalisés.<br>
 Meilleure est la performance, plus la jauge située en bas de l'écran est proche du vert.<br>
 <br>
 Afin de limiter le réchauffement climatique, la loi concernant la réglementation thermique issue du Grenelle de l'environnement<br>
