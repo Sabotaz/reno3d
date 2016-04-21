@@ -37,6 +37,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -617,6 +618,14 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     public static void startLogs() {
-        log_file = Gdx.files.external(id).write(true);
+        try {
+            String path = MainApplicationAdapter.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            if (path.endsWith(".jar"))
+                log_file = Gdx.files.external(path + "/../../log/" + id).write(true);
+            else
+                log_file = Gdx.files.external(id).write(true);
+        } catch (URISyntaxException e) {
+            log_file = Gdx.files.external(id).write(true);
+        }
     }
 }
