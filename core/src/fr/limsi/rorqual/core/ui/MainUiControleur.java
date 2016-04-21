@@ -117,6 +117,10 @@ public class MainUiControleur implements EventListener {
         ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " euros");
     }
 
+    public void setRestant(int restant) {
+        ((Label)mainLayout.getFromId("label_restant")).setText("Restant: " + restant + " euros");
+    }
+
     public void setScore(int score) {
         ((Label)mainLayout.getFromId("label_score")).setText("Base: " + score + " kWh");
     }
@@ -124,6 +128,7 @@ public class MainUiControleur implements EventListener {
     public void setEstimation(int estim) {
         ((Label)mainLayout.getFromId("label_estim")).setText("Actuel: " + estim + " kWh");
     }
+
 
     public void removeTb() {
         if (tb != null)

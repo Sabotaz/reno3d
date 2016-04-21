@@ -199,6 +199,7 @@ public class DpeKartoffelator {
 
         MainUiControleur.getInstance().setCash(getCash());
         MainUiControleur.getInstance().setTotal(getTotal());
+        MainUiControleur.getInstance().setRestant(getCash() - getTotal());
         MainUiControleur.getInstance().setScore(init);
         MainUiControleur.getInstance().setEstimation((int) dpe.getScoreDpe());
 

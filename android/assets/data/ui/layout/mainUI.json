@@ -253,6 +253,15 @@
                     null
                   ]
                 }
+                {
+                  "type": "Label",
+                  "id": "label_restant",
+                  "pad": 0,
+                  "style": [
+                    "defaultTitle.fnt",
+                    null
+                  ]
+                }
               ]
             }
             ]
