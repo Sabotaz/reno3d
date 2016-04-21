@@ -35,6 +35,8 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -125,6 +127,26 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         this.actionResolver = actionResolver;
     }
 
+    static OutputStream log_file;
+
+    public static void LOG(String ... log) {
+        try {
+            long nw = System.currentTimeMillis();
+
+            StringBuilder builder = new StringBuilder();
+            for(String s : log) {
+                builder.append(";");
+                builder.append(s);
+            }
+
+            log_file.write((nw + builder.toString() + "\n").getBytes());
+            log_file.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ActionResolver getActionResolver() {
         return actionResolver;
     }
@@ -178,7 +200,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         stack.setSize(width, height);
 
         container.setActor(loadingLabel);
-        container.padTop(height/3);
+        container.padTop(height / 3);
 
         stack.add(image);
         stack.add(container);
@@ -194,6 +216,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     private void load() {
+        log_file = Gdx.files.external(id).write(true);
         Timeit start = new Timeit().start();
         Timeit timeit;
         System.out.println("start init 0");
