@@ -17,14 +17,19 @@ def afficher():
     for i, nep in enumerate(neps):
         if nep is not None:
             html = html.replace('id="' + str(i+1) + '_' + nep + '"','id="' + str(i+1) + '_' + nep + '" checked')
+        else:
+            html = html.replace('<table id="Neps_'+str(i+1)+'">', '<table id="Neps_'+str(i+1)+'" bgcolor="#FFD289">')
 
 
     print(html)
 
 def traitement(form):
-    global  neps
-    neps = [form.getvalue("Neps_"+str(i))for i in range(1,16)]
+    global neps
+    global id
+    global version
     id = form.getvalue("id")
+    version = form.getvalue("version")
+    neps = [form.getvalue("Neps_"+str(i))for i in range(1,16)]
     if None not in neps:
         with open("log/"+id, "a") as log:
             for i, nep in enumerate(neps):

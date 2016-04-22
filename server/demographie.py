@@ -21,31 +21,49 @@ def afficher():
     html = html.replace("$ID", id)
 
     if email is not None:
-       html = html.replace('name="email" value=""','name="email" value="' + email + '"')
+        html = html.replace('name="email" value=""','name="email" value="' + email + '"')
+    else:
+        html = html.replace('<div id="email">', '<div id="email" style="background-color:#FFD289;">')
 
     if age is not None:
-       html = html.replace('name="age" value=""','name="age" value="' + email + '"')
+        html = html.replace('name="age" value=""','name="age" value="' + email + '"')
+    else:
+        html = html.replace('<div id="age">', '<div id="age" style="background-color:#FFD289;">')
 
     if sexe is not None:
        html = html.replace('value="' + sexe + '"','value="' + sexe + '" checked')
+    else:
+        html = html.replace('<div id="sexe">', '<div id="sexe" style="background-color:#FFD289;">')
 
     if proprio is not None:
         html = html.replace('value="' + proprio + '"','value="' + proprio + '" checked')
+    else:
+        html = html.replace('<div id="proprio">', '<div id="proprio" style="background-color:#FFD289;">')
 
     if habit is not None:
         html = html.replace('value="' + habit + '"','value="' + habit + '" checked')
+    else:
+        html = html.replace('<div id="habit">', '<div id="habit" style="background-color:#FFD289;">')
 
     if exp is not None:
         html=html.replace('value="' + exp + '"', 'value="' + exp + '" checked')
+    else:
+        html = html.replace('<div id="exp">', '<div id="exp" style="background-color:#FFD289;">')
 
     if util is not None:
         html = html.replace('util="' + util + '"', 'value="' + util + '" checked')
+    else:
+        html = html.replace('<div id="util">', '<div id="util" style="background-color:#FFD289;">')
 
     if studies is not None:
         html = html.replace('value="' + studies + '"','value="' + studies + '" checked')
+    else:
+        html = html.replace('<div id="studies">', '<div id="studies" style="background-color:#FFD289;">')
 
     if francais is not None:
         html = html.replace('value="' + francais + '"','value="' + francais + '" checked')
+    else:
+        html = html.replace('<div id="français">', '<div id="français" style="background-color:#FFD289;">')
 
     print(html)
 

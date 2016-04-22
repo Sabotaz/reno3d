@@ -49,6 +49,7 @@ items = {
 }
 
 results = dict()
+pb = list()
 
 shuffled = False
 def shuffle(id):
@@ -81,6 +82,9 @@ def afficher():
 
             html = html.replace("$" + type + str(i+1), value)
 
+    for type in pb:
+        html = html.replace('<table id="'+type+'">', '<table id="'+type+'" bgcolor="#FFD289">')
+
     print(html)
 
 def traitement(form):
@@ -98,6 +102,7 @@ def traitement(form):
         for i, value in enumerate(values):
             results[value] = form.getvalue(value)
             if results[value] in count:
+                pb.append(type)
                 bad = True
             count.append(results[value])
 

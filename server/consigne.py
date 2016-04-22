@@ -14,6 +14,7 @@ def afficher():
         print(html)
 
 def traitement(form):
+    global  id
     id = form.getvalue("id")
     return True
 

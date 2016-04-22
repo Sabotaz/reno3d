@@ -4,47 +4,69 @@
 </head>
 <body>
     <form action="/end.py" method="post">
-    <input type="hidden" name="version" value="$VERSION" />
+        <input type="hidden" name="version" value="$VERSION" />
         <input type="hidden" name="id" value="$ID" />
         <h3>Dernière étape, merci de renseigner les informations suivantes :</h3>
 <h4>Adresse email (servira uniquement à vous adresser un second questionnaire) ::</h4>
+        <div id="email">
+            <br>
         <input type="text" name="email" value="" /><br>
+            <br>
+        </div>
 <h4>Âge :</h4>
+        <div id="age">
+            <br>
         <input type="text" name="age" value="" /><br>
+            <br>
+        </div>
 
 <h4>Sexe :</h4>
+        <div id="sexe">
         <input type="radio" name="sexe" id="Homme" value="Homme"><label for="Homme">Homme</label><br>
         <input type="radio" name="sexe" id="Femme" value="Femme"><label for="Femme">Femme</label><br>
+        </div>
         
 <h4>Etes-vous propriétaire ou locataire ?</h4>
+        <div id="proprio">
         <input type="radio" name="proprio" id="Propriétaire" value="Propriétaire"><label for="Propriétaire">Propriétaire</label><br>
         <input type="radio" name="proprio" id="Locataire" value="Locataire"><label for="Locataire">Locataire</label><br>
+        </div>
 
 <h4>Vivez-vous dans une maison ou un appartement ?</h4>
+        <div id="habit">
         <input type="radio" name="habit" id="Maison" value="Maison"><label for="Maison">Maison</label><br>
         <input type="radio" name="habit" id="Appt" value="Appt"><label for="Appt">Appartement</label><br>
+        </div>
 
 <h4>Avez-vous déjà planifié ou participé à des travaux de rénovation ?</h4>
+        <div id="exp">
         <input type="radio" name="exp" id="Oui" value="Oui"><label for="Oui">Oui</label><br>
         <input type="radio" name="exp" id="Non" value="Non"><label for="Non">Non</label><br>
+        </div>
 
 <h4>Avez-vous déjà utilisé une application de maquettage architectural ?</h4>
+        <div id="util">
         <input type="radio" name="util" id="Oui" value="Oui"><label for="Oui">Oui</label><br>
         <input type="radio" name="util" id="Non" value="Non"><label for="Non">Non</label><br>
+        </div>
 
 <h4>Niveau d'études (dernier diplôme obtenu) :</h4>
+        <div id="studies">
         <input type="radio" name="studies" id="CAP" value="CAP/BEP"><label for="CAP">CAP/BEP</label><br>
         <input type="radio" name="studies" id="BAC" value="BAC/BT/BP"><label for="BAC">BAC/BT/BP</label><br>
         <input type="radio" name="studies" id="BAC3" value="BAC+3"><label for="BAC3">BAC+3</label><br>
         <input type="radio" name="studies" id="BAC5" value="BAC+5"><label for="BAC5">BAC+5</label><br>
         <input type="radio" name="studies" id="BAC8" value="BAC+8"><label for="BAC8">BAC+8</label><br>
+        </div>
 
 <h4>Degré de maîtrise du français :</h4>
+        <div id="français">
         <input type="radio" name="français" id="1" value="C'est ma langue maternelle"><label for="1">C'est ma langue maternelle</label><br>
         <input type="radio" name="français" id="2" value="Je le parle aussi bien que ma langue maternelle"><label for="2">Je le parle aussi bien que ma langue maternelle</label><br>
         <input type="radio" name="français" id="3" value="Je le parle couramment mais pas aussi bien que ma langue maternelle"><label for="3">Je le parle couramment mais pas aussi bien que ma langue maternelle</label><br>
         <input type="radio" name="français" id="4" value="Je le parle nettement moins bien que ma langue maternelle"><label for="4">Je le parle nettement moins bien que ma langue maternelle</label><br>
 <br>
+        </div>
         <input type="submit" name="send" value="Envoyer">
     </form>
 </body>
