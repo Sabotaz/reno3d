@@ -19,6 +19,9 @@ class Handler(CGIHTTPServer.CGIHTTPRequestHandler):
             #set the right mime type
 
             sendReply = False
+            if file.endswith(".py"):
+                self.do_POST()
+                return
             if file.endswith(".html"):
                 mimetype='text/html'
                 sendReply = True
