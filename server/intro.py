@@ -7,11 +7,11 @@ debug = False
 
 def afficher():
 
-    with open("log/debug", "a") as log:
-        log.write("version;"+version)
-        log.write("\n")
-
     if debug:
+        with open("log/debug", "a") as log:
+            log.write("version;"+version)
+            log.write("\n")
+
         import os
         os.system("java -jar jar/desktop-1.0.jar " + version)
 

@@ -109,6 +109,8 @@ def traitement(form):
 
     if None not in results.values() and not bad:
         with open("log/"+id, "a") as log:
+            log.write("version;"+version)
+            log.write("\n")
             for type, value in results.items():
                 log.write(type+";"+value)
                 log.write("\n")
