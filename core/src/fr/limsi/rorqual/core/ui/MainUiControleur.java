@@ -113,12 +113,14 @@ public class MainUiControleur implements EventListener {
         ((Label)mainLayout.getFromId("label_cash")).setText("Total: " + cash + " euros");
     }
 
-    public void setTotal(int total) {
+    public void setTotal(int total, Color color) {
         ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " euros");
+        ((Label)mainLayout.getFromId("label_total")).getStyle().fontColor = color;
     }
 
-    public void setRestant(int restant) {
+    public void setRestant(int restant, Color color) {
         ((Label)mainLayout.getFromId("label_restant")).setText("Restant: " + restant + " euros");
+        ((Label)mainLayout.getFromId("label_restant")).getStyle().fontColor = color;
     }
 
     public void setScore(int score) {

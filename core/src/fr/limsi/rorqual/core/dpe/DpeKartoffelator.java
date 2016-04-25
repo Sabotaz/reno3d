@@ -200,9 +200,15 @@ public class DpeKartoffelator {
             }
         }
 
+        Color color = Color.BLACK;
+        if (getTotal() > getCash()*0.75f)
+            color = Color.MAROON;
+        if (getTotal() > getCash())
+            color = Color.RED;
+
         MainUiControleur.getInstance().setCash(getCash());
-        MainUiControleur.getInstance().setTotal(getTotal());
-        MainUiControleur.getInstance().setRestant(getCash() - getTotal());
+        MainUiControleur.getInstance().setTotal(getTotal(),color);
+        MainUiControleur.getInstance().setRestant(getCash()-getTotal(),color);
         MainUiControleur.getInstance().setScore(init);
         MainUiControleur.getInstance().setEstimation((int) dpe.getScoreDpe());
 
