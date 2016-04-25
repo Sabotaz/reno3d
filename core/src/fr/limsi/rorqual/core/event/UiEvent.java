@@ -22,5 +22,7 @@ public enum UiEvent implements EventType {
 
     FONCTION_PIECE,
 
+    LIMIT_INFRINGEMENT,
+
     ;
 }

@@ -33,6 +33,7 @@ import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
+import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
 import fr.limsi.rorqual.core.model.Mur;
@@ -213,6 +214,10 @@ public class DpeKartoffelator {
         MainUiControleur.getInstance().setEstimation((int) dpe.getScoreDpe());
 
         if (last_total != getTotal()) {
+            if (last_total <= getCash()*0.75f && getTotal() > getCash()*0.75f) {
+                Event e2 = new Event(UiEvent.LIMIT_INFRINGEMENT);
+                EventManager.getInstance().put(Channel.UI, e2);
+            }
             last_total = getTotal();
             MainApplicationAdapter.LOG("ARGENT", "TOTAL", "" + getTotal());
         }

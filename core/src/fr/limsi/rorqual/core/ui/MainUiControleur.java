@@ -131,7 +131,6 @@ public class MainUiControleur implements EventListener {
         ((Label)mainLayout.getFromId("label_estim")).setText("Actuel: " + estim + " kWh");
     }
 
-
     public void removeTb() {
         if (tb != null)
             synchronized (stage) {
@@ -776,8 +775,35 @@ public class MainUiControleur implements EventListener {
                     actor.setVisible(model instanceof Fenetre);
                 }
             }
+            else if (e.getEventType() == UiEvent.LIMIT_INFRINGEMENT) {
+                uncheckAll();
+                removeTb();
+                tabName = "Limit popup";
+                addTb(getLimitPopupTb());
+            }
 
         }
+    }
+
+    private Window getLimitPopupTb() {
+        Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
+        Label.LabelStyle ls = new Label.LabelStyle((BitmapFont)AssetManager.getInstance().get("default.fnt"), Color.BLACK);
+        final Window w = new Window("Limite proche",skin);
+        Label label = new Label("Attention, vous approchez de la limite de votre budget.",ls);
+        TextButton.TextButtonStyle tbs = skin.get("default", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+        final TextButton button = new TextButton("OK", tbs);
+        w.add(label).pad(20).center().row();
+        w.add(button).pad(2).center();
+        w.setWidth(w.getPrefWidth());
+        w.setHeight(w.getPrefHeight());
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                w.remove();
+            }
+        });
+        return w;
     }
 
     private Window getSaveTb() {
