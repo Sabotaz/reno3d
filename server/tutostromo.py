@@ -14,8 +14,10 @@ def afficher():
         print(html)
 
 def traitement(form):
-    global  id
+    global id
+    global version
     id = form.getvalue("id")
+    version = form.getvalue("version")
     return True
 
 if __name__ == "__main__":

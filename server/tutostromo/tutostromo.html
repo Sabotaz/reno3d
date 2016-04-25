@@ -25,5 +25,10 @@ html, body {
 <body>
 <iframe class="tscplayer_inline" id="embeddedSmartPlayerInstance" src="tutostromo_player.html?embedIFrameId=embeddedSmartPlayerInstance" scrolling="no" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 
+<form action="/consigne.py" method="post">
+	<input type="hidden" name="id" value="$ID" />
+	<input type="hidden" name="version" value="$VERSION" />
+	<input type="submit" name="send" value="J'ai compris">
+</form>
 </body>
 </html>
