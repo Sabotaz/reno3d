@@ -141,6 +141,8 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     builder.append(s);
                 }
 
+                //System.out.println("LOG: " + nw + builder.toString());
+
                 log_file.write((nw + builder.toString() + "\n").getBytes());
                 log_file.flush();
 
@@ -618,14 +620,19 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
     public static void startLogs() {
+        FileHandle file;
         try {
             String path = MainApplicationAdapter.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            if (path.endsWith("/jar/desktop-1.0.jar"))
-                log_file = Gdx.files.external(path.replace("/jar/desktop-1.0.jar", "/log/" + id)).write(true);
-            else
-                log_file = Gdx.files.external(id).write(true);
+            if (path.endsWith("/jar/desktop-1.0.jar")) {
+                file = Gdx.files.absolute(path.replace("/jar/desktop-1.0.jar", "/log/" + id));
+            }
+            else {
+                file = Gdx.files.external(id);
+            }
         } catch (URISyntaxException e) {
-            log_file = Gdx.files.external(id).write(true);
+            file = Gdx.files.external(id);
         }
+        log_file = file.write(true);
+        LOG("start app logs");
     }
 }
