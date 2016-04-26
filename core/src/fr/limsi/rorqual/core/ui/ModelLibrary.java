@@ -382,11 +382,20 @@ public class ModelLibrary {
             if (!entry.getKey().equals("Portes et fenetres"))
                 if (!entry.getValue().isEmpty())
                     makeNewTab(tw, entry.getKey(), entry.getValue());
+        uncheckAll();
         tabWindow = tw;
     }
 
     public Table getModelTable(String category) {
         return categoriesTables.get(category);
+    }
+
+
+    ArrayList<ButtonGroup<ImageButton>> groups = new ArrayList<ButtonGroup<ImageButton>>();
+
+    public void uncheckAll() {
+        for (ButtonGroup<ImageButton> group : groups)
+            group.uncheckAll();
     }
 
     private void makeNewTab(TabWindow tw, String category, HashMap<String, ModelLoader> models) {
@@ -407,6 +416,7 @@ public class ModelLibrary {
 
             ImageButton imageButton = new Layout.ClickableImageButton(modelLoader.getImageName(), 64, 64);
             group.add(imageButton);
+            groups.add(group);
 
             imageButton.addListener(new ClickListener() {
                 @Override

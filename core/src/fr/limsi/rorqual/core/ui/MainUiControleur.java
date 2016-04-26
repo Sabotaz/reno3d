@@ -252,7 +252,7 @@ public class MainUiControleur implements EventListener {
 
     private void uncheckControlButtons() {
         if (mainLayout.getFromId("control_buttons") != null)
-            ((Button)(((Table)mainLayout.getFromId("control_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
+            ((Button) (((Table) mainLayout.getFromId("control_buttons")).getChildren().first())).getButtonGroup().uncheckAll();
     }
 
     private void uncheckCalculButtons() {
@@ -480,11 +480,19 @@ public class MainUiControleur implements EventListener {
                 }
             } else if (e.getEventType() == UiEvent.ITEM_SELECTED) {
                 if (e.getUserObject() instanceof Objet) {
+                    if (mainLayout.getFromId("Delete") != null)
+                        mainLayout.getFromId("Delete").setVisible(true);
+                    if (mainLayout.getFromId("Move") != null)
+                        mainLayout.getFromId("Move").setVisible(true);
                     if (mainLayout.getFromId("Rotate_G") != null)
                         mainLayout.getFromId("Rotate_G").setVisible(true);
                     if (mainLayout.getFromId("Rotate_D") != null)
                         mainLayout.getFromId("Rotate_D").setVisible(true);
                 } else {
+                    if (mainLayout.getFromId("Delete") != null)
+                        mainLayout.getFromId("Delete").setVisible(false);
+                    if (mainLayout.getFromId("Move") != null)
+                        mainLayout.getFromId("Move").setVisible(false);
                     if (mainLayout.getFromId("Rotate_G") != null)
                         mainLayout.getFromId("Rotate_G").setVisible(false);
                     if (mainLayout.getFromId("Rotate_D") != null)
@@ -506,6 +514,10 @@ public class MainUiControleur implements EventListener {
                     mur.add(cote);
                 }
             } else if (e.getEventType() == UiEvent.ITEM_DESELECTED) {
+                if (mainLayout.getFromId("Delete") != null)
+                    mainLayout.getFromId("Delete").setVisible(false);
+                if (mainLayout.getFromId("Move") != null)
+                    mainLayout.getFromId("Move").setVisible(false);
                 if (mainLayout.getFromId("Rotate_G") != null)
                     mainLayout.getFromId("Rotate_G").setVisible(false);
                 if (mainLayout.getFromId("Rotate_D") != null)

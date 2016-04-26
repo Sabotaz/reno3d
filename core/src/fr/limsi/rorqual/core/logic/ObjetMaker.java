@@ -1,12 +1,9 @@
 package fr.limsi.rorqual.core.logic;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
-import fr.limsi.rorqual.core.model.Etage;
 import fr.limsi.rorqual.core.model.ModelHolder;
-import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
@@ -41,7 +38,7 @@ public class ObjetMaker extends ModelMaker {
 
         ModelGraph modelGraph = ModelHolder.getInstance().getBatiment().getCurrentEtage().getModelGraph();
         ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
-        if (modelContainer == null) {
+        if (modelContainer == null || modelId == null) {
             making_objet = false;
         } else if (modelContainer instanceof Slab) {
             Slab slab = (Slab) modelContainer;
@@ -88,7 +85,11 @@ public class ObjetMaker extends ModelMaker {
 
         MainApplicationAdapter.LOG("AMENAGEMENT", "ADD_OBJET", "" + modelId);
 
+        ModelLibrary.getInstance().uncheckAll();
+        Logic.getInstance().end();
+
         making_objet = false;
+        modelId = null;
     }
 
     public void abort() {

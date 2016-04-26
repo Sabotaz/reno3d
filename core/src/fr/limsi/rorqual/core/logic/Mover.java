@@ -3,6 +3,7 @@ package fr.limsi.rorqual.core.logic;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.model.utils.Coin;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
+import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.utils.scene3d.ModelGraph;
 import fr.limsi.rorqual.core.utils.scene3d.models.Anchor;
@@ -60,7 +62,7 @@ public class Mover extends ModelMaker {
         ModelContainer modelContainer = modelGraph.getObject(screenX, screenY);
         collisionController = new CollisionController();
 
-        if (modelContainer == null) {
+        if (modelContainer == null || modelContainer != MainApplicationAdapter.getSelected()) {
             moving = false;
         } else if (modelContainer instanceof Mur) {
             moving = false;
@@ -253,6 +255,8 @@ public class Mover extends ModelMaker {
                 moving = false;
                 movingObject = false;
                 MainApplicationAdapter.LOG("AMENAGEMENT", "END_MOVE_OBJET", "" + movedObjet.getModelId(), "" + movedObjet.getPosition());
+                MainUiControleur.getInstance().uncheckAll();
+                Logic.getInstance().end();
                 return;
             } else if (movingOuverture) {
                 movedOuverture.setSelectable(true);

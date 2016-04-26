@@ -85,13 +85,13 @@
           "content": [
             {
               "type": "Button",
-              "text": "Modifier",
-              "id":"Move",
+              "text": "Supprimer",
+              "id":"Delete",
               "value": "fr.limsi.rorqual.core.event.ButtonValue.DELETE",
               "height": "auto",
               "width": "6%",
               "pad": 0,
-              "visible":true,
+              "visible":false,
               "style": [
                 "drawable:delete",
                 "drawable:delete:tint:888888",
@@ -107,7 +107,7 @@
               "height": "auto",
               "width": "6%",
               "pad": 0,
-              "visible":true,
+              "visible":false,
               "style": [
                 "drawable:move",
                 "drawable:move:tint:888888",
@@ -167,7 +167,7 @@
       "content": [
         {
           "type": "ButtonGroup",
-          "id": "control_buttons",
+          "id": "save_buttons",
           "layout": "row",
           "minChecked": 0,
           "content": [

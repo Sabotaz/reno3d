@@ -70,6 +70,7 @@ public class Deleter extends ModelMaker {
         }
         deleting_objet = false;
         deleted_object = null;
+        Logic.getInstance().end();
     }
 
     @Override

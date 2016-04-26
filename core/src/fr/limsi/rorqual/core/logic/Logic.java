@@ -185,6 +185,10 @@ public class Logic implements InputProcessor {
         }
     }
 
+    public void end() {
+        modelMaker = null;
+    }
+
     // INPUTS
 
     @Override
