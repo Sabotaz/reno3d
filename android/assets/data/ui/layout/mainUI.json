@@ -189,6 +189,7 @@
         }
       ]
     },
+
     {
       "type": "Table",
       "name": "Main score",
@@ -299,6 +300,36 @@
               "style": [
                 "texture:bar",
                 "texture:bar_background"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "name": "Context",
+      "id": "context",
+      "position": "bottom-center",
+      "align": "center",
+      "layout": "column",
+      "expand":false,
+      "content": [
+        {
+          "type": "Window",
+          "name": "",
+          "width": "5%",
+          "id": "tab_window",
+          "padBottom": 100,
+          "content": [
+            {
+              "type": "Label",
+              "id": "consigne",
+              "height": "auto",//64
+              "width": "768",//1024
+              "style": [
+                "defaultTitle.fnt",
+                null
               ]
             }
           ]

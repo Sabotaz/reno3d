@@ -104,6 +104,16 @@ public class MainUiControleur implements EventListener {
             ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
 
         //addTb(getIntro(),"intro");
+        if (version == 0)
+            ((Label)mainLayout.getFromId("consigne")).remove();
+        else if (version == 1)
+            (mainLayout.getFromId("consigne")).remove();
+        else if (version == 2)
+            ((Label)mainLayout.getFromId("consigne")).setText("Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n d'au moins 25% des performances énergétiques des bâtiments existants d'ici à 2020.");
+        else if (version == 3)
+            (mainLayout.getFromId("consigne")).remove();
+        else if (version == 4)
+            ((Label)mainLayout.getFromId("consigne")).setText("Pour les besoins de l'étude, nous vous demanderons d'améliorer d'au moins 25% la performance de votre bâtiment.");
     }
 
     Timeit timeit;
@@ -112,6 +122,7 @@ public class MainUiControleur implements EventListener {
     public void setCash(int cash) {
         ((Label)mainLayout.getFromId("label_cash")).setText("Total: " + cash + " euros");
     }
+
 
     public void setTotal(int total, Color color) {
         ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " euros");
