@@ -319,8 +319,8 @@
           "type": "Window",
           "name": "",
           "width": "5%",
-          "id": "tab_window",
-          "padBottom": 100,
+          "id": "consigne_window",
+          "padBottom": 95,
           "content": [
             {
               "type": "Label",

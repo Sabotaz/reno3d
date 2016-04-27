@@ -112,8 +112,12 @@ public class MainUiControleur implements EventListener {
             ((Label)mainLayout.getFromId("consigne")).setText("Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n d'au moins 25% des performances énergétiques des bâtiments existants d'ici à 2020.");
         else if (version == 3)
             (mainLayout.getFromId("consigne")).remove();
-        else if (version == 4)
-            ((Label)mainLayout.getFromId("consigne")).setText("Pour les besoins de l'étude, nous vous demanderons d'améliorer d'au moins 25% la performance de votre bâtiment.");
+        else if (version == 4) {
+            ((Label) mainLayout.getFromId("consigne")).setText("Pour les besoins de l'étude, nous vous demanderons d'améliorer d'au moins 25% la performance de votre bâtiment.");
+            float x = (mainLayout.getFromId("context")).getX();
+            float y = (mainLayout.getFromId("context")).getY();
+            (mainLayout.getFromId("context")).setPosition(x, y-21);
+        }
     }
 
     Timeit timeit;
