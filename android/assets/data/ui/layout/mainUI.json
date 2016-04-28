@@ -271,6 +271,14 @@
                     "defaultTitle.fnt",
                     null
                   ]
+                },
+                {"type": "Label",
+                  "id": "obj",
+                  "pad": 0,
+                  "style": [
+                    "defaultTitle.fnt",
+                    null
+                  ]
                 }
               ]
             }

@@ -113,7 +113,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     public static float time[] = {0, 0, 0, 0};
     public static String versionName = "1.0.x";
     public static int versionCode = 1;
-    public static int version = 0;
+    public static int version = 4;
     public static String id = "debug";
 
 

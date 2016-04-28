@@ -104,14 +104,21 @@ public class MainUiControleur implements EventListener {
             ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
 
         //addTb(getIntro(),"intro");
-        if (version == 0)
-            ((Label)mainLayout.getFromId("consigne")).remove();
-        else if (version == 1)
-            (mainLayout.getFromId("consigne")).remove();
-        else if (version == 2)
-            ((Label)mainLayout.getFromId("consigne")).setText("Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n d'au moins 25% des performances énergétiques des bâtiments existants d'ici à 2020.");
-        else if (version == 3)
-            (mainLayout.getFromId("consigne")).remove();
+        if (version == 0) {
+            (mainLayout.getFromId("context")).remove();
+            (mainLayout.getFromId("obj")).remove();
+        }
+        else if (version == 1) {
+            (mainLayout.getFromId("context")).remove();
+            (mainLayout.getFromId("obj")).remove();
+        }
+        else if (version == 2) {
+            ((Label) mainLayout.getFromId("consigne")).setText("Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n d'au moins 25% des performances énergétiques des bâtiments existants d'ici à 2020.");
+        }
+        else if (version == 3) {
+            (mainLayout.getFromId("context")).remove();
+            (mainLayout.getFromId("obj")).remove();
+        }
         else if (version == 4) {
             ((Label) mainLayout.getFromId("consigne")).setText("Pour les besoins de l'étude, nous vous demanderons d'améliorer d'au moins 25% la performance de votre bâtiment.");
             float x = (mainLayout.getFromId("context")).getX();
@@ -124,26 +131,31 @@ public class MainUiControleur implements EventListener {
     String tabName;
 
     public void setCash(int cash) {
-        ((Label)mainLayout.getFromId("label_cash")).setText("Total: " + cash + " euros");
+        ((Label)mainLayout.getFromId("label_cash")).setText("Total : " + cash + " euros");
     }
 
 
     public void setTotal(int total, Color color) {
-        ((Label)mainLayout.getFromId("label_total")).setText("Travaux: " + total + " euros");
+        ((Label)mainLayout.getFromId("label_total")).setText("Travaux : " + total + " euros");
         ((Label)mainLayout.getFromId("label_total")).getStyle().fontColor = color;
     }
 
     public void setRestant(int restant, Color color) {
-        ((Label)mainLayout.getFromId("label_restant")).setText("Restant: " + restant + " euros");
+        ((Label)mainLayout.getFromId("label_restant")).setText("Restant : " + restant + " euros");
         ((Label)mainLayout.getFromId("label_restant")).getStyle().fontColor = color;
     }
 
     public void setScore(int score) {
-        ((Label)mainLayout.getFromId("label_score")).setText("Base: " + score + " kWh");
+        ((Label)mainLayout.getFromId("label_score")).setText("Base : " + score + " kWh");
     }
 
-    public void setEstimation(int estim) {
-        ((Label)mainLayout.getFromId("label_estim")).setText("Actuel: " + estim + " kWh");
+    public void setEstimation(int estim, Color color) {
+        ((Label)mainLayout.getFromId("label_estim")).setText("Actuel : " + estim + " kWh");
+        ((Label)mainLayout.getFromId("label_estim")).getStyle().fontColor = color;
+    }
+
+    public void setObj(int obj) {
+        ((Label)mainLayout.getFromId("obj")).setText("Objectif : " + obj + " kWh");
     }
 
     public void removeTb() {
