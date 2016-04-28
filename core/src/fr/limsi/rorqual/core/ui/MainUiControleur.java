@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import fr.limsi.rorqual.core.dpe.DpeKartoffelator;
 import fr.limsi.rorqual.core.event.ButtonValue;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
@@ -125,6 +126,10 @@ public class MainUiControleur implements EventListener {
             float y = (mainLayout.getFromId("context")).getY();
             (mainLayout.getFromId("context")).setPosition(x, y-21);
         }
+    }
+
+    private void logOnEnd() {
+        MainApplicationAdapter.kartoffelator.logAll();
     }
 
     Timeit timeit;
@@ -662,10 +667,12 @@ public class MainUiControleur implements EventListener {
                 }
             }
             else if (e.getEventType() == UiEvent.SAVE_FILE) {
+                logOnEnd();
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 String filename = (String)items.get("filename");
                 HitMaker.makeHitOnSave();
                 Serializer.saveAll(filename);
+                MainApplicationAdapter.LOG("stop app logs");
                 Gdx.app.exit();
             }
             else if (e.getEventType() == UiEvent.LOAD_FILE) {

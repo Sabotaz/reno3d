@@ -303,4 +303,82 @@ public class DpeKartoffelator {
         Dpe dpe = Dpe.getInstance();
         init = (int) dpe.getScoreDpe();
     }
+
+    public void logAll() {
+
+        Dpe dpe = Dpe.getInstance();
+        int savedTotal = total;
+
+        for (Map.Entry<DpeEvent, ArrayList<Object>> keys : fake_dpes.entrySet()) {
+            DpeEvent event = keys.getKey();
+            total = 0;
+            for (Object value : keys.getValue()) {
+                String price_str = prices_file.get(event + "#" + (value instanceof Chauffage.Generateur ? ((Chauffage.Generateur) value).name() : value.toString()));
+                update_score(event, value, getPrice(price_str));
+            }
+            MainApplicationAdapter.LOG("TOTAL", ""+event, ""+total);
+        }
+
+        total = 0;
+        for (Objet o : ModelHolder.getInstance().getBatiment().getObjets())
+            total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
+        MainApplicationAdapter.LOG("TOTAL", "OBJETS", ""+total);
+
+        total = 0;
+        for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs()) {
+            total += s.getPrixTextures();
+        }
+        MainApplicationAdapter.LOG("TOTAL", "TEXTURES_SOLS", ""+total);
+
+        total = 0;
+        for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
+            for (DateIsolationMurEnum value : DateIsolationMurEnum.values()) {
+                String price_str = prices_file.get("DATE_ISOLATION_MUR#" + value.toString());
+                update_score(m, value, getPrice(price_str, m));
+            }
+        }
+        MainApplicationAdapter.LOG("TOTAL", "ISOLATION_MUR", ""+total);
+
+        total = 0;
+        for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
+            total += m.getPrixTextures();
+        }
+        MainApplicationAdapter.LOG("TOTAL", "TEXTURES_MUR", ""+total);
+
+        total = 0;
+        for (Fenetre fen : ModelHolder.getInstance().getBatiment().getFenetres()) {
+            for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
+                String price_str = prices_file.get("TYPE_VITRAGE_MENUISERIE#" + value.toString());
+                update_score(fen, value, getPrice(price_str, fen));
+            }
+        }
+        for (PorteFenetre fen : ModelHolder.getInstance().getBatiment().getPorteFenetres()) {
+            for (TypeVitrageEnum value : TypeVitrageEnum.values()) {
+                String price_str = prices_file.get("TYPE_VITRAGE_MENUISERIE#" + value.toString());
+                update_score(fen, value, getPrice(price_str, fen));
+            }
+        }
+        MainApplicationAdapter.LOG("TOTAL", "TYPE_VITRAGE_MENUISERIE", ""+total);
+
+        total = 0;
+        for (Fenetre fen : ModelHolder.getInstance().getBatiment().getFenetres()) {
+            for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
+                String price_str = prices_file.get("TYPE_FERMETURE_MENUISERIE#" + value.toString());
+                update_score(fen, value, getPrice(price_str, fen));
+            }
+        }
+        for (PorteFenetre fen : ModelHolder.getInstance().getBatiment().getPorteFenetres()) {
+            for (TypeFermetureEnum value : TypeFermetureEnum.values()) {
+                String price_str = prices_file.get("TYPE_FERMETURE_MENUISERIE#" + value.toString());
+                update_score(fen, value, getPrice(price_str, fen));
+            }
+        }
+
+        MainApplicationAdapter.LOG("TOTAL", "TYPE_FERMETURE_MENUISERIE", ""+total);
+
+        total = savedTotal;
+        MainApplicationAdapter.LOG("GRAND_TOTAL", ""+savedTotal);
+        MainApplicationAdapter.LOG("DPE", ""+dpe.getScoreDpe());
+
+    }
 }
