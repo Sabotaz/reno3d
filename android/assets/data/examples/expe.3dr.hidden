@@ -10,36 +10,60 @@
         <wall id="5">
           <A id="6">
             <position id="7">
-              <x>-5.0</x>
-              <y>5.0</y>
+              <x>5.6</x>
+              <y>1.5</y>
             </position>
           </A>
           <B id="8">
             <position id="9">
-              <x>-5.0</x>
-              <y>0.2</y>
+              <x>5.6</x>
+              <y>5.0</y>
             </position>
           </B>
           <cloison>false</cloison>
-          <isolationDate>INCONNUE</isolationDate>
+          <isolationDate>JAMAIS</isolationDate>
           <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
           <depth>0.2</depth>
           <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
           <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
           <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-          <orientation>OUEST</orientation>
-          <leftSlab id="10">
-            <coin reference="6"/>
+          <orientation>EST</orientation>
+          <rightSlab id="10">
             <coin reference="8"/>
+            <coin reference="6"/>
             <coin id="11">
               <position id="12">
-                <x>-0.1</x>
-                <y>0.2</y>
+                <x>5.6</x>
+                <y>-0.3</y>
               </position>
             </coin>
             <coin id="13">
               <position id="14">
-                <x>-0.1</x>
+                <x>10.2</x>
+                <y>-0.3</y>
+              </position>
+            </coin>
+            <coin id="15">
+              <position id="16">
+                <x>10.2</x>
+                <y>3.3</y>
+              </position>
+            </coin>
+            <coin id="17">
+              <position id="18">
+                <x>10.2</x>
+                <y>5.0</y>
+              </position>
+            </coin>
+            <coin id="19">
+              <position id="20">
+                <x>8.7</x>
+                <y>5.0</y>
+              </position>
+            </coin>
+            <coin id="21">
+              <position id="22">
+                <x>7.0</x>
                 <y>5.0</y>
               </position>
             </coin>
@@ -48,192 +72,246 @@
             <height>0.2</height>
             <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
             <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
-            <wall reference="5"/>
-            <wall id="15">
-              <A reference="8"/>
-              <B reference="11"/>
+            <wall id="23">
+              <A reference="11"/>
+              <B reference="13"/>
               <cloison>false</cloison>
-              <isolationDate>INCONNUE</isolationDate>
+              <isolationDate>JAMAIS</isolationDate>
               <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
               <depth>0.2</depth>
               <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
               <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
               <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
               <orientation>SUD</orientation>
-              <rightSlab id="16">
-                <coin reference="11"/>
-                <coin id="17">
-                  <position id="18">
-                    <x>-0.1</x>
-                    <y>-1.4</y>
+              <leftSlab reference="10"/>
+              <isolationType>NON_ISOLE</isolationType>
+              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+              <width>4.6</width>
+            </wall>
+            <wall id="24">
+              <A reference="13"/>
+              <B reference="15"/>
+              <cloison>false</cloison>
+              <isolationDate>JAMAIS</isolationDate>
+              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+              <depth>0.2</depth>
+              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+              <orientation>EST</orientation>
+              <rightSlab id="25">
+                <coin reference="15"/>
+                <coin reference="13"/>
+                <coin id="26">
+                  <position id="27">
+                    <x>14.7</x>
+                    <y>-0.3</y>
                   </position>
                 </coin>
-                <coin id="19">
-                  <position id="20">
-                    <x>-5.0</x>
-                    <y>-1.4</y>
+                <coin id="28">
+                  <position id="29">
+                    <x>14.7</x>
+                    <y>3.3</y>
                   </position>
                 </coin>
-                <coin reference="8"/>
                 <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
                 <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
                 <height>0.2</height>
                 <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
                 <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
-                <wall id="21">
-                  <A reference="17"/>
-                  <B reference="19"/>
+                <wall id="30">
+                  <A reference="13"/>
+                  <B reference="26"/>
                   <cloison>false</cloison>
-                  <isolationDate>INCONNUE</isolationDate>
+                  <isolationDate>JAMAIS</isolationDate>
                   <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                   <depth>0.2</depth>
                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                   <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                   <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                  <orientation>NORD</orientation>
-                  <rightSlab reference="16"/>
-                  <leftSlab id="22">
-                    <coin reference="19"/>
-                    <coin id="23">
-                      <position id="24">
-                        <x>-5.0</x>
-                        <y>-7.9006867</y>
-                      </position>
-                    </coin>
-                    <coin id="25">
-                      <position id="26">
-                        <x>-0.1</x>
-                        <y>-7.9006867</y>
-                      </position>
-                    </coin>
-                    <coin id="27">
-                      <position id="28">
-                        <x>-0.1</x>
-                        <y>-4.3</y>
-                      </position>
-                    </coin>
+                  <orientation>SUD</orientation>
+                  <leftSlab reference="25"/>
+                  <isolationType>NON_ISOLE</isolationType>
+                  <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                  <width>4.5</width>
+                </wall>
+                <wall id="31">
+                  <A reference="26"/>
+                  <B reference="28"/>
+                  <cloison>false</cloison>
+                  <isolationDate>JAMAIS</isolationDate>
+                  <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                  <depth>0.2</depth>
+                  <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                  <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                  <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                  <orientation>EST</orientation>
+                  <leftSlab reference="25"/>
+                  <isolationType>NON_ISOLE</isolationType>
+                  <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                  <width>3.6</width>
+                </wall>
+                <wall reference="24"/>
+                <wall id="32">
+                  <A reference="15"/>
+                  <B reference="28"/>
+                  <cloison>false</cloison>
+                  <isolationDate>JAMAIS</isolationDate>
+                  <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                  <depth>0.2</depth>
+                  <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                  <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                  <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                  <orientation>SUD</orientation>
+                  <rightSlab reference="25"/>
+                  <leftSlab id="33">
                     <coin reference="17"/>
+                    <coin reference="15"/>
+                    <coin reference="28"/>
+                    <coin id="34">
+                      <position id="35">
+                        <x>14.7</x>
+                        <y>5.0</y>
+                      </position>
+                    </coin>
                     <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
                     <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
                     <height>0.2</height>
                     <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
                     <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
-                    <wall id="29">
-                      <A reference="19"/>
-                      <B reference="23"/>
+                    <wall id="36">
+                      <A reference="17"/>
+                      <B reference="15"/>
                       <cloison>false</cloison>
-                      <isolationDate>INCONNUE</isolationDate>
+                      <isolationDate>JAMAIS</isolationDate>
                       <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                       <depth>0.2</depth>
                       <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                       <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                       <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
                       <orientation>OUEST</orientation>
-                      <leftSlab reference="22"/>
+                      <rightSlab reference="10"/>
+                      <leftSlab reference="33"/>
                       <isolationType>NON_ISOLE</isolationType>
-                      <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                      <width>6.5006866</width>
+                      <wallType>MUR_INTERIEUR</wallType>
+                      <width>1.7</width>
                     </wall>
-                    <wall id="30">
-                      <A reference="23"/>
-                      <B reference="25"/>
+                    <wall reference="32"/>
+                    <wall id="37">
+                      <A reference="28"/>
+                      <B reference="34"/>
                       <cloison>false</cloison>
-                      <isolationDate>INCONNUE</isolationDate>
-                      <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
-                      <depth>0.2</depth>
-                      <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
-                      <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
-                      <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                      <orientation>SUD</orientation>
-                      <leftSlab reference="22"/>
-                      <isolationType>NON_ISOLE</isolationType>
-                      <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                      <width>4.9</width>
-                    </wall>
-                    <wall id="31">
-                      <A reference="25"/>
-                      <B reference="27"/>
-                      <cloison>false</cloison>
-                      <isolationDate>INCONNUE</isolationDate>
+                      <isolationDate>JAMAIS</isolationDate>
                       <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                       <depth>0.2</depth>
                       <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                       <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                       <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
                       <orientation>EST</orientation>
-                      <rightSlab id="32">
-                        <coin reference="27"/>
-                        <coin reference="25"/>
-                        <coin id="33">
-                          <position id="34">
-                            <x>3.9</x>
-                            <y>-7.9006867</y>
+                      <leftSlab reference="33"/>
+                      <isolationType>NON_ISOLE</isolationType>
+                      <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                      <width>1.7</width>
+                    </wall>
+                    <wall id="38">
+                      <A reference="34"/>
+                      <B reference="17"/>
+                      <cloison>false</cloison>
+                      <isolationDate>JAMAIS</isolationDate>
+                      <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                      <depth>0.2</depth>
+                      <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                      <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                      <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                      <orientation>NORD</orientation>
+                      <rightSlab id="39">
+                        <coin reference="17"/>
+                        <coin id="40">
+                          <position id="41">
+                            <x>10.2</x>
+                            <y>6.8</y>
                           </position>
                         </coin>
-                        <coin id="35">
-                          <position id="36">
-                            <x>3.9</x>
-                            <y>-4.3</y>
+                        <coin id="42">
+                          <position id="43">
+                            <x>10.2</x>
+                            <y>8.6</y>
                           </position>
                         </coin>
+                        <coin id="44">
+                          <position id="45">
+                            <x>14.7</x>
+                            <y>8.6</y>
+                          </position>
+                        </coin>
+                        <coin reference="34"/>
                         <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
                         <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
                         <height>0.2</height>
                         <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
                         <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
-                        <wall id="37">
-                          <A reference="25"/>
-                          <B reference="33"/>
+                        <wall id="46">
+                          <A reference="42"/>
+                          <B reference="44"/>
                           <cloison>false</cloison>
-                          <isolationDate>INCONNUE</isolationDate>
+                          <isolationDate>JAMAIS</isolationDate>
                           <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                           <depth>0.2</depth>
                           <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                           <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                           <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
                           <orientation>SUD</orientation>
-                          <leftSlab reference="32"/>
+                          <rightSlab reference="39"/>
                           <isolationType>NON_ISOLE</isolationType>
                           <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                          <width>4.0</width>
+                          <width>4.5</width>
                         </wall>
-                        <wall id="38">
-                          <A reference="33"/>
-                          <B reference="35"/>
+                        <wall id="47">
+                          <A reference="44"/>
+                          <B reference="34"/>
                           <cloison>false</cloison>
-                          <isolationDate>INCONNUE</isolationDate>
+                          <isolationDate>JAMAIS</isolationDate>
                           <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                           <depth>0.2</depth>
                           <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                           <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                           <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                          <orientation>EST</orientation>
-                          <leftSlab reference="32"/>
+                          <orientation>OUEST</orientation>
+                          <rightSlab reference="39"/>
                           <isolationType>NON_ISOLE</isolationType>
                           <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                          <width>3.6006866</width>
+                          <width>3.6000004</width>
                         </wall>
-                        <wall reference="31"/>
-                        <wall id="39">
-                          <A reference="27"/>
-                          <B reference="35"/>
+                        <wall id="48">
+                          <A reference="42"/>
+                          <B reference="40"/>
                           <cloison>false</cloison>
-                          <isolationDate>INCONNUE</isolationDate>
+                          <isolationDate>JAMAIS</isolationDate>
                           <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                           <depth>0.2</depth>
                           <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                           <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                           <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                          <orientation>SUD</orientation>
-                          <rightSlab reference="32"/>
-                          <leftSlab id="40">
-                            <coin reference="17"/>
-                            <coin reference="27"/>
-                            <coin reference="35"/>
-                            <coin id="41">
-                              <position id="42">
-                                <x>3.9</x>
-                                <y>-1.4</y>
+                          <orientation>OUEST</orientation>
+                          <rightSlab id="49">
+                            <coin id="50">
+                              <position id="51">
+                                <x>7.0</x>
+                                <y>6.8</y>
+                              </position>
+                            </coin>
+                            <coin id="52">
+                              <position id="53">
+                                <x>7.0</x>
+                                <y>8.6</y>
+                              </position>
+                            </coin>
+                            <coin reference="42"/>
+                            <coin reference="40"/>
+                            <coin id="54">
+                              <position id="55">
+                                <x>8.7</x>
+                                <y>6.8</y>
                               </position>
                             </coin>
                             <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
@@ -241,188 +319,383 @@
                             <height>0.2</height>
                             <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
                             <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
-                            <wall id="43">
-                              <A reference="17"/>
-                              <B reference="27"/>
+                            <wall id="56">
+                              <A reference="52"/>
+                              <B reference="42"/>
                               <cloison>false</cloison>
-                              <isolationDate>INCONNUE</isolationDate>
-                              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
-                              <depth>0.2</depth>
-                              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
-                              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
-                              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                              <orientation>OUEST</orientation>
-                              <rightSlab reference="22"/>
-                              <leftSlab reference="40"/>
-                              <isolationType>NON_ISOLE</isolationType>
-                              <wallType>MUR_INTERIEUR</wallType>
-                              <width>2.9</width>
-                            </wall>
-                            <wall reference="39"/>
-                            <wall id="44">
-                              <A reference="35"/>
-                              <B reference="41"/>
-                              <cloison>false</cloison>
-                              <isolationDate>INCONNUE</isolationDate>
-                              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
-                              <depth>0.2</depth>
-                              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
-                              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
-                              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                              <orientation>EST</orientation>
-                              <leftSlab reference="40"/>
-                              <isolationType>NON_ISOLE</isolationType>
-                              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                              <width>2.9</width>
-                            </wall>
-                            <wall id="45">
-                              <A reference="17"/>
-                              <B reference="41"/>
-                              <cloison>false</cloison>
-                              <isolationDate>INCONNUE</isolationDate>
+                              <isolationDate>JAMAIS</isolationDate>
                               <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                               <depth>0.2</depth>
                               <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                               <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                               <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
                               <orientation>SUD</orientation>
-                              <rightSlab reference="40"/>
-                              <leftSlab id="46">
-                                <coin reference="13"/>
-                                <coin reference="11"/>
+                              <rightSlab reference="49"/>
+                              <isolationType>NON_ISOLE</isolationType>
+                              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                              <width>3.1999998</width>
+                            </wall>
+                            <wall reference="48"/>
+                            <wall id="57">
+                              <A reference="40"/>
+                              <B reference="54"/>
+                              <cloison>false</cloison>
+                              <isolationDate>JAMAIS</isolationDate>
+                              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                              <depth>0.2</depth>
+                              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                              <orientation>NORD</orientation>
+                              <rightSlab reference="49"/>
+                              <leftSlab id="58">
+                                <coin reference="54"/>
+                                <coin reference="19"/>
                                 <coin reference="17"/>
-                                <coin reference="41"/>
-                                <coin id="47">
-                                  <position id="48">
-                                    <x>3.9</x>
-                                    <y>5.0</y>
-                                  </position>
-                                </coin>
+                                <coin reference="40"/>
                                 <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
                                 <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
                                 <height>0.2</height>
                                 <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
                                 <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
-                                <wall reference="45"/>
-                                <wall id="49">
-                                  <A reference="41"/>
-                                  <B reference="47"/>
+                                <wall id="59">
+                                  <A reference="17"/>
+                                  <B reference="40"/>
                                   <cloison>false</cloison>
-                                  <isolationDate>INCONNUE</isolationDate>
+                                  <isolationDate>JAMAIS</isolationDate>
                                   <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                                   <depth>0.2</depth>
                                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                                   <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                                   <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
                                   <orientation>EST</orientation>
-                                  <leftSlab reference="46"/>
+                                  <rightSlab reference="39"/>
+                                  <leftSlab reference="58"/>
                                   <isolationType>NON_ISOLE</isolationType>
-                                  <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                                  <width>6.4</width>
+                                  <wallType>MUR_INTERIEUR</wallType>
+                                  <width>1.8000002</width>
                                 </wall>
-                                <wall id="50">
-                                  <A reference="47"/>
-                                  <B reference="13"/>
+                                <wall id="60">
+                                  <A reference="17"/>
+                                  <B reference="19"/>
                                   <cloison>false</cloison>
-                                  <isolationDate>INCONNUE</isolationDate>
+                                  <isolationDate>JAMAIS</isolationDate>
                                   <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                                   <depth>0.2</depth>
                                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                                   <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                                   <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
                                   <orientation>NORD</orientation>
-                                  <leftSlab reference="46"/>
+                                  <rightSlab reference="58"/>
+                                  <leftSlab reference="10"/>
                                   <isolationType>NON_ISOLE</isolationType>
-                                  <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                                  <width>4.0</width>
+                                  <wallType>MUR_INTERIEUR</wallType>
+                                  <width>1.5</width>
                                 </wall>
-                                <wall id="51">
-                                  <A reference="11"/>
-                                  <B reference="17"/>
+                                <wall id="61">
+                                  <A reference="54"/>
+                                  <B reference="19"/>
                                   <cloison>false</cloison>
-                                  <isolationDate>INCONNUE</isolationDate>
+                                  <isolationDate>JAMAIS</isolationDate>
                                   <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
                                   <depth>0.2</depth>
                                   <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
                                   <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
                                   <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
                                   <orientation>OUEST</orientation>
-                                  <rightSlab reference="16"/>
-                                  <leftSlab reference="46"/>
+                                  <rightSlab id="62">
+                                    <coin reference="21"/>
+                                    <coin reference="50"/>
+                                    <coin reference="54"/>
+                                    <coin reference="19"/>
+                                    <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
+                                    <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
+                                    <height>0.2</height>
+                                    <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
+                                    <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
+                                    <wall id="63">
+                                      <A reference="50"/>
+                                      <B reference="54"/>
+                                      <cloison>false</cloison>
+                                      <isolationDate>JAMAIS</isolationDate>
+                                      <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                      <depth>0.2</depth>
+                                      <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                      <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                      <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                      <orientation>SUD</orientation>
+                                      <rightSlab reference="62"/>
+                                      <leftSlab reference="49"/>
+                                      <isolationType>NON_ISOLE</isolationType>
+                                      <wallType>MUR_INTERIEUR</wallType>
+                                      <width>1.6999998</width>
+                                    </wall>
+                                    <wall reference="61"/>
+                                    <wall id="64">
+                                      <A reference="19"/>
+                                      <B reference="21"/>
+                                      <cloison>false</cloison>
+                                      <isolationDate>JAMAIS</isolationDate>
+                                      <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                      <depth>0.2</depth>
+                                      <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                      <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                      <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                      <orientation>NORD</orientation>
+                                      <rightSlab reference="62"/>
+                                      <leftSlab reference="10"/>
+                                      <isolationType>NON_ISOLE</isolationType>
+                                      <wallType>MUR_INTERIEUR</wallType>
+                                      <width>1.6999998</width>
+                                    </wall>
+                                    <wall id="65">
+                                      <A reference="21"/>
+                                      <B reference="50"/>
+                                      <cloison>false</cloison>
+                                      <isolationDate>JAMAIS</isolationDate>
+                                      <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                      <depth>0.2</depth>
+                                      <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                      <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                      <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                      <orientation>EST</orientation>
+                                      <rightSlab reference="62"/>
+                                      <leftSlab id="66">
+                                        <coin reference="21"/>
+                                        <coin reference="50"/>
+                                        <coin reference="52"/>
+                                        <coin id="67">
+                                          <position id="68">
+                                            <x>3.4</x>
+                                            <y>8.6</y>
+                                          </position>
+                                        </coin>
+                                        <coin id="69">
+                                          <position id="70">
+                                            <x>3.4</x>
+                                            <y>5.0</y>
+                                          </position>
+                                        </coin>
+                                        <coin reference="8"/>
+                                        <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
+                                        <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
+                                        <height>0.2</height>
+                                        <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
+                                        <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
+                                        <wall reference="65"/>
+                                        <wall id="71">
+                                          <A reference="52"/>
+                                          <B reference="67"/>
+                                          <cloison>false</cloison>
+                                          <isolationDate>JAMAIS</isolationDate>
+                                          <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                          <depth>0.2</depth>
+                                          <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                          <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                          <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                          <orientation>NORD</orientation>
+                                          <leftSlab reference="66"/>
+                                          <isolationType>NON_ISOLE</isolationType>
+                                          <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                                          <width>3.6</width>
+                                        </wall>
+                                        <wall id="72">
+                                          <A reference="67"/>
+                                          <B reference="69"/>
+                                          <cloison>false</cloison>
+                                          <isolationDate>JAMAIS</isolationDate>
+                                          <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                          <depth>0.2</depth>
+                                          <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                          <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                          <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                          <orientation>OUEST</orientation>
+                                          <leftSlab reference="66"/>
+                                          <isolationType>NON_ISOLE</isolationType>
+                                          <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                                          <width>3.6000004</width>
+                                        </wall>
+                                        <wall id="73">
+                                          <A reference="8"/>
+                                          <B reference="69"/>
+                                          <cloison>false</cloison>
+                                          <isolationDate>JAMAIS</isolationDate>
+                                          <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                          <depth>0.2</depth>
+                                          <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                          <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                          <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                          <orientation>NORD</orientation>
+                                          <rightSlab reference="66"/>
+                                          <leftSlab id="74">
+                                            <coin reference="8"/>
+                                            <coin reference="6"/>
+                                            <coin id="75">
+                                              <position id="76">
+                                                <x>0.26562995</x>
+                                                <y>1.5</y>
+                                              </position>
+                                            </coin>
+                                            <coin id="77">
+                                              <position id="78">
+                                                <x>0.26562995</x>
+                                                <y>5.0</y>
+                                              </position>
+                                            </coin>
+                                            <coin reference="69"/>
+                                            <dateIsolationPlafond>INCONNUE</dateIsolationPlafond>
+                                            <dateIsolationPlancher>INCONNUE</dateIsolationPlancher>
+                                            <height>0.2</height>
+                                            <mitoyennetePlafond>TERRASSE</mitoyennetePlafond>
+                                            <mitoyennetePlancher>TERRE_PLEIN</mitoyennetePlancher>
+                                            <wall id="79">
+                                              <A reference="6"/>
+                                              <B reference="75"/>
+                                              <cloison>false</cloison>
+                                              <isolationDate>JAMAIS</isolationDate>
+                                              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                              <depth>0.2</depth>
+                                              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                              <orientation>NORD</orientation>
+                                              <rightSlab reference="74"/>
+                                              <isolationType>NON_ISOLE</isolationType>
+                                              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                                              <width>5.33437</width>
+                                            </wall>
+                                            <wall id="80">
+                                              <A reference="75"/>
+                                              <B reference="77"/>
+                                              <cloison>false</cloison>
+                                              <isolationDate>JAMAIS</isolationDate>
+                                              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                              <depth>0.2</depth>
+                                              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                              <orientation>EST</orientation>
+                                              <rightSlab reference="74"/>
+                                              <isolationType>NON_ISOLE</isolationType>
+                                              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                                              <width>3.5</width>
+                                            </wall>
+                                            <wall id="81">
+                                              <A reference="77"/>
+                                              <B reference="69"/>
+                                              <cloison>false</cloison>
+                                              <isolationDate>JAMAIS</isolationDate>
+                                              <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                              <depth>0.2</depth>
+                                              <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                              <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                              <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                              <orientation>SUD</orientation>
+                                              <rightSlab reference="74"/>
+                                              <isolationType>NON_ISOLE</isolationType>
+                                              <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
+                                              <width>3.13437</width>
+                                            </wall>
+                                            <wall reference="5"/>
+                                            <wall reference="73"/>
+                                            <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
+                                            <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
+                                            <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
+                                          </leftSlab>
+                                          <isolationType>NON_ISOLE</isolationType>
+                                          <wallType>MUR_INTERIEUR</wallType>
+                                          <width>2.1999998</width>
+                                        </wall>
+                                        <wall id="82">
+                                          <A reference="21"/>
+                                          <B reference="8"/>
+                                          <cloison>false</cloison>
+                                          <isolationDate>JAMAIS</isolationDate>
+                                          <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                          <depth>0.2</depth>
+                                          <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                          <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                          <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                          <orientation>NORD</orientation>
+                                          <rightSlab reference="66"/>
+                                          <leftSlab reference="10"/>
+                                          <isolationType>NON_ISOLE</isolationType>
+                                          <wallType>MUR_INTERIEUR</wallType>
+                                          <width>1.4000001</width>
+                                        </wall>
+                                        <wall id="83">
+                                          <A reference="50"/>
+                                          <B reference="52"/>
+                                          <cloison>false</cloison>
+                                          <isolationDate>JAMAIS</isolationDate>
+                                          <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
+                                          <depth>0.2</depth>
+                                          <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
+                                          <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
+                                          <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
+                                          <orientation>EST</orientation>
+                                          <rightSlab reference="49"/>
+                                          <leftSlab reference="66"/>
+                                          <isolationType>NON_ISOLE</isolationType>
+                                          <wallType>MUR_INTERIEUR</wallType>
+                                          <width>1.8000002</width>
+                                        </wall>
+                                        <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
+                                        <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
+                                        <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
+                                      </leftSlab>
+                                      <isolationType>NON_ISOLE</isolationType>
+                                      <wallType>MUR_INTERIEUR</wallType>
+                                      <width>1.8000002</width>
+                                    </wall>
+                                    <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
+                                    <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
+                                    <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
+                                  </rightSlab>
+                                  <leftSlab reference="58"/>
                                   <isolationType>NON_ISOLE</isolationType>
                                   <wallType>MUR_INTERIEUR</wallType>
-                                  <width>1.6</width>
+                                  <width>1.8000002</width>
                                 </wall>
-                                <wall id="52">
-                                  <A reference="11"/>
-                                  <B reference="13"/>
-                                  <cloison>false</cloison>
-                                  <isolationDate>INCONNUE</isolationDate>
-                                  <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
-                                  <depth>0.2</depth>
-                                  <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
-                                  <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
-                                  <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                                  <orientation>EST</orientation>
-                                  <rightSlab reference="46"/>
-                                  <leftSlab reference="10"/>
-                                  <isolationType>NON_ISOLE</isolationType>
-                                  <wallType>MUR_INTERIEUR</wallType>
-                                  <width>4.8</width>
-                                </wall>
+                                <wall reference="57"/>
                                 <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
                                 <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
                                 <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
                               </leftSlab>
                               <isolationType>NON_ISOLE</isolationType>
                               <wallType>MUR_INTERIEUR</wallType>
-                              <width>4.0</width>
+                              <width>1.5</width>
                             </wall>
+                            <wall reference="63"/>
+                            <wall reference="83"/>
                             <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
                             <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
                             <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
-                          </leftSlab>
+                          </rightSlab>
+                          <leftSlab reference="39"/>
                           <isolationType>NON_ISOLE</isolationType>
                           <wallType>MUR_INTERIEUR</wallType>
-                          <width>4.0</width>
+                          <width>1.8000002</width>
                         </wall>
+                        <wall reference="59"/>
+                        <wall reference="38"/>
                         <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
                         <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
                         <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
                       </rightSlab>
-                      <leftSlab reference="22"/>
+                      <leftSlab reference="33"/>
                       <isolationType>NON_ISOLE</isolationType>
                       <wallType>MUR_INTERIEUR</wallType>
-                      <width>3.6006866</width>
+                      <width>4.5</width>
                     </wall>
-                    <wall reference="21"/>
-                    <wall reference="43"/>
                     <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
                     <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
                     <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
                   </leftSlab>
                   <isolationType>NON_ISOLE</isolationType>
                   <wallType>MUR_INTERIEUR</wallType>
-                  <width>4.9</width>
+                  <width>4.5</width>
                 </wall>
-                <wall id="53">
-                  <A reference="19"/>
-                  <B reference="8"/>
-                  <cloison>false</cloison>
-                  <isolationDate>INCONNUE</isolationDate>
-                  <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
-                  <depth>0.2</depth>
-                  <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
-                  <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
-                  <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-                  <orientation>EST</orientation>
-                  <rightSlab reference="16"/>
-                  <isolationType>NON_ISOLE</isolationType>
-                  <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-                  <width>1.6</width>
-                </wall>
-                <wall reference="15"/>
-                <wall reference="51"/>
                 <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
                 <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
                 <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
@@ -430,58 +703,304 @@
               <leftSlab reference="10"/>
               <isolationType>NON_ISOLE</isolationType>
               <wallType>MUR_INTERIEUR</wallType>
-              <width>4.9</width>
+              <width>3.6</width>
             </wall>
-            <wall reference="52"/>
-            <wall id="54">
-              <A reference="13"/>
-              <B reference="6"/>
+            <wall reference="60"/>
+            <wall id="85">
+              <A reference="6"/>
+              <B reference="11"/>
               <cloison>false</cloison>
-              <isolationDate>INCONNUE</isolationDate>
+              <isolationDate>JAMAIS</isolationDate>
               <defaultMaterial>eTeksScopia#grey-rough-stonewall</defaultMaterial>
               <depth>0.2</depth>
               <exteriorMaterial>eTeksScopia#grey-rough-stonewall</exteriorMaterial>
               <interiorMaterial1>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial1>
               <interiorMaterial2>eTeksScopia#pastel-brown-sponge-wallpaint</interiorMaterial2>
-              <orientation>NORD</orientation>
+              <orientation>OUEST</orientation>
               <leftSlab reference="10"/>
               <isolationType>NON_ISOLE</isolationType>
               <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-              <width>4.9</width>
+              <width>1.8</width>
             </wall>
+            <wall reference="5"/>
+            <wall reference="82"/>
+            <wall reference="64"/>
+            <wall reference="36"/>
             <plafondMaterial>eTeksScopia#pavement_2</plafondMaterial>
             <plancherMaterial>eTeksScopia#old-brown-parquet</plancherMaterial>
             <typeIsolationPlancher>NON_ISOLE</typeIsolationPlancher>
-          </leftSlab>
+          </rightSlab>
+          <leftSlab reference="74"/>
           <isolationType>NON_ISOLE</isolationType>
-          <wallType>MUR_DONNANT_SUR_EXTERIEUR</wallType>
-          <width>4.8</width>
+          <wallType>MUR_INTERIEUR</wallType>
+          <width>3.5</width>
         </wall>
-        <wall reference="15"/>
-        <wall reference="52"/>
-        <wall reference="54"/>
-        <wall reference="45"/>
-        <wall reference="49"/>
-        <wall reference="50"/>
-        <wall reference="51"/>
-        <wall reference="21"/>
-        <wall reference="53"/>
-        <wall reference="29"/>
-        <wall reference="30"/>
-        <wall reference="31"/>
-        <wall reference="43"/>
-        <wall reference="39"/>
-        <wall reference="44"/>
+        <wall reference="73"/>
+        <wall reference="23"/>
+        <wall reference="24"/>
+        <wall reference="60"/>
+        <wall reference="85"/>
+        <wall reference="65"/>
+        <wall reference="71"/>
+        <wall reference="72"/>
+        <wall reference="82"/>
+        <wall reference="63"/>
+        <wall reference="61"/>
+        <wall reference="64"/>
+        <wall reference="83"/>
+        <wall reference="56"/>
+        <wall reference="48"/>
+        <wall reference="57"/>
+        <wall reference="59"/>
+        <wall reference="36"/>
+        <wall reference="32"/>
         <wall reference="37"/>
         <wall reference="38"/>
+        <wall reference="46"/>
+        <wall reference="47"/>
+        <wall reference="30"/>
+        <wall reference="31"/>
+        <wall reference="79"/>
+        <wall reference="80"/>
+        <wall reference="81"/>
         <name>Rez-de-chaussee</name>
         <number>0</number>
-        <opening class="fr.limsi.rorqual.core.model.Porte" id="55">
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="86">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="36"/>
+          <position id="87">
+            <x>0.50776976</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="88">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="38"/>
+          <position id="89">
+            <x>2.6452658</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="90">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="32"/>
+          <position id="91">
+            <x>1.0108969</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="92">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="61"/>
+          <position id="93">
+            <x>0.7296445</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="94">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="65"/>
+          <position id="95">
+            <x>0.24214143</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="96">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="63"/>
+          <position id="97">
+            <x>0.13277072</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="98">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="5"/>
+          <position id="99">
+            <x>1.7421398</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="100">
+          <height>2.15</height>
+          <modelId>Scopia#puerta</modelId>
+          <wall reference="64"/>
+          <position id="101">
+            <x>0.2233898</x>
+            <y>0.0</y>
+          </position>
+          <width>0.8907143</width>
+          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
+          <deperdition>0.0</deperdition>
+          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="102">
+          <height>0.75</height>
+          <modelId>Artist373#rectangularFivePanesWindow</modelId>
+          <wall reference="23"/>
+          <position id="103">
+            <x>1.5497802</x>
+            <y>1.0</y>
+          </position>
+          <width>1.2004511</width>
+          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
+          <deperdition>1.7550001</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>PVC</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="104">
+          <height>0.75</height>
+          <modelId>Artist373#rectangularFivePanesWindow</modelId>
+          <wall reference="30"/>
+          <position id="105">
+            <x>1.6841553</x>
+            <y>1.0</y>
+          </position>
+          <width>1.2004511</width>
+          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
+          <deperdition>1.7550001</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>PVC</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="106">
+          <height>0.75</height>
+          <modelId>Artist373#rectangularFivePanesWindow</modelId>
+          <wall reference="72"/>
+          <position id="107">
+            <x>1.1091536</x>
+            <y>1.0</y>
+          </position>
+          <width>1.2004511</width>
+          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
+          <deperdition>1.7550001</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>PVC</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="108">
+          <height>0.75</height>
+          <modelId>Artist373#rectangularFivePanesWindow</modelId>
+          <wall reference="46"/>
+          <position id="109">
+            <x>1.5747803</x>
+            <y>1.0</y>
+          </position>
+          <width>1.2004511</width>
+          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
+          <deperdition>1.7550001</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>PVC</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="110">
+          <height>0.75</height>
+          <modelId>Artist373#rectangularFivePanesWindow</modelId>
+          <wall reference="47"/>
+          <position id="111">
+            <x>1.2029041</x>
+            <y>1.0</y>
+          </position>
+          <width>1.2004511</width>
+          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
+          <deperdition>1.7550001</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>PVC</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="112">
+          <height>0.75</height>
+          <modelId>Artist373#rectangularFivePanesWindow</modelId>
+          <wall reference="37"/>
+          <position id="113">
+            <x>0.30289567</x>
+            <y>1.0</y>
+          </position>
+          <width>1.2004511</width>
+          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
+          <deperdition>1.7550001</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>PVC</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="114">
+          <height>0.75</height>
+          <modelId>Artist373#rectangularFivePanesWindow</modelId>
+          <wall reference="31"/>
+          <position id="115">
+            <x>1.7466451</x>
+            <y>1.0</y>
+          </position>
+          <width>1.2004511</width>
+          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
+          <deperdition>1.7550001</deperdition>
+          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
+          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
+          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
+          <typeFermeture>SANS_FERMETURE</typeFermeture>
+          <typeMateriau>PVC</typeMateriau>
+          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
+        </opening>
+        <opening class="fr.limsi.rorqual.core.model.Porte" id="116">
           <height>2.15</height>
           <modelId>Artist373#frontDoorDark</modelId>
-          <wall reference="53"/>
-          <position id="56">
-            <x>0.3123595</x>
+          <wall reference="79"/>
+          <position id="117">
+            <x>3.6334834</x>
             <y>0.0</y>
           </position>
           <width>1.1830245</width>
@@ -489,77 +1008,12 @@
           <deperdition>8.600000381469727</deperdition>
           <typePorte>PORTE_AVEC_MOINS_DE_30_POURCENT_DE_SIMPLE_VITRAGE</typePorte>
         </opening>
-        <opening class="fr.limsi.rorqual.core.model.Porte" id="57">
-          <height>2.15</height>
-          <modelId>Scopia#puerta</modelId>
-          <wall reference="15"/>
-          <position id="58">
-            <x>2.6119974</x>
-            <y>0.0</y>
-          </position>
-          <width>0.8907143</width>
-          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
-          <deperdition>0.0</deperdition>
-          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Porte" id="59">
-          <height>2.15</height>
-          <modelId>Scopia#puerta</modelId>
-          <wall reference="51"/>
-          <position id="60">
-            <x>0.05776143</x>
-            <y>0.0</y>
-          </position>
-          <width>0.8907143</width>
-          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
-          <deperdition>0.0</deperdition>
-          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Porte" id="61">
-          <height>2.15</height>
-          <modelId>Scopia#puerta</modelId>
-          <wall reference="21"/>
-          <position id="62">
-            <x>1.0112681</x>
-            <y>0.0</y>
-          </position>
-          <width>0.8907143</width>
-          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
-          <deperdition>0.0</deperdition>
-          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Porte" id="63">
-          <height>2.15</height>
-          <modelId>Scopia#puerta</modelId>
-          <wall reference="31"/>
-          <position id="64">
-            <x>1.2935169</x>
-            <y>0.0</y>
-          </position>
-          <width>0.8907143</width>
-          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
-          <deperdition>0.0</deperdition>
-          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Porte" id="65">
-          <height>2.15</height>
-          <modelId>Scopia#puerta</modelId>
-          <wall reference="43"/>
-          <position id="66">
-            <x>1.0968862</x>
-            <y>0.0</y>
-          </position>
-          <width>0.8907143</width>
-          <coefficientTransmissionThermique>0.0</coefficientTransmissionThermique>
-          <deperdition>0.0</deperdition>
-          <typePorte>PORTE_OPAQUE_PLEINE</typePorte>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="67">
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="118">
           <height>0.75</height>
           <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="5"/>
-          <position id="68">
-            <x>2.916603</x>
+          <wall reference="80"/>
+          <position id="119">
+            <x>1.1185211</x>
             <y>1.0</y>
           </position>
           <width>1.2004511</width>
@@ -572,210 +1026,12 @@
           <typeMateriau>PVC</typeMateriau>
           <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
         </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="69">
+        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="120">
           <height>0.75</height>
           <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="5"/>
-          <position id="70">
-            <x>0.81006753</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="71">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="54"/>
-          <position id="72">
-            <x>1.7175902</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="73">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="50"/>
-          <position id="74">
-            <x>1.4443334</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="75">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="49"/>
-          <position id="76">
-            <x>4.254061</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="77">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="49"/>
-          <position id="78">
-            <x>1.139398</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="79">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="44"/>
-          <position id="80">
-            <x>1.015016</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="81">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="38"/>
-          <position id="82">
-            <x>1.3957127</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="83">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="37"/>
-          <position id="84">
-            <x>1.3853087</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="85">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="29"/>
-          <position id="86">
-            <x>3.7390094</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="87">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="30"/>
-          <position id="88">
-            <x>0.68794525</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="89">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="30"/>
-          <position id="90">
-            <x>3.050274</x>
-            <y>1.0</y>
-          </position>
-          <width>1.2004511</width>
-          <coefficientTransmissionThermique>3.9</coefficientTransmissionThermique>
-          <deperdition>1.7550001</deperdition>
-          <masqueLointain>ABSENCE_MASQUE_LOINTAIN</masqueLointain>
-          <masqueProche>ABSENCE_MASQUE_PROCHE</masqueProche>
-          <typeFenetre>FENETRE_SIMPLE_VENTAIL_BATTANTE</typeFenetre>
-          <typeFermeture>SANS_FERMETURE</typeFermeture>
-          <typeMateriau>PVC</typeMateriau>
-          <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
-        </opening>
-        <opening class="fr.limsi.rorqual.core.model.Fenetre" id="91">
-          <height>0.75</height>
-          <modelId>Artist373#rectangularFivePanesWindow</modelId>
-          <wall reference="29"/>
-          <position id="92">
-            <x>1.1660271</x>
+          <wall reference="81"/>
+          <position id="121">
+            <x>1.0403994</x>
             <y>1.0</y>
           </position>
           <width>1.2004511</width>
@@ -789,59 +1045,82 @@
           <typeVitrage>SIMPLE_VITRAGE</typeVitrage>
         </opening>
         <slab reference="10"/>
-        <slab reference="46"/>
-        <slab reference="16"/>
-        <slab reference="22"/>
-        <slab reference="40"/>
-        <slab reference="32"/>
+        <slab reference="66"/>
+        <slab reference="62"/>
+        <slab reference="49"/>
+        <slab reference="58"/>
+        <slab reference="33"/>
+        <slab reference="39"/>
+        <slab reference="25"/>
+        <slab reference="74"/>
       </floor>
     </etages>
     <globalOrientation>SUD</globalOrientation>
     <plafondsVisibles>false</plafondsVisibles>
   </batiment>
-  <coins id="93">
+  <coins id="122">
     <entry>
       <int>0</int>
-      <list id="94">
-        <coin id="95">
-          <position id="96">
-            <x>6.8</x>
-            <y>0.42187458</y>
-          </position>
-        </coin>
+      <list id="123">
         <coin reference="6"/>
         <coin reference="8"/>
+        <coin reference="17"/>
         <coin reference="11"/>
         <coin reference="13"/>
-        <coin reference="17"/>
-        <coin reference="47"/>
+        <coin id="124">
+          <position id="125">
+            <x>8.5</x>
+            <y>3.2</y>
+          </position>
+        </coin>
+        <coin id="126">
+          <position id="127">
+            <x>8.7</x>
+            <y>3.2</y>
+          </position>
+        </coin>
+        <coin id="128">
+          <position id="129">
+            <x>8.7</x>
+            <y>3.2</y>
+          </position>
+        </coin>
+        <coin reference="21"/>
+        <coin reference="69"/>
+        <coin reference="52"/>
+        <coin reference="67"/>
         <coin reference="19"/>
-        <coin reference="23"/>
-        <coin reference="25"/>
-        <coin reference="35"/>
-        <coin reference="33"/>
-        <coin reference="27"/>
-        <coin reference="41"/>
+        <coin reference="50"/>
+        <coin reference="54"/>
+        <coin reference="42"/>
+        <coin reference="40"/>
+        <coin reference="15"/>
+        <coin reference="28"/>
+        <coin reference="34"/>
+        <coin reference="44"/>
+        <coin reference="26"/>
+        <coin reference="75"/>
+        <coin reference="77"/>
       </list>
     </entry>
   </coins>
-  <dpe id="97">
-    <aI>2154524.5</aI>
-    <aS>229592.58</aS>
+  <dpe id="130">
+    <aI>1973883.5</aI>
+    <aS>179632.55</aS>
     <bEcs>3547.863</bEcs>
-    <bch>19126.22</bch>
+    <bch>21789.688</bch>
     <becs>55.0</becs>
-    <bv>459.49783</bv>
+    <bv>492.7514</bv>
     <cClimatisation>0.0</cClimatisation>
     <cCuisson>1660.0</cCuisson>
-    <cEclairage>424.81964</cEclairage>
+    <cEclairage>398.04715</cEclairage>
     <cEclairageSurfacique>3.7</cEclairageSurfacique>
-    <cEcs>4655.5913</cEcs>
+    <cEcs>4087.9453</cEcs>
     <cElectromenager>0.0</cElectromenager>
-    <categorieLogement>T5_F5_ET_PLUS</categorieLogement>
-    <cch>19113.8</cch>
+    <categorieLogement>T1_F1</categorieLogement>
+    <cch>21775.537</cch>
     <chaudiereAssureChauffageEtEcs>false</chaudiereAssureChauffageEtEcs>
-    <chauffageUnique id="104">
+    <chauffageUnique id="137">
       <emission>RADIATEUR</emission>
       <generateur>CHAUDIERE_GAZ_STANDARD_APRES_2001</generateur>
       <generateurDansVolumeChauffe>true</generateurDansVolumeChauffe>
@@ -859,43 +1138,44 @@
       <rr>0.9</rr>
       <type>CENTRALE</type>
     </chauffageUnique>
-    <chauffage__properties id="105"/>
+    <chauffage__properties id="138"/>
     <dateConstructionBatiment>AVANT_1975</dateConstructionBatiment>
     <declenchementChaudiere>NON_DECLENCHEMENT_OUVERTURE_ROBINET_EAU_CHAUDE</declenchementChaudiere>
-    <departementBatiment>GIRONDE</departementBatiment>
-    <dhCor>50000.0</dhCor>
-    <dpFenetre>22.815002</dpFenetre>
-    <dpMur>228.16768</dpMur>
-    <dpPlancher>28.70403</dpPlancher>
+    <departementBatiment>TARN</departementBatiment>
+    <dhCor>53800.0</dhCor>
+    <dpFenetre>15.795001</dpFenetre>
+    <dpMur>248.94495</dpMur>
+    <dpPlancher>26.895077</dpPlancher>
     <dpPorte>8.6</dpPorte>
     <dpPorteFenetre>0.0</dpPorteFenetre>
-    <dpToit>201.20549</dpToit>
+    <dpToit>215.16061</dpToit>
     <equipementCuisson>FEUX_GAZ_ET_FOUR_GAZ</equipementCuisson>
     <equipementEclairage>MAJORITAIREMENT_AMPOULE_A_INCANDESCENCE</equipementEclairage>
-    <f>0.09384935</f>
+    <f>0.07505406</f>
     <fCh>1.0</fCh>
     <fEcs>0.0</fEcs>
     <frequenceUtilisationPoeleAvecChauffage>TRES_PEU</frequenceUtilisationPoeleAvecChauffage>
     <frequenceUtilisationPoeleAvecChauffageEtPac>TRES_PEU</frequenceUtilisationPoeleAvecChauffageEtPac>
-    <g>1.766608</g>
-    <general__properties id="106"/>
+    <g>1.9807913</g>
+    <general__properties id="139"/>
     <generateurChauffageUnique>CHAUDIERE_GAZ_STANDARD_APRES_2001</generateurChauffageUnique>
-    <gv>507.08768</gv>
-    <hPerm>16.866173</hPerm>
+    <gv>532.73535</gv>
+    <hPerm>16.610407</hPerm>
     <hVent>0.7293</hVent>
     <i0>0.93</i0>
-    <iEcs>1.312224</iEcs>
+    <iEcs>1.1522275</iEcs>
     <installationChauffage>CHAUFFAGE_UNIQUE</installationChauffage>
     <installationEcs>BALLON_ELECTRIQUE_HORIZONTAL_SUP_15ANS</installationEcs>
-    <intermittence>0.86378187</intermittence>
-    <lastGv>507.08768</lastGv>
-    <listEquipementElectromenager id="107"/>
+    <intermittence>0.84693354</intermittence>
+    <lastGv>532.73535</lastGv>
+    <listEquipementElectromenager id="140"/>
     <localEquipementEcs>SITUE_DANS_LOCAL_CHAUFFE</localEquipementEcs>
     <nbFenetreDV>0.0</nbFenetreDV>
-    <nbFenetreSV>13.0</nbFenetreSV>
+    <nbFenetreSV>9.0</nbFenetreSV>
     <nbHabitant>4.0</nbHabitant>
     <nbJoursAbsenceParAn>0.0</nbJoursAbsenceParAn>
-    <pr>838.15765</pr>
+    <perimetreBatiment>46.66874</perimetreBatiment>
+    <pr>785.33624</pr>
     <presenceClimatisation>NON</presenceClimatisation>
     <presenceInstallationSolaire>INSTALLATION_SOLAIRE_ABSENTE</presenceInstallationSolaire>
     <presenceRobinetThermostatique>ABSENCE_ROBINET_THERMOSTATIQUE</presenceRobinetThermostatique>
@@ -903,27 +1183,27 @@
     <programmationSysteme>IMPOSSIBLE</programmationSysteme>
     <prs1>3.6</prs1>
     <prs2>3.7</prs2>
-    <q4pa>680.46893</q4pa>
+    <q4pa>670.1501</q4pa>
     <q4paConv>2.0</q4paConv>
-    <q4paEnv>473.79993</q4paEnv>
+    <q4paEnv>476.50555</q4paEnv>
     <qVarep>2.145</qVarep>
-    <qVinf>49.606388</qVinf>
+    <qVinf>48.854137</qVinf>
     <rClimatisation>4.0</rClimatisation>
-    <renouvellementAir>17.595472</renouvellementAir>
-    <rrp>0.99321735</rrp>
+    <renouvellementAir>17.339706</renouvellementAir>
+    <rrp>0.99611163</rrp>
     <sClimatisation>0.0</sClimatisation>
-    <scoreDpe>225.17929</scoreDpe>
-    <sdepFen>5.8499994</sdepFen>
-    <sdepMurs>114.08384</sdepMurs>
+    <scoreDpe>259.54126</scoreDpe>
+    <sdepFen>4.05</sdepFen>
+    <sdepMurs>124.47247</sdepMurs>
     <sdepPorte>2.15</sdepPorte>
     <sdepPorteFenetre>0.0</sdepPorteFenetre>
-    <sdepToits>114.81612</sdepToits>
-    <sdepTot>236.89996</sdepTot>
-    <sh>114.81612</sh>
+    <sdepToits>107.58031</sdepToits>
+    <sdepTot>238.25278</sdepTot>
+    <sh>107.58031</sh>
     <smea>4.0</smea>
-    <sse>0.5599819</sse>
+    <sse>0.4082558</sse>
     <tInt>ENTRE_22_ET_23</tInt>
-    <tabCoeffPondX id="112">
+    <tabCoeffPondX id="145">
       <float>0.1</float>
       <float>0.25</float>
       <float>0.2</float>
@@ -935,7 +1215,7 @@
       <float>0.025</float>
       <float>0.0</float>
     </tabCoeffPondX>
-    <tabTauxDeCharge id="113">
+    <tabTauxDeCharge id="146">
       <int>5</int>
       <int>15</int>
       <int>25</int>
@@ -952,8 +1232,8 @@
     <typeBatiment>MAISON</typeBatiment>
     <typeEmetteurDeChaleur>RADIATEUR</typeEmetteurDeChaleur>
     <typeEnergieConstruction>AUTRE</typeEnergieConstruction>
-    <typeVentilation>INCONNUE</typeVentilation>
+    <typeVentilation>NATURELLE</typeVentilation>
     <usageEauChaude>DOUCHES</usageEauChaude>
-    <x>0.09403174</x>
+    <x>0.07513708</x>
   </dpe>
 </model>
