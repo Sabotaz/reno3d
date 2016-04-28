@@ -4,14 +4,17 @@ version = ""
 id = ""
 
 def afficher():
-        html = open("html/consigne.html").read()
-        intro = open("text/intro"+version).read()
+    import os
+    os.popen("vlc video/tutostromo.mp4").read()
 
-        html = html.replace("$INTRO", intro)
-        html = html.replace("$VERSION", version)
-        html = html.replace("$ID", id)
+    html = open("html/consigne.html").read()
+    intro = open("text/intro"+version).read()
 
-        print(html)
+    html = html.replace("$INTRO", intro)
+    html = html.replace("$VERSION", version)
+    html = html.replace("$ID", id)
+
+    print(html)
 
 def traitement(form):
     global  id

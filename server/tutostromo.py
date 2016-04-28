@@ -5,7 +5,8 @@ version = ""
 id = ""
 
 def afficher():
-        html = open("tutostromo/tutostromo.html").read()
+
+        html = open("html/tutostromo.html").read()
 
         html = html.replace("$VERSION", version)
         html = html.replace("$ID", id)
