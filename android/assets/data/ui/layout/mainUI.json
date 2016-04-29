@@ -333,8 +333,8 @@
             {
               "type": "Label",
               "id": "consigne",
-              "height": "auto",//64
-              "width": "768",//1024
+              "height": "64",//64
+              "width": "1024",//1024
               "style": [
                 "defaultTitle.fnt",
                 null

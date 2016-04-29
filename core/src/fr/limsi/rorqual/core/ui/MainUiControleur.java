@@ -77,6 +77,7 @@ public class MainUiControleur implements EventListener {
         EventManager.getInstance().addListener(Channel.UI, this);
     }
 
+
     /** Holder */
     private static class MainUiControleurHolder
     {
@@ -114,17 +115,17 @@ public class MainUiControleur implements EventListener {
             (mainLayout.getFromId("obj")).remove();
         }
         else if (version == 2) {
-            ((Label) mainLayout.getFromId("consigne")).setText("Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n d'au moins 25% des performances énergétiques des bâtiments existants d'ici à 2020.");
+            ((Label) mainLayout.getFromId("consigne")).setText("Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n d'au moins 25% des performances énergétiques des bâtiments.");
         }
         else if (version == 3) {
             (mainLayout.getFromId("context")).remove();
             (mainLayout.getFromId("obj")).remove();
         }
         else if (version == 4) {
-            ((Label) mainLayout.getFromId("consigne")).setText("Pour les besoins de l'étude, nous vous demanderons d'améliorer d'au moins 25% la performance de votre bâtiment.");
-            float x = (mainLayout.getFromId("context")).getX();
+            ((Label) mainLayout.getFromId("consigne")).setText("Afin de limiter le réchauffement climatique, une possibilité est de réduire la\n consommation énergétique des bâtiments. Dans ce cadre, nous vous fixons un objectif\n d'amélioration d'au moins 25% des performances énergétiques du bâtiment.");
+            /*float x = (mainLayout.getFromId("context")).getX();
             float y = (mainLayout.getFromId("context")).getY();
-            (mainLayout.getFromId("context")).setPosition(x, y-21);
+            (mainLayout.getFromId("context")).setPosition(x, y-21);*/
         }
     }
 
@@ -159,8 +160,8 @@ public class MainUiControleur implements EventListener {
         ((Label)mainLayout.getFromId("label_estim")).getStyle().fontColor = color;
     }
 
-    public void setObj(int obj) {
-        ((Label)mainLayout.getFromId("obj")).setText("Objectif : " + obj + " kWh");
+    public void setObj(String str, int obj) {
+        ((Label)mainLayout.getFromId("obj")).setText(str + " : " + obj + " kWh");
     }
 
     public void removeTb() {
