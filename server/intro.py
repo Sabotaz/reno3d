@@ -13,7 +13,7 @@ def afficher():
             log.write("\n")
 
         import os
-        os.system("java -jar jar/desktop-1.0.jar " + version)
+        os.system("java -Xms128m -Xmx512m -jar jar/desktop-1.0.jar " + version)
 
     else:
         html = open("html/intro.html").read()
