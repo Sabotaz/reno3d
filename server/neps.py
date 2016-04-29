@@ -6,9 +6,6 @@ version = ""
 
 def afficher():
 
-    import os
-    os.popen("java -Xms128m -Xmx512m -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
-
     html = open("html/neps.html").read()
 
     html = html.replace("$ID", id)
@@ -44,4 +41,6 @@ if __name__ == "__main__":
     form = cgi.FieldStorage()
     id = form.getvalue("id")
     version = form.getvalue("version")
+    import os
+    os.popen("java -Xms128m -Xmx512m -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
     afficher() if last.traitement(form) else last.afficher()
