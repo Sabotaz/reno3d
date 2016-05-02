@@ -1122,7 +1122,7 @@
     </chauffageUnique>
     <chauffage__properties id="131"/>
     <dateConstructionBatiment>AVANT_1975</dateConstructionBatiment>
-    <declenchementChaudiere>DECLENCHEMENT_OUVERTURE_ROBINET_EAU_CHAUDE</declenchementChaudiere>
+    <declenchementChaudiere>NON_DECLENCHEMENT_OUVERTURE_ROBINET_EAU_CHAUDE</declenchementChaudiere>
     <departementBatiment>AIN</departementBatiment>
     <dhCor>55000.0</dhCor>
     <dpFenetre>15.795001</dpFenetre>
@@ -1151,7 +1151,7 @@
     <intermittence>0.82322115</intermittence>
     <lastGv>450.53705</lastGv>
     <listEquipementElectromenager id="133"/>
-    <localEquipementEcs>SITUE_DANS_LOCAL_NON_CHAUFFE</localEquipementEcs>
+    <localEquipementEcs>SITUE_DANS_LOCAL_CHAUFFE</localEquipementEcs>
     <nbFenetreDV>0.0</nbFenetreDV>
     <nbFenetreSV>9.0</nbFenetreSV>
     <nbHabitant>4.0</nbHabitant>
@@ -1160,8 +1160,8 @@
     <pr>97.90921</pr>
     <presenceClimatisation>NON</presenceClimatisation>
     <presenceInstallationSolaire>INSTALLATION_SOLAIRE_ABSENTE</presenceInstallationSolaire>
-    <presenceRobinetThermostatique>PRESENCE_ROBINET_THERMOSTATIQUE</presenceRobinetThermostatique>
-    <presenceThermostat>PRESENCE_THERMOSTAT_OU_SONDE</presenceThermostat>
+    <presenceRobinetThermostatique>ABSENCE_ROBINET_THERMOSTATIQUE</presenceRobinetThermostatique>
+    <presenceThermostat>AUCUN_DES_DEUX</presenceThermostat>
     <programmationSysteme>IMPOSSIBLE</programmationSysteme>
     <prs1>0.0</prs1>
     <prs2>1.05</prs2>
@@ -1214,8 +1214,8 @@
     <typeBatiment>MAISON</typeBatiment>
     <typeEmetteurDeChaleur>RADIATEUR</typeEmetteurDeChaleur>
     <typeEnergieConstruction>AUTRE</typeEnergieConstruction>
-    <typeVentilation>INCONNUE</typeVentilation>
-    <usageEauChaude>BAINS</usageEauChaude>
+    <typeVentilation>NATURELLE</typeVentilation>
+    <usageEauChaude>DOUCHES</usageEauChaude>
     <x>0.083592825</x>
   </dpe>
 </model>
