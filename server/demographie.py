@@ -119,7 +119,7 @@ def traitement(form):
 
 if __name__ == "__main__":
     import cgi
-    import neps as last
+    import neps2b as last
     print("Content-type: text/html; charset=utf-8\n")
     form = cgi.FieldStorage()
     id = form.getvalue("id")

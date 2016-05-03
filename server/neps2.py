@@ -112,7 +112,7 @@ def traitement(form):
             log.write("version;"+version)
             log.write("\n")
             for type, value in results.items():
-                log.write(type+";"+value)
+                log.write("pretest"+type+";"+value)
                 log.write("\n")
 
     return None not in results.values() and not bad
