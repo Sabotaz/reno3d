@@ -156,7 +156,8 @@ public class Layout {
 
     private Object getEnumConstant(JsonValue json, String key) {
         try {
-            String str = json.getString(key);
+            String str = json.getString(key, null);
+            if (str == null) return null;
             int last_point = str.lastIndexOf(".");
             String enum_name = str.substring(0, last_point);
             String enum_value = str.substring(last_point + 1, str.length());
@@ -653,7 +654,7 @@ public class Layout {
             tbs = StyleFactory.getTextButtonStyle(style_list.asStringArray());
 
         } else {
-            tbs = skin.get("toggle", TextButton.TextButtonStyle.class);
+            tbs = skin.get("default", TextButton.TextButtonStyle.class);
             tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
         }
 
@@ -671,45 +672,45 @@ public class Layout {
 
         textButton.setVisible(json.getBoolean("visible", true));
 
-        if (updater != null & json.has("value")) {
+        if (updater != null) {
             Object value_value = getEnumConstant(json, "value");
 
             if (updater.getDefaultValue() == value_value) {
                 textButton.setChecked(true);
             }
 
-            if (value_value != null) {
-                final Object last_value = value_value;
-                final Updater last_updater = updater;
-                textButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        if (json.getBoolean("notify_clicked", true)) {
-                            HashMap<String, Object> items = new HashMap<String, Object>();
-                            items.put("userObject", userObject);
-                            items.put("eventRequest", EventRequest.UPDATE_STATE);
+            final Object last_value = value_value;
+            final Updater last_updater = updater;
+            textButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (json.getBoolean("notify_clicked", true)) {
+                        HashMap<String, Object> items = new HashMap<String, Object>();
+                        items.put("userObject", userObject);
+                        items.put("eventRequest", EventRequest.UPDATE_STATE);
+                        if (last_value != null)
                             items.put("lastValue", last_value);
-                            items.put("layout", Layout.this);
-                            items.put("button", textButton);
-                            last_updater.trigger(items);
-                        }
+                        items.put("layout", Layout.this);
+                        items.put("button", textButton);
+                        last_updater.trigger(items);
                     }
-                    @Override
-                    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                        boolean retour = super.touchDown(event, x, y, pointer, button);
-                        if (json.getBoolean("notify_pressed", false)) {
-                            HashMap<String, Object> items = new HashMap<String, Object>();
-                            items.put("userObject", userObject);
-                            items.put("eventRequest", EventRequest.UPDATE_STATE);
+                }
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    boolean retour = super.touchDown(event, x, y, pointer, button);
+                    if (json.getBoolean("notify_pressed", false)) {
+                        HashMap<String, Object> items = new HashMap<String, Object>();
+                        items.put("userObject", userObject);
+                        items.put("eventRequest", EventRequest.UPDATE_STATE);
+                        if (last_value != null)
                             items.put("lastValue", last_value);
-                            items.put("layout", Layout.this);
-                            items.put("button", textButton);
-                            last_updater.trigger(items);
-                        }
-                        return retour;
+                        items.put("layout", Layout.this);
+                        items.put("button", textButton);
+                        last_updater.trigger(items);
                     }
-                });
-            }
+                    return retour;
+                }
+            });
         }
         return textButton;
     }

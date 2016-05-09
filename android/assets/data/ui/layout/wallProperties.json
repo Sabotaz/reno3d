@@ -72,46 +72,75 @@
               ]
             }
           ]
+        },
+        {
+          "type": "Table",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Fermer",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.CLOSE",
+              "pad": 5
+            }
+          ]
         }
       ]
     },
     {
       "type": "Table",
       "name": "Couleur",
-      "id": "textures",
       "content": [
         {
-          "type": "TexturePicker",
-          "label": "Extérieur :",
-          "id": "textures ext",
-          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
-          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
-          "category": "Mur",
-          "align": "left",
-          "width": "30%",
-          "height": "30%"
+          "type": "Table",
+          "id": "textures",
+          "content": [
+            {
+              "type": "TexturePicker",
+              "label": "Extérieur :",
+              "id": "textures ext",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
+              "category": "Mur",
+              "align": "left",
+              "width": "30%",
+              "height": "30%"
+            },
+            {
+              "type": "TexturePicker",
+              "label": "Intérieur 1 :",
+              "id": "textures int 1",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
+              "category": "Mur",
+              "align": "left",
+              "width": "30%",
+              "height": "30%"
+            },
+            {
+              "type": "TexturePicker",
+              "label": "Intérieur 2 :",
+              "id": "textures int 2",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE3_PICKED",
+              "category": "Mur",
+              "align": "left",
+              "width": "30%",
+              "height": "30%"
+            }
+          ]
         },
         {
-          "type": "TexturePicker",
-          "label": "Intérieur 1 :",
-          "id": "textures int 1",
-          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
-          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
-          "category": "Mur",
-          "align": "left",
-          "width": "30%",
-          "height": "30%"
-        },
-        {
-          "type": "TexturePicker",
-          "label": "Intérieur 2 :",
-          "id": "textures int 2",
-          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
-          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE3_PICKED",
-          "category": "Mur",
-          "align": "left",
-          "width": "30%",
-          "height": "30%"
+          "type": "Table",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Fermer",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.CLOSE",
+              "pad": 5
+            }
+          ]
         }
       ]
     }

@@ -116,6 +116,18 @@
               ]
             }
           ]
+        },
+        {
+          "type": "Table",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Fermer",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.CLOSE",
+              "pad": 5
+            }
+          ]
         }
       ]
     },
@@ -171,6 +183,18 @@
                   "value": "fr.limsi.rorqual.core.dpe.enums.generalproperties.TypeEquipementCuissonEnum.FEUX_GAZ_ET_FOUR_GAZ"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "type": "Table",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Fermer",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.CLOSE",
+              "pad": 5
             }
           ]
         }

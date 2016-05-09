@@ -24,5 +24,7 @@ public enum UiEvent implements EventType {
 
     LIMIT_INFRINGEMENT,
 
+    CLOSE,
+
     ;
 }

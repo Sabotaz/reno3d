@@ -828,6 +828,23 @@ public class MainUiControleur implements EventListener {
                 tabName = "Limit popup";
                 addTb(getLimitPopupTb());
             }
+            else if (e.getEventType() == UiEvent.CLOSE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                if (items.get("eventRequest") == EventRequest.GET_STATE) {
+                    // FIXME: disable this case (no state to get)
+                    HashMap<String,Object> response = new HashMap<String,Object>();
+                    response.put("lastValue",null);
+                    response.put("userObject",items.get("userObject"));
+                    response.put("eventRequest", EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.CLOSE, response);
+                    EventManager.getInstance().put(Channel.UI, e2);
+
+                } else if (items.get("eventRequest") == EventRequest.UPDATE_STATE) {
+                    uncheckAll();
+                    removeTb();
+                    MainApplicationAdapter.deselect();
+                }
+            }
 
         }
     }

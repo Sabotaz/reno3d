@@ -32,6 +32,18 @@
           "align": "left",
           "width": "30%",
           "height": "25%"
+        },
+        {
+          "type": "Table",
+          "content": [
+            {
+              "type": "TextButton",
+              "text": "Fermer",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.CLOSE",
+              "pad": 5
+            }
+          ]
         }
       ]
     }
