@@ -29,6 +29,7 @@ public class CollisionController {
         Etage etage = movedObjet.getSlab().getEtage();
         blockingWalls.clear();
         valid = true;
+        last_valid_slab = movedObjet.getSlab();
 
         for (Mur mur : etage.getMurs()) {
             if (movedObjet.intersects(mur, null)) {
