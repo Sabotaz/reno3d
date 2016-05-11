@@ -408,7 +408,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
     }
 
 	public void renderG() {
-        Gdx.gl.glViewport(0, Gdx.graphics.getHeight() - 300, 225, 225);
+        Gdx.gl.glViewport(0, Gdx.graphics.getHeight() - 225 - (int)(Gdx.graphics.getWidth()*0.06), 225, 225);
         CameraEngine.Cameras.ORTHOGRAPHIC.getCameraUpdater().updateViewport(225, 225);
 
         ShapeRenderer shapeRenderer = new ShapeRenderer();
