@@ -34,6 +34,16 @@
           "height": "25%"
         },
         {
+          "type": "TexturePicker",
+          "label": "Murs : ",
+          "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+          "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE2_PICKED",
+          "category": "Mur",
+          "align": "left",
+          "width": "20%",
+          "height": "25%"
+        },
+        {
           "type": "Table",
           "expand": false,
           "content": [

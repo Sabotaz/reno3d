@@ -166,7 +166,7 @@ public class TabWindow extends Table {
 
         last = next;
         button.setChecked(true);
-        this.setPosition(lastX, nextY);
+        this.setPosition(((TabWindow) this).getPrefWidth() / 2, Gdx.graphics.getHeight() - ((TabWindow) this).getPrefHeight() / 2 - 100);
 
         MainApplicationAdapter.LOG("CHANGE_TAB", "" + next.getName());
 

@@ -615,7 +615,12 @@ public class MainUiControleur implements EventListener {
                 if (eventRequest == EventRequest.UPDATE_STATE) {
                     if (items.get("userObject") instanceof Slab) {
                         Slab slab = (Slab)items.get("userObject");
-                        slab.setPlafondMaterialType((String) items.get("lastValue"));
+                        for(Mur mur : slab.getMurs()) {
+                            if (mur.getSlabGauche() == slab)
+                                mur.setInteriorMaterialType1((String) items.get("lastValue"));
+                            else
+                                mur.setInteriorMaterialType2((String) items.get("lastValue"));
+                        }
                     } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
                         mur.setInteriorMaterialType1((String) items.get("lastValue"));
@@ -629,7 +634,11 @@ public class MainUiControleur implements EventListener {
 
                     if (items.get("userObject") instanceof Slab) {
                         Slab slab = (Slab)items.get("userObject");
-                        currentItems.put("lastValue", slab.getPlafondMaterialType());
+                        Mur mur = slab.getMurs().get(0);
+                        if (mur.getSlabGauche() == slab)
+                            currentItems.put("lastValue", mur.getInteriorMaterialType1());
+                        else
+                            currentItems.put("lastValue", mur.getInteriorMaterialType2());
                     } else if (items.get("userObject") instanceof Mur) {
                         Mur mur = (Mur)items.get("userObject");
                         currentItems.put("lastValue", mur.getInteriorMaterialType1());
