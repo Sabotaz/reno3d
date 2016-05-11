@@ -340,6 +340,7 @@ public class Layout {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");
         Window window = new Window(json.getString("name", ""),skin);
         window.setWidth(getValue(json, "width", 900, null).get(null));
+        window.setMovable(json.getBoolean("movable", true));
 
         if (json.get("content") != null) {
             JsonValue json_tab;

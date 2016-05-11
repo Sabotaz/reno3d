@@ -204,6 +204,7 @@
           "name": "Budget",
           "width": "10%",
           "id": "tab_window",
+          "movable": false,
           "padBottom": 100,
           "content": [
             {
@@ -240,20 +241,21 @@
                 }
               ]
             }
-            ]
-          },
+          ]
+        },
+        {
+          "type": "Window",
+          "name": "Energie",
+          "width": "10%",
+          "id": "tab_window",
+          "padBottom": 100,
+          "movable": false,
+          "content": [
             {
-              "type": "Window",
-              "name": "Energie",
-              "width": "10%",
-              "id": "tab_window",
-              "padBottom": 100,
+              "type": "ButtonGroup",
+              "layout": "row",
+              "minChecked": 0,
               "content": [
-                {
-                  "type": "ButtonGroup",
-                  "layout": "row",
-                  "minChecked": 0,
-                  "content": [
                 {
                   "type": "Label",
                   "id": "label_score",
@@ -329,6 +331,7 @@
           "width": "5%",
           "id": "consigne_window",
           "padBottom": 95,
+          "movable": false,
           "content": [
             {
               "type": "Label",
