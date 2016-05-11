@@ -161,7 +161,8 @@ public class DpeKartoffelator {
         }
 
         for (Objet o : ModelHolder.getInstance().getBatiment().getObjets())
-            total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
+            if (o.getParent() != null)
+                total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
 
         for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs()) {
             total += s.getPrixTextures();
@@ -324,7 +325,8 @@ public class DpeKartoffelator {
 
         total = 0;
         for (Objet o : ModelHolder.getInstance().getBatiment().getObjets())
-            total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
+            if (o.getParent() != null)
+                total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
         MainApplicationAdapter.LOG("TOTAL", "OBJETS", ""+total);
 
         total = 0;

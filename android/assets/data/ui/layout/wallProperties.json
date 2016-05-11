@@ -11,7 +11,7 @@
       "content": [
         {
           "type": "Table",
-          "label": "Date de l'isolation",
+          "label": "Matériau d'isolation",
           "labelPad": 5,
           "labelWidth": "10%",
           "content": [
