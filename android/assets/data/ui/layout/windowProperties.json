@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés de la fenêtre",
-  "width": "25%",
+  "width": "17%",
   "id": "tab_window",
   "content": [
     {
@@ -97,6 +97,7 @@
         },
         {
           "type": "Table",
+          "expand": false,
           "content": [
             {
               "type": "TextButton",

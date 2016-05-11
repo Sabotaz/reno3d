@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -46,7 +47,11 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import fr.limsi.rorqual.core.event.Channel;
+import fr.limsi.rorqual.core.event.Event;
+import fr.limsi.rorqual.core.event.EventManager;
 import fr.limsi.rorqual.core.event.EventRequest;
+import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.logic.Logic;
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.Slab;
@@ -375,7 +380,7 @@ public class ModelLibrary {
     }
 
     private void makeTabWindow() {
-        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.33f).get(null);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.22f).get(null);
         TabWindow tw = new TabWindow(width);
         tw.setTitle("Bibliothèque");
         for (Map.Entry<String, HashMap<String, ModelLoader>> entry : categories.entrySet())
@@ -401,7 +406,7 @@ public class ModelLibrary {
     private void makeNewTab(TabWindow tw, String category, HashMap<String, ModelLoader> models) {
 
         Table content = new Table();
-        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.3f).get(null);
+        float width = new Value.Fixed(Gdx.graphics.getWidth() * 0.2f).get(null);
         float height = new Value.Fixed(Gdx.graphics.getHeight() * 0.4f).get(null);
         content.setSize(width, height);
         int start_x = 0;
@@ -446,7 +451,23 @@ public class ModelLibrary {
         scrollPane.updateVisualScroll();
 
         Table t = new Table();
-        t.add(scrollPane).size(width+scrollPane.getScrollBarWidth(), height).top().left();
+        t.add(scrollPane).size(width+scrollPane.getScrollBarWidth(), height).top().left().row();
+
+        TextButton.TextButtonStyle tbs;
+        tbs = skin.get("default", TextButton.TextButtonStyle.class);
+        tbs.font = (BitmapFont) AssetManager.getInstance().get("default.fnt");
+        TextButton textButton = new TextButton("Fermer", tbs);
+        textButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                HashMap<String, Object> items = new HashMap<String, Object>();
+                items.put("eventRequest", EventRequest.UPDATE_STATE);
+                Event e = new Event(UiEvent.CLOSE, items);
+                EventManager.getInstance().put(Channel.UI, e);
+            }
+        });
+        t.add(textButton).left();
+
         content.setSize(width + scrollPane.getScrollBarWidth(), height);
         t.setName(category);
 

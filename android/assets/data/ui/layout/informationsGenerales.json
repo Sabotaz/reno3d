@@ -2,7 +2,7 @@
   "type": "TabWindow",
   "name": "Informations générales du logement",
   "id": "tab_window",
-  "width": "35%",
+  "width": "23%",
   "content": [
     {
       "type": "Table",
@@ -119,6 +119,7 @@
         },
         {
           "type": "Table",
+          "expand": false,
           "content": [
             {
               "type": "TextButton",
@@ -188,6 +189,7 @@
         },
         {
           "type": "Table",
+          "expand": false,
           "content": [
             {
               "type": "TextButton",

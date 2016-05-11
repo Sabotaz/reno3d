@@ -1,7 +1,7 @@
 {
   "type": "TabWindow",
   "name": "Propriétés de la pièce",
-  "width": "33%",
+  "width": "22%",
   "id": "tab_window",
   "content": [
     {
@@ -30,11 +30,12 @@
           "event": "fr.limsi.rorqual.core.event.UiEvent.TEXTURE1_PICKED",
           "category": "Sol",
           "align": "left",
-          "width": "30%",
+          "width": "20%",
           "height": "25%"
         },
         {
           "type": "Table",
+          "expand": false,
           "content": [
             {
               "type": "TextButton",
