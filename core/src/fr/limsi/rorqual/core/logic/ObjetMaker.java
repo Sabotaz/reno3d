@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
 import fr.limsi.rorqual.core.model.ModelHolder;
+import fr.limsi.rorqual.core.model.Mur;
 import fr.limsi.rorqual.core.model.Objet;
 import fr.limsi.rorqual.core.model.Slab;
 import fr.limsi.rorqual.core.model.utils.MyVector2;
@@ -56,6 +57,8 @@ public class ObjetMaker extends ModelMaker {
             collisionController = new CollisionController();
             collisionController.startNewCollision(obj);
             collisionController.checkCollisions(intersection.x, intersection.y, slab);
+            for (Mur mur : ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs())
+                mur.setSelectable(false);
         }
     }
 
@@ -80,6 +83,9 @@ public class ObjetMaker extends ModelMaker {
         if (!making_objet)
             return;
 
+        for (Mur mur : ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs())
+            mur.setSelectable(true);
+
         obj.setSelectable(true);
         ModelHolder.notify(obj);
 
@@ -96,6 +102,9 @@ public class ObjetMaker extends ModelMaker {
 
         if (!making_objet)
             return;
+
+        for (Mur mur : ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs())
+            mur.setSelectable(true);
 
         obj.setSlab(null);
 

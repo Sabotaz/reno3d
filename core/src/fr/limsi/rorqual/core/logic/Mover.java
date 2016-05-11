@@ -74,6 +74,8 @@ public class Mover extends ModelMaker {
             moving = movingObject = true;
             translate = false;
             collisionController.startNewCollision(movedObjet);
+            for (Mur mur : ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs())
+                mur.setSelectable(false);
             MainApplicationAdapter.LOG("AMENAGEMENT", "START_MOVE_OBJET", "" + movedObjet.getModelId(), "" + movedObjet.getPosition());
         } else if (modelContainer instanceof Ouverture) {
             moving = false;
@@ -251,6 +253,8 @@ public class Mover extends ModelMaker {
         if (moving) {
 
             if (movingObject) {
+                for (Mur mur : ModelHolder.getInstance().getBatiment().getCurrentEtage().getMurs())
+                    mur.setSelectable(true);
                 movedObjet.setSelectable(true);
                 moving = false;
                 movingObject = false;
