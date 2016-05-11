@@ -4,6 +4,10 @@ neps = []
 id = ""
 version = ""
 
+def thread():
+    import os
+    os.popen("java -Xms128m -Xmx512m -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
+
 def afficher():
 
     html = open("html/neps.html").read()
@@ -41,6 +45,8 @@ if __name__ == "__main__":
     form = cgi.FieldStorage()
     id = form.getvalue("id")
     version = form.getvalue("version")
-    import os
-    os.popen("java -Xms128m -Xmx512m -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
+
+    import threading
+    threading.Thread(None, thread).start()
+
     afficher() if last.traitement(form) else last.afficher()

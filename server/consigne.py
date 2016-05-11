@@ -3,9 +3,13 @@
 version = ""
 id = ""
 
-def afficher():
+def thread():
     import os
     os.popen("vlc video/tutostromo.mp4").read()
+
+def afficher():
+    import threading
+    threading.Thread(None, thread).start()
 
     html = open("html/consigne.html").read()
     intro = open("text/intro"+version).read()
