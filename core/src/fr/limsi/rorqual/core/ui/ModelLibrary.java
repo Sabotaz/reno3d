@@ -466,7 +466,7 @@ public class ModelLibrary {
                 EventManager.getInstance().put(Channel.UI, e);
             }
         });
-        t.add(textButton).left();
+        t.add(textButton).left().pad(10);
 
         content.setSize(width + scrollPane.getScrollBarWidth(), height);
         t.setName(category);
