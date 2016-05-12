@@ -127,6 +127,8 @@ public class MainUiControleur implements EventListener {
             float y = (mainLayout.getFromId("context")).getY();
             (mainLayout.getFromId("context")).setPosition(x, y-21);*/
         }
+        if (!MainApplicationAdapter.id.equals("debug"))
+            mainLayout.getFromId("load").remove();
     }
 
     private void logOnEnd() {
@@ -773,7 +775,7 @@ public class MainUiControleur implements EventListener {
                 else if (eventRequest == EventRequest.GET_STATE) {
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
 
-                    ModelContainer model = MainApplicationAdapter.getSelected();
+                    Object model = items.get("userObject");
                     if (model instanceof Slab) {
                         currentItems.put("lastValue", ((Slab) model).getFonction());
                     }

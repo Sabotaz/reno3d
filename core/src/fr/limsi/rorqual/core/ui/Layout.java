@@ -910,10 +910,10 @@ public class Layout {
         list.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                HashMap<String,Object> items = new HashMap<String, Object>();
-                items.put("userObject",userObject);
-                items.put("eventRequest",EventRequest.UPDATE_STATE);
-                items.put("lastValue",list.getSelected());
+                HashMap<String, Object> items = new HashMap<String, Object>();
+                items.put("userObject", userObject);
+                items.put("eventRequest", EventRequest.UPDATE_STATE);
+                items.put("lastValue", list.getSelected());
                 items.put("layout", Layout.this);
                 last_updater.trigger(items);
             }
@@ -1091,7 +1091,14 @@ public class Layout {
             if (userObject instanceof Mur)
                 prix*= ((Mur) userObject).getSurface();
             else if (userObject instanceof Slab)
-                prix*= ((Slab) userObject).getSurface();
+                if (category.equals("Mur")) {
+                    int f = 0;
+                    for (Mur mur : ((Slab) userObject).getMurs())
+                        f += prix * mur.getSurface();
+                    prix = f;
+
+                } else
+                    prix*= ((Slab) userObject).getSurface();
             buttonsTable.add(new Label(((int)prix) + " euros", lbs)).padLeft(10).width(128-10);
 
             start_x ++;

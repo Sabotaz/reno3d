@@ -91,7 +91,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
     @XStreamAlias("plancherMaterial")
     private String plancherType = "eTeksScopia#old-brown-parquet";
     @XStreamOmitField
-    private String basePlancherType = plancherType;
+    private String basePlancherType = "eTeksScopia#old-brown-parquet";
     @XStreamOmitField
     private Material plafondMaterial = new Material();
     @XStreamOmitField
@@ -132,14 +132,14 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
         this.height = model.height;
         this.mitoyennetePlafond=model.getMitoyennetePlafond();
         this.mitoyennetePlancher=model.getMitoyennetePlancher();
-        this.uPlafond=model.getuPlafond();
-        this.uPlancher=model.getuPlancher();
+        this.uPlafond =model.getuPlafond();
+        this.uPlancher = model.getuPlancher();
         this.dateIsolationPlafond=model.getDateIsolationPlafond();
         this.dateIsolationPlancher=model.getDateIsolationPlancher();
         this.typeIsolationPlancher=model.getTypeIsolationPlancher();
         this.setPlafondMaterialType(model.getPlafondMaterialType());
         this.setPlancherMaterialType(model.getPlancherMaterialType());
-        basePlancherType = plancherType;
+        this.setFonction(model.getFonction());
         plafond = new Plafond(this);
         this.add(plafond);
 
@@ -639,7 +639,7 @@ public class Slab extends ModelContainer implements SurfaceCote.SurfaceCotable, 
 
         TextureLibrary.TextureLoader loader = TextureLibrary.getInstance().getTextureLoader(getPlancherMaterialType());
 
-        if (plancherType != basePlancherType)
+        if (!plancherType.equals(basePlancherType))
             prix += loader.getPrix() * getSurface();
 
         return prix;

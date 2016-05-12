@@ -62,6 +62,21 @@
                 "drawable:chauffage:tint:888888",
                 "default.fnt"
               ]
+            },
+            {
+              "type": "Button",
+              "text": "Load",
+              "id": "load",
+              "value": "fr.limsi.rorqual.core.event.ButtonValue.LOAD",
+              "height": "auto",
+              "width": "6%",
+              "pad": 0,
+              "style": [
+                "drawable:load",
+                "drawable:load:tint:888888",
+                null,
+                "default.fnt"
+              ]
             }
           ]
         }
