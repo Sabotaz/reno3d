@@ -74,11 +74,12 @@ def afficher():
         for i, value in enumerate(values):
 
             if value in results:
-                m = re.search('(\<select name\="'+"\$" + type + str(i+1)+'".*?\>\\n(?:.*\<option\>.\\n)+)', html, re.MULTILINE)
+                m = re.search('(\<select name\="'+"\$" + type + str(i+1)+'".*?\>\\n(?:.*\<option\>.?\\n)+)', html, re.MULTILINE)
                 if m:
                     found = m.group(1)
-                    found2 = found.replace("<option>" + results[value], "<option selected=\"selected\">" + results[value])
-                    html = html.replace(found, found2)
+                    if results[value] is not None:
+                        found2 = found.replace("<option>" + results[value], "<option selected=\"selected\">" + results[value])
+                        html = html.replace(found, found2)
 
             html = html.replace("$" + type + str(i+1), value)
 
@@ -101,7 +102,7 @@ def traitement(form):
         count = []
         for i, value in enumerate(values):
             results[value] = form.getvalue(value)
-            if results[value] in count:
+            if results[value] in count or results[value] is None:
                 pb.append(type)
                 bad = True
             count.append(results[value])
