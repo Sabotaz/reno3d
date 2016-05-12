@@ -129,7 +129,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     protected void update() {
         /* set look at */
-        roll = roll < -90 ? -90 : (roll > -30 ? -30 : roll);
+        roll = roll < -90 ? -90 : (roll > -20 ? -20 : roll);
 
         float py = (float)(dist * Math.cos(pitch * Math.PI / 180)*Math.sin(roll*Math.PI / 180));
         float px = (float)(dist * Math.sin(pitch*Math.PI / 180)*Math.sin(roll*Math.PI / 180));
