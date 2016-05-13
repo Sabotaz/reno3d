@@ -786,6 +786,23 @@ public class MainUiControleur implements EventListener {
                     EventManager.getInstance().put(Channel.UI, e2);
                 }
             }
+            else if (e.getEventType() == UiEvent.SURFACE_PIECE) {
+                HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
+                EventRequest eventRequest = (EventRequest)items.get("eventRequest");
+                if (eventRequest == EventRequest.GET_STATE) {
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+
+                    Object model = items.get("userObject");
+                    if (model instanceof Slab) {
+                        currentItems.put("lastValue", (int)(((Slab) model).getSurface()) + "m²");
+                    }
+
+                    currentItems.put("userObject", items.get("userObject"));
+                    currentItems.put("eventRequest",EventRequest.CURRENT_STATE);
+                    Event e2 = new Event(UiEvent.SURFACE_PIECE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+                }
+            }
             else if (e.getEventType() == UiEvent.RATIO_MODELE) {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 EventRequest eventRequest = (EventRequest)items.get("eventRequest");

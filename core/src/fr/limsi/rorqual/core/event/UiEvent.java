@@ -21,6 +21,7 @@ public enum UiEvent implements EventType {
     RATIO_MODELE,
 
     FONCTION_PIECE,
+    SURFACE_PIECE,
 
     LIMIT_INFRINGEMENT,
 

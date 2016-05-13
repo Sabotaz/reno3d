@@ -24,6 +24,20 @@
           ]
         },
         {
+          "type": "Table",
+          "label": "Surface",
+          "labelPad": 5,
+          "labelWidth": "10%",
+          "content": [
+            {
+              "type": "Label",
+              "channel": "fr.limsi.rorqual.core.event.Channel.UI",
+              "event": "fr.limsi.rorqual.core.event.UiEvent.SURFACE_PIECE",
+              "maxLength": 20
+            }
+          ]
+        },
+        {
           "type": "TexturePicker",
           "label": "Sol : ",
           "channel": "fr.limsi.rorqual.core.event.Channel.UI",

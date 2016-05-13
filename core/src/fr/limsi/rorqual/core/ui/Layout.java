@@ -278,6 +278,11 @@ public class Layout {
         Label label = new Label(json.getString("label", ""),lbs);
         label.setHeight(25);
         label.setWidth(200);
+
+        if (updater != null) {
+            label.setText(updater.getDefaultValue().toString());
+        }
+
         return label;
     }
 
