@@ -6,7 +6,7 @@ version = ""
 
 def thread():
     import os
-    os.popen("java -Xms128m -Xmx512m -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
+    os.popen("java -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
 
 def afficher():
 
