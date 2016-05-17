@@ -1,22 +1,13 @@
-Vous allez participer à une étude qui vise à évaluer une application d'aménagement d'intérieur.<br>
+Pour rappel, nous vous demandons d'imaginer le scénario suivant :<br>
+Vous venez d'acheter une maison et il vous faut maintenant l'aménager.<br>
+Pour ce faire, vous disposez d'un budget de 10000€ qui servira à l'achat des meubles à et la rénovation du bâtiment<br>
 <br>
-Dans ce cadre, nous vous demandons d'imaginer le scénario suivant :<br>
-Vous venez d'acheter une maison et il vous faut maintenant aménager les différentes pièces.<br>
-Pour ce faire, vous disposez d'un budget de 10000€.<br>
-Cet argent sert à l'achat des différents meubles et à la rénovation des équipements du logement.<br>
-<br>
-C'est à vous d'aménager les différentes pièces du logement en fonction de vos besoins et goûts.<br>
-Vous pouvez ainsi disposer les meubles où vous le souhaitez et les organiser librement.<br>
-<br>
-Vous avez enfin la possibilité de modifier les caractéristiques des sols, des murs et des fenêtres simplement en cliquant dessus.<br>
-Il vous faudra nommer les différentes pièces selon la fonction que vous leur attribuerez.<br>
-Pour ce faire, cliquez sur le sol de la pièce que vous souhaitez nommer.<br>
+Vous êtes libre d'aménager les différentes pièces du logement ne fonction de vos besoins et goûts.<br>
 <br>
 La performance énergétique du bâtiment sera affichée à l'écran et évoluera en temps réel en fonction des aménagements réalisés.<br>
-Plus le logement sera performant, plus la jauge située en bas de l'écran sera proche du vert.<br>
+Cette performance est exprimée en kWh/m², soit la consommation annuelle moyenne du logement.<br>
+Plus le chiffre est faible, meilleure est la performance du logement.<br>
 <br>
-Afin de limiter le réchauffement climatique, la loi concernant la réglementation thermique issue du Grenelle de l'environnement<br>
-fixe un objectif d'amélioration d'au moins 25% des performances énergétiques des bâtiments existants d'ici à 2020.<br>
+Afin de limiter le réchauffement climatique, la lou concernant la règlementation thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration d'au moins 25% des performances énergétiques des bâtiments existants.<br>
 <br>
-Pour que vous puissiez imaginer ce que cela représente, cet objectif sera matérialisé à l'écran<br>
-sous la forme d'un seuil affiché sur la jauge en bas de l'écran.
+Pour que vous puissiez vous imaginer ce que cela représente, cet objectif sera matérialisé à l'écran sous la forme d'un seuil affiché sur la jauge en bas de l'écran.

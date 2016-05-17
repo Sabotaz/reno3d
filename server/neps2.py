@@ -107,14 +107,23 @@ def traitement(form):
                 bad = True
             count.append(results[value])
 
-
     if None not in results.values() and not bad:
         with open("log/"+id, "a") as log:
             log.write("version;"+version)
             log.write("\n")
-            for type, value in results.items():
-                log.write("pretest"+type+";"+value)
-                log.write("\n")
+            for supertype in items:
+                for type in items[supertype]:
+                    log.write("pretest"+type+";"+results[type])
+                    log.write("\n")
+
+
+#    if None not in results.values() and not bad:
+#       with open("log/"+id, "a") as log:
+#            log.write("version;"+version)
+#            log.write("\n")
+#            for type, value in results.items():
+#                log.write("pretest"+type+";"+value)
+#                log.write("\n")
 
     return None not in results.values() and not bad
 

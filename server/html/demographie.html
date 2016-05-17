@@ -3,6 +3,7 @@
     <title>Nostromo</title>
 </head>
 <body>
+<font size="5">
     <form action="/end.py" method="post">
         <input type="hidden" name="version" value="$VERSION" />
         <input type="hidden" name="id" value="$ID" />
@@ -50,7 +51,7 @@
         <input type="radio" name="util" id="Non2" value="Non"><label for="Non2">Non</label><br>
         </div>
 
-<h4>Niveau d'études (dernier diplôme obtenu) :</h4>
+<h4>Quel est votre niveau d'études (dernier diplôme obtenu) :</h4>
         <div id="studies">
         <input type="radio" name="studies" id="CAP" value="CAP/BEP"><label for="CAP">CAP/BEP</label><br>
         <input type="radio" name="studies" id="BAC" value="BAC/BT/BP"><label for="BAC">BAC/BT/BP</label><br>
@@ -59,7 +60,7 @@
         <input type="radio" name="studies" id="BAC8" value="BAC+8"><label for="BAC8">BAC+8</label><br>
         </div>
 
-<h4>Degré de maîtrise du français :</h4>
+<h4>Quel est votre degré de maîtrise du français :</h4>
         <div id="français">
         <input type="radio" name="français" id="1" value="C'est ma langue maternelle"><label for="1">C'est ma langue maternelle</label><br>
         <input type="radio" name="français" id="2" value="Je le parle aussi bien que ma langue maternelle"><label for="2">Je le parle aussi bien que ma langue maternelle</label><br>
@@ -69,5 +70,6 @@
         </div>
         <input type="submit" name="send" value="Envoyer">
     </form>
+</font>
 </body>
 </html>
