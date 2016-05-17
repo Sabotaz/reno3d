@@ -5,16 +5,13 @@ id = ""
 
 def thread():
     import os
-    os.popen("vlc video/tutostromo.mp4").read()
+    os.popen("vlc video/tutostromo"+version+".mp4").read()
 
 def afficher():
     import threading
     threading.Thread(None, thread).start()
 
     html = open("html/consigne.html").read()
-    intro = open("text/intro"+version).read()
-
-    html = html.replace("$INTRO", intro)
     html = html.replace("$VERSION", version)
     html = html.replace("$ID", id)
 
