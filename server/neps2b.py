@@ -101,7 +101,7 @@ def traitement(form):
         count = []
         for i, value in enumerate(values):
             results[value] = form.getvalue(value)
-            if results[value] in count:
+            if results[value] in count or results[value] is None:
                 pb.append(type)
                 bad = True
             count.append(results[value])
