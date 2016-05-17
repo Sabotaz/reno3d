@@ -12,6 +12,9 @@ def afficher():
     threading.Thread(None, thread).start()
 
     html = open("html/consigne.html").read()
+    intro = open("text/intro"+version).read()
+
+    html = html.replace("$INTRO", intro)
     html = html.replace("$VERSION", version)
     html = html.replace("$ID", id)
 
