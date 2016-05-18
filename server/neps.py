@@ -4,9 +4,29 @@ neps = []
 id = ""
 version = ""
 
+def fsdkml():
+    
+    import win32gui
+    import win32con
+    import time
+    time.sleep(2)
+	
+    def enumHandler(hwnd, lParam):
+        if win32gui.IsWindowVisible(hwnd):
+            if 'Mozilla' in win32gui.GetWindowText(hwnd) or 'Chrome' in win32gui.GetWindowText(hwnd):
+                win32gui.SetWindowPos(hwnd, win32con.HWND_BOTTOM, 0, 0, 1920, 1080, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+    win32gui.EnumWindows(enumHandler, None)
+    
+    
+
 def thread():
+
+    import threading
+    threading.Thread(None, fsdkml).start()
+	
     import os
     os.popen("java -jar jar/desktop-1.0.jar " + version + " \"" + id + "\"").read()
+
 
 def afficher():
 
