@@ -227,7 +227,8 @@ public class DpeKartoffelator {
             MainUiControleur.getInstance().setObj("Idéal RT2012",(int) (init*0.75f));
         else if (MainApplicationAdapter.version == 4)
             MainUiControleur.getInstance().setObj("Objectif étude",(int) (init*0.75f));
-        MainUiControleur.getInstance().setScore(init);
+        //MainUiControleur.getInstance().setScore(init);
+        MainUiControleur.getInstance().setScore(322);
         MainUiControleur.getInstance().setEstimation((int) dpe.getScoreDpe(),color2);
 
         if (last_total != getTotal()) {
