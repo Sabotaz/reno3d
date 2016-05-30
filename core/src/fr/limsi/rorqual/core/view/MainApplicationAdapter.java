@@ -191,7 +191,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         Thread backup= new Thread() {
             public void run() {
-                while (EventManager.getInstance().isRunning()) {
+                 do {
                     try {
                         Thread.sleep(20_000);
                         String filename = id + ".3dr.backup";
@@ -204,7 +204,7 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
+                } while (EventManager.getInstance().isRunning());
             }
         };
 
