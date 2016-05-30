@@ -481,6 +481,7 @@ public class MainUiControleur implements EventListener {
                             removeTb();
                             HashMap<String,Object> currentItems = new HashMap<String,Object>();
                             currentItems.put("filename", MainApplicationAdapter.id + ".3dr");
+                            currentItems.put("action", "close");
                             Event e2 = new Event(UiEvent.SAVE_FILE, currentItems);
                             EventManager.getInstance().put(Channel.UI, e2);
                             break;
@@ -682,10 +683,12 @@ public class MainUiControleur implements EventListener {
                 logOnEnd();
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 String filename = (String)items.get("filename");
-                HitMaker.makeHitOnSave();
                 Serializer.saveAll(filename);
-                MainApplicationAdapter.LOG("stop app logs");
-                Gdx.app.exit();
+                if (items.containsKey("action") && ((String)items.get("action")).equals("close")) {
+                    MainApplicationAdapter.LOG("stop app logs");
+                    HitMaker.makeHitOnSave();
+                    Gdx.app.exit();
+                }
             }
             else if (e.getEventType() == UiEvent.LOAD_FILE) {
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
