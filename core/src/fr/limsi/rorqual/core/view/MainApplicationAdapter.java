@@ -166,9 +166,13 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
                 load();
 
                 try {
+                    String filename = id + ".3dr.backup";
+                    FileHandle handle = Gdx.files.external(filename);
+                    if (!handle.exists())
+                        filename = "expe.3dr.hidden";
 
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                    currentItems.put("filename","expe.3dr.hidden");
+                    currentItems.put("filename",filename);
                     Event e = new Event(UiEvent.LOAD_FILE, currentItems);
                     EventManager.getInstance().put(Channel.UI, e);
 
@@ -182,6 +186,28 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
         };
 
         t.start();
+
+
+
+        Thread backup= new Thread() {
+            public void run() {
+
+                try {
+                    Thread.sleep(20_000);
+                    String filename = id + ".3dr.backup";
+
+                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
+                    currentItems.put("filename", filename);
+                    Event e2 = new Event(UiEvent.SAVE_FILE, currentItems);
+                    EventManager.getInstance().put(Channel.UI, e2);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        backup.start();
 
 	}
 
