@@ -111,4 +111,8 @@ public class EventManager {
         running = false;
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
 }

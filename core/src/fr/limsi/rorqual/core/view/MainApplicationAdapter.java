@@ -191,18 +191,19 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
         Thread backup= new Thread() {
             public void run() {
+                while (EventManager.getInstance().isRunning()) {
+                    try {
+                        Thread.sleep(20_000);
+                        String filename = id + ".3dr.backup";
 
-                try {
-                    Thread.sleep(20_000);
-                    String filename = id + ".3dr.backup";
+                        HashMap<String, Object> currentItems = new HashMap<String, Object>();
+                        currentItems.put("filename", filename);
+                        Event e2 = new Event(UiEvent.SAVE_FILE, currentItems);
+                        EventManager.getInstance().put(Channel.UI, e2);
 
-                    HashMap<String,Object> currentItems = new HashMap<String,Object>();
-                    currentItems.put("filename", filename);
-                    Event e2 = new Event(UiEvent.SAVE_FILE, currentItems);
-                    EventManager.getInstance().put(Channel.UI, e2);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
