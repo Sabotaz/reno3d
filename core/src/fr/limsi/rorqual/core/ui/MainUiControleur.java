@@ -680,11 +680,11 @@ public class MainUiControleur implements EventListener {
                 }
             }
             else if (e.getEventType() == UiEvent.SAVE_FILE) {
-                logOnEnd();
                 HashMap<String,Object> items = (HashMap<String,Object>) e.getUserObject();
                 String filename = (String)items.get("filename");
                 Serializer.saveAll(filename);
                 if (items.containsKey("action") && ((String)items.get("action")).equals("close")) {
+                    logOnEnd();
                     MainApplicationAdapter.LOG("stop app logs");
                     HitMaker.makeHitOnSave();
                     Gdx.app.exit();
