@@ -23,7 +23,7 @@ def traitement(form):
 
 if __name__ == "__main__":
     import cgi
-    import neps2 as last
+    import intro as last
     print("Content-type: text/html; charset=utf-8\n")
     form = cgi.FieldStorage()
     version = form.getvalue("version")
