@@ -310,6 +310,8 @@ public class DpeKartoffelator {
     }
 
     public void logAll() {
+        int total_amenagement = 0;
+        int total_renovation = 0;
 
         Dpe dpe = Dpe.getInstance();
         int savedTotal = total;
@@ -329,12 +331,14 @@ public class DpeKartoffelator {
             if (o.getParent() != null)
                 total += ModelLibrary.getInstance().getModelFromId(o.getModelId()).getPrix();
         MainApplicationAdapter.LOG("TOTAL", "OBJETS", ""+total);
+        total_amenagement += total;
 
         total = 0;
         for (Slab s : ModelHolder.getInstance().getBatiment().getSlabs()) {
             total += s.getPrixTextures();
         }
         MainApplicationAdapter.LOG("TOTAL", "TEXTURES_SOLS", ""+total);
+        total_amenagement += total;
 
         total = 0;
         for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
@@ -344,12 +348,14 @@ public class DpeKartoffelator {
             }
         }
         MainApplicationAdapter.LOG("TOTAL", "ISOLATION_MUR", ""+total);
+        total_renovation += total;
 
         total = 0;
         for (Mur m : ModelHolder.getInstance().getBatiment().getMurs()) {
             total += m.getPrixTextures();
         }
         MainApplicationAdapter.LOG("TOTAL", "TEXTURES_MUR", ""+total);
+        total_amenagement += total;
 
         total = 0;
         for (Fenetre fen : ModelHolder.getInstance().getBatiment().getFenetres()) {
@@ -365,6 +371,7 @@ public class DpeKartoffelator {
             }
         }
         MainApplicationAdapter.LOG("TOTAL", "TYPE_VITRAGE_MENUISERIE", ""+total);
+        total_renovation += total;
 
         total = 0;
         for (Fenetre fen : ModelHolder.getInstance().getBatiment().getFenetres()) {
@@ -381,8 +388,12 @@ public class DpeKartoffelator {
         }
 
         MainApplicationAdapter.LOG("TOTAL", "TYPE_FERMETURE_MENUISERIE", ""+total);
+        total_renovation += total;
 
         total = savedTotal;
+        MainApplicationAdapter.LOG("TOTAL_AMENAGEMENT", ""+total_amenagement);
+        MainApplicationAdapter.LOG("TOTAL_RENOVATION", ""+total_renovation);
+
         MainApplicationAdapter.LOG("GRAND_TOTAL", ""+savedTotal);
         MainApplicationAdapter.LOG("DPE", ""+dpe.getScoreDpe());
 
