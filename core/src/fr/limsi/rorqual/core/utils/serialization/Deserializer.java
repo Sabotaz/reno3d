@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.thoughtworks.xstream.XStream;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
@@ -19,9 +20,21 @@ public class Deserializer {
         stream.processAnnotations(SerialHolder.class);
         stream.autodetectAnnotations(true);
         stream.setMode(XStream.ID_REFERENCES);
+        FileHandle file;
 
-        FileHandle handle = Gdx.files.external(filename);
-        SerialHolder serialHolder = (SerialHolder) stream.fromXML(handle.read());
+        try {
+            String path = MainApplicationAdapter.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            if (path.endsWith("/jar/desktop-1.0.jar")) {
+                file = Gdx.files.absolute(path.replace("/jar/desktop-1.0.jar", "/models/" + filename));
+            }
+            else {
+                file = Gdx.files.external(filename);
+            }
+        } catch (URISyntaxException e) {
+            file = Gdx.files.external(filename);
+        }
+
+        SerialHolder serialHolder = (SerialHolder) stream.fromXML(file.read());
         serialHolder.recreateModel();
 
         try {
