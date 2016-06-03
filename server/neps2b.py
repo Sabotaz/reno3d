@@ -74,11 +74,12 @@ def afficher():
         for i, value in enumerate(values):
 
             if value in results:
-                m = re.search('(\<select name\="'+"\$" + type + str(i+1)+'".*?\>\\n(?:.*\<option\>.\\n)+)', html, re.MULTILINE)
+                m = re.search('(\<select name\="'+"\$" + type + str(i+1)+'".*?\>\\n(?:.*\<option\>.?\\n)+)', html, re.MULTILINE)
                 if m:
                     found = m.group(1)
-                    found2 = found.replace("<option>" + results[value], "<option selected=\"selected\">" + results[value])
-                    html = html.replace(found, found2)
+                    if results[value] is not None:
+                        found2 = found.replace("<option>" + results[value], "<option selected=\"selected\">" + results[value])
+                        html = html.replace(found, found2)
 
             html = html.replace("$" + type + str(i+1), value)
 
@@ -106,14 +107,14 @@ def traitement(form):
                 bad = True
             count.append(results[value])
 
-
     if None not in results.values() and not bad:
         with open("log/"+id, "a") as log:
             log.write("version;"+version)
             log.write("\n")
-            for type, value in results.items():
-                log.write("posttest"+type+";"+value)
-                log.write("\n")
+            for supertype in items:
+                for type in items[supertype]:
+                    log.write("pretest"+type+";"+results[type])
+                    log.write("\n")
 
     return None not in results.values() and not bad
 
