@@ -324,7 +324,9 @@ public class DpeKartoffelator {
                 update_score(event, value, getPrice(price_str));
             }
             MainApplicationAdapter.LOG("TOTAL", ""+event, ""+total);
+            total_renovation += total;
         }
+
 
         total = 0;
         for (Objet o : ModelHolder.getInstance().getBatiment().getObjets())
