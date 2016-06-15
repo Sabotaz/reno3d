@@ -167,9 +167,17 @@ public class MainApplicationAdapter extends InputAdapter implements ApplicationL
 
                 try {
                     String filename = id + ".3dr.backup";
-                    FileHandle handle = Gdx.files.external(filename);
-                    if (!handle.exists())
-                        filename = "expe.3dr.hidden";
+                    String path = null;
+                    try {
+                        path = this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+                        if (path.endsWith("/jar/desktop-1.0.jar")) {
+                            FileHandle file = Gdx.files.absolute(path.replace("/jar/desktop-1.0.jar", "/models/" + filename));
+                            if (!file.exists())
+                                filename = "expe.3dr.hidden";
+                        }
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
 
                     HashMap<String,Object> currentItems = new HashMap<String,Object>();
                     currentItems.put("filename",filename);
