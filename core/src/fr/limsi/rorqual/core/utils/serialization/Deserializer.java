@@ -26,6 +26,16 @@ public class Deserializer {
             String path = MainApplicationAdapter.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
             if (path.endsWith("/jar/desktop-1.0.jar")) {
                 file = Gdx.files.absolute(path.replace("/jar/desktop-1.0.jar", "/models/" + filename));
+                if (file.exists()) {
+                    int i = 0;
+                    do {
+                        FileHandle next = Gdx.files.absolute(path.replace("/jar/desktop-1.0.jar", "/models/" + filename + "." + i));
+                        if (!next.exists()) {
+                            next.write(file.read(), false);
+                            break;
+                        }
+                    } while (true);
+                }
             }
             else {
                 file = Gdx.files.external(filename);
