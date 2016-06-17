@@ -35,6 +35,8 @@ public class Deserializer {
                             break;
                         }
                     } while (true);
+                } else {
+                    file = Gdx.files.external(filename);
                 }
             }
             else {
