@@ -34,6 +34,7 @@ public class Deserializer {
                             next.write(file.read(), false);
                             break;
                         }
+                        i++;
                     } while (true);
                 } else {
                     file = Gdx.files.external(filename);
