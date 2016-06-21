@@ -56,6 +56,7 @@ def traitement(form):
             for i, nep in enumerate(neps):
                 log.write("Neps_"+str(i)+";"+nep)
                 log.write("\n")
+            log.flush()
     return None not in neps
 
 if __name__ == "__main__":

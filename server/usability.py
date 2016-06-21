@@ -31,6 +31,7 @@ def traitement(form):
             for i, usa in enumerate(usability):
                 log.write("Usa_"+str(i)+";"+usa)
                 log.write("\n")
+            log.flush()
     return None not in usability
 
 if __name__ == "__main__":

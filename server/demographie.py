@@ -114,6 +114,7 @@ def traitement(form):
             log.write("\n")
             log.write("français;"+francais)
             log.write("\n")
+            log.flush()
         return True
     return False
 

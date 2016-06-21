@@ -11,6 +11,7 @@ def afficher():
         with open("log/debug", "a") as log:
             log.write("version;"+version)
             log.write("\n")
+            log.flush()
 
         import os
         os.system("java -jar jar/desktop-1.0.jar " + version)

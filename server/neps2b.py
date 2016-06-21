@@ -115,6 +115,7 @@ def traitement(form):
                 for type in items[supertype]:
                     log.write("pretest"+type+";"+results[type])
                     log.write("\n")
+            log.flush()
 
     return None not in results.values() and not bad
 
