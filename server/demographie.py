@@ -93,7 +93,7 @@ def traitement(form):
     francais = form.getvalue("français")
     version = form.getvalue("version")
 
-    if email and age and sexe and studies and francais:
+    if email and age and sexe and studies and francais and proprio and exp and habit and util:
         id = form.getvalue("id")
         with open("log/"+id, "a") as log:
             log.write("email;"+email)
