@@ -26,7 +26,7 @@ def afficher():
         html = html.replace('<div id="email">', '<div id="email" style="background-color:#FFD289;">')
 
     if age is not None:
-        html = html.replace('name="age" value=""','name="age" value="' + email + '"')
+        html = html.replace('name="age" value=""','name="age" value="' + age + '"')
     else:
         html = html.replace('<div id="age">', '<div id="age" style="background-color:#FFD289;">')
 
