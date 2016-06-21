@@ -214,6 +214,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
     public boolean panStop(float x, float y, int pointer, int button) {
         last_screenX = -1;
         last_screenY = -1;
+        translating = false;
         return true;
     }
 
@@ -272,8 +273,7 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        translating = !(translating && button == 1);
-        return false;
+        return translating && button == 1 ? panStop(screenX, screenY, pointer, button) : false;
     }
 
     @Override
