@@ -2,6 +2,7 @@ package fr.limsi.rorqual.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import fr.limsi.rorqual.core.utils.analytics.Action;
 import fr.limsi.rorqual.core.utils.analytics.ActionResolver;
@@ -52,7 +53,6 @@ public class DesktopLauncher {
 		/*config.height = 1200;
 		config.width = 1920;
 		config.fullscreen = true;*/
-
 		if (id.equals("debug")) {
 			config.height = 720;
 			config.width = 1200;
@@ -62,7 +62,6 @@ public class DesktopLauncher {
 			config.width = 1920;
 			config.fullscreen = true;
 		}
-
 		new LwjglApplication(new MainApplicationAdapter(new ActionResolverImpl(), version, id), config);
 	}
 }

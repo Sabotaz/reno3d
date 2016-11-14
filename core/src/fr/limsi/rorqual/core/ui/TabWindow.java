@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
@@ -88,7 +88,7 @@ public class TabWindow extends Table {
     }
 
     public void setTitle(String title) {
-        window.setTitle(title);
+        //window.setTitle(title);
     }
     public void addTable(Actor tab) {
         Skin skin = (Skin) AssetManager.getInstance().get("uiskin");

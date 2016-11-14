@@ -49,8 +49,8 @@ public class BillboardShader extends FileShader {
         texture.bind();
         set(u_texture, 0);
         set(u_textureUV, ta.offsetU, ta.offsetV, ta.scaleU, ta.scaleV);
-
-        renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
+        renderable.meshPart.render(program);
+        //renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }
 
     @Override

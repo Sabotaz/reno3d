@@ -242,6 +242,11 @@ public class PerspectiveCameraUpdater extends CameraUpdater {
         return false;
     }
 
+    @Override
+    public void pinchStop() {
+
+    }
+
     float ZOOM_RATIO = 0.02f;
 
     private float dist = 10;

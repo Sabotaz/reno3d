@@ -223,6 +223,11 @@ public class OrthographicCameraUpdater extends CameraUpdater {
         return false;
     }
 
+    @Override
+    public void pinchStop() {
+
+    }
+
     float ZOOM_RATIO = 0.001f;
 
     private void avancer(float amount) {

@@ -59,4 +59,8 @@ public class ShaderAttribute extends Attribute {
         return prime * super.hashCode() + (int)(v^(v>>>32));
     }
 
+    @Override
+    public int compareTo(Attribute attribute) {
+        return hashCode() - attribute.hashCode();
+    }
 }

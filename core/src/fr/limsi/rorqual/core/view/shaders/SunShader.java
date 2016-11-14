@@ -83,20 +83,20 @@ public class SunShader extends FileShader {
         final Matrix3 tmpM = new Matrix3();
         set(u_normal_matrix, tmpM.set(renderable.worldTransform).inv().transpose());
 
-
+/*
         if (renderable.environment.directionalLights.size > 0) {
             DirectionalLight light0 = renderable.environment.directionalLights.get(0);
             set(u_light_color, light0.color);
             set(u_light_direction, light0.direction);
-        }
+        }*/
 
         Attribute attribute =  renderable.environment.get(ColorAttribute.AmbientLight);
         if (attribute != null) {
             ColorAttribute colorAttribute = (ColorAttribute) attribute;
             set(u_ambient_color, colorAttribute.color);
         }
-
-        renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
+        renderable.meshPart.render(program);
+        //renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
     }
 
     @Override

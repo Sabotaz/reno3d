@@ -149,8 +149,8 @@ public abstract class ActableModel extends Model implements RenderableProvider {
         NodePart copy = new NodePart();
         copy.meshPart = new MeshPart();
         copy.meshPart.id = nodePart.meshPart.id;
-        copy.meshPart.indexOffset = nodePart.meshPart.indexOffset;
-        copy.meshPart.numVertices = nodePart.meshPart.numVertices;
+        copy.meshPart.offset = nodePart.meshPart.offset;
+        copy.meshPart.size = nodePart.meshPart.size;
         copy.meshPart.primitiveType = nodePart.meshPart.primitiveType;
         copy.meshPart.mesh = nodePart.meshPart.mesh;
         meshParts.add(copy.meshPart);

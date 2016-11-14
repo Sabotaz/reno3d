@@ -135,7 +135,7 @@ public class Cote extends ModelContainer {
         for (char c : text.toCharArray()) {
             FreeTypeFontGenerator.GlyphAndBitmap glyphAndBitmap = generator.generateGlyphAndBitmap(c, 100, true);
 
-            Pixmap fontPixmap = glyphAndBitmap.bitmap.getPixmap(Pixmap.Format.RGBA8888, Color.RED);
+            Pixmap fontPixmap = glyphAndBitmap.bitmap.getPixmap(Pixmap.Format.RGBA8888, Color.RED,0);
             BitmapFont.Glyph glyph = glyphAndBitmap.glyph;
 
             textPixmap.drawPixmap(fontPixmap, glyph.srcX, glyph.srcY, glyph.width, glyph.height, cursor + glyph.xoffset, startY + glyph.yoffset, glyph.width, glyph.height);

@@ -157,6 +157,11 @@ public class CameraEngine implements GestureDetector.GestureListener, InputProce
     }
 
     @Override
+    public void pinchStop() {
+        
+    }
+
+    @Override
     public boolean keyDown(int keycode) {
         return false;
     }
