@@ -202,34 +202,14 @@ public class DpeKartoffelator {
             }
         }
 
-        Color color = Color.BLACK;
-        if (getTotal() > getCash()*0.75f)
-            color = Color.MAROON;
-        if (getTotal() > getCash())
-            color = Color.RED;
-
-        Color color2 = Color.BLACK;
-        if (MainApplicationAdapter.version == 2 || MainApplicationAdapter.version == 4) {
-            color2 = Color.valueOf("fc4f18");
-            if (dpe.getScoreDpe() <= init * 0.95)
-                color2 = Color.valueOf("fcb325");
-            if (dpe.getScoreDpe() <= init * 0.88)
-                color2 = Color.valueOf("fcff31");
-            if (dpe.getScoreDpe() <= init * 0.75)
-                color2 = Color.valueOf("00ca2e");
-        }
-
-
-        MainUiControleur.getInstance().setCash(getCash());
-        MainUiControleur.getInstance().setTotal(getTotal(),color);
-        MainUiControleur.getInstance().setRestant(getCash()-getTotal(),color);
-        if (MainApplicationAdapter.version == 2)
-            MainUiControleur.getInstance().setObj("Idéal RT2012",(int) (init*0.75f));
-        else if (MainApplicationAdapter.version == 4)
-            MainUiControleur.getInstance().setObj("Objectif étude",(int) (init*0.75f));
-        //MainUiControleur.getInstance().setScore(init);
-        MainUiControleur.getInstance().setScore(322);
-        MainUiControleur.getInstance().setEstimation((int) dpe.getScoreDpe(),color2);
+        DpeInfo infos = new DpeInfo();
+        infos.cash = getCash();
+        infos.total = getTotal();
+        infos.score = 332;
+        infos.restant = getCash()-getTotal();
+        infos.estimation = dpe.getScoreDpe();
+        infos.initial = init;
+        MainUiControleur.getInstance().setDpeInfo(infos);
 
         if (last_total != getTotal()) {
             if (last_total <= getCash()*0.75f && getTotal() > getCash()*0.75f) {

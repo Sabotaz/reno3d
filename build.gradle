@@ -47,7 +47,7 @@ project(":desktop") {
     }
 }
 
-project(":android") {
+/*project(":android") {
     apply plugin: "android"
 
     configurations { natives }
@@ -112,7 +112,7 @@ project(":android") {
 
     preBuild.dependsOn updateManifest
 
-}
+}*/
 
 project(":jcsg") {
 }
