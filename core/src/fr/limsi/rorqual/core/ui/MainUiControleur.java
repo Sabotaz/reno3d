@@ -126,61 +126,73 @@ public class MainUiControleur implements EventListener {
             mainLayout.getFromId("load").remove();
     }
 
-    private void version0() {
-        ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
-        ((Label) mainLayout.getFromId("consigne")).setText(
-                "Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n" +
-                "thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n" +
-                "d'au moins 25% des performances énergétiques des bâtiments.");
-
+    private void noConsigne() {
+        (mainLayout.getFromId("context")).remove();
+    }
+    private void consigne(String text) {
+        ((Label) mainLayout.getFromId("consigne")).setText(text);
+    }
+    private void idealRT2012() {
         setObj("Idéal RT2012",(int) (infos.initial*0.75f));
-
+    }
+    private void noIdealRT2012() {
+        (mainLayout.getFromId("obj")).remove();
+    }
+    private void objectifBarre() {
+        ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
+    }
+    private void noObjectifBarre() {
+    }
+    private void couleurs() {
         ((Label)mainLayout.getFromId("label_total")).getStyle().fontColor = getColorForCash();
         ((Label)mainLayout.getFromId("label_restant")).getStyle().fontColor = getColorForCash();
         ((Label)mainLayout.getFromId("label_estim")).getStyle().fontColor = getColorForDpe();
+    }
+    private void noCouleurs() {
+    }
+
+    private void version0() {
+        consigne("Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n" +
+                "thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n" +
+                "d'au moins 25% des performances énergétiques des bâtiments.");
+        noIdealRT2012();
+        noObjectifBarre();
+        noCouleurs();
     }
 
     private void version1() {
-        ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
-        ((Label) mainLayout.getFromId("consigne")).setText(
-                "Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n" +
-                "thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n" +
-                "d'au moins 25% des performances énergétiques des bâtiments.");
-
-        setObj("Idéal RT2012",(int) (infos.initial*0.75f));
-
-        ((Label)mainLayout.getFromId("label_total")).getStyle().fontColor = getColorForCash();
-        ((Label)mainLayout.getFromId("label_restant")).getStyle().fontColor = getColorForCash();
-        ((Label)mainLayout.getFromId("label_estim")).getStyle().fontColor = getColorForDpe();
+        noConsigne();
+        idealRT2012();
+        objectifBarre();
+        couleurs();
     }
 
     private void version2() {
-        (mainLayout.getFromId("context")).remove();
-        (mainLayout.getFromId("obj")).remove();
+        noConsigne();
+        noIdealRT2012();
+        noObjectifBarre();
+        noCouleurs();
     }
 
     private void version3() {
-        (mainLayout.getFromId("context")).remove();
-        (mainLayout.getFromId("obj")).remove();
+        consigne("???? version 3 ???");
+        noIdealRT2012();
+        noObjectifBarre();
+        noCouleurs();
     }
 
     private void version4() {
-        (mainLayout.getFromId("context")).remove();
-        (mainLayout.getFromId("obj")).remove();
+        noConsigne();
+        idealRT2012();
+        objectifBarre();
+        couleurs();
     }
 
     private void version5() {
-        ((CircularJauge)mainLayout.getFromId("dpe_jauge")).setForeground((Texture) AssetManager.getInstance().get("bar2"));
-        ((Label) mainLayout.getFromId("consigne")).setText(
-                "Afin de limiter le réchauffement climatique, la loi concernant la réglementation\n" +
-                "thermique issue du Grenelle de l'environnement fixe un objectif d'amélioration\n" +
-                "d'au moins 25% des performances énergétiques des bâtiments.");
-
-        setObj("Idéal RT2012",(int) (infos.initial*0.75f));
-
-        ((Label)mainLayout.getFromId("label_total")).getStyle().fontColor = getColorForCash();
-        ((Label)mainLayout.getFromId("label_restant")).getStyle().fontColor = getColorForCash();
-        ((Label)mainLayout.getFromId("label_estim")).getStyle().fontColor = getColorForDpe();
+        consigne("???? version 5 ????");
+        idealRT2012();
+        objectifBarre();
+        couleurs();
     }
 
     private Color getColorForCash() {
