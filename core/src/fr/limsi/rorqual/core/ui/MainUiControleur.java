@@ -117,10 +117,10 @@ public class MainUiControleur implements EventListener {
         switch (MainApplicationAdapter.version) {
             case 0: version0(); break;
             case 1: version1(); break;
-            case 2: version2(); break;
-            case 3: version3(); break;
-            case 4: version4(); break;
-            case 5: version5(); break;
+            //case 2: version2(); break;
+            //case 3: version3(); break;
+            //case 4: version4(); break;
+            //case 5: version5(); break;
         }
         if (!MainApplicationAdapter.id.equals("debug"))
             mainLayout.getFromId("load").remove();
@@ -166,7 +166,7 @@ public class MainUiControleur implements EventListener {
         objectifBarre();
         couleurs();
     }
-
+/*
     private void version2() {
         noConsigne();
         noIdealRT2012();
@@ -193,7 +193,7 @@ public class MainUiControleur implements EventListener {
         idealRT2012();
         objectifBarre();
         couleurs();
-    }
+    }*/
 
     private Color getColorForCash() {
         Color color = Color.BLACK;
