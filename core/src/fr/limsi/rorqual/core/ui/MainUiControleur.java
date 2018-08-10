@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import fr.limsi.rorqual.core.dpe.DpeInfo;
-import fr.limsi.rorqual.core.dpe.DpeKartoffelator;
 import fr.limsi.rorqual.core.event.ButtonValue;
 import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
@@ -43,7 +42,6 @@ import fr.limsi.rorqual.core.logic.Calculateur;
 import fr.limsi.rorqual.core.logic.CameraEngine;
 import fr.limsi.rorqual.core.logic.Deleter;
 import fr.limsi.rorqual.core.logic.Logic;
-import fr.limsi.rorqual.core.model.Batiment;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.Ouverture;
 import fr.limsi.rorqual.core.model.PorteFenetre;
@@ -86,9 +84,17 @@ public class MainUiControleur implements EventListener {
         setTotal(infos.total);
         setRestant(infos.cash-infos.total);
 
-        setScore(322);
-        setEstimation(infos.dpe);
+        setBase(infos.base);
+        setEstimation(infos.estimation);
 
+        switch (MainApplicationAdapter.version) {
+            case 0: version0(); break;
+            case 1: version1(); break;
+            //case 2: version2(); break;
+            //case 3: version3(); break;
+            //case 4: version4(); break;
+            //case 5: version5(); break;
+        }
     }
 
     /** Holder */
@@ -133,7 +139,7 @@ public class MainUiControleur implements EventListener {
         ((Label) mainLayout.getFromId("consigne")).setText(text);
     }
     private void idealRT2012() {
-        setObj("Idéal RT2012",(int) (infos.initial*0.75f));
+        setObj("Idéal RT2012",(int) (infos.base*0.75f));
     }
     private void noIdealRT2012() {
         (mainLayout.getFromId("obj")).remove();
@@ -206,11 +212,11 @@ public class MainUiControleur implements EventListener {
 
     private Color getColorForDpe() {
         Color color = Color.valueOf("fc4f18");
-        if (infos.dpe <= infos.initial * 0.95)
+        if (infos.estimation <= infos.base * 0.95)
             color = Color.valueOf("fcb325");
-        if (infos.dpe <= infos.initial * 0.88)
+        if (infos.estimation <= infos.base * 0.88)
             color = Color.valueOf("fcff31");
-        if (infos.dpe <= infos.initial * 0.75)
+        if (infos.estimation <= infos.base * 0.75)
             color = Color.valueOf("00ca2e");
         return color;
     }
@@ -235,7 +241,7 @@ public class MainUiControleur implements EventListener {
         ((Label)mainLayout.getFromId("label_restant")).setText("Restant : " + restant + " euros");
     }
 
-    public void setScore(int score) {
+    public void setBase(int score) {
         ((Label)mainLayout.getFromId("label_score")).setText("Base : " + score + " kWh");
     }
 

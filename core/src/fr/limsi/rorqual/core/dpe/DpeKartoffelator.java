@@ -11,11 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
@@ -32,7 +30,6 @@ import fr.limsi.rorqual.core.event.Channel;
 import fr.limsi.rorqual.core.event.DpeEvent;
 import fr.limsi.rorqual.core.event.Event;
 import fr.limsi.rorqual.core.event.EventManager;
-import fr.limsi.rorqual.core.event.EventRequest;
 import fr.limsi.rorqual.core.event.UiEvent;
 import fr.limsi.rorqual.core.model.Fenetre;
 import fr.limsi.rorqual.core.model.ModelHolder;
@@ -46,7 +43,6 @@ import fr.limsi.rorqual.core.ui.Layout;
 import fr.limsi.rorqual.core.ui.MainUiControleur;
 import fr.limsi.rorqual.core.ui.ModelLibrary;
 import fr.limsi.rorqual.core.utils.AssetManager;
-import fr.limsi.rorqual.core.utils.scene3d.ModelContainer;
 import fr.limsi.rorqual.core.view.MainApplicationAdapter;
 
 /**
@@ -205,10 +201,9 @@ public class DpeKartoffelator {
         DpeInfo infos = new DpeInfo();
         infos.cash = getCash();
         infos.total = getTotal();
-        infos.score = 332;
-        infos.restant = getCash()-getTotal();
-        infos.estimation = dpe.getScoreDpe();
-        infos.initial = init;
+        //infos.base = init;
+        infos.base = 322; // fix for reload
+        infos.estimation = (int) dpe.getScoreDpe();
         MainUiControleur.getInstance().setDpeInfo(infos);
 
         if (last_total != getTotal()) {
@@ -271,7 +266,7 @@ public class DpeKartoffelator {
 
                 //Label label = (Label)cb.getLabel().getParent().getChildren().get(1);
 
-                //label.setText(" ("+score + "%)");
+                //label.setText(" ("+base + "%)");
 
                 Label prix = (Label)cb.getLabel().getParent().getChildren().get(1);
 

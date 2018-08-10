@@ -130,7 +130,7 @@ public class CircularJauge extends Widget {
 
         Score score = Score.getScore((int)current_value);
 
-        //float percent = (MathUtils.clamp(current_value, score.min, score.max) - score.min) / (score.max - score.min);
+        //float percent = (MathUtils.clamp(current_value, base.min, base.max) - base.min) / (base.max - base.min);
         float percent = (MathUtils.clamp(current_value, 1, 600) - 1) / (600 - 1);
 
         // generate drawables
